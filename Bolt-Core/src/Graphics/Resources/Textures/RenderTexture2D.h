@@ -1,0 +1,21 @@
+#pragma once
+#include "..\..\Framebuffer.h"
+#include "Texture2D.h"
+
+namespace Bolt
+{
+
+	enum class TextureComponent
+	{
+		Color,
+		Depth
+	};
+
+	class BLT_API RenderTexture2D : public Texture2D, public Framebuffer
+	{
+	public:
+		RenderTexture2D(int width, int height, TextureComponent component = TextureComponent::Color);
+
+	};
+
+}

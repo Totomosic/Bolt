@@ -1,0 +1,7 @@
+R"(struct Material
+{
+	vec4 DiffuseColor;
+	vec4 SpecularHighlight;
+	float Shininess;
+	float ShineDamper;
+};)"

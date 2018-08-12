@@ -1,0 +1,43 @@
+R"(#include "BoltMaterials.glh"
+
+const int LIGHT_TYPE_POINT = 0;
+const int LIGHT_TYPE_DIRECTIONAL = 1;
+const int LIGHT_TYPE_SPOTLIGHT = 2;
+
+struct LightSource
+{
+	vec3 Position;
+	vec4 Color;
+	vec3 Attenuation;
+	int Type;
+	float AmbientIntensity;
+	vec3 ForwardDirection;
+	float SpotAngle;
+};
+
+vec4 CalculateDiffuseLighting(Material material, LightSource light, vec3 normal, vec3 toLightVector)
+{
+	float distance = length(toLightVector);
+	vec3 unitToLightVector = normalize(toLightVector);
+	vec3 unitNormal = normalize(normal);
+	float nDotV = dot(unitNormal, unitToLightVector);
+	float brightness = max(nDotV, light.AmbientIntensity);
+	float attenutationFactor = light.Attenutation.x + light.Attenuation.y * distance + light.Attenuation.z * distance * distance;
+	brightness /= attenuationFactor;
+	return material.DiffuseColor * light.Color * brightness;
+}
+
+vec4 CalculateSpecularLighting(Material material, LightSource light, vec3 normal, vec3 toLightVector, vec3 toCameraVector)
+{
+	float toLightDistance = length(toLightVector);
+	vec3 unitToLightVector = normalize(toLightVector);
+	vec3 unitNormal = normalize(normal);
+	vec3 unitToCameraVector = normalize(toCameraVector);
+	vec3 lightDirection = -unitToLightVector;
+	vec3 reflectedLightDirection = reflect(lightDirection, unitNormal);
+	float specularFactor = max(dot(reflectedLightDirection, unitToCameraVector));
+	float dampedSpecularFactor = pow(specularFactor, material.ShineDamper);
+	float attenutationFactor = light.Attenutation.x + light.Attenuation.y * distance + light.Attenuation.z * distance * distance;
+	dampedSpecularFactor /= attenuationFactor;
+	return material.SpecularHighlight * light.Color * dampedSpecularFactor;
+})"

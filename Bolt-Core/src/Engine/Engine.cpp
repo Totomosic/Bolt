@@ -1,0 +1,75 @@
+#include "Engine.h"
+#include "Initialization\Initializor.h"
+#include "User\Input.h"
+#include "Renderer\Graphics.h"
+#include "Renderer\GLState.h"
+#include "Scene\SceneManager.h"
+
+namespace Bolt
+{
+
+	Engine::Engine()
+	{
+		SetupConsole(BLT_LOG_LEVEL_INFO);
+		std::cout << std::boolalpha;
+		Filesystem::Initialize();
+		int result = glfwInit();
+		BLT_ASSERT(result != GL_NO_ERROR, "GLFW failed to initialise");
+		Random::Initialize();
+		WSADATA data;
+		if (WSAStartup(MAKEWORD(2, 2), &data) != 0)
+		{
+			BLT_ASSERT(false, "Failed to initalise WinSock2");
+		}
+	}
+
+	Engine::~Engine()
+	{
+		WSACleanup();
+		m_Window.release(); // TEMPORARY
+	}
+
+	bool Engine::ShouldClose() const
+	{
+		return m_Window->ShouldClose();
+	}
+
+	void Engine::SetWindow(std::unique_ptr<Window>&& window)
+	{
+		m_Window = std::move(window);
+	}
+
+	void Engine::UpdateApplication()
+	{
+		Scene* scene = &SceneManager::CurrentScene();
+		Input::Update();
+		glfwPollEvents();
+		m_CurrentApplication->Update();
+		if (scene != nullptr)
+		{
+			scene->Update();
+		}
+		ImGui_ImplGlfwGL3_NewFrame();
+		m_CurrentApplication->ImGuiRender();
+		m_CurrentApplication->Render();
+		ImGui::Render();
+		ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
+		m_Window->SwapBuffers();
+		Time::Update();
+		if (scene != nullptr)
+		{
+			scene->UpdateTemporaryObjects();
+		}
+	}
+
+	void Engine::SetApplication(std::unique_ptr<Application>&& app)
+	{
+		ResourceManager::Terminate();
+		SceneManager::Terminate();
+		Input::Terminate();
+		Time::Reset();
+		m_CurrentApplication = std::move(app);
+		m_CurrentApplication->Start(m_Window.get());
+	}
+
+}

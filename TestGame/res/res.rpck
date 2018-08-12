@@ -1,0 +1,16 @@
+<Resources>
+    <Texture2D>
+        <Image name="grass_side" filename="grass_side.jpg">
+        <Image name="background" filename="background.jpg">
+    </Texture2D>
+    <TextureCube>
+        <Image name="skybox">
+            <Image face="posx" filename="right.png">
+            <Image face="negx" filename="left.png">
+            <Image face="posy" filename="top.jpg">
+            <Image face="negy" filename="bottom.jpg">
+            <Image face="posz" filename="back.png">
+            <Image face="negz" filename="front.png">
+        </Image>
+    </TextureCube>
+</Resources>
