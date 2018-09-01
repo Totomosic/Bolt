@@ -20,6 +20,7 @@ namespace Bolt
 		void SetWindow(std::unique_ptr<Window>&& window);
 		void UpdateApplication();
 		void SetApplication(std::unique_ptr<Application>&& app);
+		void Run();
 
 	};
 

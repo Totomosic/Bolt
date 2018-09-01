@@ -4,10 +4,10 @@
 namespace Bolt
 {
 
-	class BLT_API Initializor
+	class BLT_API Initializer
 	{
 	public:
-		Initializor() = delete;
+		Initializer() = delete;
 
 		static bool Run(Window* window);
 

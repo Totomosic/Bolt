@@ -1,4 +1,5 @@
 #include "Component.h"
+#include "..\ObjectPrefab.h"
 #include "..\GameObject.h"
 #include "..\Layer.h"
 
@@ -21,9 +22,14 @@ namespace Bolt
 
 	}
 
-	GameObject* Component::gameObject() const
+	ObjectPrefab* Component::objectPrefab() const
 	{
 		return m_GameObject;
+	}
+
+	GameObject* Component::gameObject() const
+	{
+		return (GameObject*)m_GameObject;
 	}
 
 	Layer* Component::layer() const
@@ -51,7 +57,7 @@ namespace Bolt
 	
 	}
 
-	void Component::SetGameObject(GameObject* object)
+	void Component::SetGameObject(ObjectPrefab* object)
 	{
 		m_GameObject = object;
 	}

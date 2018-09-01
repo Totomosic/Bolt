@@ -14,10 +14,10 @@ namespace Bolt
 	private:
 		std::unordered_map<std::type_index, std::unique_ptr<Component>> m_ComponentMap;
 		Component* m_ComponentArray[MAX_COMPONENTS];
-		GameObject* m_GameObject;
+		ObjectPrefab* m_GameObject;
 
 	public:
-		ComponentManager(GameObject* gameObject);
+		ComponentManager(ObjectPrefab* gameObject);
 		ComponentManager(const ComponentManager& other) = delete;
 		ComponentManager& operator=(const ComponentManager& other) = delete;
 		ComponentManager(ComponentManager&& other);
@@ -59,10 +59,11 @@ namespace Bolt
 		}
 
 		friend class GameObject;
+		friend class ObjectPrefab;
 
 	private:
 		id_t FindNextId() const;
-		void SetGameObject(GameObject* object);
+		void SetGameObject(ObjectPrefab* object);
 
 	};
 

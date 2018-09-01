@@ -29,8 +29,9 @@ namespace Bolt
 		static double FramesPerSecond();
 
 		static void Reset();
-		static Timer* CreateTimer(double time, RepeatMode repeat = RepeatMode::Recurring, bool start = true);
-		static Timer* CreateTimer(double time, Timer::TimerFunc callback, RepeatMode repeat = RepeatMode::Recurring, bool start = true);
+		static Timer* GetTimer(id_t id);
+		static id_t CreateTimer(double time, RepeatMode repeat = RepeatMode::Recurring, bool start = true);
+		static id_t CreateTimer(double time, Timer::TimerFunc callback, RepeatMode repeat = RepeatMode::Recurring, bool start = true);
 
 		friend class Engine;
 

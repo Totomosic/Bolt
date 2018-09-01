@@ -7,7 +7,7 @@ namespace Bolt
 	struct BLT_API SceneArray : public SceneGraph
 	{
 	public:
-		static constexpr int MAX_GAMEOBJECTS = 10000;
+		static constexpr size_t MAX_GAMEOBJECTS = ObjectCollection::MAX_GAMEOBJECTS;
 
 	private:
 		GameObject* m_GameObjects[MAX_GAMEOBJECTS];

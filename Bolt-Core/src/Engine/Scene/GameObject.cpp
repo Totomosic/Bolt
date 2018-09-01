@@ -4,14 +4,14 @@
 namespace Bolt
 {
 
-	GameObject::GameObject()
-		: m_Id(GameObject::InvalidID), m_Transform(), m_Components(this), m_Parent(nullptr), m_Layer(nullptr)
+	GameObject::GameObject() : ObjectPrefab(),
+		m_Id(GameObject::InvalidID), m_Parent(nullptr), m_Layer(nullptr)
 	{
 	
 	}
 
 	GameObject::GameObject(GameObject&& other)
-		: m_Id(other.m_Id), m_Transform(std::move(other.m_Transform)), m_Components(std::move(other.m_Components)), m_Layer(other.m_Layer)
+		: m_Id(other.m_Id), m_Layer(other.m_Layer)
 	{
 		for (GameObject* child : other.m_Children)
 		{
@@ -75,26 +75,6 @@ namespace Bolt
 		}
 	}
 
-	const Transform& GameObject::transform() const
-	{
-		return m_Transform;
-	}
-
-	Transform& GameObject::transform()
-	{
-		return m_Transform;
-	}
-
-	const ComponentManager& GameObject::Components() const
-	{
-		return m_Components;
-	}
-
-	ComponentManager& GameObject::Components()
-	{
-		return m_Components;
-	}
-
 	GameObject* GameObject::Parent() const
 	{
 		return m_Parent;
@@ -112,6 +92,11 @@ namespace Bolt
 
 	void GameObject::MakeChildOf(GameObject* parent)
 	{
+		if (parent == nullptr)
+		{
+			MakeStandalone();
+			return;
+		}
 		m_Parent = parent;
 		m_Transform.SetParent(&parent->transform());
 	}
@@ -168,7 +153,7 @@ namespace Bolt
 		return Instantiate(layer, Transform(Vector3f(x, y, z), orientation, scale));
 	}
 
-	GameObject* GameObject::Instantiate(Layer* layer, const GameObject* prefab)
+	GameObject* GameObject::Instantiate(Layer* layer, const ObjectPrefab* prefab)
 	{
 		GameObject* object = layer->AddGameObject(GameObject());
 		for (const auto& pair : prefab->Components().m_ComponentMap)
@@ -178,21 +163,21 @@ namespace Bolt
 		return object;
 	}
 
-	GameObject* GameObject::Instantiate(Layer* layer, const GameObject* prefab, Transform transform)
+	GameObject* GameObject::Instantiate(Layer* layer, const ObjectPrefab* prefab, Transform transform)
 	{
 		GameObject* object = Instantiate(layer, prefab);
 		object->transform() = std::move(transform);
 		return object;
 	}
 
-	GameObject* GameObject::Instantiate(Layer* layer, const GameObject* prefab, GameObject* parent)
+	GameObject* GameObject::Instantiate(Layer* layer, const ObjectPrefab* prefab, GameObject* parent)
 	{
 		GameObject* object = Instantiate(layer, prefab);
 		object->MakeChildOf(parent);
 		return object;
 	}
 
-	GameObject* GameObject::Instantiate(Layer* layer, const GameObject* prefab, GameObject* parent, Transform transform)
+	GameObject* GameObject::Instantiate(Layer* layer, const ObjectPrefab* prefab, GameObject* parent, Transform transform)
 	{
 		GameObject* object = Instantiate(layer, prefab, std::move(transform));
 		object->MakeChildOf(parent);

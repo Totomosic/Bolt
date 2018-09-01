@@ -45,18 +45,23 @@ namespace Bolt
 		s_RealCurrentTime = 0.0;
 	}
 
-	Timer* Time::CreateTimer(double time, RepeatMode repeat, bool start)
+	Timer* Time::GetTimer(id_t id)
+	{
+		return &s_Timers.at(id);
+	}
+
+	id_t Time::CreateTimer(double time, RepeatMode repeat, bool start)
 	{
 		size_t index = s_Timers.size();
 		s_Timers.emplace_back(time, repeat, start);
-		return &s_Timers.at(index);
+		return index;
 	}
 
-	Timer* Time::CreateTimer(double time, Timer::TimerFunc callback, RepeatMode repeat, bool start)
+	id_t Time::CreateTimer(double time, Timer::TimerFunc callback, RepeatMode repeat, bool start)
 	{
 		size_t index = s_Timers.size();
 		s_Timers.emplace_back(time, callback, repeat, start);
-		return &s_Timers.at(index);
+		return index;
 	}
 
 	void Time::Update()

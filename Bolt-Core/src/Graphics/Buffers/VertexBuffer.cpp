@@ -29,4 +29,13 @@ namespace Bolt
 		return Size() / m_Layout.Stride();
 	}
 
+	std::unique_ptr<VertexBuffer> VertexBuffer::Clone() const
+	{
+		std::unique_ptr<VertexBuffer> buffer = std::make_unique<VertexBuffer>(Size(), Layout(), Usage());
+		byte* data = new byte[Size()];
+		Download(data, Size(), 0);
+		buffer->Upload(data, Size(), 0);
+		return std::move(buffer);
+	}
+
 }

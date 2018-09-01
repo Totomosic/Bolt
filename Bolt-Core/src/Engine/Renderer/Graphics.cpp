@@ -3,11 +3,18 @@
 namespace Bolt
 {
 
+	Window* Graphics::s_Window = nullptr;
+
 	Model* Graphics::s_Rectangle = nullptr;
 	Model* Graphics::s_Line = nullptr;
 
 	RenderSchedule Graphics::s_Schedule = RenderSchedule();
 	std::vector<std::unique_ptr<Renderer>> Graphics::s_Renderers = std::vector<std::unique_ptr<Renderer>>();
+
+	const Framebuffer* Graphics::DefaultFramebuffer()
+	{
+		return &s_Window->GetFramebuffer();
+	}
 
 	void Graphics::Rectangle(float x, float y, float z, float w, float h, const Color& color, const Quaternion& orientation, id_t layerId)
 	{
@@ -53,13 +60,13 @@ namespace Bolt
 		object->Components().AddComponent(std::make_unique<MeshRenderer>(mesh));
 	}
 
-	void Graphics::Text(const blt::string& text, const Font* font, float x, float y, float z, const Color& color, TextAlignmentH horizontalAlign, id_t layerId)
+	void Graphics::Text(const blt::string& text, const Font* font, float x, float y, float z, const Color& color, AlignH horizontalAlign, AlignV verticalAlign, id_t layerId)
 	{
 		GameObject* object = SceneManager::CurrentScene().GetLayer(layerId).AddTemporaryGameObject(GameObject());
 		object->transform().SetLocalPosition(x, y, z);
 
 		Mesh mesh;
-		mesh.Models.push_back({ new Model(TextFactory(text, font, Color::White, horizontalAlign)), Matrix4f::Identity(), { 0 } });
+		mesh.Models.push_back({ new Model(TextFactory(text, font, Color::White, horizontalAlign, verticalAlign)), Matrix4f::Identity(), { 0 } });
 		mesh.Materials[0].BaseColor = color;
 		mesh.Materials[0].Textures.Textures.push_back(font);
 		mesh.Materials[0].Shader = Shader::DefaultFont();
@@ -105,6 +112,11 @@ namespace Bolt
 
 	void Graphics::RenderScene()
 	{
+		if (s_Schedule.RenderPasses.empty())
+		{
+			BLT_WARN("Attempted to Render Scene with no RenderPasses setup");
+			BLT_WARN("Use Graphics::Schedule() to add render passes");
+		}
 		std::vector<const Framebuffer*> clearedFramebuffers;
 		for (RenderPass& pass : s_Schedule.RenderPasses)
 		{
@@ -119,8 +131,9 @@ namespace Bolt
 		}
 	}
 
-	void Graphics::Initialize()
+	void Graphics::Initialize(Window* window)
 	{
+		s_Window = window;
 		s_Rectangle = new Model(RectangleFactory(1, 1));
 		s_Line = new Model(LineFactory(Vector3f::Right(), 1));
 	}

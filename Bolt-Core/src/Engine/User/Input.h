@@ -220,7 +220,7 @@ namespace Bolt
 		static void HideCursor();
 		static void ShowCursor();
 
-		friend class Initializor;
+		friend class Initializer;
 		friend class Window;
 		friend class Engine;
 

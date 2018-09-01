@@ -5,6 +5,8 @@
 
 #include "GameObject.h"
 #include "Layer.h"
+#include "ObjectFactory.h"
+#include "ObjectPrefab.h"
 #include "Scene.h"
 #include "SceneManager.h"
 #include "Transform.h"

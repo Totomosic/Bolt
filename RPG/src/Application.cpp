@@ -167,7 +167,7 @@ namespace RPG
 			blt::string text = "fps " + std::to_string((int)Time::FramesPerSecond());
 			const Font* font = ResourceManager::Get<Font>("Arial24");
 			Vector2f size = font->SizeOfText(text);
-			Graphics::Text(text, font, 1280 - size.x - 5, 720 - size.y / 2 - 5, -5, Color::White, TextAlignmentH::Left, 2);
+			Graphics::Text(text, font, 1280 - size.x - 5, 720 - size.y / 2 - 5, -5, Color::White, AlignH::Left, 2);
 			Graphics::RenderScene();
 		}
 
