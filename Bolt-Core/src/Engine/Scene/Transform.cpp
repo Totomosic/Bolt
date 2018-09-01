@@ -75,7 +75,7 @@ namespace Bolt
 				m_Parent->m_Children.erase(it);
 			}
 		}
-		else
+		else if (transform != nullptr)
 		{
 			transform->m_Children.push_back(this);
 		}

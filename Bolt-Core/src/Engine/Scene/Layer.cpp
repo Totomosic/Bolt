@@ -7,7 +7,7 @@ namespace Bolt
 	Layer::Layer()
 		: m_Id(GameObject::InvalidID), m_GameObjects(), m_SceneGraph(std::make_unique<Bolt::SceneArray>()), m_Enabled(false), m_ActiveCamera(nullptr)
 	{
-		
+		m_SceneGraph->SetObjectCollection(&m_GameObjects);
 	}
 
 	const ObjectCollection& Layer::GameObjects() const

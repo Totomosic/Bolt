@@ -5,11 +5,18 @@
 namespace Bolt
 {
 
-	enum class TextAlignmentH
+	enum class AlignH
 	{
 		Left,
 		Center,
 		Right
+	};
+
+	enum class AlignV
+	{
+		Bottom,
+		Center,
+		Top
 	};
 
 	class BLT_API TextFactory : public VertexFactory
@@ -18,10 +25,11 @@ namespace Bolt
 		const Font* TextFont;
 		blt::string Text;
 		Bolt::Color Color;
-		TextAlignmentH HorizontalAlign;
+		AlignH HorizontalAlign;
+		AlignV VerticalAlign;
 
 	public:
-		TextFactory(const blt::string& text, const Font* font, const Bolt::Color& color = Color::White, TextAlignmentH horizontalAlignment = TextAlignmentH::Center);
+		TextFactory(const blt::string& text, const Font* font, const Bolt::Color& color = Color::White, AlignH horizontalAlignment = AlignH::Center, AlignV verticalAlignment = AlignV::Center);
 
 		ModelData GenerateVertices() const override;
 

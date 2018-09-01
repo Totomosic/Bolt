@@ -141,6 +141,16 @@ namespace Bolt
 		m_RenderMode = mode;
 	}
 
+	std::unique_ptr<VertexArray> VertexArray::Clone() const
+	{
+		std::unique_ptr<VertexArray> vertexArray = std::make_unique<VertexArray>(GetRenderMode());
+		for (const std::unique_ptr<VertexBuffer>& buffer : m_Vertices)
+		{
+			vertexArray->AddVertexBuffer(buffer->Clone());
+		}
+		return std::move(vertexArray);
+	}
+
 	void VertexArray::Create()
 	{
 		GL_CALL(glGenVertexArrays(1, &m_Id));

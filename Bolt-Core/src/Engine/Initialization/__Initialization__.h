@@ -1,2 +1,2 @@
 #pragma once
-#include "Initializor.h"
+#include "Initializer.h"

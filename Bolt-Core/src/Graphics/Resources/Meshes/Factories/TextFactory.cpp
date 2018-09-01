@@ -3,8 +3,8 @@
 namespace Bolt
 {
 
-	TextFactory::TextFactory(const blt::string& text, const Font* font, const Bolt::Color& color, TextAlignmentH horizontalAlignment) : VertexFactory(),
-		TextFont(font), Text(text), Color(color), HorizontalAlign(horizontalAlignment)
+	TextFactory::TextFactory(const blt::string& text, const Font* font, const Bolt::Color& color, AlignH horizontalAlignment, AlignV verticalAlignment) : VertexFactory(),
+		TextFont(font), Text(text), Color(color), HorizontalAlign(horizontalAlignment), VerticalAlign(verticalAlignment)
 	{
 
 	}
@@ -13,8 +13,9 @@ namespace Bolt
 	{
 		std::vector<Font::FontCharacter> characters = TextFont->GetCharacters(Text);
 		Vector2f size = TextFont->SizeOfText(Text);
+		float height = TextFont->SizeOfText("fg").y;
 		float w = size.x / 2.0f;
-		float h = size.y / 2.0f;
+		float h = height / 2.0f;
 
 		ModelData result;
 		result.Vertices = std::make_unique<VertexArray>();
@@ -35,14 +36,23 @@ namespace Bolt
 			IndexIterator<uint> indices = result.Indices.Begin();
 			
 			float currentX = -w;
-			float currentY = -h;
+			float currentY = h;
 			switch (HorizontalAlign)
 			{
-			case TextAlignmentH::Left:
+			case AlignH::Left:
 				currentX = 0.0f;
 				break;
-			case TextAlignmentH::Right:
+			case AlignH::Right:
 				currentX = -w * 2.0f;
+				break;
+			}
+			switch (VerticalAlign)
+			{
+			case AlignV::Bottom:
+				currentY = h * 2.0f;
+				break;
+			case AlignV::Top:
+				currentY = 0.0f;
 				break;
 			}
 			for (int i = 0; i < characters.size(); i++)

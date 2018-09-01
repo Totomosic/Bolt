@@ -4,7 +4,7 @@
 namespace Bolt
 {
 
-	ComponentManager::ComponentManager(GameObject* gameObject)
+	ComponentManager::ComponentManager(ObjectPrefab* gameObject)
 		: m_ComponentMap(), m_ComponentArray(), m_GameObject(gameObject)
 	{
 		for (int i = 0; i < ComponentManager::MAX_COMPONENTS; i++)
@@ -126,7 +126,7 @@ namespace Bolt
 		return GameObject::InvalidID;
 	}
 
-	void ComponentManager::SetGameObject(GameObject* object)
+	void ComponentManager::SetGameObject(ObjectPrefab* object)
 	{
 		m_GameObject = object;
 		for (auto& pair : m_ComponentMap)

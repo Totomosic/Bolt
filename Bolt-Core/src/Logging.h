@@ -37,10 +37,10 @@ namespace Bolt
 	}
 
 #ifdef BLT_DEBUG
-	#define BLT_INFO(msg) PrintMessage(BLT_LOG_LEVEL_INFO, msg);
-	#define BLT_WARN(msg) PrintMessage(BLT_LOG_LEVEL_WARN, msg);
-	#define BLT_ERROR(msg) PrintMessage(BLT_LOG_LEVEL_ERROR, msg);
-	#define BLT_FATAL(msg) PrintMessage(BLT_LOG_LEVEL_FATAL, msg);
+	#define BLT_INFO(msg) Bolt::PrintMessage(BLT_LOG_LEVEL_INFO, msg);
+	#define BLT_WARN(msg) Bolt::PrintMessage(BLT_LOG_LEVEL_WARN, msg);
+	#define BLT_ERROR(msg) Bolt::PrintMessage(BLT_LOG_LEVEL_ERROR, msg);
+	#define BLT_FATAL(msg) Bolt::PrintMessage(BLT_LOG_LEVEL_FATAL, msg);
 
 	#define BLT_ASSERT(arg, msg) { if (!(arg)) { BLT_FATAL(msg); __debugbreak(); } }
 #else

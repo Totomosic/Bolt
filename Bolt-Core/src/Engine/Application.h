@@ -9,13 +9,16 @@ namespace Bolt
 	class BLT_API Application
 	{
 	private:
-		Timer * m_TickTimer;
+		id_t m_TickTimer;
 
 	public:
 		Window* PrimaryWindow;
 
 	public:
 		virtual ~Application();
+
+		float Width() const;
+		float Height() const;
 
 		void Start(Window* engineWindow);
 		void SetPrimaryWindow(Window* window);

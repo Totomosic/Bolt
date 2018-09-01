@@ -66,6 +66,8 @@ namespace Bolt
 
 		void SetRenderMode(RenderMode mode);
 
+		std::unique_ptr<VertexArray> Clone() const;
+
 		template<typename> friend class AttributeIterator;
 		friend class AttributeSetter;
 

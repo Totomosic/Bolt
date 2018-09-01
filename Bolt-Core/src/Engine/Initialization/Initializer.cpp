@@ -1,11 +1,12 @@
-#include "Initializor.h"
+#include "Initializer.h"
 #include "..\User\Input.h"
 #include "..\Renderer\Graphics.h"
+#include "..\Scene\ObjectFactory.h"
 
 namespace Bolt
 {
 
-	bool Initializor::Run(Window* window)
+	bool Initializer::Run(Window* window)
 	{
 		int result = glewInit();
 		if (result != GLEW_OK)
@@ -14,7 +15,8 @@ namespace Bolt
 		}
 		Input::Initialize(window);
 		Shader::Initialize();
-		Graphics::Initialize();
+		Graphics::Initialize(window);
+		ObjectFactory::Initialize();
 		return true;
 	}
 

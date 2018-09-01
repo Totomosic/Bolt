@@ -17,6 +17,8 @@ namespace Bolt
 		const BufferLayout& Layout() const;
 		int VertexCount() const;
 
+		std::unique_ptr<VertexBuffer> Clone() const;
+
 		friend class VertexArray;
 		friend class MappedBufferManager;
 		friend class IteratorManager;

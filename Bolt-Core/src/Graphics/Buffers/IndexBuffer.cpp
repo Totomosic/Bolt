@@ -18,6 +18,15 @@ namespace Bolt
 		return Size() / sizeof(uint);
 	}
 
+	std::unique_ptr<IndexBuffer> IndexBuffer::Clone() const
+	{
+		std::unique_ptr<IndexBuffer> indexBuffer = std::make_unique<IndexBuffer>(Size() / sizeof(uint), Usage());
+		byte* data = new byte[Size()];
+		Download(data, Size(), 0);
+		indexBuffer->Upload(data, Size(), 0);
+		return std::move(indexBuffer);
+	}
+
 	void IndexBuffer::MapIterator() const
 	{
 		m_MappedIterators++;

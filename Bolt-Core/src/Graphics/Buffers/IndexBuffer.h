@@ -16,6 +16,8 @@ namespace Bolt
 		constexpr GLenum IndexType() const { return GL_UNSIGNED_INT; }
 		int IndexCount() const;
 
+		std::unique_ptr<IndexBuffer> Clone() const;
+
 		friend class IndexArray;
 
 	private:

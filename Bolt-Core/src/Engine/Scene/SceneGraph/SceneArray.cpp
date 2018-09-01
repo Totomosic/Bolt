@@ -3,8 +3,8 @@
 namespace Bolt
 {
 
-	SceneArray::SceneArray()
-		: m_GameObjects(), m_MaxGameObjectID(0)
+	SceneArray::SceneArray() : SceneGraph(),
+		m_GameObjects(), m_MaxGameObjectID(0)
 	{
 
 	}

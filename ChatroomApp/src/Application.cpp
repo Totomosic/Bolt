@@ -21,32 +21,22 @@ namespace Chatroom
 			Scene* scene = SceneManager::CreateScene();
 			Layer* layer = scene->CreateLayer<SceneArray>("Default");
 
-			Camera* mainCamera = scene->CreateCamera(Projection::Orthographic(0, PrimaryWindow->Width(), 0, PrimaryWindow->Height(), -100, 100));
+			Camera* mainCamera = scene->CreateCamera(Projection::Orthographic(0, Width(), 0, Height(), -100, 100));
 			layer->SetActiveCamera(mainCamera);
 
-			Mesh panelMesh;
-			panelMesh.Models.push_back({ ResourceManager::Register("PanelModel", std::make_unique<Model>(RectangleFactory(1, 1))) });
-
 			Mesh textMesh;
-			textMesh.Models.push_back({ ResourceManager::Register("TextModel", std::make_unique<Model>(TextFactory(currentText, arial, Color::Black, TextAlignmentH::Left))) });
+			textMesh.Models.push_back({ ResourceManager::Register("TextModel", std::make_unique<Model>(TextFactory(currentText, arial, Color::Black, AlignH::Left, AlignV::Bottom))) });
 			textMesh.Materials[0].Shader = Shader::DefaultFont();
 			textMesh.Materials[0].Textures.Textures.push_back(arial);
 
-			GameObject* historyPanel = GameObject::Instantiate(layer);
-			historyPanel->transform().SetLocalPosition(PrimaryWindow->Width() / 2, PrimaryWindow->Height() / 2 + 25, 0);
-			historyPanel->transform().SetLocalScale(PrimaryWindow->Width() - 10, PrimaryWindow->Height() - 50 - 10, 1);
-			historyPanel->Components().AddComponent(std::make_unique<MeshRenderer>(panelMesh));
+			ObjectFactory factory(layer);
 
-			GameObject* chatPanel = GameObject::Instantiate(layer);
-			chatPanel->transform().SetLocalPosition(PrimaryWindow->Width() / 2 - 100, 27, 5);
-			chatPanel->transform().SetLocalScale(PrimaryWindow->Width() - 200 - 10, 46, 1);
-			chatPanel->Components().AddComponent(std::make_unique<MeshRenderer>(panelMesh));
+			GameObject* historyPanel = factory.Rectangle(Width() - 10, Height() - 50 - 10, Color::White, Transform(Vector3f(Width() / 2, Height() / 2 + 25, 0)));
+			GameObject* chatPanel = factory.Rectangle(Width() - 200 - 10, 46, Color::White, Transform(Vector3f(Width() / 2 - 100, 27, 5)));
 
-			currentTextObject = GameObject::Instantiate(layer);
-			currentTextObject->MakeChildOf(chatPanel);
-			currentTextObject->transform().SetLocalPosition(-0.5f + 0.01f, 0, 2);
-			currentTextObject->transform().SetLocalScale(1.0f / chatPanel->transform().Scale());
-			currentTextObject->Components().AddComponent(std::make_unique<MeshRenderer>(textMesh));
+			factory.SetCurrentParent(chatPanel);
+			currentTextObject = factory.Instantiate(textMesh);
+			currentTextObject->transform().SetLocalPosition(-(Width() - 200 - 10) / 2 + 10, 0, 2);
 
 			id_t rendererId = Graphics::AddRenderer(std::make_unique<Renderer>(std::make_unique<DefaultRenderMethod>()));
 			Graphics::Schedule().RenderPasses.push_back({ &PrimaryWindow->GetFramebuffer(), RenderPass::ALL_LAYERS, Graphics::GetRenderer(rendererId) });
@@ -71,7 +61,7 @@ namespace Chatroom
 			if (newString != currentText)
 			{
 				ResourceManager::FreeResource("TextModel");
-				Model* newModel = ResourceManager::Register("TextModel", std::make_unique<Model>(TextFactory(newString, ResourceManager::Get<Font>("Arial"), Color::Black, TextAlignmentH::Left)));
+				Model* newModel = ResourceManager::Register("TextModel", std::make_unique<Model>(TextFactory(newString, ResourceManager::Get<Font>("Arial"), Color::Black, AlignH::Left)));
 				currentTextObject->Components().GetComponent<MeshRenderer>().Mesh.Models[0].Model = newModel;
 				currentText = newString;
 			}
@@ -88,7 +78,10 @@ namespace Chatroom
 int main()
 {
 	Engine e;
-	e.SetWindow(std::make_unique<Window>(600, 800, "Chatroom"));
+	WindowCreateInfo info;
+	info.Resizable = false;
+	info.Samples = 1;
+	e.SetWindow(std::make_unique<Window>(600, 800, "Chatroom", info));
 	e.SetApplication(std::make_unique<Chatroom::ChatroomApp>());
 	while (!e.ShouldClose())
 	{

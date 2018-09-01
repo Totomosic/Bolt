@@ -20,9 +20,9 @@ namespace Bolt
 
 	TextureBounds SpriteSheetAnimator::GetBounds() const
 	{
-		int currentIndex = m_CurrentTime / m_TotalTime * (m_Rows * m_Columns);
+		int currentIndex = (int)(m_CurrentTime / m_TotalTime * (m_Rows * m_Columns));// % (m_Rows * m_Columns);
 		int currentRow = currentIndex / m_Columns;
-		int currentCol = currentIndex % m_Rows;
+		int currentCol = currentIndex % m_Columns;
 		float imageWidth = 1.0f / m_Columns;
 		float imageHeight = 1.0f / m_Rows;
 		TextureBounds result;

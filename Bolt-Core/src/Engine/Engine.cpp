@@ -1,5 +1,5 @@
 #include "Engine.h"
-#include "Initialization\Initializor.h"
+#include "Initialization\Initializer.h"
 #include "User\Input.h"
 #include "Renderer\Graphics.h"
 #include "Renderer\GLState.h"
@@ -70,6 +70,15 @@ namespace Bolt
 		Time::Reset();
 		m_CurrentApplication = std::move(app);
 		m_CurrentApplication->Start(m_Window.get());
+	}
+
+	void Engine::Run()
+	{
+		BLT_ASSERT(m_CurrentApplication.get() != nullptr, "Must have a valid Application to run");
+		while (!ShouldClose())
+		{
+			UpdateApplication();
+		}
 	}
 
 }

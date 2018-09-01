@@ -4,13 +4,14 @@
 namespace Bolt
 {
 
+	class ObjectPrefab;
 	class GameObject;
 	struct Layer;
 
 	class BLT_API Component
 	{
 	protected:
-		GameObject* m_GameObject;
+		ObjectPrefab* m_GameObject;
 		id_t m_Id;
 
 	public:
@@ -18,6 +19,7 @@ namespace Bolt
 		Component(id_t m_Id);
 		virtual ~Component();
 
+		ObjectPrefab* objectPrefab() const;
 		GameObject* gameObject() const;
 		Layer* layer() const;
 
@@ -32,7 +34,7 @@ namespace Bolt
 		friend class ComponentManager;
 
 	private:
-		void SetGameObject(GameObject* object);
+		void SetGameObject(ObjectPrefab* object);
 
 	};
 

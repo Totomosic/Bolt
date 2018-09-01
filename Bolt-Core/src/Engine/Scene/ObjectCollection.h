@@ -19,12 +19,14 @@ namespace Bolt
 
 	private:
 		GameObjectInfo m_GameObjects[MAX_GAMEOBJECTS];
+		std::vector<GameObject*> m_ActiveGameObjects;
 
 	public:
 		ObjectCollection();
 
 		const GameObject& GetGameObjectById(id_t id) const;
 		GameObject& GetGameObjectById(id_t id);
+		const std::vector<GameObject*>& GetAllGameObjects() const;
 
 		id_t AddGameObject(GameObject&& object);
 		void RemoveGameObject(GameObject* object);

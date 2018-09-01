@@ -105,7 +105,7 @@ namespace Bolt
 			SetUniform(location, value);
 		}
 
-		friend class Initializor;
+		friend class Initializer;
 
 	public:
 		static std::unique_ptr<Shader> FromFile(const Filepath& shaderFile);

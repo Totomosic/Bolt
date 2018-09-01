@@ -96,7 +96,7 @@ namespace MeteorGame
 		{
 			float width = orthoCamera->CameraProjection().ViewFrustum.Width();
 			float height = orthoCamera->CameraProjection().ViewFrustum.Height();
-			Graphics::Text(std::to_string((int)Time::FramesPerSecond()) + " fps", ResourceManager::Get<Font>("Arial"), width - 50, height - 25, 45, Color::Black, TextAlignmentH::Center, 0);
+			Graphics::Text(std::to_string((int)Time::FramesPerSecond()) + " fps", ResourceManager::Get<Font>("Arial"), width - 50, height - 25, 45, Color::Black, AlignH::Center, 0);
 			//Graphics::Image(width / 2, height / 2, 40, 300, 300, ResourceManager::Get<Texture2D>("Explosion2"));
 			Graphics::RenderScene();
 		}
