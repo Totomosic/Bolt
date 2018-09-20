@@ -82,7 +82,7 @@ namespace Bolt
 		}
 		for (const auto& pair : renderBatches)
 		{
-			uniforms.UploadAll(pair.second.Material->Shader);
+			uniforms.UploadAll(pair.second.Material->Shader.Get());
 			(*m_Method)(pair.second, viewMatrix, projectionMatrix);
 		}
 	}

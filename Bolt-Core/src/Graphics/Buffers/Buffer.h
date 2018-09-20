@@ -35,8 +35,7 @@ namespace Bolt
 	{
 	protected:
 		id_t m_Id;
-		mutable size_t m_Size;
-		size_t m_Capacity;
+		size_t m_Size;
 		BufferUsage m_Usage;
 		BufferTarget m_Target;
 
@@ -53,7 +52,6 @@ namespace Bolt
 		Buffer& operator=(const Buffer& other) = delete;
 
 		size_t Size() const;
-		size_t Capacity() const;
 		BufferUsage Usage() const;
 		BufferTarget Target() const;
 		id_t ID() const;

@@ -5,7 +5,7 @@ namespace Bolt
 {
 
 	File::File(const Filepath& path)
-		: m_Path(path)
+		: m_Path(path), m_Stream(), m_Mode(OpenMode::None)
 	{
 	
 	}
@@ -27,110 +27,81 @@ namespace Bolt
 
 	bool File::IsOpen() const
 	{
-		return m_Out.is_open() || m_In.is_open();
+		return m_Stream.is_open();
 	}
 
-	int File::FileSize() const
+	bool File::IsReadable() const
 	{
-		return Filesystem::FileSize(m_Path);
+		return IsOpen() && (m_Mode == OpenMode::Read);
 	}
 
-	void File::Open(OpenFlags flags)
+	bool File::IsWritable() const
 	{
-		if (flags == OpenFlags::None)
-		{
-			m_Out.open(Filename().c_str());
-			m_In.open(Filename().c_str());
-		}
-		else
-		{
-			m_Out.open(Filename().c_str(), (std::ios::openmode)FlagsToValue(flags));
-			m_In.open(Filename().c_str(), (std::ios::openmode)FlagsToValue(flags));
-		}
+		return IsOpen() && (m_Mode == OpenMode::Append || m_Mode == OpenMode::Write);
 	}
 
-	void File::Close()
+	uint File::GetSize() const
 	{
-		m_Out.close();
-		m_In.close();
+		BLT_ASSERT(IsOpen(), "File must be open to read size");
+		std::streampos begin = m_Stream.tellg();
+		m_Stream.seekg(0, std::ios::end);
+		std::streampos end = m_Stream.tellg();
+		uint size = end - begin;
+		m_Stream.seekg(begin);
+		return size;
 	}
 
-	void File::Rename(const Filepath& newFilename)
+	void File::Read(void* data, uint size) const
 	{
-		Filesystem::Rename(m_Path, newFilename);
+		BLT_ASSERT(IsReadable(), "Unable to read file when not opened for reading");
+		m_Stream.read((char*)data, min(size, GetSize()));
 	}
 
-	void File::Clear()
+	void File::Write(const void* data, uint size) const
 	{
-		Open(OpenFlags::Override);
+		BLT_ASSERT(IsWritable(), "Unable to write to file when not opened for writing");
+		m_Stream.write((const char*)data, size);
 	}
 
-	void File::Read(char* buffer, int size)
+	void File::ReadText(blt::string* outString, uint size) const
 	{
-		if (IsOpen())
-		{
-			m_In.read(buffer, size);
-		}
-		else
-		{
-			BLT_ERROR("File was not opened before reading from it. File: " + Filename());
-		}
-	}
-
-	void File::Read(char* buffer)
-	{
-		Read(buffer, FileSize());
-	}
-
-	char* File::Read(int size)
-	{
-		char* buffer = new char[size];
+		uint realSize = min(size, GetSize());
+		char* buffer = new char[realSize];
 		Read(buffer, size);
-		return buffer;
+		*outString = blt::string(buffer, realSize);
 	}
 
-	char* File::Read()
+	blt::string File::ReadText(uint size) const
 	{
-		return Read(FileSize());
+		blt::string result;
+		ReadText(&result, size);
+		return result;
 	}
 
-	void File::ReadText(blt::string* outString)
+	void File::WriteText(const blt::string& string) const
 	{
-		std::string str((std::istreambuf_iterator<char>(m_In)), std::istreambuf_iterator<char>());
-		*outString = blt::string(str);
+		Write(string.data(), string.size());
 	}
 
-	blt::string File::ReadText()
+	int File::FlagsToValue(OpenMode mode)
 	{
-		blt::string str;
-		ReadText(&str);
-		return str;
-	}
-
-	void File::Write(const char* buffer, int size)
-	{
-		m_Out.write(buffer, size);
-	}
-
-	void File::WriteText(const blt::string& text)
-	{
-		Write(text.c_str(), text.size() * sizeof(char));
-	}
-
-	int File::FlagsToValue(OpenFlags flag)
-	{
-		switch (flag)
+		switch (mode)
 		{
-		case OpenFlags::None:
+		case OpenMode::None:
 			return 0;
-		case OpenFlags::Override:
-			return (int)std::ios::trunc;
-		case OpenFlags::Append:
-			return (int)std::ios::app;
-		case OpenFlags::Read:
-			return (int)std::ios::app;
+		case OpenMode::Write:
+			return std::ios::trunc | std::ios::binary | std::ios::out | std::ios::in;
+		case OpenMode::Append:
+			return std::ios::app | std::ios::binary | std::ios::out | std::ios::in;
+		case OpenMode::Read:
+			return std::ios::app | std::ios::binary | std::ios::in;
 		}
 		return 0;
+	}
+
+	void File::SetOpenMode(OpenMode mode)
+	{
+		m_Mode = mode;
 	}
 
 }

@@ -38,6 +38,8 @@ namespace Bolt
 		IndexIterator<uint> Begin() const;
 		IndexIterator<uint> End() const;
 
+		IndexArray Clone() const;
+
 		template<typename> friend class IndexIterator;
 
 	private:

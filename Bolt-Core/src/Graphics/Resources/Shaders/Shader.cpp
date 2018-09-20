@@ -4,11 +4,11 @@
 namespace Bolt
 {
 
-	const Shader* Shader::s_DefaultColorShader = nullptr;
-	const Shader* Shader::s_DefaultTextureShader = nullptr;
-	const Shader* Shader::s_DefaultFontShader = nullptr;
-	const Shader* Shader::s_DefaultSkyboxShader = nullptr;
-	const Shader* Shader::s_SpriteTextureShader = nullptr;
+	ResourcePtr<const Shader> Shader::s_DefaultColorShader = nullptr;
+	ResourcePtr<const Shader> Shader::s_DefaultTextureShader = nullptr;
+	ResourcePtr<const Shader> Shader::s_DefaultFontShader = nullptr;
+	ResourcePtr<const Shader> Shader::s_DefaultSkyboxShader = nullptr;
+	ResourcePtr<const Shader> Shader::s_SpriteTextureShader = nullptr;
 
 	Shader::Shader(const blt::string& vertexSource, const blt::string& fragmentSource) : Resource(), GLshared(),
 		m_Id(0), m_UniformLocations(), m_UniformVariables(), m_TextureSamplers()
@@ -283,6 +283,12 @@ namespace Bolt
 		GL_CALL(glUniform4f(location, value.x, value.y, value.z, value.w));
 	}
 
+	Resource* Shader::Clone() const
+	{
+		BLT_ASSERT(false, "Currently unable to clone Shaders");
+		return nullptr;
+	}
+
 	std::unique_ptr<Shader> Shader::FromFile(const Filepath& shaderFile)
 	{
 		constexpr int NONE_SHADER_TYPE = -1;
@@ -294,7 +300,7 @@ namespace Bolt
 		int currentType = NONE_SHADER_TYPE;
 		bool isGeometryShader = false;
 
-		File f = Filesystem::OpenFile(shaderFile, OpenFlags::Read);
+		File f = Filesystem::Open(shaderFile, OpenMode::Read);
 		blt::string fileData = f.ReadText();
 		std::vector<blt::string> lines = fileData.split('\n');
 		for (blt::string& line : lines)
@@ -336,8 +342,8 @@ namespace Bolt
 
 	std::unique_ptr<Shader> Shader::FromFile(const Filepath& vertexFile, const Filepath& fragmentFile)
 	{
-		File v = Filesystem::OpenFile(vertexFile, OpenFlags::Read);
-		File f = Filesystem::OpenFile(fragmentFile, OpenFlags::Read);
+		File v = Filesystem::Open(vertexFile, OpenMode::Read);
+		File f = Filesystem::Open(fragmentFile, OpenMode::Read);
 		blt::string sources[3] = { v.ReadText(), "", f.ReadText() };
 		ComShaderProgram program = ShaderCompiler::Compile(sources, vertexFile.Directory());
 		return std::make_unique<Shader>(program.Sources[0], program.Sources[2]);
@@ -345,9 +351,9 @@ namespace Bolt
 
 	std::unique_ptr<Shader> Shader::FromFile(const Filepath& vertexFile, const Filepath& geometryFile, const Filepath& fragmentFile)
 	{
-		File v = Filesystem::OpenFile(vertexFile, OpenFlags::Read);
-		File g = Filesystem::OpenFile(geometryFile, OpenFlags::Read);
-		File f = Filesystem::OpenFile(fragmentFile, OpenFlags::Read);
+		File v = Filesystem::Open(vertexFile, OpenMode::Read);
+		File g = Filesystem::Open(geometryFile, OpenMode::Read);
+		File f = Filesystem::Open(fragmentFile, OpenMode::Read);
 		blt::string sources[3] = { v.ReadText(), g.ReadText(), f.ReadText() };
 		ComShaderProgram program = ShaderCompiler::Compile(sources, vertexFile.Directory());
 		return std::make_unique<Shader>(program.Sources[0], program.Sources[1], program.Sources[2]);
@@ -367,27 +373,27 @@ namespace Bolt
 		return std::make_unique<Shader>(program.Sources[0], program.Sources[1], program.Sources[2]);
 	}
 
-	const Shader* Shader::DefaultColor()
+	ResourcePtr<const Shader> Shader::DefaultColor()
 	{
 		return s_DefaultColorShader;
 	}
 
-	const Shader* Shader::DefaultTexture()
+	ResourcePtr<const Shader> Shader::DefaultTexture()
 	{
 		return s_DefaultTextureShader;
 	}
 
-	const Shader* Shader::DefaultFont()
+	ResourcePtr<const Shader> Shader::DefaultFont()
 	{
 		return s_DefaultFontShader;
 	}
 
-	const Shader* Shader::DefaultSkybox()
+	ResourcePtr<const Shader> Shader::DefaultSkybox()
 	{
 		return s_DefaultSkyboxShader;
 	}
 
-	const Shader* Shader::Sprite()
+	ResourcePtr<const Shader> Shader::Sprite()
 	{
 		return s_SpriteTextureShader;
 	}
@@ -596,7 +602,7 @@ namespace Bolt
 #include "Source\DefaultColor_f.glsl"
 			;
 		std::unique_ptr<Shader> shader = Shader::FromSource(vSource, fSource);
-		Shader* ptr = ResourceManager::Register("DefaultColorShader", std::move(shader));
+		Shader* ptr = ResourceManager::Get<Shader>(ResourceManager::Register(std::move(shader))).Get();
 		return ptr;
 	}
 
@@ -609,7 +615,7 @@ namespace Bolt
 #include "Source\DefaultTexture_f.glsl"
 			;
 		std::unique_ptr<Shader> shader = Shader::FromSource(vSource, fSource);
-		Shader* ptr = ResourceManager::Register("DefaultTextureShader", std::move(shader));
+		Shader* ptr = ResourceManager::Get<Shader>(ResourceManager::Register(std::move(shader))).Get();
 		return ptr;
 	}
 
@@ -622,7 +628,7 @@ namespace Bolt
 #include "Source\DefaultFont_f.glsl"
 			;
 		std::unique_ptr<Shader> shader = Shader::FromSource(vSource, fSource);
-		Shader* ptr = ResourceManager::Register("DefaultFontShader", std::move(shader));
+		Shader* ptr = ResourceManager::Get<Shader>(ResourceManager::Register(std::move(shader))).Get();
 		return ptr;
 	}
 
@@ -635,7 +641,7 @@ namespace Bolt
 #include "Source\DefaultSkybox_f.glsl"
 			;
 		std::unique_ptr<Shader> shader = Shader::FromSource(vSource, fSource);
-		Shader* ptr = ResourceManager::Register("DefaultSkyboxShader", std::move(shader));
+		Shader* ptr = ResourceManager::Get<Shader>(ResourceManager::Register(std::move(shader))).Get();
 		return ptr;
 	}
 
@@ -648,7 +654,7 @@ namespace Bolt
 #include "Source\SpriteTexture_f.glsl"
 			;
 		std::unique_ptr<Shader> shader = Shader::FromSource(vSource, fSource);
-		Shader* ptr = ResourceManager::Register("DefaultSpriteShader", std::move(shader));
+		Shader* ptr = ResourceManager::Get<Shader>(ResourceManager::Register(std::move(shader))).Get();
 		return ptr;
 	}
 

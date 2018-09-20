@@ -6,6 +6,12 @@
 namespace Bolt
 {
 
+	enum class StorageType : GLenum
+	{
+		Float = GL_FLOAT,
+		UnsignedByte = GL_UNSIGNED_BYTE
+	};
+
 	enum class TextureTarget : GLenum
 	{
 		Texture1D = GL_TEXTURE_1D,
@@ -81,6 +87,11 @@ namespace Bolt
 
 		virtual void Bind(int textureBank = 0) const;
 		virtual void Unbind(int textureBank = 0) const;
+
+		virtual void Download(void* buffer, StorageType type, int level = 0) const;
+		virtual void Upload(const void* data, int x, int y, int width, int height, StorageType type, int level = 0) const;
+
+		Resource* Clone() const override;
 
 	protected:
 		void Create();

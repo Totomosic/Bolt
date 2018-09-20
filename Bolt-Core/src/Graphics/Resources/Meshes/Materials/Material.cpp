@@ -5,7 +5,7 @@ namespace Bolt
 
 	bool Material::operator==(const Material& other) const
 	{
-		return (BaseColor == other.BaseColor && RenderOptions == other.RenderOptions && Textures == other.Textures && LightingOptions == other.LightingOptions && Shader == other.Shader);
+		return (BaseColor == other.BaseColor && RenderOptions == other.RenderOptions && Textures == other.Textures && LightingOptions == other.LightingOptions && Shader.Get() == other.Shader.Get());
 	}
 
 	bool Material::operator!=(const Material& other) const

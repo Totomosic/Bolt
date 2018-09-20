@@ -93,10 +93,39 @@ namespace Bolt
 		GL_CALL(glActiveTexture(GL_TEXTURE0 + textureBank));
 		GL_CALL(glBindTexture((GLenum)Target(), 0));
 	}
+
+	void Texture::Download(void* buffer, StorageType type, int level) const
+	{
+		Bind();
+		GL_CALL(glGetTexImage((GLenum)Target(), level, GL_RGBA, (GLenum)type, buffer));
+	}
+
+	void Texture::Upload(const void* data, int x, int y, int width, int height, StorageType type, int level) const
+	{
+		Bind();
+		GL_CALL(glTexSubImage2D((GLenum)Target(), level, x, y, width, height, GL_RGBA, (GLenum)type, data));
+	}
+
+	Resource* Texture::Clone() const
+	{
+		Texture* texture = new Texture(m_Width, m_Height, m_Target, m_Format, m_Mipmaps);
+		float* imageData = new float[m_Width * m_Height * 4];
+		Bind();
+		Download(imageData, StorageType::Float);
+		texture->Bind();
+		texture->Upload(imageData, 0, 0, m_Width, m_Height, StorageType::Float);
+		if (m_Mipmaps == Mipmaps::Enabled)
+		{
+			texture->GenerateMipmaps();
+		}
+		return texture;
+	}
 	
 	void Texture::Create()
 	{
 		GL_CALL(glGenTextures(1, &m_Id));
+		Bind();
+		GL_CALL(glTexImage2D((GLenum)Target(), 0, GL_RGBA8, m_Width, m_Height, 0, (GLenum)m_Format, GL_UNSIGNED_BYTE, nullptr));
 	}
 
 	void Texture::GenerateMipmaps() const

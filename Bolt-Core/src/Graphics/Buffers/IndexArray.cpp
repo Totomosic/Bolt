@@ -101,6 +101,16 @@ namespace Bolt
 		return GetIterator(m_Descriptor.IndexCount());
 	}
 
+	IndexArray IndexArray::Clone() const
+	{
+		IndexArray result;
+		for (const auto& buffer : m_IndexBuffers)
+		{
+			result.AddIndexBuffer(buffer->Clone());
+		}
+		return std::move(result);
+	}
+
 	byte* IndexArray::TestBufferPointer(int& currentIndex, int prevIndex, byte* currentPtr, int incAmount) const
 	{
 		IArrayDescriptor::QueryResult currentResult = m_Descriptor.QueryIndex(currentIndex);

@@ -21,7 +21,25 @@ namespace DinoGame
 
 	bool Collider2D::CollidesWith(const Collider2D& collider) const
 	{
-	
+		Vector2f myPos = gameObject()->transform().Position().xy();
+		Vector2f otherPos = collider.gameObject()->transform().Position().xy();
+		float myW = Bounds().Width() / 2.0f;
+		float myH = Bounds().Height() / 2.0f;
+		float otherW = collider.Bounds().Width() / 2.0f;
+		float otherH = collider.Bounds().Height() / 2.0f;
+
+		float myLeft = myPos.x - myW;
+		float myRight = myPos.x + myW;
+		float otherLeft = otherPos.x - otherW;
+		float otherRight = otherPos.x + otherW;
+		float myBottom = myPos.y - myH;
+		float myTop = myPos.y + myH;
+		float otherBottom = otherPos.y - otherH;
+		float otherTop = otherPos.y + otherH;
+
+		bool x = (myLeft <= otherRight && myLeft >= otherLeft) || (myRight >= otherLeft && myRight <= otherRight) || (myLeft <= otherLeft && myRight >= otherRight);
+		bool y = (myBottom <= otherTop && myBottom >= otherBottom) || (myTop <= otherTop && myTop >= otherBottom) || (myTop >= otherTop && myBottom <= otherBottom);
+		return x && y;
 	}
 
 	void Collider2D::Trigger(Collider2D* collider)

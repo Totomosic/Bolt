@@ -12,9 +12,10 @@ namespace DinoGame
 		float m_RestHeight;
 		float m_Gravity;
 		float m_Velocity;
+		const bool* m_IsPaused;
 
 	public:
-		JumpScript(float gravity);
+		JumpScript(float gravity, const bool* isPaused);
 
 		void Start() override;
 		void Update() override;

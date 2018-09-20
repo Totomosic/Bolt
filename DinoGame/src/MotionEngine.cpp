@@ -3,26 +3,29 @@
 namespace DinoGame
 {
 
-	MotionEngine::MotionEngine(const float* gameSpeed) : Component(),
-		m_GameSpeed(gameSpeed), Velocity(0.0f)
+	MotionEngine::MotionEngine(const float* gameSpeed, const bool* isPaused) : Component(),
+		m_GameSpeed(gameSpeed), m_IsPaused(isPaused), Velocity(0.0f)
 	{
 
 	}
 
 	void MotionEngine::Update()
 	{
-		Transform& t = gameObject()->transform();
-		t.Translate(*m_GameSpeed * -Time::DeltaTime(), 0, 0);
-		t.Translate(Velocity.x * Time::DeltaTime(), Velocity.y * Time::DeltaTime(), 0);
-		if (t.Position().x < -50)
+		if (!*m_IsPaused)
 		{
-			Destroy(gameObject(), 0.0f);
+			Transform& t = gameObject()->transform();
+			t.Translate(*m_GameSpeed * -Time::DeltaTime(), 0, 0);
+			t.Translate(Velocity.x * Time::DeltaTime(), Velocity.y * Time::DeltaTime(), 0);
+			if (t.Position().x < -50)
+			{
+				Destroy(gameObject(), 0.0f);
+			}
 		}
 	}
 
 	std::unique_ptr<Component> MotionEngine::Clone() const
 	{
-		std::unique_ptr<MotionEngine> comp = std::make_unique<MotionEngine>(m_GameSpeed);
+		std::unique_ptr<MotionEngine> comp = std::make_unique<MotionEngine>(m_GameSpeed, m_IsPaused);
 		comp->Velocity = Velocity;
 		return std::move(comp);
 	}

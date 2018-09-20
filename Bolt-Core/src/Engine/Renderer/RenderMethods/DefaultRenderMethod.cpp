@@ -15,7 +15,7 @@ namespace Bolt
 	{
 		material.Shader->Bind();
 		material.Shader->SetUniform("u_Color", material.BaseColor);
-		material.Uniforms.UploadAll(material.Shader);
+		material.Uniforms.UploadAll(material.Shader.Get());
 		GLState::ApplySettings(material.RenderOptions);
 
 		//const std::vector<Shader::UniformVariable>& textureSamplers = material.Shader->GetAllTextureSamplers();
@@ -34,7 +34,7 @@ namespace Bolt
 
 	void DefaultRenderMethod::operator()(const RenderBatch& batch, const Matrix4f& viewMatrix, const Matrix4f& projectionMatrix) const
 	{
-		const Shader* shader = batch.Material->Shader;
+		const Shader* shader = batch.Material->Shader.Get();
 		ApplyMaterial(*batch.Material);
 		shader->SetUniform("u_ViewMatrix", viewMatrix);
 		shader->SetUniform("u_ProjectionMatrix", projectionMatrix);

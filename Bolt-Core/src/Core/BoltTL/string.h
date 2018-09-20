@@ -39,6 +39,7 @@ namespace blt
 		string(size_t capacity);
 		string(char c);
 		string(const char* str);
+		string(const char* buffer, unsigned int size);
 		string(const std::string& str);
 		string(std::initializer_list<char> il);
 		string(const string& other);

@@ -10,12 +10,13 @@ namespace DinoGame
 	{
 	private:
 		const float* m_GameSpeed;
+		const bool* m_IsPaused;
 		
 	public:
 		Vector2f Velocity;
 
 	public:
-		MotionEngine(const float* gameSpeed);
+		MotionEngine(const float* gameSpeed, const bool* isPaused);
 
 		void Update() override;
 

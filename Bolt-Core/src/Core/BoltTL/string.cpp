@@ -28,6 +28,13 @@ namespace blt
 		append(str);
 	}
 
+	string::string(const char* buffer, unsigned int size) : string(size + (size_t)1)
+	{
+		memcpy(buffer_ptr(), buffer, size);
+		m_Size += size;
+		null_terminate();
+	}
+
 	string::string(const std::string& str) : string(str.c_str())
 	{
 

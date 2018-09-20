@@ -1,6 +1,7 @@
 #pragma once
 #include "Bolt-Core.h"
 #include "..\Resource.h"
+#include "..\ResourcePtr.h"
 #include "..\..\GLshared.h"
 #include "Compiler\__Compiler__.h"
 
@@ -39,11 +40,11 @@ namespace Bolt
 		};
 
 	private:
-		static const Shader* s_DefaultColorShader;
-		static const Shader* s_DefaultTextureShader;
-		static const Shader* s_DefaultFontShader;
-		static const Shader* s_DefaultSkyboxShader;
-		static const Shader* s_SpriteTextureShader;
+		static ResourcePtr<const Shader> s_DefaultColorShader;
+		static ResourcePtr<const Shader> s_DefaultTextureShader;
+		static ResourcePtr<const Shader> s_DefaultFontShader;
+		static ResourcePtr<const Shader> s_DefaultSkyboxShader;
+		static ResourcePtr<const Shader> s_SpriteTextureShader;
 
 	private:
 		id_t m_Id;
@@ -105,6 +106,8 @@ namespace Bolt
 			SetUniform(location, value);
 		}
 
+		Resource* Clone() const override;
+
 		friend class Initializer;
 
 	public:
@@ -114,11 +117,11 @@ namespace Bolt
 		static std::unique_ptr<Shader> FromSource(const blt::string& vertexSource, const blt::string& fragmentSource);
 		static std::unique_ptr<Shader> FromSource(const blt::string& vertexSource, const blt::string& geometrySource, const blt::string& fragmentSource);
 
-		static const Shader* DefaultColor();
-		static const Shader* DefaultTexture();
-		static const Shader* DefaultFont();
-		static const Shader* DefaultSkybox();
-		static const Shader* Sprite();
+		static ResourcePtr<const Shader> DefaultColor();
+		static ResourcePtr<const Shader> DefaultTexture();
+		static ResourcePtr<const Shader> DefaultFont();
+		static ResourcePtr<const Shader> DefaultSkybox();
+		static ResourcePtr<const Shader> Sprite();
 
 	private:
 		void Create();

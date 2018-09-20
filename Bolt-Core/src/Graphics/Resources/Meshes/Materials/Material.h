@@ -1,10 +1,11 @@
 #pragma once
 #include "Bolt-Core.h"
-#include "../../Shaders/__Shaders__.h"
+#include "..\..\Shaders\__Shaders__.h"
 
 #include "LightSettings.h"
 #include "RenderSettings.h"
 #include "TextureGroup.h"
+#include "..\..\ResourcePtr.h"
 
 namespace Bolt
 {
@@ -12,7 +13,7 @@ namespace Bolt
 	struct BLT_API Material
 	{
 	public:
-		const Shader* Shader = Shader::DefaultColor();
+		ResourcePtr<const Shader> Shader = Shader::DefaultColor();
 		Color BaseColor = Color::White;
 		LightSettings LightingOptions = LightSettings();
 		RenderSettings RenderOptions = RenderSettings();

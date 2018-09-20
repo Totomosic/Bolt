@@ -50,6 +50,12 @@ namespace Bolt
 		}
 	}
 
+	Resource* Model::Clone() const
+	{
+		Model* model = new Model({ m_Data.Vertices->Clone(), m_Data.Indices.Clone() });
+		return model;
+	}
+
 	std::vector<Triangle> Model::GetTriangles() const
 	{
 		std::vector<Triangle> result;

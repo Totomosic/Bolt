@@ -5,10 +5,10 @@
 namespace Bolt
 {
 
-	enum class OpenFlags : int
+	enum class OpenMode : int
 	{
 		None,
-		Override,
+		Write,
 		Read,
 		Append
 	};
@@ -17,8 +17,8 @@ namespace Bolt
 	{
 	private:
 		Filepath m_Path;
-		std::ofstream m_Out;
-		std::ifstream m_In;
+		mutable std::fstream m_Stream;
+		mutable OpenMode m_Mode;
 
 	public:
 		File();
@@ -27,27 +27,22 @@ namespace Bolt
 		const blt::string& Filename() const;
 		const Filepath& Path() const;
 		bool IsOpen() const;
-		int FileSize() const;
+		uint GetSize() const;
+		bool IsReadable() const;
+		bool IsWritable() const;
 
-		void Open(OpenFlags flags = OpenFlags::Read);
-		void Close();
-		void Rename(const Filepath& newFilename);
-		void Clear();
+		void Read(void* data, uint size) const;
+		void Write(const void* data, uint size) const;
 
-		void Read(char* buffer, int size);
-		void Read(char* buffer);
-		char* Read(int size);
-		char* Read();
-		void ReadText(blt::string* outString);
-		blt::string ReadText();
-
-		void Write(const char* buffer, int size);
-		void WriteText(const blt::string& text);
+		void ReadText(blt::string* outString, uint size = (uint)-1) const;
+		blt::string ReadText(uint size = (uint)-1) const;
+		void WriteText(const blt::string& string) const;
 
 		friend class Filesystem;
 
 	private:
-		int FlagsToValue(OpenFlags flags);
+		int FlagsToValue(OpenMode mode);
+		void SetOpenMode(OpenMode mode);
 
 	};
 
