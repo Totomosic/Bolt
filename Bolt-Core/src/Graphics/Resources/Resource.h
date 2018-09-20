@@ -9,6 +9,8 @@ namespace Bolt
 	public:
 		inline virtual ~Resource() {}
 
+		virtual Resource* Clone() const = 0;
+
 	};
 
 }

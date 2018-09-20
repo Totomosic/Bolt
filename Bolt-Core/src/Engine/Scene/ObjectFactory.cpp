@@ -5,6 +5,11 @@ namespace Bolt
 
 	Model* ObjectFactory::s_RectangleModel = nullptr;
 
+	ObjectFactory::ObjectFactory() : ObjectFactory((Layer*)nullptr)
+	{
+	
+	}
+
 	ObjectFactory::ObjectFactory(Layer* layer)
 		: m_CurrentLayer(layer), m_CurrentParent(nullptr), m_Prefabs()
 	{
@@ -110,7 +115,7 @@ namespace Bolt
 		return Instantiate(mesh, std::move(transform));
 	}
 
-	GameObject* ObjectFactory::Image(float width, float height, const Texture2D* image, Transform transform) const
+	GameObject* ObjectFactory::Image(float width, float height, const ResourcePtr<const Texture2D>& image, Transform transform) const
 	{
 		GameObject* object = Rectangle(width, height, Color::White, std::move(transform));
 		Mesh& mesh = object->Components().GetComponent<MeshRenderer>().Mesh;

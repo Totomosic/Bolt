@@ -1,6 +1,7 @@
 #pragma once
 #include "Materials\__Materials__.h"
 #include "Model.h"
+#include "..\ResourcePtr.h"
 
 namespace Bolt
 {
@@ -11,7 +12,7 @@ namespace Bolt
 		struct BLT_API ModelGroup
 		{
 		public:
-			const Model* Model = nullptr;
+			ResourcePtr<const Model> Model = nullptr;
 			Matrix4f Transform = Matrix4f::Identity();
 			std::vector<int> MaterialIndices = { 0 }; // size should equal the number of index buffers that the model has
 		};

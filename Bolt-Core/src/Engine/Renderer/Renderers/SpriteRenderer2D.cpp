@@ -90,7 +90,7 @@ namespace Bolt
 				{
 					const Material* material = &mesh.Materials[model.MaterialIndices[j]];
 					RenderBatch batch;
-					uniforms.UploadAll(material->Shader);
+					uniforms.UploadAll(material->Shader.Get());
 					batch.Material = material;
 					batch.Geometry.push_back({ model.Model->Data().Vertices.get(), model.Model->Data().Indices.GetIndexBuffer(j).get(), object->transform().TransformMatrix() * model.Transform });
 					Submit(batch);
@@ -119,7 +119,7 @@ namespace Bolt
 		int tid = 0;
 		if (renderBatch.Material->Textures.Textures.size() > 0)
 		{
-			const Texture* texture = renderBatch.Material->Textures.Textures[0];
+			const Texture* texture = renderBatch.Material->Textures.Textures[0].Get();
 			if (m_TextureLookup.find(texture) != m_TextureLookup.end())
 			{
 				tid = m_TextureLookup.at(texture);

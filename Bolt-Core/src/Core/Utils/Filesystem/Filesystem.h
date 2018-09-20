@@ -19,25 +19,10 @@ namespace Bolt
 
 		static const Directorypath& WorkingDirectory();
 
-		static int FileSize(const Filepath& filename);
-		static bool FileExists(const Filepath& filename);
+		static bool FileExists(const Filepath& filepath);
 
-		static void Rename(const Filepath& filename, const Filepath& newFilename);
-		static void Rename(File& file, const Filepath& newFilename);
-
-		static File GetFile(const Filepath& filename);
-		static File OpenFile(const Filepath& filename, OpenFlags flags = OpenFlags::Read);
-		static File CreateNewFile(const Filepath& filename);
-		static void CreateNewDirectory(const Directorypath& directoryPath);
-		static bool DirectoryExists(const Directorypath& path);
-
-		static std::vector<Directorypath> EnumerateDirectories(const Directorypath& path);
-		static std::vector<Filepath> EnumerateFiles(const Directorypath& path);
-		
-		static bool Delete(const Filepath& filename);
-		static bool Delete(const File& file);
-
-		static XMLfile OpenXMLFile(const Filepath& filename);
+		static File Open(const Filepath& filepath, OpenMode mode = OpenMode::Read);
+		static void Close(File& file);
 
 		friend class Engine;
 

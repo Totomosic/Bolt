@@ -29,7 +29,7 @@ namespace Bolt
 		VertexBuffer* m_Vbo;
 		mutable uint m_IndexCount;
 		mutable SpriteVertex* m_MappedPtr;
-		mutable std::vector<const Texture*> m_Textures;
+		mutable std::vector<ResourcePtr<const Texture>> m_Textures;
 		mutable std::unordered_map<const Texture*, int> m_TextureLookup;
 
 	public:

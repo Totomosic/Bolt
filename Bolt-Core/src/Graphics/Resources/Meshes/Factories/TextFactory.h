@@ -1,6 +1,7 @@
 #pragma once
 #include "VertexFactory.h"
 #include "..\..\Textures\Fonts\Font.h"
+#include "..\..\ResourcePtr.h"
 
 namespace Bolt
 {
@@ -22,14 +23,14 @@ namespace Bolt
 	class BLT_API TextFactory : public VertexFactory
 	{
 	public:
-		const Font* TextFont;
+		ResourcePtr<const Font> TextFont;
 		blt::string Text;
 		Bolt::Color Color;
 		AlignH HorizontalAlign;
 		AlignV VerticalAlign;
 
 	public:
-		TextFactory(const blt::string& text, const Font* font, const Bolt::Color& color = Color::White, AlignH horizontalAlignment = AlignH::Center, AlignV verticalAlignment = AlignV::Center);
+		TextFactory(const blt::string& text, const ResourcePtr<const Font>& font, const Bolt::Color& color = Color::White, AlignH horizontalAlignment = AlignH::Center, AlignV verticalAlignment = AlignV::Center);
 
 		ModelData GenerateVertices() const override;
 

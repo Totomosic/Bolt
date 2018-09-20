@@ -1,6 +1,7 @@
 #pragma once
 #include "TextureAnimator.h"
 #include "..\..\Textures\__Textures__.h"
+#include "..\..\ResourcePtr.h"
 
 namespace Bolt
 {
@@ -8,7 +9,7 @@ namespace Bolt
 	struct BLT_API TextureGroup
 	{
 	public:
-		std::vector<const Texture*> Textures;
+		std::vector<ResourcePtr<const Texture>> Textures;
 		std::unordered_map<int, std::unique_ptr<TextureAnimator>> Animators;
 
 	public:

@@ -9,13 +9,13 @@ namespace Bolt
 	}
 
 	Buffer::Buffer(const void* data, size_t size, BufferTarget target, BufferUsage usage) : GLshared(),
-		m_Id(0), m_Size(size), m_Capacity(size), m_Usage(usage), m_Target(target), m_MappedPtr(nullptr), m_MappedAccess(Access::Read)
+		m_Id(0), m_Size(size), m_Usage(usage), m_Target(target), m_MappedPtr(nullptr), m_MappedAccess(Access::Read)
 	{
 		Create(data);
 	}
 
 	Buffer::Buffer(Buffer&& other) noexcept
-		: m_Id(other.m_Id), m_Size(other.m_Size), m_Capacity(other.m_Capacity), m_Target(other.m_Target), m_Usage(other.m_Usage), m_MappedPtr(nullptr), m_MappedAccess(Access::Read)
+		: m_Id(other.m_Id), m_Size(other.m_Size), m_Target(other.m_Target), m_Usage(other.m_Usage), m_MappedPtr(nullptr), m_MappedAccess(Access::Read)
 	{
 		other.m_Id = 0;
 	}
@@ -27,7 +27,6 @@ namespace Bolt
 		Access tempAccess = m_MappedAccess;
 		m_Id = other.m_Id;
 		m_Size = other.m_Size;
-		m_Capacity = other.m_Capacity;
 		m_Target = other.m_Target;
 		m_Usage = other.m_Usage;
 		m_MappedPtr = other.m_MappedPtr;
@@ -49,11 +48,6 @@ namespace Bolt
 	size_t Buffer::Size() const
 	{
 		return m_Size;
-	}
-
-	size_t Buffer::Capacity() const
-	{
-		return m_Capacity;
 	}
 
 	BufferUsage Buffer::Usage() const
@@ -110,7 +104,6 @@ namespace Bolt
 			Bind();
 			bool result = GL_CALL(glUnmapBuffer((GLenum)m_Target));
 			m_MappedPtr = nullptr;
-			m_Size = m_Capacity; // Some way of testing this
 			return result;
 		}
 		return true;
@@ -118,16 +111,15 @@ namespace Bolt
 
 	void Buffer::Upload(const void* data, size_t size, size_t offset) const
 	{
-		BLT_ASSERT(size + offset <= Capacity(), "Could not upload: " + std::to_string(size) + " as buffer is not large enough");
+		BLT_ASSERT(size + offset <= Size(), "Could not upload: " + std::to_string(size) + " as buffer is not large enough");
 		BLT_ASSERT(!IsCurrentlyMapped(), "Buffer was mapped while trying to upload, ensure no active iterators are present.");
 		Bind();
 		GL_CALL(glBufferSubData((GLenum)m_Target, (GLintptr)offset, (GLsizeiptr)size, (const GLvoid*)data));
-		m_Size += size;
 	}
 
 	void Buffer::Download(void* data, size_t size, size_t offset) const
 	{
-		BLT_ASSERT(size + offset <= Capacity(), "Could not download: " + std::to_string(size) + " as buffer does not contain that many bytes");
+		BLT_ASSERT(size + offset <= Size(), "Could not download: " + std::to_string(size) + " as buffer does not contain that many bytes");
 		BLT_ASSERT(!IsCurrentlyMapped(), "Buffer was mapped while trying to download, ensure no active iterators are present.");
 		Bind();
 		GL_CALL(glGetBufferSubData((GLenum)m_Target, (GLintptr)offset, (GLsizeiptr)size, (GLvoid*)data));
@@ -140,17 +132,13 @@ namespace Bolt
 
 	void Buffer::Resize(size_t newSize)
 	{
-		m_Capacity = newSize;
-		if (m_Size > m_Capacity)
-		{
-			m_Size = m_Capacity;
-		}
-		GL_CALL(glBufferData((GLenum)m_Target, (GLsizeiptr)Capacity(), (const GLvoid*)nullptr, (GLenum)Usage()));
+		m_Size = newSize;
+		GL_CALL(glBufferData((GLenum)m_Target, (GLsizeiptr)Size(), (const GLvoid*)nullptr, (GLenum)Usage()));
 	}
 
 	void Buffer::ResizePreserve(size_t newSize)
 	{
-		size_t oldSize = (newSize < Capacity()) ? newSize : Capacity();
+		size_t oldSize = (newSize < Size()) ? newSize : Size();
 		byte* oldData = new byte[oldSize];
 		Download(oldData, oldSize, 0);
 		Resize(newSize);
@@ -160,7 +148,7 @@ namespace Bolt
 
 	void Buffer::TestResize(size_t newSize)
 	{
-		if (newSize >= Capacity())
+		if (newSize >= Size())
 		{
 			Resize(newSize);
 		}
@@ -168,7 +156,7 @@ namespace Bolt
 
 	void Buffer::TestResizePreserve(size_t newSize)
 	{
-		if (newSize >= Capacity())
+		if (newSize >= Size())
 		{
 			ResizePreserve(newSize);
 		}

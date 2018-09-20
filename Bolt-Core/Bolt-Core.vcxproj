@@ -261,7 +261,9 @@
     <ClInclude Include="src\Graphics\Resources\Meshes\Factories\VertexFactory.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\__Meshes__.h" />
     <ClInclude Include="src\Graphics\Resources\Resource.h" />
+    <ClInclude Include="src\Graphics\Resources\ResourceFile.h" />
     <ClInclude Include="src\Graphics\Resources\ResourceManager.h" />
+    <ClInclude Include="src\Graphics\Resources\ResourcePtr.h" />
     <ClInclude Include="src\Graphics\Resources\Shaders\Compiler\ComShaderProgram.h" />
     <ClInclude Include="src\Graphics\Resources\Shaders\Compiler\ShaderCompiler.h" />
     <ClInclude Include="src\Graphics\Resources\Shaders\Compiler\__Compiler__.h" />

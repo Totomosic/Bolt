@@ -1,11 +1,13 @@
 #pragma once
 #include "Bolt-Core.h"
 #include "Resource.h"
+#include "ResourceFile.h"
+#include "ResourcePtr.h"
 
 namespace Bolt
 {
 
-	typedef blt::string ResourceID;
+	typedef id_t ResourceID;
 
 	class BLT_API ResourceManager
 	{
@@ -15,28 +17,35 @@ namespace Bolt
 	public:
 		ResourceManager() = delete;
 
+		static ResourceFile Fetch(const Filepath& resourceFile);
+		static id_t LoadFile(const ResourceFile& resourceFile);
+
 		static bool ResourceExists(const ResourceID& id);
 
-		static Resource* Register(const ResourceID& id, std::unique_ptr<Resource>&& resource);
-		static Resource* Get(const ResourceID& id);
+		static id_t Register(std::unique_ptr<Resource>&& resource);
+		static ResourcePtr<Resource> Get(const ResourceID& id);
 		static void FreeResource(const ResourceID& id);
 
 		template<typename T>
-		static T* Get(const ResourceID& id)
+		static ResourcePtr<T> Get(const ResourceID& id)
 		{
-			return (T*)Get(id);
+			return (ResourcePtr<T>)Get(id);
 		}
 
 		template<typename T>
-		static T* Register(const ResourceID& id, std::unique_ptr<T>&& resource)
+		static id_t Register(std::unique_ptr<T>&& resource)
 		{
-			return (T*)Register(id, std::unique_ptr<Resource>(resource.release()));
+			return Register(std::unique_ptr<Resource>(resource.release()));
 		}
 
 		friend class Engine;
 
 	private:
 		static void Terminate();
+		static id_t FindNextId();
+
+		static ResourceType StringToType(const blt::string& str);
+		static id_t LoadImageFile(const ResourceFile& resourceFile);
 
 	};
 

@@ -3,15 +3,10 @@
 namespace Bolt
 {
 
-	MeshRenderer::MeshRenderer(Bolt::Mesh mesh, const std::function<void(Bolt::Mesh&)>& deleter)
-		: Mesh(std::move(mesh)), Deleter(deleter)
+	MeshRenderer::MeshRenderer(Bolt::Mesh mesh)
+		: Mesh(std::move(mesh))
 	{
 	
-	}
-
-	MeshRenderer::~MeshRenderer()
-	{
-		Deleter(Mesh);
 	}
 
 	void MeshRenderer::Update()

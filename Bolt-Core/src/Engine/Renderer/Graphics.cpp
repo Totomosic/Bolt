@@ -60,27 +60,21 @@ namespace Bolt
 		object->Components().AddComponent(std::make_unique<MeshRenderer>(mesh));
 	}
 
-	void Graphics::Text(const blt::string& text, const Font* font, float x, float y, float z, const Color& color, AlignH horizontalAlign, AlignV verticalAlign, id_t layerId)
+	void Graphics::Text(const blt::string& text, const ResourcePtr<const Font>& font, float x, float y, float z, const Color& color, AlignH horizontalAlign, AlignV verticalAlign, id_t layerId)
 	{
 		GameObject* object = SceneManager::CurrentScene().GetLayer(layerId).AddTemporaryGameObject(GameObject());
 		object->transform().SetLocalPosition(x, y, z);
 
 		Mesh mesh;
-		mesh.Models.push_back({ new Model(TextFactory(text, font, Color::White, horizontalAlign, verticalAlign)), Matrix4f::Identity(), { 0 } });
+		mesh.Models.push_back({ ResourcePtr<Model>(new Model(TextFactory(text, font, Color::White, horizontalAlign, verticalAlign)), true), Matrix4f::Identity(), { 0 } });
 		mesh.Materials[0].BaseColor = color;
 		mesh.Materials[0].Textures.Textures.push_back(font);
 		mesh.Materials[0].Shader = Shader::DefaultFont();
 		mesh.Materials[0].RenderOptions.DepthFunc = DepthFunction::Lequal;
-		object->Components().AddComponent(std::make_unique<MeshRenderer>(mesh, [](Mesh& mesh) { 
-			for (Mesh::ModelGroup& model : mesh.Models)
-			{
-				Model* m = (Model*)model.Model;
-				delete m;
-			}
-		}));
+		object->Components().AddComponent(std::make_unique<MeshRenderer>(mesh));
 	}
 
-	void Graphics::Image(float x, float y, float z, float w, float h, const Texture2D* texture, const Quaternion& orientation, id_t layerId)
+	void Graphics::Image(float x, float y, float z, float w, float h, const ResourcePtr<const Texture2D>& texture, const Quaternion& orientation, id_t layerId)
 	{
 		GameObject* object = SceneManager::CurrentScene().GetLayer(layerId).AddTemporaryGameObject(GameObject());
 		object->transform().SetLocalPosition(x, y, z);

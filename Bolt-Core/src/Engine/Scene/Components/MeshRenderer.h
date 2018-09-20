@@ -9,11 +9,9 @@ namespace Bolt
 	{
 	public:
 		Mesh Mesh;
-		std::function<void(Bolt::Mesh&)> Deleter;
 
 	public:
-		MeshRenderer(Bolt::Mesh mesh, const std::function<void(Bolt::Mesh&)>& deleter = [](Bolt::Mesh& mesh) {});
-		~MeshRenderer() override;
+		MeshRenderer(Bolt::Mesh mesh);
 
 		void Update() override;
 
