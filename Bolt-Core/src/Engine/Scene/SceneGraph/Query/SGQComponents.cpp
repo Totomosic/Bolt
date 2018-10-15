@@ -19,7 +19,7 @@ namespace Bolt
 			bool hasComponents = true;
 			for (const std::type_index& type : ComponentTypes)
 			{
-				if (!object->Components().HasComponent(type))
+				if (!object->Components().HasComponent(type.hash_code()))
 				{
 					hasComponents = false;
 					break;

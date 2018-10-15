@@ -43,4 +43,10 @@ namespace Bolt
 		return m_Components;
 	}
 
+	void ObjectPrefab::Transfer(XMLserializer& backend, bool isWriting)
+	{
+		BLT_TRANSFER(backend, m_Transform);
+		BLT_TRANSFER(backend, m_Components);
+	}
+
 }

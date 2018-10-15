@@ -128,6 +128,13 @@ namespace Bolt
 		m_TemporaryObjects.push_back({ object, timeToDelete });
 	}
 
+	void Layer::Transfer(XMLserializer& backend, bool isWriting)
+	{
+		BLT_TRANSFER(backend, m_Id);
+		BLT_TRANSFER(backend, m_GameObjects);
+		BLT_TRANSFER(backend, m_ActiveCamera);
+	}
+
 	void Destroy(GameObject* object, float timeToDelete)
 	{
 		BLT_ASSERT(object->GetLayer() != nullptr, "Attempted to destroy GameObject that is not part of a layer");

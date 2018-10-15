@@ -136,6 +136,15 @@ namespace Bolt
 		}
 	}
 
+	void GameObject::Transfer(XMLserializer& backend, bool isWriting)
+	{
+		ObjectPrefab::Transfer(backend, isWriting);
+		BLT_TRANSFER(backend, m_Id);
+		BLT_TRANSFER(backend, m_Parent);
+		BLT_TRANSFER(backend, m_Children);
+		BLT_TRANSFER(backend, m_Layer);
+	}
+
 	void GameObject::SetLayer(Layer* layer)
 	{
 		m_Layer = layer;

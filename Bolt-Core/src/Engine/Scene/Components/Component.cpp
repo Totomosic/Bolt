@@ -57,6 +57,12 @@ namespace Bolt
 	
 	}
 
+	void Component::Transfer(XMLserializer& backend, bool isWriting)
+	{
+		BLT_TRANSFER(backend, m_Id);
+		BLT_TRANSFER(backend, m_GameObject);
+	}
+
 	void Component::SetGameObject(ObjectPrefab* object)
 	{
 		m_GameObject = object;

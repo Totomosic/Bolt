@@ -2,6 +2,7 @@
 #include "Bolt-Core.h"
 #include "Resource.h"
 #include "ResourceFile.h"
+#include "ResourcePack.h"
 #include "ResourcePtr.h"
 
 namespace Bolt
@@ -18,7 +19,9 @@ namespace Bolt
 		ResourceManager() = delete;
 
 		static ResourceFile Fetch(const Filepath& resourceFile);
-		static id_t LoadFile(const ResourceFile& resourceFile);
+		static ResourcePack FetchPack(const Filepath& resourcePack);
+		static ResourceFile& LoadFile(ResourceFile& resourceFile);
+		static ResourcePack& LoadPack(ResourcePack& resourcePack);
 
 		static bool ResourceExists(const ResourceID& id);
 
@@ -45,7 +48,8 @@ namespace Bolt
 		static id_t FindNextId();
 
 		static ResourceType StringToType(const blt::string& str);
-		static id_t LoadImageFile(const ResourceFile& resourceFile);
+		static ResourceFile& LoadTexture2DFile(ResourceFile& resourceFile);
+		static ResourceFile& LoadModelFile(ResourceFile& resourceFile);
 
 	};
 

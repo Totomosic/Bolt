@@ -3,6 +3,14 @@
 namespace Bolt
 {
 
+	void ObjectCollection::GameObjectInfo::Transfer(XMLserializer& backend, bool isWriting)
+	{
+		if (Enabled)
+		{
+			BLT_TRANSFER(backend, Object);
+		}
+	}
+
 	ObjectCollection::ObjectCollection()
 		: m_GameObjects(), m_ActiveGameObjects()
 	{
@@ -49,6 +57,11 @@ namespace Bolt
 		{
 			m_ActiveGameObjects.erase(it);
 		}
+	}
+
+	void ObjectCollection::Transfer(XMLserializer& backend, bool isWriting)
+	{
+		BLT_TRANSFER_ARRAY(backend, m_GameObjects, MAX_GAMEOBJECTS);
 	}
 
 	id_t ObjectCollection::FindNextId() const

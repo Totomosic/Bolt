@@ -483,6 +483,26 @@ namespace Bolt
 			stream << right.ToString();	
 			return stream;	
 		}	
+
+		void Transfer(XMLserializer& backend, bool isWriting)
+		{
+			BLT_TRANSFER(backend, m00);
+			BLT_TRANSFER(backend, m10);
+			BLT_TRANSFER(backend, m20);
+			BLT_TRANSFER(backend, m30);
+			BLT_TRANSFER(backend, m01);
+			BLT_TRANSFER(backend, m11);
+			BLT_TRANSFER(backend, m21);
+			BLT_TRANSFER(backend, m31);
+			BLT_TRANSFER(backend, m02);
+			BLT_TRANSFER(backend, m12);
+			BLT_TRANSFER(backend, m22);
+			BLT_TRANSFER(backend, m32);
+			BLT_TRANSFER(backend, m03);
+			BLT_TRANSFER(backend, m13);
+			BLT_TRANSFER(backend, m23);
+			BLT_TRANSFER(backend, m33);
+		}
 				
 		static Matrix4<T, Base> Identity()
 		{	

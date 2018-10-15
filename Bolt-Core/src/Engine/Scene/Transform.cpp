@@ -79,7 +79,7 @@ namespace Bolt
 		{
 			transform->m_Children.push_back(this);
 		}
-		m_Parent = transform;		
+		m_Parent = (Transform*)transform;		
 		RecalculateMatrix();
 	}
 
@@ -186,6 +186,16 @@ namespace Bolt
 			axis = Orientation().Inverse() * axis;
 		}
 		Rotate(Quaternion::FromAngleAxis(angle, axis));
+	}
+
+	void Transform::Transfer(XMLserializer& backend, bool isWriting)
+	{
+		BLT_TRANSFER(backend, m_Position);
+		BLT_TRANSFER(backend, m_Orientation);
+		BLT_TRANSFER(backend, m_Scale);
+
+		BLT_TRANSFER(backend, m_Parent);
+		BLT_TRANSFER(backend, m_Children);
 	}
 
 	void Transform::RecalculateMatrix() const

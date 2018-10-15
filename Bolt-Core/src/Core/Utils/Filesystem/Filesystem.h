@@ -3,6 +3,7 @@
 #include "File.h"
 #include "Filepath.h"
 #include "FileLoader.h"
+#include "XML\__XML__.h"
 
 #define BLT_GET_CURRENT_DIRECTORY _getcwd
 
@@ -23,6 +24,7 @@ namespace Bolt
 
 		static File Open(const Filepath& filepath, OpenMode mode = OpenMode::Read);
 		static void Close(File& file);
+		static XMLfile OpenXML(const Filepath& filepath, OpenMode mode = OpenMode::Read);
 
 		friend class Engine;
 

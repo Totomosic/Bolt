@@ -63,6 +63,8 @@ namespace Bolt
 
 		blt::string ToString() const;
 
+		void Transfer(XMLserializer& backend, bool isWriting);
+
 	public:
 		static Quaternion Log(const Quaternion& q);
 		static Quaternion Exp(const Quaternion& q);

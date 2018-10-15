@@ -13,7 +13,7 @@ namespace Bolt
 	struct BLT_API Transform
 	{
 	private:
-		const Transform* m_Parent;
+		Transform* m_Parent;
 		mutable std::vector<Transform*> m_Children;
 
 		Vector3f m_Position;
@@ -55,6 +55,8 @@ namespace Bolt
 		void Translate(float x, float y, float z);
 		void Rotate(const Quaternion& rotation);
 		void Rotate(float angle, Vector3f axis, Space rotateSpace = Space::World);
+
+		void Transfer(XMLserializer& backend, bool isWriting);
 
 	private:
 		void RecalculateMatrix() const;

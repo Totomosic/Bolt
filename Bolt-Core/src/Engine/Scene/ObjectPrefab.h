@@ -26,6 +26,8 @@ namespace Bolt
 		const ComponentManager& Components() const;
 		ComponentManager& Components();
 
+		virtual void Transfer(XMLserializer& backend, bool isWriting);
+
 	};
 
 }

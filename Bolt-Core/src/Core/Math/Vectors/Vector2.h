@@ -1,5 +1,6 @@
 #pragma once
 #include "Types.h"
+#include "Engine\Serialization\XMLserializer.h"
 
 namespace Bolt
 {
@@ -306,6 +307,12 @@ namespace Bolt
 			stream << vector.ToString();	
 			return stream;	
 		}	
+
+		void Transfer(XMLserializer& backend, bool isWriting)
+		{
+			BLT_TRANSFER(backend, x);
+			BLT_TRANSFER(backend, y);
+		}
 						
 		static Base Distance(const Vector2<Base>& left, const Vector2<Base>& right)
 		{	

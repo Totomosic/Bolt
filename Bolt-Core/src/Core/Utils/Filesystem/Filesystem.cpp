@@ -19,7 +19,7 @@ namespace Bolt
 
 	File Filesystem::Open(const Filepath& filepath, OpenMode mode)
 	{
-		File f;
+		File f(filepath);
 		f.SetOpenMode(mode);
 		f.m_Stream.open(filepath.Path().c_str(), f.FlagsToValue(mode));
 		return f;
@@ -29,6 +29,14 @@ namespace Bolt
 	{
 		file.SetOpenMode(OpenMode::None);
 		file.m_Stream.close();
+	}
+
+	XMLfile Filesystem::OpenXML(const Filepath& filepath, OpenMode mode)
+	{
+		XMLfile f(filepath);
+		f.SetOpenMode(mode);
+		f.m_Stream.open(filepath.Path().c_str(), f.FlagsToValue(mode));
+		return f;
 	}
 
 	void Filesystem::Initialize()
