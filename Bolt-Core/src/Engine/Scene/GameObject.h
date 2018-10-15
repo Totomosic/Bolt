@@ -40,6 +40,8 @@ namespace Bolt
 		void Update();
 		void LateUpdate();
 
+		void Transfer(XMLserializer& backend, bool isWriting) override;
+
 		friend struct ObjectCollection;
 		friend struct Layer;
 

@@ -52,6 +52,8 @@ namespace Bolt
 		void UpdateTemporaryObjects();
 		void MarkGameObjectForDelete(GameObject* object, float timeToDelete = 0.0f);
 
+		void Transfer(XMLserializer& backend, bool isWriting);
+
 		friend struct Scene;
 		friend class Graphics;
 		friend class Component;

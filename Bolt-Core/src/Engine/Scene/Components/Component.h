@@ -29,6 +29,7 @@ namespace Bolt
 		virtual void End();
 
 		virtual std::unique_ptr<Component> Clone() const = 0;
+		virtual void Transfer(XMLserializer& backend, bool isWriting);
 
 		friend class GameObject;
 		friend class ComponentManager;

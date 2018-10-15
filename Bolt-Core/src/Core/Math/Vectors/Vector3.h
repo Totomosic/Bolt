@@ -332,6 +332,13 @@ namespace Bolt
 			return stream;
 		}
 
+		void Transfer(XMLserializer& backend, bool isWriting)
+		{
+			BLT_TRANSFER(backend, x);
+			BLT_TRANSFER(backend, y);
+			BLT_TRANSFER(backend, z);
+		}
+
 		Vector2<Base> xy() const
 		{
 			return Vector2<Base>(x, y);

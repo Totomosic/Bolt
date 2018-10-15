@@ -15,6 +15,10 @@ namespace Bolt
 		public:
 			GameObject Object;
 			bool Enabled = false;
+
+		public:
+			void Transfer(XMLserializer& backend, bool isWriting);
+
 		};
 
 	private:
@@ -31,6 +35,8 @@ namespace Bolt
 		id_t AddGameObject(GameObject&& object);
 		void RemoveGameObject(GameObject* object);
 		void RemoveGameObject(id_t id);
+
+		void Transfer(XMLserializer& backend, bool isWriting);
 
 	private:
 		id_t FindNextId() const;

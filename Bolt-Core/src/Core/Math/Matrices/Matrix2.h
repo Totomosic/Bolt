@@ -284,6 +284,14 @@ namespace Bolt
 			return stream;
 		}
 
+		void Transfer(XMLserializer& backend, bool isWriting)
+		{
+			BLT_TRANSFER(backend, m00);
+			BLT_TRANSFER(backend, m10);
+			BLT_TRANSFER(backend, m01);
+			BLT_TRANSFER(backend, m11);
+		}
+
 		template<typename Other, typename OtherBase>
 		bool operator==(const Matrix2<Other, OtherBase>& other) const
 		{

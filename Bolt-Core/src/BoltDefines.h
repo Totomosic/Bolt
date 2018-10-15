@@ -28,3 +28,7 @@ inline blt::string ConvertError(GLenum error)
 #define BLT_BIT(num) (1 << num)
 #define BLT_IS_BIT_SET(var, num) (!!((var) & BLT_BIT(num)))
 #define BLT_CONTAINS_BIT(var, bitvalue) (!!(((int)var) & ((int)bitvalue)))
+
+// Serialization Helpers
+#define BLT_TRANSFER(backend, member_var) backend.Transfer(#member_var, &member_var)
+#define BLT_TRANSFER_ARRAY(backend, member_var, length) backend.TransferArray(#member_var, member_var, length)

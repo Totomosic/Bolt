@@ -15,7 +15,7 @@ namespace DinoGame
 		id_t arialFont;
 		id_t groundTextureId;
 		id_t playerTextureId;
-		ObjectFactory* factory;
+		ObjectFactory factory;
 
 		GameObject* player;
 		GameObject* ground;
@@ -42,24 +42,18 @@ namespace DinoGame
 			arialFont = ResourceManager::Register(std::make_unique<Font>("res/arial.ttf", 20));
 			ResourcePtr<Font> arial = ResourceManager::Get<Font>(arialFont);
 
-			TextureCreateOptions opt;
-			opt.Magnification = MagFilter::Nearest;
-			opt.Minification = MinFilter::Nearest;
-			playerTextureId = ResourceManager::Register(std::make_unique<Texture2D>(LoadTexture("res/trex_anim.png"), opt));
-			groundTextureId = ResourceManager::Register(std::make_unique<Texture2D>(LoadTexture("res/ground.png"), opt));
-			ResourcePtr<Texture2D> trex = ResourceManager::Get<Texture2D>(playerTextureId);
-			ResourcePtr<Texture2D> groundTexture = ResourceManager::Get<Texture2D>(groundTextureId);
-			ResourcePtr<Texture2D> cactusLTexture = ResourceManager::Get<Texture2D>(ResourceManager::Register(std::make_unique<Texture2D>(LoadTexture("res/large_cactus.png"), opt)));
-			ResourcePtr<Texture2D> cactusSTexture = ResourceManager::Get<Texture2D>(ResourceManager::Register(std::make_unique<Texture2D>(LoadTexture("res/small_cactus.png"), opt)));
-			ResourcePtr<Texture2D> cloudTexture = ResourceManager::Get<Texture2D>(ResourceManager::Register(std::make_unique<Texture2D>(LoadTexture("res/cloud.png"), opt)));
-			//Texture2D* gameOverTexture = ResourceManager::Register(6, std::make_unique<Texture2D>(LoadTexture("res/gameover.png")));
-			ResourcePtr<Model> cactusRectangle = ResourceManager::Get<Model>(ResourceManager::Register(std::make_unique<Model>(RectangleFactory(50, 100))));
+			ResourcePack resources = ResourceManager::FetchPack("res/dino_resources.pack");
+			ResourceManager::LoadPack(resources);
+
+			groundTextureId = resources.Resources.at("ground").Id;
+			playerTextureId = resources.Resources.at("trex").Id;
+			ResourcePtr<Texture2D> cactusSTexture = ResourceManager::Get<Texture2D>(resources.Resources.at("small_cactus").Id);
+			ResourcePtr<Texture2D> gameOverTexture = ResourceManager::Get<Texture2D>(resources.Resources.at("gameover").Id);
+
+			ResourcePtr<Model> cactusRectangle = ResourceManager::Get<Model>(resources.Resources.at("square").Id);
 			ResourcePtr<Model> gameOverRectangle = ResourceManager::Get<Model>(ResourceManager::Register(std::make_unique<Model>(RectangleFactory(Width() / 4, Height() / 4))));
 
-			ResourceFile f = ResourceManager::Fetch("res/shark.bres");
-			id_t gameOver = ResourceManager::LoadFile(f);
-
-			factory = new ObjectFactory(mainLayer);
+			factory = ObjectFactory(mainLayer);
 
 			Mesh cactusMesh;
 			cactusMesh.Models.push_back({ cactusRectangle, Matrix4f::Identity(), { 0 } });
@@ -69,7 +63,7 @@ namespace DinoGame
 
 			Mesh gameOverMesh = cactusMesh;
 			gameOverMesh.Models[0].Model = gameOverRectangle.Clone();
-			gameOverMesh.Materials[0].Textures.Textures[0] = ResourceManager::Get<Texture2D>(gameOver);
+			gameOverMesh.Materials[0].Textures.Textures[0] = gameOverTexture;
 			gameOverMesh.Materials[0].Textures.Animators.erase(0);
 
 			ObjectPrefab gameOverPrefab = ObjectPrefab();
@@ -80,8 +74,8 @@ namespace DinoGame
 			cactusPrefab.Components().AddComponent(std::make_unique<MotionEngine>(&gameSpeed, &isPaused));
 			cactusPrefab.Components().AddComponent(std::make_unique<Collider2D>(Bolt::Rectangle{ { -25, -50 }, { 25, 50 } }));
 
-			GAMEOVER_PREFAB = factory->AddPrefab(std::move(gameOverPrefab));
-			CACTUS_PREFAB = factory->AddPrefab(std::move(cactusPrefab));
+			GAMEOVER_PREFAB = factory.AddPrefab(std::move(gameOverPrefab));
+			CACTUS_PREFAB = factory.AddPrefab(std::move(cactusPrefab));
 
 			Reset(true);
 
@@ -93,6 +87,15 @@ namespace DinoGame
 
 		void Update() override
 		{
+			if (Input::KeyPressed(Keycode::G))
+			{
+				XMLfile xmlFile = Filesystem::OpenXML("test.xml", OpenMode::Write);
+				XMLnode node;
+				node.Name = "Root";
+				XMLserializer writer(node, true);
+				writer.Write("Layer", SceneManager::CurrentScene().GetLayer("Main"));
+				xmlFile.WriteXML(node);
+			}
 			if (!isPaused)
 			{
 				gameSpeed += Time::DeltaTime() * 10;
@@ -101,7 +104,7 @@ namespace DinoGame
 				JumpScript& jump = player->Components().GetComponent<JumpScript>();
 				if ((Input::KeyPressed(Keycode::W) || Input::KeyPressed(Keycode::Up)) && jump.CanJump())
 				{
-					jump.Jump(1100);
+					jump.Jump(1150);
 				}
 
 				if (Input::KeyPressed(Keycode::R))
@@ -143,12 +146,12 @@ namespace DinoGame
 
 		void CreateCactus()
 		{
-			GameObject* object = factory->Instantiate(factory->GetPrefab(CACTUS_PREFAB), Transform(Vector3f(1500, 100 + 100 / 2, -8)));
+			GameObject* object = factory.Instantiate(factory.GetPrefab(CACTUS_PREFAB), Transform(Vector3f(1500, 100 + 100 / 2, -8)));
 		}
 
 		void GameOver()
 		{
-			GameObject* object = factory->Instantiate(factory->GetPrefab(GAMEOVER_PREFAB), Transform(Vector3f(Width() / 2, Height() / 2, -1)));
+			GameObject* object = factory.Instantiate(factory.GetPrefab(GAMEOVER_PREFAB), Transform(Vector3f(Width() / 2, Height() / 2, -1)));
 			Pause();
 		}
 
@@ -167,9 +170,9 @@ namespace DinoGame
 			Layer* mainLayer = &SceneManager::CurrentScene().GetLayer("Main");
 			mainLayer->Clear();
 
-			ground = factory->Image(Width(), 30, ResourceManager::Get<Texture2D>(groundTextureId), Transform({ Width() / 2, 100, -10 }));
+			ground = factory.Image(Width(), 30, ResourceManager::Get<Texture2D>(groundTextureId), Transform({ Width() / 2, 100, -10 }));
 			ground->Components().GetComponent<MeshRenderer>().Mesh.Materials[0].Textures.Animators[0] = std::make_unique<ScrollAnimator>(Vector2f(-1, 0), 1 / Width() * 400);
-			player = factory->Image(44 * 2, 47 * 2, ResourceManager::Get<Texture2D>(playerTextureId), Transform({ 200, 85 + 47, -5 }));
+			player = factory.Image(44 * 2, 47 * 2, ResourceManager::Get<Texture2D>(playerTextureId), Transform({ 200, 85 + 47, -5 }));
 			player->Components().GetComponent<MeshRenderer>().Mesh.Materials[0].Textures.Animators[0] = std::make_unique<SpriteSheetAnimator>(6, 1, 0.2f);
 			player->Components().AddComponent(std::make_unique<JumpScript>(3000, &isPaused));
 			player->Components().AddComponent(std::make_unique<Collider2D>(Bolt::Rectangle{ { -22 * 2, -47.0f / 2.0f * 2 },{ 22 * 2, 47 / 2.0f * 2 } }));

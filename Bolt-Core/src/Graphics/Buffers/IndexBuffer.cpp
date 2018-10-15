@@ -24,6 +24,7 @@ namespace Bolt
 		byte* data = new byte[Size()];
 		Download(data, Size(), 0);
 		indexBuffer->Upload(data, Size(), 0);
+		delete[] data;
 		return std::move(indexBuffer);
 	}
 

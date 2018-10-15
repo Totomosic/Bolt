@@ -211,6 +211,14 @@ namespace Bolt
 		return "Quaternion(" + std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z) + ", " + std::to_string(w) + ")";
 	}
 
+	void Quaternion::Transfer(XMLserializer& backend, bool isWriting)
+	{
+		BLT_TRANSFER(backend, x);
+		BLT_TRANSFER(backend, y);
+		BLT_TRANSFER(backend, z);
+		BLT_TRANSFER(backend, w);
+	}
+
 	Quaternion Quaternion::Log(const Quaternion& q)
 	{
 		float a = (float)acos(q.w);

@@ -46,28 +46,28 @@ namespace Bolt
 	
 	}
 
-	Component& ComponentManager::GetComponent(id_t id) const
+	Component& ComponentManager::GetComponentById(id_t id) const
 	{
 		return *m_ComponentArray[id];
 	}
 
-	Component& ComponentManager::GetComponent(const std::type_index& componentType) const
+	Component& ComponentManager::GetComponent(size_t componentTypeHash) const
 	{
-		return *m_ComponentMap.at(componentType);
+		return *m_ComponentMap.at(componentTypeHash);
 	}
 
-	bool ComponentManager::HasComponent(id_t id) const
+	bool ComponentManager::HasComponentById(id_t id) const
 	{
 		return m_ComponentArray[id] != nullptr;
 	}
 
-	bool ComponentManager::HasComponent(const std::type_index& componentType) const
+	bool ComponentManager::HasComponent(size_t componentTypeHash) const
 	{
 		if (m_ComponentMap.empty())
 		{
 			return false;
 		}
-		return m_ComponentMap.find(componentType) != m_ComponentMap.end();
+		return m_ComponentMap.find(componentTypeHash) != m_ComponentMap.end();
 	}
 
 	std::vector<Component*> ComponentManager::GetComponents() const
@@ -80,19 +80,19 @@ namespace Bolt
 		return result;
 	}
 
-	Component* ComponentManager::AddComponent(const std::type_index& componentType, std::unique_ptr<Component>&& component)
+	Component* ComponentManager::AddComponent(size_t componentTypeHash, std::unique_ptr<Component>&& component)
 	{
 		id_t id = FindNextId();
 		component->m_Id = id;
-		m_ComponentMap[componentType] = std::move(component);
-		Component* c = m_ComponentMap.at(componentType).get();
+		m_ComponentMap[componentTypeHash] = std::move(component);
+		Component* c = m_ComponentMap.at(componentTypeHash).get();
 		m_ComponentArray[id] = c;
 		c->SetGameObject(m_GameObject);
 		c->Start();
 		return c;
 	}
 
-	void ComponentManager::RemoveComponent(id_t id)
+	void ComponentManager::RemoveComponentById(id_t id)
 	{
 		Component* component = m_ComponentArray[id];
 		component->End();
@@ -107,11 +107,17 @@ namespace Bolt
 		m_ComponentArray[id] = nullptr;
 	}
 
-	void ComponentManager::RemoveComponent(const std::type_index& componentType)
+	void ComponentManager::RemoveComponent(size_t componentTypeHash)
 	{
-		Component& component = GetComponent(componentType);
+		Component& component = GetComponent(componentTypeHash);
 		m_ComponentArray[component.m_Id] = nullptr;
-		m_ComponentMap.erase(componentType);
+		m_ComponentMap.erase(componentTypeHash);
+	}
+
+	void ComponentManager::Transfer(XMLserializer& backend, bool isWriting)
+	{
+		BLT_TRANSFER(backend, m_ComponentMap);
+		BLT_TRANSFER(backend, m_GameObject);
 	}
 
 	id_t ComponentManager::FindNextId() const

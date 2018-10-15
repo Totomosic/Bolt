@@ -7,7 +7,7 @@ namespace Bolt
 	enum class ResourceType
 	{
 		Unknown,
-		Image,
+		Texture2D,
 		Model,
 		Animation,
 		Data
@@ -18,8 +18,8 @@ namespace Bolt
 	public:
 		ResourceType Type;
 		blt::string Name;
-		mutable id_t Id;
-		std::unordered_map<blt::string, blt::string> Attributes;
+		id_t Id;
+		XMLnode Attributes;
 
 	};
 
