@@ -17,6 +17,8 @@ namespace DinoGame
 		id_t playerTextureId;
 		ObjectFactory factory;
 
+		Layer* mainLayer;
+
 		GameObject* player;
 		GameObject* ground;
 
@@ -26,15 +28,18 @@ namespace DinoGame
 
 		id_t GAMEOVER_PREFAB;
 		id_t CACTUS_PREFAB;
+		id_t PENGUIN_PREFAB;
+
+		id_t FPS_TEXT;
+		id_t SCORE_TEXT;
 
 	public:
 		void Init() override
 		{
 			PrimaryWindow->SetClearColor(Color::White);
-			//PrimaryWindow->EnableVSync();
 
 			Scene* scene = SceneManager::CreateScene();
-			Layer* mainLayer = scene->CreateLayer<SceneArray>("Main");
+			mainLayer = scene->CreateLayer<SceneArray>("Main");
 
 			Camera* mainCamera = scene->CreateCamera(Projection::Orthographic(0, Width(), 0, Height(), 0, 1000));
 			mainLayer->SetActiveCamera(mainCamera);
@@ -49,11 +54,13 @@ namespace DinoGame
 			playerTextureId = resources.Resources.at("trex").Id;
 			ResourcePtr<Texture2D> cactusSTexture = ResourceManager::Get<Texture2D>(resources.Resources.at("small_cactus").Id);
 			ResourcePtr<Texture2D> gameOverTexture = ResourceManager::Get<Texture2D>(resources.Resources.at("gameover").Id);
+			ResourcePtr<Texture2D> penguinTexture = ResourceManager::Get<Texture2D>(resources.Resources.at("penguin-black").Id);
 
 			ResourcePtr<Model> cactusRectangle = ResourceManager::Get<Model>(resources.Resources.at("square").Id);
 			ResourcePtr<Model> gameOverRectangle = ResourceManager::Get<Model>(ResourceManager::Register(std::make_unique<Model>(RectangleFactory(Width() / 4, Height() / 4))));
+			ResourcePtr<Model> penguinRectangle = ResourceManager::Get<Model>(resources.Resources.at("penguin_square").Id);
 
-			factory = ObjectFactory(mainLayer);
+			factory = ObjectFactory(mainLayer);	
 
 			Mesh cactusMesh;
 			cactusMesh.Models.push_back({ cactusRectangle, Matrix4f::Identity(), { 0 } });
@@ -66,6 +73,11 @@ namespace DinoGame
 			gameOverMesh.Materials[0].Textures.Textures[0] = gameOverTexture;
 			gameOverMesh.Materials[0].Textures.Animators.erase(0);
 
+			Mesh penguinMesh;
+			penguinMesh.Models.push_back({ penguinRectangle, Matrix4f::Identity(), { 0 } });
+			penguinMesh.Materials[0].Textures.Textures.push_back(penguinTexture);
+			penguinMesh.Materials[0].Shader = Shader::DefaultTexture();
+
 			ObjectPrefab gameOverPrefab = ObjectPrefab();
 			gameOverPrefab.Components().AddComponent(std::make_unique<MeshRenderer>(gameOverMesh));
 
@@ -74,8 +86,14 @@ namespace DinoGame
 			cactusPrefab.Components().AddComponent(std::make_unique<MotionEngine>(&gameSpeed, &isPaused));
 			cactusPrefab.Components().AddComponent(std::make_unique<Collider2D>(Bolt::Rectangle{ { -25, -50 }, { 25, 50 } }));
 
+			ObjectPrefab penguinPrefab = ObjectPrefab();
+			penguinPrefab.Components().AddComponent(std::make_unique<MeshRenderer>(penguinMesh));
+			penguinPrefab.Components().AddComponent(std::make_unique<MotionEngine>(&gameSpeed, &isPaused));
+			penguinPrefab.Components().AddComponent(std::make_unique<Collider2D>(Bolt::Rectangle{ { -50, -25 },{ 50, 25 } }));
+
 			GAMEOVER_PREFAB = factory.AddPrefab(std::move(gameOverPrefab));
 			CACTUS_PREFAB = factory.AddPrefab(std::move(cactusPrefab));
+			PENGUIN_PREFAB = factory.AddPrefab(std::move(penguinPrefab));
 
 			Reset(true);
 
@@ -139,14 +157,20 @@ namespace DinoGame
 
 		void Render() override
 		{
-			//Graphics::Text("fps " + std::to_string((int)Time::FramesPerSecond()), ResourceManager::Get<Font>("Arial"), Width() - 100, Height() - 25, -5, Color::Black, AlignH::Left, AlignV::Top);
-			Graphics::Text("Score: " + std::to_string((int)score), ResourceManager::Get<Font>(arialFont), 20, Height() - 25, -5, Color::Black, AlignH::Left, AlignV::Top);
+			Text* fpsText = mainLayer->UI().GetElementById<Text>(FPS_TEXT);
+			Text* scoreText = mainLayer->UI().GetElementById<Text>(SCORE_TEXT);
+			fpsText->SetText("fps " + std::to_string((int)Time::FramesPerSecond()));
+			scoreText->SetText("Score: " + std::to_string((int)score));
 			Graphics::RenderScene();
 		}
 
 		void CreateCactus()
 		{
-			GameObject* object = factory.Instantiate(factory.GetPrefab(CACTUS_PREFAB), Transform(Vector3f(1500, 100 + 100 / 2, -8)));
+			if (!isPaused)
+			{
+				GameObject* object = factory.Instantiate(factory.GetPrefab(CACTUS_PREFAB), Transform(Vector3f(1500, 100 + 100 / 2, -8)));
+				GameObject* penguin = factory.Instantiate(factory.GetPrefab(PENGUIN_PREFAB), Transform(Vector3f(2000, 100 + 50 / 2, -8)));
+			}
 		}
 
 		void GameOver()
@@ -167,7 +191,6 @@ namespace DinoGame
 			score = 0;
 			isPaused = false;
 
-			Layer* mainLayer = &SceneManager::CurrentScene().GetLayer("Main");
 			mainLayer->Clear();
 
 			ground = factory.Image(Width(), 30, ResourceManager::Get<Texture2D>(groundTextureId), Transform({ Width() / 2, 100, -10 }));
@@ -175,7 +198,10 @@ namespace DinoGame
 			player = factory.Image(44 * 2, 47 * 2, ResourceManager::Get<Texture2D>(playerTextureId), Transform({ 200, 85 + 47, -5 }));
 			player->Components().GetComponent<MeshRenderer>().Mesh.Materials[0].Textures.Animators[0] = std::make_unique<SpriteSheetAnimator>(6, 1, 0.2f);
 			player->Components().AddComponent(std::make_unique<JumpScript>(3000, &isPaused));
-			player->Components().AddComponent(std::make_unique<Collider2D>(Bolt::Rectangle{ { -22 * 2, -47.0f / 2.0f * 2 },{ 22 * 2, 47 / 2.0f * 2 } }));
+			player->Components().AddComponent(std::make_unique<Collider2D>(Bolt::Rectangle{ { -22 * 2, -47.0f / 2.0f * 2 }, { 22 * 2, 47 / 2.0f * 2 } }));
+
+			FPS_TEXT = mainLayer->UI().AddElement(std::make_unique<Text>("fps ", ResourceManager::Get<Font>(arialFont), Color::Black, Transform({ Width() - 100, Height() - 25, -5 }), AlignH::Left));
+			SCORE_TEXT = mainLayer->UI().AddElement(std::make_unique<Text>("Score ", ResourceManager::Get<Font>(arialFont), Color::Black, Transform({ 20, Height() - 25, -5 }), AlignH::Left));
 		}
 
 	};

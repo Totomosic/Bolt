@@ -16,6 +16,7 @@ namespace Bolt
 		id_t m_Id;
 		GameObject* m_Parent;
 		std::vector<GameObject*> m_Children;
+		std::vector<blt::string> m_Tags;
 		Layer* m_Layer;
 
 	public:
@@ -30,10 +31,14 @@ namespace Bolt
 	public:
 		GameObject* Parent() const;
 		Layer* GetLayer() const;
-		id_t ID() const;
+		id_t Id() const;
+		const std::vector<blt::string>& Tags() const;
 
 		void MakeChildOf(GameObject* parent);
 		void MakeStandalone();
+		void AddTag(const blt::string& tag);
+		void RemoveTag(const blt::string& tag);
+		void RemoveAllTags();
 
 		void SetID(id_t id);
 
@@ -47,6 +52,7 @@ namespace Bolt
 
 	private:
 		void SetLayer(Layer* layer);
+		void AddTagPrivate(const blt::string& tag);
 
 	public:
 		static GameObject* Instantiate(Layer* layer, Transform transform = Transform());

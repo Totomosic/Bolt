@@ -115,6 +115,15 @@ namespace Bolt
 		return Instantiate(mesh, std::move(transform));
 	}
 
+	GameObject* ObjectFactory::Rectangle(float width, float height, const Material& material, Transform transform) const
+	{
+		Mesh mesh;
+		// TODO: CHANGE
+		mesh.Models.push_back({ s_RectangleModel, Matrix4f::Scale(width, height, 1),{ 0 } });
+		mesh.Materials[0] = material;
+		return Instantiate(mesh, std::move(transform));
+	}
+
 	GameObject* ObjectFactory::Image(float width, float height, const ResourcePtr<const Texture2D>& image, Transform transform) const
 	{
 		GameObject* object = Rectangle(width, height, Color::White, std::move(transform));

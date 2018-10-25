@@ -129,13 +129,6 @@
     <ClInclude Include="external\GLEW\include\GL\wglew.h" />
     <ClInclude Include="external\GLFW\include\GLFW\glfw3.h" />
     <ClInclude Include="external\GLFW\include\GLFW\glfw3native.h" />
-    <ClInclude Include="external\imgui\imconfig.h" />
-    <ClInclude Include="external\imgui\imgui.h" />
-    <ClInclude Include="external\imgui\imgui_impl_glfw_gl3.h" />
-    <ClInclude Include="external\imgui\imgui_internal.h" />
-    <ClInclude Include="external\imgui\stb_rect_pack.h" />
-    <ClInclude Include="external\imgui\stb_textedit.h" />
-    <ClInclude Include="external\imgui\stb_truetype.h" />
     <ClInclude Include="external\stb_image.h" />
     <ClInclude Include="src\Bolt-Engine.h" />
     <ClInclude Include="src\BoltDefines.h" />
@@ -216,6 +209,11 @@
     <ClInclude Include="src\Engine\Scene\SceneGraph\__SceneGraph__.h" />
     <ClInclude Include="src\Engine\Scene\SceneManager.h" />
     <ClInclude Include="src\Engine\Scene\Transform.h" />
+    <ClInclude Include="src\Engine\Scene\UI\Text.h" />
+    <ClInclude Include="src\Engine\Scene\UI\UIelement.h" />
+    <ClInclude Include="src\Engine\Scene\UI\UIroot.h" />
+    <ClInclude Include="src\Engine\Scene\UI\UIsurface.h" />
+    <ClInclude Include="src\Engine\Scene\UI\__UI__.h" />
     <ClInclude Include="src\Engine\Scene\__Scene__.h" />
     <ClInclude Include="src\Engine\Serialization\XMLReadTraits.h" />
     <ClInclude Include="src\Engine\Serialization\XMLserializer.h" />
@@ -315,10 +313,6 @@
     <ClInclude Include="src\Core\Utils\__Utils__.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="external\imgui\imgui.cpp" />
-    <ClCompile Include="external\imgui\imgui_demo.cpp" />
-    <ClCompile Include="external\imgui\imgui_draw.cpp" />
-    <ClCompile Include="external\imgui\imgui_impl_glfw_gl3.cpp" />
     <ClCompile Include="src\Core\BoltTL\string.cpp" />
     <ClCompile Include="src\Core\Color.cpp" />
     <ClCompile Include="src\Core\Functions.cpp" />
@@ -371,6 +365,10 @@
     <ClCompile Include="src\Engine\Scene\SceneGraph\SceneGraph.cpp" />
     <ClCompile Include="src\Engine\Scene\SceneManager.cpp" />
     <ClCompile Include="src\Engine\Scene\Transform.cpp" />
+    <ClCompile Include="src\Engine\Scene\UI\Text.cpp" />
+    <ClCompile Include="src\Engine\Scene\UI\UIelement.cpp" />
+    <ClCompile Include="src\Engine\Scene\UI\UIroot.cpp" />
+    <ClCompile Include="src\Engine\Scene\UI\UIsurface.cpp" />
     <ClCompile Include="src\Engine\Serialization\XMLserializer.cpp" />
     <ClCompile Include="src\Engine\User\Input.cpp" />
     <ClCompile Include="src\Graphics\Buffers\ArrayDescriptor.cpp" />

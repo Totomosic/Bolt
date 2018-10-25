@@ -133,7 +133,7 @@ namespace Bolt
 
 	void Scene::RemoveCamera(const Camera* camera)
 	{
-		RemoveCamera(camera->ID());
+		RemoveCamera(camera->Id());
 	}
 
 	void Scene::Update()
@@ -147,7 +147,7 @@ namespace Bolt
 		}
 		for (id_t i = 0; i < MAX_CAMERAS; i++)
 		{
-			if (m_Cameras[i].ID() != GameObject::InvalidID)
+			if (m_Cameras[i].Id() != GameObject::InvalidID)
 			{
 				m_Cameras[i].Update();
 				m_Cameras[i].LateUpdate();
@@ -191,7 +191,7 @@ namespace Bolt
 	{
 		for (id_t i = 0; i < Scene::MAX_CAMERAS; i++)
 		{
-			if (m_Cameras[i].ID() == GameObject::InvalidID)
+			if (m_Cameras[i].Id() == GameObject::InvalidID)
 			{
 				return i;
 			}

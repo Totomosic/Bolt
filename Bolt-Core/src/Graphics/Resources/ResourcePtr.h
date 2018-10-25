@@ -11,8 +11,8 @@ namespace Bolt
 		using pointer = T*;
 
 	private:
-		pointer m_Ptr;
-		bool m_OwnsPtr;
+		pointer m_Ptr = nullptr;
+		bool m_OwnsPtr = false;
 
 	public:
 		ResourcePtr()
@@ -57,16 +57,23 @@ namespace Bolt
 		}
 
 		ResourcePtr(ResourcePtr<T>&& other)
-			: m_Ptr(other.m_Ptr), m_OwnsPtr(other.m_OwnsPtr)
 		{
-			other.m_Ptr = nullptr;
+			pointer ptr = m_Ptr;
+			bool ownsPtr = m_OwnsPtr;
+			m_Ptr = other.m_Ptr;
+			m_OwnsPtr = other.m_OwnsPtr;
+			other.m_Ptr = ptr;
+			other.m_OwnsPtr = ownsPtr;
 		}
 
 		ResourcePtr<T>& operator=(ResourcePtr<T>&& other)
 		{
+			pointer ptr = m_Ptr;
+			bool ownsPtr = m_OwnsPtr;
 			m_Ptr = other.m_Ptr;
 			m_OwnsPtr = other.m_OwnsPtr;
-			other.m_Ptr = nullptr;
+			other.m_Ptr = ptr;
+			other.m_OwnsPtr = ownsPtr;
 			return *this;
 		}
 

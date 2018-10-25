@@ -15,7 +15,7 @@ namespace Bolt
 		Vector2f size = TextFont->SizeOfText(Text);
 		float height = TextFont->SizeOfText("fg").y;
 		float w = size.x / 2.0f;
-		float h = height / 2.0f;
+		float h = -height / 2.0f;
 
 		ModelData result;
 		result.Vertices = std::make_unique<VertexArray>();
@@ -49,10 +49,10 @@ namespace Bolt
 			switch (VerticalAlign)
 			{
 			case AlignV::Bottom:
-				currentY = h * 2.0f;
+				currentY = 0.0f;
 				break;
 			case AlignV::Top:
-				currentY = 0.0f;
+				currentY = h * 2.0f;
 				break;
 			}
 			for (int i = 0; i < characters.size(); i++)

@@ -40,6 +40,7 @@ namespace Bolt
 		GameObject* Instantiate(Mesh mesh, Transform transform = Transform()) const;
 
 		GameObject* Rectangle(float width, float height, const Color& color = Color::White, Transform transform = Transform()) const;
+		GameObject* Rectangle(float width, float height, const Material& material, Transform transform = Transform()) const;
 		GameObject* Image(float width, float height, const ResourcePtr<const Texture2D>& image, Transform transform = Transform()) const;
 		GameObject* Line(const Vector3f& p0, const Vector3f& p1, const Color& color = Color::White) const;
 

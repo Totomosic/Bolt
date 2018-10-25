@@ -10,8 +10,7 @@ namespace Bolt
 
 	Application::~Application()
 	{
-		ImGui_ImplGlfwGL3_Shutdown();
-		ImGui::DestroyContext();
+		
 	}
 
 	float Application::Width() const
@@ -42,10 +41,6 @@ namespace Bolt
 		}
 		SceneManager::s_Window = PrimaryWindow;
 		GLState::Reset();
-		ImGui::CreateContext();
-		ImGuiIO& io = ImGui::GetIO();
-		ImGui_ImplGlfwGL3_Init(PrimaryWindow->WindowHandle(), false);
-		ImGui::StyleColorsDark();
 	}
 
 	void Application::Init()
@@ -59,11 +54,6 @@ namespace Bolt
 	}
 
 	void Application::Update()
-	{
-	
-	}
-
-	void Application::ImGuiRender()
 	{
 	
 	}

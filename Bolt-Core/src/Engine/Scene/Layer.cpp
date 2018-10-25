@@ -5,9 +5,14 @@ namespace Bolt
 {
 
 	Layer::Layer()
-		: m_Id(GameObject::InvalidID), m_GameObjects(), m_SceneGraph(std::make_unique<Bolt::SceneArray>()), m_Enabled(false), m_ActiveCamera(nullptr)
+		: m_Id(GameObject::InvalidID), m_GameObjects(), m_SceneGraph(std::make_unique<Bolt::SceneArray>()), m_Enabled(false), m_ActiveCamera(nullptr), m_UIroot(this)
 	{
 		m_SceneGraph->SetObjectCollection(&m_GameObjects);
+	}
+
+	Layer::~Layer()
+	{
+		m_UIroot.Clear();
 	}
 
 	const ObjectCollection& Layer::GameObjects() const
@@ -15,7 +20,17 @@ namespace Bolt
 		return m_GameObjects;
 	}
 
+	ObjectCollection& Layer::GameObjects()
+	{
+		return m_GameObjects;
+	}
+
 	const SceneGraph& Layer::Graph() const
+	{
+		return *m_SceneGraph;
+	}
+
+	SceneGraph& Layer::Graph()
 	{
 		return *m_SceneGraph;
 	}
@@ -28,6 +43,16 @@ namespace Bolt
 	id_t Layer::Id() const
 	{
 		return m_Id;
+	}
+
+	const UIroot& Layer::UI() const
+	{
+		return m_UIroot;
+	}
+
+	UIroot& Layer::UI()
+	{
+		return m_UIroot;
 	}
 
 	bool Layer::IsEnabled() const
@@ -61,7 +86,7 @@ namespace Bolt
 
 	void Layer::RemoveGameObject(GameObject* object)
 	{
-		if (object->ID() < ObjectCollection::MAX_GAMEOBJECTS)
+		if (object->Id() < ObjectCollection::MAX_GAMEOBJECTS)
 		{
 			m_GameObjects.RemoveGameObject(object);
 		}
@@ -90,7 +115,7 @@ namespace Bolt
 		for (id_t i = 0; i < ObjectCollection::MAX_GAMEOBJECTS; i++)
 		{
 			GameObject& object = m_GameObjects.GetGameObjectById(i);
-			if (object.ID() != GameObject::InvalidID)
+			if (object.Id() != GameObject::InvalidID)
 			{
 				object.Update();
 				validObjects.push_back(&object);
