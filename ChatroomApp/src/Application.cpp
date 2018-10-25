@@ -2,68 +2,45 @@
 
 using namespace Bolt;
 
-namespace Chatroom
+namespace AStar
 {
 
-	class ChatroomApp : public Application
+	class AStarApp : public Application
 	{
 	public:
-		GameObject* currentTextObject;
-		blt::string currentText = "";
+		float columns = 20;
 
 	public:
 		void Init() override
 		{
-			PrimaryWindow->SetClearColor(Color(220, 220, 220));
-
-			Font* arial = ResourceManager::Register("Arial", std::make_unique<Font>("res/arial.ttf", 16));
-
 			Scene* scene = SceneManager::CreateScene();
-			Layer* layer = scene->CreateLayer<SceneArray>("Default");
-
-			Camera* mainCamera = scene->CreateCamera(Projection::Orthographic(0, Width(), 0, Height(), -100, 100));
-			layer->SetActiveCamera(mainCamera);
-
-			Mesh textMesh;
-			textMesh.Models.push_back({ ResourceManager::Register("TextModel", std::make_unique<Model>(TextFactory(currentText, arial, Color::Black, AlignH::Left, AlignV::Bottom))) });
-			textMesh.Materials[0].Shader = Shader::DefaultFont();
-			textMesh.Materials[0].Textures.Textures.push_back(arial);
+			Layer* layer = scene->CreateLayer<SceneArray>("Main");
+			Camera* camera = scene->CreateCamera(PrimaryWindow->GetFramebuffer().ViewFrustum(-100, 100), ProjectionType::Orthographic);
+			layer->SetActiveCamera(camera);
 
 			ObjectFactory factory(layer);
+			
+			int rows = ((int)columns) / PrimaryWindow->GetFramebuffer().Aspect();
+			RedrawBoard(factory, columns, rows);
 
-			GameObject* historyPanel = factory.Rectangle(Width() - 10, Height() - 50 - 10, Color::White, Transform(Vector3f(Width() / 2, Height() / 2 + 25, 0)));
-			GameObject* chatPanel = factory.Rectangle(Width() - 200 - 10, 46, Color::White, Transform(Vector3f(Width() / 2 - 100, 27, 5)));
-
-			factory.SetCurrentParent(chatPanel);
-			currentTextObject = factory.Instantiate(textMesh);
-			currentTextObject->transform().SetLocalPosition(-(Width() - 200 - 10) / 2 + 10, 0, 2);
-
-			id_t rendererId = Graphics::AddRenderer(std::make_unique<Renderer>(std::make_unique<DefaultRenderMethod>()));
-			Graphics::Schedule().RenderPasses.push_back({ &PrimaryWindow->GetFramebuffer(), RenderPass::ALL_LAYERS, Graphics::GetRenderer(rendererId) });
+			id_t renderer = Graphics::AddRenderer(std::make_unique<Renderer>(std::make_unique<DefaultRenderMethod>()));//Graphics::AddRenderer(std::make_unique<SpriteRenderer2D>());
+			Graphics::Schedule().RenderPasses.push_back({ Graphics::DefaultFramebuffer(), RenderPass::ALL_LAYERS, Graphics::GetRenderer(renderer) });
 		}
 
 		void Tick() override
 		{
-		
+			BLT_INFO(Time::FramesPerSecond());
 		}
 
 		void Update() override
 		{
-			blt::string newString = currentText;
-			for (char c : Input::PressedCharacters())
+			int oldCols = (int)columns;
+			columns -= Input::RelMouseScroll().y;
+			if ((int)columns != oldCols)
 			{
-				newString += c;
-			}
-			if (Input::KeyPressed(Keycode::Backspace) && newString.size() > 0)
-			{
-				newString.pop_back();
-			}
-			if (newString != currentText)
-			{
-				ResourceManager::FreeResource("TextModel");
-				Model* newModel = ResourceManager::Register("TextModel", std::make_unique<Model>(TextFactory(newString, ResourceManager::Get<Font>("Arial"), Color::Black, AlignH::Left)));
-				currentTextObject->Components().GetComponent<MeshRenderer>().Mesh.Models[0].Model = newModel;
-				currentText = newString;
+				ObjectFactory factory(&SceneManager::CurrentScene().GetLayer("Main"));
+				int rows = (columns) / PrimaryWindow->GetFramebuffer().Aspect();
+				RedrawBoard(factory, columns, rows);
 			}
 		}
 
@@ -71,6 +48,27 @@ namespace Chatroom
 		{
 			Graphics::RenderScene();
 		}
+
+		void RedrawBoard(const ObjectFactory& factory, int columns, int rows)
+		{
+			factory.CurrentLayer()->GameObjects().RemoveAllWithTag("Tile");
+			float border = 2;
+			float width = (Width() - (columns + 1) * border) / (columns);
+			float height = (Height() - (rows + 1) * border) / (rows);
+			for (int i = 0; i < columns; i++)
+			{
+				for (int j = 0; j < rows; j++)
+				{
+					float x = border + i * (width + border) + width / 2.0f;
+					float y = border + j * (height + border) + height / 2.0f;
+					Material mat;
+					mat.BaseColor = (Random::NextInt(0, 10) == 2) ? Color::Random() : Color::White;
+					GameObject* tile = factory.Rectangle(width, height, mat, Transform({ x, y, 0 }));
+					tile->AddTag("Tile");
+				}
+			}
+		}
+
 	};
 
 }
@@ -78,13 +76,7 @@ namespace Chatroom
 int main()
 {
 	Engine e;
-	WindowCreateInfo info;
-	info.Resizable = false;
-	info.Samples = 1;
-	e.SetWindow(std::make_unique<Window>(600, 800, "Chatroom", info));
-	e.SetApplication(std::make_unique<Chatroom::ChatroomApp>());
-	while (!e.ShouldClose())
-	{
-		e.UpdateApplication();
-	}
+	e.SetWindow(std::make_unique<Window>(1280, 720, "A* Visualisation"));
+	e.SetApplication(std::make_unique<AStar::AStarApp>());
+	e.Run();
 }

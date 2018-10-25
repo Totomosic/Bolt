@@ -1,7 +1,5 @@
 #pragma once
 #include "Bolt-Graphics.h"
-#include "imgui\imgui.h"
-#include "imgui\imgui_impl_glfw_gl3.h"
 
 namespace Bolt
 {
@@ -26,7 +24,6 @@ namespace Bolt
 		virtual void Init();
 		virtual void Tick();
 		virtual void Update();
-		virtual void ImGuiRender();
 		virtual void Render();
 
 	};

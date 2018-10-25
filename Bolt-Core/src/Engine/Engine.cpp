@@ -49,11 +49,7 @@ namespace Bolt
 		{
 			scene->Update();
 		}
-		ImGui_ImplGlfwGL3_NewFrame();
-		m_CurrentApplication->ImGuiRender();
 		m_CurrentApplication->Render();
-		ImGui::Render();
-		ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
 		m_Window->SwapBuffers();
 		Time::Update();
 		if (scene != nullptr)

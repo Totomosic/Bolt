@@ -11,7 +11,7 @@ namespace Bolt
 
 	id_t SceneArray::AddGameObject(GameObject* gameObject)
 	{
-		id_t id = gameObject->ID();
+		id_t id = gameObject->Id();
 		m_GameObjects[id] = gameObject;
 		if ((int)id > m_MaxGameObjectID)
 		{
@@ -35,7 +35,7 @@ namespace Bolt
 		std::vector<GameObject*> result;
 		for (int i = 0; i <= m_MaxGameObjectID; i++)
 		{
-			if (m_GameObjects[i] != nullptr && m_GameObjects[i]->ID() != GameObject::InvalidID)
+			if (m_GameObjects[i] != nullptr && m_GameObjects[i]->Id() != GameObject::InvalidID)
 			{
 				result.push_back(m_GameObjects[i]);
 			}

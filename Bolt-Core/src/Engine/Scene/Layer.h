@@ -3,8 +3,12 @@
 #include "SceneGraph\__SceneGraph__.h"
 #include "ObjectCollection.h"
 
+#include "UI\UIroot.h"
+
 namespace Bolt
 {
+
+	class UIsurface;
 
 	struct BLT_API Layer
 	{
@@ -22,6 +26,8 @@ namespace Bolt
 		std::unique_ptr<SceneGraph> m_SceneGraph;
 		bool m_Enabled;
 		Camera* m_ActiveCamera;
+
+		UIroot m_UIroot;
 		
 		std::vector<TempGameObject> m_TemporaryObjects;
 
@@ -31,12 +37,16 @@ namespace Bolt
 		Layer& operator=(const Layer& other) = delete;
 		Layer(Layer&& other) = default;
 		Layer& operator=(Layer&& other) = default;
-		~Layer() = default;
+		~Layer();
 
 		const ObjectCollection& GameObjects() const;
+		ObjectCollection& GameObjects();
 		const SceneGraph& Graph() const;
+		SceneGraph& Graph();
 		Camera* ActiveCamera() const;
 		id_t Id() const;
+		const UIroot& UI() const;
+		UIroot& UI();
 
 		bool IsEnabled() const;
 		void Enable();

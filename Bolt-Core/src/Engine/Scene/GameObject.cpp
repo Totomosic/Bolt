@@ -5,7 +5,7 @@ namespace Bolt
 {
 
 	GameObject::GameObject() : ObjectPrefab(),
-		m_Id(GameObject::InvalidID), m_Parent(nullptr), m_Layer(nullptr)
+		m_Id(GameObject::InvalidID), m_Parent(nullptr), m_Layer(nullptr), m_Tags()
 	{
 	
 	}
@@ -27,7 +27,10 @@ namespace Bolt
 				}
 			}
 		}
+		std::vector<blt::string> tags = m_Tags;
+		m_Tags = other.m_Tags;
 		m_Parent = other.m_Parent;
+		other.m_Tags = tags;
 		m_Components.SetGameObject(this);
 	}
 
@@ -47,11 +50,14 @@ namespace Bolt
 				}
 			}
 		}
+		std::vector<blt::string> tags = m_Tags;
+		m_Tags = other.m_Tags;
 		m_Parent = other.m_Parent;
 		m_Id = other.m_Id;
 		m_Transform = std::move(other.m_Transform);
 		m_Layer = other.m_Layer;
 		m_Components = std::move(other.m_Components);
+		other.m_Tags = tags;
 		m_Components.SetGameObject(this);
 		return *this;
 	}
@@ -85,9 +91,14 @@ namespace Bolt
 		return m_Layer;
 	}
 
-	id_t GameObject::ID() const
+	id_t GameObject::Id() const
 	{
 		return m_Id;
+	}
+
+	const std::vector<blt::string>& GameObject::Tags() const
+	{
+		return m_Tags;
 	}
 
 	void GameObject::MakeChildOf(GameObject* parent)
@@ -105,6 +116,24 @@ namespace Bolt
 	{
 		m_Parent = nullptr;
 		m_Transform.SetParent(nullptr);
+	}
+
+	void GameObject::AddTag(const blt::string& tag)
+	{
+		BLT_ASSERT(m_Layer != nullptr, "Must be a part of a valid layer");
+		m_Layer->GameObjects().TagGameObject(tag, this);
+	}
+
+	void GameObject::RemoveTag(const blt::string& tag)
+	{
+		BLT_ASSERT(m_Layer != nullptr, "Must be a part of a valid layer");
+		m_Layer->GameObjects().RemoveTag(this, tag);
+	}
+
+	void GameObject::RemoveAllTags()
+	{
+		BLT_ASSERT(m_Layer != nullptr, "Must be a part of a valid layer");
+		m_Layer->GameObjects().RemoveAllTags(this);
 	}
 
 	void GameObject::SetID(id_t id)
@@ -148,6 +177,11 @@ namespace Bolt
 	void GameObject::SetLayer(Layer* layer)
 	{
 		m_Layer = layer;
+	}
+
+	void GameObject::AddTagPrivate(const blt::string& tag)
+	{
+		m_Tags.push_back(tag);
 	}
 
 	GameObject* GameObject::Instantiate(Layer* layer, Transform transform)

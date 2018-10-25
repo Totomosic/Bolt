@@ -19,7 +19,7 @@ namespace Bolt
 
 		for (GameObject* object : objects)
 		{
-			if (object->ID() != GameObject::InvalidID)
+			if (object->Id() != GameObject::InvalidID)
 			{
 				Vector3f toGameObject = object->transform().Position() - Point;
 				float length = toGameObject.Length();
