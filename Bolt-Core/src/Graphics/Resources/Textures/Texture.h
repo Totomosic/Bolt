@@ -6,13 +6,13 @@
 namespace Bolt
 {
 
-	enum class StorageType : GLenum
+	BLT_API enum class StorageType : GLenum
 	{
 		Float = GL_FLOAT,
 		UnsignedByte = GL_UNSIGNED_BYTE
 	};
 
-	enum class TextureTarget : GLenum
+	BLT_API enum class TextureTarget : GLenum
 	{
 		Texture1D = GL_TEXTURE_1D,
 		Texture2D = GL_TEXTURE_2D,
@@ -20,7 +20,7 @@ namespace Bolt
 		TextureCube = GL_TEXTURE_CUBE_MAP
 	};
 
-	enum class TextureFormat : GLenum
+	BLT_API enum class TextureFormat : GLenum
 	{
 		R = GL_RED,
 		G = GL_GREEN,
@@ -33,25 +33,25 @@ namespace Bolt
 		BGRA = GL_BGRA
 	};
 
-	enum class Mipmaps : GLenum
+	BLT_API enum class Mipmaps : GLenum
 	{
 		Disabled,
 		Enabled
 	};
 
-	enum class MinFilter : GLenum
+	BLT_API enum class MinFilter : GLenum
 	{
 		Linear = GL_LINEAR,
 		Nearest = GL_NEAREST
 	};
 
-	enum class MagFilter : GLenum
+	BLT_API enum class MagFilter : GLenum
 	{
 		Linear = GL_LINEAR,
 		Nearest = GL_NEAREST
 	};
 
-	enum class WrapMode : GLenum
+	BLT_API enum class WrapMode : GLenum
 	{
 		Clamp = GL_CLAMP,
 		Repeat = GL_REPEAT,
@@ -91,7 +91,7 @@ namespace Bolt
 		virtual void Download(void* buffer, StorageType type, int level = 0) const;
 		virtual void Upload(const void* data, int x, int y, int width, int height, StorageType type, int level = 0) const;
 
-		Resource* Clone() const override;
+		std::unique_ptr<Resource> Clone() const override;
 
 	protected:
 		void Create();

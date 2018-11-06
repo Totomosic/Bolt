@@ -6,14 +6,14 @@
 namespace Bolt
 {
 
-	enum class AlignH
+	BLT_API enum class AlignH
 	{
 		Left,
 		Center,
 		Right
 	};
 
-	enum class AlignV
+	BLT_API enum class AlignV
 	{
 		Bottom,
 		Center,

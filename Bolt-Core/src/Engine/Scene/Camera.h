@@ -4,7 +4,7 @@
 namespace Bolt
 {
 
-	enum class ProjectionType
+	BLT_API enum class ProjectionType
 	{
 		Perspective,
 		Orthographic

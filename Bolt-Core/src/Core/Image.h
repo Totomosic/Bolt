@@ -4,7 +4,7 @@
 namespace Bolt
 {
 
-	enum class ResizeFilter
+	BLT_API enum class ResizeFilter
 	{
 		Linear,
 		Nearest

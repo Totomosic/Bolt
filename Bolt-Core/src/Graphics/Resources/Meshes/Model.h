@@ -27,7 +27,7 @@ namespace Bolt
 		int IndexBufferCount() const;
 		int TriangleCount() const;
 
-		Resource* Clone() const override;
+		std::unique_ptr<Resource> Clone() const override;
 
 		std::vector<Triangle> GetTriangles() const;
 		Triangle GetTriangle(int index) const;

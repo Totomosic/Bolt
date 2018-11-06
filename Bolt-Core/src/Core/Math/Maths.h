@@ -3,5 +3,5 @@
 
 namespace Bolt
 {
-	constexpr double PI = M_PI;
+	BLT_API constexpr double PI = M_PI;
 }

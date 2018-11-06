@@ -188,6 +188,8 @@
     <ClInclude Include="src\Engine\Scene\Components\LightRenderer.h" />
     <ClInclude Include="src\Engine\Scene\Components\MeshRenderer.h" />
     <ClInclude Include="src\Engine\Scene\Components\MotionEngine.h" />
+    <ClInclude Include="src\Engine\Scene\Components\UI\MouseHoverable.h" />
+    <ClInclude Include="src\Engine\Scene\Components\UI\__UI__.h" />
     <ClInclude Include="src\Engine\Scene\Components\__Components__.h" />
     <ClInclude Include="src\Engine\Scene\GameObject.h" />
     <ClInclude Include="src\Engine\Scene\Layer.h" />
@@ -351,6 +353,7 @@
     <ClCompile Include="src\Engine\Scene\Components\LightRenderer.cpp" />
     <ClCompile Include="src\Engine\Scene\Components\MeshRenderer.cpp" />
     <ClCompile Include="src\Engine\Scene\Components\MotionEngine.cpp" />
+    <ClCompile Include="src\Engine\Scene\Components\UI\MouseHoverable.cpp" />
     <ClCompile Include="src\Engine\Scene\GameObject.cpp" />
     <ClCompile Include="src\Engine\Scene\Layer.cpp" />
     <ClCompile Include="src\Engine\Scene\ObjectCollection.cpp" />
@@ -642,26 +645,26 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)bin\$(Configuration)\Core\</OutDir>
-    <IntDir>$(SolutionDir)bin\$(Configuration)\Core\Intermediate\</IntDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(ProjectName)\</OutDir>
+    <IntDir>$(SolutionDir)bin-int\$(Configuration)\$(ProjectName)\</IntDir>
     <LibraryPath>$(SolutionDir)Bolt-Core\external\GLFW\lib-vc2015\;$(SolutionDir)Bolt-Core\external\FreeImage\lib\;$(SolutionDir)Bolt-Core\external\FreeType\lib\;$(SolutionDir)Bolt-Core\external\FreeType-GL\lib\;$(SolutionDir)Bolt-Core\external\GLEW\lib\;$(LibraryPath)</LibraryPath>
     <IncludePath>$(SolutionDir)Bolt-Core\external\;$(SolutionDir)Bolt-Core\src\;$(SolutionDir)Bolt-Core\external\GLEW\include\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)bin\$(Configuration)\Core\</OutDir>
-    <IntDir>$(SolutionDir)bin\$(Configuration)\Core\Intermediate\</IntDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(ProjectName)\</OutDir>
+    <IntDir>$(SolutionDir)bin-int\$(Configuration)\$(ProjectName)\</IntDir>
     <LibraryPath>$(SolutionDir)Bolt-Core\external\GLFW\lib-vc2015\;$(SolutionDir)Bolt-Core\external\FreeImage\lib\;$(SolutionDir)Bolt-Core\external\FreeType\lib\;$(SolutionDir)Bolt-Core\external\FreeType-GL\lib\;$(SolutionDir)Bolt-Core\external\GLEW\lib\;$(LibraryPath)</LibraryPath>
     <IncludePath>$(SolutionDir)Bolt-Core\external\;$(SolutionDir)Bolt-Core\src\;$(SolutionDir)Bolt-Core\external\GLEW\include\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)bin\$(Configuration)\Core\</OutDir>
-    <IntDir>$(SolutionDir)bin\$(Configuration)\Core\Intermediate\</IntDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(ProjectName)\</OutDir>
+    <IntDir>$(SolutionDir)bin-int\$(Configuration)\$(ProjectName)\</IntDir>
     <LibraryPath>$(SolutionDir)Bolt-Core\external\GLFW\lib-vc2015\;$(SolutionDir)Bolt-Core\external\FreeImage\lib\;$(SolutionDir)Bolt-Core\external\FreeType\lib\;$(SolutionDir)Bolt-Core\external\FreeType-GL\lib\;$(SolutionDir)Bolt-Core\external\GLEW\lib\;$(LibraryPath)</LibraryPath>
     <IncludePath>$(SolutionDir)Bolt-Core\external\;$(SolutionDir)Bolt-Core\src\;$(SolutionDir)Bolt-Core\external\GLEW\include\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)bin\$(Configuration)\Core\</OutDir>
-    <IntDir>$(SolutionDir)bin\$(Configuration)\Core\Intermediate\</IntDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(ProjectName)\</OutDir>
+    <IntDir>$(SolutionDir)bin-int\$(Configuration)\$(ProjectName)\</IntDir>
     <LibraryPath>$(SolutionDir)Bolt-Core\external\GLFW\lib-vc2015\;$(SolutionDir)Bolt-Core\external\FreeImage\lib\;$(SolutionDir)Bolt-Core\external\FreeType\lib\;$(SolutionDir)Bolt-Core\external\FreeType-GL\lib\;$(SolutionDir)Bolt-Core\external\GLEW\lib\;$(LibraryPath)</LibraryPath>
     <IncludePath>$(SolutionDir)Bolt-Core\external\;$(SolutionDir)Bolt-Core\src\;$(SolutionDir)Bolt-Core\external\GLEW\include\;$(IncludePath)</IncludePath>
   </PropertyGroup>
@@ -671,7 +674,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>_MBCS;_CRT_SECURE_NO_WARNINGS;BLT_DEBUG;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_MBCS;_CRT_SECURE_NO_WARNINGS;BLT_PLATFORM_WINDOWS;BLT_BUILD_STATIC;GAMEOBJECTS_PER_LAYER=10000;LAYERS_PER_SCENE=6;BLT_DEBUG;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
   </ItemDefinitionGroup>
@@ -681,7 +684,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>_MBCS;_CRT_SECURE_NO_WARNINGS;BLT_DEBUG;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_MBCS;_CRT_SECURE_NO_WARNINGS;BLT_PLATFORM_WINDOWS;BLT_BUILD_STATIC;GAMEOBJECTS_PER_LAYER=10000;LAYERS_PER_SCENE=6;BLT_DEBUG;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
   </ItemDefinitionGroup>
@@ -693,7 +696,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>_MBCS;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_MBCS;_CRT_SECURE_NO_WARNINGS;BLT_PLATFORM_WINDOWS;BLT_BUILD_STATIC;GAMEOBJECTS_PER_LAYER=10000;LAYERS_PER_SCENE=6;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
@@ -712,7 +715,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>_MBCS;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_MBCS;_CRT_SECURE_NO_WARNINGS;BLT_PLATFORM_WINDOWS;BLT_BUILD_STATIC;GAMEOBJECTS_PER_LAYER=10000;LAYERS_PER_SCENE=6;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>

@@ -7,20 +7,20 @@
 namespace Bolt
 {
 
-	enum class MouseButton
+	BLT_API enum class MouseButton
 	{
 		Left = GLFW_MOUSE_BUTTON_LEFT,
 		Middle = GLFW_MOUSE_BUTTON_MIDDLE,
 		Right = GLFW_MOUSE_BUTTON_RIGHT
 	};
 
-	enum class ButtonState
+	BLT_API enum class ButtonState
 	{
 		Released = GLFW_RELEASE,
 		Pressed = GLFW_PRESS
 	};
 
-	enum class Keycode
+	BLT_API enum class Keycode
 	{
 		LShift = GLFW_KEY_LEFT_SHIFT,
 		RShift = GLFW_KEY_RIGHT_SHIFT,
@@ -111,7 +111,7 @@ namespace Bolt
 		F12 = GLFW_KEY_F12
 	};
 
-	enum class KeyMod
+	BLT_API enum class KeyMod
 	{
 		LShift = BLT_BIT(0),
 		RShift = BLT_BIT(1),

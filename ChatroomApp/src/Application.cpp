@@ -23,7 +23,7 @@ namespace AStar
 			int rows = ((int)columns) / PrimaryWindow->GetFramebuffer().Aspect();
 			RedrawBoard(factory, columns, rows);
 
-			id_t renderer = Graphics::AddRenderer(std::make_unique<Renderer>(std::make_unique<DefaultRenderMethod>()));//Graphics::AddRenderer(std::make_unique<SpriteRenderer2D>());
+			id_t renderer = Graphics::AddRenderer(std::make_unique<SpriteRenderer2D>());
 			Graphics::Schedule().RenderPasses.push_back({ Graphics::DefaultFramebuffer(), RenderPass::ALL_LAYERS, Graphics::GetRenderer(renderer) });
 		}
 
@@ -52,7 +52,7 @@ namespace AStar
 		void RedrawBoard(const ObjectFactory& factory, int columns, int rows)
 		{
 			factory.CurrentLayer()->GameObjects().RemoveAllWithTag("Tile");
-			float border = 2;
+			float border = 1;
 			float width = (Width() - (columns + 1) * border) / (columns);
 			float height = (Height() - (rows + 1) * border) / (rows);
 			for (int i = 0; i < columns; i++)

@@ -4,7 +4,7 @@
 namespace Bolt
 {
 
-	enum class AddressFamily
+	BLT_API enum class AddressFamily
 	{
 		INET = AF_INET,
 		INET6 = AF_INET6

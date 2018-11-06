@@ -9,7 +9,7 @@
 namespace Bolt
 {
 
-	enum class ClearBuffer : GLenum
+	BLT_API enum class ClearBuffer : GLenum
 	{
 		Color = GL_COLOR_BUFFER_BIT,
 		Depth = GL_DEPTH_BUFFER_BIT,
@@ -18,7 +18,7 @@ namespace Bolt
 
 	ClearBuffer operator|(ClearBuffer left, ClearBuffer right);
 
-	enum class Filter : GLenum
+	BLT_API enum class Filter : GLenum
 	{
 		Linear = GL_LINEAR,
 		Nearest = GL_NEAREST

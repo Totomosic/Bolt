@@ -891,6 +891,12 @@
     <ClInclude Include="src\Engine\Scene\UI\UIsurface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Scene\Components\UI\__UI__.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Scene\Components\UI\MouseHoverable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\BoltTL\string.cpp">
@@ -1179,6 +1185,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Scene\UI\UIsurface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Scene\Components\UI\MouseHoverable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

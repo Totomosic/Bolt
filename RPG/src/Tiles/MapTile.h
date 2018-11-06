@@ -6,7 +6,7 @@ namespace RPG
 
 	class Character;
 
-	enum class TileType
+	BLT_API enum class TileType
 	{
 		Grass,
 		Sand,

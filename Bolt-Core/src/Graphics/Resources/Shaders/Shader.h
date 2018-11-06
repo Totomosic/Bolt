@@ -8,7 +8,7 @@
 namespace Bolt
 {
 
-	enum class UniformType
+	BLT_API enum class UniformType
 	{
 		None,
 		Bool,
@@ -106,7 +106,7 @@ namespace Bolt
 			SetUniform(location, value);
 		}
 
-		Resource* Clone() const override;
+		std::unique_ptr<Resource> Clone() const override;
 
 		friend class Initializer;
 

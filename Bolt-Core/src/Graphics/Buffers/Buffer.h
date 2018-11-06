@@ -5,7 +5,7 @@
 namespace Bolt
 {
 
-	enum class BufferUsage
+	BLT_API enum class BufferUsage
 	{
 		StaticDraw = GL_STATIC_DRAW,
 		StaticRead = GL_STATIC_READ,
@@ -18,13 +18,13 @@ namespace Bolt
 		StreamCopy = GL_STREAM_COPY
 	};
 
-	enum class BufferTarget
+	BLT_API enum class BufferTarget
 	{
 		ArrayBuffer = GL_ARRAY_BUFFER,
 		ElementBuffer = GL_ELEMENT_ARRAY_BUFFER
 	};
 
-	enum class Access
+	BLT_API enum class Access
 	{
 		Read = GL_READ_ONLY,
 		Write = GL_WRITE_ONLY,

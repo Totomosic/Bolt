@@ -4,7 +4,7 @@
 namespace Bolt
 {
 
-	enum class LightType
+	BLT_API enum class LightType
 	{
 		Point,
 		Directional,

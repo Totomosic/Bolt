@@ -4,7 +4,7 @@
 namespace Bolt
 {
 
-	enum class DepthFunction : GLenum
+	BLT_API enum class DepthFunction : GLenum
 	{
 		Less = GL_LESS,
 		Lequal = GL_LEQUAL,
@@ -13,26 +13,26 @@ namespace Bolt
 		Greater = GL_GREATER
 	};
 
-	enum class CullFace : GLenum
+	BLT_API enum class CullFace : GLenum
 	{
 		Front = GL_FRONT,
 		Back = GL_BACK,
 		FrontAndBack = GL_FRONT_AND_BACK
 	};
 
-	enum class BlendSrc : GLenum
+	BLT_API enum class BlendSrc : GLenum
 	{
 		SrcAlpha = GL_SRC_ALPHA,
 		One = GL_ONE
 	};
 
-	enum class BlendDst : GLenum
+	BLT_API enum class BlendDst : GLenum
 	{
 		OneMinusSrcAlpha = GL_ONE_MINUS_SRC_ALPHA,
 		One = GL_ONE
 	};
 
-	enum class PolygonMode : GLenum
+	BLT_API enum class PolygonMode : GLenum
 	{
 		Fill = GL_FILL,
 		Line = GL_LINE,
