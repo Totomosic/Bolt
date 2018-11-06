@@ -4,7 +4,7 @@
 namespace Bolt
 {
 
-	enum class UniformUploadType
+	BLT_API enum class UniformUploadType
 	{
 		Recurring,
 		Once

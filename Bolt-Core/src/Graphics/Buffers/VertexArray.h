@@ -8,7 +8,7 @@
 namespace Bolt
 {
 
-	enum class RenderMode : GLenum
+	BLT_API enum class RenderMode : GLenum
 	{
 		Triangles = GL_TRIANGLES,
 		TriangleStrip = GL_TRIANGLE_STRIP,

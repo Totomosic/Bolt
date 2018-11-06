@@ -35,7 +35,17 @@
 #include <math.h>
 #include <cmath>
 
-#define BLT_API
+#ifdef BLT_PLATFORM_WINDOWS
+	#ifdef BLT_BUILD_STATIC
+		#define BLT_API
+	#elif BLT_BUILD_DLL
+		#define BLT_API __declspec(dllexport)
+	#else
+		#define BLT_API __declspec(dllimport)
+	#endif
+#else
+#error Only Supports Windows
+#endif
 
 namespace Bolt
 {

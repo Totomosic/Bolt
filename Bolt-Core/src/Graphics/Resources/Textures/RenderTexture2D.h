@@ -5,7 +5,7 @@
 namespace Bolt
 {
 
-	enum class TextureComponent
+	BLT_API enum class TextureComponent
 	{
 		Color,
 		Depth

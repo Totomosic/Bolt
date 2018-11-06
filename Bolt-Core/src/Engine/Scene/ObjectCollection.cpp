@@ -12,7 +12,7 @@ namespace Bolt
 	}
 
 	ObjectCollection::ObjectCollection()
-		: m_GameObjects(), m_ActiveGameObjects()
+		: m_GameObjects{}, m_ActiveGameObjects()
 	{
 		
 	}

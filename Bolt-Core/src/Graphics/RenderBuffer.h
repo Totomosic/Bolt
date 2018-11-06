@@ -4,7 +4,7 @@
 namespace Bolt
 {
 
-	enum class ColorBuffer
+	BLT_API enum class ColorBuffer
 	{
 		Color0 = GL_COLOR_ATTACHMENT0,
 		Color1 = GL_COLOR_ATTACHMENT1,

@@ -31,7 +31,7 @@ namespace Bolt
 		{
 			if (other.m_OwnsPtr)
 			{
-				m_Ptr = (pointer)other.m_Ptr->Clone();
+				m_Ptr = (pointer)other.m_Ptr->Clone().release();
 				m_OwnsPtr = true;
 			}
 			else
@@ -45,7 +45,7 @@ namespace Bolt
 		{
 			if (other.m_OwnsPtr)
 			{
-				m_Ptr = (pointer)other.m_Ptr->Clone();
+				m_Ptr = (pointer)other.m_Ptr->Clone().release();
 				m_OwnsPtr = true;
 			}
 			else
@@ -104,7 +104,7 @@ namespace Bolt
 			ResourcePtr<Other> result = ResourcePtr<Other>((Other*)m_Ptr, m_OwnsPtr);
 			if (m_OwnsPtr)
 			{
-				result.Set((Other*)m_Ptr->Clone());
+				result.Set((Other*)m_Ptr->Clone().release());
 				BLT_WARN("Copied resource when converting ResourcePtr");
 			}
 			return std::move(result);
@@ -112,13 +112,18 @@ namespace Bolt
 
 		ResourcePtr<T> Clone() const
 		{
-			pointer newResource = (pointer)m_Ptr->Clone();
+			pointer newResource = (pointer)m_Ptr->Clone().release();
 			return ResourcePtr<T>(newResource, true);
 		}
 
 		pointer Get() const { return m_Ptr; }
 		bool OwnsPtr() const { return m_OwnsPtr; }
 		void Set(pointer ptr) { m_Ptr = ptr; }
+		pointer Release() 
+		{ 
+			m_OwnsPtr = false; 
+			return m_Ptr; 
+		}
 
 		pointer operator*() const { return m_Ptr; }
 		pointer operator->() const { return m_Ptr; }

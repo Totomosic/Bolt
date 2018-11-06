@@ -283,7 +283,7 @@ namespace Bolt
 		GL_CALL(glUniform4f(location, value.x, value.y, value.z, value.w));
 	}
 
-	Resource* Shader::Clone() const
+	std::unique_ptr<Resource> Shader::Clone() const
 	{
 		BLT_ASSERT(false, "Currently unable to clone Shaders");
 		return nullptr;

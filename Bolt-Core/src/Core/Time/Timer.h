@@ -4,7 +4,7 @@
 namespace Bolt
 {
 
-	enum class RepeatMode
+	BLT_API enum class RepeatMode
 	{
 		Recurring,
 		Once

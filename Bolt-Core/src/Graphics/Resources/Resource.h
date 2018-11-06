@@ -9,7 +9,7 @@ namespace Bolt
 	public:
 		inline virtual ~Resource() {}
 
-		virtual Resource* Clone() const = 0;
+		virtual std::unique_ptr<Resource> Clone() const = 0;
 
 	};
 

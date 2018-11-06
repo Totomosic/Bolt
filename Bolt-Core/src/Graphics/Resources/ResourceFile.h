@@ -4,7 +4,7 @@
 namespace Bolt
 {
 
-	enum class ResourceType
+	BLT_API enum class ResourceType
 	{
 		Unknown,
 		Texture2D,

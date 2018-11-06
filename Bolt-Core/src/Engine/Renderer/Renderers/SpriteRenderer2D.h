@@ -18,7 +18,7 @@ namespace Bolt
 	class BLT_API SpriteRenderer2D : public Renderer
 	{
 	public:
-		static constexpr uint MAX_SPRITES = 10000;
+		static constexpr uint MAX_SPRITES = GAMEOBJECTS_PER_LAYER;
 		static constexpr uint MAX_VERTICES = MAX_SPRITES * 4;
 		static constexpr uint MAX_INDICES = MAX_SPRITES * 6;
 

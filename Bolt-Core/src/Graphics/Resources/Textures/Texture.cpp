@@ -106,9 +106,9 @@ namespace Bolt
 		GL_CALL(glTexSubImage2D((GLenum)Target(), level, x, y, width, height, GL_RGBA, (GLenum)type, data));
 	}
 
-	Resource* Texture::Clone() const
+	std::unique_ptr<Resource> Texture::Clone() const
 	{
-		Texture* texture = new Texture(m_Width, m_Height, m_Target, m_Format, m_Mipmaps);
+		std::unique_ptr<Texture> texture = std::make_unique<Texture>(m_Width, m_Height, m_Target, m_Format, m_Mipmaps);
 		float* imageData = new float[m_Width * m_Height * 4];
 		Bind();
 		Download(imageData, StorageType::Float);
@@ -118,7 +118,7 @@ namespace Bolt
 		{
 			texture->GenerateMipmaps();
 		}
-		return texture;
+		return std::move(texture);
 	}
 	
 	void Texture::Create()

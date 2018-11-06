@@ -5,7 +5,7 @@
 namespace Bolt
 {
 
-	enum class OpenMode : int
+	BLT_API enum class OpenMode : int
 	{
 		None,
 		Write,

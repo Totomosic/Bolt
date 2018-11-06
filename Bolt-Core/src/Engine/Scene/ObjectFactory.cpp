@@ -3,7 +3,8 @@
 namespace Bolt
 {
 
-	Model* ObjectFactory::s_RectangleModel = nullptr;
+	ResourcePtr<Model> ObjectFactory::s_RectangleModel = nullptr;
+	ResourcePtr<Model> ObjectFactory::s_EllipseModel = nullptr;
 
 	ObjectFactory::ObjectFactory() : ObjectFactory((Layer*)nullptr)
 	{
@@ -109,7 +110,7 @@ namespace Bolt
 	{
 		Mesh mesh;
 		// TODO: CHANGE
-		mesh.Models.push_back({ s_RectangleModel, Matrix4f::Scale(width, height, 1), { 0 } });
+		mesh.Models.push_back({ s_RectangleModel.Get(), Matrix4f::Scale(width, height, 1), { 0 } });
 		mesh.Materials[0].BaseColor = color;
 		mesh.Materials[0].Shader = Shader::DefaultColor();
 		return Instantiate(mesh, std::move(transform));
@@ -119,7 +120,7 @@ namespace Bolt
 	{
 		Mesh mesh;
 		// TODO: CHANGE
-		mesh.Models.push_back({ s_RectangleModel, Matrix4f::Scale(width, height, 1),{ 0 } });
+		mesh.Models.push_back({ s_RectangleModel.Get(), Matrix4f::Scale(width, height, 1),{ 0 } });
 		mesh.Materials[0] = material;
 		return Instantiate(mesh, std::move(transform));
 	}
@@ -153,15 +154,35 @@ namespace Bolt
 
 		Mesh mesh;
 		// TODO: CHANGE
-		mesh.Models.push_back({ new Model(LineFactory(Vector3f::Right(), distance)), Matrix4f::Identity(),{ 0 } });
+		mesh.Models.push_back({ ResourcePtr<Model>(new Model(LineFactory(Vector3f::Right(), distance)), true), Matrix4f::Identity(),{ 0 } });
 		mesh.Materials[0].BaseColor = color;
 
 		return Instantiate(mesh, std::move(t));
 	}
 
+	GameObject* ObjectFactory::Ellipse(float width, float height, const Color& color, Transform transform) const
+	{
+		Mesh mesh;
+		// TODO: CHANGE
+		mesh.Models.push_back({ s_EllipseModel.Get(), Matrix4f::Scale(width / 2, height / 2, 1), { 0 } });
+		mesh.Materials[0].BaseColor = color;
+		mesh.Materials[0].Shader = Shader::DefaultColor();
+		return Instantiate(mesh, std::move(transform));
+	}
+
+	GameObject* ObjectFactory::Ellipse(float width, float height, const Material& material, Transform transform) const
+	{
+		Mesh mesh;
+		// TODO: CHANGE
+		mesh.Models.push_back({ s_EllipseModel.Get(), Matrix4f::Scale(width / 2, height / 2, 1), { 0 } });
+		mesh.Materials[0] = material;
+		return Instantiate(mesh, std::move(transform));
+	}
+
 	void ObjectFactory::Initialize()
 	{
-		s_RectangleModel = new Model(RectangleFactory(1, 1));
+		s_RectangleModel = ResourcePtr<Model>(new Model(RectangleFactory(1, 1)), true);
+		s_EllipseModel = ResourcePtr<Model>(new Model(EllipseFactory(2, 2)), true);
 	}
 
 }

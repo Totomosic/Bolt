@@ -2,13 +2,17 @@
 #include "GameObject.h"
 #include "Camera.h"
 
+#ifndef GAMEOBJECTS_PER_LAYER
+#define GAMEOBJECTS_PER_LAYER 20000
+#endif
+
 namespace Bolt
 {
 
 	struct BLT_API ObjectCollection
 	{
 	public:
-		static constexpr size_t MAX_GAMEOBJECTS = 10000;
+		static constexpr size_t MAX_GAMEOBJECTS = GAMEOBJECTS_PER_LAYER;
 
 		struct BLT_API GameObjectInfo
 		{

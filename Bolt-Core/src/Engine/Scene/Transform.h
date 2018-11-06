@@ -4,7 +4,7 @@
 namespace Bolt
 {
 
-	enum class Space
+	BLT_API enum class Space
 	{
 		World,
 		Local

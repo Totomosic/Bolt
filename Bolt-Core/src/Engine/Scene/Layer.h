@@ -73,6 +73,6 @@ namespace Bolt
 
 	};
 
-	void Destroy(GameObject* object, float timeToDelete);
+	void BLT_API Destroy(GameObject* object, float timeToDelete);
 
 }

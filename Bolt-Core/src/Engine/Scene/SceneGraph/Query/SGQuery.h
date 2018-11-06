@@ -7,7 +7,7 @@ namespace Bolt
 
 	struct SceneGraph;
 
-	enum class QueryType
+	BLT_API enum class QueryType
 	{
 		None,
 		NearTo,

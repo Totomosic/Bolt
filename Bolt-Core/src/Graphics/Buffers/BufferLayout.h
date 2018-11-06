@@ -4,7 +4,7 @@
 namespace Bolt
 {
 
-	enum class DataType
+	BLT_API enum class DataType
 	{
 		UInt = GL_UNSIGNED_INT,
 		Int = GL_INT,

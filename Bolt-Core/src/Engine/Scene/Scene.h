@@ -1,13 +1,17 @@
 #pragma once
 #include "Layer.h"
 
+#ifndef LAYERS_PER_SCENE
+#define LAYERS_PER_SCENE 12
+#endif
+
 namespace Bolt
 {
 
 	struct BLT_API Scene
 	{
 	public:
-		static constexpr int MAX_LAYERS = 24;
+		static constexpr int MAX_LAYERS = LAYERS_PER_SCENE;
 		static constexpr int MAX_CAMERAS = 32;
 
 	private:

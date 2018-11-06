@@ -6,7 +6,7 @@ using namespace Bolt;
 namespace RPG
 {
 
-	enum class CharacterOrientation
+	BLT_API enum class CharacterOrientation
 	{
 		Left,
 		Right,
