@@ -29,7 +29,7 @@ namespace AStar
 
 		void Tick() override
 		{
-			BLT_INFO(Time::FramesPerSecond());
+			BLT_CORE_INFO(Time::FramesPerSecond());
 		}
 
 		void Update() override

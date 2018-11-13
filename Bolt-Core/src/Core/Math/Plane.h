@@ -4,7 +4,7 @@
 namespace Bolt
 {
 
-	struct BLT_API Plane
+	/*struct BLT_API Plane
 	{
 	public:
 		union
@@ -17,6 +17,8 @@ namespace Bolt
 			Vector4f NormDist;
 		};
 
-	};
+	};*/
+
+	using Plane = Vector4f;
 
 }

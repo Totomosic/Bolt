@@ -10,8 +10,6 @@ namespace Bolt
 
 	Engine::Engine()
 	{
-		SetupConsole(BLT_LOG_LEVEL_INFO);
-		std::cout << std::boolalpha;
 		Filesystem::Initialize();
 		int result = glfwInit();
 		BLT_ASSERT(result != GL_NO_ERROR, "GLFW failed to initialise");
@@ -44,6 +42,7 @@ namespace Bolt
 		Scene* scene = &SceneManager::CurrentScene();
 		Input::Update();
 		glfwPollEvents();
+		EventManager::FlushEvents();
 		m_CurrentApplication->Update();
 		if (scene != nullptr)
 		{

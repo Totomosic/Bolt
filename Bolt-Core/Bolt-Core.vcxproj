@@ -140,6 +140,10 @@
     <ClInclude Include="src\Core\BoltTL\__BoltTL__.h" />
     <ClInclude Include="src\Bolt-Graphics.h" />
     <ClInclude Include="src\Core\Color.h" />
+    <ClInclude Include="src\Core\Events\EventArgs.h" />
+    <ClInclude Include="src\Core\Events\EventManager.h" />
+    <ClInclude Include="src\Core\Events\Events.h" />
+    <ClInclude Include="src\Core\Events\__Events__.h" />
     <ClInclude Include="src\Core\Functions.h" />
     <ClInclude Include="src\Core\Image.h" />
     <ClInclude Include="src\Core\Math\Frustum.h" />
@@ -222,6 +226,7 @@
     <ClInclude Include="src\Engine\Serialization\XMLWriteTraits.h" />
     <ClInclude Include="src\Engine\Serialization\__Serialization__.h" />
     <ClInclude Include="src\Engine\User\Input.h" />
+    <ClInclude Include="src\Engine\User\InputEventArgs.h" />
     <ClInclude Include="src\Engine\User\__User__.h" />
     <ClInclude Include="src\Graphics\Buffers\ArrayDescriptor.h" />
     <ClInclude Include="src\Graphics\Buffers\Buffer.h" />
@@ -317,6 +322,7 @@
   <ItemGroup>
     <ClCompile Include="src\Core\BoltTL\string.cpp" />
     <ClCompile Include="src\Core\Color.cpp" />
+    <ClCompile Include="src\Core\Events\EventManager.cpp" />
     <ClCompile Include="src\Core\Functions.cpp" />
     <ClCompile Include="src\Core\Image.cpp" />
     <ClCompile Include="src\Core\Math\Frustum.cpp" />
@@ -412,6 +418,7 @@
     <ClCompile Include="src\Graphics\Resources\Textures\TextureCube.cpp" />
     <ClCompile Include="src\Graphics\Structs\Monitor.cpp" />
     <ClCompile Include="src\Graphics\Window.cpp" />
+    <ClCompile Include="src\Logging.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="external\GLFW\docs\html\annotated.html" />
@@ -648,25 +655,25 @@
     <OutDir>$(SolutionDir)bin\$(Configuration)\$(ProjectName)\</OutDir>
     <IntDir>$(SolutionDir)bin-int\$(Configuration)\$(ProjectName)\</IntDir>
     <LibraryPath>$(SolutionDir)Bolt-Core\external\GLFW\lib-vc2015\;$(SolutionDir)Bolt-Core\external\FreeImage\lib\;$(SolutionDir)Bolt-Core\external\FreeType\lib\;$(SolutionDir)Bolt-Core\external\FreeType-GL\lib\;$(SolutionDir)Bolt-Core\external\GLEW\lib\;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)Bolt-Core\external\;$(SolutionDir)Bolt-Core\src\;$(SolutionDir)Bolt-Core\external\GLEW\include\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Bolt-Core\external\;$(SolutionDir)Bolt-Core\src\;$(SolutionDir)Bolt-Core\external\GLEW\include\;$(SolutionDir)Bolt-Core\external\spdlog\include\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)bin\$(Configuration)\$(ProjectName)\</OutDir>
     <IntDir>$(SolutionDir)bin-int\$(Configuration)\$(ProjectName)\</IntDir>
     <LibraryPath>$(SolutionDir)Bolt-Core\external\GLFW\lib-vc2015\;$(SolutionDir)Bolt-Core\external\FreeImage\lib\;$(SolutionDir)Bolt-Core\external\FreeType\lib\;$(SolutionDir)Bolt-Core\external\FreeType-GL\lib\;$(SolutionDir)Bolt-Core\external\GLEW\lib\;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)Bolt-Core\external\;$(SolutionDir)Bolt-Core\src\;$(SolutionDir)Bolt-Core\external\GLEW\include\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Bolt-Core\external\;$(SolutionDir)Bolt-Core\src\;$(SolutionDir)Bolt-Core\external\GLEW\include\;$(SolutionDir)Bolt-Core\external\spdlog\include\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)bin\$(Configuration)\$(ProjectName)\</OutDir>
     <IntDir>$(SolutionDir)bin-int\$(Configuration)\$(ProjectName)\</IntDir>
     <LibraryPath>$(SolutionDir)Bolt-Core\external\GLFW\lib-vc2015\;$(SolutionDir)Bolt-Core\external\FreeImage\lib\;$(SolutionDir)Bolt-Core\external\FreeType\lib\;$(SolutionDir)Bolt-Core\external\FreeType-GL\lib\;$(SolutionDir)Bolt-Core\external\GLEW\lib\;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)Bolt-Core\external\;$(SolutionDir)Bolt-Core\src\;$(SolutionDir)Bolt-Core\external\GLEW\include\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Bolt-Core\external\;$(SolutionDir)Bolt-Core\src\;$(SolutionDir)Bolt-Core\external\GLEW\include\;$(SolutionDir)Bolt-Core\external\spdlog\include\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)bin\$(Configuration)\$(ProjectName)\</OutDir>
     <IntDir>$(SolutionDir)bin-int\$(Configuration)\$(ProjectName)\</IntDir>
     <LibraryPath>$(SolutionDir)Bolt-Core\external\GLFW\lib-vc2015\;$(SolutionDir)Bolt-Core\external\FreeImage\lib\;$(SolutionDir)Bolt-Core\external\FreeType\lib\;$(SolutionDir)Bolt-Core\external\FreeType-GL\lib\;$(SolutionDir)Bolt-Core\external\GLEW\lib\;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)Bolt-Core\external\;$(SolutionDir)Bolt-Core\src\;$(SolutionDir)Bolt-Core\external\GLEW\include\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Bolt-Core\external\;$(SolutionDir)Bolt-Core\src\;$(SolutionDir)Bolt-Core\external\GLEW\include\;$(SolutionDir)Bolt-Core\external\spdlog\include\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

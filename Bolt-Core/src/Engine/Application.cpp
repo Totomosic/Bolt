@@ -27,7 +27,7 @@ namespace Bolt
 	{
 		SetPrimaryWindow(engineWindow);
 		Init();
-		BLT_INFO("Init took " + std::to_string(Time::CurrentTime()) + " seconds");
+		BLT_CORE_INFO("Init took " + std::to_string(Time::CurrentTime()) + " seconds");
 		Time::Reset();
 		m_TickTimer = Time::CreateTimer(1.0, std::bind(&Application::Tick, this));
 	}

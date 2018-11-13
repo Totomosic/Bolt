@@ -41,7 +41,7 @@ namespace Bolt
 		if (err < 0)
 		{
 			int errorCode = WSAGetLastError();
-			BLT_ERROR("Socket Error: " + std::to_string(errorCode));
+			BLT_CORE_ERROR("Socket Error: " + std::to_string(errorCode));
 			return errorCode;
 		}
 		return NO_ERROR;
@@ -53,7 +53,7 @@ namespace Bolt
 		if (err != NO_ERROR)
 		{
 			int errorCode = WSAGetLastError();
-			BLT_ERROR("Socket Error: " + std::to_string(errorCode));
+			BLT_CORE_ERROR("Socket Error: " + std::to_string(errorCode));
 			return -errorCode;
 		}
 		return NO_ERROR;
@@ -76,7 +76,7 @@ namespace Bolt
 		{
 			return TCPsocket(newSocket);
 		}
-		BLT_ERROR("Socket Error");
+		BLT_CORE_ERROR("Socket Error");
 		return TCPsocket(INVALID_SOCKET);
 	}
 
@@ -86,7 +86,7 @@ namespace Bolt
 		if (err < 0)
 		{
 			int res = WSAGetLastError();
-			BLT_ERROR("Socket Error: " + std::to_string(res));
+			BLT_CORE_ERROR("Socket Error: " + std::to_string(res));
 			return -res;
 		}
 		return NO_ERROR;
@@ -98,7 +98,7 @@ namespace Bolt
 		if (bytesSent < 0)
 		{
 			int error = WSAGetLastError();
-			BLT_ERROR("Socket send error");
+			BLT_CORE_ERROR("Socket send error");
 			return -error;
 		}
 		return bytesSent;
@@ -110,7 +110,7 @@ namespace Bolt
 		if (bytesReceived < 0)
 		{
 			int error = WSAGetLastError();
-			BLT_ERROR("Socket recv error: " + std::to_string(error));
+			BLT_CORE_ERROR("Socket recv error: " + std::to_string(error));
 			return -error;
 		}
 		return bytesReceived;

@@ -108,8 +108,8 @@ namespace Bolt
 	{
 		if (s_Schedule.RenderPasses.empty())
 		{
-			BLT_WARN("Attempted to Render Scene with no RenderPasses setup");
-			BLT_WARN("Use Graphics::Schedule() to add render passes");
+			BLT_CORE_WARN("Attempted to Render Scene with no RenderPasses setup");
+			BLT_CORE_WARN("Use Graphics::Schedule() to add render passes");
 		}
 		std::vector<const Framebuffer*> clearedFramebuffers;
 		for (RenderPass& pass : s_Schedule.RenderPasses)

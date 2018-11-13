@@ -66,7 +66,7 @@ namespace Bolt
 
 	bool SocketAddress::operator==(const SocketAddress& other) const
 	{
-		BLT_INFO(m_SockAddr.sa_data == other.m_SockAddr.sa_data);
+		BLT_CORE_INFO(m_SockAddr.sa_data == other.m_SockAddr.sa_data);
 		return (m_SockAddr.sa_data == other.m_SockAddr.sa_data) && (m_SockAddr.sa_family == other.m_SockAddr.sa_family);
 	}
 

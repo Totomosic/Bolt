@@ -13,6 +13,7 @@ namespace Bolt
 		{
 			return false;
 		}
+		Log::Initialize();
 		Input::Initialize(window);
 		Shader::Initialize();
 		Graphics::Initialize(window);

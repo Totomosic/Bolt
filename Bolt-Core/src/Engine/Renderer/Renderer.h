@@ -23,6 +23,8 @@ namespace Bolt
 
 	private:
 		void RenderGameObjects(const std::vector<GameObject*>& objects, const Matrix4f& viewMatrix, const Matrix4f& projMatrix, const UniformManager& uniforms) const;
+		std::vector<GameObject*> PerformClipping(const std::vector<GameObject*>& objects, const std::vector<Plane>& clippingPlanes) const;
+		bool TestClipPlane(const Plane& plane, const Cuboid& box) const;
 
 	};
 

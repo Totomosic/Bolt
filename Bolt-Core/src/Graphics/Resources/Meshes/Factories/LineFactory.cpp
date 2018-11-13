@@ -15,6 +15,13 @@ namespace Bolt
 		result.Vertices = std::make_unique<VertexArray>(RenderMode::Lines);
 		uint indices[2] = { 0, 1 };
 		result.Indices.AddIndexBuffer(std::make_unique<IndexBuffer>(indices, 2));
+		Vector3f half = Direction * Length / 2.0f;
+		result.Bounds.MinX = -abs(half.x);
+		result.Bounds.MaxX = abs(half.x);
+		result.Bounds.MinY = -abs(half.y);
+		result.Bounds.MaxY = abs(half.y);
+		result.Bounds.MinZ = -abs(half.z);
+		result.Bounds.MaxZ = abs(half.z);
 
 		BufferLayout layout = BufferLayout::Default();
 		result.Vertices->CreateVertexBuffer(2 * layout.Size(), layout);
@@ -22,12 +29,12 @@ namespace Bolt
 		Vector4<byte> color = Color.ToBytes();
 
 		VertexIterator iterator = result.Vertices->Begin();
-		iterator[0] = -Direction * Length / 2.0f;
+		iterator[0] = -half;
 		iterator[1] = Vector3f(0, 0, 1);
 		iterator[2] = Vector2f(0, 1);
 		iterator[3] = color;
 		iterator++;
-		iterator[0] = Direction * Length / 2.0f;
+		iterator[0] = half;
 		iterator[1] = Vector3f(0, 0, 1);
 		iterator[2] = Vector2f(0, 0);
 		iterator[3] = color;
