@@ -4,7 +4,7 @@ void* Allocate(size_t size)
 {
 	if (size > 1024 * 1024 * 10)
 	{
-		BLT_WARN("Large Allocation: " + std::to_string(size / 1024.0f / 1024.0f) + " MB");
+		BLT_CORE_WARN("Large Allocation: " + std::to_string(size / 1024.0f / 1024.0f) + " MB");
 	}
 	return BLT_ALLOC(size);
 }

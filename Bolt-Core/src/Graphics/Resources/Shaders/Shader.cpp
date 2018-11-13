@@ -415,8 +415,8 @@ namespace Bolt
 			std::vector<char> error(length);
 			GL_CALL(glGetProgramInfoLog(m_Id, length, &length, &error[0]));
 			blt::string errorMsg(&error[0]);
-			BLT_ERROR("Shader Failed To Link");
-			BLT_ERROR(errorMsg);
+			BLT_CORE_ERROR("Shader Failed To Link");
+			BLT_CORE_ERROR(errorMsg);
 		}
 		for (int i = 0; i < count; i++)
 		{
@@ -442,7 +442,7 @@ namespace Bolt
 			GL_CALL(glGetShaderInfoLog(shader, length, &length, &error[0]));
 			blt::string errorMessage(&error[0]);
 			GL_CALL(glDeleteShader(shader));
-			BLT_ERROR(errorMessage);
+			BLT_CORE_ERROR(errorMessage);
 			return 0;
 		}
 		GL_CALL(glAttachShader(m_Id, shader));
@@ -460,7 +460,7 @@ namespace Bolt
 		m_UniformLocations[location] = loc;
 		if (location == -1)
 		{
-			BLT_WARN("Unable to find uniform variable: " + location + " in shader with ID: " + std::to_string(m_Id));
+			BLT_CORE_WARN("Unable to find uniform variable: " + location + " in shader with ID: " + std::to_string(m_Id));
 		}
 		return loc;
 	}
@@ -478,7 +478,7 @@ namespace Bolt
 		}		
 		if (var.Type != type)
 		{
-			BLT_WARN("Uploaded value to uniform variable with incorrect type");
+			BLT_CORE_WARN("Uploaded value to uniform variable with incorrect type");
 		}
 	}
 	
@@ -508,7 +508,7 @@ namespace Bolt
 				}
 				else
 				{
-					BLT_WARN("Found uniform variable: " + name + " but was not able to determine type");
+					BLT_CORE_WARN("Found uniform variable: " + name + " but was not able to determine type");
 				}
 			}
 		}

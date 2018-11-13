@@ -75,7 +75,7 @@ namespace Bolt
 		}		
 		else
 		{
-			BLT_INFO("NOT IN ACTIVE OBJECTS");
+			BLT_CORE_INFO("NOT IN ACTIVE OBJECTS");
 		}
 	}
 

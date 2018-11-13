@@ -18,8 +18,9 @@ namespace Bolt
 		id_t LayerMask;
 		const Renderer* PassRenderer;
 		std::unordered_map<id_t, CameraView> CameraOverrides;
-		std::vector<LightSource> AdditionalLights;
+		std::vector<Plane> ClippingPlanes;
 		UniformManager Uniforms;
+		std::vector<LightSource> AdditionalLights;
 
 	};
 

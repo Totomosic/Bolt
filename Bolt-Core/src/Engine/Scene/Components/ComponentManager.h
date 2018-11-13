@@ -52,6 +52,12 @@ namespace Bolt
 			return (T*)AddComponent(typeid(T).hash_code(), std::move(component));
 		}
 
+		template<typename T, typename... Args>
+		T* AddComponent(Args&&... args)
+		{
+			return AddComponent<T>(std::make_unique<T>(args...));
+		}
+
 		template<typename T>
 		void RemoveComponent()
 		{

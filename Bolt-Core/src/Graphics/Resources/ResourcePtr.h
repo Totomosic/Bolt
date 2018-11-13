@@ -105,7 +105,7 @@ namespace Bolt
 			if (m_OwnsPtr)
 			{
 				result.Set((Other*)m_Ptr->Clone().release());
-				BLT_WARN("Copied resource when converting ResourcePtr");
+				BLT_CORE_WARN("Copied resource when converting ResourcePtr");
 			}
 			return std::move(result);
 		}

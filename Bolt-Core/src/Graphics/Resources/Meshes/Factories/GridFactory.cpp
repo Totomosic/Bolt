@@ -15,6 +15,12 @@ namespace Bolt
 		result.Vertices = std::make_unique<VertexArray>(RenderMode::Triangles);
 		int vertexCount = xVertices * zVertices;
 		result.Indices.AddIndexBuffer(std::make_unique<IndexBuffer>((xVertices - 1) * (zVertices - 1) * 6));		
+		result.Bounds.MinX = -Width / 2;
+		result.Bounds.MaxX = Width / 2;
+		result.Bounds.MinY = 0;
+		result.Bounds.MaxY = 0;
+		result.Bounds.MinZ = -Depth / 2;
+		result.Bounds.MaxZ = Depth / 2;
 
 		BufferLayout layout = BufferLayout::Default();
 		result.Vertices->CreateVertexBuffer(vertexCount * layout.Size(), layout);

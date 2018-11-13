@@ -26,6 +26,8 @@ namespace Bolt
 		{
 			std::vector<GameObject*> defaultObjects = layer->Graph().Query(SGQTransparency(false)).GameObjects;
 			std::vector<GameObject*> transparentObjects = layer->Graph().Query(SGQTransparency(true)).GameObjects;
+			defaultObjects = PerformClipping(defaultObjects, renderPass->ClippingPlanes);
+			transparentObjects = PerformClipping(transparentObjects, renderPass->ClippingPlanes);
 
 			Camera* camera = layer->ActiveCamera();
 			if (camera->CameraProjection().Type == ProjectionType::Orthographic)
@@ -85,6 +87,63 @@ namespace Bolt
 			uniforms.UploadAll(pair.second.Material->Shader.Get());
 			(*m_Method)(pair.second, viewMatrix, projectionMatrix);
 		}
+	}
+
+	std::vector<GameObject*> Renderer::PerformClipping(const std::vector<GameObject*>& objects, const std::vector<Plane>& clippingPlanes) const
+	{
+		std::vector<GameObject*> result;
+		result.reserve(objects.size());
+		for (GameObject* object : objects)
+		{
+			Vector3f position = object->transform().Position();
+			Mesh& mesh = object->Components().GetComponent<MeshRenderer>().Mesh;
+			if (mesh.Models.size() <= 0)
+			{
+				continue;
+			}
+			const ModelData& info = mesh.Models[0].Model->Data();
+			float width = info.Bounds.MaxX - info.Bounds.MinX;
+			float height = info.Bounds.MaxY - info.Bounds.MinY;
+			float depth = info.Bounds.MaxZ - info.Bounds.MinZ;
+			Vector3f meshScale = Vector3f(mesh.Models[0].Transform.Element(0, 0), mesh.Models[0].Transform.Element(1, 1), mesh.Models[0].Transform.Element(2, 2));
+			Vector3f size = Vector3f(width, height, depth) * object->transform().Scale() * meshScale;
+			Cuboid box = { position - size / 2, position + size / 2 };
+			bool passed = true;
+			Plane frustum[6];
+			object->GetLayer()->ActiveCamera()->CameraProjection().GetPlanes(object->GetLayer()->ActiveCamera()->ViewMatrix(), frustum);
+			for (int i = 0; i < 6; i++)
+			{
+				if (!TestClipPlane(frustum[i], box))
+				{
+					passed = false;
+					break;
+				}
+			}
+			if (passed)
+			{
+				for (const Plane& plane : clippingPlanes)
+				{
+					if (!TestClipPlane(plane, box))
+					{
+						passed = false;
+						break;
+					}
+				}
+			}
+			if (passed)
+			{
+				result.push_back(object);
+			}
+		}
+		return std::move(result);
+	}
+
+	bool Renderer::TestClipPlane(const Plane& plane, const Cuboid& box) const
+	{
+		Vector4f minP = Vector4f(box.Min, 1.0f);
+		Vector4f maxP = Vector4f(box.Max, 1.0f);
+		float distance = max(minP.x * plane.x, maxP.x * plane.x) + max(minP.y * plane.y, maxP.y * plane.y) + max(minP.z * plane.z, maxP.z * plane.z) + plane.w;
+		return distance >= 0;
 	}
 
 }

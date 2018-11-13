@@ -3,6 +3,38 @@
 namespace Bolt
 {
 
+	Plane TransformPlane(const Matrix4f& transform, const Plane& plane)
+	{
+		Vector4f o = Vector4f(plane.xyz().Normalize() * plane.w, -1);
+		Vector4f n = Vector4f(plane.xyz().Normalize(), 0);
+		o = transform * o;
+		n = transform.Inverse().Transpose() * n;
+		return Plane(n.xyz().Normalize(), o.xyz().Dot(n.xyz().Normalize()));
+	}
+
+	void Projection::GetPlanes(const Matrix4f& viewMatrix, Plane* outPlanes) const
+	{
+		Matrix4f transform = (ProjectionMatrix * viewMatrix).Inverse();
+		Plane nearPlane = Plane(0.0f, 0.0f, 1.0, 1.0f);
+		Plane farPlane = Plane(0.0f, 0.0f, -1.0f, 1.0f);
+		Plane leftPlane = Plane(1.0f, 0.0f, 0.0f, 1.0f);
+		Plane rightPlane = Plane(-1.0f, 0.0f, 0.0f, 1.0f);
+		Plane bottomPlane = Plane(0.0f, 1.0f, 0.0f, 1.0f);
+		Plane topPlane = Plane(0.0f, -1.0f, 0.0f, 1.0f);
+		nearPlane = TransformPlane(transform, nearPlane);
+		farPlane = TransformPlane(transform, farPlane);
+		leftPlane = TransformPlane(transform, leftPlane);
+		rightPlane = TransformPlane(transform, rightPlane);
+		bottomPlane = TransformPlane(transform, bottomPlane);
+		topPlane = TransformPlane(transform, topPlane);
+		outPlanes[0] = nearPlane;
+		outPlanes[1] = farPlane;
+		outPlanes[2] = leftPlane;
+		outPlanes[3] = rightPlane;
+		outPlanes[4] = bottomPlane;
+		outPlanes[5] = topPlane;
+	}
+
 	Projection Projection::Perspective(float fovy, float aspect, float nearPlane, float farPlane)
 	{
 		return { Frustum::Perspective(fovy, aspect, nearPlane, farPlane), ProjectionType::Perspective, Matrix4f::Perspective(fovy, aspect, nearPlane, farPlane) };

@@ -282,6 +282,16 @@ namespace Bolt
 		{
 			s_Mouse.Buttons[button].State = (ButtonState)action;
 			s_ChangedButtons.push_back({ (MouseButton)button, (ButtonState)action });
+			std::unique_ptr<MouseEventArgs> args = std::make_unique<MouseEventArgs>();
+			args->Button = (MouseButton)button;
+			if ((ButtonState)action == ButtonState::Pressed)
+			{
+				EventManager::Post(Events::MOUSE_PRESSED, std::move(args));
+			}
+			else
+			{
+				EventManager::Post(Events::MOUSE_RELEASED, std::move(args));
+			}
 		}
 	}
 
@@ -291,6 +301,16 @@ namespace Bolt
 		{
 			s_Keyboard.Keys[key].State = (ButtonState)action;
 			s_ChangedKeys.push_back({ (Keycode)key, (ButtonState)action });
+			std::unique_ptr<KeyEventArgs> args = std::make_unique<KeyEventArgs>();
+			args->Key = (Keycode)key;
+			if ((ButtonState)action == ButtonState::Pressed)
+			{
+				EventManager::Post(Events::KEY_PRESSED, std::move(args));
+			}
+			else
+			{
+				EventManager::Post(Events::KEY_RELEASED, std::move(args));
+			}
 		}
 	}
 

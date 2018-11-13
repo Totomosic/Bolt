@@ -20,6 +20,12 @@ namespace Bolt
 		ModelData result;
 		result.Vertices = std::make_unique<VertexArray>();
 		result.Indices.AddIndexBuffer(std::make_unique<IndexBuffer>(6 * characters.size()));
+		result.Bounds.MinX = -w;
+		result.Bounds.MaxX = w;
+		result.Bounds.MinY = h;
+		result.Bounds.MaxY = -h;
+		result.Bounds.MinZ = 0;
+		result.Bounds.MaxZ = 0;
 
 		BufferLayout layout = BufferLayout::Default();
 		result.Vertices->CreateVertexBuffer(4 * characters.size() * layout.Size(), layout);

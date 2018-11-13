@@ -25,6 +25,10 @@ namespace Bolt
 		Matrix4f ProjectionMatrix;
 
 	public:
+		// Fills outPlanes with the 6 planes that define the view frustum
+		void GetPlanes(const Matrix4f& viewMatrix, Plane* outPlanes) const;
+
+	public:
 		static Projection Perspective(float fovy, float aspect, float nearPlane, float farPlane);
 		static Projection Orthographic(float left, float right, float bottom, float top, float nearPlane, float farPlane);
 

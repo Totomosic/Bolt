@@ -172,6 +172,20 @@ namespace Bolt
 		{	
 			values[4 * col + row] = value;	
 		}	
+
+		Matrix4<Base> Transpose() const
+		{
+			Vector4<Base> r0 = Row(0);
+			Vector4<Base> r1 = Row(1);
+			Vector4<Base> r2 = Row(2);
+			Vector4<Base> r3 = Row(3);
+			Matrix4<Base> result;
+			result.SetColumn(0, r0);
+			result.SetColumn(1, r1);
+			result.SetColumn(2, r2);
+			result.SetColumn(3, r3);
+			return result;
+		}
 				
 		Matrix4<Base> Inverse() const	
 		{	
