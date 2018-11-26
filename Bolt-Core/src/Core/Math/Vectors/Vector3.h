@@ -393,7 +393,7 @@ namespace Bolt
 
 		static Vector3<T, Base> SmoothDamp(const Vector3<T, Base>& current, const Vector3<T, Base>& end, Vector3<T, Base>* currentVelocity, T smoothTime, T deltaTime, T maxSpeed = std::numeric_limits<T>::infinity())
 		{
-			smoothTime = max((T)0.0001, smoothTime);
+			smoothTime = std::max((T)0.0001, smoothTime);
 			float num = 2.0f / smoothTime;
 			float num2 = num * deltaTime;
 			float d = 1.0f / (1.0f + num2 + 0.48f * num2 * num2 + 0.235f * num2 * num2 * num2);

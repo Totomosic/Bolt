@@ -47,6 +47,8 @@ namespace Bolt
 		const Projection& CameraProjection() const;
 		const Matrix4f& ProjectionMatrix() const;
 		const Matrix4f& ViewMatrix() const;
+		float ViewWidth() const;
+		float ViewHeight() const;
 
 		void SetViewFrustum(const Frustum& frustum);
 		void SetProjectionType(ProjectionType type);

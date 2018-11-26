@@ -14,7 +14,7 @@ namespace Bolt
 	void ApplyMaterial(const Material& material)
 	{
 		material.Shader->Bind();
-		material.Shader->SetUniform("u_Color", material.BaseColor);
+		material.Shader->SetColor(material.BaseColor);
 		material.Uniforms.UploadAll(material.Shader.Get());
 		GLState::ApplySettings(material.RenderOptions);
 
@@ -22,7 +22,7 @@ namespace Bolt
 		for (int i = 0; i < material.Textures.Textures.size(); i++)
 		{
 			material.Textures.Textures[i]->Bind(i);
-			material.Shader->SetUniform("u_Textures[" + std::to_string(i) + ']', i);
+			material.Shader->SetUniform("Material.Textures[" + std::to_string(i) + ']', i);
 			Matrix3f textureMatrix = Matrix3f::Identity();
 			if (material.Textures.Animators.find(i) != material.Textures.Animators.end())
 			{
@@ -36,13 +36,13 @@ namespace Bolt
 	{
 		const Shader* shader = batch.Material->Shader.Get();
 		ApplyMaterial(*batch.Material);
-		shader->SetUniform("u_ViewMatrix", viewMatrix);
-		shader->SetUniform("u_ProjectionMatrix", projectionMatrix);
+		shader->SetViewMatrix(viewMatrix);
+		shader->SetProjectionMatrix(projectionMatrix);
 
 		for (const GeometryData& data : batch.Geometry)
 		{
-			int renderCount = min(data.Indices->IndexCount(), data.IndexOverride);
-			shader->SetUniform("u_ModelMatrix", data.Transform);
+			int renderCount = std::min((uint)data.Indices->IndexCount(), data.IndexOverride);
+			shader->SetModelMatrix(data.Transform);
 			data.Vertices->Bind();
 			data.Indices->Bind();
 			glDrawElements((GLenum)data.Vertices->GetRenderMode(), renderCount, data.Indices->IndexType(), nullptr);

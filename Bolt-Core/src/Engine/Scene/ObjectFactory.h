@@ -12,6 +12,7 @@ namespace Bolt
 	private:
 		static ResourcePtr<Model> s_RectangleModel;
 		static ResourcePtr<Model> s_EllipseModel;
+		static ResourcePtr<Model> s_CuboidModel;
 
 	private:
 		Layer* m_CurrentLayer;
@@ -43,9 +44,12 @@ namespace Bolt
 		GameObject* Rectangle(float width, float height, const Color& color = Color::White, Transform transform = Transform()) const;
 		GameObject* Rectangle(float width, float height, const Material& material, Transform transform = Transform()) const;
 		GameObject* Image(float width, float height, const ResourcePtr<const Texture2D>& image, Transform transform = Transform()) const;
-		GameObject* Line(const Vector3f& p0, const Vector3f& p1, const Color& color = Color::White) const;
 		GameObject* Ellipse(float width, float height, const Color& color = Color::White, Transform transform = Transform()) const;
 		GameObject* Ellipse(float width, float height, const Material& material, Transform transform = Transform()) const;
+
+		GameObject* Cuboid(float width, float height, float depth, const Color& color = Color::White, Transform transform = Transform()) const;
+		GameObject* Cuboid(float width, float height, float depth, const Material& material = Material(), Transform transform = Transform()) const;
+		GameObject* Line(const Vector3f& p0, const Vector3f& p1, const Color& color = Color::White) const;
 
 		friend class Initializer;
 

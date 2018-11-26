@@ -6,6 +6,7 @@ namespace Bolt
 
 	class ObjectPrefab;
 	class GameObject;
+	class Camera;
 	struct Layer;
 
 	class BLT_API Component
@@ -21,6 +22,7 @@ namespace Bolt
 
 		ObjectPrefab* objectPrefab() const;
 		GameObject* gameObject() const;
+		Camera* camera() const;
 		Layer* layer() const;
 
 		virtual void Start();

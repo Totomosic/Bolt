@@ -1,15 +1,16 @@
 R"(
 #version 430 core
+#include "BoltMaterials.glh"
 
 in vec2 f_TexCoord;
 in vec4 f_Color;
 
-uniform vec4 u_Color;
+uniform Material2D Material;
 
 layout(location = 0) out vec4 FinalColor;
 
 void main()
 {
-	FinalColor = f_Color * u_Color;	
+	FinalColor = f_Color * Material.MeshColor;	
 }
 )"

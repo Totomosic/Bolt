@@ -16,9 +16,9 @@ namespace Bolt
 	struct BLT_API ResourceFile
 	{
 	public:
-		ResourceType Type;
-		blt::string Name;
-		id_t Id;
+		ResourceType Type = ResourceType::Unknown;
+		blt::string Name = "";
+		id_t Id = (id_t)-1;
 		XMLnode Attributes;
 
 	};

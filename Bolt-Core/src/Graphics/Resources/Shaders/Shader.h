@@ -39,6 +39,11 @@ namespace Bolt
 			UniformType Type;
 		};
 
+		static blt::string MODEL_MATRIX_NAME;
+		static blt::string VIEW_MATRIX_NAME;
+		static blt::string PROJECTION_MATRIX_NAME;
+		static blt::string BASE_COLOR_NAME;
+
 	private:
 		static ResourcePtr<const Shader> s_DefaultColorShader;
 		static ResourcePtr<const Shader> s_DefaultTextureShader;
@@ -46,11 +51,20 @@ namespace Bolt
 		static ResourcePtr<const Shader> s_DefaultSkyboxShader;
 		static ResourcePtr<const Shader> s_SpriteTextureShader;
 
+		static ResourcePtr<const Shader> s_LightingTextureShader;
+
 	private:
 		id_t m_Id;
+		std::unordered_map<id_t, int> m_ShaderConcepts;
+
 		mutable std::unordered_map<blt::string, int> m_UniformLocations;
 		std::unordered_map<int, UniformVariable> m_UniformVariables;
 		std::vector<UniformVariable> m_TextureSamplers;
+
+		int m_ModelMatrixLocation;
+		int m_ViewMatrixLocation;
+		int m_ProjectionMatrixLocation;
+		int m_BaseColorLocation;
 
 	public:
 		Shader(const blt::string& vertexSource, const blt::string& fragmentSource);
@@ -67,6 +81,11 @@ namespace Bolt
 
 		void Bind() const;
 		void Unbind() const;
+
+		void SetModelMatrix(const Matrix4f& matrix) const;
+		void SetViewMatrix(const Matrix4f& matrix) const;
+		void SetProjectionMatrix(const Matrix4f& matrix) const;
+		void SetColor(const Color& color) const;
 
 		void SetUniform(const blt::string& location, bool value) const;
 		void SetUniform(const blt::string& location, int value) const;
@@ -121,7 +140,9 @@ namespace Bolt
 		static ResourcePtr<const Shader> DefaultTexture();
 		static ResourcePtr<const Shader> DefaultFont();
 		static ResourcePtr<const Shader> DefaultSkybox();
-		static ResourcePtr<const Shader> Sprite();
+		static ResourcePtr<const Shader> SpriteTexture();
+
+		static ResourcePtr<const Shader> LightingTexture();
 
 	private:
 		void Create();
@@ -139,7 +160,9 @@ namespace Bolt
 		static const Shader* CreateDefaultTextureShader();
 		static const Shader* CreateDefaultFontShader();
 		static const Shader* CreateDefaultSkyboxShader();
-		static const Shader* CraeteSpriteShader();
+		static const Shader* CreateSpriteTextureShader();
+
+		static const Shader* CreateLightingTextureShader();
 
 	};
 

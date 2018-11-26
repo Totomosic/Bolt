@@ -19,6 +19,7 @@ namespace Bolt
 
 	File Filesystem::Open(const Filepath& filepath, OpenMode mode)
 	{
+		BLT_ASSERT(mode != OpenMode::Read || FileExists(filepath), "No file with path " + filepath.Path());
 		File f(filepath);
 		f.SetOpenMode(mode);
 		f.m_Stream.open(filepath.Path().c_str(), f.FlagsToValue(mode));
@@ -33,6 +34,7 @@ namespace Bolt
 
 	XMLfile Filesystem::OpenXML(const Filepath& filepath, OpenMode mode)
 	{
+		BLT_ASSERT(mode != OpenMode::Read || FileExists(filepath), "No file with path " + filepath.Path());
 		XMLfile f(filepath);
 		f.SetOpenMode(mode);
 		f.m_Stream.open(filepath.Path().c_str(), f.FlagsToValue(mode));

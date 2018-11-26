@@ -11,6 +11,11 @@ namespace Bolt
 	std::vector<KeyboardInstance::Key> Input::s_ChangedKeys = std::vector<KeyboardInstance::Key>();
 	std::vector<MouseInstance::Button> Input::s_ChangedButtons = std::vector<MouseInstance::Button>();
 
+	EventDispatcher<KeyEventArgs> Input::KeyPressedEvent = EventDispatcher<KeyEventArgs>(Events::KEY_PRESSED);
+	EventDispatcher<KeyEventArgs> Input::KeyReleasedEvent = EventDispatcher<KeyEventArgs>(Events::KEY_RELEASED);
+	EventDispatcher<MouseEventArgs> Input::MouseButtonPressedEvent = EventDispatcher<MouseEventArgs>(Events::MOUSE_PRESSED);
+	EventDispatcher<MouseEventArgs> Input::MouseButtonReleasedEvent = EventDispatcher<MouseEventArgs>(Events::MOUSE_RELEASED);
+
 	const MouseInstance& Input::Mouse()
 	{
 		return s_Mouse;
@@ -31,9 +36,19 @@ namespace Bolt
 		return Vector3f(s_Mouse.X, s_Mouse.Y, 0);
 	}
 
+	Vector3f Input::MousePosition(float width, float height)
+	{
+		return Vector3f(Map<float>(s_Mouse.X, 0, s_Window->Width(), 0, width), Map<float>(s_Mouse.Y, 0, s_Window->Height(), 0, height), 0);
+	}
+
 	Vector3f Input::RelMousePosition()
 	{
 		return Vector3f(s_Mouse.RelX, s_Mouse.RelY, 0);
+	}
+
+	Vector3f Input::RelMousePosition(float width, float height)
+	{
+		return Vector3f(Map<float>(s_Mouse.RelX, -s_Window->Width(), s_Window->Width(), -width, width), Map<float>(s_Mouse.RelY, -s_Window->Height(), s_Window->Height(), -height, height), 0);
 	}
 
 	Vector3f Input::NormalizedMousePosition()
@@ -286,11 +301,11 @@ namespace Bolt
 			args->Button = (MouseButton)button;
 			if ((ButtonState)action == ButtonState::Pressed)
 			{
-				EventManager::Post(Events::MOUSE_PRESSED, std::move(args));
+				MouseButtonPressedEvent.Post(std::move(args));
 			}
 			else
 			{
-				EventManager::Post(Events::MOUSE_RELEASED, std::move(args));
+				MouseButtonReleasedEvent.Post(std::move(args));
 			}
 		}
 	}
@@ -305,11 +320,11 @@ namespace Bolt
 			args->Key = (Keycode)key;
 			if ((ButtonState)action == ButtonState::Pressed)
 			{
-				EventManager::Post(Events::KEY_PRESSED, std::move(args));
+				KeyPressedEvent.Post(std::move(args));
 			}
 			else
 			{
-				EventManager::Post(Events::KEY_RELEASED, std::move(args));
+				KeyReleasedEvent.Post(std::move(args));
 			}
 		}
 	}

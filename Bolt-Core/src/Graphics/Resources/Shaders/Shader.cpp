@@ -4,11 +4,24 @@
 namespace Bolt
 {
 
+#ifdef BLT_DEBUG
+	#define BLT_SHADER_VALIDATE_VALUE(...) ValidateUploadValue(__VA_ARGS__)
+#else
+	#define BLT_SHADER_VALIDATE_VALUE(...)
+#endif
+
+	blt::string Shader::MODEL_MATRIX_NAME = "u_ModelMatrix";
+	blt::string Shader::VIEW_MATRIX_NAME = "u_ViewMatrix";
+	blt::string Shader::PROJECTION_MATRIX_NAME = "u_ProjectionMatrix";
+	blt::string Shader::BASE_COLOR_NAME = "Material.MeshColor";
+
 	ResourcePtr<const Shader> Shader::s_DefaultColorShader = nullptr;
 	ResourcePtr<const Shader> Shader::s_DefaultTextureShader = nullptr;
 	ResourcePtr<const Shader> Shader::s_DefaultFontShader = nullptr;
 	ResourcePtr<const Shader> Shader::s_DefaultSkyboxShader = nullptr;
 	ResourcePtr<const Shader> Shader::s_SpriteTextureShader = nullptr;
+
+	ResourcePtr<const Shader> Shader::s_LightingTextureShader = nullptr;
 
 	Shader::Shader(const blt::string& vertexSource, const blt::string& fragmentSource) : Resource(), GLshared(),
 		m_Id(0), m_UniformLocations(), m_UniformVariables(), m_TextureSamplers()
@@ -86,6 +99,26 @@ namespace Bolt
 	void Shader::Unbind() const
 	{
 		GL_CALL(glUseProgram(0));
+	}
+
+	void Shader::SetModelMatrix(const Matrix4f& matrix) const
+	{
+		SetUniform(m_ModelMatrixLocation, matrix);
+	}
+
+	void Shader::SetViewMatrix(const Matrix4f& matrix) const
+	{
+		SetUniform(m_ViewMatrixLocation, matrix);
+	}
+
+	void Shader::SetProjectionMatrix(const Matrix4f& matrix) const
+	{
+		SetUniform(m_ProjectionMatrixLocation, matrix);
+	}
+
+	void Shader::SetColor(const Color& color) const
+	{
+		SetUniform(m_BaseColorLocation, color);
 	}
 
 	void Shader::SetUniform(const blt::string& location, bool value) const
@@ -181,105 +214,105 @@ namespace Bolt
 	void Shader::SetUniform(int location, bool value) const
 	{
 		Bind();		
-		ValidateUploadValue(location, UniformType::Bool);
+		BLT_SHADER_VALIDATE_VALUE(location, UniformType::Bool);
 		GL_CALL(glUniform1i(location, value));
 	}
 
 	void Shader::SetUniform(int location, int value) const
 	{
 		Bind();		
-		ValidateUploadValue(location, UniformType::Int);
+		BLT_SHADER_VALIDATE_VALUE(location, UniformType::Int);
 		GL_CALL(glUniform1i(location, value));
 	}
 
 	void Shader::SetUniform(int location, uint value) const
 	{
 		Bind();		
-		ValidateUploadValue(location, UniformType::Int);
+		BLT_SHADER_VALIDATE_VALUE(location, UniformType::Int);
 		GL_CALL(glUniform1i(location, (int)value));
 	}
 
 	void Shader::SetUniform(int location, float value) const
 	{
 		Bind();		
-		ValidateUploadValue(location, UniformType::Float);
+		BLT_SHADER_VALIDATE_VALUE(location, UniformType::Float);
 		GL_CALL(glUniform1f(location, value));
 	}
 
 	void Shader::SetUniform(int location, double value) const
 	{
 		Bind();		
-		ValidateUploadValue(location, UniformType::Double);
+		BLT_SHADER_VALIDATE_VALUE(location, UniformType::Double);
 		GL_CALL(glUniform1d(location, value));
 	}
 
 	void Shader::SetUniform(int location, const Vector2f& value) const
 	{
 		Bind();		
-		ValidateUploadValue(location, UniformType::Vector2f);
+		BLT_SHADER_VALIDATE_VALUE(location, UniformType::Vector2f);
 		GL_CALL(glUniform2f(location, value.x, value.y));
 	}
 
 	void Shader::SetUniform(int location, const Vector2i& value) const
 	{
 		Bind();		
-		ValidateUploadValue(location, UniformType::Vector2i);
+		BLT_SHADER_VALIDATE_VALUE(location, UniformType::Vector2i);
 		GL_CALL(glUniform2i(location, value.x, value.y));
 	}
 
 	void Shader::SetUniform(int location, const Vector3f& value) const
 	{
 		Bind();		
-		ValidateUploadValue(location, UniformType::Vector3f);
+		BLT_SHADER_VALIDATE_VALUE(location, UniformType::Vector3f);
 		GL_CALL(glUniform3f(location, value.x, value.y, value.z));
 	}
 
 	void Shader::SetUniform(int location, const Vector3i& value) const
 	{
 		Bind();		
-		ValidateUploadValue(location, UniformType::Vector3i);
+		BLT_SHADER_VALIDATE_VALUE(location, UniformType::Vector3i);
 		GL_CALL(glUniform3i(location, value.x, value.y, value.z));
 	}
 
 	void Shader::SetUniform(int location, const Vector4f& value) const
 	{
 		Bind();		
-		ValidateUploadValue(location, UniformType::Vector4f);
+		BLT_SHADER_VALIDATE_VALUE(location, UniformType::Vector4f);
 		GL_CALL(glUniform4f(location, value.x, value.y, value.z, value.w));
 	}
 
 	void Shader::SetUniform(int location, const Vector4i& value) const
 	{
 		Bind();		
-		ValidateUploadValue(location, UniformType::Vector4i);
+		BLT_SHADER_VALIDATE_VALUE(location, UniformType::Vector4i);
 		GL_CALL(glUniform4i(location, value.x, value.y, value.z, value.w));
 	}
 
 	void Shader::SetUniform(int location, const Color& value) const
 	{
 		Bind();		
-		ValidateUploadValue(location, UniformType::Vector4f);
+		BLT_SHADER_VALIDATE_VALUE(location, UniformType::Vector4f);
 		GL_CALL(glUniform4f(location, value.r, value.g, value.b, value.a));
 	}
 
 	void Shader::SetUniform(int location, const Matrix3f& value) const
 	{
 		Bind();		
-		ValidateUploadValue(location, UniformType::Matrix3f);
+		BLT_SHADER_VALIDATE_VALUE(location, UniformType::Matrix3f);
 		GL_CALL(glUniformMatrix3fv(location, 1, GL_FALSE, value.values));
 	}
 
 	void Shader::SetUniform(int location, const Matrix4f& value) const
 	{
 		Bind();		
-		ValidateUploadValue(location, UniformType::Matrix4f);
+		BLT_SHADER_VALIDATE_VALUE(location, UniformType::Matrix4f);
 		GL_CALL(glUniformMatrix4fv(location, 1, GL_FALSE, value.values));
 	}
 
 	void Shader::SetUniform(int location, const Quaternion& value) const
 	{
 		Bind();		
-		ValidateUploadValue(location, UniformType::Vector4f);
+		BLT_SHADER_VALIDATE_VALUE(location, UniformType::Vector4f);
 		GL_CALL(glUniform4f(location, value.x, value.y, value.z, value.w));
 	}
 
@@ -393,9 +426,14 @@ namespace Bolt
 		return s_DefaultSkyboxShader;
 	}
 
-	ResourcePtr<const Shader> Shader::Sprite()
+	ResourcePtr<const Shader> Shader::SpriteTexture()
 	{
 		return s_SpriteTextureShader;
+	}
+
+	ResourcePtr<const Shader> Shader::LightingTexture()
+	{
+		return s_LightingTextureShader;
 	}
 
 	void Shader::Create()
@@ -423,6 +461,10 @@ namespace Bolt
 			GL_CALL(glDetachShader(m_Id, shaders[i]));
 			GL_CALL(glDeleteShader(shaders[i]));
 		}
+		m_ModelMatrixLocation = GetUniformLocation(Shader::MODEL_MATRIX_NAME);
+		m_ViewMatrixLocation = GetUniformLocation(Shader::VIEW_MATRIX_NAME);
+		m_ProjectionMatrixLocation = GetUniformLocation(Shader::PROJECTION_MATRIX_NAME);
+		m_BaseColorLocation = GetUniformLocation(Shader::BASE_COLOR_NAME);
 	}
 
 	id_t Shader::AddShader(const blt::string& source, GLenum shaderType)
@@ -590,7 +632,9 @@ namespace Bolt
 		s_DefaultTextureShader = CreateDefaultTextureShader();
 		s_DefaultFontShader = CreateDefaultFontShader();
 		s_DefaultSkyboxShader = CreateDefaultSkyboxShader();
-		s_SpriteTextureShader = CraeteSpriteShader();
+		s_SpriteTextureShader = CreateSpriteTextureShader();
+
+		s_LightingTextureShader = CreateLightingTextureShader();
 	}
 
 	const Shader* Shader::CreateDefaultColorShader()
@@ -645,13 +689,26 @@ namespace Bolt
 		return ptr;
 	}
 
-	const Shader* Shader::CraeteSpriteShader()
+	const Shader* Shader::CreateSpriteTextureShader()
 	{
 		blt::string vSource =
 #include "Source\SpriteTexture_v.glsl"
 			;
 		blt::string fSource =
 #include "Source\SpriteTexture_f.glsl"
+			;
+		std::unique_ptr<Shader> shader = Shader::FromSource(vSource, fSource);
+		Shader* ptr = ResourceManager::Get<Shader>(ResourceManager::Register(std::move(shader))).Get();
+		return ptr;
+	}
+
+	const Shader* Shader::CreateLightingTextureShader()
+	{
+		blt::string vSource =
+#include "Source\LightingTexture_v.glsl"
+			;
+		blt::string fSource =
+#include "Source\LightingTexture_f.glsl"
 			;
 		std::unique_ptr<Shader> shader = Shader::FromSource(vSource, fSource);
 		Shader* ptr = ResourceManager::Get<Shader>(ResourceManager::Register(std::move(shader))).Get();

@@ -13,6 +13,7 @@ namespace Bolt
 	public:
 		MeshRenderer(Bolt::Mesh mesh);
 
+		Cuboid GetMeshBounds() const;
 		void Update() override;
 
 		std::unique_ptr<Component> Clone() const override;

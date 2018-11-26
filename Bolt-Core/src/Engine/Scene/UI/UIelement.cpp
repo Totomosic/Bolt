@@ -1,6 +1,9 @@
 #include "UIelement.h"
 #include "..\Layer.h"
 
+#include "UIsurface.h"
+#include "Text.h"
+
 namespace Bolt
 {
 
@@ -23,9 +26,19 @@ namespace Bolt
 		}
 	}
 
+	id_t UIelement::Id() const
+	{
+		return m_Id;
+	}
+
 	GameObject* UIelement::Object() const
 	{
 		return m_GameObject;
+	}
+
+	UIEventHandler& UIelement::EventHandler() const
+	{
+		return Object()->Components().GetComponent<UIEventHandler>();
 	}
 
 	UIelement* UIelement::Parent() const
@@ -57,12 +70,14 @@ namespace Bolt
 		}
 	}
 
-	id_t UIelement::AddElement(std::unique_ptr<UIelement>&& element)
+	UIelement* UIelement::AddElement(std::unique_ptr<UIelement>&& element)
 	{
 		id_t id = m_Elements.size();
+		UIelement* ptr = element.get();
+		ptr->SetId(id);
 		element->SetParent(this);
 		m_Elements.push_back(std::move(element));
-		return id;
+		return ptr;
 	}
 
 	void UIelement::Clear()
@@ -70,9 +85,52 @@ namespace Bolt
 		m_Elements.clear();
 	}
 
+	Text* UIelement::Text(const blt::string& text, const ResourcePtr<const Font>& font, const Color& color, Transform&& transform, AlignH horizontal, AlignV vertical)
+	{
+		return (Bolt::Text*)AddElement<Bolt::Text>(text, font, color, std::move(transform), horizontal, vertical);
+	}
+
+	Text* UIelement::Text(const blt::string& text, const Color& color, Transform&& transform, AlignH horizontal, AlignV vertical)
+	{
+		BLT_ASSERT(ResourceManager::DefaultFont() != nullptr, "No default font");
+		return Text(text, ResourceManager::DefaultFont(), color, std::move(transform), horizontal, vertical);
+	}
+
+	UIsurface* UIelement::Rectangle(float width, float height, const Color& color, Transform&& transform)
+	{
+		return (UIsurface*)AddElement<UIsurface>(Vector2f(width, height), color, std::move(transform));
+	}
+
+	UIsurface* UIelement::Rectangle(float width, float height, const Material& material, Transform&& transform)
+	{
+		return (UIsurface*)AddElement<UIsurface>(Vector2f(width, height), material, std::move(transform));
+	}
+
+	UIsurface* UIelement::Image(float width, float height, const ResourcePtr<const Texture2D>& texture, Transform&& transform)
+	{
+		return (UIsurface*)AddElement<UIsurface>(Vector2f(width, height), texture, std::move(transform));
+	}
+
+	void UIelement::ReleaseAllGameObjects()
+	{
+		for (auto& ptr : m_Elements)
+		{
+			ptr.release();
+		}
+	}
+
+	void UIelement::SetId(id_t id)
+	{
+		m_Id = id;
+	}
+
 	void UIelement::SetGameObject(GameObject* object)
 	{
 		m_GameObject = object;
+		if (!m_GameObject->Components().HasComponent<UIEventHandler>())
+		{
+			m_GameObject->Components().AddComponent<UIEventHandler>();
+		}
 		if (m_ParentElement != nullptr)
 		{
 			m_GameObject->MakeChildOf(m_ParentElement->Object());

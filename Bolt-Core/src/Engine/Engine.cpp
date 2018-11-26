@@ -23,6 +23,9 @@ namespace Bolt
 
 	Engine::~Engine()
 	{
+		SceneManager::Terminate();
+		ResourceManager::Terminate();
+		Input::Terminate();
 		WSACleanup();
 		m_Window.release(); // TEMPORARY
 	}
@@ -59,8 +62,8 @@ namespace Bolt
 
 	void Engine::SetApplication(std::unique_ptr<Application>&& app)
 	{
-		ResourceManager::Terminate();
 		SceneManager::Terminate();
+		ResourceManager::Terminate();
 		Input::Terminate();
 		Time::Reset();
 		m_CurrentApplication = std::move(app);

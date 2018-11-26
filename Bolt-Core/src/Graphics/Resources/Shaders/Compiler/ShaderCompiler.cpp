@@ -16,7 +16,7 @@ namespace Bolt
 
 	void ShaderCompiler::AddHeader(const blt::string& headerName, const blt::string& headerSource)
 	{
-		s_Headers[headerName] = headerSource;
+		s_Headers[headerName] = PreprocessShaderSource(headerSource);
 	}
 
 	blt::string ShaderCompiler::PreprocessShaderSource(const blt::string& source, const Directorypath& rootDirectory)
@@ -33,6 +33,10 @@ namespace Bolt
 				blt::string headerSource = s_Headers[header] + '\n';
 				result.erase(index, quote1 - index + 1);
 				result.insert(index, headerSource);
+			}
+			else
+			{
+				BLT_CORE_ERROR("Unable to find Shader Header File: " + header);
 			}
 			index = result.find("#include", quote1);
 		}

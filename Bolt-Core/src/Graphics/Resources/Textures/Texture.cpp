@@ -53,7 +53,7 @@ namespace Bolt
 		{
 			return 1;
 		}
-		return (int)log2(min(m_Width, m_Height));
+		return (int)log2(std::min(m_Width, m_Height));
 	}
 
 	bool Texture::HasMipmaps() const

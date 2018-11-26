@@ -133,7 +133,6 @@ namespace Bolt
 	{
 	public:
 		MouseButton Button;
-		int Test[100000];
 	};
 
 }

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -9,162 +9,164 @@
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Debug|x64">
-      <Configuration>Debug</Configuration>
-      <Platform>x64</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|x64">
-      <Configuration>Release</Configuration>
-      <Platform>x64</Platform>
+    <ProjectConfiguration Include="Dist|Win32">
+      <Configuration>Dist</Configuration>
+      <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{2CF839F6-9862-EE6C-E1A0-9F124D4ACCC1}</ProjectGuid>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Bolt-Core</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dist|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Dist|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>..\bin\Debug-windows-x86\Bolt-Core\</OutDir>
+    <IntDir>..\bin-int\Debug-windows-x86\Bolt-Core\</IntDir>
+    <TargetName>Bolt-Core</TargetName>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>..\bin\Release-windows-x86\Bolt-Core\</OutDir>
+    <IntDir>..\bin-int\Release-windows-x86\Bolt-Core\</IntDir>
+    <TargetName>Bolt-Core</TargetName>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dist|Win32'">
+    <OutDir>..\bin\Dist-windows-x86\Bolt-Core\</OutDir>
+    <IntDir>..\bin-int\Dist-windows-x86\Bolt-Core\</IntDir>
+    <TargetName>Bolt-Core</TargetName>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>GLEW_STATIC;BLT_PLATFORM_WINDOWS;BLT_BUILD_STATIC;BLT_DEBUG;NOMINMAX=1;GAMEOBJECTS_PER_LAYER=10000;LAYERS_PER_SCENE=6;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>external;src;external\GLEW\include;external\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Disabled</Optimization>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>GLEW_STATIC;BLT_PLATFORM_WINDOWS;BLT_BUILD_STATIC;BLT_DEBUG;NOMINMAX=1;GAMEOBJECTS_PER_LAYER=10000;LAYERS_PER_SCENE=6;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>external;src;external\GLEW\include;external\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Disabled</Optimization>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>GLEW_STATIC;BLT_PLATFORM_WINDOWS;BLT_BUILD_STATIC;BLT_DEBUG;NOMINMAX=1;GAMEOBJECTS_PER_LAYER=10000;LAYERS_PER_SCENE=6;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>external;src;external\GLEW\include;external\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Disabled</Optimization>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="external\FreeImage\include\FreeImage.h" />
-    <ClInclude Include="external\FreeImage\include\FreeImage\Utilities.h" />
-    <ClInclude Include="external\FreeType-GL\include\edtaa3func.h" />
-    <ClInclude Include="external\FreeType-GL\include\font-manager.h" />
-    <ClInclude Include="external\FreeType-GL\include\freetype-gl.h" />
-    <ClInclude Include="external\FreeType-GL\include\markup.h" />
-    <ClInclude Include="external\FreeType-GL\include\mat4.h" />
-    <ClInclude Include="external\FreeType-GL\include\opengl.h" />
-    <ClInclude Include="external\FreeType-GL\include\platform.h" />
-    <ClInclude Include="external\FreeType-GL\include\shader.h" />
-    <ClInclude Include="external\FreeType-GL\include\text-buffer.h" />
-    <ClInclude Include="external\FreeType-GL\include\texture-atlas.h" />
-    <ClInclude Include="external\FreeType-GL\include\texture-font.h" />
-    <ClInclude Include="external\FreeType-GL\include\vec234.h" />
-    <ClInclude Include="external\FreeType-GL\include\vector.h" />
-    <ClInclude Include="external\FreeType-GL\include\vertex-attribute.h" />
-    <ClInclude Include="external\FreeType-GL\include\vertex-buffer.h" />
-    <ClInclude Include="external\FreeType\include\config\ftconfig.h" />
-    <ClInclude Include="external\FreeType\include\config\ftheader.h" />
-    <ClInclude Include="external\FreeType\include\config\ftmodule.h" />
-    <ClInclude Include="external\FreeType\include\config\ftoption.h" />
-    <ClInclude Include="external\FreeType\include\config\ftstdlib.h" />
-    <ClInclude Include="external\FreeType\include\freetype.h" />
-    <ClInclude Include="external\FreeType\include\ft2build.h" />
-    <ClInclude Include="external\FreeType\include\ftadvanc.h" />
-    <ClInclude Include="external\FreeType\include\ftautoh.h" />
-    <ClInclude Include="external\FreeType\include\ftbbox.h" />
-    <ClInclude Include="external\FreeType\include\ftbdf.h" />
-    <ClInclude Include="external\FreeType\include\ftbitmap.h" />
-    <ClInclude Include="external\FreeType\include\ftbzip2.h" />
-    <ClInclude Include="external\FreeType\include\ftcache.h" />
-    <ClInclude Include="external\FreeType\include\ftcffdrv.h" />
-    <ClInclude Include="external\FreeType\include\ftchapters.h" />
-    <ClInclude Include="external\FreeType\include\ftcid.h" />
-    <ClInclude Include="external\FreeType\include\fterrdef.h" />
-    <ClInclude Include="external\FreeType\include\fterrors.h" />
-    <ClInclude Include="external\FreeType\include\ftfntfmt.h" />
-    <ClInclude Include="external\FreeType\include\ftgasp.h" />
-    <ClInclude Include="external\FreeType\include\ftglyph.h" />
-    <ClInclude Include="external\FreeType\include\ftgxval.h" />
-    <ClInclude Include="external\FreeType\include\ftgzip.h" />
-    <ClInclude Include="external\FreeType\include\ftimage.h" />
-    <ClInclude Include="external\FreeType\include\ftincrem.h" />
-    <ClInclude Include="external\FreeType\include\ftlcdfil.h" />
-    <ClInclude Include="external\FreeType\include\ftlist.h" />
-    <ClInclude Include="external\FreeType\include\ftlzw.h" />
-    <ClInclude Include="external\FreeType\include\ftmac.h" />
-    <ClInclude Include="external\FreeType\include\ftmm.h" />
-    <ClInclude Include="external\FreeType\include\ftmodapi.h" />
-    <ClInclude Include="external\FreeType\include\ftmoderr.h" />
-    <ClInclude Include="external\FreeType\include\ftotval.h" />
-    <ClInclude Include="external\FreeType\include\ftoutln.h" />
-    <ClInclude Include="external\FreeType\include\ftpfr.h" />
-    <ClInclude Include="external\FreeType\include\ftrender.h" />
-    <ClInclude Include="external\FreeType\include\ftsizes.h" />
-    <ClInclude Include="external\FreeType\include\ftsnames.h" />
-    <ClInclude Include="external\FreeType\include\ftstroke.h" />
-    <ClInclude Include="external\FreeType\include\ftsynth.h" />
-    <ClInclude Include="external\FreeType\include\ftsystem.h" />
-    <ClInclude Include="external\FreeType\include\fttrigon.h" />
-    <ClInclude Include="external\FreeType\include\ftttdrv.h" />
-    <ClInclude Include="external\FreeType\include\fttypes.h" />
-    <ClInclude Include="external\FreeType\include\ftwinfnt.h" />
-    <ClInclude Include="external\FreeType\include\internal\autohint.h" />
-    <ClInclude Include="external\FreeType\include\internal\ftcalc.h" />
-    <ClInclude Include="external\FreeType\include\internal\ftdebug.h" />
-    <ClInclude Include="external\FreeType\include\internal\ftdriver.h" />
-    <ClInclude Include="external\FreeType\include\internal\ftgloadr.h" />
-    <ClInclude Include="external\FreeType\include\internal\ftmemory.h" />
-    <ClInclude Include="external\FreeType\include\internal\ftobjs.h" />
-    <ClInclude Include="external\FreeType\include\internal\ftpic.h" />
-    <ClInclude Include="external\FreeType\include\internal\ftrfork.h" />
-    <ClInclude Include="external\FreeType\include\internal\ftserv.h" />
-    <ClInclude Include="external\FreeType\include\internal\ftstream.h" />
-    <ClInclude Include="external\FreeType\include\internal\fttrace.h" />
-    <ClInclude Include="external\FreeType\include\internal\ftvalid.h" />
-    <ClInclude Include="external\FreeType\include\internal\internal.h" />
-    <ClInclude Include="external\FreeType\include\internal\psaux.h" />
-    <ClInclude Include="external\FreeType\include\internal\pshints.h" />
-    <ClInclude Include="external\FreeType\include\internal\services\svbdf.h" />
-    <ClInclude Include="external\FreeType\include\internal\services\svcid.h" />
-    <ClInclude Include="external\FreeType\include\internal\services\svfntfmt.h" />
-    <ClInclude Include="external\FreeType\include\internal\services\svgldict.h" />
-    <ClInclude Include="external\FreeType\include\internal\services\svgxval.h" />
-    <ClInclude Include="external\FreeType\include\internal\services\svkern.h" />
-    <ClInclude Include="external\FreeType\include\internal\services\svmm.h" />
-    <ClInclude Include="external\FreeType\include\internal\services\svotval.h" />
-    <ClInclude Include="external\FreeType\include\internal\services\svpfr.h" />
-    <ClInclude Include="external\FreeType\include\internal\services\svpostnm.h" />
-    <ClInclude Include="external\FreeType\include\internal\services\svprop.h" />
-    <ClInclude Include="external\FreeType\include\internal\services\svpscmap.h" />
-    <ClInclude Include="external\FreeType\include\internal\services\svpsinfo.h" />
-    <ClInclude Include="external\FreeType\include\internal\services\svsfnt.h" />
-    <ClInclude Include="external\FreeType\include\internal\services\svttcmap.h" />
-    <ClInclude Include="external\FreeType\include\internal\services\svtteng.h" />
-    <ClInclude Include="external\FreeType\include\internal\services\svttglyf.h" />
-    <ClInclude Include="external\FreeType\include\internal\services\svwinfnt.h" />
-    <ClInclude Include="external\FreeType\include\internal\sfnt.h" />
-    <ClInclude Include="external\FreeType\include\internal\t1types.h" />
-    <ClInclude Include="external\FreeType\include\internal\tttypes.h" />
-    <ClInclude Include="external\FreeType\include\t1tables.h" />
-    <ClInclude Include="external\FreeType\include\ttnameid.h" />
-    <ClInclude Include="external\FreeType\include\tttables.h" />
-    <ClInclude Include="external\FreeType\include\tttags.h" />
-    <ClInclude Include="external\FreeType\include\ttunpat.h" />
-    <ClInclude Include="external\GLEW\include\GL\glew.h" />
-    <ClInclude Include="external\GLEW\include\GL\glxew.h" />
-    <ClInclude Include="external\GLEW\include\GL\wglew.h" />
-    <ClInclude Include="external\GLFW\include\GLFW\glfw3.h" />
-    <ClInclude Include="external\GLFW\include\GLFW\glfw3native.h" />
-    <ClInclude Include="external\stb_image.h" />
+    <ClInclude Include="src\Bolt-Core.h" />
     <ClInclude Include="src\Bolt-Engine.h" />
+    <ClInclude Include="src\Bolt-Graphics.h" />
     <ClInclude Include="src\BoltDefines.h" />
     <ClInclude Include="src\BoltEngine.h" />
-    <ClInclude Include="src\Bolt-Core.h" />
+    <ClInclude Include="src\Core\BoltTL\__BoltTL__.h" />
     <ClInclude Include="src\Core\BoltTL\iterator.h" />
     <ClInclude Include="src\Core\BoltTL\string.h" />
     <ClInclude Include="src\Core\BoltTL\vector.h" />
-    <ClInclude Include="src\Core\BoltTL\__BoltTL__.h" />
-    <ClInclude Include="src\Bolt-Graphics.h" />
     <ClInclude Include="src\Core\Color.h" />
     <ClInclude Include="src\Core\Events\EventArgs.h" />
+    <ClInclude Include="src\Core\Events\EventDispatcher.h" />
     <ClInclude Include="src\Core\Events\EventManager.h" />
     <ClInclude Include="src\Core\Events\Events.h" />
+    <ClInclude Include="src\Core\Events\IdManager.h" />
     <ClInclude Include="src\Core\Events\__Events__.h" />
     <ClInclude Include="src\Core\Functions.h" />
     <ClInclude Include="src\Core\Image.h" />
     <ClInclude Include="src\Core\Math\Frustum.h" />
+    <ClInclude Include="src\Core\Math\Maths.h" />
     <ClInclude Include="src\Core\Math\Matrices\Matrix2.h" />
+    <ClInclude Include="src\Core\Math\Matrices\Matrix3.h" />
+    <ClInclude Include="src\Core\Math\Matrices\Matrix4.h" />
+    <ClInclude Include="src\Core\Math\Matrices\__Matrices__.h" />
+    <ClInclude Include="src\Core\Math\Plane.h" />
+    <ClInclude Include="src\Core\Math\Quaternion.h" />
     <ClInclude Include="src\Core\Math\Random\NoiseFunctions\SimplexNoise.h" />
     <ClInclude Include="src\Core\Math\Random\NoiseFunctions\__NoiseFunctions__.h" />
+    <ClInclude Include="src\Core\Math\Random\Random.h" />
     <ClInclude Include="src\Core\Math\Random\RandomDistribution.h" />
     <ClInclude Include="src\Core\Math\Random\__Random__.h" />
+    <ClInclude Include="src\Core\Math\Ray.h" />
     <ClInclude Include="src\Core\Math\Shapes\Cuboid.h" />
     <ClInclude Include="src\Core\Math\Shapes\Rectangle.h" />
     <ClInclude Include="src\Core\Math\Shapes\__Shapes__.h" />
+    <ClInclude Include="src\Core\Math\Vectors\Vector2.h" />
+    <ClInclude Include="src\Core\Math\Vectors\Vector3.h" />
+    <ClInclude Include="src\Core\Math\Vectors\Vector4.h" />
+    <ClInclude Include="src\Core\Math\Vectors\__Vectors__.h" />
+    <ClInclude Include="src\Core\Math\__Math__.h" />
     <ClInclude Include="src\Core\Memory\Allocator.h" />
     <ClInclude Include="src\Core\Memory\__Memory__.h" />
     <ClInclude Include="src\Core\Time\Time.h" />
     <ClInclude Include="src\Core\Time\Timer.h" />
     <ClInclude Include="src\Core\Time\__Time__.h" />
+    <ClInclude Include="src\Core\Utils\Filesystem\Directorypath.h" />
+    <ClInclude Include="src\Core\Utils\Filesystem\File.h" />
     <ClInclude Include="src\Core\Utils\Filesystem\FileLoader.h" />
+    <ClInclude Include="src\Core\Utils\Filesystem\Filepath.h" />
+    <ClInclude Include="src\Core\Utils\Filesystem\Filesystem.h" />
+    <ClInclude Include="src\Core\Utils\Filesystem\XML\XMLNodePath.h" />
     <ClInclude Include="src\Core\Utils\Filesystem\XML\XMLfile.h" />
     <ClInclude Include="src\Core\Utils\Filesystem\XML\XMLnode.h" />
-    <ClInclude Include="src\Core\Utils\Filesystem\XML\XMLNodePath.h" />
     <ClInclude Include="src\Core\Utils\Filesystem\XML\__XML__.h" />
+    <ClInclude Include="src\Core\Utils\Filesystem\__Filesystem__.h" />
+    <ClInclude Include="src\Core\Utils\__Utils__.h" />
     <ClInclude Include="src\Engine\Application.h" />
     <ClInclude Include="src\Engine\Engine.h" />
     <ClInclude Include="src\Engine\Initialization\Initializer.h" />
@@ -175,16 +177,16 @@
     <ClInclude Include="src\Engine\Networking\__Networking__.h" />
     <ClInclude Include="src\Engine\Renderer\GLState.h" />
     <ClInclude Include="src\Engine\Renderer\Graphics.h" />
-    <ClInclude Include="src\Engine\Renderer\Renderable.h" />
     <ClInclude Include="src\Engine\Renderer\RenderBatch.h" />
-    <ClInclude Include="src\Engine\Renderer\Renderer.h" />
-    <ClInclude Include="src\Engine\Renderer\Renderers\SpriteRenderer2D.h" />
-    <ClInclude Include="src\Engine\Renderer\Renderers\__Renderers__.h" />
     <ClInclude Include="src\Engine\Renderer\RenderMethod.h" />
     <ClInclude Include="src\Engine\Renderer\RenderMethods\DefaultRenderMethod.h" />
     <ClInclude Include="src\Engine\Renderer\RenderMethods\__RenderMethods__.h" />
     <ClInclude Include="src\Engine\Renderer\RenderPass.h" />
     <ClInclude Include="src\Engine\Renderer\RenderSchedule.h" />
+    <ClInclude Include="src\Engine\Renderer\Renderable.h" />
+    <ClInclude Include="src\Engine\Renderer\Renderer.h" />
+    <ClInclude Include="src\Engine\Renderer\Renderers\SpriteRenderer2D.h" />
+    <ClInclude Include="src\Engine\Renderer\Renderers\__Renderers__.h" />
     <ClInclude Include="src\Engine\Renderer\__Renderer__.h" />
     <ClInclude Include="src\Engine\Scene\Camera.h" />
     <ClInclude Include="src\Engine\Scene\Components\Component.h" />
@@ -192,7 +194,7 @@
     <ClInclude Include="src\Engine\Scene\Components\LightRenderer.h" />
     <ClInclude Include="src\Engine\Scene\Components\MeshRenderer.h" />
     <ClInclude Include="src\Engine\Scene\Components\MotionEngine.h" />
-    <ClInclude Include="src\Engine\Scene\Components\UI\MouseHoverable.h" />
+    <ClInclude Include="src\Engine\Scene\Components\UI\UIEventHandler.h" />
     <ClInclude Include="src\Engine\Scene\Components\UI\__UI__.h" />
     <ClInclude Include="src\Engine\Scene\Components\__Components__.h" />
     <ClInclude Include="src\Engine\Scene\GameObject.h" />
@@ -222,8 +224,8 @@
     <ClInclude Include="src\Engine\Scene\UI\__UI__.h" />
     <ClInclude Include="src\Engine\Scene\__Scene__.h" />
     <ClInclude Include="src\Engine\Serialization\XMLReadTraits.h" />
-    <ClInclude Include="src\Engine\Serialization\XMLserializer.h" />
     <ClInclude Include="src\Engine\Serialization\XMLWriteTraits.h" />
+    <ClInclude Include="src\Engine\Serialization\XMLserializer.h" />
     <ClInclude Include="src\Engine\Serialization\__Serialization__.h" />
     <ClInclude Include="src\Engine\User\Input.h" />
     <ClInclude Include="src\Engine\User\InputEventArgs.h" />
@@ -248,11 +250,14 @@
     <ClInclude Include="src\Graphics\GLprivate.h" />
     <ClInclude Include="src\Graphics\GLshared.h" />
     <ClInclude Include="src\Graphics\RenderBuffer.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Face.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Factories\CuboidFactory.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Factories\EllipseFactory.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Factories\GridFactory.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Factories\LineFactory.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Factories\RectangleFactory.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Factories\TextFactory.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Factories\VertexFactory.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Factories\__Factories__.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Animators\ScrollAnimator.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Animators\SpriteSheetAnimator.h" />
@@ -266,9 +271,6 @@
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\__Materials__.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Mesh.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Model.h" />
-    <ClInclude Include="src\Graphics\Resources\Meshes\Factories\RectangleFactory.h" />
-    <ClInclude Include="src\Graphics\Resources\Meshes\Face.h" />
-    <ClInclude Include="src\Graphics\Resources\Meshes\Factories\VertexFactory.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\__Meshes__.h" />
     <ClInclude Include="src\Graphics\Resources\Resource.h" />
     <ClInclude Include="src\Graphics\Resources\ResourceFile.h" />
@@ -298,26 +300,7 @@
     <ClInclude Include="src\Graphics\Structs\__Structs__.h" />
     <ClInclude Include="src\Graphics\Window.h" />
     <ClInclude Include="src\Logging.h" />
-    <ClInclude Include="src\Core\Math\Maths.h" />
-    <ClInclude Include="src\Core\Math\Matrices\Matrix3.h" />
-    <ClInclude Include="src\Core\Math\Matrices\Matrix4.h" />
-    <ClInclude Include="src\Core\Math\Matrices\__Matrices__.h" />
-    <ClInclude Include="src\Core\Math\Plane.h" />
-    <ClInclude Include="src\Core\Math\Quaternion.h" />
-    <ClInclude Include="src\Core\Math\Random\Random.h" />
-    <ClInclude Include="src\Core\Math\Ray.h" />
-    <ClInclude Include="src\Core\Math\Vectors\Vector2.h" />
-    <ClInclude Include="src\Core\Math\Vectors\Vector3.h" />
-    <ClInclude Include="src\Core\Math\Vectors\Vector4.h" />
-    <ClInclude Include="src\Core\Math\Vectors\__Vectors__.h" />
-    <ClInclude Include="src\Core\Math\__Math__.h" />
     <ClInclude Include="src\Types.h" />
-    <ClInclude Include="src\Core\Utils\Filesystem\Directorypath.h" />
-    <ClInclude Include="src\Core\Utils\Filesystem\File.h" />
-    <ClInclude Include="src\Core\Utils\Filesystem\Filepath.h" />
-    <ClInclude Include="src\Core\Utils\Filesystem\Filesystem.h" />
-    <ClInclude Include="src\Core\Utils\Filesystem\__Filesystem__.h" />
-    <ClInclude Include="src\Core\Utils\__Utils__.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\BoltTL\string.cpp" />
@@ -340,9 +323,9 @@
     <ClCompile Include="src\Core\Utils\Filesystem\FileLoader.cpp" />
     <ClCompile Include="src\Core\Utils\Filesystem\Filepath.cpp" />
     <ClCompile Include="src\Core\Utils\Filesystem\Filesystem.cpp" />
+    <ClCompile Include="src\Core\Utils\Filesystem\XML\XMLNodePath.cpp" />
     <ClCompile Include="src\Core\Utils\Filesystem\XML\XMLfile.cpp" />
     <ClCompile Include="src\Core\Utils\Filesystem\XML\XMLnode.cpp" />
-    <ClCompile Include="src\Core\Utils\Filesystem\XML\XMLNodePath.cpp" />
     <ClCompile Include="src\Engine\Application.cpp" />
     <ClCompile Include="src\Engine\Engine.cpp" />
     <ClCompile Include="src\Engine\Initialization\Initializer.cpp" />
@@ -350,16 +333,16 @@
     <ClCompile Include="src\Engine\Networking\TCPsocket.cpp" />
     <ClCompile Include="src\Engine\Renderer\GLState.cpp" />
     <ClCompile Include="src\Engine\Renderer\Graphics.cpp" />
+    <ClCompile Include="src\Engine\Renderer\RenderMethods\DefaultRenderMethod.cpp" />
     <ClCompile Include="src\Engine\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Engine\Renderer\Renderers\SpriteRenderer2D.cpp" />
-    <ClCompile Include="src\Engine\Renderer\RenderMethods\DefaultRenderMethod.cpp" />
     <ClCompile Include="src\Engine\Scene\Camera.cpp" />
     <ClCompile Include="src\Engine\Scene\Components\Component.cpp" />
     <ClCompile Include="src\Engine\Scene\Components\ComponentManager.cpp" />
     <ClCompile Include="src\Engine\Scene\Components\LightRenderer.cpp" />
     <ClCompile Include="src\Engine\Scene\Components\MeshRenderer.cpp" />
     <ClCompile Include="src\Engine\Scene\Components\MotionEngine.cpp" />
-    <ClCompile Include="src\Engine\Scene\Components\UI\MouseHoverable.cpp" />
+    <ClCompile Include="src\Engine\Scene\Components\UI\UIEventHandler.cpp" />
     <ClCompile Include="src\Engine\Scene\GameObject.cpp" />
     <ClCompile Include="src\Engine\Scene\Layer.cpp" />
     <ClCompile Include="src\Engine\Scene\ObjectCollection.cpp" />
@@ -397,6 +380,7 @@
     <ClCompile Include="src\Graphics\Resources\Meshes\Factories\EllipseFactory.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Factories\GridFactory.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Factories\LineFactory.cpp" />
+    <ClCompile Include="src\Graphics\Resources\Meshes\Factories\RectangleFactory.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Factories\TextFactory.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Animators\ScrollAnimator.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Animators\SpriteSheetAnimator.cpp" />
@@ -406,7 +390,6 @@
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\RenderSettings.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\TextureGroup.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Model.cpp" />
-    <ClCompile Include="src\Graphics\Resources\Meshes\Factories\RectangleFactory.cpp" />
     <ClCompile Include="src\Graphics\Resources\ResourceManager.cpp" />
     <ClCompile Include="src\Graphics\Resources\Shaders\Compiler\ShaderCompiler.cpp" />
     <ClCompile Include="src\Graphics\Resources\Shaders\Shader.cpp" />
@@ -421,162 +404,6 @@
     <ClCompile Include="src\Logging.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="external\GLFW\docs\html\annotated.html" />
-    <None Include="external\GLFW\docs\html\bug.html" />
-    <None Include="external\GLFW\docs\html\build_8dox.html" />
-    <None Include="external\GLFW\docs\html\build_guide.html" />
-    <None Include="external\GLFW\docs\html\classes.html" />
-    <None Include="external\GLFW\docs\html\compat_8dox.html" />
-    <None Include="external\GLFW\docs\html\compat_guide.html" />
-    <None Include="external\GLFW\docs\html\compile_8dox.html" />
-    <None Include="external\GLFW\docs\html\compile_guide.html" />
-    <None Include="external\GLFW\docs\html\context_8dox.html" />
-    <None Include="external\GLFW\docs\html\context_guide.html" />
-    <None Include="external\GLFW\docs\html\dir_1f12d41534b9d9c99a183e145b58d6f3.html" />
-    <None Include="external\GLFW\docs\html\dir_351f617146de9499414a6c099ebbe0ca.html" />
-    <None Include="external\GLFW\docs\html\dir_4bcf8e981abe5adb811ce4f57d70c9af.html" />
-    <None Include="external\GLFW\docs\html\files.html" />
-    <None Include="external\GLFW\docs\html\functions.html" />
-    <None Include="external\GLFW\docs\html\functions_vars.html" />
-    <None Include="external\GLFW\docs\html\glfw3native_8h.html" />
-    <None Include="external\GLFW\docs\html\glfw3native_8h_source.html" />
-    <None Include="external\GLFW\docs\html\glfw3_8h.html" />
-    <None Include="external\GLFW\docs\html\glfw3_8h_source.html" />
-    <None Include="external\GLFW\docs\html\globals.html" />
-    <None Include="external\GLFW\docs\html\globals_b.html" />
-    <None Include="external\GLFW\docs\html\globals_c.html" />
-    <None Include="external\GLFW\docs\html\globals_d.html" />
-    <None Include="external\GLFW\docs\html\globals_defs.html" />
-    <None Include="external\GLFW\docs\html\globals_defs_b.html" />
-    <None Include="external\GLFW\docs\html\globals_defs_c.html" />
-    <None Include="external\GLFW\docs\html\globals_defs_d.html" />
-    <None Include="external\GLFW\docs\html\globals_defs_e.html" />
-    <None Include="external\GLFW\docs\html\globals_defs_f.html" />
-    <None Include="external\GLFW\docs\html\globals_defs_g.html" />
-    <None Include="external\GLFW\docs\html\globals_defs_h.html" />
-    <None Include="external\GLFW\docs\html\globals_defs_i.html" />
-    <None Include="external\GLFW\docs\html\globals_defs_j.html" />
-    <None Include="external\GLFW\docs\html\globals_defs_k.html" />
-    <None Include="external\GLFW\docs\html\globals_defs_l.html" />
-    <None Include="external\GLFW\docs\html\globals_defs_m.html" />
-    <None Include="external\GLFW\docs\html\globals_defs_n.html" />
-    <None Include="external\GLFW\docs\html\globals_defs_o.html" />
-    <None Include="external\GLFW\docs\html\globals_defs_p.html" />
-    <None Include="external\GLFW\docs\html\globals_defs_r.html" />
-    <None Include="external\GLFW\docs\html\globals_defs_s.html" />
-    <None Include="external\GLFW\docs\html\globals_defs_t.html" />
-    <None Include="external\GLFW\docs\html\globals_defs_v.html" />
-    <None Include="external\GLFW\docs\html\globals_e.html" />
-    <None Include="external\GLFW\docs\html\globals_f.html" />
-    <None Include="external\GLFW\docs\html\globals_func.html" />
-    <None Include="external\GLFW\docs\html\globals_g.html" />
-    <None Include="external\GLFW\docs\html\globals_h.html" />
-    <None Include="external\GLFW\docs\html\globals_i.html" />
-    <None Include="external\GLFW\docs\html\globals_j.html" />
-    <None Include="external\GLFW\docs\html\globals_k.html" />
-    <None Include="external\GLFW\docs\html\globals_l.html" />
-    <None Include="external\GLFW\docs\html\globals_m.html" />
-    <None Include="external\GLFW\docs\html\globals_n.html" />
-    <None Include="external\GLFW\docs\html\globals_o.html" />
-    <None Include="external\GLFW\docs\html\globals_p.html" />
-    <None Include="external\GLFW\docs\html\globals_r.html" />
-    <None Include="external\GLFW\docs\html\globals_s.html" />
-    <None Include="external\GLFW\docs\html\globals_t.html" />
-    <None Include="external\GLFW\docs\html\globals_type.html" />
-    <None Include="external\GLFW\docs\html\globals_v.html" />
-    <None Include="external\GLFW\docs\html\globals_w.html" />
-    <None Include="external\GLFW\docs\html\group__buttons.html" />
-    <None Include="external\GLFW\docs\html\group__context.html" />
-    <None Include="external\GLFW\docs\html\group__errors.html" />
-    <None Include="external\GLFW\docs\html\group__init.html" />
-    <None Include="external\GLFW\docs\html\group__input.html" />
-    <None Include="external\GLFW\docs\html\group__joysticks.html" />
-    <None Include="external\GLFW\docs\html\group__keys.html" />
-    <None Include="external\GLFW\docs\html\group__mods.html" />
-    <None Include="external\GLFW\docs\html\group__monitor.html" />
-    <None Include="external\GLFW\docs\html\group__native.html" />
-    <None Include="external\GLFW\docs\html\group__shapes.html" />
-    <None Include="external\GLFW\docs\html\group__vulkan.html" />
-    <None Include="external\GLFW\docs\html\group__window.html" />
-    <None Include="external\GLFW\docs\html\index.html" />
-    <None Include="external\GLFW\docs\html\input_8dox.html" />
-    <None Include="external\GLFW\docs\html\input_guide.html" />
-    <None Include="external\GLFW\docs\html\intro_8dox.html" />
-    <None Include="external\GLFW\docs\html\intro_guide.html" />
-    <None Include="external\GLFW\docs\html\main_8dox.html" />
-    <None Include="external\GLFW\docs\html\modules.html" />
-    <None Include="external\GLFW\docs\html\monitor_8dox.html" />
-    <None Include="external\GLFW\docs\html\monitor_guide.html" />
-    <None Include="external\GLFW\docs\html\moving_8dox.html" />
-    <None Include="external\GLFW\docs\html\moving_guide.html" />
-    <None Include="external\GLFW\docs\html\news.html" />
-    <None Include="external\GLFW\docs\html\news_8dox.html" />
-    <None Include="external\GLFW\docs\html\pages.html" />
-    <None Include="external\GLFW\docs\html\quick_8dox.html" />
-    <None Include="external\GLFW\docs\html\quick_guide.html" />
-    <None Include="external\GLFW\docs\html\search\all_0.html" />
-    <None Include="external\GLFW\docs\html\search\all_1.html" />
-    <None Include="external\GLFW\docs\html\search\all_2.html" />
-    <None Include="external\GLFW\docs\html\search\all_3.html" />
-    <None Include="external\GLFW\docs\html\search\all_4.html" />
-    <None Include="external\GLFW\docs\html\search\all_5.html" />
-    <None Include="external\GLFW\docs\html\search\all_6.html" />
-    <None Include="external\GLFW\docs\html\search\all_7.html" />
-    <None Include="external\GLFW\docs\html\search\all_8.html" />
-    <None Include="external\GLFW\docs\html\search\all_9.html" />
-    <None Include="external\GLFW\docs\html\search\all_a.html" />
-    <None Include="external\GLFW\docs\html\search\all_b.html" />
-    <None Include="external\GLFW\docs\html\search\all_c.html" />
-    <None Include="external\GLFW\docs\html\search\all_d.html" />
-    <None Include="external\GLFW\docs\html\search\all_e.html" />
-    <None Include="external\GLFW\docs\html\search\all_f.html" />
-    <None Include="external\GLFW\docs\html\search\classes_0.html" />
-    <None Include="external\GLFW\docs\html\search\defines_0.html" />
-    <None Include="external\GLFW\docs\html\search\files_0.html" />
-    <None Include="external\GLFW\docs\html\search\files_1.html" />
-    <None Include="external\GLFW\docs\html\search\files_2.html" />
-    <None Include="external\GLFW\docs\html\search\files_3.html" />
-    <None Include="external\GLFW\docs\html\search\files_4.html" />
-    <None Include="external\GLFW\docs\html\search\files_5.html" />
-    <None Include="external\GLFW\docs\html\search\files_6.html" />
-    <None Include="external\GLFW\docs\html\search\files_7.html" />
-    <None Include="external\GLFW\docs\html\search\files_8.html" />
-    <None Include="external\GLFW\docs\html\search\functions_0.html" />
-    <None Include="external\GLFW\docs\html\search\groups_0.html" />
-    <None Include="external\GLFW\docs\html\search\groups_1.html" />
-    <None Include="external\GLFW\docs\html\search\groups_2.html" />
-    <None Include="external\GLFW\docs\html\search\groups_3.html" />
-    <None Include="external\GLFW\docs\html\search\groups_4.html" />
-    <None Include="external\GLFW\docs\html\search\groups_5.html" />
-    <None Include="external\GLFW\docs\html\search\groups_6.html" />
-    <None Include="external\GLFW\docs\html\search\groups_7.html" />
-    <None Include="external\GLFW\docs\html\search\groups_8.html" />
-    <None Include="external\GLFW\docs\html\search\groups_9.html" />
-    <None Include="external\GLFW\docs\html\search\nomatches.html" />
-    <None Include="external\GLFW\docs\html\search\pages_0.html" />
-    <None Include="external\GLFW\docs\html\search\pages_1.html" />
-    <None Include="external\GLFW\docs\html\search\pages_2.html" />
-    <None Include="external\GLFW\docs\html\search\pages_3.html" />
-    <None Include="external\GLFW\docs\html\search\pages_4.html" />
-    <None Include="external\GLFW\docs\html\search\pages_5.html" />
-    <None Include="external\GLFW\docs\html\search\pages_6.html" />
-    <None Include="external\GLFW\docs\html\search\pages_7.html" />
-    <None Include="external\GLFW\docs\html\search\pages_8.html" />
-    <None Include="external\GLFW\docs\html\search\typedefs_0.html" />
-    <None Include="external\GLFW\docs\html\search\variables_0.html" />
-    <None Include="external\GLFW\docs\html\search\variables_1.html" />
-    <None Include="external\GLFW\docs\html\search\variables_2.html" />
-    <None Include="external\GLFW\docs\html\search\variables_3.html" />
-    <None Include="external\GLFW\docs\html\search\variables_4.html" />
-    <None Include="external\GLFW\docs\html\search\variables_5.html" />
-    <None Include="external\GLFW\docs\html\search\variables_6.html" />
-    <None Include="external\GLFW\docs\html\structGLFWgammaramp.html" />
-    <None Include="external\GLFW\docs\html\structGLFWimage.html" />
-    <None Include="external\GLFW\docs\html\structGLFWvidmode.html" />
-    <None Include="external\GLFW\docs\html\vulkan_8dox.html" />
-    <None Include="external\GLFW\docs\html\vulkan_guide.html" />
-    <None Include="external\GLFW\docs\html\window_8dox.html" />
-    <None Include="external\GLFW\docs\html\window_guide.html" />
     <None Include="src\Graphics\Resources\Shaders\Source\DefaultColor_f.glsl" />
     <None Include="src\Graphics\Resources\Shaders\Source\DefaultColor_v.glsl" />
     <None Include="src\Graphics\Resources\Shaders\Source\DefaultFont_f.glsl" />
@@ -585,154 +412,13 @@
     <None Include="src\Graphics\Resources\Shaders\Source\DefaultSkybox_v.glsl" />
     <None Include="src\Graphics\Resources\Shaders\Source\DefaultTexture_f.glsl" />
     <None Include="src\Graphics\Resources\Shaders\Source\DefaultTexture_v.glsl" />
-    <None Include="src\Graphics\Resources\Shaders\Source\Headers\BoltLighting.glh">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </None>
-    <None Include="src\Graphics\Resources\Shaders\Source\Headers\BoltMaterials.glh">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </None>
+    <None Include="src\Graphics\Resources\Shaders\Source\Headers\BoltLighting.glh" />
+    <None Include="src\Graphics\Resources\Shaders\Source\Headers\BoltMaterials.glh" />
+    <None Include="src\Graphics\Resources\Shaders\Source\LightingTexture_f.glsl" />
+    <None Include="src\Graphics\Resources\Shaders\Source\LightingTexture_v.glsl" />
     <None Include="src\Graphics\Resources\Shaders\Source\SpriteTexture_f.glsl" />
     <None Include="src\Graphics\Resources\Shaders\Source\SpriteTexture_v.glsl" />
   </ItemGroup>
-  <PropertyGroup Label="Globals">
-    <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{300EE943-EFA2-4A3A-B502-54F809461382}</ProjectGuid>
-    <RootNamespace>BoltCore</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
-  </PropertyGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
-    <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
-    <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
-  </PropertyGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
-  <ImportGroup Label="ExtensionSettings">
-  </ImportGroup>
-  <ImportGroup Label="Shared">
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)bin\$(Configuration)\$(ProjectName)\</OutDir>
-    <IntDir>$(SolutionDir)bin-int\$(Configuration)\$(ProjectName)\</IntDir>
-    <LibraryPath>$(SolutionDir)Bolt-Core\external\GLFW\lib-vc2015\;$(SolutionDir)Bolt-Core\external\FreeImage\lib\;$(SolutionDir)Bolt-Core\external\FreeType\lib\;$(SolutionDir)Bolt-Core\external\FreeType-GL\lib\;$(SolutionDir)Bolt-Core\external\GLEW\lib\;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)Bolt-Core\external\;$(SolutionDir)Bolt-Core\src\;$(SolutionDir)Bolt-Core\external\GLEW\include\;$(SolutionDir)Bolt-Core\external\spdlog\include\;$(IncludePath)</IncludePath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)bin\$(Configuration)\$(ProjectName)\</OutDir>
-    <IntDir>$(SolutionDir)bin-int\$(Configuration)\$(ProjectName)\</IntDir>
-    <LibraryPath>$(SolutionDir)Bolt-Core\external\GLFW\lib-vc2015\;$(SolutionDir)Bolt-Core\external\FreeImage\lib\;$(SolutionDir)Bolt-Core\external\FreeType\lib\;$(SolutionDir)Bolt-Core\external\FreeType-GL\lib\;$(SolutionDir)Bolt-Core\external\GLEW\lib\;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)Bolt-Core\external\;$(SolutionDir)Bolt-Core\src\;$(SolutionDir)Bolt-Core\external\GLEW\include\;$(SolutionDir)Bolt-Core\external\spdlog\include\;$(IncludePath)</IncludePath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)bin\$(Configuration)\$(ProjectName)\</OutDir>
-    <IntDir>$(SolutionDir)bin-int\$(Configuration)\$(ProjectName)\</IntDir>
-    <LibraryPath>$(SolutionDir)Bolt-Core\external\GLFW\lib-vc2015\;$(SolutionDir)Bolt-Core\external\FreeImage\lib\;$(SolutionDir)Bolt-Core\external\FreeType\lib\;$(SolutionDir)Bolt-Core\external\FreeType-GL\lib\;$(SolutionDir)Bolt-Core\external\GLEW\lib\;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)Bolt-Core\external\;$(SolutionDir)Bolt-Core\src\;$(SolutionDir)Bolt-Core\external\GLEW\include\;$(SolutionDir)Bolt-Core\external\spdlog\include\;$(IncludePath)</IncludePath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)bin\$(Configuration)\$(ProjectName)\</OutDir>
-    <IntDir>$(SolutionDir)bin-int\$(Configuration)\$(ProjectName)\</IntDir>
-    <LibraryPath>$(SolutionDir)Bolt-Core\external\GLFW\lib-vc2015\;$(SolutionDir)Bolt-Core\external\FreeImage\lib\;$(SolutionDir)Bolt-Core\external\FreeType\lib\;$(SolutionDir)Bolt-Core\external\FreeType-GL\lib\;$(SolutionDir)Bolt-Core\external\GLEW\lib\;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)Bolt-Core\external\;$(SolutionDir)Bolt-Core\src\;$(SolutionDir)Bolt-Core\external\GLEW\include\;$(SolutionDir)Bolt-Core\external\spdlog\include\;$(IncludePath)</IncludePath>
-  </PropertyGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <Optimization>Disabled</Optimization>
-      <SDLCheck>true</SDLCheck>
-      <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>_MBCS;_CRT_SECURE_NO_WARNINGS;BLT_PLATFORM_WINDOWS;BLT_BUILD_STATIC;GAMEOBJECTS_PER_LAYER=10000;LAYERS_PER_SCENE=6;BLT_DEBUG;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-    </ClCompile>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <Optimization>Disabled</Optimization>
-      <SDLCheck>true</SDLCheck>
-      <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>_MBCS;_CRT_SECURE_NO_WARNINGS;BLT_PLATFORM_WINDOWS;BLT_BUILD_STATIC;GAMEOBJECTS_PER_LAYER=10000;LAYERS_PER_SCENE=6;BLT_DEBUG;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-    </ClCompile>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <Optimization>MaxSpeed</Optimization>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
-      <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>_MBCS;_CRT_SECURE_NO_WARNINGS;BLT_PLATFORM_WINDOWS;BLT_BUILD_STATIC;GAMEOBJECTS_PER_LAYER=10000;LAYERS_PER_SCENE=6;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
-      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <FloatingPointModel>Fast</FloatingPointModel>
-    </ClCompile>
-    <Link>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <Optimization>MaxSpeed</Optimization>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
-      <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>_MBCS;_CRT_SECURE_NO_WARNINGS;BLT_PLATFORM_WINDOWS;BLT_BUILD_STATIC;GAMEOBJECTS_PER_LAYER=10000;LAYERS_PER_SCENE=6;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
-      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <FloatingPointModel>Fast</FloatingPointModel>
-    </ClCompile>
-    <Link>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-    </Link>
-  </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

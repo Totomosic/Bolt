@@ -1,11 +1,13 @@
 #include "ResourceManager.h"
 #include "Textures\Texture2D.h"
 #include "Meshes\Model.h"
+#include "Textures\Fonts\Font.h"
 
 namespace Bolt
 {
 
 	std::unordered_map<ResourceID, std::unique_ptr<Resource>> ResourceManager::s_Resources = std::unordered_map<ResourceID, std::unique_ptr<Resource>>();
+	Font* ResourceManager::s_DefaultFont = nullptr;
 
 	ResourceFile ResourceManager::Fetch(const Filepath& resourceFile)
 	{
@@ -80,7 +82,21 @@ namespace Bolt
 	void ResourceManager::FreeResource(const ResourceID& id)
 	{
 		Resource* resource = Get(id).Get();
+		if (resource == s_DefaultFont)
+		{
+			s_DefaultFont = nullptr;
+		}
 		s_Resources.erase(id);
+	}
+
+	ResourcePtr<Font> ResourceManager::DefaultFont()
+	{
+		return ResourcePtr<Font>(s_DefaultFont, false);
+	}
+
+	void ResourceManager::SetDefaultFont(id_t font)
+	{
+		s_DefaultFont = Get<Font>(font).Get();
 	}
 
 	void ResourceManager::Terminate()
