@@ -89,50 +89,12 @@ namespace Bolt
 	{
 		blt::string data = ReadText();
 		XMLnode root;
-		XMLnode* currentNode = nullptr;
 
-		id_t tagBegin = data.find_first_of('<', 0);
-		id_t tagEnd = data.find_first_of('>', tagBegin);
-
-		currentNode = nullptr;
-
-		while (tagBegin != blt::string::npos)
+		ProcessTags(data, &root);
+		if (root.ChildCount() == 1)
 		{
-			bool isBeginTag = data.at(tagBegin + 1) != '/';
-			if (isBeginTag)
-			{
-				blt::string tagAttribs = data.substr(tagBegin + 1, tagEnd - tagBegin - 1);
-				auto nameAttribs = GetNameAndAttributesFromTag(tagAttribs);
-
-				if (currentNode == nullptr)
-				{
-					currentNode = &root;
-				}
-				else
-				{
-					id_t index = currentNode->ChildCount();
-					XMLnode* parent = currentNode;
-					currentNode->Children.push_back(XMLnode());
-					currentNode = &currentNode->Children.at(index);
-					currentNode->Parent = parent;
-				}
-				currentNode->Name = nameAttribs.first;
-				currentNode->Attributes = nameAttribs.second;
-			}	
-			else
-			{
-				currentNode = currentNode->Parent;
-			}
-			id_t prevEnd = tagEnd;
-			tagBegin = data.find_first_of('<', tagEnd);
-			tagEnd = data.find_first_of('>', tagBegin);
-			if (isBeginTag)
-			{
-				blt::string tagData = data.substr(prevEnd + 1, tagBegin - prevEnd - 1);
-				currentNode->Data = tagData;
-			}
+			return root.Children.at(0);
 		}
-
 		return root;
 	}
 
@@ -154,6 +116,10 @@ namespace Bolt
 				id_t equals = tag.find_first_of('=', begin);
 				id_t firstQuote = tag.find_first_of('"', equals);
 				id_t secondQuote = tag.find_first_of('"', firstQuote + 1);
+				if (equals == blt::string::npos || firstQuote == blt::string::npos || secondQuote == blt::string::npos)
+				{
+					return { "", {} };
+				}
 				blt::string key = tag.substr(begin, equals - begin);
 				blt::string value = tag.substr(firstQuote + 1, secondQuote - firstQuote - 1);
 				result.second[key] = value;
@@ -190,6 +156,36 @@ namespace Bolt
 		for (int i = 0; i < tabCount; i++)
 		{
 			currentString += '\t';
+		}
+	}
+
+	void XMLfile::ProcessTags(const blt::string& data, XMLnode* parent) const
+	{
+		id_t begin = data.find_first_of('<', 0);
+		bool hadChild = false;
+		while (begin != blt::string::npos)
+		{
+			id_t beginTagEnd = data.find_first_of('>', begin);
+			blt::string beginTagData = data.substr(begin + 1, beginTagEnd - begin - 1);
+			auto nameAttributes = GetNameAndAttributesFromTag(beginTagData);
+			blt::string endTagName = "</" + nameAttributes.first + '>';
+			id_t end = data.find(endTagName, beginTagEnd + 1);
+			if (end != blt::string::npos)
+			{
+				hadChild = true;
+				XMLnode& node = parent->AddChild(nameAttributes.first, nameAttributes.second);
+				blt::string nodeData = data.substr(beginTagEnd + 1, end - beginTagEnd - 1);
+				ProcessTags(nodeData, &node);
+				begin = data.find_first_of('<', end + 1);
+			}
+			else
+			{
+				begin = data.find_first_of('<', begin + 1);
+			}
+		}
+		if (!hadChild)
+		{
+			parent->Data = data;
 		}
 	}
 

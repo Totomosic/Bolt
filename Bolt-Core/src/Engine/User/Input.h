@@ -61,6 +61,12 @@ namespace Bolt
 		static std::vector<MouseInstance::Button> s_ChangedButtons;
 
 	public:
+		static EventDispatcher<KeyEventArgs> KeyPressedEvent;
+		static EventDispatcher<KeyEventArgs> KeyReleasedEvent;
+		static EventDispatcher<MouseEventArgs> MouseButtonPressedEvent;
+		static EventDispatcher<MouseEventArgs> MouseButtonReleasedEvent;
+
+	public:
 		Input() = delete;
 
 		static const MouseInstance& Mouse();
@@ -70,8 +76,12 @@ namespace Bolt
 
 		// Mouse position relative to the bottom left of the window
 		static Vector3f MousePosition();
+		// Mouse position relative to bottom left of region with given [width, height]
+		static Vector3f MousePosition(float width, float height);
 		// Mouse position change since last frame relative to the bottom left of the window
 		static Vector3f RelMousePosition();
+		// Mouse position change since last frame relative to the bottom left of region with given [width, height]
+		static Vector3f RelMousePosition(float width, float height);
 		// Mouse position in the range [-1, 1] from the centre of the window
 		static Vector3f NormalizedMousePosition();
 		// Mouse posiiton change from last frame in the range [-1, 1] from the centre of the window

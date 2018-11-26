@@ -1,6 +1,7 @@
 #include "Component.h"
 #include "..\ObjectPrefab.h"
 #include "..\GameObject.h"
+#include "..\Camera.h"
 #include "..\Layer.h"
 
 namespace Bolt
@@ -30,6 +31,15 @@ namespace Bolt
 	GameObject* Component::gameObject() const
 	{
 		return (GameObject*)m_GameObject;
+	}
+
+	Camera* Component::camera() const
+	{
+		if (layer() == nullptr)
+		{
+			return nullptr;
+		}
+		return layer()->ActiveCamera();
 	}
 
 	Layer* Component::layer() const

@@ -5,39 +5,53 @@ namespace Bolt
 
 	EventManager::EventInfo EventManager::s_EventQueue[MAX_EVENTS];
 	id_t EventManager::s_Tail = 0;
-	std::unordered_map<id_t, std::vector<EventManager::Listener>> EventManager::s_Listeners = std::unordered_map<id_t, std::vector<EventManager::Listener>>();
-	std::unordered_map<id_t, EventManager::ListenerInfo> EventManager::s_ListenerInfo = std::unordered_map<id_t, EventManager::ListenerInfo>();
+	std::unordered_map<id_t, std::vector<EventManager::EventListener>> EventManager::s_Listeners = std::unordered_map<id_t, std::vector<EventManager::EventListener>>();
+	std::unordered_map<id_t, id_t> EventManager::s_ListenerMap = std::unordered_map<id_t, id_t>();
 
-	id_t EventManager::Subscribe(id_t eventId, const EventManager::Listener& listener)
+	IdManager<id_t> EventManager::s_ListenerIdManager = IdManager<id_t>(0, EventManager::IGNORE_INSTANCE_ID - 1);
+	IdManager<id_t> EventManager::s_InstanceIdManager = IdManager<id_t>(0, EventManager::IGNORE_INSTANCE_ID - 1);
+
+	id_t EventManager::GetNextInstanceId()
+	{
+		return s_InstanceIdManager.GetNextId();
+	}
+
+	void EventManager::ReleaseInstanceId(id_t id)
+	{
+		s_InstanceIdManager.ReleaseId(id);
+	}
+
+	id_t EventManager::Subscribe(id_t eventId, const EventManager::Listener& listener, id_t instanceId)
 	{
 		id_t listenerId = FindNextListenerId();
 		id_t listenerIndex = s_Listeners[eventId].size();
-		s_Listeners.at(eventId).push_back(listener);
-		ListenerInfo info;
-		info.EventId = eventId;
-		info.ListenerPtr = &s_Listeners.at(eventId).at(listenerIndex);
-		s_ListenerInfo[listenerId] = info;
+		s_Listeners.at(eventId).push_back({ listener, instanceId, listenerId });
+		s_ListenerMap[listenerId] = eventId;
 		return listenerId;
 	}
 
 	void EventManager::Unsubscribe(id_t listenerId)
 	{
-		BLT_ASSERT(s_ListenerInfo.find(listenerId) != s_ListenerInfo.end(), "Unable to find listener with Id " + std::to_string(listenerId));
-		ListenerInfo& info = s_ListenerInfo.at(listenerId);
-		std::vector<EventManager::Listener>& listenerVector = s_Listeners.at(info.EventId);
-		auto it = std::find_if(listenerVector.begin(), listenerVector.end(), [&info](EventManager::Listener& listener)
-		{
-			return info.ListenerPtr == &listener;
+		BLT_ASSERT(s_ListenerMap.find(listenerId) != s_ListenerMap.end(), "Unable to find listener with Id " + std::to_string(listenerId));
+		id_t eventId = s_ListenerMap.at(listenerId);
+		std::vector<EventListener>& listenersVector = s_Listeners.at(eventId);
+		auto it = std::find_if(listenersVector.begin(), listenersVector.end(), [listenerId](EventListener& eListener)
+		{	
+			return eListener.ListenerId == listenerId;
 		});
-		BLT_ASSERT(it != listenerVector.end(), "Unable to find listener in vector");
-		listenerVector.erase(it);
-		s_ListenerInfo.erase(listenerId);
+		listenersVector.erase(it);
+		ReleaseListenerId(listenerId);
 	}
 
-	void EventManager::Post(id_t eventId, std::unique_ptr<EventArgs>&& args)
+	void EventManager::UpdateListener(id_t listenerId, const Listener& listener)
+	{
+		
+	}
+
+	void EventManager::Post(id_t eventId, id_t instanceId, std::unique_ptr<EventArgs>&& args)
 	{
 		BLT_ASSERT(s_Tail < MAX_EVENTS, "Event overflow");
-		s_EventQueue[s_Tail++] = { eventId, std::move(args) };
+		s_EventQueue[s_Tail++] = { eventId, instanceId, std::move(args) };
 	}
 
 	void EventManager::FlushEvents()
@@ -45,9 +59,12 @@ namespace Bolt
 		for (id_t i = 0; i < s_Tail; i++)
 		{
 			EventInfo& e = s_EventQueue[i];
-			for (EventManager::Listener& listener : s_Listeners[e.EventId])
+			for (auto& listener : s_Listeners[e.EventId])
 			{
-				listener(e.EventId, e.Args.get());
+				if (e.InstanceId == listener.InstanceId || listener.InstanceId == EventManager::IGNORE_INSTANCE_ID)
+				{
+					listener.Callback(e.EventId, e.Args.get());
+				}
 			}
 		}
 		s_Tail = 0;
@@ -55,8 +72,12 @@ namespace Bolt
 
 	id_t EventManager::FindNextListenerId()
 	{
-		static id_t currentId = 0;
-		return currentId++;
+		return s_ListenerIdManager.GetNextId();
+	}
+
+	void EventManager::ReleaseListenerId(id_t id)
+	{
+		s_ListenerIdManager.ReleaseId(id);
 	}
 
 }

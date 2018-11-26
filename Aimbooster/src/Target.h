@@ -20,7 +20,7 @@ namespace Aimbooster
 		ObjectFactory* Factory;
 
 	public:
-		Target(float lifetime, float maxSize, ObjectFactory& factory);
+		Target(float lifetime, float maxSize, ObjectFactory* factory);
 
 		void Start() override;
 		void Update() override;

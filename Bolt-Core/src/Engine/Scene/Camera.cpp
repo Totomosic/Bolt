@@ -76,6 +76,16 @@ namespace Bolt
 		return m_Transform.InverseTransformMatrix();
 	}
 
+	float Camera::ViewWidth() const
+	{
+		return CameraProjection().ViewFrustum.Width();
+	}
+
+	float Camera::ViewHeight() const
+	{
+		return CameraProjection().ViewFrustum.Height();
+	}
+
 	void Camera::SetViewFrustum(const Frustum& frustum)
 	{
 		m_Projection.ViewFrustum = frustum;

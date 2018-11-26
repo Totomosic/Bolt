@@ -3,8 +3,8 @@
 namespace Aimbooster
 {
 
-	Target::Target(float lifetime, float maxSize, ObjectFactory& factory) : Component(),
-		Lifetime(lifetime), StartingSize(1.0f), MaxSize(maxSize), CurrentTime(0.0f), CurrentSize(StartingSize), Factory(&factory)
+	Target::Target(float lifetime, float maxSize, ObjectFactory* factory) : Component(),
+		Lifetime(lifetime), StartingSize(1.0f), MaxSize(maxSize), CurrentTime(0.0f), CurrentSize(StartingSize), Factory(factory)
 	{
 	
 	}
@@ -30,10 +30,12 @@ namespace Aimbooster
 		{
 			if (Input::MouseButtonPressed(MouseButton::Left))
 			{
-				if (Vector2f::Distance(Input::MousePosition().xy(), gameObject()->transform().Position().xy()) <= CurrentSize)
+				float width = camera()->ViewWidth();
+				float height = camera()->ViewHeight();
+				if (Vector2f::Distance(Input::MousePosition(width, height).xy(), gameObject()->transform().Position().xy()) <= CurrentSize)
 				{
 					Destroy(gameObject(), 0.0f);
-					GameObject* hitLocation = Factory->Ellipse(5, 5, Color::White, Transform({ Input::MousePosition().x, Input::MousePosition().y, gameObject()->transform().Position().z + 1 }));
+					GameObject* hitLocation = Factory->Ellipse(5, 5, Color::White, Transform({ Input::MousePosition(width, height).x, Input::MousePosition(width, height).y, gameObject()->transform().Position().z + 1 }));
 					Destroy(hitLocation, 1.0f);
 					EventManager::Post(TARGET_HIT_EVENT);
 				}
@@ -43,7 +45,7 @@ namespace Aimbooster
 
 	std::unique_ptr<Component> Target::Clone() const
 	{
-		return std::make_unique<Target>(Lifetime, MaxSize, *Factory);
+		return std::make_unique<Target>(Lifetime, MaxSize, Factory);
 	}
 
 }

@@ -54,7 +54,7 @@ namespace Bolt
 	void File::Read(void* data, uint size) const
 	{
 		BLT_ASSERT(IsReadable(), "Unable to read file when not opened for reading");
-		m_Stream.read((char*)data, min(size, GetSize()));
+		m_Stream.read((char*)data, std::min(size, GetSize()));
 	}
 
 	void File::Write(const void* data, uint size) const
@@ -65,7 +65,7 @@ namespace Bolt
 
 	void File::ReadText(blt::string* outString, uint size) const
 	{
-		uint realSize = min(size, GetSize());
+		uint realSize = std::min(size, GetSize());
 		char* buffer = new char[realSize];
 		Read(buffer, size);
 		*outString = blt::string(buffer, realSize);

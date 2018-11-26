@@ -52,7 +52,7 @@ namespace Bolt
 
 	std::unique_ptr<Resource> Model::Clone() const
 	{
-		std::unique_ptr<Model> model = std::make_unique<Model>(ModelData{ m_Data.Vertices->Clone(), m_Data.Indices.Clone() });
+		std::unique_ptr<Model> model = std::make_unique<Model>(ModelData{ m_Data.Vertices->Clone(), m_Data.Indices.Clone(), m_Data.Bounds });
 		return model;
 	}
 

@@ -9,11 +9,13 @@ namespace Bolt
 {
 
 	typedef id_t ResourceID;
+	class Font;
 
 	class BLT_API ResourceManager
 	{
 	private:
 		static std::unordered_map<ResourceID, std::unique_ptr<Resource>> s_Resources;
+		static Font* s_DefaultFont;
 
 	public:
 		ResourceManager() = delete;
@@ -28,6 +30,8 @@ namespace Bolt
 		static id_t Register(std::unique_ptr<Resource>&& resource);
 		static ResourcePtr<Resource> Get(const ResourceID& id);
 		static void FreeResource(const ResourceID& id);
+		static ResourcePtr<Font> DefaultFont();
+		static void SetDefaultFont(id_t font);
 
 		template<typename T>
 		static ResourcePtr<T> Get(const ResourceID& id)
@@ -35,10 +39,13 @@ namespace Bolt
 			return (ResourcePtr<T>)Get(id);
 		}
 
-		template<typename T>
-		static id_t Register(std::unique_ptr<T>&& resource)
+		static id_t Register(std::unique_ptr<Font>&& resource)
 		{
-			return Register(std::unique_ptr<Resource>(resource.release()));
+			if (s_DefaultFont == nullptr)
+			{
+				s_DefaultFont = resource.get();
+			}
+			return Register((std::unique_ptr<Resource>&&)std::move(resource));
 		}
 
 		friend class Engine;

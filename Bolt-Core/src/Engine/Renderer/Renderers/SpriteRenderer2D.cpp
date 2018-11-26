@@ -167,7 +167,7 @@ namespace Bolt
 	void SpriteRenderer2D::Flush(const Matrix4f& viewMatrix, const Matrix4f& projMatrix) const
 	{
 		Material mat;
-		mat.Shader = Shader::Sprite();
+		mat.Shader = Shader::SpriteTexture();
 		mat.Textures.Textures = m_Textures;
 		mat.RenderOptions.DepthFunc = DepthFunction::Lequal;
 		RenderBatch renderable;

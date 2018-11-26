@@ -1,6 +1,8 @@
 #include "Renderer.h"
 #include "..\Scene\SceneGraph\Query\__Query__.h"
 
+#define BLT_USE_FRUSTUM_CULLING 0
+
 namespace Bolt
 {
 
@@ -96,19 +98,14 @@ namespace Bolt
 		for (GameObject* object : objects)
 		{
 			Vector3f position = object->transform().Position();
-			Mesh& mesh = object->Components().GetComponent<MeshRenderer>().Mesh;
-			if (mesh.Models.size() <= 0)
+			MeshRenderer& mesh = object->Components().GetComponent<MeshRenderer>();
+			if (mesh.Mesh.Models.size() <= 0)
 			{
 				continue;
 			}
-			const ModelData& info = mesh.Models[0].Model->Data();
-			float width = info.Bounds.MaxX - info.Bounds.MinX;
-			float height = info.Bounds.MaxY - info.Bounds.MinY;
-			float depth = info.Bounds.MaxZ - info.Bounds.MinZ;
-			Vector3f meshScale = Vector3f(mesh.Models[0].Transform.Element(0, 0), mesh.Models[0].Transform.Element(1, 1), mesh.Models[0].Transform.Element(2, 2));
-			Vector3f size = Vector3f(width, height, depth) * object->transform().Scale() * meshScale;
-			Cuboid box = { position - size / 2, position + size / 2 };
+			Cuboid box = mesh.GetMeshBounds();
 			bool passed = true;
+#if BLT_USE_FRUSTUM_CULLING
 			Plane frustum[6];
 			object->GetLayer()->ActiveCamera()->CameraProjection().GetPlanes(object->GetLayer()->ActiveCamera()->ViewMatrix(), frustum);
 			for (int i = 0; i < 6; i++)
@@ -119,6 +116,7 @@ namespace Bolt
 					break;
 				}
 			}
+#endif
 			if (passed)
 			{
 				for (const Plane& plane : clippingPlanes)
@@ -142,7 +140,7 @@ namespace Bolt
 	{
 		Vector4f minP = Vector4f(box.Min, 1.0f);
 		Vector4f maxP = Vector4f(box.Max, 1.0f);
-		float distance = max(minP.x * plane.x, maxP.x * plane.x) + max(minP.y * plane.y, maxP.y * plane.y) + max(minP.z * plane.z, maxP.z * plane.z) + plane.w;
+		float distance = std::max(minP.x * plane.x, maxP.x * plane.x) + std::max(minP.y * plane.y, maxP.y * plane.y) + std::max(minP.z * plane.z, maxP.z * plane.z) + plane.w;
 		return distance >= 0;
 	}
 

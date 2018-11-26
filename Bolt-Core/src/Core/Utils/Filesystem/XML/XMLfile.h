@@ -30,6 +30,7 @@ namespace Bolt
 		std::pair<blt::string, std::unordered_map<blt::string, blt::string>> GetNameAndAttributesFromTag(const blt::string& tag) const;
 		void WriteXMLnode(const XMLnode& node, int tabCount, blt::string& currentString) const;
 		void AddTabs(int tabCount, blt::string& currentString) const;
+		void ProcessTags(const blt::string& data, XMLnode* parent) const;
 
 	};
 

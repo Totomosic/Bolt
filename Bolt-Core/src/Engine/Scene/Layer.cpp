@@ -107,6 +107,8 @@ namespace Bolt
 		{
 			RemoveGameObject(object);
 		}
+		UI().ReleaseAllGameObjects();
+		UI().Clear();
 	}
 
 	void Layer::Update()
@@ -162,7 +164,11 @@ namespace Bolt
 
 	void Destroy(GameObject* object, float timeToDelete)
 	{
-		BLT_ASSERT(object->GetLayer() != nullptr, "Attempted to destroy GameObject that is not part of a layer");
+		if (object->GetLayer() == nullptr)
+		{
+			BLT_CORE_WARN("Deleting GameObject that either does not have a layer or may have already been deleted. Id = {0}", object->Id());
+			return;
+		}
 		object->GetLayer()->MarkGameObjectForDelete(object, timeToDelete);
 	}
 
