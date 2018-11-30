@@ -31,7 +31,8 @@ project "Bolt-Core"
         "%{prj.name}/external/",
         "%{prj.name}/src/",
         "%{prj.name}/external/GLEW/include/",
-        "%{prj.name}/external/spdlog/include/"
+        "%{prj.name}/external/spdlog/include/",
+        "C:/Users/Jordan Morrison/AppData/Local/Programs/Python/Python37/include/"
     }
 
     filter "system:windows"
@@ -40,6 +41,7 @@ project "Bolt-Core"
 
         defines
         {
+            "NOMINMAX",
             "GLEW_STATIC",
             "BLT_PLATFORM_WINDOWS",
             "BLT_BUILD_STATIC",
@@ -67,12 +69,14 @@ project "Aimbooster"
         "Bolt-Core/external/",
         "Bolt-Core/src/",
         "Bolt-Core/external/GLEW/include/",
-        "Bolt-Core/external/spdlog/include/"
+        "Bolt-Core/external/spdlog/include/",
+        "C:/Users/Jordan Morrison/AppData/Local/Programs/Python/Python37/include/"
     }
 
     libdirs
     {
-        "Bolt-Core/external/**"
+        "Bolt-Core/external/**",
+        "C:/Users/Jordan Morrison/AppData/Local/Programs/Python/Python37/libs"
     }
 
     links
@@ -117,12 +121,14 @@ project "NatureScene"
         "Bolt-Core/external/",
         "Bolt-Core/src/",
         "Bolt-Core/external/GLEW/include/",
-        "Bolt-Core/external/spdlog/include/"
+        "Bolt-Core/external/spdlog/include/",
+        "C:/Users/Jordan Morrison/AppData/Local/Programs/Python/Python37/include/"
     }
 
     libdirs
     {
-        "Bolt-Core/external/**"
+        "Bolt-Core/external/**",
+        "C:/Users/Jordan Morrison/AppData/Local/Programs/Python/Python37/libs"
     }
 
     links

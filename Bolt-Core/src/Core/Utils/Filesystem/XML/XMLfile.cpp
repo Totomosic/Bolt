@@ -166,10 +166,15 @@ namespace Bolt
 		while (begin != blt::string::npos)
 		{
 			id_t beginTagEnd = data.find_first_of('>', begin);
+			if (beginTagEnd == blt::string::npos)
+			{
+				begin = data.find_first_of('<', begin + 1);
+				continue;
+			}
 			blt::string beginTagData = data.substr(begin + 1, beginTagEnd - begin - 1);
 			auto nameAttributes = GetNameAndAttributesFromTag(beginTagData);
 			blt::string endTagName = "</" + nameAttributes.first + '>';
-			id_t end = data.find(endTagName, beginTagEnd + 1);
+			id_t end = data.find(endTagName, beginTagEnd);
 			if (end != blt::string::npos)
 			{
 				hadChild = true;

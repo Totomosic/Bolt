@@ -86,6 +86,11 @@ namespace Bolt
 
 	void Layer::RemoveGameObject(GameObject* object)
 	{
+		if (object == UI().Object())
+		{
+			BLT_CORE_WARN("[LAYER] Attempted to Delete UI Root object with Id " + std::to_string(object->Id()));
+			return;
+		}
 		if (object->Id() < ObjectCollection::MAX_GAMEOBJECTS)
 		{
 			m_GameObjects.RemoveGameObject(object);
@@ -109,6 +114,7 @@ namespace Bolt
 		}
 		UI().ReleaseAllGameObjects();
 		UI().Clear();
+		m_GameObjects.Reset();
 	}
 
 	void Layer::Update()

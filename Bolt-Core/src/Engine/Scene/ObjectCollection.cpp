@@ -12,7 +12,7 @@ namespace Bolt
 	}
 
 	ObjectCollection::ObjectCollection()
-		: m_GameObjects{}, m_ActiveGameObjects()
+		: m_IdManager(0, ObjectCollection::MAX_GAMEOBJECTS - 1), m_GameObjects{}, m_ActiveGameObjects()
 	{
 		
 	}
@@ -68,6 +68,7 @@ namespace Bolt
 		m_GameObjects[id].Enabled = false;
 		obj->SetID(GameObject::InvalidID);
 		obj->SetLayer(nullptr);
+		ReleaseId(id);
 		auto it = std::find(m_ActiveGameObjects.begin(), m_ActiveGameObjects.end(), obj);
 		if (it != m_ActiveGameObjects.end())
 		{
@@ -130,6 +131,12 @@ namespace Bolt
 		vector.erase(it2);
 	}
 
+	void ObjectCollection::Reset()
+	{
+		// 0 = UI object for each layer which is never deleted
+		m_IdManager.Reset(1);
+	}
+
 	void ObjectCollection::Transfer(XMLserializer& backend, bool isWriting)
 	{
 		BLT_TRANSFER_ARRAY(backend, m_GameObjects, MAX_GAMEOBJECTS);
@@ -137,15 +144,13 @@ namespace Bolt
 
 	id_t ObjectCollection::FindNextId() const
 	{
-		for (id_t i = 0; i < ObjectCollection::MAX_GAMEOBJECTS; i++)
-		{
-			if (!m_GameObjects[i].Enabled)
-			{
-				return i;
-			}
-		}
-		BLT_ASSERT(false, "Unable to find valid Id for GameObject");
-		return GameObject::InvalidID;
+		id_t i = m_IdManager.GetNextId();
+		return i;
+	}
+
+	void ObjectCollection::ReleaseId(id_t id) const
+	{
+		m_IdManager.ReleaseId(id);
 	}
 
 }

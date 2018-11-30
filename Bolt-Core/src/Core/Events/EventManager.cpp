@@ -45,7 +45,17 @@ namespace Bolt
 
 	void EventManager::UpdateListener(id_t listenerId, const Listener& listener)
 	{
-		
+		BLT_ASSERT(s_ListenerMap.find(listenerId) != s_ListenerMap.end(), "Unable to find listener with Id " + std::to_string(listenerId));
+		id_t eventId = s_ListenerMap.at(listenerId);
+		std::vector<EventListener>& listenersVector = s_Listeners.at(eventId);
+		for (EventListener& l : listenersVector)
+		{
+			if (l.ListenerId == listenerId)
+			{
+				l.Callback = listener;
+				break;
+			}
+		}
 	}
 
 	void EventManager::Post(id_t eventId, id_t instanceId, std::unique_ptr<EventArgs>&& args)

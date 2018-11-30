@@ -16,6 +16,7 @@ namespace Bolt
 	public:
 		Vector3f Position = Vector3f(0.0f, 0.0f, 0.0f);
 		Color Color = Color::White;
+		float Intensity = 1.0f;
 		float AmbientIntensity = 0.2f;
 		Vector3f Attenuation = Vector3f(1.0f, 0.0f, 0.0f);
 

@@ -73,12 +73,14 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>GLEW_STATIC;BLT_PLATFORM_WINDOWS;BLT_BUILD_STATIC;BLT_DEBUG;NOMINMAX=1;GAMEOBJECTS_PER_LAYER=10000;LAYERS_PER_SCENE=6;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>external;src;external\GLEW\include;external\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NOMINMAX;GLEW_STATIC;BLT_PLATFORM_WINDOWS;BLT_BUILD_STATIC;BLT_DEBUG;GAMEOBJECTS_PER_LAYER=10000;LAYERS_PER_SCENE=6;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>external;src;external\GLEW\include;external\spdlog\include;..\..\..\..\..\AppData\Local\Programs\Python\Python37\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <PrecompiledHeaderFile>Types.h</PrecompiledHeaderFile>
+      <ForcedIncludeFiles>Types.h</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -86,12 +88,14 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>GLEW_STATIC;BLT_PLATFORM_WINDOWS;BLT_BUILD_STATIC;BLT_DEBUG;NOMINMAX=1;GAMEOBJECTS_PER_LAYER=10000;LAYERS_PER_SCENE=6;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>external;src;external\GLEW\include;external\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NOMINMAX;GLEW_STATIC;BLT_PLATFORM_WINDOWS;BLT_BUILD_STATIC;BLT_DEBUG;GAMEOBJECTS_PER_LAYER=10000;LAYERS_PER_SCENE=6;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>external;src;external\GLEW\include;external\spdlog\include;..\..\..\..\..\AppData\Local\Programs\Python\Python37\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <PrecompiledHeaderFile>Types.h</PrecompiledHeaderFile>
+      <ForcedIncludeFiles>Types.h</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -99,12 +103,14 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|Win32'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>GLEW_STATIC;BLT_PLATFORM_WINDOWS;BLT_BUILD_STATIC;BLT_DEBUG;NOMINMAX=1;GAMEOBJECTS_PER_LAYER=10000;LAYERS_PER_SCENE=6;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>external;src;external\GLEW\include;external\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NOMINMAX;GLEW_STATIC;BLT_PLATFORM_WINDOWS;BLT_BUILD_STATIC;BLT_DEBUG;GAMEOBJECTS_PER_LAYER=10000;LAYERS_PER_SCENE=6;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>external;src;external\GLEW\include;external\spdlog\include;..\..\..\..\..\AppData\Local\Programs\Python\Python37\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <PrecompiledHeaderFile>Types.h</PrecompiledHeaderFile>
+      <ForcedIncludeFiles>Types.h</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -223,6 +229,11 @@
     <ClInclude Include="src\Engine\Scene\UI\UIsurface.h" />
     <ClInclude Include="src\Engine\Scene\UI\__UI__.h" />
     <ClInclude Include="src\Engine\Scene\__Scene__.h" />
+    <ClInclude Include="src\Engine\Scripting\JavaScript\JSscript.h" />
+    <ClInclude Include="src\Engine\Scripting\JavaScript\__JavaScript__.h" />
+    <ClInclude Include="src\Engine\Scripting\Python\PyScript.h" />
+    <ClInclude Include="src\Engine\Scripting\Python\__Python__.h" />
+    <ClInclude Include="src\Engine\Scripting\__Scripting__.h" />
     <ClInclude Include="src\Engine\Serialization\XMLReadTraits.h" />
     <ClInclude Include="src\Engine\Serialization\XMLWriteTraits.h" />
     <ClInclude Include="src\Engine\Serialization\XMLserializer.h" />
@@ -334,6 +345,7 @@
     <ClCompile Include="src\Engine\Renderer\GLState.cpp" />
     <ClCompile Include="src\Engine\Renderer\Graphics.cpp" />
     <ClCompile Include="src\Engine\Renderer\RenderMethods\DefaultRenderMethod.cpp" />
+    <ClCompile Include="src\Engine\Renderer\RenderSchedule.cpp" />
     <ClCompile Include="src\Engine\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Engine\Renderer\Renderers\SpriteRenderer2D.cpp" />
     <ClCompile Include="src\Engine\Scene\Camera.cpp" />
@@ -402,6 +414,17 @@
     <ClCompile Include="src\Graphics\Structs\Monitor.cpp" />
     <ClCompile Include="src\Graphics\Window.cpp" />
     <ClCompile Include="src\Logging.cpp" />
+    <ClCompile Include="src\Types.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Dist|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Dist|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeaderFile>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Graphics\Resources\Shaders\Source\DefaultColor_f.glsl" />
@@ -414,6 +437,8 @@
     <None Include="src\Graphics\Resources\Shaders\Source\DefaultTexture_v.glsl" />
     <None Include="src\Graphics\Resources\Shaders\Source\Headers\BoltLighting.glh" />
     <None Include="src\Graphics\Resources\Shaders\Source\Headers\BoltMaterials.glh" />
+    <None Include="src\Graphics\Resources\Shaders\Source\LightingColor_f.glsl" />
+    <None Include="src\Graphics\Resources\Shaders\Source\LightingColor_v.glsl" />
     <None Include="src\Graphics\Resources\Shaders\Source\LightingTexture_f.glsl" />
     <None Include="src\Graphics\Resources\Shaders\Source\LightingTexture_v.glsl" />
     <None Include="src\Graphics\Resources\Shaders\Source\SpriteTexture_f.glsl" />

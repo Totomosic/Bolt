@@ -8,6 +8,9 @@
 namespace Bolt
 {
 
+	struct Material;
+	struct LightSource;
+
 	BLT_API enum class UniformType
 	{
 		None,
@@ -51,6 +54,7 @@ namespace Bolt
 		static ResourcePtr<const Shader> s_DefaultSkyboxShader;
 		static ResourcePtr<const Shader> s_SpriteTextureShader;
 
+		static ResourcePtr<const Shader> s_LightingColorShader;
 		static ResourcePtr<const Shader> s_LightingTextureShader;
 
 	private:
@@ -86,6 +90,8 @@ namespace Bolt
 		void SetViewMatrix(const Matrix4f& matrix) const;
 		void SetProjectionMatrix(const Matrix4f& matrix) const;
 		void SetColor(const Color& color) const;
+		void SetMaterial(const Material& material) const;
+		void SetLights(const std::vector<LightSource>& lights) const;
 
 		void SetUniform(const blt::string& location, bool value) const;
 		void SetUniform(const blt::string& location, int value) const;
@@ -142,6 +148,7 @@ namespace Bolt
 		static ResourcePtr<const Shader> DefaultSkybox();
 		static ResourcePtr<const Shader> SpriteTexture();
 
+		static ResourcePtr<const Shader> LightingColor();
 		static ResourcePtr<const Shader> LightingTexture();
 
 	private:
@@ -162,6 +169,7 @@ namespace Bolt
 		static const Shader* CreateDefaultSkyboxShader();
 		static const Shader* CreateSpriteTextureShader();
 
+		static const Shader* CreateLightingColorShader();
 		static const Shader* CreateLightingTextureShader();
 
 	};

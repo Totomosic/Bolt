@@ -99,7 +99,7 @@ namespace Bolt
 
 	const Texture2D* Framebuffer::GetTextureBuffer(ColorBuffer buffer) const
 	{
-		return m_Textures.at(buffer).get();
+		return m_Textures.at(buffer).Get();
 	}
 
 	bool Framebuffer::HasTextureBuffer(ColorBuffer buffer) const
@@ -120,27 +120,27 @@ namespace Bolt
 	const Texture2D* Framebuffer::CreateColorBuffer(ColorBuffer buffer)
 	{
 		TextureCreateOptions createOptions = { WrapMode::Repeat, MagFilter::Linear, MinFilter::Linear, Mipmaps::Disabled };
-		return CreateColorBuffer(std::make_unique<Texture2D>(Width(), Height(), createOptions), buffer);
+		return CreateColorBuffer(ResourcePtr<Texture2D>(new Texture2D(Width(), Height(), createOptions), true), buffer);
 	}
 
 	const Texture2D* Framebuffer::CreateDepthBuffer()
 	{
 		TextureCreateOptions createOptions = { WrapMode::Repeat, MagFilter::Linear, MinFilter::Linear, Mipmaps::Disabled };
-		return CreateDepthBuffer(std::make_unique<Texture2D>(Width(), Height(), createOptions));
+		return CreateDepthBuffer(ResourcePtr<Texture2D>(new Texture2D(Width(), Height(), createOptions), true));
 	}
 
-	const Texture2D* Framebuffer::CreateColorBuffer(std::unique_ptr<Texture2D>&& texture, ColorBuffer buffer)
+	const Texture2D* Framebuffer::CreateColorBuffer(const ResourcePtr<Texture2D>&  texture, ColorBuffer buffer)
 	{
-		CreateColorTexture(texture.get(), buffer);
+		CreateColorTexture(texture, buffer);
 		m_Textures[buffer] = std::move(texture);
-		return m_Textures[buffer].get();
+		return m_Textures[buffer].Get();
 	}
 
-	const Texture2D* Framebuffer::CreateDepthBuffer(std::unique_ptr<Texture2D>&& texture)
+	const Texture2D* Framebuffer::CreateDepthBuffer(const ResourcePtr<Texture2D>&  texture)
 	{
-		CreateDepthTexture(texture.get());
+		CreateDepthTexture(texture);
 		m_Textures[ColorBuffer::Depth] = std::move(texture);
-		return m_Textures[ColorBuffer::Depth].get();
+		return m_Textures[ColorBuffer::Depth].Get();
 	}
 
 	RenderBuffer Framebuffer::CreateColorRenderBuffer(ColorBuffer buffer)
@@ -229,7 +229,7 @@ namespace Bolt
 		GL_CALL(glGenFramebuffers(1, &m_Id));
 	}
 
-	void Framebuffer::CreateColorTexture(const Texture2D* texture, ColorBuffer buffer)
+	void Framebuffer::CreateColorTexture(const ResourcePtr<Texture2D>&  texture, ColorBuffer buffer)
 	{
 		BLT_ASSERT(!HasTextureBuffer(buffer), "RenderBuffer is already attached at buffer " + std::to_string((int)buffer));
 		BLT_ASSERT(!IsMultisampled(), "Multisampled Framebuffer cannot have texture attachments");
@@ -243,7 +243,7 @@ namespace Bolt
 		GL_CALL(glDrawBuffer((GLenum)buffer));
 	}
 
-	void Framebuffer::CreateDepthTexture(const Texture2D* texture)
+	void Framebuffer::CreateDepthTexture(const ResourcePtr<Texture2D>&  texture)
 	{
 		BLT_ASSERT(!HasTextureBuffer(ColorBuffer::Depth), "RenderBuffer is already attached at buffer " + std::to_string((int)ColorBuffer::Depth));
 		BLT_ASSERT(!IsMultisampled(), "Multisampled Framebuffer cannot have texture attachments");

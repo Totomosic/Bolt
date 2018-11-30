@@ -82,6 +82,12 @@
     <Filter Include="Engine\Scene\UI">
       <UniqueIdentifier>{65D59BAE-D160-0973-DA71-8C67467C6573}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Scripting">
+      <UniqueIdentifier>{9D0A0F60-8903-2EB2-B235-13379E8D0DBE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Scripting\JavaScript">
+      <UniqueIdentifier>{0336D403-6F43-02EA-F829-FED46436CEA0}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Engine\Serialization">
       <UniqueIdentifier>{A843FDD7-94D2-86A1-3DF1-9A9C295F9747}</UniqueIdentifier>
     </Filter>
@@ -158,10 +164,16 @@
     <ClInclude Include="src\Core\Events\EventArgs.h">
       <Filter>Core\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\Events\EventDispatcher.h">
+      <Filter>Core\Events</Filter>
+    </ClInclude>
     <ClInclude Include="src\Core\Events\EventManager.h">
       <Filter>Core\Events</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Events\Events.h">
+      <Filter>Core\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Events\IdManager.h">
       <Filter>Core\Events</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Events\__Events__.h">
@@ -455,6 +467,15 @@
     <ClInclude Include="src\Engine\Scene\__Scene__.h">
       <Filter>Engine\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Scripting\JavaScript\JSscript.h">
+      <Filter>Engine\Scripting\JavaScript</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Scripting\JavaScript\__JavaScript__.h">
+      <Filter>Engine\Scripting\JavaScript</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Scripting\__Scripting__.h">
+      <Filter>Engine\Scripting</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Serialization\XMLReadTraits.h">
       <Filter>Engine\Serialization</Filter>
     </ClInclude>
@@ -685,8 +706,8 @@
     </ClInclude>
     <ClInclude Include="src\Logging.h" />
     <ClInclude Include="src\Types.h" />
-    <ClInclude Include="src\Core\Events\IdManager.h" />
-    <ClInclude Include="src\Core\Events\EventDispatcher.h" />
+    <ClInclude Include="src\Engine\Scripting\Python\__Python__.h" />
+    <ClInclude Include="src\Engine\Scripting\Python\PyScript.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\BoltTL\string.cpp">
@@ -781,6 +802,9 @@
     </ClCompile>
     <ClCompile Include="src\Engine\Renderer\RenderMethods\DefaultRenderMethod.cpp">
       <Filter>Engine\Renderer\RenderMethods</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Renderer\RenderSchedule.cpp">
+      <Filter>Engine\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Renderer\Renderer.cpp">
       <Filter>Engine\Renderer</Filter>
@@ -984,6 +1008,7 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Logging.cpp" />
+    <ClCompile Include="src\Types.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Graphics\Resources\Shaders\Source\DefaultColor_f.glsl">
@@ -1016,13 +1041,23 @@
     <None Include="src\Graphics\Resources\Shaders\Source\Headers\BoltMaterials.glh">
       <Filter>Graphics\Resources\Shaders\Source\Headers</Filter>
     </None>
+    <None Include="src\Graphics\Resources\Shaders\Source\LightingColor_f.glsl">
+      <Filter>Graphics\Resources\Shaders\Source</Filter>
+    </None>
+    <None Include="src\Graphics\Resources\Shaders\Source\LightingColor_v.glsl">
+      <Filter>Graphics\Resources\Shaders\Source</Filter>
+    </None>
+    <None Include="src\Graphics\Resources\Shaders\Source\LightingTexture_f.glsl">
+      <Filter>Graphics\Resources\Shaders\Source</Filter>
+    </None>
+    <None Include="src\Graphics\Resources\Shaders\Source\LightingTexture_v.glsl">
+      <Filter>Graphics\Resources\Shaders\Source</Filter>
+    </None>
     <None Include="src\Graphics\Resources\Shaders\Source\SpriteTexture_f.glsl">
       <Filter>Graphics\Resources\Shaders\Source</Filter>
     </None>
     <None Include="src\Graphics\Resources\Shaders\Source\SpriteTexture_v.glsl">
       <Filter>Graphics\Resources\Shaders\Source</Filter>
     </None>
-    <None Include="src\Graphics\Resources\Shaders\Source\LightingTexture_v.glsl" />
-    <None Include="src\Graphics\Resources\Shaders\Source\LightingTexture_f.glsl" />
   </ItemGroup>
 </Project>

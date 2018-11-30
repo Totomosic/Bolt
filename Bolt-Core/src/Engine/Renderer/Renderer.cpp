@@ -55,8 +55,8 @@ namespace Bolt
 			Matrix4f viewMatrix = (hasCameraOverride) ? renderPass->CameraOverrides.at(layer->Id()).ViewMatrix : layer->ActiveCamera()->ViewMatrix();
 			Matrix4f projectionMatrix = (hasCameraOverride) ? renderPass->CameraOverrides.at(layer->Id()).ProjectionMatrix : layer->ActiveCamera()->ProjectionMatrix();
 
-			RenderGameObjects(defaultObjects, viewMatrix, projectionMatrix, renderPass->Uniforms);
-			RenderGameObjects(transparentObjects, viewMatrix, projectionMatrix, renderPass->Uniforms);
+			RenderGameObjects(renderPass, defaultObjects, viewMatrix, projectionMatrix, renderPass->Uniforms);
+			RenderGameObjects(renderPass, transparentObjects, viewMatrix, projectionMatrix, renderPass->Uniforms);
 		}
 	}
 
@@ -65,7 +65,7 @@ namespace Bolt
 		
 	}
 
-	void Renderer::RenderGameObjects(const std::vector<GameObject*>& objects, const Matrix4f& viewMatrix, const Matrix4f& projectionMatrix, const UniformManager& uniforms) const
+	void Renderer::RenderGameObjects(const RenderPass* renderPass, const std::vector<GameObject*>& objects, const Matrix4f& viewMatrix, const Matrix4f& projectionMatrix, const UniformManager& uniforms) const
 	{
 		std::unordered_map<Material, RenderBatch> renderBatches;		
 		for (GameObject* object : objects)
@@ -86,7 +86,8 @@ namespace Bolt
 		}
 		for (const auto& pair : renderBatches)
 		{
-			uniforms.UploadAll(pair.second.Material->Shader.Get());
+			//uniforms.UploadAll(pair.second.Material->Shader.Get()); already done in Shader::SetMaterial() ?????????
+			pair.second.Material->Shader->SetLights(renderPass->AdditionalLights);
 			(*m_Method)(pair.second, viewMatrix, projectionMatrix);
 		}
 	}

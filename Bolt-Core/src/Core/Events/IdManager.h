@@ -1,5 +1,6 @@
 #pragma once
 #include "Types.h"
+#include "..\Functions.h"
 
 namespace Bolt
 {
@@ -17,7 +18,7 @@ namespace Bolt
 		IdManager(T min, T max)
 			: m_MinId(min), m_MaxId(max), m_CurrentMaxId(min), m_AvailableIds()
 		{
-		
+			
 		}
 
 		T GetNextId() const
@@ -28,7 +29,9 @@ namespace Bolt
 			}
 			if (m_AvailableIds.size() > 0)
 			{
-				return m_AvailableIds.front();
+				T id = m_AvailableIds.back();
+				m_AvailableIds.pop_back();
+				return id;
 			}
 			BLT_ASSERT(false, "No available Id");
 			return m_MaxId;
@@ -39,9 +42,9 @@ namespace Bolt
 			m_AvailableIds.push_back(id);
 		}
 
-		void Reset() const
+		void Reset(T value = 0) const
 		{
-			m_CurrentMaxId = m_MinId;
+			m_CurrentMaxId = Clamp<T>(value, m_MinId, m_MaxId);
 			m_AvailableIds.clear();
 		}
 
