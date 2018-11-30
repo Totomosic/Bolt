@@ -10,6 +10,7 @@ struct LightSource
 {
 	vec3 Position;
 	vec4 Color;
+	float Intensity;
 	vec3 Attenuation;
 	int Type;
 	float AmbientIntensity;
@@ -26,7 +27,9 @@ vec4 CalculateDiffuseLighting(Material2D material, LightSource light, vec3 norma
 	float brightness = max(nDotV, light.AmbientIntensity);
 	//float attenuationFactor = light.Attenuation.x + light.Attenuation.y * distance + light.Attenuation.z * distance * distance;
 	//brightness /= attenuationFactor;
-	return material.DiffuseColor * light.Color * brightness;
+	vec4 c = material.DiffuseColor * light.Color * brightness * light.Intensity;
+	c.a = material.DiffuseColor.a * light.Color.a;
+	return c;
 }
 
 vec4 CalculateSpecularLighting(Material2D material, LightSource light, vec3 normal, vec3 toLightVector, vec3 toCameraVector)
@@ -41,5 +44,5 @@ vec4 CalculateSpecularLighting(Material2D material, LightSource light, vec3 norm
 	float dampedSpecularFactor = pow(specularFactor, material.ShineDamper);
 	//float attenuationFactor = light.Attenuation.x + light.Attenuation.y * distance + light.Attenuation.z * distance * distance;
 	//dampedSpecularFactor /= attenuationFactor;
-	return material.SpecularHighlight * light.Color * dampedSpecularFactor;
+	return material.SpecularHighlight * light.Color * dampedSpecularFactor * material.Shininess * light.Intensity;
 })"

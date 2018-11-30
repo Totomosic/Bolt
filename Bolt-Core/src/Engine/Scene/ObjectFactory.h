@@ -49,6 +49,8 @@ namespace Bolt
 
 		GameObject* Cuboid(float width, float height, float depth, const Color& color = Color::White, Transform transform = Transform()) const;
 		GameObject* Cuboid(float width, float height, float depth, const Material& material = Material(), Transform transform = Transform()) const;
+		GameObject* Grid(float width, float depth, int xVertices = 2, int zVertices = 2, const Color& color = Color::White, Transform transform = Transform()) const;
+		GameObject* Grid(float width, float depth, int xVertices = 2, int zVertices = 2, const Material& material = Material(), Transform transform = Transform()) const;
 		GameObject* Line(const Vector3f& p0, const Vector3f& p1, const Color& color = Color::White) const;
 
 		friend class Initializer;

@@ -1,8 +1,19 @@
 #include "Shader.h"
 #include "..\ResourceManager.h"
+#include "..\Meshes\Materials\Material.h"
+#include "..\..\..\Engine\Scene\Lighting\LightSource.h"
+#include "..\..\..\Engine\Renderer\GLState.h"
 
 namespace Bolt
 {
+
+	Matrix3f CalculateMatrix3(const TextureBounds& bounds)
+	{
+		float width = bounds.MaxX - bounds.MinX;
+		float height = bounds.MaxY - bounds.MinY;
+		Matrix3f result = Matrix3f::Translation(bounds.MinX, bounds.MinY, 0) * Matrix3f::Scale(width, height, 1);
+		return result;
+	}
 
 #ifdef BLT_DEBUG
 	#define BLT_SHADER_VALIDATE_VALUE(...) ValidateUploadValue(__VA_ARGS__)
@@ -21,6 +32,7 @@ namespace Bolt
 	ResourcePtr<const Shader> Shader::s_DefaultSkyboxShader = nullptr;
 	ResourcePtr<const Shader> Shader::s_SpriteTextureShader = nullptr;
 
+	ResourcePtr<const Shader> Shader::s_LightingColorShader = nullptr;
 	ResourcePtr<const Shader> Shader::s_LightingTextureShader = nullptr;
 
 	Shader::Shader(const blt::string& vertexSource, const blt::string& fragmentSource) : Resource(), GLshared(),
@@ -119,6 +131,48 @@ namespace Bolt
 	void Shader::SetColor(const Color& color) const
 	{
 		SetUniform(m_BaseColorLocation, color);
+	}
+
+	void Shader::SetMaterial(const Material& material) const
+	{
+		SetColor(material.BaseColor);
+		SetUniform("Material.DiffuseColor", material.BaseColor);
+		SetUniform("Material.SpecularHighlight", material.LightingOptions.SpecularColor);
+		SetUniform("Material.Shininess", material.LightingOptions.Reflectivity);
+		SetUniform("Material.ShineDamper", material.LightingOptions.ShineDamper);
+
+		material.Uniforms.UploadAll(this);
+		GLState::ApplySettings(material.RenderOptions);
+
+		for (int i = 0; i < material.Textures.Textures.size(); i++)
+		{
+			material.Textures.Textures[i]->Bind(i);
+			material.Shader->SetUniform("Material.Textures[" + std::to_string(i) + ']', i);
+			Matrix3f textureMatrix = Matrix3f::Identity();
+			if (material.Textures.Animators.find(i) != material.Textures.Animators.end())
+			{
+				textureMatrix = CalculateMatrix3(material.Textures.Animators.at(i)->GetBounds());
+			}
+			material.Shader->SetUniform("u_TexTransforms[" + std::to_string(i) + ']', textureMatrix);
+		}
+	}
+
+	void Shader::SetLights(const std::vector<LightSource>& lights) const
+	{
+		for (int i = 0; i < lights.size(); i++)
+		{
+			const LightSource& light = lights.at(i);
+			blt::string strIndex = std::to_string(i);
+			SetUniform("Lights[" + strIndex + "].Position", light.Position);
+			SetUniform("Lights[" + strIndex + "].Color", light.Color);
+			SetUniform("Lights[" + strIndex + "].Intensity", light.Intensity);
+			SetUniform("Lights[" + strIndex + "].Attenuation", light.Attenuation);
+			SetUniform("Lights[" + strIndex + "].Type", 0);
+			SetUniform("Lights[" + strIndex + "].AmbientIntensity", light.AmbientIntensity);
+			SetUniform("Lights[" + strIndex + "].ForwardDirection", light.ForwardDirection);
+			SetUniform("Lights[" + strIndex + "].SpotAngle", light.SpotlightAngle);
+		}
+		SetUniform<int>("u_UsedLights", lights.size());
 	}
 
 	void Shader::SetUniform(const blt::string& location, bool value) const
@@ -431,6 +485,11 @@ namespace Bolt
 		return s_SpriteTextureShader;
 	}
 
+	ResourcePtr<const Shader> Shader::LightingColor()
+	{
+		return s_LightingColorShader;
+	}
+
 	ResourcePtr<const Shader> Shader::LightingTexture()
 	{
 		return s_LightingTextureShader;
@@ -634,6 +693,7 @@ namespace Bolt
 		s_DefaultSkyboxShader = CreateDefaultSkyboxShader();
 		s_SpriteTextureShader = CreateSpriteTextureShader();
 
+		s_LightingColorShader = CreateLightingColorShader();
 		s_LightingTextureShader = CreateLightingTextureShader();
 	}
 
@@ -696,6 +756,19 @@ namespace Bolt
 			;
 		blt::string fSource =
 #include "Source\SpriteTexture_f.glsl"
+			;
+		std::unique_ptr<Shader> shader = Shader::FromSource(vSource, fSource);
+		Shader* ptr = ResourceManager::Get<Shader>(ResourceManager::Register(std::move(shader))).Get();
+		return ptr;
+	}
+
+	const Shader* Shader::CreateLightingColorShader()
+	{
+		blt::string vSource =
+#include "Source\LightingColor_v.glsl"
+			;
+		blt::string fSource =
+#include "Source\LightingColor_f.glsl"
 			;
 		std::unique_ptr<Shader> shader = Shader::FromSource(vSource, fSource);
 		Shader* ptr = ResourceManager::Get<Shader>(ResourceManager::Register(std::move(shader))).Get();

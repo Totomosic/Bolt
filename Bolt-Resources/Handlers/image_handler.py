@@ -47,7 +47,7 @@ def write_image_resource(output_file, input_file, arguments, append):
 # "Argument_Name" : [type, accepted_values, default_value]
 
 RESOURCE_HANDLERS[FILE_TYPE_IMAGE] = ResourceHandler(write_image_resource, {
-        "Name" : ["string", "*", ""],
+        "Name" : ["string", "*", "__FILENAME__"],
         "Min Filter" : ["string", "linear,nearest", "linear"],
         "Mag Filter" : ["string", "linear,nearest", "linear"],
         "Mipmaps" : ["bool", "true,false", "true"]

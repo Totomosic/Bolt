@@ -11,10 +11,10 @@ namespace Bolt
 	std::vector<KeyboardInstance::Key> Input::s_ChangedKeys = std::vector<KeyboardInstance::Key>();
 	std::vector<MouseInstance::Button> Input::s_ChangedButtons = std::vector<MouseInstance::Button>();
 
-	EventDispatcher<KeyEventArgs> Input::KeyPressedEvent = EventDispatcher<KeyEventArgs>(Events::KEY_PRESSED);
-	EventDispatcher<KeyEventArgs> Input::KeyReleasedEvent = EventDispatcher<KeyEventArgs>(Events::KEY_RELEASED);
-	EventDispatcher<MouseEventArgs> Input::MouseButtonPressedEvent = EventDispatcher<MouseEventArgs>(Events::MOUSE_PRESSED);
-	EventDispatcher<MouseEventArgs> Input::MouseButtonReleasedEvent = EventDispatcher<MouseEventArgs>(Events::MOUSE_RELEASED);
+	EventDispatcher<KeyEventArgs> Input::KeyPressedEvent = EventDispatcher<KeyEventArgs>();
+	EventDispatcher<KeyEventArgs> Input::KeyReleasedEvent = EventDispatcher<KeyEventArgs>();
+	EventDispatcher<MouseEventArgs> Input::MouseButtonPressedEvent = EventDispatcher<MouseEventArgs>();
+	EventDispatcher<MouseEventArgs> Input::MouseButtonReleasedEvent = EventDispatcher<MouseEventArgs>();
 
 	const MouseInstance& Input::Mouse()
 	{
@@ -252,6 +252,11 @@ namespace Bolt
 		s_Mouse.RelXScroll = 0;
 		s_Mouse.RelYScroll = 0;
 		s_Mouse.IsVisible = true;
+
+		KeyPressedEvent = EventDispatcher<KeyEventArgs>(Events::KEY_PRESSED);
+		KeyReleasedEvent = EventDispatcher<KeyEventArgs>(Events::KEY_RELEASED);
+		MouseButtonPressedEvent = EventDispatcher<MouseEventArgs>(Events::MOUSE_PRESSED);
+		MouseButtonReleasedEvent = EventDispatcher<MouseEventArgs>(Events::MOUSE_RELEASED);
 	}
 
 	void Input::Terminate()
@@ -261,6 +266,11 @@ namespace Bolt
 		s_ChangedButtons.clear();
 		s_ChangedKeys.clear();
 		s_Window = nullptr;
+
+		KeyPressedEvent.Destroy();
+		KeyReleasedEvent.Destroy();
+		MouseButtonPressedEvent.Destroy();
+		MouseButtonReleasedEvent.Destroy();
 	}
 
 	void Input::Update()

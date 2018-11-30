@@ -26,6 +26,8 @@ namespace Bolt
 		};
 
 	private:
+		IdManager<id_t> m_IdManager;
+
 		GameObjectInfo m_GameObjects[MAX_GAMEOBJECTS];
 		std::vector<GameObject*> m_ActiveGameObjects;
 		mutable std::unordered_map<blt::string, std::vector<GameObject*>> m_Tags;
@@ -50,10 +52,13 @@ namespace Bolt
 		void RemoveTags(GameObject* object, size_t count = 1) const;
 		void RemoveTag(GameObject* object, const blt::string& tag) const;
 
+		void Reset();
+
 		void Transfer(XMLserializer& backend, bool isWriting);
 
 	private:
 		id_t FindNextId() const;
+		void ReleaseId(id_t id) const;
 
 	};
 

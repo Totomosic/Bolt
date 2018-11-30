@@ -8,39 +8,39 @@ namespace Bolt
 	struct BLT_API Color
 	{
 	public:
-		inline static const Bolt::Color White = Bolt::Color(255, 255, 255, 255);
-		inline static const Bolt::Color Black = Bolt::Color(0, 0, 0, 255);
+		static const Bolt::Color White;
+		static const Bolt::Color Black;
 
-		inline static const Bolt::Color Red = Bolt::Color(255, 0, 0, 255);
-		inline static const Bolt::Color Green = Bolt::Color(0, 255, 0, 255);
-		inline static const Bolt::Color Blue = Bolt::Color(0, 0, 255, 255);
+		static const Bolt::Color Red;
+		static const Bolt::Color Green;
+		static const Bolt::Color Blue;
 
-		inline static const Bolt::Color Yellow = Bolt::Color(255, 255, 0, 255);
-		inline static const Bolt::Color Cyan = Bolt::Color(0, 255, 255, 255);
-		inline static const Bolt::Color Magenta = Bolt::Color(255, 0, 255, 255);
+		static const Bolt::Color Yellow;
+		static const Bolt::Color Cyan;
+		static const Bolt::Color Magenta;
 
-		inline static const Bolt::Color CornflowerBlue = Bolt::Color(100, 149, 237, 255);
-		inline static const Bolt::Color Purple = Bolt::Color(128, 0, 128, 255);
-		inline static const Bolt::Color Indigo = Bolt::Color(75, 0, 130, 255);
-		inline static const Bolt::Color Lavender = Bolt::Color(230, 230, 250, 255);
-		inline static const Bolt::Color Violet = Bolt::Color(238, 130, 238, 255);
-		inline static const Bolt::Color Brown = Bolt::Color(165, 42, 42, 255);
-		inline static const Bolt::Color SaddleBrown = Bolt::Color(139, 69, 19, 255);
-		inline static const Bolt::Color Tan = Bolt::Color(210, 180, 140, 255);
-		inline static const Bolt::Color Gold = Bolt::Color(255, 215, 0, 255);
-		inline static const Bolt::Color Orange = Bolt::Color(255, 165, 0, 255);
-		inline static const Bolt::Color Navy = Bolt::Color(0, 0, 128, 255);
-		inline static const Bolt::Color RoyalBlue = Bolt::Color(65, 105, 225, 255);
-		inline static const Bolt::Color SkyBlue = Bolt::Color(135, 206, 235, 255);
-		inline static const Bolt::Color DeepSkyBlue = Bolt::Color(0, 191, 255, 255);
-		inline static const Bolt::Color Olive = Bolt::Color(128, 128, 0, 255);
-		inline static const Bolt::Color DarkGreen = Bolt::Color(0, 100, 0, 255);
-		inline static const Bolt::Color LawnGreen = Bolt::Color(124, 252, 0, 255);
-		inline static const Bolt::Color Pink = Bolt::Color(255, 192, 203, 255);
-		inline static const Bolt::Color HotPink = Bolt::Color(255, 105, 180, 255);
-		inline static const Bolt::Color DeepPink = Bolt::Color(255, 20, 147, 255);
-		inline static const Bolt::Color Teal = Bolt::Color(0, 128, 128, 255);
-		inline static const Bolt::Color Turquoise = Bolt::Color(64, 224, 208, 255);
+		static const Bolt::Color CornflowerBlue;
+		static const Bolt::Color Purple;
+		static const Bolt::Color Indigo;
+		static const Bolt::Color Lavender;
+		static const Bolt::Color Violet;
+		static const Bolt::Color Brown;
+		static const Bolt::Color SaddleBrown;
+		static const Bolt::Color Tan;
+		static const Bolt::Color Gold;
+		static const Bolt::Color Orange;
+		static const Bolt::Color Navy;
+		static const Bolt::Color RoyalBlue;
+		static const Bolt::Color SkyBlue;
+		static const Bolt::Color DeepSkyBlue;
+		static const Bolt::Color Olive;
+		static const Bolt::Color DarkGreen;
+		static const Bolt::Color LawnGreen;
+		static const Bolt::Color Pink;
+		static const Bolt::Color HotPink;
+		static const Bolt::Color DeepPink;
+		static const Bolt::Color Teal;
+		static const Bolt::Color Turquoise;
 
 	public:
 		float r;

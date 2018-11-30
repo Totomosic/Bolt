@@ -160,7 +160,7 @@ namespace Bolt
 		// TODO: CHANGE
 		mesh.Models.push_back({ s_CuboidModel.Get(), Matrix4f::Scale(width, height, depth),{ 0 } });
 		mesh.Materials[0].BaseColor = color;
-		mesh.Materials[0].Shader = Shader::DefaultColor();
+		mesh.Materials[0].Shader = Shader::LightingColor();
 		return Instantiate(mesh, std::move(transform));
 	}
 
@@ -169,6 +169,25 @@ namespace Bolt
 		Mesh mesh;
 		// TODO: CHANGE
 		mesh.Models.push_back({ s_EllipseModel.Get(), Matrix4f::Scale(width, height, depth),{ 0 } });
+		mesh.Materials[0] = material;
+		return Instantiate(mesh, std::move(transform));
+	}
+
+	GameObject* ObjectFactory::Grid(float width, float depth, int xVertices, int zVertices, const Color& color, Transform transform) const
+	{
+		Mesh mesh;
+		// TODO: CHANGE
+		mesh.Models.push_back({ ResourcePtr<Model>(new Model(GridFactory(width, depth, xVertices, zVertices)), true), Matrix4f::Identity(), { 0 } });
+		mesh.Materials[0].BaseColor = color;
+		mesh.Materials[0].Shader = Shader::LightingColor();
+		return Instantiate(mesh, std::move(transform));
+	}
+
+	GameObject* ObjectFactory::Grid(float width, float depth, int xVertices, int zVertices, const Material& material, Transform transform) const
+	{
+		Mesh mesh;
+		// TODO: CHANGE
+		mesh.Models.push_back({ ResourcePtr<Model>(new Model(GridFactory(width, depth, xVertices, zVertices)), true), Matrix4f::Identity(), { 0 } });
 		mesh.Materials[0] = material;
 		return Instantiate(mesh, std::move(transform));
 	}

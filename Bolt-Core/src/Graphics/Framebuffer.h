@@ -6,6 +6,8 @@
 #include "Resources\Textures\Texture2D.h"
 #include "RenderBuffer.h"
 
+#include "Resources\ResourcePtr.h"
+
 namespace Bolt
 {
 
@@ -32,7 +34,7 @@ namespace Bolt
 		Color m_ClearColor;
 		int m_Samples;
 
-		std::unordered_map<ColorBuffer, std::unique_ptr<Texture2D>> m_Textures;
+		std::unordered_map<ColorBuffer, ResourcePtr<Texture2D>> m_Textures;
 		std::unordered_map<ColorBuffer, RenderBuffer> m_RenderBuffers;
 
 	private:
@@ -60,8 +62,8 @@ namespace Bolt
 		bool HasRenderBuffer(ColorBuffer buffer) const;
 		virtual const Texture2D* CreateColorBuffer(ColorBuffer buffer = ColorBuffer::Color0);
 		virtual const Texture2D* CreateDepthBuffer();
-		virtual const Texture2D* CreateColorBuffer(std::unique_ptr<Texture2D>&& texture, ColorBuffer buffer = ColorBuffer::Color0);
-		virtual const Texture2D* CreateDepthBuffer(std::unique_ptr<Texture2D>&& texture);
+		virtual const Texture2D* CreateColorBuffer(const ResourcePtr<Texture2D>& texture, ColorBuffer buffer = ColorBuffer::Color0);
+		virtual const Texture2D* CreateDepthBuffer(const ResourcePtr<Texture2D>&  texture);
 		virtual RenderBuffer CreateColorRenderBuffer(ColorBuffer buffer = ColorBuffer::Color0);
 		virtual RenderBuffer CreateDepthRenderBuffer();
 
@@ -77,8 +79,8 @@ namespace Bolt
 		void Create();
 
 	protected:
-		void CreateColorTexture(const Texture2D* texture, ColorBuffer buffer = ColorBuffer::Color0);
-		void CreateDepthTexture(const Texture2D* texture);
+		void CreateColorTexture(const ResourcePtr<Texture2D>&  texture, ColorBuffer buffer = ColorBuffer::Color0);
+		void CreateDepthTexture(const ResourcePtr<Texture2D>&  texture);
 
 	};
 

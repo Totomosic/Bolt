@@ -23,6 +23,6 @@ void main()
 		diffuse += CalculateDiffuseLighting(Material, Lights[i], f_WorldNormal, Lights[i].Position - f_WorldPosition);
 		specular += CalculateSpecularLighting(Material, Lights[i], f_WorldNormal, Lights[i].Position - f_WorldPosition, f_WorldCameraPosition - f_WorldPosition);
 	}
-	FinalColor = f_Color * vec4(diffuse.xyz + specular.xyz, diffuse.a) * texture(Material.Textures[0], f_TexCoord);	
+	FinalColor = f_Color * vec4(diffuse.xyz + specular.xyz, diffuse.a);
 }
 )"

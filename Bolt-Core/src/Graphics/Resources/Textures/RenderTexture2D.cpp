@@ -7,13 +7,13 @@ namespace Bolt
 	{
 		if (component == TextureComponent::Color)
 		{
-			CreateColorTexture(this, ColorBuffer::Color0);
+			CreateColorBuffer(this, ColorBuffer::Color0);
 			CreateDepthRenderBuffer();
 		}
 		else
 		{
 			CreateColorRenderBuffer(ColorBuffer::Color0);
-			CreateDepthTexture(this);
+			CreateDepthBuffer(this);
 		}
 	}
 

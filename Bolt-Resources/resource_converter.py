@@ -36,6 +36,8 @@ def main():
         pause()
         return
     resource_filename = sys.argv[1]
+    for i in range(2, len(sys.argv)):
+        resource_filename += " " + sys.argv[i]
     filename, extension = os.path.splitext(resource_filename)
 
     file_type = determine_file_type(extension[1:])
@@ -45,6 +47,8 @@ def main():
     resourceHandler = find_resource_handler(file_type)
     arguments = {}
     for key in resourceHandler.arguments:
+        if resourceHandler.arguments[key][2] == "__FILENAME__":
+            resourceHandler.arguments[key][2] = os.path.splitext(os.path.basename(resource_filename))[0]
         get_user_value(key, resourceHandler.arguments[key], arguments)
 
     output_filename = arguments["Name"] + ".bres"
