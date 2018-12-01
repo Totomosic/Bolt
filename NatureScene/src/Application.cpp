@@ -59,6 +59,23 @@ namespace NatureScene
 			Factory.Rectangle(50, HEIGHT, Color::White, Transform({ -25, -HEIGHT / 2, 0 }, Quaternion::FromAngleAxis(-PI / 2, Vector3f::Up())));
 			Factory.Rectangle(50, HEIGHT, Color::White, Transform({ 25, -HEIGHT / 2, 0 }, Quaternion::FromAngleAxis(PI / 2, Vector3f::Up())));
 
+			PyModule exMod("bolt");
+			exMod.Methods().AddMethod("Print", [](PyObject* self, PyObject* args) -> PyObject*
+			{
+				const char* arg;
+				if (!PyArg_ParseTuple(args, "s", &arg))
+				{
+					return nullptr;
+				}
+				SceneManager::CurrentScene().GetLayer("Main").ActiveCamera()->transform().Translate(0, 50, 0);
+				BLT_CORE_INFO(arg);
+				Py_RETURN_NONE;
+			});
+			PyInterpreter::AddModule(exMod);
+			PyInterpreter::Initialize();
+			PyScript script = PyScript::FromFile("ex.py");
+			PyInterpreter::Execute(script);
+
 			SimplexNoise noise(0.002f, 3, 1.25f, 1.0f / 1.25f);
 			{
 				VertexIterator it = ground->Components().GetComponent<MeshRenderer>().Mesh.Models[0].Model->Data().Vertices->Begin();
