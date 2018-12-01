@@ -88,6 +88,9 @@
     <Filter Include="Engine\Scripting\JavaScript">
       <UniqueIdentifier>{0336D403-6F43-02EA-F829-FED46436CEA0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Scripting\Python">
+      <UniqueIdentifier>{CE2B3C35-3A63-84CC-436D-E8EFAF23ABC5}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Engine\Serialization">
       <UniqueIdentifier>{A843FDD7-94D2-86A1-3DF1-9A9C295F9747}</UniqueIdentifier>
     </Filter>
@@ -473,6 +476,12 @@
     <ClInclude Include="src\Engine\Scripting\JavaScript\__JavaScript__.h">
       <Filter>Engine\Scripting\JavaScript</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Scripting\Python\PyScript.h">
+      <Filter>Engine\Scripting\Python</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Scripting\Python\__Python__.h">
+      <Filter>Engine\Scripting\Python</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Scripting\__Scripting__.h">
       <Filter>Engine\Scripting</Filter>
     </ClInclude>
@@ -706,8 +715,9 @@
     </ClInclude>
     <ClInclude Include="src\Logging.h" />
     <ClInclude Include="src\Types.h" />
-    <ClInclude Include="src\Engine\Scripting\Python\__Python__.h" />
-    <ClInclude Include="src\Engine\Scripting\Python\PyScript.h" />
+    <ClInclude Include="src\Engine\Scripting\Python\PyInterpreter.h" />
+    <ClInclude Include="src\Engine\Scripting\Python\PyModule.h" />
+    <ClInclude Include="src\Engine\Scripting\Python\PyMethods.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\BoltTL\string.cpp">
@@ -1009,6 +1019,10 @@
     </ClCompile>
     <ClCompile Include="src\Logging.cpp" />
     <ClCompile Include="src\Types.cpp" />
+    <ClCompile Include="src\Engine\Scripting\Python\PyScript.cpp" />
+    <ClCompile Include="src\Engine\Scripting\Python\PyInterpreter.cpp" />
+    <ClCompile Include="src\Engine\Scripting\Python\PyModule.cpp" />
+    <ClCompile Include="src\Engine\Scripting\Python\PyMethods.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Graphics\Resources\Shaders\Source\DefaultColor_f.glsl">

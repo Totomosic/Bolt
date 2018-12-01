@@ -26,13 +26,21 @@ project "Bolt-Core"
         "%{prj.name}/src/**.glh"
     }
 
+    pchheader "Types.h"
+    pchsource "%{prj.name}/src/Types.cpp"
+    
+    forceincludes 
+    {
+        "Types.h"
+    }
+
     includedirs
     {
         "%{prj.name}/external/",
         "%{prj.name}/src/",
         "%{prj.name}/external/GLEW/include/",
         "%{prj.name}/external/spdlog/include/",
-        "C:/Users/Jordan Morrison/AppData/Local/Programs/Python/Python37/include/"
+        "C:/Users/Jordan Morrison/AppData/Local/Programs/Python/Python37-32/include/"
     }
 
     filter "system:windows"
@@ -70,13 +78,13 @@ project "Aimbooster"
         "Bolt-Core/src/",
         "Bolt-Core/external/GLEW/include/",
         "Bolt-Core/external/spdlog/include/",
-        "C:/Users/Jordan Morrison/AppData/Local/Programs/Python/Python37/include/"
+        "C:/Users/Jordan Morrison/AppData/Local/Programs/Python/Python37-32/include/"
     }
 
     libdirs
     {
         "Bolt-Core/external/**",
-        "C:/Users/Jordan Morrison/AppData/Local/Programs/Python/Python37/libs"
+        "C:/Users/Jordan Morrison/AppData/Local/Programs/Python/Python37-32/libs/"
     }
 
     links
@@ -88,6 +96,7 @@ project "Aimbooster"
         "FreeImage.lib",
         "freetype26d.lib",
         "freetype-gl.lib",
+        "python37.lib",
         "ws2_32.lib"
     }
 
@@ -122,13 +131,13 @@ project "NatureScene"
         "Bolt-Core/src/",
         "Bolt-Core/external/GLEW/include/",
         "Bolt-Core/external/spdlog/include/",
-        "C:/Users/Jordan Morrison/AppData/Local/Programs/Python/Python37/include/"
+        "C:/Users/Jordan Morrison/AppData/Local/Programs/Python/Python37-32/include/"
     }
 
     libdirs
     {
         "Bolt-Core/external/**",
-        "C:/Users/Jordan Morrison/AppData/Local/Programs/Python/Python37/libs"
+        "C:/Users/Jordan Morrison/AppData/Local/Programs/Python/Python37-32/libs/"
     }
 
     links
@@ -140,6 +149,7 @@ project "NatureScene"
         "FreeImage.lib",
         "freetype26d.lib",
         "freetype-gl.lib",
+        "python37.lib",
         "ws2_32.lib"
     }
 
