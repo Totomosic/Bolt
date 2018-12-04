@@ -73,6 +73,7 @@ namespace Bolt
 
 	};
 
-	void BLT_API Destroy(GameObject* object, float timeToDelete);
+	// Deletes given object after timeToDelete seconds. Will not be deleted instantly.
+	void BLT_API Destroy(GameObject* object, float timeToDelete = 0.0f);
 
 }

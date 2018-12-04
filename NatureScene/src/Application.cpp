@@ -13,7 +13,6 @@ namespace NatureScene
 		float MOUSE_Y_SENSITIVITY = 0.005f;
 		Camera* perspectiveCamera;
 		Camera* orthoCamera;
-		Camera* minimapCamera;
 
 		ObjectFactory Factory;
 		Text* fpsText;
@@ -28,9 +27,6 @@ namespace NatureScene
 			Layer* uiLayer = scene->CreateLayer<SceneArray>("UI");
 			perspectiveCamera = scene->CreateCamera(Frustum::Perspective(PI / 3, PrimaryWindow->GetFramebuffer().Aspect(), 1, 1000), ProjectionType::Perspective);
 			orthoCamera = scene->CreateCamera(PrimaryWindow->GetFramebuffer().ViewFrustum(), ProjectionType::Orthographic);
-			minimapCamera = scene->CreateCamera(Projection::Orthographic(-25, 25, -25, 25, 0, 1000));
-			minimapCamera->transform().Translate(0, 100, 0);
-			minimapCamera->transform().Rotate(-PI / 2, Vector3f::Right());
 			layer->SetActiveCamera(perspectiveCamera);
 			uiLayer->SetActiveCamera(orthoCamera);
 
@@ -40,11 +36,6 @@ namespace NatureScene
 
 			ResourcePack resources = ResourceManager::FetchPack("res/resources.pack");
 			ResourceManager::LoadPack(resources);
-
-			RenderTexture2D* minimapTexture = new RenderTexture2D(200, 200);
-			Factory.SetCurrentLayer(uiLayer);
-			Factory.Image(200, 200, minimapTexture, Transform({ Width() - 100, Height() - 100, -5 }));
-			Factory.Ellipse(3, 3, Color::Red, Transform({ Width() - 100, Height() - 100, -3 }));
 
 			Factory.SetCurrentLayer(layer);
 			GameObject* cube = Factory.Cuboid(2, 2, 2, Color::White, Transform({ 0, 0, -10 }));
@@ -58,23 +49,6 @@ namespace NatureScene
 			Factory.Rectangle(50, HEIGHT, Color::White, Transform({ 0, -HEIGHT / 2, -25 }, Quaternion::FromAngleAxis(PI, Vector3f::Up())));
 			Factory.Rectangle(50, HEIGHT, Color::White, Transform({ -25, -HEIGHT / 2, 0 }, Quaternion::FromAngleAxis(-PI / 2, Vector3f::Up())));
 			Factory.Rectangle(50, HEIGHT, Color::White, Transform({ 25, -HEIGHT / 2, 0 }, Quaternion::FromAngleAxis(PI / 2, Vector3f::Up())));
-
-			PyModule exMod("bolt");
-			exMod.Methods().AddMethod("Print", [](PyObject* self, PyObject* args) -> PyObject*
-			{
-				const char* arg;
-				if (!PyArg_ParseTuple(args, "s", &arg))
-				{
-					return nullptr;
-				}
-				SceneManager::CurrentScene().GetLayer("Main").ActiveCamera()->transform().Translate(0, 50, 0);
-				BLT_CORE_INFO(arg);
-				Py_RETURN_NONE;
-			});
-			PyInterpreter::AddModule(exMod);
-			PyInterpreter::Initialize();
-			PyScript script = PyScript::FromFile("ex.py");
-			PyInterpreter::Execute(script);
 
 			SimplexNoise noise(0.002f, 3, 1.25f, 1.0f / 1.25f);
 			{
@@ -97,7 +71,6 @@ namespace NatureScene
 			fpsText = uiLayer->UI().Text("fps ", Color::White, Transform({ 20, Height() - 20, -5 }), AlignH::Left, AlignV::Top);
 			
 			id_t rendererId = Graphics::AddRenderer(std::make_unique<Renderer>(std::make_unique<DefaultRenderMethod>()));
-			Graphics::Schedule().AddPass({ minimapTexture, scene->GetMaskOfLayer(layer->Id()), Graphics::GetRenderer(rendererId),{ { layer->Id(), CameraView{ minimapCamera->ViewMatrix(), minimapCamera->ProjectionMatrix() } } },{},{},{ LightSource{ Vector3f(0, 100, 0) } } });
 			Graphics::Schedule().AddPass({ Graphics::DefaultFramebuffer(), RenderPass::ALL_LAYERS, Graphics::GetRenderer(rendererId),{},{},{},{ LightSource{ Vector3f(0, 100, 0) } } });
 		}
 
@@ -124,12 +97,9 @@ namespace NatureScene
 			{
 				float x = Input::RelMousePosition().x * MOUSE_X_SENSITIVITY;
 				float y = Input::RelMousePosition().y * MOUSE_Y_SENSITIVITY;
-				perspectiveCamera->transform().Rotate(-x, Vector3f::Up(), Space::World);
-				minimapCamera->transform().Rotate(-x, Vector3f::Up(), Space::World);				
+				perspectiveCamera->transform().Rotate(-x, Vector3f::Up(), Space::World);			
 				perspectiveCamera->transform().Rotate(y, Vector3f::Right(), Space::Local);				
 			}
-			minimapCamera->transform().SetLocalPosition(perspectiveCamera->transform().Position().x, minimapCamera->transform().Position().y, perspectiveCamera->transform().Position().z);
-			Graphics::Schedule().GetRenderPass(0).CameraOverrides[SceneManager::CurrentScene().GetLayer("Main").Id()].ViewMatrix = minimapCamera->ViewMatrix();
 
 			if (Input::MouseButtonPressed(MouseButton::Right))
 			{

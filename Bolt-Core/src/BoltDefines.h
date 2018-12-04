@@ -25,7 +25,7 @@ inline blt::string ConvertError(GLenum error)
 #endif
 
 #define BLT_OFFSET_OF(object, field) ((size_t)(&(((object*)(nullptr))->field)))
-#define BLT_BIT(num) (1 << num)
+#define BLT_BIT(x) (1 << x)
 #define BLT_IS_BIT_SET(var, num) (!!((var) & BLT_BIT(num)))
 #define BLT_CONTAINS_BIT(var, bitvalue) (!!(((int)var) & ((int)bitvalue)))
 

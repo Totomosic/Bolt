@@ -1,12 +1,14 @@
 #pragma once
 #include "Types.h"
+#include "Events.h"
 
 namespace Bolt
 {
 
-	struct BLT_API EventArgs
-	{
 
+	class BLT_API Event
+	{
+		
 	};
 
 }

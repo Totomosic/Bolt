@@ -5,7 +5,8 @@ namespace Bolt
 {
 
 	Window::Window(int width, int height, const blt::string& title, const WindowCreateInfo& info)
-		: m_WindowHandle(nullptr), m_Framebuffer(), m_Title(title), m_CreateInfo(info)
+		: m_WindowHandle(nullptr), m_Framebuffer(), m_Title(title), m_CreateInfo(info),
+		OnResize(Events::WINDOW_RESIZE), OnMoved(Events::WINDOW_MOVED), OnFocus(Events::WINDOW_FOCUSED), OnFocusLost(Events::WINDOW_LOST_FOCUS)
 	{
 		m_Framebuffer.GetViewport().Width = width;
 		m_Framebuffer.GetViewport().Height = height;
@@ -158,9 +159,15 @@ namespace Bolt
 
 	void Window::SetSize(int width, int height)
 	{
+		std::unique_ptr<WindowResizeEvent> args = std::make_unique<WindowResizeEvent>();
+		args->OldWidth = Width();
+		args->OldHeight = Height();
+		args->NewWidth = width;
+		args->NewHeight = height;
 		m_Framebuffer.GetViewport().Width = width;
 		m_Framebuffer.GetViewport().Height = height;
 		glfwSetWindowSize(m_WindowHandle, Width(), Height());
+		OnResize.Post(std::move(args));
 	}
 
 	void Window::SetWidth(int width)

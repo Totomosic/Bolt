@@ -23,7 +23,7 @@ namespace Aimbooster
 		CurrentSize = size;
 		if (CurrentTime >= Lifetime)
 		{
-			Destroy(gameObject(), 0.0f);
+			Destroy(gameObject());
 			EventManager::Post(TARGET_FAILED_EVENT);
 		}
 		else
@@ -34,7 +34,7 @@ namespace Aimbooster
 				float height = camera()->ViewHeight();
 				if (Vector2f::Distance(Input::MousePosition(width, height).xy(), gameObject()->transform().Position().xy()) <= CurrentSize)
 				{
-					Destroy(gameObject(), 0.0f);
+					Destroy(gameObject());
 					GameObject* hitLocation = Factory->Ellipse(5, 5, Color::White, Transform({ Input::MousePosition(width, height).x, Input::MousePosition(width, height).y, gameObject()->transform().Position().z + 1 }));
 					Destroy(hitLocation, 1.0f);
 					EventManager::Post(TARGET_HIT_EVENT);

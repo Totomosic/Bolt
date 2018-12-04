@@ -164,9 +164,6 @@
     <ClInclude Include="src\Core\Color.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Events\EventArgs.h">
-      <Filter>Core\Events</Filter>
-    </ClInclude>
     <ClInclude Include="src\Core\Events\EventDispatcher.h">
       <Filter>Core\Events</Filter>
     </ClInclude>
@@ -500,9 +497,6 @@
     <ClInclude Include="src\Engine\User\Input.h">
       <Filter>Engine\User</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\User\InputEventArgs.h">
-      <Filter>Engine\User</Filter>
-    </ClInclude>
     <ClInclude Include="src\Engine\User\__User__.h">
       <Filter>Engine\User</Filter>
     </ClInclude>
@@ -718,6 +712,14 @@
     <ClInclude Include="src\Engine\Scripting\Python\PyInterpreter.h" />
     <ClInclude Include="src\Engine\Scripting\Python\PyModule.h" />
     <ClInclude Include="src\Engine\Scripting\Python\PyMethods.h" />
+    <ClInclude Include="src\Core\BoltTL\string_template.h" />
+    <ClInclude Include="src\Core\Events\Event.h">
+      <Filter>Core\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\User\InputEvents.h">
+      <Filter>Engine\User</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphics\WindowEvents.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\BoltTL\string.cpp">

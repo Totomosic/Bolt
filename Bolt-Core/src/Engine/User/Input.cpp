@@ -11,10 +11,12 @@ namespace Bolt
 	std::vector<KeyboardInstance::Key> Input::s_ChangedKeys = std::vector<KeyboardInstance::Key>();
 	std::vector<MouseInstance::Button> Input::s_ChangedButtons = std::vector<MouseInstance::Button>();
 
-	EventDispatcher<KeyEventArgs> Input::KeyPressedEvent = EventDispatcher<KeyEventArgs>();
-	EventDispatcher<KeyEventArgs> Input::KeyReleasedEvent = EventDispatcher<KeyEventArgs>();
-	EventDispatcher<MouseEventArgs> Input::MouseButtonPressedEvent = EventDispatcher<MouseEventArgs>();
-	EventDispatcher<MouseEventArgs> Input::MouseButtonReleasedEvent = EventDispatcher<MouseEventArgs>();
+	EventDispatcher<Bolt::KeyPressedEvent> Input::OnKeyPressed = EventDispatcher<Bolt::KeyPressedEvent>();
+	EventDispatcher<Bolt::KeyReleasedEvent> Input::OnKeyReleased = EventDispatcher<Bolt::KeyReleasedEvent>();
+	EventDispatcher<Bolt::MousePressedEvent> Input::OnMousePressed = EventDispatcher<Bolt::MousePressedEvent>();
+	EventDispatcher<Bolt::MouseReleasedEvent> Input::OnMouseReleased = EventDispatcher<Bolt::MouseReleasedEvent>();
+	EventDispatcher<Bolt::MouseScrolledEvent> Input::OnMouseScrolled = EventDispatcher<Bolt::MouseScrolledEvent>();
+	EventDispatcher<Bolt::MouseMovedEvent> Input::OnMouseMoved = EventDispatcher<Bolt::MouseMovedEvent>();
 
 	const MouseInstance& Input::Mouse()
 	{
@@ -253,10 +255,12 @@ namespace Bolt
 		s_Mouse.RelYScroll = 0;
 		s_Mouse.IsVisible = true;
 
-		KeyPressedEvent = EventDispatcher<KeyEventArgs>(Events::KEY_PRESSED);
-		KeyReleasedEvent = EventDispatcher<KeyEventArgs>(Events::KEY_RELEASED);
-		MouseButtonPressedEvent = EventDispatcher<MouseEventArgs>(Events::MOUSE_PRESSED);
-		MouseButtonReleasedEvent = EventDispatcher<MouseEventArgs>(Events::MOUSE_RELEASED);
+		OnKeyPressed = EventDispatcher<Bolt::KeyPressedEvent>(Events::KEY_PRESSED);
+		OnKeyReleased = EventDispatcher<Bolt::KeyReleasedEvent>(Events::KEY_RELEASED);
+		OnMousePressed = EventDispatcher<Bolt::MousePressedEvent>(Events::MOUSE_PRESSED);
+		OnMouseReleased = EventDispatcher<Bolt::MouseReleasedEvent>(Events::MOUSE_RELEASED);
+		OnMouseScrolled = EventDispatcher<Bolt::MouseScrolledEvent>(Events::MOUSE_SCROLLED);
+		OnMouseMoved = EventDispatcher<Bolt::MouseMovedEvent>(Events::MOUSE_POSITION_MOVED);
 	}
 
 	void Input::Terminate()
@@ -267,10 +271,12 @@ namespace Bolt
 		s_ChangedKeys.clear();
 		s_Window = nullptr;
 
-		KeyPressedEvent.Destroy();
-		KeyReleasedEvent.Destroy();
-		MouseButtonPressedEvent.Destroy();
-		MouseButtonReleasedEvent.Destroy();
+		OnKeyPressed.Destroy();
+		OnKeyReleased.Destroy();
+		OnMousePressed.Destroy();
+		OnMouseReleased.Destroy();
+		OnMouseScrolled.Destroy();
+		OnMouseMoved.Destroy();
 	}
 
 	void Input::Update()
@@ -291,6 +297,12 @@ namespace Bolt
 		s_Mouse.RelY = (float)mouseY - s_Mouse.Y;
 		s_Mouse.X = (float)mouseX;
 		s_Mouse.Y = (float)mouseY;
+		std::unique_ptr<Bolt::MouseMovedEvent> args = std::make_unique<Bolt::MouseMovedEvent>();
+		args->x = (float)mouseX;
+		args->y = (float)mouseY;
+		args->relX = s_Mouse.RelX;
+		args->relY = s_Mouse.RelY;
+		OnMouseMoved.Post(std::move(args));
 	}
 
 	void Input::MouseScrollCallback(GLFWwindow* window, double xScroll, double yScroll)
@@ -299,6 +311,10 @@ namespace Bolt
 		s_Mouse.RelYScroll = (float)yScroll;
 		s_Mouse.XScroll += (float)xScroll;
 		s_Mouse.YScroll += (float)yScroll;
+		std::unique_ptr<Bolt::MouseScrolledEvent> args = std::make_unique<Bolt::MouseScrolledEvent>();
+		args->xOffset = (float)xScroll;
+		args->yOffset = (float)yScroll;
+		OnMouseScrolled.Post(std::move(args));
 	}
 
 	void Input::MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
@@ -307,16 +323,23 @@ namespace Bolt
 		{
 			s_Mouse.Buttons[button].State = (ButtonState)action;
 			s_ChangedButtons.push_back({ (MouseButton)button, (ButtonState)action });
-			std::unique_ptr<MouseEventArgs> args = std::make_unique<MouseEventArgs>();
+		}
+		if ((ButtonState)action == ButtonState::Pressed || action == GLFW_REPEAT)
+		{
+			std::unique_ptr<Bolt::MousePressedEvent> args = std::make_unique<Bolt::MousePressedEvent>();
 			args->Button = (MouseButton)button;
-			if ((ButtonState)action == ButtonState::Pressed)
-			{
-				MouseButtonPressedEvent.Post(std::move(args));
-			}
-			else
-			{
-				MouseButtonReleasedEvent.Post(std::move(args));
-			}
+			args->IsRepeat = action == GLFW_REPEAT;
+			args->x = s_Mouse.X;
+			args->y = s_Mouse.Y;
+			OnMousePressed.Post(std::move(args));
+		}
+		else
+		{
+			std::unique_ptr<Bolt::MouseReleasedEvent> args = std::make_unique<Bolt::MouseReleasedEvent>();
+			args->Button = (MouseButton)button;
+			args->x = s_Mouse.X;
+			args->y = s_Mouse.Y;
+			OnMouseReleased.Post(std::move(args));
 		}
 	}
 
@@ -326,16 +349,19 @@ namespace Bolt
 		{
 			s_Keyboard.Keys[key].State = (ButtonState)action;
 			s_ChangedKeys.push_back({ (Keycode)key, (ButtonState)action });
-			std::unique_ptr<KeyEventArgs> args = std::make_unique<KeyEventArgs>();
-			args->Key = (Keycode)key;
-			if ((ButtonState)action == ButtonState::Pressed)
-			{
-				KeyPressedEvent.Post(std::move(args));
-			}
-			else
-			{
-				KeyReleasedEvent.Post(std::move(args));
-			}
+		}
+		if ((ButtonState)action == ButtonState::Pressed || action == GLFW_REPEAT)
+		{
+			std::unique_ptr<Bolt::KeyPressedEvent> args = std::make_unique<Bolt::KeyPressedEvent>();
+			args->KeyCode = (Keycode)key;
+			args->IsRepeat = action == GLFW_REPEAT;
+			OnKeyPressed.Post(std::move(args));
+		}
+		else
+		{
+			std::unique_ptr<Bolt::KeyReleasedEvent> args = std::make_unique<Bolt::KeyReleasedEvent>();
+			args->KeyCode = (Keycode)key;
+			OnKeyReleased.Post(std::move(args));
 		}
 	}
 

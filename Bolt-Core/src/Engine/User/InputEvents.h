@@ -123,16 +123,50 @@ namespace Bolt
 		None = BLT_BIT(10)
 	};
 
-	struct BLT_API KeyEventArgs : public EventArgs
+	struct BLT_API KeyPressedEvent : public Event
 	{
 	public:
-		Keycode Key;
+		Keycode KeyCode;
+		bool IsRepeat;
 	};
 
-	struct BLT_API MouseEventArgs : public EventArgs
+	struct BLT_API KeyReleasedEvent : public Event
+	{
+	public:
+		Keycode KeyCode;
+	};
+
+	struct BLT_API MouseMovedEvent : public Event
+	{
+	public:
+		float x;
+		float y;
+		float relX;
+		float relY;
+	};
+
+	struct BLT_API MousePressedEvent : public Event
 	{
 	public:
 		MouseButton Button;
+		bool IsRepeat;
+		float x;
+		float y;
+	};
+
+	struct BLT_API MouseReleasedEvent : public Event
+	{
+	public:
+		MouseButton Button;
+		float x;
+		float y;
+	};
+
+	struct BLT_API MouseScrolledEvent : public Event
+	{
+	public:
+		float xOffset;
+		float yOffset;
 	};
 
 }
