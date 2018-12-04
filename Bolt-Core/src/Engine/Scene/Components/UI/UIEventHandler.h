@@ -5,7 +5,7 @@
 namespace Bolt
 {
 
-	struct BLT_API UIEventArgs : public EventArgs
+	struct BLT_API UIEvent : public Event
 	{
 	public:
 		GameObject* Object;
@@ -17,10 +17,10 @@ namespace Bolt
 		bool m_IsHovering;
 
 	public:
-		EventDispatcher<UIEventArgs> OnClicked;
-		EventDispatcher<UIEventArgs> OnHoverEntry;
-		EventDispatcher<UIEventArgs> OnHover;
-		EventDispatcher<UIEventArgs> OnHoverExit;
+		EventDispatcher<UIEvent> OnClicked;
+		EventDispatcher<UIEvent> OnHoverEntry;
+		EventDispatcher<UIEvent> OnHover;
+		EventDispatcher<UIEvent> OnHoverExit;
 
 	public:
 		UIEventHandler();

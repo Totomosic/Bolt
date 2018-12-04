@@ -1,5 +1,5 @@
 #pragma once
-#include "EventArgs.h"
+#include "Event.h"
 #include "IdManager.h"
 
 namespace Bolt
@@ -8,13 +8,14 @@ namespace Bolt
 	class BLT_API EventManager
 	{
 	public:
-		using Listener = std::function<void(id_t, const EventArgs*)>;
+		// Event handler function, returns whether the event has been handled and should not be passed on to other listeners
+		using Listener = std::function<bool(id_t, Event&)>;
 
 		struct BLT_API EventListener
 		{
 		public:
 			Listener Callback;
-			id_t InstanceId;
+			id_t DispatcherId;
 			id_t ListenerId;
 		};
 
@@ -22,8 +23,8 @@ namespace Bolt
 		{
 		public:
 			id_t EventId;
-			id_t InstanceId;
-			std::unique_ptr<EventArgs> Args;
+			id_t DispatcherId;
+			std::unique_ptr<Event> Args;
 		};
 
 		struct BLT_API ListenerInfo
@@ -38,8 +39,8 @@ namespace Bolt
 		static constexpr uint MAX_EVENTS = 500;
 		// Create user events with this Id, eg. USER_EVENT = EventManager::USER_EVENT_ID + 0
 		static constexpr id_t USER_EVENT_ID = 100000;
-		// Use to receive events from all instances Posting an event
-		static constexpr id_t IGNORE_INSTANCE_ID = (id_t)-1;
+		// Use to receive events from all instances posting an event
+		static constexpr id_t IGNORE_DISPATCHER_ID = (id_t)-1;
 
 	private:
 		static EventInfo s_EventQueue[MAX_EVENTS];
@@ -48,30 +49,32 @@ namespace Bolt
 		static std::unordered_map<id_t, id_t> s_ListenerMap;
 
 		static IdManager<id_t> s_ListenerIdManager;
-		static IdManager<id_t> s_InstanceIdManager;
+		static IdManager<id_t> s_DispatcherIdManager;
 
 	public:
 		EventManager() = delete;
 
 		// Get a new Id for an instance
-		static id_t GetNextInstanceId();
+		static id_t GetNextDispatcherId();
 		// Release instance Id
-		static void ReleaseInstanceId(id_t id);
+		static void ReleaseDispatcherId(id_t id);
 		
-		// Register a listener to a specific event, returns a Listener Id
-		static id_t Subscribe(id_t eventId, const Listener& listener, id_t instanceId = IGNORE_INSTANCE_ID);
+		// Register a listener to a specific event from an dispatcher with given id, returns a Listener Id
+		static id_t Subscribe(id_t eventId, const Listener& listener, id_t dispatcherId);
+		// Register a listener to a specific event from any dispatcher, returns a listener Id
+		static id_t Subscribe(id_t eventId, const Listener& listener);
 		// Stop a listener from receiving events
 		static void Unsubscribe(id_t listenerId);
 		// Update a listener
 		static void UpdateListener(id_t listenerId, const Listener& listener);
 
-		// Post a new event with given args from a specific instance
-		static void Post(id_t eventId, id_t instanceId = IGNORE_INSTANCE_ID, std::unique_ptr<EventArgs>&& args = nullptr);
+		// Post a new event with given args from a specific dispatcher
+		static void Post(id_t eventId, id_t dispatcherId, std::unique_ptr<Event>&& args = nullptr);
+		// Post a new event with given args
+		static void Post(id_t eventId, std::unique_ptr<Event>&& args = nullptr);
 
 		// Called automatically every frame before Application::Update() runs, processes all events from previous frame
 		static void FlushEvents();
-
-	private:
 		static id_t FindNextListenerId();
 		static void ReleaseListenerId(id_t id);
 

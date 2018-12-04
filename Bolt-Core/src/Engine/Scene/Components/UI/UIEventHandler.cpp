@@ -17,25 +17,25 @@ namespace Bolt
 		bool hovering = IsHovering();
 		if (hovering)
 		{
-			auto args = std::make_unique<UIEventArgs>();
+			auto args = std::make_unique<UIEvent>();
 			args->Object = gameObject();
 			OnHover.Post(std::move(args));
 		}
 		if (!m_IsHovering && hovering)
 		{
-			auto args = std::make_unique<UIEventArgs>();
+			auto args = std::make_unique<UIEvent>();
 			args->Object = gameObject();
 			OnHoverEntry.Post(std::move(args));
 		}
 		if (m_IsHovering && !hovering)
 		{
-			auto args = std::make_unique<UIEventArgs>();
+			auto args = std::make_unique<UIEvent>();
 			args->Object = gameObject();
 			OnHoverExit.Post(std::move(args));
 		}
 		if (m_IsHovering && Input::MouseButtonReleased(MouseButton::Left))
 		{
-			auto args = std::make_unique<UIEventArgs>();
+			auto args = std::make_unique<UIEvent>();
 			args->Object = gameObject();
 			OnClicked.Post(std::move(args));
 		}

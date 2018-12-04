@@ -15,7 +15,6 @@ namespace blt
 #include <iostream>
 #include <vector>
 #include "iterator.h"
-#include "vector.h"
 
 namespace blt
 {

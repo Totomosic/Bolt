@@ -1,6 +1,6 @@
 #pragma once
 #include "Bolt-Graphics.h"
-#include "InputEventArgs.h"
+#include "InputEvents.h"
 
 #define BLT_MAX_KEYS 256
 #define BLT_MAX_MOUSE_BUTTONS 32
@@ -61,10 +61,12 @@ namespace Bolt
 		static std::vector<MouseInstance::Button> s_ChangedButtons;
 
 	public:
-		static EventDispatcher<KeyEventArgs> KeyPressedEvent;
-		static EventDispatcher<KeyEventArgs> KeyReleasedEvent;
-		static EventDispatcher<MouseEventArgs> MouseButtonPressedEvent;
-		static EventDispatcher<MouseEventArgs> MouseButtonReleasedEvent;
+		static EventDispatcher<Bolt::KeyPressedEvent> OnKeyPressed;
+		static EventDispatcher<Bolt::KeyReleasedEvent> OnKeyReleased;
+		static EventDispatcher<Bolt::MousePressedEvent> OnMousePressed;
+		static EventDispatcher<Bolt::MouseReleasedEvent> OnMouseReleased;
+		static EventDispatcher<Bolt::MouseScrolledEvent> OnMouseScrolled;
+		static EventDispatcher<Bolt::MouseMovedEvent> OnMouseMoved;
 
 	public:
 		Input() = delete;

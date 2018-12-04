@@ -10,6 +10,7 @@ namespace Bolt
 		const VertexArray* Vertices = nullptr;
 		const IndexBuffer* Indices = nullptr;
 		Matrix4f Transform = Matrix4f::Identity();
+		// use to limit the number of indices used when rendering
 		uint IndexOverride = (uint)-1;
 	};
 

@@ -8,26 +8,31 @@ namespace Bolt
 	std::unordered_map<id_t, std::vector<EventManager::EventListener>> EventManager::s_Listeners = std::unordered_map<id_t, std::vector<EventManager::EventListener>>();
 	std::unordered_map<id_t, id_t> EventManager::s_ListenerMap = std::unordered_map<id_t, id_t>();
 
-	IdManager<id_t> EventManager::s_ListenerIdManager = IdManager<id_t>(0, EventManager::IGNORE_INSTANCE_ID - 1);
-	IdManager<id_t> EventManager::s_InstanceIdManager = IdManager<id_t>(0, EventManager::IGNORE_INSTANCE_ID - 1);
+	IdManager<id_t> EventManager::s_ListenerIdManager = IdManager<id_t>(0, EventManager::IGNORE_DISPATCHER_ID - 1);
+	IdManager<id_t> EventManager::s_DispatcherIdManager = IdManager<id_t>(0, EventManager::IGNORE_DISPATCHER_ID - 1);
 
-	id_t EventManager::GetNextInstanceId()
+	id_t EventManager::GetNextDispatcherId()
 	{
-		return s_InstanceIdManager.GetNextId();
+		return s_DispatcherIdManager.GetNextId();
 	}
 
-	void EventManager::ReleaseInstanceId(id_t id)
+	void EventManager::ReleaseDispatcherId(id_t id)
 	{
-		s_InstanceIdManager.ReleaseId(id);
+		s_DispatcherIdManager.ReleaseId(id);
 	}
 
-	id_t EventManager::Subscribe(id_t eventId, const EventManager::Listener& listener, id_t instanceId)
+	id_t EventManager::Subscribe(id_t eventId, const EventManager::Listener& listener, id_t dispatcherId)
 	{
 		id_t listenerId = FindNextListenerId();
 		id_t listenerIndex = s_Listeners[eventId].size();
-		s_Listeners.at(eventId).push_back({ listener, instanceId, listenerId });
+		s_Listeners.at(eventId).push_back({ listener, dispatcherId, listenerId });
 		s_ListenerMap[listenerId] = eventId;
 		return listenerId;
+	}
+
+	id_t EventManager::Subscribe(id_t eventId, const EventManager::Listener& listener)
+	{
+		return Subscribe(eventId, listener, EventManager::IGNORE_DISPATCHER_ID);
 	}
 
 	void EventManager::Unsubscribe(id_t listenerId)
@@ -58,10 +63,15 @@ namespace Bolt
 		}
 	}
 
-	void EventManager::Post(id_t eventId, id_t instanceId, std::unique_ptr<EventArgs>&& args)
+	void EventManager::Post(id_t eventId, id_t dispatcherId, std::unique_ptr<Event>&& args)
 	{
 		BLT_ASSERT(s_Tail < MAX_EVENTS, "Event overflow");
-		s_EventQueue[s_Tail++] = { eventId, instanceId, std::move(args) };
+		s_EventQueue[s_Tail++] = { eventId, dispatcherId, std::move(args) };
+	}
+
+	void EventManager::Post(id_t eventId, std::unique_ptr<Event>&& args)
+	{
+		return Post(eventId, EventManager::IGNORE_DISPATCHER_ID, std::move(args));
 	}
 
 	void EventManager::FlushEvents()
@@ -71,9 +81,13 @@ namespace Bolt
 			EventInfo& e = s_EventQueue[i];
 			for (auto& listener : s_Listeners[e.EventId])
 			{
-				if (e.InstanceId == listener.InstanceId || listener.InstanceId == EventManager::IGNORE_INSTANCE_ID)
+				if (listener.DispatcherId == EventManager::IGNORE_DISPATCHER_ID || e.DispatcherId == listener.DispatcherId)
 				{
-					listener.Callback(e.EventId, e.Args.get());
+					if (listener.Callback(e.EventId, *e.Args))
+					{
+						// Event has already been handled and should not be propogated to other event listeners
+						break;
+					}
 				}
 			}
 		}

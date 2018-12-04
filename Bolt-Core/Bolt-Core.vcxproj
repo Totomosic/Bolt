@@ -122,12 +122,13 @@
     <ClInclude Include="src\Bolt-Graphics.h" />
     <ClInclude Include="src\BoltDefines.h" />
     <ClInclude Include="src\BoltEngine.h" />
+    <ClInclude Include="src\Core\BoltTL\string_template.h" />
     <ClInclude Include="src\Core\BoltTL\__BoltTL__.h" />
     <ClInclude Include="src\Core\BoltTL\iterator.h" />
     <ClInclude Include="src\Core\BoltTL\string.h" />
     <ClInclude Include="src\Core\BoltTL\vector.h" />
     <ClInclude Include="src\Core\Color.h" />
-    <ClInclude Include="src\Core\Events\EventArgs.h" />
+    <ClInclude Include="src\Core\Events\Event.h" />
     <ClInclude Include="src\Core\Events\EventDispatcher.h" />
     <ClInclude Include="src\Core\Events\EventManager.h" />
     <ClInclude Include="src\Core\Events\Events.h" />
@@ -242,7 +243,7 @@
     <ClInclude Include="src\Engine\Serialization\XMLserializer.h" />
     <ClInclude Include="src\Engine\Serialization\__Serialization__.h" />
     <ClInclude Include="src\Engine\User\Input.h" />
-    <ClInclude Include="src\Engine\User\InputEventArgs.h" />
+    <ClInclude Include="src\Engine\User\InputEvents.h" />
     <ClInclude Include="src\Engine\User\__User__.h" />
     <ClInclude Include="src\Graphics\Buffers\ArrayDescriptor.h" />
     <ClInclude Include="src\Graphics\Buffers\Buffer.h" />
@@ -313,6 +314,7 @@
     <ClInclude Include="src\Graphics\Structs\WindowCreateInfo.h" />
     <ClInclude Include="src\Graphics\Structs\__Structs__.h" />
     <ClInclude Include="src\Graphics\Window.h" />
+    <ClInclude Include="src\Graphics\WindowEvents.h" />
     <ClInclude Include="src\Logging.h" />
     <ClInclude Include="src\Types.h" />
   </ItemGroup>

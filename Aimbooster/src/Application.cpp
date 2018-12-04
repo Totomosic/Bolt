@@ -65,17 +65,19 @@ namespace Aimbooster
 
 			targetTimer = Time::CreateTimer(1 / TARGETS_PER_SECOND, std::bind(&App::CreateTarget, this));
 			Time::GetTimer(targetTimer)->Stop();
-			EventManager::Subscribe(TARGET_HIT_EVENT, [this](id_t eventId, const EventArgs* args)
+			EventManager::Subscribe(TARGET_HIT_EVENT, [this](id_t eventId, Event& args) -> bool
 			{
 				this->score++;
+				return false;
 			});
-			EventManager::Subscribe(TARGET_FAILED_EVENT, [this](id_t eventId, const EventArgs* args)
+			EventManager::Subscribe(TARGET_FAILED_EVENT, [this](id_t eventId, Event& args) -> bool
 			{
 				this->score--;
+				return false;
 			});
 
 			id_t renderer = Graphics::AddRenderer(std::make_unique<Renderer>(std::make_unique<DefaultRenderMethod>()));
-			Graphics::Schedule().RenderPasses.push_back({ Graphics::DefaultFramebuffer(), RenderPass::ALL_LAYERS, Graphics::GetRenderer(renderer), {}, {  } });
+			Graphics::Schedule().AddPass({ Graphics::DefaultFramebuffer(), RenderPass::ALL_LAYERS, Graphics::GetRenderer(renderer), {}, {  } });
 
 			CreateTitleScreen();
 		}
@@ -123,24 +125,28 @@ namespace Aimbooster
 			UIsurface* quitButton = mainLayer->UI().Rectangle(150, 50, Color(200, 0, 0), Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() - 550, -5 }));
 			quitButton->Text("Quit", Color::White, Transform({ 0, 0, 1 }));
 
-			playButton->EventHandler().OnClicked.Subscribe([this](id_t eventId, const UIEventArgs* args)
+			playButton->EventHandler().OnClicked.Subscribe([this](id_t eventId, UIEvent& args) -> bool
 			{
 				CreateGameScreen();
+				return false;
 			});
 
-			playButton->EventHandler().OnHoverEntry.Subscribe([](id_t eventId, const UIEventArgs* args)
+			playButton->EventHandler().OnHoverEntry.Subscribe([](id_t eventId, UIEvent& args) -> bool
 			{
-				args->Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0].BaseColor = Color::Green;
+				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0].BaseColor = Color::Green;
+				return false;
 			});
 
-			playButton->EventHandler().OnHoverExit.Subscribe([](id_t eventId, const UIEventArgs* args)
+			playButton->EventHandler().OnHoverExit.Subscribe([](id_t eventId, UIEvent& args) -> bool
 			{
-				args->Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0].BaseColor = Color(0, 200, 0 );
+				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0].BaseColor = Color(0, 200, 0 );
+				return false;
 			});
 
-			quitButton->EventHandler().OnClicked.Subscribe([this](id_t eventId, const UIEventArgs* args)
+			quitButton->EventHandler().OnClicked.Subscribe([this](id_t eventId, UIEvent& args) -> bool
 			{
 				PrimaryWindow->Close();
+				return false;
 			});
 			
 		}
