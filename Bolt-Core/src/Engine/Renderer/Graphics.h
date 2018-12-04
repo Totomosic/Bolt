@@ -1,8 +1,6 @@
 #pragma once
 #include "Bolt-Graphics.h"
-#include "RenderSchedule.h"
-#include "Renderer.h"
-#include "..\Scene\__Scene__.h"
+#include "SceneRenderer.h"
 
 namespace Bolt
 {
@@ -15,8 +13,6 @@ namespace Bolt
 
 	private:
 		static Window* s_Window;
-		static RenderSchedule s_Schedule;
-		static std::vector<std::unique_ptr<Renderer>> s_Renderers;
 
 	public:
 		Graphics() = delete;
@@ -29,9 +25,6 @@ namespace Bolt
 		static void Text(const blt::string& text, const ResourcePtr<const Font>& font, float x, float y, float z, const Color& color = Color::White, AlignH horizontalAlign = AlignH::Center, AlignV verticalAlign = AlignV::Center, id_t layerId = 0);
 		static void Image(float x, float y, float z, float w, float h, const ResourcePtr<const Texture2D>& texture, const Quaternion& orientation = Quaternion::Identity(), id_t layerId = 0);
 
-		static RenderSchedule& Schedule();
-		static id_t AddRenderer(std::unique_ptr<Renderer>&& renderer);
-		static const Renderer* GetRenderer(id_t id);
 		static void RenderScene();
 
 		friend class Initializer;

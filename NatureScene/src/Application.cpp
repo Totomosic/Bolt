@@ -69,9 +69,6 @@ namespace NatureScene
 			}
 
 			fpsText = uiLayer->UI().Text("fps ", Color::White, Transform({ 20, Height() - 20, -5 }), AlignH::Left, AlignV::Top);
-			
-			id_t rendererId = Graphics::AddRenderer(std::make_unique<Renderer>(std::make_unique<DefaultRenderMethod>()));
-			Graphics::Schedule().AddPass({ Graphics::DefaultFramebuffer(), RenderPass::ALL_LAYERS, Graphics::GetRenderer(rendererId),{},{},{},{ LightSource{ Vector3f(0, 100, 0) } } });
 		}
 
 		void Update() override

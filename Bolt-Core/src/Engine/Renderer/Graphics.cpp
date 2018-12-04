@@ -8,9 +8,6 @@ namespace Bolt
 	Model* Graphics::s_Rectangle = nullptr;
 	Model* Graphics::s_Line = nullptr;
 
-	RenderSchedule Graphics::s_Schedule = RenderSchedule();
-	std::vector<std::unique_ptr<Renderer>> Graphics::s_Renderers = std::vector<std::unique_ptr<Renderer>>();
-
 	const Framebuffer* Graphics::DefaultFramebuffer()
 	{
 		return &s_Window->GetFramebuffer();
@@ -87,42 +84,14 @@ namespace Bolt
 		object->Components().AddComponent(std::make_unique<MeshRenderer>(mesh));
 	}
 
-	RenderSchedule& Graphics::Schedule()
-	{
-		return s_Schedule;
-	}
-
-	id_t Graphics::AddRenderer(std::unique_ptr<Renderer>&& renderer)
-	{
-		id_t id = s_Renderers.size();
-		s_Renderers.push_back(std::move(renderer));
-		return id;
-	}
-
-	const Renderer* Graphics::GetRenderer(id_t id)
-	{
-		return s_Renderers.at(id).get();
-	}
-
 	void Graphics::RenderScene()
 	{
-		if (s_Schedule.RenderPasses().empty())
+		if (&SceneManager::CurrentScene() == nullptr)
 		{
-			BLT_CORE_WARN("Attempted to Render Scene with no RenderPasses setup");
-			BLT_CORE_WARN("Use Graphics::Schedule() to add render passes");
+			BLT_CORE_WARN("No Active Scene");
+			return;
 		}
-		std::vector<const Framebuffer*> clearedFramebuffers;
-		for (const RenderPass& pass : s_Schedule.RenderPasses())
-		{
-			pass.PassRenderer->Begin(&pass);
-			if (std::find(clearedFramebuffers.begin(), clearedFramebuffers.end(), pass.RenderTarget) == clearedFramebuffers.end())
-			{
-				pass.RenderTarget->Clear();
-				clearedFramebuffers.push_back(pass.RenderTarget);
-			}
-			pass.PassRenderer->Render(&pass);
-			pass.PassRenderer->End(&pass);
-		}
+		SceneRenderer::Render({ Graphics::DefaultFramebuffer(), false }, SceneManager::CurrentScene());
 	}
 
 	void Graphics::Initialize(Window* window)
