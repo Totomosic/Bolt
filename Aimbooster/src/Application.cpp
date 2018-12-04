@@ -76,9 +76,6 @@ namespace Aimbooster
 				return false;
 			});
 
-			id_t renderer = Graphics::AddRenderer(std::make_unique<Renderer>(std::make_unique<DefaultRenderMethod>()));
-			Graphics::Schedule().AddPass({ Graphics::DefaultFramebuffer(), RenderPass::ALL_LAYERS, Graphics::GetRenderer(renderer), {}, {  } });
-
 			CreateTitleScreen();
 		}
 

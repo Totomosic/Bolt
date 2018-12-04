@@ -8,7 +8,8 @@ namespace Bolt
 	class BLT_API SceneRenderer
 	{
 	public:
-		static void Render(const Scene& scene);
+		static void Render(const RenderPassData& passData, const Scene& scene);
+
 	};
 
 }

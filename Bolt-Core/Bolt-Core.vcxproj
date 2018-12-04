@@ -122,10 +122,10 @@
     <ClInclude Include="src\Bolt-Graphics.h" />
     <ClInclude Include="src\BoltDefines.h" />
     <ClInclude Include="src\BoltEngine.h" />
-    <ClInclude Include="src\Core\BoltTL\string_template.h" />
     <ClInclude Include="src\Core\BoltTL\__BoltTL__.h" />
     <ClInclude Include="src\Core\BoltTL\iterator.h" />
     <ClInclude Include="src\Core\BoltTL\string.h" />
+    <ClInclude Include="src\Core\BoltTL\string_template.h" />
     <ClInclude Include="src\Core\BoltTL\vector.h" />
     <ClInclude Include="src\Core\Color.h" />
     <ClInclude Include="src\Core\Events\Event.h" />
@@ -183,17 +183,15 @@
     <ClInclude Include="src\Engine\Networking\TCPsocket.h" />
     <ClInclude Include="src\Engine\Networking\__Networking__.h" />
     <ClInclude Include="src\Engine\Renderer\GLState.h" />
+    <ClInclude Include="src\Engine\Renderer\GlobalRenderer.h" />
     <ClInclude Include="src\Engine\Renderer\Graphics.h" />
-    <ClInclude Include="src\Engine\Renderer\RenderBatch.h" />
-    <ClInclude Include="src\Engine\Renderer\RenderMethod.h" />
-    <ClInclude Include="src\Engine\Renderer\RenderMethods\DefaultRenderMethod.h" />
-    <ClInclude Include="src\Engine\Renderer\RenderMethods\__RenderMethods__.h" />
+    <ClInclude Include="src\Engine\Renderer\RenderCamera.h" />
+    <ClInclude Include="src\Engine\Renderer\RenderContext.h" />
+    <ClInclude Include="src\Engine\Renderer\RenderData.h" />
+    <ClInclude Include="src\Engine\Renderer\RenderGroup.h" />
     <ClInclude Include="src\Engine\Renderer\RenderPass.h" />
-    <ClInclude Include="src\Engine\Renderer\RenderSchedule.h" />
-    <ClInclude Include="src\Engine\Renderer\Renderable.h" />
-    <ClInclude Include="src\Engine\Renderer\Renderer.h" />
-    <ClInclude Include="src\Engine\Renderer\Renderers\SpriteRenderer2D.h" />
-    <ClInclude Include="src\Engine\Renderer\Renderers\__Renderers__.h" />
+    <ClInclude Include="src\Engine\Renderer\RenderRoutine.h" />
+    <ClInclude Include="src\Engine\Renderer\SceneRenderer.h" />
     <ClInclude Include="src\Engine\Renderer\__Renderer__.h" />
     <ClInclude Include="src\Engine\Scene\Camera.h" />
     <ClInclude Include="src\Engine\Scene\Components\Component.h" />
@@ -348,11 +346,16 @@
     <ClCompile Include="src\Engine\Networking\SocketAddress.cpp" />
     <ClCompile Include="src\Engine\Networking\TCPsocket.cpp" />
     <ClCompile Include="src\Engine\Renderer\GLState.cpp" />
+    <ClCompile Include="src\Engine\Renderer\GlobalRenderer.cpp">
+      <ObjectFileName>$(IntDir)\GlobalRenderer1.obj</ObjectFileName>
+    </ClCompile>
     <ClCompile Include="src\Engine\Renderer\Graphics.cpp" />
-    <ClCompile Include="src\Engine\Renderer\RenderMethods\DefaultRenderMethod.cpp" />
-    <ClCompile Include="src\Engine\Renderer\RenderSchedule.cpp" />
-    <ClCompile Include="src\Engine\Renderer\Renderer.cpp" />
-    <ClCompile Include="src\Engine\Renderer\Renderers\SpriteRenderer2D.cpp" />
+    <ClCompile Include="src\Engine\Renderer\RenderRoutine.cpp">
+      <ObjectFileName>$(IntDir)\RenderRoutine1.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Renderer\SceneRenderer.cpp">
+      <ObjectFileName>$(IntDir)\SceneRenderer1.obj</ObjectFileName>
+    </ClCompile>
     <ClCompile Include="src\Engine\Scene\Camera.cpp" />
     <ClCompile Include="src\Engine\Scene\Components\Component.cpp" />
     <ClCompile Include="src\Engine\Scene\Components\ComponentManager.cpp" />

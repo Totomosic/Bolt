@@ -52,14 +52,11 @@
     <Filter Include="Engine\Networking">
       <UniqueIdentifier>{12126F42-7E28-6DD8-C79F-F8F933F53D60}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\NewRenderer">
+      <UniqueIdentifier>{EB14A7BC-D7F8-6712-4059-62652C5C5294}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Engine\Renderer">
       <UniqueIdentifier>{E1119970-4D9D-0635-56AE-8929C2B86235}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Renderer\RenderMethods">
-      <UniqueIdentifier>{2408550D-9020-3C37-59CD-CBD0C5A4D0D0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Renderer\Renderers">
-      <UniqueIdentifier>{FA57516A-661A-85F4-AFCA-13811BCC5DD2}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Scene">
       <UniqueIdentifier>{386D1796-24D0-A63A-CD55-DFF0B99772BD}</UniqueIdentifier>
@@ -158,11 +155,17 @@
     <ClInclude Include="src\Core\BoltTL\string.h">
       <Filter>Core\BoltTL</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\BoltTL\string_template.h">
+      <Filter>Core\BoltTL</Filter>
+    </ClInclude>
     <ClInclude Include="src\Core\BoltTL\vector.h">
       <Filter>Core\BoltTL</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Color.h">
       <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Events\Event.h">
+      <Filter>Core\Events</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Events\EventDispatcher.h">
       <Filter>Core\Events</Filter>
@@ -326,38 +329,32 @@
     <ClInclude Include="src\Engine\Renderer\GLState.h">
       <Filter>Engine\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Renderer\GlobalRenderer.h">
+      <Filter>Engine\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Renderer\Graphics.h">
       <Filter>Engine\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\Renderer\RenderBatch.h">
+    <ClInclude Include="src\Engine\Renderer\RenderCamera.h">
       <Filter>Engine\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\Renderer\RenderMethod.h">
+    <ClInclude Include="src\Engine\Renderer\RenderContext.h">
       <Filter>Engine\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\Renderer\RenderMethods\DefaultRenderMethod.h">
-      <Filter>Engine\Renderer\RenderMethods</Filter>
+    <ClInclude Include="src\Engine\Renderer\RenderData.h">
+      <Filter>Engine\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\Renderer\RenderMethods\__RenderMethods__.h">
-      <Filter>Engine\Renderer\RenderMethods</Filter>
+    <ClInclude Include="src\Engine\Renderer\RenderGroup.h">
+      <Filter>Engine\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Renderer\RenderPass.h">
       <Filter>Engine\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\Renderer\RenderSchedule.h">
+    <ClInclude Include="src\Engine\Renderer\RenderRoutine.h">
       <Filter>Engine\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\Renderer\Renderable.h">
+    <ClInclude Include="src\Engine\Renderer\SceneRenderer.h">
       <Filter>Engine\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\Renderer\Renderer.h">
-      <Filter>Engine\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\Renderer\Renderers\SpriteRenderer2D.h">
-      <Filter>Engine\Renderer\Renderers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\Renderer\Renderers\__Renderers__.h">
-      <Filter>Engine\Renderer\Renderers</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Renderer\__Renderer__.h">
       <Filter>Engine\Renderer</Filter>
@@ -473,6 +470,15 @@
     <ClInclude Include="src\Engine\Scripting\JavaScript\__JavaScript__.h">
       <Filter>Engine\Scripting\JavaScript</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Scripting\Python\PyInterpreter.h">
+      <Filter>Engine\Scripting\Python</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Scripting\Python\PyMethods.h">
+      <Filter>Engine\Scripting\Python</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Scripting\Python\PyModule.h">
+      <Filter>Engine\Scripting\Python</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Scripting\Python\PyScript.h">
       <Filter>Engine\Scripting\Python</Filter>
     </ClInclude>
@@ -495,6 +501,9 @@
       <Filter>Engine\Serialization</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\User\Input.h">
+      <Filter>Engine\User</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\User\InputEvents.h">
       <Filter>Engine\User</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\User\__User__.h">
@@ -707,19 +716,11 @@
     <ClInclude Include="src\Graphics\Window.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="src\Graphics\WindowEvents.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
     <ClInclude Include="src\Logging.h" />
     <ClInclude Include="src\Types.h" />
-    <ClInclude Include="src\Engine\Scripting\Python\PyInterpreter.h" />
-    <ClInclude Include="src\Engine\Scripting\Python\PyModule.h" />
-    <ClInclude Include="src\Engine\Scripting\Python\PyMethods.h" />
-    <ClInclude Include="src\Core\BoltTL\string_template.h" />
-    <ClInclude Include="src\Core\Events\Event.h">
-      <Filter>Core\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\User\InputEvents.h">
-      <Filter>Engine\User</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Graphics\WindowEvents.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\BoltTL\string.cpp">
@@ -809,20 +810,17 @@
     <ClCompile Include="src\Engine\Renderer\GLState.cpp">
       <Filter>Engine\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Renderer\GlobalRenderer.cpp">
+      <Filter>Engine\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\Engine\Renderer\Graphics.cpp">
       <Filter>Engine\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\Engine\Renderer\RenderMethods\DefaultRenderMethod.cpp">
-      <Filter>Engine\Renderer\RenderMethods</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Engine\Renderer\RenderSchedule.cpp">
+    <ClCompile Include="src\Engine\Renderer\RenderRoutine.cpp">
       <Filter>Engine\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\Engine\Renderer\Renderer.cpp">
+    <ClCompile Include="src\Engine\Renderer\SceneRenderer.cpp">
       <Filter>Engine\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Engine\Renderer\Renderers\SpriteRenderer2D.cpp">
-      <Filter>Engine\Renderer\Renderers</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Scene\Camera.cpp">
       <Filter>Engine\Scene</Filter>
@@ -898,6 +896,18 @@
     </ClCompile>
     <ClCompile Include="src\Engine\Scene\UI\UIsurface.cpp">
       <Filter>Engine\Scene\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Scripting\Python\PyInterpreter.cpp">
+      <Filter>Engine\Scripting\Python</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Scripting\Python\PyMethods.cpp">
+      <Filter>Engine\Scripting\Python</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Scripting\Python\PyModule.cpp">
+      <Filter>Engine\Scripting\Python</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Scripting\Python\PyScript.cpp">
+      <Filter>Engine\Scripting\Python</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Serialization\XMLserializer.cpp">
       <Filter>Engine\Serialization</Filter>
@@ -1021,10 +1031,6 @@
     </ClCompile>
     <ClCompile Include="src\Logging.cpp" />
     <ClCompile Include="src\Types.cpp" />
-    <ClCompile Include="src\Engine\Scripting\Python\PyScript.cpp" />
-    <ClCompile Include="src\Engine\Scripting\Python\PyInterpreter.cpp" />
-    <ClCompile Include="src\Engine\Scripting\Python\PyModule.cpp" />
-    <ClCompile Include="src\Engine\Scripting\Python\PyMethods.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Graphics\Resources\Shaders\Source\DefaultColor_f.glsl">
