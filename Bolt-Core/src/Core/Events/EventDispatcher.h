@@ -12,15 +12,15 @@ namespace Bolt
 		using Listener = std::function<bool(id_t, T&)>;
 
 	private:
-		id_t m_DispatcherId = EventManager::IGNORE_DISPATCHER_ID;
-		id_t m_EventId = EventManager::IGNORE_DISPATCHER_ID;
-		id_t m_ListenerId = EventManager::IGNORE_DISPATCHER_ID;
+		id_t m_DispatcherId;
+		id_t m_EventId;
+		id_t m_ListenerId;
 		std::unordered_map<id_t, Listener> m_Listeners;
-		IdManager<id_t> m_IdManager = IdManager<id_t>(0, 0);
+		IdManager<id_t> m_IdManager;
 
 	public:
 		EventDispatcher()
-			: m_DispatcherId(EventManager::IGNORE_DISPATCHER_ID), m_EventId(EventManager::IGNORE_DISPATCHER_ID), m_ListenerId(EventManager::IGNORE_DISPATCHER_ID), m_Listeners(), m_IdManager(0, 0)
+			: m_DispatcherId(EventManager::IGNORE_DISPATCHER_ID), m_EventId(EventManager::IGNORE_DISPATCHER_ID), m_ListenerId(EventManager::IGNORE_DISPATCHER_ID), m_Listeners(), m_IdManager(0, EventManager::IGNORE_DISPATCHER_ID - 1)
 		{
 			
 		}

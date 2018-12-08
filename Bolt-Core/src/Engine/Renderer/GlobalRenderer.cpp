@@ -6,19 +6,23 @@ namespace Bolt
 
 	std::unique_ptr<RenderRoutine> GlobalRenderer::s_RenderRoutine = std::make_unique<RenderRoutine>();
 
+	void DrawRenderGroup(RenderRoutine* routine, const RenderGroup& group, const RenderContext& context, const RenderCamera& camera)
+	{
+		context.Uniforms.UploadAll(group.Material->Shader.Get());
+		group.Material->Shader->SetLights(context.Lights);
+		(*routine)(group, camera.ViewMatrix, camera.ProjectionMatrix);
+	}
+
 	void GlobalRenderer::Render(const RenderPass& renderPass, const RenderContext& context, const RenderCamera& camera)
 	{
-		renderPass.Metadata.RenderTarget->Bind();
-		if (renderPass.Metadata.ClearRenderTarget)
+		renderPass.RenderTarget->Bind();
+		for (const RenderGroup& group : context.StaticMeshes)
 		{
-			renderPass.Metadata.RenderTarget->Clear();
+			DrawRenderGroup(s_RenderRoutine.get(), group, context, camera);
 		}
-
 		for (const RenderGroup& group : renderPass.RenderGroups)
 		{
-			context.Uniforms.UploadAll(group.Material->Shader.Get());
-			group.Material->Shader->SetLights({ LightSource{ Vector3f(0, 100, 0) } });
-			(*s_RenderRoutine)(group, camera.ViewMatrix, camera.ProjectionMatrix);
+			DrawRenderGroup(s_RenderRoutine.get(), group, context, camera);
 		}
 	}
 

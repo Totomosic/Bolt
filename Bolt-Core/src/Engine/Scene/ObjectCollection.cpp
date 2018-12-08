@@ -68,6 +68,7 @@ namespace Bolt
 		m_GameObjects[id].Enabled = false;
 		obj->SetID(GameObject::InvalidID);
 		obj->SetLayer(nullptr);
+		obj->Components().Clear();
 		ReleaseId(id);
 		auto it = std::find(m_ActiveGameObjects.begin(), m_ActiveGameObjects.end(), obj);
 		if (it != m_ActiveGameObjects.end())
@@ -129,6 +130,13 @@ namespace Bolt
 		std::vector<GameObject*>& vector = m_Tags.at(tag);
 		auto it2 = std::find(vector.begin(), vector.end(), object);
 		vector.erase(it2);
+	}
+
+	SGQueryResult ObjectCollection::Query(const SGQuery& query) const
+	{
+		SGQueryResult result;
+		result.GameObjects = query.Evaluate(*this, &result.MostRelevant, &result.LeastRelevant);
+		return result;
 	}
 
 	void ObjectCollection::Reset()

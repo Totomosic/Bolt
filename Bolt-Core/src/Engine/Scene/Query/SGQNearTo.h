@@ -4,7 +4,7 @@
 namespace Bolt
 {
 
-	struct BLT_API SGQNearTo : public SGQuery
+	class BLT_API SGQNearTo : public SGQuery
 	{
 	public:
 		Vector3f Point = Vector3f(0.0f, 0.0f, 0.0f);
@@ -14,7 +14,7 @@ namespace Bolt
 	public:
 		SGQNearTo();
 
-		std::vector<GameObject*> Evaluate(const SceneGraph& graph, GameObject** mostRelevant, GameObject** leastRelevant) const override;
+		std::vector<GameObject*> Evaluate(const ObjectCollection& graph, GameObject** mostRelevant, GameObject** leastRelevant) const override;
 
 	};
 

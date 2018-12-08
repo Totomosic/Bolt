@@ -1,4 +1,5 @@
 #include "Graphics.h"
+#include "SceneRenderer.h"
 
 namespace Bolt
 {
@@ -91,7 +92,8 @@ namespace Bolt
 			BLT_CORE_WARN("No Active Scene");
 			return;
 		}
-		SceneRenderer::Render({ Graphics::DefaultFramebuffer(), false }, SceneManager::CurrentScene());
+		DefaultFramebuffer()->Clear();
+		SceneRenderer::Render(SceneManager::CurrentScene());
 	}
 
 	void Graphics::Initialize(Window* window)

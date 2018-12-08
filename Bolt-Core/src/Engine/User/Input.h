@@ -2,7 +2,7 @@
 #include "Bolt-Graphics.h"
 #include "InputEvents.h"
 
-#define BLT_MAX_KEYS 256
+#define BLT_MAX_KEYS 512
 #define BLT_MAX_MOUSE_BUTTONS 32
 
 namespace Bolt
@@ -13,8 +13,8 @@ namespace Bolt
 	public:
 		struct BLT_API Button
 		{
-			MouseButton ButtonID;
-			ButtonState State;
+			int ButtonID;
+			int State;
 		};
 
 	public:
@@ -40,8 +40,8 @@ namespace Bolt
 		struct BLT_API Key
 		{
 		public:
-			Keycode KeyID;
-			ButtonState State;
+			int KeyID;
+			int State;
 		};
 
 	public:

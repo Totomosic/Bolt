@@ -4,13 +4,14 @@ namespace Bolt
 {
 
 	Transform::Transform(Vector3f position, Quaternion orientation, Vector3f scale)
-		: m_Parent(nullptr), m_Children(), m_Position(position), m_Orientation(orientation), m_Scale(scale), m_TransformMatrix(Matrix4f::Identity()), m_InverseTransformMatrix(Matrix4f::Identity()), m_IsValid(false)
+		: m_Parent(nullptr), m_Children(), m_Position(position), m_Orientation(orientation), m_Scale(scale), m_TransformMatrix(Matrix4f::Identity()), m_InverseTransformMatrix(Matrix4f::Identity()), m_IsValid(false), m_UpdateOnInvalidate(false)
 	{
 		RecalculateMatrix();
 	}
 
 	Transform::Transform(Transform&& other)
-		: m_Parent(other.m_Parent), m_Children(std::move(other.m_Children)), m_Position(other.m_Position), m_Orientation(other.m_Orientation), m_Scale(other.m_Scale), m_TransformMatrix(other.m_TransformMatrix), m_InverseTransformMatrix(other.m_InverseTransformMatrix), m_IsValid(other.m_IsValid)
+		: m_Parent(other.m_Parent), m_Children(std::move(other.m_Children)), m_Position(other.m_Position), m_Orientation(other.m_Orientation), m_Scale(other.m_Scale), 
+		m_TransformMatrix(other.m_TransformMatrix), m_InverseTransformMatrix(other.m_InverseTransformMatrix), m_IsValid(other.m_IsValid), m_UpdateOnInvalidate(other.m_UpdateOnInvalidate)
 	{
 		if (m_Parent != nullptr)
 		{
@@ -32,6 +33,7 @@ namespace Bolt
 		m_TransformMatrix = other.m_TransformMatrix;
 		m_InverseTransformMatrix = other.m_InverseTransformMatrix;
 		m_IsValid = other.m_IsValid;
+		m_UpdateOnInvalidate = other.m_UpdateOnInvalidate;
 		if (m_Parent != nullptr)
 		{
 			m_Parent->m_Children.push_back(this);
@@ -65,6 +67,11 @@ namespace Bolt
 		return m_Parent != nullptr;
 	}
 
+	bool Transform::GetUpdateOnInvalidate() const
+	{
+		return m_UpdateOnInvalidate;
+	}
+
 	void Transform::SetParent(const Transform* transform)
 	{
 		if (transform == nullptr && m_Parent != nullptr)
@@ -81,6 +88,11 @@ namespace Bolt
 		}
 		m_Parent = (Transform*)transform;		
 		RecalculateMatrix();
+	}
+
+	void Transform::SetUpdateOnInvalidate(bool update)
+	{
+		m_UpdateOnInvalidate = update;
 	}
 
 	Vector3f Transform::Position() const
@@ -188,6 +200,14 @@ namespace Bolt
 		Rotate(Quaternion::FromAngleAxis(angle, axis));
 	}
 
+	void Transform::Reset()
+	{
+		m_Position = Vector3f(0, 0, 0);
+		m_Orientation = Quaternion::Identity();
+		m_Scale = Vector3f(1, 1, 1);
+		Invalidate();
+	}
+
 	void Transform::Transfer(XMLserializer& backend, bool isWriting)
 	{
 		BLT_TRANSFER(backend, m_Position);
@@ -212,6 +232,10 @@ namespace Bolt
 	void Transform::Invalidate() const
 	{
 		m_IsValid = false;
+		if (m_UpdateOnInvalidate)
+		{
+			RecalculateMatrix();
+		}
 		for (const Transform* child : m_Children)
 		{
 			child->Invalidate();

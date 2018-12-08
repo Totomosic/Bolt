@@ -57,6 +57,7 @@ namespace Bolt
 		mesh.Materials[0].BaseColor = m_Color;
 		mesh.Materials[0].Shader = Shader::DefaultFont();
 		mesh.Materials[0].Textures.Textures.push_back(m_Font);
+		mesh.Materials[0].RenderOptions.DepthFunc = DepthFunction::Lequal;
 		m_GameObject->Components().AddComponent(std::make_unique<MeshRenderer>(std::move(mesh)));
 	}
 

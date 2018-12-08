@@ -75,7 +75,7 @@ namespace Bolt
 
 	bool Input::MouseButtonDown(MouseButton mouseButton, KeyMod mods)
 	{
-		return s_Mouse.Buttons[(int)mouseButton].State == ButtonState::Pressed && TestKeyMods(mods);
+		return s_Mouse.Buttons[(int)mouseButton].State == (int)ButtonState::Pressed && TestKeyMods(mods);
 	}
 
 	bool Input::MouseButtonPressed(MouseButton mouseButton, KeyMod mods)
@@ -85,7 +85,7 @@ namespace Bolt
 		{
 			return false;
 		}
-		return button->State == ButtonState::Pressed && TestKeyMods(mods);
+		return button->State == (int)ButtonState::Pressed && TestKeyMods(mods);
 	}
 
 	bool Input::MouseButtonUp(MouseButton mouseButton, KeyMod mods)
@@ -100,12 +100,12 @@ namespace Bolt
 		{
 			return false;
 		}
-		return button->State == ButtonState::Released && TestKeyMods(mods);
+		return button->State == (int)ButtonState::Released && TestKeyMods(mods);
 	}
 
 	bool Input::KeyDown(Keycode key, KeyMod mods)
 	{
-		return s_Keyboard.Keys[(int)key].State == ButtonState::Pressed && TestKeyMods(mods);
+		return s_Keyboard.Keys[(int)key].State == (int)ButtonState::Pressed && TestKeyMods(mods);
 	}
 
 	bool Input::KeyPressed(Keycode key, KeyMod mods)
@@ -115,7 +115,7 @@ namespace Bolt
 		{
 			return false;
 		}
-		return k->State == ButtonState::Pressed && TestKeyMods(mods);
+		return k->State == (int)ButtonState::Pressed && TestKeyMods(mods);
 	}
 
 	bool Input::KeyUp(Keycode key, KeyMod mods)
@@ -130,7 +130,7 @@ namespace Bolt
 		{
 			return false;
 		}
-		return k->State == ButtonState::Released && TestKeyMods(mods);
+		return k->State == (int)ButtonState::Released && TestKeyMods(mods);
 	}
 
 	void Input::HideCursor()
@@ -149,7 +149,7 @@ namespace Bolt
 	{
 		for (KeyboardInstance::Key& button : s_ChangedKeys)
 		{
-			if (button.KeyID == keycode)
+			if (button.KeyID == (int)keycode)
 			{
 				return &button;
 			}
@@ -161,7 +161,7 @@ namespace Bolt
 	{
 		for (MouseInstance::Button& button : s_ChangedButtons)
 		{
-			if (button.ButtonID == mouseButton)
+			if (button.ButtonID == (int)mouseButton)
 			{
 				return &button;
 			}
@@ -234,13 +234,13 @@ namespace Bolt
 		s_Window = window;
 		for (int i = 0; i < BLT_MAX_KEYS; i++)
 		{
-			s_Keyboard.Keys[i].KeyID = (Keycode)i;
-			s_Keyboard.Keys[i].State = ButtonState::Released;
+			s_Keyboard.Keys[i].KeyID = i;
+			s_Keyboard.Keys[i].State = (int)ButtonState::Released;
 		}
 		for (int i = 0; i < BLT_MAX_MOUSE_BUTTONS; i++)
 		{
-			s_Mouse.Buttons[i].ButtonID = (MouseButton)i;
-			s_Mouse.Buttons[i].State = ButtonState::Released;
+			s_Mouse.Buttons[i].ButtonID = i;
+			s_Mouse.Buttons[i].State = (int)ButtonState::Released;
 		}
 		s_Mouse.Left = ButtonState::Released;
 		s_Mouse.Middle = ButtonState::Released;
@@ -321,10 +321,10 @@ namespace Bolt
 	{
 		if (action != GLFW_REPEAT)
 		{
-			s_Mouse.Buttons[button].State = (ButtonState)action;
-			s_ChangedButtons.push_back({ (MouseButton)button, (ButtonState)action });
+			s_Mouse.Buttons[button].State = action;
+			s_ChangedButtons.push_back({ button, action });
 		}
-		if ((ButtonState)action == ButtonState::Pressed || action == GLFW_REPEAT)
+		if (action == (int)ButtonState::Pressed || action == GLFW_REPEAT)
 		{
 			std::unique_ptr<Bolt::MousePressedEvent> args = std::make_unique<Bolt::MousePressedEvent>();
 			args->Button = (MouseButton)button;
@@ -347,10 +347,10 @@ namespace Bolt
 	{
 		if (action != GLFW_REPEAT)
 		{
-			s_Keyboard.Keys[key].State = (ButtonState)action;
-			s_ChangedKeys.push_back({ (Keycode)key, (ButtonState)action });
+			s_Keyboard.Keys[key].State = action;
+			s_ChangedKeys.push_back(KeyboardInstance::Key{ key, action });
 		}
-		if ((ButtonState)action == ButtonState::Pressed || action == GLFW_REPEAT)
+		if (action == (int)ButtonState::Pressed || action == GLFW_REPEAT)
 		{
 			std::unique_ptr<Bolt::KeyPressedEvent> args = std::make_unique<Bolt::KeyPressedEvent>();
 			args->KeyCode = (Keycode)key;

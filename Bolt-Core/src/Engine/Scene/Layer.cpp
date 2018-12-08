@@ -1,13 +1,13 @@
 #include "Layer.h"
-#include "SceneGraph\__SceneGraph__.h"
+#include "ObjectCollection.h"
 
 namespace Bolt
 {
 
 	Layer::Layer()
-		: m_Id(GameObject::InvalidID), m_GameObjects(), m_SceneGraph(std::make_unique<Bolt::SceneArray>()), m_Enabled(false), m_ActiveCamera(nullptr), m_UIroot(this)
+		: m_Id(GameObject::InvalidID), m_GameObjects(), m_Enabled(false), m_ActiveCamera(nullptr), m_UIroot(this)
 	{
-		m_SceneGraph->SetObjectCollection(&m_GameObjects);
+
 	}
 
 	Layer::~Layer()
@@ -23,16 +23,6 @@ namespace Bolt
 	ObjectCollection& Layer::GameObjects()
 	{
 		return m_GameObjects;
-	}
-
-	const SceneGraph& Layer::Graph() const
-	{
-		return *m_SceneGraph;
-	}
-
-	SceneGraph& Layer::Graph()
-	{
-		return *m_SceneGraph;
 	}
 
 	Camera* Layer::ActiveCamera() const
@@ -79,7 +69,6 @@ namespace Bolt
 	{
 		id_t id = m_GameObjects.AddGameObject(std::move(object));
 		GameObject* obj = &m_GameObjects.GetGameObjectById(id);
-		m_SceneGraph->AddGameObject(obj);
 		obj->SetLayer(this);
 		return obj;
 	}
@@ -107,10 +96,13 @@ namespace Bolt
 
 	void Layer::Clear()
 	{
-		std::vector<GameObject*> objects = m_SceneGraph->GetAllGameObjects();
+		std::vector<GameObject*> objects = m_GameObjects.GetAllGameObjects();
 		for (GameObject* object : objects)
 		{
-			RemoveGameObject(object);
+			if (object != UI().Object())
+			{
+				RemoveGameObject(object);
+			}
 		}
 		UI().ReleaseAllGameObjects();
 		UI().Clear();
@@ -166,6 +158,12 @@ namespace Bolt
 		BLT_TRANSFER(backend, m_Id);
 		BLT_TRANSFER(backend, m_GameObjects);
 		BLT_TRANSFER(backend, m_ActiveCamera);
+	}
+
+	void Layer::Create(id_t id)
+	{
+		m_Id = id;
+		Enable();
 	}
 
 	void Destroy(GameObject* object, float timeToDelete)

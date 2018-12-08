@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Aimbooster", "Aimbooster\Aimbooster.vcxproj", "{FA3F401E-E6F7-816B-4FFF-5AC73BD61C5C}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Blockstream", "Blockstream\Blockstream.vcxproj", "{3C0C7C22-A8C1-F417-31B6-EEEE9D6AEB1B}"
+EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Bolt-Core", "Bolt-Core\Bolt-Core.vcxproj", "{2CF839F6-9862-EE6C-E1A0-9F124D4ACCC1}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NatureScene", "NatureScene\NatureScene.vcxproj", "{828B4111-EE40-BA06-7735-B4DDE3E9B00A}"
@@ -20,6 +22,12 @@ Global
 		{FA3F401E-E6F7-816B-4FFF-5AC73BD61C5C}.Dist|Win32.Build.0 = Dist|Win32
 		{FA3F401E-E6F7-816B-4FFF-5AC73BD61C5C}.Release|Win32.ActiveCfg = Release|Win32
 		{FA3F401E-E6F7-816B-4FFF-5AC73BD61C5C}.Release|Win32.Build.0 = Release|Win32
+		{3C0C7C22-A8C1-F417-31B6-EEEE9D6AEB1B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{3C0C7C22-A8C1-F417-31B6-EEEE9D6AEB1B}.Debug|Win32.Build.0 = Debug|Win32
+		{3C0C7C22-A8C1-F417-31B6-EEEE9D6AEB1B}.Dist|Win32.ActiveCfg = Dist|Win32
+		{3C0C7C22-A8C1-F417-31B6-EEEE9D6AEB1B}.Dist|Win32.Build.0 = Dist|Win32
+		{3C0C7C22-A8C1-F417-31B6-EEEE9D6AEB1B}.Release|Win32.ActiveCfg = Release|Win32
+		{3C0C7C22-A8C1-F417-31B6-EEEE9D6AEB1B}.Release|Win32.Build.0 = Release|Win32
 		{2CF839F6-9862-EE6C-E1A0-9F124D4ACCC1}.Debug|Win32.ActiveCfg = Debug|Win32
 		{2CF839F6-9862-EE6C-E1A0-9F124D4ACCC1}.Debug|Win32.Build.0 = Debug|Win32
 		{2CF839F6-9862-EE6C-E1A0-9F124D4ACCC1}.Dist|Win32.ActiveCfg = Dist|Win32

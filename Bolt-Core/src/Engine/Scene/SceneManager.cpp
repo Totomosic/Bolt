@@ -14,7 +14,7 @@ namespace Bolt
 
 	Scene* SceneManager::CreateScene()
 	{
-		int index = s_Scenes.size();
+		id_t index = s_Scenes.size();
 		s_Scenes.push_back(std::make_unique<Scene>());
 		Scene* ptr = s_Scenes[index].get();
 		if (s_CurrentScene == nullptr)

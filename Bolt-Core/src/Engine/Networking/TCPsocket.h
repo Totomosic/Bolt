@@ -25,6 +25,7 @@ namespace Bolt
 		int Connect(const SocketAddress& address);
 		int Send(const void* data, uint length);
 		int Recv(void* buffer, uint length);
+		int Close();
 
 	};
 

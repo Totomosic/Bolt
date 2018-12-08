@@ -11,7 +11,7 @@ namespace Bolt
 
 	TCPsocket::TCPsocket(AddressFamily addressFamily) : TCPsocket(socket((int)addressFamily, SOCK_STREAM, IPPROTO_TCP))
 	{
-	
+		
 	}
 
 	TCPsocket::TCPsocket(TCPsocket&& other)
@@ -22,8 +22,9 @@ namespace Bolt
 
 	TCPsocket& TCPsocket::operator=(TCPsocket&& other)
 	{
+		SOCKET sock = m_Socket;
 		m_Socket = other.m_Socket;
-		other.m_Socket = m_Socket;
+		other.m_Socket = sock;
 		return *this;
 	}
 
@@ -37,6 +38,7 @@ namespace Bolt
 
 	int TCPsocket::Bind(const SocketAddress& address)
 	{
+		BLT_ASSERT(m_Socket != INVALID_SOCKET, "Socket was invalid");
 		int err = bind(m_Socket, &address.m_SockAddr, address.GetSize());
 		if (err < 0)
 		{
@@ -49,6 +51,7 @@ namespace Bolt
 
 	int TCPsocket::Listen(int backlog)
 	{
+		BLT_ASSERT(m_Socket != INVALID_SOCKET, "Socket was invalid");
 		int err = listen(m_Socket, backlog);
 		if (err != NO_ERROR)
 		{
@@ -61,6 +64,7 @@ namespace Bolt
 
 	TCPsocket TCPsocket::Accept(SocketAddress* outAddress)
 	{
+		BLT_ASSERT(m_Socket != INVALID_SOCKET, "Socket was invalid");
 		int length = SocketAddress::GetSize();
 		SOCKET newSocket = INVALID_SOCKET;
 		if (outAddress != nullptr)
@@ -82,6 +86,7 @@ namespace Bolt
 
 	int TCPsocket::Connect(const SocketAddress& address)
 	{
+		BLT_ASSERT(m_Socket != INVALID_SOCKET, "Socket was invalid");
 		int err = connect(m_Socket, &address.m_SockAddr, address.GetSize());
 		if (err < 0)
 		{
@@ -94,6 +99,7 @@ namespace Bolt
 
 	int TCPsocket::Send(const void* data, uint length)
 	{
+		BLT_ASSERT(m_Socket != INVALID_SOCKET, "Socket was invalid");
 		int bytesSent = send(m_Socket, static_cast<const char*>(data), (int)length, 0);
 		if (bytesSent < 0)
 		{
@@ -106,6 +112,7 @@ namespace Bolt
 
 	int TCPsocket::Recv(void* buffer, uint length)
 	{
+		BLT_ASSERT(m_Socket != INVALID_SOCKET, "Socket was invalid");
 		int bytesReceived = recv(m_Socket, static_cast<char*>(buffer), (int)length, 0);
 		if (bytesReceived < 0)
 		{
@@ -114,6 +121,18 @@ namespace Bolt
 			return -error;
 		}
 		return bytesReceived;
+	}
+
+	int TCPsocket::Close()
+	{
+		int err = closesocket(m_Socket);
+		m_Socket = INVALID_SOCKET;
+		if (err != NO_ERROR)
+		{
+			int errorCode = WSAGetLastError();
+			BLT_CORE_ERROR("Socket Close Error: " + std::to_string(errorCode));
+		}
+		return err;
 	}
 
 }

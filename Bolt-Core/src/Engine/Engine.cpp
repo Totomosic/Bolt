@@ -45,7 +45,7 @@ namespace Bolt
 		Scene* scene = &SceneManager::CurrentScene();
 		Input::Update();
 		glfwPollEvents();
-		EventManager::FlushEvents();
+		EventManager::FlushEvents(); // Flush #1 (likely input events)
 		m_CurrentApplication->Update();
 		if (scene != nullptr)
 		{
@@ -54,6 +54,7 @@ namespace Bolt
 		m_CurrentApplication->Render();
 		m_Window->SwapBuffers();
 		Time::Update();
+		EventManager::FlushEvents(); // Flush #2 (likely other scene/app events)
 		if (scene != nullptr)
 		{
 			scene->UpdateTemporaryObjects();

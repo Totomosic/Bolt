@@ -23,6 +23,7 @@ namespace Bolt
 		mutable Matrix4f m_TransformMatrix;
 		mutable Matrix4f m_InverseTransformMatrix;
 		mutable bool m_IsValid;
+		mutable bool m_UpdateOnInvalidate;
 
 	public:
 		Transform(Vector3f position = Vector3f(0.0f, 0.0f, 0.0f), Quaternion orientation = Quaternion::Identity(), Vector3f scale = Vector3f(1.0f, 1.0f, 1.0f));
@@ -34,7 +35,9 @@ namespace Bolt
 
 		const Transform& Parent() const;
 		bool HasParent() const;
+		bool GetUpdateOnInvalidate() const;
 		void SetParent(const Transform* transform);
+		void SetUpdateOnInvalidate(bool update);
 
 		Vector3f Position() const;
 		Quaternion Orientation() const;
@@ -55,6 +58,8 @@ namespace Bolt
 		void Translate(float x, float y, float z);
 		void Rotate(const Quaternion& rotation);
 		void Rotate(float angle, Vector3f axis, Space rotateSpace = Space::World);
+
+		void Reset();
 
 		void Transfer(XMLserializer& backend, bool isWriting);
 
