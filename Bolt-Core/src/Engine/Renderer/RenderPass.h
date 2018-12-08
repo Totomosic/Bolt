@@ -4,17 +4,10 @@
 namespace Bolt
 {
 
-	struct BLT_API RenderPassData
-	{
-	public:
-		const Framebuffer* RenderTarget = nullptr;
-		bool ClearRenderTarget = true;
-	};
-
 	struct BLT_API RenderPass
 	{
 	public:
-		RenderPassData Metadata = RenderPassData();
+		const Framebuffer* RenderTarget;
 		std::vector<RenderGroup> RenderGroups = std::vector<RenderGroup>();
 	};
 

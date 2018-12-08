@@ -1,7 +1,7 @@
 #include "SGQTransparency.h"
 #include "SGQComponents.h"
-#include "..\SceneGraph.h"
-#include "..\..\Components\MeshRenderer.h"
+#include "..\ObjectCollection.h"
+#include "..\Components\MeshRenderer.h"
 
 namespace Bolt
 {
@@ -12,7 +12,7 @@ namespace Bolt
 	
 	}
 
-	std::vector<GameObject*> SGQTransparency::Evaluate(const SceneGraph& graph, GameObject** mostRelevant, GameObject** leastRelevant) const
+	std::vector<GameObject*> SGQTransparency::Evaluate(const ObjectCollection& graph, GameObject** mostRelevant, GameObject** leastRelevant) const
 	{
 		std::vector<GameObject*> result;
 		std::vector<GameObject*> objects = graph.Query(SGQComponents({ typeid(MeshRenderer) })).GameObjects;

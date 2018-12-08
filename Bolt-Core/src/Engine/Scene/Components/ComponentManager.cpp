@@ -53,6 +53,7 @@ namespace Bolt
 
 	Component& ComponentManager::GetComponent(size_t componentTypeHash) const
 	{
+		BLT_ASSERT(HasComponent(componentTypeHash), "Does not have given component type");
 		return *m_ComponentMap.at(componentTypeHash);
 	}
 
@@ -112,6 +113,11 @@ namespace Bolt
 		Component& component = GetComponent(componentTypeHash);
 		m_ComponentArray[component.m_Id] = nullptr;
 		m_ComponentMap.erase(componentTypeHash);
+	}
+
+	void ComponentManager::Clear()
+	{
+		m_ComponentMap.clear();
 	}
 
 	void ComponentManager::Transfer(XMLserializer& backend, bool isWriting)

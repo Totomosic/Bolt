@@ -19,6 +19,11 @@
     <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Bolt-Core</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Globals">
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Globals">
     <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -91,7 +96,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>Types.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>NOMINMAX;GLEW_STATIC;BLT_PLATFORM_WINDOWS;BLT_BUILD_STATIC;BLT_DEBUG;GAMEOBJECTS_PER_LAYER=10000;LAYERS_PER_SCENE=6;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NOMINMAX;GLEW_STATIC;BLT_PLATFORM_WINDOWS;BLT_BUILD_STATIC;GAMEOBJECTS_PER_LAYER=10000;LAYERS_PER_SCENE=6;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>external;src;external\GLEW\include;external\spdlog\include;..\..\..\..\..\AppData\Local\Programs\Python\Python37-32\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>Types.h</ForcedIncludeFiles>
       <Optimization>Disabled</Optimization>
@@ -106,11 +111,9 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>Types.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>NOMINMAX;GLEW_STATIC;BLT_PLATFORM_WINDOWS;BLT_BUILD_STATIC;BLT_DEBUG;GAMEOBJECTS_PER_LAYER=10000;LAYERS_PER_SCENE=6;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>external;src;external\GLEW\include;external\spdlog\include;..\..\..\..\..\AppData\Local\Programs\Python\Python37-32\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>Types.h</ForcedIncludeFiles>
       <Optimization>Disabled</Optimization>
-      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -189,8 +192,10 @@
     <ClInclude Include="src\Engine\Renderer\RenderContext.h" />
     <ClInclude Include="src\Engine\Renderer\RenderData.h" />
     <ClInclude Include="src\Engine\Renderer\RenderGroup.h" />
+    <ClInclude Include="src\Engine\Renderer\RenderOptions.h" />
     <ClInclude Include="src\Engine\Renderer\RenderPass.h" />
     <ClInclude Include="src\Engine\Renderer\RenderRoutine.h" />
+    <ClInclude Include="src\Engine\Renderer\RenderSchedule.h" />
     <ClInclude Include="src\Engine\Renderer\SceneRenderer.h" />
     <ClInclude Include="src\Engine\Renderer\__Renderer__.h" />
     <ClInclude Include="src\Engine\Scene\Camera.h" />
@@ -204,22 +209,21 @@
     <ClInclude Include="src\Engine\Scene\Components\__Components__.h" />
     <ClInclude Include="src\Engine\Scene\GameObject.h" />
     <ClInclude Include="src\Engine\Scene\Layer.h" />
+    <ClInclude Include="src\Engine\Scene\LayerEvents.h" />
     <ClInclude Include="src\Engine\Scene\Lighting\LightSource.h" />
     <ClInclude Include="src\Engine\Scene\Lighting\__Lighting__.h" />
     <ClInclude Include="src\Engine\Scene\ObjectCollection.h" />
     <ClInclude Include="src\Engine\Scene\ObjectFactory.h" />
     <ClInclude Include="src\Engine\Scene\ObjectPrefab.h" />
+    <ClInclude Include="src\Engine\Scene\Query\SGQComponents.h" />
+    <ClInclude Include="src\Engine\Scene\Query\SGQFrustrum.h" />
+    <ClInclude Include="src\Engine\Scene\Query\SGQNearTo.h" />
+    <ClInclude Include="src\Engine\Scene\Query\SGQRayCast.h" />
+    <ClInclude Include="src\Engine\Scene\Query\SGQTransparency.h" />
+    <ClInclude Include="src\Engine\Scene\Query\SGQuery.h" />
+    <ClInclude Include="src\Engine\Scene\Query\SGQueryResult.h" />
+    <ClInclude Include="src\Engine\Scene\Query\__Query__.h" />
     <ClInclude Include="src\Engine\Scene\Scene.h" />
-    <ClInclude Include="src\Engine\Scene\SceneGraph\Query\SGQComponents.h" />
-    <ClInclude Include="src\Engine\Scene\SceneGraph\Query\SGQFrustrum.h" />
-    <ClInclude Include="src\Engine\Scene\SceneGraph\Query\SGQNearTo.h" />
-    <ClInclude Include="src\Engine\Scene\SceneGraph\Query\SGQTransparency.h" />
-    <ClInclude Include="src\Engine\Scene\SceneGraph\Query\SGQuery.h" />
-    <ClInclude Include="src\Engine\Scene\SceneGraph\Query\SGQueryResult.h" />
-    <ClInclude Include="src\Engine\Scene\SceneGraph\Query\__Query__.h" />
-    <ClInclude Include="src\Engine\Scene\SceneGraph\SceneArray.h" />
-    <ClInclude Include="src\Engine\Scene\SceneGraph\SceneGraph.h" />
-    <ClInclude Include="src\Engine\Scene\SceneGraph\__SceneGraph__.h" />
     <ClInclude Include="src\Engine\Scene\SceneManager.h" />
     <ClInclude Include="src\Engine\Scene\Transform.h" />
     <ClInclude Include="src\Engine\Scene\UI\Text.h" />
@@ -346,16 +350,11 @@
     <ClCompile Include="src\Engine\Networking\SocketAddress.cpp" />
     <ClCompile Include="src\Engine\Networking\TCPsocket.cpp" />
     <ClCompile Include="src\Engine\Renderer\GLState.cpp" />
-    <ClCompile Include="src\Engine\Renderer\GlobalRenderer.cpp">
-      <ObjectFileName>$(IntDir)\GlobalRenderer1.obj</ObjectFileName>
-    </ClCompile>
+    <ClCompile Include="src\Engine\Renderer\GlobalRenderer.cpp" />
     <ClCompile Include="src\Engine\Renderer\Graphics.cpp" />
-    <ClCompile Include="src\Engine\Renderer\RenderRoutine.cpp">
-      <ObjectFileName>$(IntDir)\RenderRoutine1.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="src\Engine\Renderer\SceneRenderer.cpp">
-      <ObjectFileName>$(IntDir)\SceneRenderer1.obj</ObjectFileName>
-    </ClCompile>
+    <ClCompile Include="src\Engine\Renderer\RenderRoutine.cpp" />
+    <ClCompile Include="src\Engine\Renderer\RenderSchedule.cpp" />
+    <ClCompile Include="src\Engine\Renderer\SceneRenderer.cpp" />
     <ClCompile Include="src\Engine\Scene\Camera.cpp" />
     <ClCompile Include="src\Engine\Scene\Components\Component.cpp" />
     <ClCompile Include="src\Engine\Scene\Components\ComponentManager.cpp" />
@@ -368,13 +367,12 @@
     <ClCompile Include="src\Engine\Scene\ObjectCollection.cpp" />
     <ClCompile Include="src\Engine\Scene\ObjectFactory.cpp" />
     <ClCompile Include="src\Engine\Scene\ObjectPrefab.cpp" />
+    <ClCompile Include="src\Engine\Scene\Query\SGQComponents.cpp" />
+    <ClCompile Include="src\Engine\Scene\Query\SGQNearTo.cpp" />
+    <ClCompile Include="src\Engine\Scene\Query\SGQRayCast.cpp" />
+    <ClCompile Include="src\Engine\Scene\Query\SGQTransparency.cpp" />
+    <ClCompile Include="src\Engine\Scene\Query\SGQuery.cpp" />
     <ClCompile Include="src\Engine\Scene\Scene.cpp" />
-    <ClCompile Include="src\Engine\Scene\SceneGraph\Query\SGQComponents.cpp" />
-    <ClCompile Include="src\Engine\Scene\SceneGraph\Query\SGQNearTo.cpp" />
-    <ClCompile Include="src\Engine\Scene\SceneGraph\Query\SGQTransparency.cpp" />
-    <ClCompile Include="src\Engine\Scene\SceneGraph\Query\SGQuery.cpp" />
-    <ClCompile Include="src\Engine\Scene\SceneGraph\SceneArray.cpp" />
-    <ClCompile Include="src\Engine\Scene\SceneGraph\SceneGraph.cpp" />
     <ClCompile Include="src\Engine\Scene\SceneManager.cpp" />
     <ClCompile Include="src\Engine\Scene\Transform.cpp" />
     <ClCompile Include="src\Engine\Scene\UI\Text.cpp" />

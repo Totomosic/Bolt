@@ -23,8 +23,8 @@ namespace NatureScene
 			PrimaryWindow->SetClearColor(Color::SkyBlue);
 
 			Scene* scene = SceneManager::CreateScene();
-			Layer* layer = scene->CreateLayer<SceneArray>("Main");
-			Layer* uiLayer = scene->CreateLayer<SceneArray>("UI");
+			Layer* layer = scene->CreateLayer("Main");
+			Layer* uiLayer = scene->CreateLayer("UI");
 			perspectiveCamera = scene->CreateCamera(Frustum::Perspective(PI / 3, PrimaryWindow->GetFramebuffer().Aspect(), 1, 1000), ProjectionType::Perspective);
 			orthoCamera = scene->CreateCamera(PrimaryWindow->GetFramebuffer().ViewFrustum(), ProjectionType::Orthographic);
 			layer->SetActiveCamera(perspectiveCamera);
@@ -69,6 +69,11 @@ namespace NatureScene
 			}
 
 			fpsText = uiLayer->UI().Text("fps ", Color::White, Transform({ 20, Height() - 20, -5 }), AlignH::Left, AlignV::Top);
+
+			RenderSchedule schedule(*scene);
+			RenderProcess process;
+			schedule.AddRenderProcess(process);
+			SceneRenderer::AddRenderSchedule(schedule);
 		}
 
 		void Update() override

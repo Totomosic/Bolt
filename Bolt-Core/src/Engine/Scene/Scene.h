@@ -1,5 +1,6 @@
 #pragma once
 #include "Layer.h"
+#include "ObjectCollection.h"
 
 #ifndef LAYERS_PER_SCENE
 #define LAYERS_PER_SCENE 12
@@ -37,13 +38,7 @@ namespace Bolt
 		std::vector<const Layer*> GetAllLayers() const;
 		std::vector<const Layer*> GetLayers(id_t mask) const;
 
-		Layer* CreateLayer(const blt::string& name, std::unique_ptr<SceneGraph>&& sceneGraph);
-
-		template<typename SceneGraphType>
-		Layer* CreateLayer(const blt::string& name)
-		{
-			return CreateLayer(name, std::make_unique<SceneGraphType>());
-		}
+		Layer* CreateLayer(const blt::string& name);
 
 		Camera* CreateCamera(const Projection& projection = Projection());
 		Camera* CreateCamera(const Frustum& frustum, ProjectionType type);

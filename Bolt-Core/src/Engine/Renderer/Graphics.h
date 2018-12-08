@@ -1,6 +1,5 @@
 #pragma once
 #include "Bolt-Graphics.h"
-#include "SceneRenderer.h"
 
 namespace Bolt
 {

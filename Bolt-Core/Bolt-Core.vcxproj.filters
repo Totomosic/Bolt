@@ -52,9 +52,6 @@
     <Filter Include="Engine\Networking">
       <UniqueIdentifier>{12126F42-7E28-6DD8-C79F-F8F933F53D60}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\NewRenderer">
-      <UniqueIdentifier>{EB14A7BC-D7F8-6712-4059-62652C5C5294}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Renderer">
       <UniqueIdentifier>{E1119970-4D9D-0635-56AE-8929C2B86235}</UniqueIdentifier>
     </Filter>
@@ -70,11 +67,8 @@
     <Filter Include="Engine\Scene\Lighting">
       <UniqueIdentifier>{BD5FF7D2-29CC-B2CD-F2BF-4A2B5EEBD435}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Scene\SceneGraph">
-      <UniqueIdentifier>{E7DBA49F-5313-ED36-5C1D-515AC8D31330}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Scene\SceneGraph\Query">
-      <UniqueIdentifier>{AC0808C6-1821-EFEF-E1CD-7E894DA58389}</UniqueIdentifier>
+    <Filter Include="Engine\Scene\Query">
+      <UniqueIdentifier>{BD929061-A976-51B7-12D7-4B0AFED93B39}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Scene\UI">
       <UniqueIdentifier>{65D59BAE-D160-0973-DA71-8C67467C6573}</UniqueIdentifier>
@@ -347,10 +341,16 @@
     <ClInclude Include="src\Engine\Renderer\RenderGroup.h">
       <Filter>Engine\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Renderer\RenderOptions.h">
+      <Filter>Engine\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Renderer\RenderPass.h">
       <Filter>Engine\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Renderer\RenderRoutine.h">
+      <Filter>Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Renderer\RenderSchedule.h">
       <Filter>Engine\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Renderer\SceneRenderer.h">
@@ -392,6 +392,9 @@
     <ClInclude Include="src\Engine\Scene\Layer.h">
       <Filter>Engine\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Scene\LayerEvents.h">
+      <Filter>Engine\Scene</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Scene\Lighting\LightSource.h">
       <Filter>Engine\Scene\Lighting</Filter>
     </ClInclude>
@@ -407,38 +410,29 @@
     <ClInclude Include="src\Engine\Scene\ObjectPrefab.h">
       <Filter>Engine\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Scene\Query\SGQComponents.h">
+      <Filter>Engine\Scene\Query</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Scene\Query\SGQFrustrum.h">
+      <Filter>Engine\Scene\Query</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Scene\Query\SGQNearTo.h">
+      <Filter>Engine\Scene\Query</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Scene\Query\SGQTransparency.h">
+      <Filter>Engine\Scene\Query</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Scene\Query\SGQuery.h">
+      <Filter>Engine\Scene\Query</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Scene\Query\SGQueryResult.h">
+      <Filter>Engine\Scene\Query</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Scene\Query\__Query__.h">
+      <Filter>Engine\Scene\Query</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Scene\Scene.h">
       <Filter>Engine\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\Scene\SceneGraph\Query\SGQComponents.h">
-      <Filter>Engine\Scene\SceneGraph\Query</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\Scene\SceneGraph\Query\SGQFrustrum.h">
-      <Filter>Engine\Scene\SceneGraph\Query</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\Scene\SceneGraph\Query\SGQNearTo.h">
-      <Filter>Engine\Scene\SceneGraph\Query</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\Scene\SceneGraph\Query\SGQTransparency.h">
-      <Filter>Engine\Scene\SceneGraph\Query</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\Scene\SceneGraph\Query\SGQuery.h">
-      <Filter>Engine\Scene\SceneGraph\Query</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\Scene\SceneGraph\Query\SGQueryResult.h">
-      <Filter>Engine\Scene\SceneGraph\Query</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\Scene\SceneGraph\Query\__Query__.h">
-      <Filter>Engine\Scene\SceneGraph\Query</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\Scene\SceneGraph\SceneArray.h">
-      <Filter>Engine\Scene\SceneGraph</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\Scene\SceneGraph\SceneGraph.h">
-      <Filter>Engine\Scene\SceneGraph</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\Scene\SceneGraph\__SceneGraph__.h">
-      <Filter>Engine\Scene\SceneGraph</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Scene\SceneManager.h">
       <Filter>Engine\Scene</Filter>
@@ -721,6 +715,7 @@
     </ClInclude>
     <ClInclude Include="src\Logging.h" />
     <ClInclude Include="src\Types.h" />
+    <ClInclude Include="src\Engine\Scene\Query\SGQRayCast.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\BoltTL\string.cpp">
@@ -819,6 +814,9 @@
     <ClCompile Include="src\Engine\Renderer\RenderRoutine.cpp">
       <Filter>Engine\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Renderer\RenderSchedule.cpp">
+      <Filter>Engine\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\Engine\Renderer\SceneRenderer.cpp">
       <Filter>Engine\Renderer</Filter>
     </ClCompile>
@@ -858,26 +856,20 @@
     <ClCompile Include="src\Engine\Scene\ObjectPrefab.cpp">
       <Filter>Engine\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Scene\Query\SGQComponents.cpp">
+      <Filter>Engine\Scene\Query</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Scene\Query\SGQNearTo.cpp">
+      <Filter>Engine\Scene\Query</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Scene\Query\SGQTransparency.cpp">
+      <Filter>Engine\Scene\Query</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Scene\Query\SGQuery.cpp">
+      <Filter>Engine\Scene\Query</Filter>
+    </ClCompile>
     <ClCompile Include="src\Engine\Scene\Scene.cpp">
       <Filter>Engine\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Engine\Scene\SceneGraph\Query\SGQComponents.cpp">
-      <Filter>Engine\Scene\SceneGraph\Query</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Engine\Scene\SceneGraph\Query\SGQNearTo.cpp">
-      <Filter>Engine\Scene\SceneGraph\Query</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Engine\Scene\SceneGraph\Query\SGQTransparency.cpp">
-      <Filter>Engine\Scene\SceneGraph\Query</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Engine\Scene\SceneGraph\Query\SGQuery.cpp">
-      <Filter>Engine\Scene\SceneGraph\Query</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Engine\Scene\SceneGraph\SceneArray.cpp">
-      <Filter>Engine\Scene\SceneGraph</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Engine\Scene\SceneGraph\SceneGraph.cpp">
-      <Filter>Engine\Scene\SceneGraph</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Scene\SceneManager.cpp">
       <Filter>Engine\Scene</Filter>
@@ -1031,6 +1023,7 @@
     </ClCompile>
     <ClCompile Include="src\Logging.cpp" />
     <ClCompile Include="src\Types.cpp" />
+    <ClCompile Include="src\Engine\Scene\Query\SGQRayCast.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Graphics\Resources\Shaders\Source\DefaultColor_f.glsl">

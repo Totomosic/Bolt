@@ -1,7 +1,6 @@
 #pragma once
 #include "Components\__Components__.h"
 #include "Lighting\__Lighting__.h"
-#include "SceneGraph\__SceneGraph__.h"
 #include "UI\__UI__.h"
 
 #include "GameObject.h"

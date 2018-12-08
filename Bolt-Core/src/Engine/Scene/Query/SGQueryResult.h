@@ -1,6 +1,6 @@
 #pragma once
 #include "SGQuery.h"
-#include "..\..\GameObject.h"
+#include "..\GameObject.h"
 
 namespace Bolt
 {

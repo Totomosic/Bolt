@@ -1,9 +1,10 @@
 #pragma once
 #include "Bolt-Graphics.h"
-#include "SceneGraph\__SceneGraph__.h"
 #include "ObjectCollection.h"
+#include "Query\__Query__.h"
 
 #include "UI\UIroot.h"
+#include "LayerEvents.h"
 
 namespace Bolt
 {
@@ -23,7 +24,6 @@ namespace Bolt
 	private:
 		id_t m_Id;
 		ObjectCollection m_GameObjects;
-		std::unique_ptr<SceneGraph> m_SceneGraph;
 		bool m_Enabled;
 		Camera* m_ActiveCamera;
 
@@ -41,8 +41,6 @@ namespace Bolt
 
 		const ObjectCollection& GameObjects() const;
 		ObjectCollection& GameObjects();
-		const SceneGraph& Graph() const;
-		SceneGraph& Graph();
 		Camera* ActiveCamera() const;
 		id_t Id() const;
 		const UIroot& UI() const;
@@ -70,6 +68,7 @@ namespace Bolt
 
 	private:
 		GameObject* AddTemporaryGameObject(GameObject&& object);
+		void Create(id_t id);
 
 	};
 

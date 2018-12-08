@@ -4,7 +4,7 @@
 namespace Bolt
 {
 
-	struct BLT_API SGQFrustrum : public SGQuery
+	class BLT_API SGQFrustrum : public SGQuery
 	{
 	public:
 		Frustum Frustrum;

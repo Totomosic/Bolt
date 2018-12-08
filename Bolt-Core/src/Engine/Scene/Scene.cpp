@@ -5,7 +5,7 @@ namespace Bolt
 {
 
 	Scene::Scene()
-		: m_Layers(), m_LayerNames(), m_Cameras()
+		: m_Layers{}, m_LayerNames(), m_Cameras()
 	{
 		ClearCameras();
 	}
@@ -102,12 +102,10 @@ namespace Bolt
 		return result;
 	}
 
-	Layer* Scene::CreateLayer(const blt::string& name, std::unique_ptr<SceneGraph>&& sceneGraph)
+	Layer* Scene::CreateLayer(const blt::string& name)
 	{
 		id_t id = FindNextId();
-		m_Layers[id].m_Id = id;
-		m_Layers[id].Enable();
-		m_Layers[id].m_SceneGraph = std::move(sceneGraph);
+		m_Layers[id].Create(id);
 		m_LayerNames[name] = id;
 		return &m_Layers[id];
 	}

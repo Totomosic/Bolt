@@ -1,5 +1,5 @@
 #include "SGQComponents.h"
-#include "..\SceneGraph.h"
+#include "..\ObjectCollection.h"
 
 namespace Bolt
 {
@@ -10,7 +10,7 @@ namespace Bolt
 	
 	}
 
-	std::vector<GameObject*> SGQComponents::Evaluate(const SceneGraph& graph, GameObject** mostRelevant, GameObject** leastRelevant) const
+	std::vector<GameObject*> SGQComponents::Evaluate(const ObjectCollection& graph, GameObject** mostRelevant, GameObject** leastRelevant) const
 	{
 		std::vector<GameObject*> result;
 		std::vector<GameObject*> objects = graph.GetAllGameObjects();

@@ -1,5 +1,5 @@
 #pragma once
-#include "Types.h"
+#include "Bolt-Core.h"
 
 namespace Bolt
 {
@@ -9,6 +9,13 @@ namespace Bolt
 	public:
 		Matrix4f ViewMatrix;
 		Matrix4f ProjectionMatrix;
+	};
+
+	struct BLT_API RenderCameraRef
+	{
+	public:
+		const Matrix4f* ViewMatrix = nullptr;
+		const Matrix4f* ProjectionMatrix = nullptr;
 	};
 
 }

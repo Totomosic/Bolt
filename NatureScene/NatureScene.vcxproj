@@ -19,6 +19,11 @@
     <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>NatureScene</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Globals">
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Globals">
     <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -61,7 +66,7 @@
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LinkIncremental>true</LinkIncremental>
+    <LinkIncremental>false</LinkIncremental>
     <OutDir>..\bin\Release-windows-x86\NatureScene\</OutDir>
     <IntDir>..\bin-int\Release-windows-x86\NatureScene\</IntDir>
     <TargetName>NatureScene</TargetName>
@@ -93,13 +98,19 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>BLT_BUILD_STATIC;BLT_PLATFORM_WINDOWS;BLT_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BLT_BUILD_STATIC;BLT_PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\Bolt-Core\external;..\Bolt-Core\src;..\Bolt-Core\external\GLEW\include;..\Bolt-Core\external\spdlog\include;..\..\..\..\..\AppData\Local\Programs\Python\Python37-32\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <Optimization>Disabled</Optimization>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <StringPooling>true</StringPooling>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>opengl32.lib;glew32s.lib;glfw3.lib;FreeImage.lib;freetype26d.lib;freetype-gl.lib;python37.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\Bolt-Core\external\FreeImage;..\Bolt-Core\external\FreeType;..\Bolt-Core\external\FreeType-GL;..\Bolt-Core\external\GLEW;..\Bolt-Core\external\GLFW;..\Bolt-Core\external\spdlog;..\Bolt-Core\external\FreeImage\bin;..\Bolt-Core\external\FreeImage\include;..\Bolt-Core\external\FreeImage\lib;..\Bolt-Core\external\FreeImage\include\FreeImage;..\Bolt-Core\external\FreeType\include;..\Bolt-Core\external\FreeType\lib;..\Bolt-Core\external\FreeType\include\config;..\Bolt-Core\external\FreeType\include\internal;..\Bolt-Core\external\FreeType\include\internal\services;..\Bolt-Core\external\FreeType-GL\include;..\Bolt-Core\external\FreeType-GL\lib;..\Bolt-Core\external\GLEW\include;..\Bolt-Core\external\GLEW\lib;..\Bolt-Core\external\GLEW\include\GL;..\Bolt-Core\external\GLFW\docs;..\Bolt-Core\external\GLFW\include;..\Bolt-Core\external\GLFW\lib-vc2015;..\Bolt-Core\external\GLFW\docs\html;..\Bolt-Core\external\GLFW\docs\html\search;..\Bolt-Core\external\GLFW\include\GLFW;..\Bolt-Core\external\spdlog\bench;..\Bolt-Core\external\spdlog\cmake;..\Bolt-Core\external\spdlog\example;..\Bolt-Core\external\spdlog\include;..\Bolt-Core\external\spdlog\tests;..\Bolt-Core\external\spdlog\bench\logs;..\Bolt-Core\external\spdlog\example\jni;..\Bolt-Core\external\spdlog\example\logs;..\Bolt-Core\external\spdlog\include\spdlog;..\Bolt-Core\external\spdlog\include\spdlog\details;..\Bolt-Core\external\spdlog\include\spdlog\fmt;..\Bolt-Core\external\spdlog\include\spdlog\sinks;..\Bolt-Core\external\spdlog\include\spdlog\fmt\bundled;..\..\..\..\..\AppData\Local\Programs\Python\Python37-32\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
@@ -108,10 +119,8 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>BLT_BUILD_STATIC;BLT_PLATFORM_WINDOWS;BLT_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\Bolt-Core\external;..\Bolt-Core\src;..\Bolt-Core\external\GLEW\include;..\Bolt-Core\external\spdlog\include;..\..\..\..\..\AppData\Local\Programs\Python\Python37-32\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
-      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

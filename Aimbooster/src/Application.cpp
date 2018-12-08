@@ -10,7 +10,8 @@ namespace Aimbooster
 	class App : public Application
 	{
 	public:
-		float TARGETS_PER_SECOND = 2;
+		int MAX_LIVES = 5;
+		float TARGETS_PER_SECOND = 3.5f;
 		float TARGET_SIZE = 50;
 		float TARGET_LIFETIME = 5;
 
@@ -30,6 +31,8 @@ namespace Aimbooster
 		Text* scoreText;
 
 		int score = 0;
+		int lives = MAX_LIVES;
+		float totalTime = 0;
 
 	public:
 		void Init() override
@@ -38,8 +41,8 @@ namespace Aimbooster
 			isPlaying = false;
 
 			Scene* scene = SceneManager::CreateScene();
-			mainLayer = scene->CreateLayer<SceneArray>("Main");
-			mainCamera = scene->CreateCamera(PrimaryWindow->GetFramebuffer().ViewFrustum(-0.1f, 100), ProjectionType::Orthographic);
+			mainLayer = scene->CreateLayer("Main");
+			mainCamera = scene->CreateCamera(PrimaryWindow->GetFramebuffer().ViewFrustum(-100, 100), ProjectionType::Orthographic);
 			mainLayer->SetActiveCamera(mainCamera);
 
 			arial = ResourceManager::Register(std::make_unique<Font>("res/arial.ttf", 24));
@@ -72,9 +75,20 @@ namespace Aimbooster
 			});
 			EventManager::Subscribe(TARGET_FAILED_EVENT, [this](id_t eventId, Event& args) -> bool
 			{
-				this->score--;
+				TargetFailedEvent& e = *(TargetFailedEvent*)&args;
+				this->lives--;
+				GameObject* marker = factory.Ellipse(5, 5, Color::Black, Transform(e.Position));
+				Destroy(marker, 1.0f);
+				if (this->lives <= 0)
+				{
+					CreateEndScreen();
+				}
 				return false;
 			});
+
+			RenderSchedule schedule(*scene);
+			schedule.AddRenderProcess({  });
+			SceneRenderer::AddRenderSchedule(schedule);
 
 			CreateTitleScreen();
 		}
@@ -86,16 +100,9 @@ namespace Aimbooster
 
 		void Update() override
 		{
-			if (Input::KeyPressed(Keycode::R))
-			{
-				CreateGameScreen();
-			}
-			if (Input::KeyPressed(Keycode::T))
-			{
-				CreateTitleScreen();
-			}
 			if (isPlaying)
 			{
+				totalTime += Time::DeltaTime();
 				timer->SetText(TimeToString());
 				fpsText->SetText(std::to_string((int)Time::FramesPerSecond()) + " fps");
 				scoreText->SetText("Score: " + std::to_string(score));
@@ -114,12 +121,12 @@ namespace Aimbooster
 			Time::GetTimer(targetTimer)->Stop();
 			Time::GetTimer(targetTimer)->Reset();
 			
-			mainLayer->UI().AddElement<Text>("Aim Booster", ResourceManager::Get<Font>(titleArial), Color::White, Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() - 300, -5 }), AlignH::Center);
-			factory.Instantiate(factory.GetPrefab(TITLE_TARGET_PREFAB), Transform({ 300, 400, -5 }, Quaternion::Identity(), { 50, 50, 1 }));
-			UIsurface* playButton = mainLayer->UI().Rectangle(300, 75, Color(0, 200, 0), Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() - 450, -5 }));
-			playButton->Text("Play", Color::White, Transform({ 0, 0, 1 }, Quaternion::Identity(), { 1.5f, 1.5f, 1.0f }));
+			mainLayer->UI().Rectangle(600, mainCamera->ViewHeight(), Color(10, 10, 10), Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() / 2, -10 }));
+			mainLayer->UI().Text("Aim Booster", ResourceManager::Get<Font>(titleArial), Color::White, Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() - 300, -5 }), AlignH::Center);
+			UIsurface* playButton = mainLayer->UI().Rectangle(300, 50, Color(0, 200, 0), Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() / 2 - 150, -5 }));
+			playButton->Text("Play", Color::White, Transform({ 0, 0, 1 }));
 
-			UIsurface* quitButton = mainLayer->UI().Rectangle(150, 50, Color(200, 0, 0), Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() - 550, -5 }));
+			UIsurface* quitButton = mainLayer->UI().Rectangle(300, 50, Color(200, 0, 0), Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() / 2 - 225, -5 }));
 			quitButton->Text("Quit", Color::White, Transform({ 0, 0, 1 }));
 
 			playButton->EventHandler().OnClicked.Subscribe([this](id_t eventId, UIEvent& args) -> bool
@@ -145,6 +152,18 @@ namespace Aimbooster
 				PrimaryWindow->Close();
 				return false;
 			});
+
+			quitButton->EventHandler().OnHoverEntry.Subscribe([](id_t eventId, UIEvent& args) -> bool
+			{
+				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0].BaseColor = Color::Red;
+				return false;
+			});
+
+			quitButton->EventHandler().OnHoverExit.Subscribe([](id_t eventId, UIEvent& args) -> bool
+			{
+				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0].BaseColor = Color(200, 0, 0);
+				return false;
+			});
 			
 		}
 
@@ -152,23 +171,99 @@ namespace Aimbooster
 		{
 			isPlaying = true;
 			score = 0;
-			Time::Reset();
+			lives = MAX_LIVES;
+			totalTime = 0;
 			mainLayer->Clear();
 			Time::GetTimer(targetTimer)->Start();
 			factory.Rectangle(mainCamera->ViewWidth(), 60, Color(30, 30, 30), Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() - 30, -10 }));
-			timer = mainLayer->UI().Text("00:00.0", ResourceManager::Get<Font>(arial), Color::White, Transform({ 20, mainCamera->ViewHeight() - 30, -5 }), AlignH::Left);
+			UIsurface* qButton = mainLayer->UI().Rectangle(30, 30, Color(200, 0, 0), Transform({ 30, mainCamera->ViewHeight() - 30, -5 }));
+			qButton->Text("<", Color::White, Transform({ 0, 0, 1 }));
+			timer = mainLayer->UI().Text("00:00.0", Color::White, Transform({ 60, mainCamera->ViewHeight() - 30, -5 }), AlignH::Left);
 			fpsText = mainLayer->UI().Text("60 fps", Color::White, Transform({ mainCamera->ViewWidth() - 100, mainCamera->ViewHeight() - 30, -5 }), AlignH::Left);
 			scoreText = mainLayer->UI().Text("Score: 0", Color::White, Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() - 30, -5 }), AlignH::Center);
+
+			qButton->EventHandler().OnClicked.Subscribe([this](id_t eventId, UIEvent& args) -> bool
+			{
+				CreateTitleScreen();
+				return false;
+			});
+
+			qButton->EventHandler().OnHoverEntry.Subscribe([](id_t eventId, UIEvent& args) -> bool
+			{
+				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0].BaseColor = Color::Red;
+				return false;
+			});
+
+			qButton->EventHandler().OnHoverExit.Subscribe([](id_t eventId, UIEvent& args) -> bool
+			{
+				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0].BaseColor = Color(200, 0, 0);
+				return false;
+			});
+		}
+
+		void CreateEndScreen()
+		{
+			isPlaying = false;
+			mainLayer->Clear();
+			Time::GetTimer(targetTimer)->Stop();
+			Time::GetTimer(targetTimer)->Reset();
+
+			mainLayer->UI().Rectangle(600, mainCamera->ViewHeight(), Color(10, 10, 10), Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() / 2, -10 }));
+			mainLayer->UI().Text("Game Over", ResourceManager::Get<Font>(titleArial), Color::White, Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() / 2 + 100, -5 }));
+			mainLayer->UI().Text("Play time: " + TimeToString(), Color::White, Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() / 2 + 0, -5 }));
+			mainLayer->UI().Text("Score: " + std::to_string(score), Color::White, Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() / 2 - 50, -5 }));
+			UIsurface* retryButton = mainLayer->UI().Rectangle(300, 50, Color(0, 200, 0), Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() / 2 - 150, -5 }));
+			retryButton->Text("Retry", Color::White, Transform({ 0, 0, 1 }));
+			retryButton->EventHandler().OnClicked.Subscribe([this](id_t event, UIEvent& args) -> bool
+			{
+				CreateGameScreen();
+				return false;
+			});
+
+			retryButton->EventHandler().OnHoverEntry.Subscribe([](id_t eventId, UIEvent& args) -> bool
+			{
+				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0].BaseColor = Color::Green;
+				return false;
+			});
+
+			retryButton->EventHandler().OnHoverExit.Subscribe([](id_t eventId, UIEvent& args) -> bool
+			{
+				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0].BaseColor = Color(0, 200, 0);
+				return false;
+			});
+
+			UIsurface* menuButton = mainLayer->UI().Rectangle(300, 50, Color(200, 0, 0), Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() / 2 - 225, -5 }));
+			menuButton->Text("Main Menu", Color::White, Transform({ 0, 0, 1 }));
+			menuButton->EventHandler().OnClicked.Subscribe([this](id_t eventId, UIEvent& args) -> bool
+			{
+				CreateTitleScreen();
+				return false;
+			});
+
+			menuButton->EventHandler().OnHoverEntry.Subscribe([](id_t eventId, UIEvent& args) -> bool
+			{
+				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0].BaseColor = Color::Red;
+				return false;
+			});
+
+			menuButton->EventHandler().OnHoverExit.Subscribe([](id_t eventId, UIEvent& args) -> bool
+			{
+				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0].BaseColor = Color(200, 0, 0);
+				return false;
+			});
+
+			totalTime = 0;
 		}
 
 		void CreateTarget()
 		{
 			GameObject* target = factory.Instantiate(factory.GetPrefab(TARGET_PREFAB), Transform({ Random::NextFloat(0, mainCamera->ViewWidth()), Random::NextFloat(0, mainCamera->ViewHeight() - 60), -20 }));
+			target->AddTag("Target");
 		}
 
 		blt::string TimeToString()
 		{
-			double time = Time::CurrentTime();
+			double time = (double)totalTime;
 			int minutes = (int)(time / 60.0);
 			int seconds = (int)(time - 60 * minutes);
 			int milliseconds = (int)((time - (minutes * 60 + seconds)) * 1000);

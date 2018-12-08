@@ -20,7 +20,7 @@ namespace Bolt
 
 	UIelement::~UIelement()
 	{
-		if (m_GameObject != nullptr)
+		if (m_GameObject != nullptr && m_GameObject->Id() != GameObject::InvalidID)
 		{
 			Destroy(m_GameObject, 0.0f);
 		}

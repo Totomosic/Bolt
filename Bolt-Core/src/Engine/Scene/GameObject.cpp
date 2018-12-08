@@ -5,7 +5,7 @@ namespace Bolt
 {
 
 	GameObject::GameObject() : ObjectPrefab(),
-		m_Id(GameObject::InvalidID), m_Parent(nullptr), m_Layer(nullptr), m_Tags()
+		m_Id(GameObject::InvalidID), m_Parent(nullptr), m_Layer(nullptr), m_Children(), m_Tags()
 	{
 	
 	}

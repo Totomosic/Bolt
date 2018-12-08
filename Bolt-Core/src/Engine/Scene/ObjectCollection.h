@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include "Camera.h"
+#include "Query\__Query__.h"
 
 #ifndef GAMEOBJECTS_PER_LAYER
 #define GAMEOBJECTS_PER_LAYER 20000
@@ -42,8 +43,8 @@ namespace Bolt
 		const std::vector<GameObject*>& GetGameObjectsByTag(const blt::string& tag) const;
 		bool TagExists(const blt::string& tag) const;
 
-		id_t AddGameObject(GameObject&& object);
-		void RemoveGameObject(GameObject* object);
+		virtual id_t AddGameObject(GameObject&& object);
+		virtual void RemoveGameObject(GameObject* object);
 		void RemoveGameObject(id_t id);
 		void RemoveAllWithTag(const blt::string& tag);
 
@@ -52,9 +53,11 @@ namespace Bolt
 		void RemoveTags(GameObject* object, size_t count = 1) const;
 		void RemoveTag(GameObject* object, const blt::string& tag) const;
 
-		void Reset();
+		virtual SGQueryResult Query(const SGQuery& query) const;
 
-		void Transfer(XMLserializer& backend, bool isWriting);
+		virtual void Reset();
+
+		virtual void Transfer(XMLserializer& backend, bool isWriting);
 
 	private:
 		id_t FindNextId() const;

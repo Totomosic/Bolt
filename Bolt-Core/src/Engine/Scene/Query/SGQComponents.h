@@ -4,7 +4,7 @@
 namespace Bolt
 {
 
-	struct BLT_API SGQComponents : public SGQuery
+	class BLT_API SGQComponents : public SGQuery
 	{
 	public:
 		std::vector<std::type_index> ComponentTypes;
@@ -12,7 +12,7 @@ namespace Bolt
 	public:
 		SGQComponents(const std::vector<std::type_index>& componentTypes);
 
-		std::vector<GameObject*> Evaluate(const SceneGraph& graph, GameObject** mostRelevant, GameObject** leastRelevant) const override;
+		std::vector<GameObject*> Evaluate(const ObjectCollection& graph, GameObject** mostRelevant, GameObject** leastRelevant) const override;
 
 	};
 

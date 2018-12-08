@@ -33,6 +33,7 @@ namespace Bolt
 		Component* AddComponent(size_t componentTypeHash, std::unique_ptr<Component>&& component);
 		void RemoveComponentById(id_t id);
 		void RemoveComponent(size_t componentTypeHash);
+		void Clear();
 
 		template<typename T>
 		T& GetComponent() const

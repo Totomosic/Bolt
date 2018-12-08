@@ -43,49 +43,91 @@ namespace Bolt
 		}
 	}
 
-	void SceneRenderer::Render(const RenderPassData& passData, const Scene& scene)
+	std::unordered_map<const Scene*, RenderSchedule> SceneRenderer::s_Schedules = std::unordered_map<const Scene*, RenderSchedule>();
+
+	void SceneRenderer::AddRenderSchedule(const RenderSchedule& schedule)
 	{
-		std::vector<const Layer*> layers = scene.GetAllLayers();
-		passData.RenderTarget->Clear();
+		BLT_ASSERT(s_Schedules.find(&schedule.GetScene()) == s_Schedules.end(), "Schedule already exists for this scene");
+		s_Schedules[&schedule.GetScene()] = schedule;
+	}
+
+	void SceneRenderer::Render(const Scene& scene)
+	{
+		BLT_ASSERT(s_Schedules.find(&scene) != s_Schedules.end(), "No schedule found for given scene");
+		RenderSchedule& schedule = s_Schedules[&scene];
+		for (const RenderProcess& process : schedule.Processes())
+		{
+			std::vector<const Layer*> layers = (process.LayerMask == SceneRenderer::ALL_LAYERS) ? scene.GetAllLayers() : scene.GetLayers(process.LayerMask);
+			for (const Layer* layer : layers)
+			{
+				RenderOptions options = process.Options;
+				if (process.Cameras.find(layer->Id()) != process.Cameras.end())
+				{
+					options.CameraOverride = process.Cameras.at(layer->Id());
+				}
+				RenderLayer(options, *layer);
+			}
+		}
+	}
+
+	void SceneRenderer::Render(const RenderOptions& options, const Scene& scene)
+	{
+		return Render(options, scene, SceneRenderer::ALL_LAYERS);
+	}
+
+	void SceneRenderer::Render(const RenderOptions& options, const Scene& scene, id_t layerMask)
+	{
+		std::vector<const Layer*> layers = (layerMask != SceneRenderer::ALL_LAYERS) ? scene.GetLayers(layerMask) : scene.GetAllLayers();
 		for (const Layer* layer : layers)
 		{
-			RenderPass defaultRenderPass;
-			RenderPass transparentPass;
-			defaultRenderPass.Metadata = { passData.RenderTarget, false };
-			transparentPass.Metadata = { passData.RenderTarget, false };
-			ProjectionType projection = layer->ActiveCamera()->CameraProjection().Type;
-			
-			std::unordered_map<Material, std::vector<std::pair<const Material*, RenderData>>> materialMap;
-			std::vector<GameObject*> objects = layer->Graph().Query(SGQTransparency(false)).GameObjects;
-
-			PopulateMaterialMap(objects, materialMap);
-			PopulateRenderPass(defaultRenderPass, materialMap);
-			materialMap.clear();
-			objects = layer->Graph().Query(SGQTransparency(true)).GameObjects;
-			if (projection == ProjectionType::Orthographic)
-			{
-				std::sort(objects.begin(), objects.end(), [](GameObject* left, GameObject* right)
-				{
-					return left->transform().Position().z <= right->transform().Position().z;
-				});
-			}
-			else if (projection == ProjectionType::Perspective)
-			{
-				Vector3f cameraPosition = layer->ActiveCamera()->transform().Position();
-				std::sort(objects.begin(), objects.end(), [&cameraPosition](GameObject* left, GameObject* right)
-				{
-					return (cameraPosition - left->transform().Position()).LengthSqrd() >= (cameraPosition - right->transform().Position()).LengthSqrd();
-				});
-			}
-			PopulateMaterialMap(objects, materialMap);
-			PopulateRenderPass(transparentPass, materialMap);
-
-			RenderCamera camera;
-			camera.ViewMatrix = layer->ActiveCamera()->ViewMatrix();
-			camera.ProjectionMatrix = layer->ActiveCamera()->ProjectionMatrix();
-			GlobalRenderer::Render(defaultRenderPass, {}, camera);
-			GlobalRenderer::Render(transparentPass, {}, camera);
+			RenderLayer(options, *layer);
 		}
+	}
+
+	void SceneRenderer::RenderLayer(const RenderOptions& passData, const Layer& layer)
+	{
+		RenderPass defaultRenderPass;
+		RenderPass transparentPass;
+		defaultRenderPass.RenderTarget = passData.RenderTarget;
+		transparentPass.RenderTarget = passData.RenderTarget;
+		ProjectionType projection = layer.ActiveCamera()->CameraProjection().Type;
+
+		std::unordered_map<Material, std::vector<std::pair<const Material*, RenderData>>> materialMap;
+		std::vector<GameObject*> objects = layer.GameObjects().Query(SGQTransparency(false)).GameObjects;
+
+		PopulateMaterialMap(objects, materialMap);
+		PopulateRenderPass(defaultRenderPass, materialMap);
+		materialMap.clear();
+		objects = layer.GameObjects().Query(SGQTransparency(true)).GameObjects;
+		if (projection == ProjectionType::Orthographic)
+		{
+			std::sort(objects.begin(), objects.end(), [](GameObject* left, GameObject* right)
+			{
+				return left->transform().Position().z <= right->transform().Position().z;
+			});
+		}
+		else if (projection == ProjectionType::Perspective)
+		{
+			Vector3f cameraPosition = layer.ActiveCamera()->transform().Position();
+			std::sort(objects.begin(), objects.end(), [&cameraPosition](GameObject* left, GameObject* right)
+			{
+				return (cameraPosition - left->transform().Position()).LengthSqrd() >= (cameraPosition - right->transform().Position()).LengthSqrd();
+			});
+		}
+		PopulateMaterialMap(objects, materialMap);
+		PopulateRenderPass(transparentPass, materialMap);
+
+		RenderContext context = passData.GlobalContext;
+		if (context.Lights.size() == 0)
+		{
+			context.Lights.push_back(LightSource{ Vector3f(0, 100, 0) });
+		}
+
+		RenderCamera camera;
+		camera.ViewMatrix = (passData.CameraOverride.ViewMatrix == nullptr) ? layer.ActiveCamera()->ViewMatrix() : *passData.CameraOverride.ViewMatrix;
+		camera.ProjectionMatrix = (passData.CameraOverride.ProjectionMatrix == nullptr) ? layer.ActiveCamera()->ProjectionMatrix() : *passData.CameraOverride.ProjectionMatrix;
+		GlobalRenderer::Render(defaultRenderPass, context, camera);
+		GlobalRenderer::Render(transparentPass, context, camera);
 	}
 
 }

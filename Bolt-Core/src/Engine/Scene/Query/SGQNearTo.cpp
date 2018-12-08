@@ -1,5 +1,5 @@
 #include "SGQNearTo.h"
-#include "..\SceneGraph.h"
+#include "..\ObjectCollection.h"
 
 namespace Bolt
 {
@@ -9,7 +9,7 @@ namespace Bolt
 		QType = QueryType::NearTo;
 	}
 
-	std::vector<GameObject*> SGQNearTo::Evaluate(const SceneGraph& graph, GameObject** mostRelevant, GameObject** leastRelevant) const
+	std::vector<GameObject*> SGQNearTo::Evaluate(const ObjectCollection& graph, GameObject** mostRelevant, GameObject** leastRelevant) const
 	{
 		std::vector<GameObject*> result;
 		std::vector<GameObject*> objects = graph.GetAllGameObjects();
