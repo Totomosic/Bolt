@@ -19,6 +19,8 @@ namespace Bolt
 		TCPsocket& operator=(TCPsocket&& other);
 		~TCPsocket();
 
+		bool IsValid() const;
+
 		int Bind(const SocketAddress& address);
 		int Listen(int backlog);
 		TCPsocket Accept(SocketAddress* outAddress);

@@ -1,4 +1,5 @@
-#include "SGQNearTo.h"
+#include "Types.h"
+#include "SGQNearTo.h"
 #include "..\ObjectCollection.h"
 
 namespace Bolt

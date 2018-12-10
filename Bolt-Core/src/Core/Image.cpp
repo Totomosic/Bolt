@@ -1,4 +1,5 @@
-#include "Image.h"
+#include "Types.h"
+#include "Image.h"
 #include "Functions.h"
 
 namespace Bolt

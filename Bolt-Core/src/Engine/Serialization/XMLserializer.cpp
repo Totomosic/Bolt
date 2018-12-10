@@ -1,4 +1,5 @@
-#include "XMLserializer.h"
+#include "Types.h"
+#include "XMLserializer.h"
 
 namespace Bolt
 {

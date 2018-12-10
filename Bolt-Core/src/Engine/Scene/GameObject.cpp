@@ -1,4 +1,5 @@
-#include "GameObject.h"
+#include "Types.h"
+#include "GameObject.h"
 #include "Layer.h"
 
 namespace Bolt

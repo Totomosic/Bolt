@@ -1,4 +1,5 @@
-#include "FileLoader.h"
+#include "Types.h"
+#include "FileLoader.h"
 
 namespace Bolt
 {

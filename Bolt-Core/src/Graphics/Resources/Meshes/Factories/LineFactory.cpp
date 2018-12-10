@@ -1,4 +1,5 @@
-#include "LineFactory.h"
+#include "Types.h"
+#include "LineFactory.h"
 
 namespace Bolt
 {

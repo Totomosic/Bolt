@@ -1,4 +1,5 @@
-#include "ArrayDescriptor.h"
+#include "Types.h"
+#include "ArrayDescriptor.h"
 
 namespace Bolt
 {

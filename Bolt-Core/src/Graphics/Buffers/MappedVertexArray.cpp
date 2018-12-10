@@ -1,4 +1,5 @@
-#include "MappedVertexArray.h"
+#include "Types.h"
+#include "MappedVertexArray.h"
 #include "IteratorManager.h"
 
 namespace Bolt

@@ -1,4 +1,5 @@
-#include "SGQuery.h"
+#include "Types.h"
+#include "SGQuery.h"
 
 namespace Bolt
 {

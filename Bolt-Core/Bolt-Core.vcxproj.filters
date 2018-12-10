@@ -419,6 +419,9 @@
     <ClInclude Include="src\Engine\Scene\Query\SGQNearTo.h">
       <Filter>Engine\Scene\Query</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Scene\Query\SGQRayCast.h">
+      <Filter>Engine\Scene\Query</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Scene\Query\SGQTransparency.h">
       <Filter>Engine\Scene\Query</Filter>
     </ClInclude>
@@ -715,7 +718,6 @@
     </ClInclude>
     <ClInclude Include="src\Logging.h" />
     <ClInclude Include="src\Types.h" />
-    <ClInclude Include="src\Engine\Scene\Query\SGQRayCast.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\BoltTL\string.cpp">
@@ -860,6 +862,9 @@
       <Filter>Engine\Scene\Query</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Scene\Query\SGQNearTo.cpp">
+      <Filter>Engine\Scene\Query</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Scene\Query\SGQRayCast.cpp">
       <Filter>Engine\Scene\Query</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Scene\Query\SGQTransparency.cpp">
@@ -1023,7 +1028,6 @@
     </ClCompile>
     <ClCompile Include="src\Logging.cpp" />
     <ClCompile Include="src\Types.cpp" />
-    <ClCompile Include="src\Engine\Scene\Query\SGQRayCast.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Graphics\Resources\Shaders\Source\DefaultColor_f.glsl">

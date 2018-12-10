@@ -1,4 +1,5 @@
-#include "Material.h"
+#include "Types.h"
+#include "Material.h"
 
 namespace Bolt
 {

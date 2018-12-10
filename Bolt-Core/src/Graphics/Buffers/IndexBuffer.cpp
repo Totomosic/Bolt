@@ -1,4 +1,5 @@
-#include "IndexBuffer.h"
+#include "Types.h"
+#include "IndexBuffer.h"
 
 namespace Bolt
 {

@@ -112,19 +112,22 @@ namespace Blockstream
 		m_Socket.Listen(5);
 		SocketAddress clientAddr;
 		m_ClientSocket = m_Socket.Accept(&clientAddr);
-		GameManager::SetStartTile(GameManager::Map().GetTile(4, 0));
-		GameManager::SetEndTile(GameManager::Map().GetTile(4, 8));
+		if (m_ClientSocket.IsValid())
+		{
+			GameManager::SetStartTile(GameManager::Map().GetTile(4, 0));
+			GameManager::SetEndTile(GameManager::Map().GetTile(4, 8));
 
-		byte message[4];
-		message[0] = 0;
-		message[1] = 4;
-		message[2] = 8;
-		message[3] = 4;
-		GetSocket().Send(message, 4);
+			byte message[4];
+			message[0] = 0;
+			message[1] = 4;
+			message[2] = 8;
+			message[3] = 4;
+			GetSocket().Send(message, 4);
 
-		OnClientConnected.Post();
-		std::thread thread = std::thread(std::bind(&GameServer::ListenForMessages, this));
-		thread.detach();
+			OnClientConnected.Post();
+			std::thread thread = std::thread(std::bind(&GameServer::ListenForMessages, this));
+			thread.detach();
+		}
 	}
 
 	void GameServer::RunClientPrivate(const blt::string& host)

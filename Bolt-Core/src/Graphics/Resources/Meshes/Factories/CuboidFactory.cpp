@@ -1,4 +1,5 @@
-#include "CuboidFactory.h"
+#include "Types.h"
+#include "CuboidFactory.h"
 
 namespace Bolt
 {

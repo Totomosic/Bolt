@@ -1,4 +1,5 @@
-#include "Framebuffer.h"
+#include "Types.h"
+#include "Framebuffer.h"
 
 namespace Bolt
 {

@@ -1,4 +1,5 @@
-#include "Texture.h"
+#include "Types.h"
+#include "Texture.h"
 
 namespace Bolt
 {

@@ -1,4 +1,5 @@
-#include "SceneRenderer.h"
+#include "Types.h"
+#include "SceneRenderer.h"
 
 namespace Bolt
 {

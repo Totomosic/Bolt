@@ -1,4 +1,5 @@
-#include "SimplexNoise.h"
+#include "Types.h"
+#include "SimplexNoise.h"
 
 namespace Bolt
 {

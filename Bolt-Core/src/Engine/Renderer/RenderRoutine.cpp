@@ -1,4 +1,5 @@
-#include "RenderRoutine.h"
+#include "Types.h"
+#include "RenderRoutine.h"
 
 namespace Bolt
 {

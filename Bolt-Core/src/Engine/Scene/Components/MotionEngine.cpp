@@ -1,4 +1,5 @@
-#include "MotionEngine.h"
+#include "Types.h"
+#include "MotionEngine.h"
 #include "..\GameObject.h"
 
 namespace Bolt

@@ -1,4 +1,5 @@
-#include "GLState.h"
+#include "Types.h"
+#include "GLState.h"
 
 namespace Bolt
 {

@@ -1,4 +1,5 @@
-#include "Window.h"
+#include "Types.h"
+#include "Window.h"
 #include "Engine\User\Input.h"
 
 namespace Bolt

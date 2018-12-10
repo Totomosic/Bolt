@@ -1,4 +1,5 @@
-#include "RectangleFactory.h"
+#include "Types.h"
+#include "RectangleFactory.h"
 
 namespace Bolt
 {

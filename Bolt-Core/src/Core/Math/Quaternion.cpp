@@ -1,4 +1,5 @@
-#include "Quaternion.h"
+#include "Types.h"
+#include "Quaternion.h"
 
 namespace Bolt
 {

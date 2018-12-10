@@ -1,4 +1,5 @@
-#include "ObjectCollection.h"
+#include "Types.h"
+#include "ObjectCollection.h"
 
 namespace Bolt
 {

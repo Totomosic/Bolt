@@ -1,4 +1,5 @@
-#include "Color.h"
+#include "Types.h"
+#include "Color.h"
 #include "Functions.h"
 
 namespace Bolt

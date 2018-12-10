@@ -1,4 +1,5 @@
-#include "ResourceManager.h"
+#include "Types.h"
+#include "ResourceManager.h"
 #include "Textures\Texture2D.h"
 #include "Meshes\Model.h"
 #include "Textures\Fonts\Font.h"

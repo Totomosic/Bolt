@@ -1,4 +1,5 @@
-#include "ShaderCompiler.h"
+#include "Types.h"
+#include "ShaderCompiler.h"
 
 namespace Bolt
 {

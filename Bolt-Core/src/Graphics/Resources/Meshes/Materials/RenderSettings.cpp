@@ -1,4 +1,5 @@
-#include "RenderSettings.h"
+#include "Types.h"
+#include "RenderSettings.h"
 
 namespace Bolt
 {

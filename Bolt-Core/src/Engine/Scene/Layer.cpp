@@ -1,4 +1,5 @@
-#include "Layer.h"
+#include "Types.h"
+#include "Layer.h"
 #include "ObjectCollection.h"
 
 namespace Bolt

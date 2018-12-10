@@ -1,4 +1,5 @@
-#include "VertexIterator.h"
+#include "Types.h"
+#include "VertexIterator.h"
 #include "..\VertexArray.h"
 
 namespace Bolt

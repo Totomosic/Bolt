@@ -1,4 +1,5 @@
-#include "IteratorManager.h"
+#include "Types.h"
+#include "IteratorManager.h"
 #include "VertexArray.h"
 #include "VertexBuffer.h"
 

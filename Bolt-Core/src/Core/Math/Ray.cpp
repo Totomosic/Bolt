@@ -1,4 +1,5 @@
-#include "Ray.h"
+#include "Types.h"
+#include "Ray.h"
 
 namespace Bolt
 {
