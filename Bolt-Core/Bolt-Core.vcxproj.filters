@@ -446,15 +446,6 @@
     <ClInclude Include="src\Engine\Scene\UI\Text.h">
       <Filter>Engine\Scene\UI</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\Scene\UI\UIelement.h">
-      <Filter>Engine\Scene\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\Scene\UI\UIroot.h">
-      <Filter>Engine\Scene\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\Scene\UI\UIsurface.h">
-      <Filter>Engine\Scene\UI</Filter>
-    </ClInclude>
     <ClInclude Include="src\Engine\Scene\UI\__UI__.h">
       <Filter>Engine\Scene\UI</Filter>
     </ClInclude>
@@ -718,6 +709,9 @@
     </ClInclude>
     <ClInclude Include="src\Logging.h" />
     <ClInclude Include="src\Types.h" />
+    <ClInclude Include="src\Engine\Scene\UI\UIelement.h" />
+    <ClInclude Include="src\Engine\Scene\UI\UIroot.h" />
+    <ClInclude Include="src\Engine\Scene\UI\UIsurface.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\BoltTL\string.cpp">
@@ -885,15 +879,6 @@
     <ClCompile Include="src\Engine\Scene\UI\Text.cpp">
       <Filter>Engine\Scene\UI</Filter>
     </ClCompile>
-    <ClCompile Include="src\Engine\Scene\UI\UIelement.cpp">
-      <Filter>Engine\Scene\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Engine\Scene\UI\UIroot.cpp">
-      <Filter>Engine\Scene\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Engine\Scene\UI\UIsurface.cpp">
-      <Filter>Engine\Scene\UI</Filter>
-    </ClCompile>
     <ClCompile Include="src\Engine\Scripting\Python\PyInterpreter.cpp">
       <Filter>Engine\Scripting\Python</Filter>
     </ClCompile>
@@ -1028,6 +1013,9 @@
     </ClCompile>
     <ClCompile Include="src\Logging.cpp" />
     <ClCompile Include="src\Types.cpp" />
+    <ClCompile Include="src\Engine\Scene\UI\UIroot.cpp" />
+    <ClCompile Include="src\Engine\Scene\UI\UIelement.cpp" />
+    <ClCompile Include="src\Engine\Scene\UI\UIsurface.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Graphics\Resources\Shaders\Source\DefaultColor_f.glsl">

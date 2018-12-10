@@ -1,5 +1,6 @@
 #include "Types.h"
-#include "Component.h"
+
+#include "Component.h"
 #include "..\ObjectPrefab.h"
 #include "..\GameObject.h"
 #include "..\Camera.h"

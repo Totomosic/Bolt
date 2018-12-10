@@ -1,5 +1,6 @@
 #include "Types.h"
-#include "SGQRayCast.h"
+
+#include "SGQRayCast.h"
 #include "..\ObjectCollection.h"
 #include "SGQComponents.h"
 #include "..\Components\__Components__.h"

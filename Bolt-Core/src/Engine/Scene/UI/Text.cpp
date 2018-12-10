@@ -1,5 +1,7 @@
 #include "Types.h"
-#include "Text.h"
+
+#include "Text.h"
+#include "UIroot.h"
 
 namespace Bolt
 {
@@ -46,25 +48,26 @@ namespace Bolt
 	void Text::SetColor(const Color& color)
 	{
 		m_Color = color;
-		Mesh& mesh = m_GameObject->Components().GetComponent<MeshRenderer>().Mesh;
+		Mesh& mesh = m_Object->Components().GetComponent<MeshRenderer>().Mesh;
 		mesh.Materials[0].BaseColor = m_Color;
 	}
 
-	void Text::CreateGameObject()
+	void Text::SetUIroot(UIroot* root)
 	{
-		SetGameObject(GameObject::Instantiate(Parent()->Object()->GetLayer(), std::move(m_Transform)));
+		UIelement::SetUIroot(root);
 		Mesh mesh;
 		mesh.Models.push_back({ ResourcePtr<const Model>(new Model(TextFactory(m_String, m_Font, Color::White, m_AlignH, m_AlignV)), true), Matrix4f::Identity(), { 0 } });
 		mesh.Materials[0].BaseColor = m_Color;
 		mesh.Materials[0].Shader = Shader::DefaultFont();
 		mesh.Materials[0].Textures.Textures.push_back(m_Font);
 		mesh.Materials[0].RenderOptions.DepthFunc = DepthFunction::Lequal;
-		m_GameObject->Components().AddComponent(std::make_unique<MeshRenderer>(std::move(mesh)));
+		m_Object->Components().AddComponent(std::make_unique<MeshRenderer>(std::move(mesh)));
+		m_Object->transform() = std::move(m_Transform);
 	}
 
 	void Text::CreateTextModel()
 	{
-		Mesh& mesh = m_GameObject->Components().GetComponent<MeshRenderer>().Mesh;
+		Mesh& mesh = m_Object->Components().GetComponent<MeshRenderer>().Mesh;
 		mesh.Models[0].Model = ResourcePtr<const Model>(new Model(TextFactory(m_String, m_Font, Color::White, m_AlignH, m_AlignV)), true);
 	}
 

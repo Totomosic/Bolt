@@ -14,6 +14,7 @@ namespace Bolt
 	{
 	public:
 		static constexpr size_t MAX_GAMEOBJECTS = GAMEOBJECTS_PER_LAYER;
+		static constexpr size_t RESERVED_GAMEOBJECTS = 5;
 
 		struct BLT_API GameObjectInfo
 		{
@@ -62,6 +63,7 @@ namespace Bolt
 	private:
 		id_t FindNextId() const;
 		void ReleaseId(id_t id) const;
+		void CreateReservedGameObjects();
 
 	};
 

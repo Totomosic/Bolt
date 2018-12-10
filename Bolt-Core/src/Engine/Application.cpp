@@ -1,5 +1,6 @@
 #include "Types.h"
-#include "Application.h"
+
+#include "Application.h"
 #include "Initialization\Initializer.h"
 #include "User\Input.h"
 #include "Renderer\Graphics.h"

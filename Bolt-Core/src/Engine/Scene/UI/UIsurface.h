@@ -6,25 +6,21 @@ namespace Bolt
 
 	class BLT_API UIsurface : public UIelement
 	{
-	private:
-		Vector2f m_Size;
-		Material m_Material;
+	protected:
+		float m_Width;
+		float m_Height;
 		Transform m_Transform;
+		Material m_Material;
 
 	public:
-		UIsurface(const Vector2f& size = Vector2f(0.0f, 0.0f), Transform&& transform = Transform());
-		UIsurface(const Vector2f& size, Material material, Transform&& transform = Transform());
-		UIsurface(const Vector2f& size, const Color& color, Transform&& transform = Transform());
-		UIsurface(const Vector2f& size, const ResourcePtr<const Texture2D>& texture, Transform&& transform = Transform());
+		UIsurface(float width, float height, const Color& color = Color::White, Transform&& transform = Transform());
+		UIsurface(float width, float height, const Material& material, Transform&& transform = Transform());
 
-		const Vector2f& Size() const;
-		const Material& GetMaterial() const;
-		
-		void SetSize(const Vector2f& size);
-		void SetMaterial(Material material);
+		inline float Width() const { return m_Width; }
+		inline float Height() const { return m_Height; }
 
 	protected:
-		void CreateGameObject() override;
+		virtual void SetUIroot(UIroot* root) override;
 
 	};
 

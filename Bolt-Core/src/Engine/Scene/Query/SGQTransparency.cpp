@@ -1,5 +1,6 @@
 #include "Types.h"
-#include "SGQTransparency.h"
+
+#include "SGQTransparency.h"
 #include "SGQComponents.h"
 #include "..\ObjectCollection.h"
 #include "..\Components\MeshRenderer.h"

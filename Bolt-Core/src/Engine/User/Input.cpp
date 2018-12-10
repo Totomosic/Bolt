@@ -1,5 +1,6 @@
 #include "Types.h"
-#include "Input.h"
+
+#include "Input.h"
 
 namespace Bolt
 {

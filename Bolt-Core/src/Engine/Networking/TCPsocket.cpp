@@ -1,5 +1,6 @@
 #include "Types.h"
-#include "TCPsocket.h"
+
+#include "TCPsocket.h"
 
 namespace Bolt
 {

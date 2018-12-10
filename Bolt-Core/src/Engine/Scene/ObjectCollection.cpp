@@ -1,5 +1,6 @@
 #include "Types.h"
-#include "ObjectCollection.h"
+
+#include "ObjectCollection.h"
 
 namespace Bolt
 {
@@ -13,9 +14,9 @@ namespace Bolt
 	}
 
 	ObjectCollection::ObjectCollection()
-		: m_IdManager(0, ObjectCollection::MAX_GAMEOBJECTS - 1), m_GameObjects{}, m_ActiveGameObjects()
+		: m_IdManager(ObjectCollection::RESERVED_GAMEOBJECTS, ObjectCollection::MAX_GAMEOBJECTS - 1), m_GameObjects{}, m_ActiveGameObjects()
 	{
-		
+		CreateReservedGameObjects();
 	}
 
 	const GameObject& ObjectCollection::GetGameObjectById(id_t id) const
@@ -64,6 +65,11 @@ namespace Bolt
 
 	void ObjectCollection::RemoveGameObject(id_t id)
 	{
+		if (id < ObjectCollection::RESERVED_GAMEOBJECTS)
+		{
+			BLT_CORE_ERROR("Attempted to delete reserved GameObject with Id: {}", id);
+			return;
+		}
 		GameObject* obj = &m_GameObjects[id].Object;
 		RemoveAllTags(obj);
 		m_GameObjects[id].Enabled = false;
@@ -78,7 +84,7 @@ namespace Bolt
 		}		
 		else
 		{
-			BLT_CORE_INFO("NOT IN ACTIVE OBJECTS");
+			BLT_CORE_WARN("NOT IN ACTIVE OBJECTS");
 		}
 	}
 
@@ -143,7 +149,7 @@ namespace Bolt
 	void ObjectCollection::Reset()
 	{
 		// 0 = UI object for each layer which is never deleted
-		m_IdManager.Reset(1);
+		m_IdManager.Reset(ObjectCollection::RESERVED_GAMEOBJECTS);
 	}
 
 	void ObjectCollection::Transfer(XMLserializer& backend, bool isWriting)
@@ -160,6 +166,16 @@ namespace Bolt
 	void ObjectCollection::ReleaseId(id_t id) const
 	{
 		m_IdManager.ReleaseId(id);
+	}
+
+	void ObjectCollection::CreateReservedGameObjects()
+	{
+		for (id_t i = 0; i < ObjectCollection::RESERVED_GAMEOBJECTS; i++)
+		{
+			m_GameObjects[i].Enabled = true;
+			m_GameObjects[i].Object.SetID(i);
+			//m_ActiveGameObjects.push_back(&m_GameObjects[i].Object);
+		}
 	}
 
 }

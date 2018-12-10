@@ -1,21 +1,28 @@
 #pragma once
 #include "UIelement.h"
+#include "..\ObjectFactory.h"
 
 namespace Bolt
 {
 
+	struct Layer;
+
 	class BLT_API UIroot : public UIelement
 	{
 	private:
-		Layer* m_Layer;
+		ObjectFactory m_Factory;
 
 	public:
-		UIroot(Layer* layer, Transform&& anchorPosition = Transform());
+		UIroot();
 		UIroot(Layer* layer, GameObject* object);
+		~UIroot() override;
 
-		Layer* GetLayer() const;
+		friend class UIelement;
+		friend struct Layer;
 
-		void SetAnchorTransform(Transform&& anchorPosition);
+	protected:
+		const ObjectFactory& GetFactory() const;
+		ObjectFactory& GetFactory();
 
 	};
 

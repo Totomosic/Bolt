@@ -1,14 +1,26 @@
 #pragma once
 #include "..\Component.h"
 #include "..\..\GameObject.h"
+#include "..\..\..\User\Input.h"
 
 namespace Bolt
 {
 
-	struct BLT_API UIEvent : public Event
+	class BLT_API UIClickedEvent : public Event
 	{
 	public:
 		GameObject* Object;
+		Vector2f ScreenPosition;
+		Vector2f ObjectRelPosition;
+		MouseButton Button;
+	};
+
+	class BLT_API UIHoverEvent : public Event
+	{
+	public:
+		GameObject* Object;
+		Vector2f ScreenPosition;
+		Vector2f ObjectRelPosition;
 	};
 
 	class BLT_API UIEventHandler : public Component
@@ -17,10 +29,10 @@ namespace Bolt
 		bool m_IsHovering;
 
 	public:
-		EventDispatcher<UIEvent> OnClicked;
-		EventDispatcher<UIEvent> OnHoverEntry;
-		EventDispatcher<UIEvent> OnHover;
-		EventDispatcher<UIEvent> OnHoverExit;
+		EventDispatcher<UIClickedEvent> OnClicked;
+		EventDispatcher<UIHoverEvent> OnHoverEntry;
+		EventDispatcher<UIHoverEvent> OnHover;
+		EventDispatcher<UIHoverEvent> OnHoverExit;
 
 	public:
 		UIEventHandler();
