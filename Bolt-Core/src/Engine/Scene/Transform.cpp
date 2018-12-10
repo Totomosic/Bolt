@@ -1,4 +1,5 @@
-#include "Transform.h"
+#include "Types.h"
+#include "Transform.h"
 
 namespace Bolt
 {

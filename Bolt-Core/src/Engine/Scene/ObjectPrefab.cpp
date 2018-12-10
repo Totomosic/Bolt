@@ -1,4 +1,5 @@
-#include "ObjectPrefab.h"
+#include "Types.h"
+#include "ObjectPrefab.h"
 
 namespace Bolt
 {

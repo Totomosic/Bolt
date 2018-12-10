@@ -1,4 +1,5 @@
-#include "Buffer.h"
+#include "Types.h"
+#include "Buffer.h"
 
 namespace Bolt
 {

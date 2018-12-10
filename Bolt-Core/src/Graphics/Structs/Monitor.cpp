@@ -1,4 +1,5 @@
-#include "Monitor.h"
+#include "Types.h"
+#include "Monitor.h"
 
 namespace Bolt
 {

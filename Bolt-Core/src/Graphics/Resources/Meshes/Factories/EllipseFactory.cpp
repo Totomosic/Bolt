@@ -1,4 +1,5 @@
-#include "EllipseFactory.h"
+#include "Types.h"
+#include "EllipseFactory.h"
 
 namespace Bolt
 {

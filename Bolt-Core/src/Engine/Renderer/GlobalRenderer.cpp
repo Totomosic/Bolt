@@ -1,4 +1,5 @@
-#include "GlobalRenderer.h"
+#include "Types.h"
+#include "GlobalRenderer.h"
 #include "..\Scene\Lighting\LightSource.h"
 
 namespace Bolt

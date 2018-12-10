@@ -1,4 +1,5 @@
-#include "UIsurface.h"
+#include "Types.h"
+#include "UIsurface.h"
 #include "..\ObjectFactory.h"
 
 namespace Bolt

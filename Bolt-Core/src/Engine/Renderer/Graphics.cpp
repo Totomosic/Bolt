@@ -1,3 +1,5 @@
+#include "Types.h"
+
 #include "Graphics.h"
 #include "SceneRenderer.h"
 

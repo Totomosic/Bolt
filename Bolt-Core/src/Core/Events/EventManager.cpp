@@ -1,4 +1,5 @@
-#include "EventManager.h"
+#include "Types.h"
+#include "EventManager.h"
 
 namespace Bolt
 {

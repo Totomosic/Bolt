@@ -1,4 +1,5 @@
-#include "SGQComponents.h"
+#include "Types.h"
+#include "SGQComponents.h"
 #include "..\ObjectCollection.h"
 
 namespace Bolt

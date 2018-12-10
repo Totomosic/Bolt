@@ -1,4 +1,5 @@
-#include "LightRenderer.h"
+#include "Types.h"
+#include "LightRenderer.h"
 
 namespace Bolt
 {

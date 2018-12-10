@@ -129,19 +129,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Bolt-Core\Bolt-Core.vcxproj">
-      <Project>{2CF839F6-9862-EE6C-E1A0-9F124D4ACCC1}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\App.cpp" />
-    <ClCompile Include="src\GameManager.cpp" />
-    <ClCompile Include="src\GameServer.cpp" />
-    <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\MapTile.cpp" />
-    <ClCompile Include="src\MapTileManager.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="src\App.h" />
     <ClInclude Include="src\BoltInclude.h" />
     <ClInclude Include="src\Events.h" />
@@ -149,6 +136,19 @@
     <ClInclude Include="src\GameServer.h" />
     <ClInclude Include="src\MapTile.h" />
     <ClInclude Include="src\MapTileManager.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\App.cpp" />
+    <ClCompile Include="src\GameManager.cpp" />
+    <ClCompile Include="src\GameServer.cpp" />
+    <ClCompile Include="src\MapTile.cpp" />
+    <ClCompile Include="src\MapTileManager.cpp" />
+    <ClCompile Include="src\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Bolt-Core\Bolt-Core.vcxproj">
+      <Project>{2CF839F6-9862-EE6C-E1A0-9F124D4ACCC1}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

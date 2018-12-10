@@ -1,4 +1,5 @@
-#include "Shader.h"
+#include "Types.h"
+#include "Shader.h"
 #include "..\ResourceManager.h"
 #include "..\Meshes\Materials\Material.h"
 #include "..\..\..\Engine\Scene\Lighting\LightSource.h"

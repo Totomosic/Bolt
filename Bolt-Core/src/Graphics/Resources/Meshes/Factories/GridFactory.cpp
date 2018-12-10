@@ -1,4 +1,5 @@
-#include "GridFactory.h"
+#include "Types.h"
+#include "GridFactory.h"
 
 namespace Bolt
 {

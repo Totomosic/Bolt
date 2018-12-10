@@ -1,4 +1,5 @@
-#include "Timer.h"
+#include "Types.h"
+#include "Timer.h"
 
 namespace Bolt
 {

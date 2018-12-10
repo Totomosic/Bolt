@@ -1,4 +1,5 @@
-#include "File.h"
+#include "Types.h"
+#include "File.h"
 #include "Filesystem.h"
 
 namespace Bolt

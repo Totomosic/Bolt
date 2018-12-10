@@ -1,4 +1,5 @@
-#include "UniformManager.h"
+#include "Types.h"
+#include "UniformManager.h"
 
 namespace Bolt
 {

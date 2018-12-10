@@ -1,4 +1,5 @@
-#include "LightSettings.h"
+#include "Types.h"
+#include "LightSettings.h"
 
 namespace Bolt
 {

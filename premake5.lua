@@ -27,12 +27,7 @@ project "Bolt-Core"
     }
 
     pchheader "Types.h"
-    pchsource "Types.cpp"
-    
-    forceincludes 
-    {
-        "Types.h"
-    }
+    pchsource "Bolt-Core/src/Types.cpp"
 
     includedirs
     {

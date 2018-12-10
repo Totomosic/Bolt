@@ -1,4 +1,5 @@
 #include "Types.h"
+#include "Types.h"
 #include "PyMethods.h"
 
 namespace Bolt

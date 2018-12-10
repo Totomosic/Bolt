@@ -1,4 +1,5 @@
-#include "Text.h"
+#include "Types.h"
+#include "Text.h"
 
 namespace Bolt
 {

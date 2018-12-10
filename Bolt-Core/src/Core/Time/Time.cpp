@@ -1,4 +1,5 @@
-#include "Time.h"
+#include "Types.h"
+#include "Time.h"
 
 namespace Bolt
 {

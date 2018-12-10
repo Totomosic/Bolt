@@ -1,4 +1,5 @@
-#include "Filepath.h"
+#include "Types.h"
+#include "Filepath.h"
 #include "Filesystem.h"
 #include "Directorypath.h"
 

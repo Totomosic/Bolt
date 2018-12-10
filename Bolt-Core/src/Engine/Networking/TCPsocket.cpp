@@ -1,4 +1,5 @@
-#include "TCPsocket.h"
+#include "Types.h"
+#include "TCPsocket.h"
 
 namespace Bolt
 {
@@ -34,6 +35,11 @@ namespace Bolt
 		{
 			closesocket(m_Socket);
 		}
+	}
+
+	bool TCPsocket::IsValid() const
+	{
+		return m_Socket != INVALID_SOCKET;
 	}
 
 	int TCPsocket::Bind(const SocketAddress& address)

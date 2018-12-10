@@ -1,4 +1,5 @@
-#include "MeshRenderer.h"
+#include "Types.h"
+#include "MeshRenderer.h"
 
 namespace Bolt
 {

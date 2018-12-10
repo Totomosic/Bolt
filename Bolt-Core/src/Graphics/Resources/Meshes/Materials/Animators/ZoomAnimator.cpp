@@ -1,4 +1,5 @@
-#include "ZoomAnimator.h"
+#include "Types.h"
+#include "ZoomAnimator.h"
 
 namespace Bolt
 {

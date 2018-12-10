@@ -1,4 +1,5 @@
-#include "Camera.h"
+#include "Types.h"
+#include "Camera.h"
 
 namespace Bolt
 {

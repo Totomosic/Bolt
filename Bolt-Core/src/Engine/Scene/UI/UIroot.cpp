@@ -1,4 +1,5 @@
-#include "UIroot.h"
+#include "Types.h"
+#include "UIroot.h"
 #include "..\Layer.h"
 
 namespace Bolt

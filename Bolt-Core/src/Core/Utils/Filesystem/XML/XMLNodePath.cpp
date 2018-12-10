@@ -1,4 +1,5 @@
-#include "XMLNodePath.h"
+#include "Types.h"
+#include "XMLNodePath.h"
 #include "XMLnode.h"
 
 namespace Bolt

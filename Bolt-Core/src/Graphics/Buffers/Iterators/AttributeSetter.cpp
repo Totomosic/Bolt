@@ -1,4 +1,5 @@
-#include "AttributeSetter.h"
+#include "Types.h"
+#include "AttributeSetter.h"
 #include "VertexIterator.h"
 #include "../VertexArray.h"
 #include "../VertexBuffer.h"

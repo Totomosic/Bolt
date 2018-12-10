@@ -1,4 +1,5 @@
-#include "SpriteSheetAnimator.h"
+#include "Types.h"
+#include "SpriteSheetAnimator.h"
 
 namespace Bolt
 {
