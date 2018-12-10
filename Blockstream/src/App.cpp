@@ -47,7 +47,7 @@ namespace Blockstream
 
 		UIsurface* hostGameButton = uiLayer->UI().Rectangle(300, 50, Color(0, 200, 0), Transform({ uiCamera->ViewWidth() / 2, uiCamera->ViewHeight() / 2 + 0, -5 }));
 		hostGameButton->Text("Host", Color::White, Transform({ 0, 0, 1 }));
-		hostGameButton->EventHandler().OnClicked.Subscribe([this](id_t eventId, UIEvent& args) -> bool
+		hostGameButton->EventHandler().OnClicked.Subscribe([this](id_t eventId, UIClickedEvent& args) -> bool
 		{
 			CreateHostScreen();
 			return false;
@@ -55,7 +55,7 @@ namespace Blockstream
 
 		UIsurface* joinGameButton = uiLayer->UI().Rectangle(300, 50, Color(0, 200, 0), Transform({ uiCamera->ViewWidth() / 2, uiCamera->ViewHeight() / 2 - 75, -5 }));
 		joinGameButton->Text("Join", Color::White, Transform({ 0, 0, 1 }));
-		joinGameButton->EventHandler().OnClicked.Subscribe([this](id_t eventId, UIEvent& args) -> bool
+		joinGameButton->EventHandler().OnClicked.Subscribe([this](id_t eventId, UIClickedEvent& args) -> bool
 		{
 			CreateJoinScreen();
 			return false;
@@ -73,7 +73,7 @@ namespace Blockstream
 
 		UIsurface* playGameButton = uiLayer->UI().Rectangle(300, 50, Color(0, 200, 0), Transform({ uiCamera->ViewWidth() / 2, uiCamera->ViewHeight() / 2 + 0, -5 }));
 		playGameButton->Text("Play", Color::White, Transform({ 0, 0, 1 }));
-		playGameButton->EventHandler().OnClicked.Subscribe([this](id_t eventId, UIEvent& args) -> bool
+		playGameButton->EventHandler().OnClicked.Subscribe([this](id_t eventId, UIClickedEvent& args) -> bool
 		{
 			BlockstreamClient* c = this;
 			blt::string host = hostString;
@@ -138,7 +138,7 @@ namespace Blockstream
 
 		UIsurface* playGameButton = uiLayer->UI().Rectangle(300, 50, Color(0, 200, 0), Transform({ uiCamera->ViewWidth() / 2, uiCamera->ViewHeight() / 2 + 0, -5 }));
 		playGameButton->Text("Play", Color::White, Transform({ 0, 0, 1 }));
-		playGameButton->EventHandler().OnClicked.Subscribe([this](id_t eventId, UIEvent& args) -> bool
+		playGameButton->EventHandler().OnClicked.Subscribe([this](id_t eventId, UIClickedEvent& args) -> bool
 		{
 			BlockstreamClient* c = this;
 			blt::string host = hostString;
@@ -213,7 +213,7 @@ namespace Blockstream
 		uiLayer->UI().Text(text, Color::Black, Transform({ uiCamera->ViewWidth() / 2, uiCamera->ViewHeight() / 2, -5 }));
 
 		UIsurface* mainMenuButton = uiLayer->UI().Rectangle(300, 50, Color(0, 200, 0), Transform({ uiCamera->ViewWidth() / 2, uiCamera->ViewHeight() / 2 - 100, -5 }));
-		mainMenuButton->EventHandler().OnClicked.Subscribe([this](id_t eventId, UIEvent& args)
+		mainMenuButton->EventHandler().OnClicked.Subscribe([this](id_t eventId, UIClickedEvent& args)
 		{
 			CreateTitleScreen();
 			return false;

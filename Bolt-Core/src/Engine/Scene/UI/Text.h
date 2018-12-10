@@ -28,7 +28,7 @@ namespace Bolt
 		void SetColor(const Color& color);
 
 	protected:
-		void CreateGameObject() override;
+		virtual void SetUIroot(UIroot* root) override;
 
 	private:
 		void CreateTextModel();

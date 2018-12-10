@@ -1,31 +1,36 @@
 #include "Types.h"
-#include "UIroot.h"
+
+#include "UIroot.h"
 #include "..\Layer.h"
 
 namespace Bolt
 {
 
-	UIroot::UIroot(Layer* layer, Transform&& transform) : UIelement(),
-		m_Layer(layer)
+	UIroot::UIroot() : UIroot(nullptr, nullptr)
 	{
-		SetGameObject(GameObject::Instantiate(layer, std::move(transform)));
+
 	}
 
-	UIroot::UIroot(Layer* layer, GameObject* object)
-		: m_Layer(layer)
+	UIroot::UIroot(Layer* layer, GameObject* object) : UIelement(),
+		m_Factory(layer)
 	{
-		SetGameObject(object);
+		m_Root = this;
+		m_Object = object;
 	}
 
-	Layer* UIroot::GetLayer() const
+	UIroot::~UIroot()
 	{
-		return m_Layer;
+		
 	}
 
-	void UIroot::SetAnchorTransform(Transform&& anchorPosition)
+	const ObjectFactory& UIroot::GetFactory() const
 	{
-		m_GameObject->transform() = std::move(anchorPosition);
+		return m_Factory;
 	}
 
+	ObjectFactory& UIroot::GetFactory()
+	{
+		return m_Factory;
+	}
 
 }

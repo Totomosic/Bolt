@@ -1,5 +1,7 @@
 #include "Types.h"
-#include "ObjectFactory.h"
+
+#include "ObjectFactory.h"
+#include "Layer.h"
 
 namespace Bolt
 {

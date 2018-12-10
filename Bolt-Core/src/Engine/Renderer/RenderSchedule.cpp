@@ -1,5 +1,6 @@
 #include "Types.h"
-#include "RenderSchedule.h"
+
+#include "RenderSchedule.h"
 
 namespace Bolt
 {

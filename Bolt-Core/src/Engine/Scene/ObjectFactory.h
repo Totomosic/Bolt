@@ -1,11 +1,12 @@
 #pragma once
-#include "Layer.h"
 #include "GameObject.h"
 #include "Components\__Components__.h"
 #include "..\..\Graphics\Resources\ResourcePtr.h"
 
 namespace Bolt
 {
+
+	struct Layer;
 
 	class BLT_API ObjectFactory
 	{

@@ -1,5 +1,7 @@
 #include "Types.h"
-#include "UIelement.h"
+
+#include "UIelement.h"
+#include "UIroot.h"
 #include "..\Layer.h"
 
 #include "UIsurface.h"
@@ -10,137 +12,131 @@ namespace Bolt
 
 	UIelement::UIelement() : UIelement(nullptr)
 	{
-	
+
 	}
 
+
 	UIelement::UIelement(GameObject* object)
-		: m_ParentElement(nullptr), m_GameObject(object), m_Elements()
+		: m_Root(nullptr), m_Parent(nullptr), m_Children(), m_Object(object)
 	{
-	
+
 	}
 
 	UIelement::~UIelement()
 	{
-		if (m_GameObject != nullptr && m_GameObject->Id() != GameObject::InvalidID)
+		if (m_Object != nullptr)
 		{
-			Destroy(m_GameObject, 0.0f);
+			Destroy(m_Object);
 		}
-	}
-
-	id_t UIelement::Id() const
-	{
-		return m_Id;
 	}
 
 	GameObject* UIelement::Object() const
 	{
-		return m_GameObject;
-	}
-
-	UIEventHandler& UIelement::EventHandler() const
-	{
-		return Object()->Components().GetComponent<UIEventHandler>();
+		return m_Object;
 	}
 
 	UIelement* UIelement::Parent() const
 	{
-		return m_ParentElement;
+		return m_Parent;
 	}
 
-	UIelement* UIelement::GetElementById(id_t id) const
+	UIEventHandler& UIelement::EventHandler() const
 	{
-		return m_Elements.at(id).get();
+		return m_Object->Components().GetComponent<UIEventHandler>();
 	}
 
-	int UIelement::ElementCount() const
+	UIelement* UIelement::GetElement(id_t index) const
 	{
-		return m_Elements.size();
-	}
-
-	void UIelement::SetParent(UIelement* parent)
-	{
-		UIelement* oldParent = m_ParentElement;
-		m_ParentElement = parent;
-		if (m_GameObject != nullptr)
-		{
-			m_GameObject->MakeChildOf(m_ParentElement->Object());
-		}
-		if (oldParent == nullptr)
-		{
-			CreateGameObject();
-		}
+		return m_Children[index].get();
 	}
 
 	UIelement* UIelement::AddElement(std::unique_ptr<UIelement>&& element)
 	{
-		id_t id = m_Elements.size();
 		UIelement* ptr = element.get();
-		ptr->SetId(id);
-		element->SetParent(this);
-		m_Elements.push_back(std::move(element));
+		m_Children.push_back(std::move(element));
+		ptr->SetUIroot(m_Root);
+		ptr->SetParent(this);
 		return ptr;
+	}
+
+	void UIelement::RemoveElement(UIelement* element)
+	{
+		auto it = std::find_if(m_Children.begin(), m_Children.end(), [element](const std::unique_ptr<UIelement>& item)
+		{
+			return element == item.get();
+		});
+		if (it != m_Children.end())
+		{
+			m_Children.erase(it);
+		}
+		else
+		{
+			BLT_CORE_ERROR("Unable to find UIelement");
+		}
+	}
+
+	void UIelement::ReleaseGameObjects()
+	{
+		for (std::unique_ptr<UIelement>& child : m_Children)
+		{
+			child->ReleaseGameObjects();
+			child->m_Object = nullptr;
+		}
 	}
 
 	void UIelement::Clear()
 	{
-		m_Elements.clear();
-	}
-
-	Text* UIelement::Text(const blt::string& text, const ResourcePtr<const Font>& font, const Color& color, Transform&& transform, AlignH horizontal, AlignV vertical)
-	{
-		return (Bolt::Text*)AddElement<Bolt::Text>(text, font, color, std::move(transform), horizontal, vertical);
-	}
-
-	Text* UIelement::Text(const blt::string& text, const Color& color, Transform&& transform, AlignH horizontal, AlignV vertical)
-	{
-		BLT_ASSERT(ResourceManager::DefaultFont() != nullptr, "No default font");
-		return Text(text, ResourceManager::DefaultFont(), color, std::move(transform), horizontal, vertical);
+		m_Children.clear();
 	}
 
 	UIsurface* UIelement::Rectangle(float width, float height, const Color& color, Transform&& transform)
 	{
-		return (UIsurface*)AddElement<UIsurface>(Vector2f(width, height), color, std::move(transform));
+		return AddElement<UIsurface>(width, height, color, std::move(transform));
 	}
 
 	UIsurface* UIelement::Rectangle(float width, float height, const Material& material, Transform&& transform)
 	{
-		return (UIsurface*)AddElement<UIsurface>(Vector2f(width, height), material, std::move(transform));
+		return AddElement<UIsurface>(width, height, material, std::move(transform));
 	}
 
 	UIsurface* UIelement::Image(float width, float height, const ResourcePtr<const Texture2D>& texture, Transform&& transform)
 	{
-		return (UIsurface*)AddElement<UIsurface>(Vector2f(width, height), texture, std::move(transform));
+		Material material;
+		material.Shader = Shader::DefaultTexture();
+		material.Textures.Textures.push_back(texture);
+		return AddElement<UIsurface>(width, height, material, std::move(transform));
 	}
 
-	void UIelement::ReleaseAllGameObjects()
+	Bolt::Text* UIelement::Text(const blt::string& text, const ResourcePtr<const Font>& font, const Color& color, Transform&& transform, AlignH horizontal, AlignV vertical)
 	{
-		for (auto& ptr : m_Elements)
+		return AddElement<Bolt::Text>(text, font, color, std::move(transform), horizontal, vertical);
+	}
+
+	Bolt::Text* UIelement::Text(const blt::string& text, const Color& color, Transform&& transform, AlignH horizontal, AlignV vertical)
+	{
+		return AddElement<Bolt::Text>(text, ResourceManager::DefaultFont(), color, std::move(transform), horizontal, vertical);
+	}
+
+	void UIelement::SetUIroot(UIroot* root)
+	{
+		m_Root = root;
+		if (m_Object == nullptr)
 		{
-			ptr.release();
+			m_Object = m_Root->GetFactory().Instantiate();
+			m_Object->Components().AddComponent<UIEventHandler>();
 		}
-	}
-
-	void UIelement::SetId(id_t id)
-	{
-		m_Id = id;
-	}
-
-	void UIelement::SetGameObject(GameObject* object)
-	{
-		m_GameObject = object;
-		if (!m_GameObject->Components().HasComponent<UIEventHandler>())
+		else
 		{
-			m_GameObject->Components().AddComponent<UIEventHandler>();
+			BLT_ASSERT(m_Object->GetLayer() == m_Root->GetFactory().CurrentLayer(), "Layer Mismatch");
 		}
-		if (m_ParentElement != nullptr)
-		{
-			m_GameObject->MakeChildOf(m_ParentElement->Object());
-		}
+		m_Object->MakeChildOf(root->Object());
+		m_Parent = nullptr;
 	}
 
-	void UIelement::CreateGameObject()
+	void UIelement::SetParent(UIelement* parent)
 	{
-		m_GameObject = nullptr;
+		m_Parent = parent;
+		m_Object->MakeChildOf(m_Parent->Object());
 	}
 
 }

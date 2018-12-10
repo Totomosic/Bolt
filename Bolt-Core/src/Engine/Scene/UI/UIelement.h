@@ -1,64 +1,55 @@
 #pragma once
 #include "..\GameObject.h"
-#include "..\Components\__Components__.h"
+#include "..\Components\UI\UIEventHandler.h"
+#include "..\..\..\Graphics\Resources\__Resources__.h"
 
 namespace Bolt
 {
 
-	struct Layer;
-	class Text;
+	class UIroot;
 	class UIsurface;
+	class Text;
 
 	class BLT_API UIelement
 	{
 	protected:
-		id_t m_Id;
-		UIelement* m_ParentElement;
-		GameObject* m_GameObject;
-
-		std::vector<std::unique_ptr<UIelement>> m_Elements;
+		UIroot* m_Root;
+		UIelement* m_Parent;
+		std::vector<std::unique_ptr<UIelement>> m_Children;
+		GameObject* m_Object;
 
 	public:
 		UIelement();
 		UIelement(GameObject* object);
 		virtual ~UIelement();
 
-		id_t Id() const;
 		GameObject* Object() const;
-		UIEventHandler& EventHandler() const;
 		UIelement* Parent() const;
-		UIelement* GetElementById(id_t id) const;
-
-		template<typename T>
-		T* GetElementById(id_t id) const
-		{
-			return (T*)GetElementById(id);
-		}
-
-		int ElementCount() const;
-
-		void SetParent(UIelement* parent);
+		UIEventHandler& EventHandler() const;
+		UIelement* GetElement(id_t index) const;
 		UIelement* AddElement(std::unique_ptr<UIelement>&& element);
+		void RemoveElement(UIelement* element);
+		void ReleaseGameObjects();
 		void Clear();
-		void ReleaseAllGameObjects();
 
 		template<typename T, typename ...Args>
-		UIelement* AddElement(Args&& ...args)
+		T* AddElement(Args&&... args)
 		{
-			return AddElement(std::make_unique<T>(std::move(args)...));
+			return (T*)AddElement(std::make_unique<T>(std::move(args)...));
 		}
 
-		// Helper Functions
+		UIsurface* Rectangle(float width, float height, const Color& color = Color::White, Transform&& transform = Transform());
+		UIsurface* Rectangle(float width, float height, const Material& material = Material(), Transform&& transform = Transform());
+		UIsurface* Image(float width, float height, const ResourcePtr<const Texture2D>& texture, Transform&& transform = Transform());
 		Bolt::Text* Text(const blt::string& text, const ResourcePtr<const Font>& font, const Color& color = Color::White, Transform&& transform = Transform(), AlignH horizontal = AlignH::Center, AlignV vertical = AlignV::Center);
 		Bolt::Text* Text(const blt::string& text, const Color& color = Color::White, Transform&& transform = Transform(), AlignH horizontal = AlignH::Center, AlignV vertical = AlignV::Center);
-		UIsurface* Rectangle(float width, float height, const Color& color = Color::White, Transform&& transform = Transform());
-		UIsurface* Rectangle(float width, float height, const Material& material, Transform&& transform = Transform());
-		UIsurface* Image(float width, float height, const ResourcePtr<const Texture2D>& texture, Transform&& transform = Transform());
+
+		friend class UIroot;
+		friend struct Layer;
 
 	protected:
-		void SetId(id_t id);
-		void SetGameObject(GameObject* object);
-		virtual void CreateGameObject();
+		virtual void SetUIroot(UIroot* root);
+		void SetParent(UIelement* parent);
 
 	};
 

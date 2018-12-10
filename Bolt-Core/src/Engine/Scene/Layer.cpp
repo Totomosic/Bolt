@@ -1,18 +1,20 @@
 #include "Types.h"
-#include "Layer.h"
+
+#include "Layer.h"
 #include "ObjectCollection.h"
 
 namespace Bolt
 {
 
 	Layer::Layer()
-		: m_Id(GameObject::InvalidID), m_GameObjects(), m_Enabled(false), m_ActiveCamera(nullptr), m_UIroot(this)
+		: m_Id(GameObject::InvalidID), m_GameObjects(), m_Enabled(false), m_ActiveCamera(nullptr), m_UIroot()
 	{
 
 	}
 
 	Layer::~Layer()
 	{
+		m_UIroot.ReleaseGameObjects();
 		m_UIroot.Clear();
 	}
 
@@ -76,11 +78,6 @@ namespace Bolt
 
 	void Layer::RemoveGameObject(GameObject* object)
 	{
-		if (object == UI().Object())
-		{
-			BLT_CORE_WARN("[LAYER] Attempted to Delete UI Root object with Id " + std::to_string(object->Id()));
-			return;
-		}
 		if (object->Id() < ObjectCollection::MAX_GAMEOBJECTS)
 		{
 			m_GameObjects.RemoveGameObject(object);
@@ -105,7 +102,7 @@ namespace Bolt
 				RemoveGameObject(object);
 			}
 		}
-		UI().ReleaseAllGameObjects();
+		UI().ReleaseGameObjects();
 		UI().Clear();
 		m_GameObjects.Reset();
 	}
@@ -165,6 +162,8 @@ namespace Bolt
 	{
 		m_Id = id;
 		Enable();
+		m_UIroot.GetFactory().SetCurrentLayer(this);
+		m_UIroot.m_Object = &m_GameObjects.GetGameObjectById(0);
 	}
 
 	void Destroy(GameObject* object, float timeToDelete)

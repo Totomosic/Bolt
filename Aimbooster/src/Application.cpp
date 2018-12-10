@@ -129,37 +129,37 @@ namespace Aimbooster
 			UIsurface* quitButton = mainLayer->UI().Rectangle(300, 50, Color(200, 0, 0), Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() / 2 - 225, -5 }));
 			quitButton->Text("Quit", Color::White, Transform({ 0, 0, 1 }));
 
-			playButton->EventHandler().OnClicked.Subscribe([this](id_t eventId, UIEvent& args) -> bool
+			playButton->EventHandler().OnClicked.Subscribe([this](id_t eventId, UIClickedEvent& args) -> bool
 			{
 				CreateGameScreen();
 				return false;
 			});
 
-			playButton->EventHandler().OnHoverEntry.Subscribe([](id_t eventId, UIEvent& args) -> bool
+			playButton->EventHandler().OnHoverEntry.Subscribe([](id_t eventId, UIHoverEvent& args) -> bool
 			{
 				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0].BaseColor = Color::Green;
 				return false;
 			});
 
-			playButton->EventHandler().OnHoverExit.Subscribe([](id_t eventId, UIEvent& args) -> bool
+			playButton->EventHandler().OnHoverExit.Subscribe([](id_t eventId, UIHoverEvent& args) -> bool
 			{
 				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0].BaseColor = Color(0, 200, 0 );
 				return false;
 			});
 
-			quitButton->EventHandler().OnClicked.Subscribe([this](id_t eventId, UIEvent& args) -> bool
+			quitButton->EventHandler().OnClicked.Subscribe([this](id_t eventId, UIClickedEvent& args) -> bool
 			{
 				PrimaryWindow->Close();
 				return false;
 			});
 
-			quitButton->EventHandler().OnHoverEntry.Subscribe([](id_t eventId, UIEvent& args) -> bool
+			quitButton->EventHandler().OnHoverEntry.Subscribe([](id_t eventId, UIHoverEvent& args) -> bool
 			{
 				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0].BaseColor = Color::Red;
 				return false;
 			});
 
-			quitButton->EventHandler().OnHoverExit.Subscribe([](id_t eventId, UIEvent& args) -> bool
+			quitButton->EventHandler().OnHoverExit.Subscribe([](id_t eventId, UIHoverEvent& args) -> bool
 			{
 				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0].BaseColor = Color(200, 0, 0);
 				return false;
@@ -182,19 +182,19 @@ namespace Aimbooster
 			fpsText = mainLayer->UI().Text("60 fps", Color::White, Transform({ mainCamera->ViewWidth() - 100, mainCamera->ViewHeight() - 30, -5 }), AlignH::Left);
 			scoreText = mainLayer->UI().Text("Score: 0", Color::White, Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() - 30, -5 }), AlignH::Center);
 
-			qButton->EventHandler().OnClicked.Subscribe([this](id_t eventId, UIEvent& args) -> bool
+			qButton->EventHandler().OnClicked.Subscribe([this](id_t eventId, UIClickedEvent& args) -> bool
 			{
 				CreateTitleScreen();
 				return false;
 			});
 
-			qButton->EventHandler().OnHoverEntry.Subscribe([](id_t eventId, UIEvent& args) -> bool
+			qButton->EventHandler().OnHoverEntry.Subscribe([](id_t eventId, UIHoverEvent& args) -> bool
 			{
 				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0].BaseColor = Color::Red;
 				return false;
 			});
 
-			qButton->EventHandler().OnHoverExit.Subscribe([](id_t eventId, UIEvent& args) -> bool
+			qButton->EventHandler().OnHoverExit.Subscribe([](id_t eventId, UIHoverEvent& args) -> bool
 			{
 				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0].BaseColor = Color(200, 0, 0);
 				return false;
@@ -214,19 +214,19 @@ namespace Aimbooster
 			mainLayer->UI().Text("Score: " + std::to_string(score), Color::White, Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() / 2 - 50, -5 }));
 			UIsurface* retryButton = mainLayer->UI().Rectangle(300, 50, Color(0, 200, 0), Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() / 2 - 150, -5 }));
 			retryButton->Text("Retry", Color::White, Transform({ 0, 0, 1 }));
-			retryButton->EventHandler().OnClicked.Subscribe([this](id_t event, UIEvent& args) -> bool
+			retryButton->EventHandler().OnClicked.Subscribe([this](id_t event, UIClickedEvent& args) -> bool
 			{
 				CreateGameScreen();
 				return false;
 			});
 
-			retryButton->EventHandler().OnHoverEntry.Subscribe([](id_t eventId, UIEvent& args) -> bool
+			retryButton->EventHandler().OnHoverEntry.Subscribe([](id_t eventId, UIHoverEvent& args) -> bool
 			{
 				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0].BaseColor = Color::Green;
 				return false;
 			});
 
-			retryButton->EventHandler().OnHoverExit.Subscribe([](id_t eventId, UIEvent& args) -> bool
+			retryButton->EventHandler().OnHoverExit.Subscribe([](id_t eventId, UIHoverEvent& args) -> bool
 			{
 				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0].BaseColor = Color(0, 200, 0);
 				return false;
@@ -234,19 +234,19 @@ namespace Aimbooster
 
 			UIsurface* menuButton = mainLayer->UI().Rectangle(300, 50, Color(200, 0, 0), Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() / 2 - 225, -5 }));
 			menuButton->Text("Main Menu", Color::White, Transform({ 0, 0, 1 }));
-			menuButton->EventHandler().OnClicked.Subscribe([this](id_t eventId, UIEvent& args) -> bool
+			menuButton->EventHandler().OnClicked.Subscribe([this](id_t eventId, UIClickedEvent& args) -> bool
 			{
 				CreateTitleScreen();
 				return false;
 			});
 
-			menuButton->EventHandler().OnHoverEntry.Subscribe([](id_t eventId, UIEvent& args) -> bool
+			menuButton->EventHandler().OnHoverEntry.Subscribe([](id_t eventId, UIHoverEvent& args) -> bool
 			{
 				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0].BaseColor = Color::Red;
 				return false;
 			});
 
-			menuButton->EventHandler().OnHoverExit.Subscribe([](id_t eventId, UIEvent& args) -> bool
+			menuButton->EventHandler().OnHoverExit.Subscribe([](id_t eventId, UIHoverEvent& args) -> bool
 			{
 				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0].BaseColor = Color(200, 0, 0);
 				return false;

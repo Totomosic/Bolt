@@ -1,5 +1,6 @@
 #include "Types.h"
-#include "SceneManager.h"
+
+#include "SceneManager.h"
 
 namespace Bolt
 {
