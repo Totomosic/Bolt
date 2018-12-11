@@ -1,7 +1,0 @@
-<MODEL name="square">
-    <vertices type="float" count="4" dim="3">-25 50 0.0 -25 -50 0.0 25 -50 0.0 25 50 0.0</vertices>
-    <normals type="float" count="4" dim="3">0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0 1.0</normals>
-    <texcoords type="float" count="4" dim="2">0.0 1.0 0.0 0.0 1.0 0.0 1.0 1.0</texcoords>
-    <colors type="byte" count="4" dim="4">ÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿ</colors>
-    <indices type="int" count="6">0 1 2 0 2 3</indices>
-</MODEL>
