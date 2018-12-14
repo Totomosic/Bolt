@@ -27,6 +27,9 @@ namespace Blockstream
 		bool isTypingHost;
 		blt::string hostString;
 
+		id_t backgroundTitleTexture;
+		id_t backgroundSpaceTexture;
+
 		Scene* scene;
 		Layer* mainLayer;
 		Layer* uiLayer;

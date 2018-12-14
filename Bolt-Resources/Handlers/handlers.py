@@ -6,6 +6,7 @@ from Handlers.XML.XMLwriter import *
 
 FILE_TYPE_UNKNOWN = 0
 FILE_TYPE_IMAGE = 1
+FILE_TYPE_SHADER = 2
 
 class ResourceHandler:
     def __init__(self, write_function, arguments):

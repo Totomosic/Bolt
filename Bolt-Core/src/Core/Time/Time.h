@@ -1,6 +1,6 @@
 #pragma once
-#include "Types.h"
 #include "Timer.h"
+#include "Timeline.h"
 
 namespace Bolt
 {
@@ -8,12 +8,8 @@ namespace Bolt
 	class BLT_API Time
 	{
 	private:
-		static double s_TimeScale;
-
 		static std::chrono::time_point<std::chrono::high_resolution_clock, std::chrono::duration<double>> s_StartTime;
-		static double s_CurrentTime;
-		static double s_ElapsedTime;
-		static double s_RealCurrentTime;
+		static Timeline s_RenderingTimeline;
 
 		static std::vector<Timer> s_Timers;
 
@@ -21,10 +17,7 @@ namespace Bolt
 		Time() = delete;
 
 	public:
-		static double ElapsedTime();
-		static double DeltaTime();
-		static double CurrentTime();
-		static double& TimeScale();
+		static Timeline& RenderingTimeline();
 
 		static double FramesPerSecond();
 
@@ -34,6 +27,7 @@ namespace Bolt
 		static id_t CreateTimer(double time, Timer::TimerFunc callback, RepeatMode repeat = RepeatMode::Recurring, bool start = true);
 
 		friend class Engine;
+		friend class Application;
 
 	private:
 		static void Update();

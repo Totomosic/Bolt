@@ -1,5 +1,6 @@
 #include "Types.h"
-#include "Texture2D.h"
+
+#include "Texture2D.h"
 
 namespace Bolt
 {
@@ -33,13 +34,13 @@ namespace Bolt
 		delete[] Pixels;
 	}
 
-	void Texture2D::LoadPixels()
+	void Texture2D::LoadPixels() const
 	{
 		Bind();
 		GL_CALL(glGetTexImage((GLenum)m_Target, 0, GL_RGBA, GL_FLOAT, Pixels));
 	}
 
-	void Texture2D::UpdatePixels()
+	void Texture2D::UpdatePixels() const
 	{
 		Bind();
 		GL_CALL(glTexSubImage2D((GLenum)m_Target, 0, 0, 0, m_Width, m_Height, GL_RGBA, GL_FLOAT, Pixels));

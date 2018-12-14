@@ -39,7 +39,8 @@ namespace Bolt
 	{
 		if (layer() == nullptr)
 		{
-			return nullptr;
+			// This object must be the camera
+			return (Camera*)gameObject();
 		}
 		return layer()->ActiveCamera();
 	}

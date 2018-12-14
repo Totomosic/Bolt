@@ -50,6 +50,7 @@ namespace Bolt
 		BlendDst BlendDstFunc = BlendDst::OneMinusSrcAlpha;
 		CullFace CulledFaces = CullFace::Back;
 		PolygonMode PolygonMode = PolygonMode::Fill;
+		bool RenderToDepthBuffer = true;
 
 	public:
 		bool operator==(const RenderSettings& other) const;

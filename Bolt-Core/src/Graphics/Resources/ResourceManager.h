@@ -57,6 +57,7 @@ namespace Bolt
 		static ResourceType StringToType(const blt::string& str);
 		static ResourceFile& LoadTexture2DFile(ResourceFile& resourceFile);
 		static ResourceFile& LoadModelFile(ResourceFile& resourceFile);
+		static ResourceFile& LoadShaderFile(ResourceFile& resourceFile);
 
 	};
 

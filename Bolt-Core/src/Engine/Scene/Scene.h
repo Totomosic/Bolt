@@ -1,10 +1,7 @@
 #pragma once
 #include "Layer.h"
 #include "ObjectCollection.h"
-
-#ifndef LAYERS_PER_SCENE
-#define LAYERS_PER_SCENE 12
-#endif
+#include "Physics\PhysicsManager.h"
 
 namespace Bolt
 {
@@ -20,8 +17,18 @@ namespace Bolt
 		std::unordered_map<blt::string, int> m_LayerNames;
 		Camera m_Cameras[MAX_CAMERAS];
 
+		PhysicsManager m_PhysEngine;
+
 	public:
 		Scene();
+		Scene(const Scene& other) = delete;
+		Scene& operator=(const Scene& other) = delete;
+		Scene(Scene&& other) = delete;
+		Scene& operator=(Scene&& other) = delete;
+		~Scene() = default;
+
+		const PhysicsManager& Physics() const;
+		PhysicsManager& Physics();
 
 		const Layer& GetLayer(id_t id) const;
 		Layer& GetLayer(id_t id);

@@ -14,6 +14,7 @@ namespace Bolt
 	BlendDst GLState::s_BlendDst = BlendDst::OneMinusSrcAlpha;
 	CullFace GLState::s_CullFace = CullFace::Back;
 	PolygonMode GLState::s_PolygonMode = PolygonMode::Fill;
+	bool GLState::s_RenderToDepthBuffer = true;
 
 	void GLState::Reset()
 	{
@@ -24,6 +25,8 @@ namespace Bolt
 		s_BlendSrc = BlendSrc::SrcAlpha;
 		s_BlendDst = BlendDst::OneMinusSrcAlpha;
 		s_CullFace = CullFace::Back;
+		s_PolygonMode = PolygonMode::Fill;
+		s_RenderToDepthBuffer = true;
 
 		GL_CALL(glDisable(GL_DEPTH_TEST));
 		GL_CALL(glDisable(GL_BLEND));
@@ -32,6 +35,7 @@ namespace Bolt
 		GL_CALL(glBlendFunc((GLenum)s_BlendSrc, (GLenum)s_BlendDst));
 		GL_CALL(glCullFace((GLenum)s_CullFace));
 		GL_CALL(glPolygonMode(GL_FRONT_AND_BACK, (GLenum)s_PolygonMode));
+		GL_CALL(glDepthMask(s_RenderToDepthBuffer));
 	}
 
 	void GLState::SetDepthTest(bool enabled)
@@ -141,6 +145,15 @@ namespace Bolt
 		}
 	}
 
+	void GLState::SetRenderToDepthBuffer(bool renderToDepth)
+	{
+		if (s_RenderToDepthBuffer != renderToDepth)
+		{
+			s_RenderToDepthBuffer = renderToDepth;
+			GL_CALL(glDepthMask(s_RenderToDepthBuffer));
+		}
+	}
+
 	void GLState::ApplySettings(const RenderSettings& settings)
 	{
 		SetDepthTest(settings.UseDepthTest);
@@ -150,6 +163,7 @@ namespace Bolt
 		SetBlendFunc(settings.BlendSrcFunc, settings.BlendDstFunc);
 		SetCullFace(settings.CulledFaces);
 		SetPolygonMode(settings.PolygonMode);
+		SetRenderToDepthBuffer(settings.RenderToDepthBuffer);
 	}
 
 }

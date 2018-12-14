@@ -105,7 +105,7 @@ namespace Bolt
 		{
 			std::sort(objects.begin(), objects.end(), [](GameObject* left, GameObject* right)
 			{
-				return left->transform().Position().z <= right->transform().Position().z;
+				return left->transform().Position().z >= right->transform().Position().z;
 			});
 		}
 		else if (projection == ProjectionType::Perspective)

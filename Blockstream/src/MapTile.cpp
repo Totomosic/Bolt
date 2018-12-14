@@ -32,7 +32,7 @@ namespace Blockstream
 		else
 		{
 			float vecLength = (targetPosition - currentPosition).Length();
-			float length = (vecLength < TILE_SPEED * Time::DeltaTime()) ? vecLength : TILE_SPEED * Time::DeltaTime();
+			float length = (vecLength < TILE_SPEED * Time::RenderingTimeline().DeltaTime()) ? vecLength : TILE_SPEED * Time::RenderingTimeline().DeltaTime();
 			gameObject()->transform().Translate((targetPosition - currentPosition).Normalize() * length);
 		}
 	}

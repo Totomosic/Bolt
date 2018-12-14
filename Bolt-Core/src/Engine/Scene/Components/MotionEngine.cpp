@@ -19,8 +19,8 @@ namespace Bolt
 
 	void MotionEngine::Update()
 	{
-		Velocity += Acceleration * Time::DeltaTime();
-		m_GameObject->transform().Translate(Velocity * Time::DeltaTime());
+		Velocity += Acceleration * Time::RenderingTimeline().DeltaTime();
+		m_GameObject->transform().Translate(Velocity * Time::RenderingTimeline().DeltaTime());
 	}
 
 	std::unique_ptr<Component> MotionEngine::Clone() const

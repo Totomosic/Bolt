@@ -52,3 +52,11 @@ RESOURCE_HANDLERS[FILE_TYPE_IMAGE] = ResourceHandler(write_image_resource, {
         "Mag Filter" : ["string", "linear,nearest", "linear"],
         "Mipmaps" : ["bool", "true,false", "true"]
     })
+
+def reset_image_handler():
+    RESOURCE_HANDLERS[FILE_TYPE_IMAGE] = ResourceHandler(write_image_resource, {
+        "Name" : ["string", "*", "__FILENAME__"],
+        "Min Filter" : ["string", "linear,nearest", "linear"],
+        "Mag Filter" : ["string", "linear,nearest", "linear"],
+        "Mipmaps" : ["bool", "true,false", "true"]
+    })

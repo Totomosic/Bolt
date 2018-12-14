@@ -97,10 +97,7 @@ namespace Bolt
 		std::vector<GameObject*> objects = m_GameObjects.GetAllGameObjects();
 		for (GameObject* object : objects)
 		{
-			if (object != UI().Object())
-			{
-				RemoveGameObject(object);
-			}
+			RemoveGameObject(object);
 		}
 		UI().ReleaseGameObjects();
 		UI().Clear();
@@ -109,17 +106,12 @@ namespace Bolt
 
 	void Layer::Update()
 	{
-		std::vector<GameObject*> validObjects;
-		for (id_t i = 0; i < ObjectCollection::MAX_GAMEOBJECTS; i++)
+		const std::vector<GameObject*>& objects = m_GameObjects.GetAllGameObjects();
+		for (GameObject* object : objects)
 		{
-			GameObject& object = m_GameObjects.GetGameObjectById(i);
-			if (object.Id() != GameObject::InvalidID)
-			{
-				object.Update();
-				validObjects.push_back(&object);
-			}
+			object->Update();
 		}
-		for (GameObject* object : validObjects)
+		for (GameObject* object : objects)
 		{
 			object->LateUpdate();
 		}
@@ -130,7 +122,7 @@ namespace Bolt
 		for (int i = m_TemporaryObjects.size() - 1; i >= 0; i--)
 		{
 			TempGameObject& tObj = m_TemporaryObjects[i];
-			tObj.TimeToDelete -= Time::DeltaTime();
+			tObj.TimeToDelete -= Time::RenderingTimeline().DeltaTime();
 			if (tObj.TimeToDelete <= 0.0f)
 			{
 				RemoveGameObject(tObj.Object);

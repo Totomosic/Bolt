@@ -6,3 +6,4 @@
 #include "LightRenderer.h"
 #include "MeshRenderer.h"
 #include "MotionEngine.h"
+#include "PhysicsHandle.h"

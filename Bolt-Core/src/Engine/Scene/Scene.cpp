@@ -7,9 +7,19 @@ namespace Bolt
 {
 
 	Scene::Scene()
-		: m_Layers{}, m_LayerNames(), m_Cameras()
+		: m_Layers{}, m_LayerNames(), m_Cameras(), m_PhysEngine(this)
 	{
 		ClearCameras();
+	}
+
+	const PhysicsManager& Scene::Physics() const
+	{
+		return m_PhysEngine;
+	}
+
+	PhysicsManager& Scene::Physics()
+	{
+		return m_PhysEngine;
 	}
 
 	const Layer& Scene::GetLayer(id_t id) const
@@ -118,6 +128,7 @@ namespace Bolt
 		Camera* camera = &m_Cameras[id];
 		camera->SetProjection(projection);
 		camera->SetID(id);
+		camera->m_Layer = nullptr;
 		return camera;
 	}
 
