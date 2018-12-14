@@ -9,6 +9,8 @@ namespace Bolt
 	{
 	public:
 		Ray ray;
+		// Holds the hit locations of the raycast, will be populated after Query is evaluated
+		mutable std::vector<Vector3f> HitLocations;
 
 	public:
 		SGQRayCast(Ray ray);

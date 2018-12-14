@@ -60,11 +60,14 @@ namespace Bolt
 		{
 			MeshRenderer& meshRenderer = object->Components().GetComponent<MeshRenderer>();
 			Transform& transform = object->transform();
-			Cuboid bounds = meshRenderer.GetMeshBounds();
-			Vector3f hitPosition;
-			if (TestAABB(ray, bounds, &hitPosition))
+			std::vector<Cuboid> bounds = meshRenderer.GetMeshBounds();
+			for (Cuboid& bound : bounds)
 			{
-				result.push_back({ object, hitPosition });
+				Vector3f hitPosition;
+				if (TestAABB(ray, bound, &hitPosition))
+				{
+					result.push_back({ object, hitPosition });
+				}
 			}
 		}
 
@@ -88,6 +91,7 @@ namespace Bolt
 		for (auto& pair : result)
 		{
 			objectResult.push_back(pair.first);
+			HitLocations.push_back(pair.second);
 		}
 		return objectResult;
 	}

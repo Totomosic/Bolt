@@ -139,6 +139,7 @@ namespace Bolt
 		static std::unique_ptr<Shader> FromFile(const Filepath& shaderFile);
 		static std::unique_ptr<Shader> FromFile(const Filepath& vertexFile, const Filepath& fragmentFile);
 		static std::unique_ptr<Shader> FromFile(const Filepath& vertexFile, const Filepath& geometryFile, const Filepath& fragmentFile);
+		static std::unique_ptr<Shader> FromSource(const blt::string& source);
 		static std::unique_ptr<Shader> FromSource(const blt::string& vertexSource, const blt::string& fragmentSource);
 		static std::unique_ptr<Shader> FromSource(const blt::string& vertexSource, const blt::string& geometrySource, const blt::string& fragmentSource);
 

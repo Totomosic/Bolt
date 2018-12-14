@@ -1,5 +1,6 @@
 #include "Types.h"
-#include "Shader.h"
+
+#include "Shader.h"
 #include "..\ResourceManager.h"
 #include "..\Meshes\Materials\Material.h"
 #include "..\..\..\Engine\Scene\Lighting\LightSource.h"
@@ -379,6 +380,28 @@ namespace Bolt
 
 	std::unique_ptr<Shader> Shader::FromFile(const Filepath& shaderFile)
 	{
+		File f = Filesystem::Open(shaderFile, OpenMode::Read);
+		blt::string fileData = f.ReadText();
+		return FromSource(fileData);
+	}
+
+	std::unique_ptr<Shader> Shader::FromFile(const Filepath& vertexFile, const Filepath& fragmentFile)
+	{
+		File v = Filesystem::Open(vertexFile, OpenMode::Read);
+		File f = Filesystem::Open(fragmentFile, OpenMode::Read);
+		return FromSource(v.ReadText(), f.ReadText());
+	}
+
+	std::unique_ptr<Shader> Shader::FromFile(const Filepath& vertexFile, const Filepath& geometryFile, const Filepath& fragmentFile)
+	{
+		File v = Filesystem::Open(vertexFile, OpenMode::Read);
+		File g = Filesystem::Open(geometryFile, OpenMode::Read);
+		File f = Filesystem::Open(fragmentFile, OpenMode::Read);
+		return FromSource(v.ReadText(), g.ReadText(), f.ReadText());
+	}
+
+	std::unique_ptr<Shader> Shader::FromSource(const blt::string& source)
+	{
 		constexpr int NONE_SHADER_TYPE = -1;
 		constexpr int VERTEX_SHADER_TYPE = 0;
 		constexpr int FRAGMENT_SHADER_TYPE = 2;
@@ -388,8 +411,7 @@ namespace Bolt
 		int currentType = NONE_SHADER_TYPE;
 		bool isGeometryShader = false;
 
-		File f = Filesystem::Open(shaderFile, OpenMode::Read);
-		blt::string fileData = f.ReadText();
+		blt::string fileData = source;
 		std::vector<blt::string> lines = fileData.split('\n');
 		for (blt::string& line : lines)
 		{
@@ -415,36 +437,7 @@ namespace Bolt
 			}
 		}
 		blt::string sources[3] = { ss[0].str(), ss[1].str(), ss[2].str() };
-		ComShaderProgram program = ShaderCompiler::Compile(sources, shaderFile.Directory());
-		std::unique_ptr<Shader> shader;
-		if (!program.Sources[1].empty())
-		{
-			shader = std::make_unique<Shader>(program.Sources[0], program.Sources[1], program.Sources[2]);
-		}
-		else
-		{
-			shader = std::make_unique<Shader>(program.Sources[0], program.Sources[2]);
-		}		 
-		return shader;
-	}
-
-	std::unique_ptr<Shader> Shader::FromFile(const Filepath& vertexFile, const Filepath& fragmentFile)
-	{
-		File v = Filesystem::Open(vertexFile, OpenMode::Read);
-		File f = Filesystem::Open(fragmentFile, OpenMode::Read);
-		blt::string sources[3] = { v.ReadText(), "", f.ReadText() };
-		ComShaderProgram program = ShaderCompiler::Compile(sources, vertexFile.Directory());
-		return std::make_unique<Shader>(program.Sources[0], program.Sources[2]);
-	}
-
-	std::unique_ptr<Shader> Shader::FromFile(const Filepath& vertexFile, const Filepath& geometryFile, const Filepath& fragmentFile)
-	{
-		File v = Filesystem::Open(vertexFile, OpenMode::Read);
-		File g = Filesystem::Open(geometryFile, OpenMode::Read);
-		File f = Filesystem::Open(fragmentFile, OpenMode::Read);
-		blt::string sources[3] = { v.ReadText(), g.ReadText(), f.ReadText() };
-		ComShaderProgram program = ShaderCompiler::Compile(sources, vertexFile.Directory());
-		return std::make_unique<Shader>(program.Sources[0], program.Sources[1], program.Sources[2]);
+		return (isGeometryShader) ? FromSource(sources[0], sources[1], sources[2]) : FromSource(sources[0], sources[2]);
 	}
 
 	std::unique_ptr<Shader> Shader::FromSource(const blt::string& vertexSource, const blt::string& fragmentSource)

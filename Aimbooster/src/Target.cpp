@@ -19,7 +19,7 @@ namespace Aimbooster
 	{
 		if (!Paused)
 		{
-			CurrentTime += Time::DeltaTime();
+			CurrentTime += Time::RenderingTimeline().DeltaTime();
 			float size = StartingSize + (MaxSize - StartingSize) * sin(CurrentTime / Lifetime * PI);
 			gameObject()->transform().SetLocalScale(size, size, 1);
 			CurrentSize = size;

@@ -67,6 +67,15 @@
     <Filter Include="Engine\Scene\Lighting">
       <UniqueIdentifier>{BD5FF7D2-29CC-B2CD-F2BF-4A2B5EEBD435}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Scene\Physics">
+      <UniqueIdentifier>{AA281D9E-96B7-A667-3FD6-BA622B44B70D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Scene\Physics\CollisionEngine">
+      <UniqueIdentifier>{1B5D030D-0744-C504-B094-2B229C5A3E6B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Scene\Physics\CollisionEngine\Colliders">
+      <UniqueIdentifier>{ABA59353-9723-E4EC-801B-A2846C382615}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Engine\Scene\Query">
       <UniqueIdentifier>{BD929061-A976-51B7-12D7-4B0AFED93B39}</UniqueIdentifier>
     </Filter>
@@ -141,6 +150,9 @@
     <ClInclude Include="src\BoltDefines.h" />
     <ClInclude Include="src\BoltEngine.h" />
     <ClInclude Include="src\Core\BoltTL\__BoltTL__.h">
+      <Filter>Core\BoltTL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\BoltTL\array2d.h">
       <Filter>Core\BoltTL</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\BoltTL\iterator.h">
@@ -255,6 +267,9 @@
       <Filter>Core\Memory</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Time\Time.h">
+      <Filter>Core\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Time\Timeline.h">
       <Filter>Core\Time</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Time\Timer.h">
@@ -377,6 +392,9 @@
     <ClInclude Include="src\Engine\Scene\Components\MotionEngine.h">
       <Filter>Engine\Scene\Components</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Scene\Components\PhysicsHandle.h">
+      <Filter>Engine\Scene\Components</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Scene\Components\UI\UIEventHandler.h">
       <Filter>Engine\Scene\Components\UI</Filter>
     </ClInclude>
@@ -409,6 +427,36 @@
     </ClInclude>
     <ClInclude Include="src\Engine\Scene\ObjectPrefab.h">
       <Filter>Engine\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Scene\Physics\CollisionEngine\Colliders\AABBCollider.h">
+      <Filter>Engine\Scene\Physics\CollisionEngine\Colliders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Scene\Physics\CollisionEngine\Colliders\OBBCollider.h">
+      <Filter>Engine\Scene\Physics\CollisionEngine\Colliders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Scene\Physics\CollisionEngine\Colliders\SphereCollider.h">
+      <Filter>Engine\Scene\Physics\CollisionEngine\Colliders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Scene\Physics\CollisionEngine\Colliders\__Colliders__.h">
+      <Filter>Engine\Scene\Physics\CollisionEngine\Colliders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Scene\Physics\CollisionEngine\CollisionEngine.h">
+      <Filter>Engine\Scene\Physics\CollisionEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Scene\Physics\CollisionEngine\__CollisionEngine__.h">
+      <Filter>Engine\Scene\Physics\CollisionEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Scene\Physics\PhysObjCollection.h">
+      <Filter>Engine\Scene\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Scene\Physics\PhysicsEngine.h">
+      <Filter>Engine\Scene\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Scene\Physics\PhysicsManager.h">
+      <Filter>Engine\Scene\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Scene\Physics\__Physics__.h">
+      <Filter>Engine\Scene\Physics</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Scene\Query\SGQComponents.h">
       <Filter>Engine\Scene\Query</Filter>
@@ -444,6 +492,15 @@
       <Filter>Engine\Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Scene\UI\Text.h">
+      <Filter>Engine\Scene\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Scene\UI\UIelement.h">
+      <Filter>Engine\Scene\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Scene\UI\UIroot.h">
+      <Filter>Engine\Scene\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Scene\UI\UIsurface.h">
       <Filter>Engine\Scene\UI</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Scene\UI\__UI__.h">
@@ -709,9 +766,6 @@
     </ClInclude>
     <ClInclude Include="src\Logging.h" />
     <ClInclude Include="src\Types.h" />
-    <ClInclude Include="src\Engine\Scene\UI\UIelement.h" />
-    <ClInclude Include="src\Engine\Scene\UI\UIroot.h" />
-    <ClInclude Include="src\Engine\Scene\UI\UIsurface.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\BoltTL\string.cpp">
@@ -754,6 +808,9 @@
       <Filter>Core\Memory</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\Time\Time.cpp">
+      <Filter>Core\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Time\Timeline.cpp">
       <Filter>Core\Time</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\Time\Timer.cpp">
@@ -834,6 +891,9 @@
     <ClCompile Include="src\Engine\Scene\Components\MotionEngine.cpp">
       <Filter>Engine\Scene\Components</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Scene\Components\PhysicsHandle.cpp">
+      <Filter>Engine\Scene\Components</Filter>
+    </ClCompile>
     <ClCompile Include="src\Engine\Scene\Components\UI\UIEventHandler.cpp">
       <Filter>Engine\Scene\Components\UI</Filter>
     </ClCompile>
@@ -851,6 +911,18 @@
     </ClCompile>
     <ClCompile Include="src\Engine\Scene\ObjectPrefab.cpp">
       <Filter>Engine\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Scene\Physics\CollisionEngine\CollisionEngine.cpp">
+      <Filter>Engine\Scene\Physics\CollisionEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Scene\Physics\PhysObjCollection.cpp">
+      <Filter>Engine\Scene\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Scene\Physics\PhysicsEngine.cpp">
+      <Filter>Engine\Scene\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Scene\Physics\PhysicsManager.cpp">
+      <Filter>Engine\Scene\Physics</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Scene\Query\SGQComponents.cpp">
       <Filter>Engine\Scene\Query</Filter>
@@ -877,6 +949,15 @@
       <Filter>Engine\Scene</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Scene\UI\Text.cpp">
+      <Filter>Engine\Scene\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Scene\UI\UIelement.cpp">
+      <Filter>Engine\Scene\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Scene\UI\UIroot.cpp">
+      <Filter>Engine\Scene\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Scene\UI\UIsurface.cpp">
       <Filter>Engine\Scene\UI</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Scripting\Python\PyInterpreter.cpp">
@@ -1013,9 +1094,6 @@
     </ClCompile>
     <ClCompile Include="src\Logging.cpp" />
     <ClCompile Include="src\Types.cpp" />
-    <ClCompile Include="src\Engine\Scene\UI\UIroot.cpp" />
-    <ClCompile Include="src\Engine\Scene\UI\UIelement.cpp" />
-    <ClCompile Include="src\Engine\Scene\UI\UIsurface.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Graphics\Resources\Shaders\Source\DefaultColor_f.glsl">

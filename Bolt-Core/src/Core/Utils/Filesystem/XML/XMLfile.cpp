@@ -1,5 +1,6 @@
 #include "Types.h"
-#include "XMLfile.h"
+
+#include "XMLfile.h"
 
 namespace Bolt
 {
@@ -186,7 +187,7 @@ namespace Bolt
 			}
 			else
 			{
-				begin = data.find_first_of('<', begin + 1);
+				break;
 			}
 		}
 		if (!hadChild)

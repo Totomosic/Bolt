@@ -15,7 +15,7 @@ namespace Blockstream
 		mainLayer = scene->CreateLayer("Main");
 		uiLayer = scene->CreateLayer("UI");
 		mainCamera = scene->CreateCamera(Frustum::Perspective(PI / 3, PrimaryWindow->GetFramebuffer().Aspect(), 1.0f, 1000.0f), ProjectionType::Perspective);
-		uiCamera = scene->CreateCamera(PrimaryWindow->GetFramebuffer().ViewFrustum(), ProjectionType::Orthographic);
+		uiCamera = scene->CreateCamera(PrimaryWindow->GetFramebuffer().ViewFrustum(1, 10000), ProjectionType::Orthographic);
 
 		mainLayer->SetActiveCamera(mainCamera);
 		uiLayer->SetActiveCamera(uiCamera);
@@ -23,6 +23,11 @@ namespace Blockstream
 		factory.SetCurrentLayer(mainLayer);
 
 		ResourceManager::Register(std::make_unique<Font>("res/arial.ttf", 24));
+		ResourcePack resources = ResourceManager::FetchPack("res/resources.pack");
+		ResourceManager::LoadPack(resources);
+
+		backgroundTitleTexture = resources.Resources.at("titleBackground").Id;
+		backgroundSpaceTexture = resources.Resources.at("spaceBackground").Id;
 
 		GameManager::Init(this);
 		tileMapPrefabId = GameManager::Map().CreatePrefab(factory, TILE_WIDTH, TILE_HEIGHT, TILE_DEPTH);
@@ -45,7 +50,10 @@ namespace Blockstream
 		ClearScreen();
 		uiLayer->UI().Text("Blockstream", Color::Black, Transform({ uiCamera->ViewWidth() / 2, uiCamera->ViewHeight() / 2 + 100, -5 }));
 
-		UIsurface* hostGameButton = uiLayer->UI().Rectangle(300, 50, Color(0, 200, 0), Transform({ uiCamera->ViewWidth() / 2, uiCamera->ViewHeight() / 2 + 0, -5 }));
+		UIsurface* background = uiLayer->UI().Image(uiCamera->ViewWidth(), uiCamera->ViewHeight(), ResourceManager::Get<Texture2D>(backgroundTitleTexture), Transform({ uiCamera->ViewWidth() / 2, uiCamera->ViewHeight() / 2, -50 }));
+		UIsurface* title = background->Rectangle(400, 600, Color(150, 150, 150, 200), Transform({ 0, 0, 1 }));
+
+		UIsurface* hostGameButton = title->Rectangle(300, 50, Color(0, 200, 0), Transform({ 0, 0, 1 }));
 		hostGameButton->Text("Host", Color::White, Transform({ 0, 0, 1 }));
 		hostGameButton->EventHandler().OnClicked.Subscribe([this](id_t eventId, UIClickedEvent& args) -> bool
 		{
@@ -53,7 +61,7 @@ namespace Blockstream
 			return false;
 		});
 
-		UIsurface* joinGameButton = uiLayer->UI().Rectangle(300, 50, Color(0, 200, 0), Transform({ uiCamera->ViewWidth() / 2, uiCamera->ViewHeight() / 2 - 75, -5 }));
+		UIsurface* joinGameButton = title->Rectangle(300, 50, Color(0, 200, 0), Transform({ 0, -75, 1 }));
 		joinGameButton->Text("Join", Color::White, Transform({ 0, 0, 1 }));
 		joinGameButton->EventHandler().OnClicked.Subscribe([this](id_t eventId, UIClickedEvent& args) -> bool
 		{
@@ -195,6 +203,9 @@ namespace Blockstream
 	{
 		isPlaying = true;
 		ClearScreen();
+
+		UIsurface* background = uiLayer->UI().Image(uiCamera->ViewWidth(), uiCamera->ViewHeight(), ResourceManager::Get<Texture2D>(backgroundSpaceTexture), Transform({ uiCamera->ViewWidth() / 2, uiCamera->ViewHeight() / 2, -9999 }));
+
 		mainCameraAnchor = factory.Instantiate(Transform());
 		mainCamera->MakeChildOf(mainCameraAnchor);
 		mainCameraAnchor->transform().Reset();
@@ -202,7 +213,7 @@ namespace Blockstream
 		mainCamera->transform().Reset();
 		mainCamera->transform().Translate(0, 0, 200);
 		GameManager::Map().RecreateMap(factory, tileMapPrefabId, X_TILES, Y_TILES, WATER_STRENGTH);
-		fpsText = uiLayer->UI().Text("fps 60", Color::Black, Transform({ 20, uiCamera->ViewHeight() - 30, -5 }), AlignH::Left, AlignV::Center);
+		fpsText = uiLayer->UI().Text("fps 60", Color::White, Transform({ 20, uiCamera->ViewHeight() - 30, -5 }), AlignH::Left, AlignV::Center);
 	}
 
 	void BlockstreamClient::CreateEndScreen(const blt::string& text)
@@ -253,7 +264,8 @@ namespace Blockstream
 			if (Input::MouseButtonPressed(MouseButton::Left))
 			{
 				Ray mouseRay = mainCamera->NDCToWorldRay(Input::NormalizedMousePosition());
-				SGQueryResult result = mainLayer->GameObjects().Query(SGQRayCast(mouseRay));
+				SGQRayCast raycast = SGQRayCast(mouseRay);
+				SGQueryResult result = mainLayer->GameObjects().Query(raycast);
 				if (result.MostRelevant != nullptr)
 				{
 					blt::string reason;

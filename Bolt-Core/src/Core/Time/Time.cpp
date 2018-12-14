@@ -1,49 +1,30 @@
 #include "Types.h"
-#include "Time.h"
+
+#include "Time.h"
 
 namespace Bolt
 {
 	
-	double Time::s_TimeScale = 1.0;
 	std::chrono::time_point<std::chrono::high_resolution_clock, std::chrono::duration<double>> Time::s_StartTime = std::chrono::high_resolution_clock::now();
-	double Time::s_CurrentTime = 0.0;
-	double Time::s_ElapsedTime = 0.0;
-	double Time::s_RealCurrentTime = 0.0;
+	Timeline Time::s_RenderingTimeline = Timeline(1.0);
 
 	std::vector<Timer> Time::s_Timers = std::vector<Timer>();
 
-	double Time::DeltaTime()
+	Timeline& Time::RenderingTimeline()
 	{
-		return s_ElapsedTime;
-	}
-
-	double Time::ElapsedTime()
-	{
-		return DeltaTime();
-	}
-
-	double Time::CurrentTime()
-	{
-		return (((std::chrono::high_resolution_clock::now() - s_StartTime).count() - s_RealCurrentTime) * s_TimeScale + s_CurrentTime) / 1e9;
-	}
-
-	double& Time::TimeScale()
-	{
-		return s_TimeScale;
+		return s_RenderingTimeline;
 	}
 
 	double Time::FramesPerSecond()
 	{
-		return 1.0 / ElapsedTime();
+		return 1.0 / s_RenderingTimeline.ElapsedTime();
 	}
 
 	void Time::Reset()
 	{
 		glfwSetTime(0.0);
-		s_ElapsedTime = 0.0;
 		s_StartTime = std::chrono::high_resolution_clock::now();
-		s_CurrentTime = 0.0;
-		s_RealCurrentTime = 0.0;
+		s_RenderingTimeline.Reset();
 	}
 
 	Timer* Time::GetTimer(id_t id)
@@ -67,15 +48,14 @@ namespace Bolt
 
 	void Time::Update()
 	{
-		double prev = s_CurrentTime;
-		s_CurrentTime = (std::chrono::high_resolution_clock::now() - s_StartTime).count() * s_TimeScale;
-		s_RealCurrentTime = (std::chrono::high_resolution_clock::now() - s_StartTime).count();
-		s_ElapsedTime = (s_CurrentTime - prev) / 1e9;
+		double prev = s_RenderingTimeline.CurrentRealTime();
+		double current = (std::chrono::high_resolution_clock::now() - s_StartTime).count();
+		s_RenderingTimeline.Update(current / 1e9 - prev);
 
 		for (int i = s_Timers.size() - 1; i >= 0; i--)
 		{
 			Timer& t = s_Timers[i];
-			if (t.Update(s_ElapsedTime))
+			if (t.Update(s_RenderingTimeline.ElapsedTime()))
 			{
 				s_Timers.erase(s_Timers.begin() + i);
 			}

@@ -9,7 +9,7 @@ namespace Bolt
 	class BLT_API Texture2D : public Texture
 	{
 	public:
-		Color* Pixels;
+		mutable Color* Pixels;
 
 	public:
 		Texture2D(int width, int height, TextureFormat format, TextureCreateOptions options = TextureCreateOptions());
@@ -18,8 +18,8 @@ namespace Bolt
 		Texture2D(const Image& image, TextureCreateOptions options = TextureCreateOptions());
 		virtual ~Texture2D() override;
 
-		void LoadPixels();
-		void UpdatePixels();
+		void LoadPixels() const;
+		void UpdatePixels() const;
 
 	protected:
 		void SetImage(const Image& image) const;

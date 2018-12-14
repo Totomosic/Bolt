@@ -10,7 +10,8 @@ namespace Bolt
 		Texture2D,
 		Model,
 		Animation,
-		Data
+		Data,
+		Shader
 	};
 
 	struct BLT_API ResourceFile

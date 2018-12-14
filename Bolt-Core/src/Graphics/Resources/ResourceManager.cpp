@@ -1,8 +1,10 @@
 #include "Types.h"
-#include "ResourceManager.h"
+
+#include "ResourceManager.h"
 #include "Textures\Texture2D.h"
 #include "Meshes\Model.h"
 #include "Textures\Fonts\Font.h"
+#include "Shaders\Shader.h"
 
 namespace Bolt
 {
@@ -45,6 +47,8 @@ namespace Bolt
 			return LoadTexture2DFile(resourceFile);
 		case ResourceType::Model:
 			return LoadModelFile(resourceFile);
+		case ResourceType::Shader:
+			return LoadShaderFile(resourceFile);
 		}
 		BLT_ASSERT(false, "Unable to load Resource File " + resourceFile.Name);
 		return resourceFile;
@@ -132,6 +136,10 @@ namespace Bolt
 		{
 			return ResourceType::Data;
 		}
+		else if (str == "SHADER")
+		{
+			return ResourceType::Shader;
+		}
 		return ResourceType::Unknown;
 	}
 
@@ -215,6 +223,15 @@ namespace Bolt
 		id_t id = Register(std::move(model));
 		resourceFile.Id = id;
 
+		return resourceFile;
+	}
+
+	ResourceFile& ResourceManager::LoadShaderFile(ResourceFile& resourceFile)
+	{
+		blt::string source = resourceFile.Attributes.GetChild("source").Data;
+		std::unique_ptr<Shader> shader = Shader::FromSource(source);
+		id_t id = Register(std::move(shader));
+		resourceFile.Id = id;
 		return resourceFile;
 	}
 

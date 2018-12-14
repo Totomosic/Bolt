@@ -72,8 +72,16 @@ namespace Bolt
 				float viewWidth = camera()->ViewWidth();
 				float viewHeight = camera()->ViewHeight();
 				Vector3f mousePosition = Input::MousePosition(viewWidth, viewHeight);
-				Cuboid box = renderer.GetMeshBounds();
-				return (mousePosition.x > box.Min.x && mousePosition.x < box.Max.x) && (mousePosition.y > box.Min.y && mousePosition.y < box.Max.y);
+				std::vector<Cuboid> bounds = renderer.GetMeshBounds();
+				for (Cuboid& box : bounds)
+				{
+					bool hit = (mousePosition.x > box.Min.x && mousePosition.x < box.Max.x) && (mousePosition.y > box.Min.y && mousePosition.y < box.Max.y);
+					if (hit)
+					{
+						return hit;
+					}
+				}
+				return false;
 			}
 		}
 		return false;

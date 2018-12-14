@@ -102,7 +102,7 @@ namespace Aimbooster
 		{
 			if (isPlaying)
 			{
-				totalTime += Time::DeltaTime();
+				totalTime += Time::RenderingTimeline().DeltaTime();
 				timer->SetText(TimeToString());
 				fpsText->SetText(std::to_string((int)Time::FramesPerSecond()) + " fps");
 				scoreText->SetText("Score: " + std::to_string(score));

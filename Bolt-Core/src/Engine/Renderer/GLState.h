@@ -15,6 +15,7 @@ namespace Bolt
 		static BlendDst s_BlendDst;
 		static CullFace s_CullFace;
 		static PolygonMode s_PolygonMode;
+		static bool s_RenderToDepthBuffer;
 
 	public:
 		GLState() = delete;
@@ -32,6 +33,7 @@ namespace Bolt
 		static void SetBlendDst(BlendDst dst);
 		static void SetCullFace(CullFace face);
 		static void SetPolygonMode(PolygonMode mode);
+		static void SetRenderToDepthBuffer(bool renderToDepth);
 
 		static void ApplySettings(const RenderSettings& settings);
 

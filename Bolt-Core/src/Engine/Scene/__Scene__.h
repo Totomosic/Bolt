@@ -1,6 +1,8 @@
 #pragma once
 #include "Components\__Components__.h"
 #include "Lighting\__Lighting__.h"
+#include "Physics\__Physics__.h"
+#include "Query\__Query__.h"
 #include "UI\__UI__.h"
 
 #include "GameObject.h"

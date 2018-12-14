@@ -129,6 +129,24 @@ namespace Bolt
 		}
 
 		template<>
+		Vector2i& Read<Vector2i>()
+		{
+			return *(Vector2i*)m_Ptr;
+		}
+
+		template<>
+		Vector3i& Read<Vector3i>()
+		{
+			return *(Vector3i*)m_Ptr;
+		}
+
+		template<>
+		Vector4i& Read<Vector4i>()
+		{
+			return *(Vector4i*)m_Ptr;
+		}
+
+		template<>
 		int& Read<int>()
 		{
 			return *(int*)m_Ptr;
@@ -214,6 +232,30 @@ namespace Bolt
 		{
 			BLT_ASSERT(ValidateAttribute(m_AttribIndex, DataType::UByte, 4), "Attribute with index " + std::to_string(m_AttribIndex) + " was incompatible with Vector4<byte> type");
 			Vector4<byte>* ptr = (Vector4<byte>*)m_Ptr;
+			*ptr = obj;
+		}
+
+		template<>
+		void Set<Vector2i>(const Vector2i& obj)
+		{
+			BLT_ASSERT(ValidateAttribute(m_AttribIndex, DataType::Int, 2), "Attribute with index " + std::to_string(m_AttribIndex) + " was incompatible with Vector2i type");
+			Vector2i* ptr = (Vector2i*)m_Ptr;
+			*ptr = obj;
+		}
+
+		template<>
+		void Set<Vector3i>(const Vector3i& obj)
+		{
+			BLT_ASSERT(ValidateAttribute(m_AttribIndex, DataType::Int, 3), "Attribute with index " + std::to_string(m_AttribIndex) + " was incompatible with Vector3i type");
+			Vector3i* ptr = (Vector3i*)m_Ptr;
+			*ptr = obj;
+		}
+
+		template<>
+		void Set<Vector4i>(const Vector4i& obj)
+		{
+			BLT_ASSERT(ValidateAttribute(m_AttribIndex, DataType::Int, 4), "Attribute with index " + std::to_string(m_AttribIndex) + " was incompatible with Vector4i type");
+			Vector4i* ptr = (Vector4i*)m_Ptr;
 			*ptr = obj;
 		}
 
