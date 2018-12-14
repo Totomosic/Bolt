@@ -1,0 +1,7 @@
+<RESOURCE_SETTINGS>
+	<Name>target</Name>
+	<Wrap Mode>Repeat</Wrap Mode>
+	<Min Filter>Linear</Min Filter>
+	<Mag Filter>Linear</Mag Filter>
+	<Mipmaps>Enabled</Mipmaps>
+</RESOURCE_SETTINGS>

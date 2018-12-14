@@ -1,0 +1,3 @@
+RESOURCE_HANDLERS = {
+    
+}

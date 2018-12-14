@@ -81,19 +81,19 @@ namespace NatureScene
 			fpsText->SetText("fps " + std::to_string((int)Time::FramesPerSecond()));
 			if (Input::KeyDown(Keycode::W))
 			{
-				perspectiveCamera->transform().Translate(perspectiveCamera->transform().Forward() * CAMERA_SPEED * Time::DeltaTime());
+				perspectiveCamera->transform().Translate(perspectiveCamera->transform().Forward() * CAMERA_SPEED * Time::RenderingTimeline().DeltaTime());
 			}
 			if (Input::KeyDown(Keycode::S))
 			{
-				perspectiveCamera->transform().Translate(perspectiveCamera->transform().Forward() * -CAMERA_SPEED * Time::DeltaTime());
+				perspectiveCamera->transform().Translate(perspectiveCamera->transform().Forward() * -CAMERA_SPEED * Time::RenderingTimeline().DeltaTime());
 			}
 			if (Input::KeyDown(Keycode::D))
 			{
-				perspectiveCamera->transform().Translate(perspectiveCamera->transform().Right() * CAMERA_SPEED * Time::DeltaTime());
+				perspectiveCamera->transform().Translate(perspectiveCamera->transform().Right() * CAMERA_SPEED * Time::RenderingTimeline().DeltaTime());
 			}
 			if (Input::KeyDown(Keycode::A))
 			{
-				perspectiveCamera->transform().Translate(perspectiveCamera->transform().Right() * -CAMERA_SPEED * Time::DeltaTime());
+				perspectiveCamera->transform().Translate(perspectiveCamera->transform().Right() * -CAMERA_SPEED * Time::RenderingTimeline().DeltaTime());
 			}
 			if (Input::MouseButtonDown(MouseButton::Left))
 			{
