@@ -8,11 +8,13 @@ namespace DND
 	class DNDapp : public Application
 	{
 	public:
-		inline static const float CAMERA_SPEED = 300;
+		inline static const float CAMERA_SPEED = 500;
 
 	public:
 		std::unique_ptr<Tilemap> tilemap;
 		Camera* mainCamera;
+
+		GameObject* selectedTileObject;
 
 		Text* fpsText;
 
@@ -58,6 +60,7 @@ namespace DND
 			tilemap = std::make_unique<Tilemap>(factory, ResourceManager::Get<Texture2D>(tilemapTextureId), 50, info);
 
 			factory.SetCurrentLayer(mapFeatureLayer);
+			selectedTileObject = factory.Rectangle(tilemap->Tilesize(), tilemap->Tilesize(), Color(255, 0, 0, 200), Transform({ 0, 0, 1 }));
 
 			RenderSchedule schedule(*scene);
 			schedule.AddRenderProcess(RenderProcess());
@@ -67,6 +70,14 @@ namespace DND
 		void Update() override
 		{
 			fpsText->SetText("fps " + std::to_string((int)Time::FramesPerSecond()));
+			Vector3f mousePosition = Input::MousePosition(mainCamera->ViewWidth(), mainCamera->ViewHeight()) - Vector3f(mainCamera->ViewWidth() / 2.0f, mainCamera->ViewHeight() / 2.0f, 0);
+			Vector3f worldPosition = mousePosition + mainCamera->transform().Position();
+			if (tilemap->IsTile(worldPosition.x, worldPosition.y))
+			{
+				const Tilemap::TileInfo& tile = tilemap->GetTileFromWorldPosition(worldPosition.x, worldPosition.y);
+				Vector3f tilePos = tilemap->WorldPositionOfTile(tile);
+				selectedTileObject->transform().SetLocalPosition(tilePos.x, tilePos.y, selectedTileObject->transform().Position().z);
+			}
 		}
 
 		void Render() override

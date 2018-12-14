@@ -17,7 +17,6 @@ namespace DND
 		mapMesh.Materials[0].Textures.Textures.push_back(ResourceManager::Get<const Texture2D>(info.PathTextureId));
 		m_Object = factory.Instantiate(mapMesh);
 		m_TexturePtr = mapTexture.Get();
-		m_TexturePtr->SetWrapMode(WrapMode::ClampToEdge);
 	}
 
 	int Tilemap::Width() const
@@ -58,8 +57,8 @@ namespace DND
 	bool Tilemap::IsTile(float worldX, float worldY) const
 	{
 		Vector3f pos = m_Object->transform().Position();
-		float x = worldX - pos.x + Width() / 2.0f * Tilesize();
-		float y = worldY - pos.y + Height() / 2.0f * Tilesize();
+		float x = worldX - pos.x + Width() / 2.0f * Tilesize() + Tilesize() / 2;
+		float y = worldY - pos.y + Height() / 2.0f * Tilesize() + Tilesize() / 2;
 		int xind = std::floor(x / Tilesize());
 		int yind = std::floor(y / Tilesize());
 		return (xind >= 0 && yind >= 0) && (xind < Width() && yind < Height());
@@ -68,10 +67,10 @@ namespace DND
 	const Tilemap::TileInfo& Tilemap::GetTileFromWorldPosition(float x, float y) const
 	{
 		Vector3f pos = m_Object->transform().Position();
-		x = x - pos.x + Width() / 2.0f * Tilesize();
-		y = y - pos.y + Height() / 2.0f * Tilesize();
-		int xind = x / Tilesize();
-		int yind = y / Tilesize();
+		x = x - pos.x + Width() / 2.0f * Tilesize() + Tilesize() / 2;
+		y = y - pos.y + Height() / 2.0f * Tilesize() + Tilesize() / 2;
+		int xind = std::floor(x / Tilesize());
+		int yind = std::floor(y / Tilesize());
 		return GetTile(xind, yind);
 	}
 
