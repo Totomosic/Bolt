@@ -1,5 +1,6 @@
 #include "Types.h"
-#include "TextureGroup.h"
+
+#include "TextureGroup.h"
 
 namespace Bolt
 {

@@ -46,7 +46,7 @@ namespace DND
 
 	Vector3f Tilemap::WorldPositionOfTile(const Tilemap::TileInfo& tile) const
 	{
-		return m_Object->transform().Position() + Vector3f((tile.x - Width() / 2.0f) * Tilesize(), (tile.y - Height() / 2.0f) * Tilesize(), 0);
+		return m_Object->transform().Position() + Vector3f((tile.x - Width() / 2.0f + 0.5f) * Tilesize(), (tile.y - Height() / 2.0f + 0.5f) * Tilesize(), 0);
 	}
 
 	Vector3f Tilemap::WorldPositionOfTile(int x, int y) const
@@ -57,8 +57,8 @@ namespace DND
 	bool Tilemap::IsTile(float worldX, float worldY) const
 	{
 		Vector3f pos = m_Object->transform().Position();
-		float x = worldX - pos.x + Width() / 2.0f * Tilesize() + Tilesize() / 2;
-		float y = worldY - pos.y + Height() / 2.0f * Tilesize() + Tilesize() / 2;
+		float x = worldX - pos.x + Width() / 2.0f * Tilesize();
+		float y = worldY - pos.y + Height() / 2.0f * Tilesize();
 		int xind = std::floor(x / Tilesize());
 		int yind = std::floor(y / Tilesize());
 		return (xind >= 0 && yind >= 0) && (xind < Width() && yind < Height());
@@ -67,8 +67,8 @@ namespace DND
 	const Tilemap::TileInfo& Tilemap::GetTileFromWorldPosition(float x, float y) const
 	{
 		Vector3f pos = m_Object->transform().Position();
-		x = x - pos.x + Width() / 2.0f * Tilesize() + Tilesize() / 2;
-		y = y - pos.y + Height() / 2.0f * Tilesize() + Tilesize() / 2;
+		x = x - pos.x + Width() / 2.0f * Tilesize();
+		y = y - pos.y + Height() / 2.0f * Tilesize();
 		int xind = std::floor(x / Tilesize());
 		int yind = std::floor(y / Tilesize());
 		return GetTile(xind, yind);

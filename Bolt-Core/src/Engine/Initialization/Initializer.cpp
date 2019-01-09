@@ -1,5 +1,6 @@
 #include "Types.h"
-#include "Initializer.h"
+
+#include "Initializer.h"
 #include "..\User\Input.h"
 #include "..\Renderer\Graphics.h"
 #include "..\Scene\ObjectFactory.h"
@@ -9,10 +10,10 @@ namespace Bolt
 
 	bool Initializer::Run(Window* window)
 	{
-		int result = glewInit();
-		if (result != GLEW_OK)
+		int result = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+		if (result == 0)
 		{
-			return false;
+			BLT_ASSERT(false, "Failed to initialize Glad");
 		}
 		Log::Initialize();
 		BLT_CORE_INFO("Logger Initialized");

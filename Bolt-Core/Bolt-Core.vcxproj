@@ -81,8 +81,8 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>Types.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>NOMINMAX;GLEW_STATIC;BLT_PLATFORM_WINDOWS;BLT_BUILD_STATIC;BLT_DEBUG;GAMEOBJECTS_PER_LAYER=10000;LAYERS_PER_SCENE=6;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>external;src;external\GLEW\include;external\spdlog\include;..\..\..\..\..\AppData\Local\Programs\Python\Python37-32\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NOMINMAX;BLT_PLATFORM_WINDOWS;BLT_BUILD_STATIC;BLT_DEBUG;GAMEOBJECTS_PER_LAYER=10000;LAYERS_PER_SCENE=6;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>external;src;external\spdlog\include;..\..\..\..\..\AppData\Local\Programs\Python\Python37-32\include;vendor\Glad\include;vendor\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
@@ -95,8 +95,8 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>Types.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>NOMINMAX;GLEW_STATIC;BLT_PLATFORM_WINDOWS;BLT_BUILD_STATIC;GAMEOBJECTS_PER_LAYER=10000;LAYERS_PER_SCENE=6;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>external;src;external\GLEW\include;external\spdlog\include;..\..\..\..\..\AppData\Local\Programs\Python\Python37-32\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NOMINMAX;BLT_PLATFORM_WINDOWS;BLT_BUILD_STATIC;GAMEOBJECTS_PER_LAYER=10000;LAYERS_PER_SCENE=6;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>external;src;external\spdlog\include;..\..\..\..\..\AppData\Local\Programs\Python\Python37-32\include;vendor\Glad\include;vendor\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
@@ -109,7 +109,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>Types.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>external;src;external\GLEW\include;external\spdlog\include;..\..\..\..\..\AppData\Local\Programs\Python\Python37-32\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>external;src;external\spdlog\include;..\..\..\..\..\AppData\Local\Programs\Python\Python37-32\include;vendor\Glad\include;vendor\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
     </ClCompile>
     <Link>
@@ -461,6 +461,14 @@
     <None Include="src\Graphics\Resources\Shaders\Source\LightingTexture_v.glsl" />
     <None Include="src\Graphics\Resources\Shaders\Source\SpriteTexture_f.glsl" />
     <None Include="src\Graphics\Resources\Shaders\Source\SpriteTexture_v.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="vendor\Glad\Glad.vcxproj">
+      <Project>{BDD6857C-A90D-870D-52FA-6C103E10030F}</Project>
+    </ProjectReference>
+    <ProjectReference Include="vendor\GLFW\GLFW.vcxproj">
+      <Project>{154B857C-0182-860D-AA6E-6C109684020F}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

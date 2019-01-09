@@ -1,7 +1,7 @@
 #pragma once
 #include "FreeType-GL\include\freetype-gl.h"
-#include "GLEW\include\GL\glew.h"
-#include "GLFW\include\GLFW\glfw3.h"
+#include "glad\glad.h"
+#include "GLFW\glfw3.h"
 
 #include "Core\BoltTL\__BoltTL__.h"
 #include "BoltDefines.h"

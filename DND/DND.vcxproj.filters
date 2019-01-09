@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Camera">
+      <UniqueIdentifier>{CE7141AB-BA13-6C81-A3CE-7FD58F0FF3D1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\BoltInclude.h" />
+    <ClInclude Include="src\Camera\CameraController.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Tilemap.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Camera\CameraController.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Tilemap.cpp" />
+    <ClCompile Include="src\main.cpp" />
+  </ItemGroup>
+</Project>
