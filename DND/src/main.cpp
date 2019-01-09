@@ -60,7 +60,7 @@ namespace DND
 			tilemap = std::make_unique<Tilemap>(factory, ResourceManager::Get<Texture2D>(tilemapTextureId), 50, info);
 
 			factory.SetCurrentLayer(mapFeatureLayer);
-			selectedTileObject = factory.Rectangle(tilemap->Tilesize(), tilemap->Tilesize(), Color(255, 0, 0, 200), Transform({ 0, 0, 1 }));
+			selectedTileObject = factory.Rectangle(tilemap->Tilesize(), tilemap->Tilesize(), Color(255, 0, 0, 150), Transform({ 0, 0, 1 }));
 
 			RenderSchedule schedule(*scene);
 			schedule.AddRenderProcess(RenderProcess());
