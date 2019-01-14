@@ -70,6 +70,10 @@ namespace Bolt
 
 	public:
 		Texture(int width, int height, TextureTarget target, TextureFormat format, Mipmaps mipmap);
+		Texture(const Texture& other) = delete;
+		Texture& operator=(const Texture& other) = delete;
+		Texture(Texture&& other);
+		Texture& operator=(Texture&& other);
 		virtual ~Texture() override;
 
 		int Width() const;

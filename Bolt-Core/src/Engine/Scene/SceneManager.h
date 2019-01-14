@@ -8,6 +8,7 @@ namespace Bolt
 	{
 	private:
 		static std::vector<std::unique_ptr<Scene>> s_Scenes;
+		static std::unordered_map<blt::string, Scene*> s_SceneMap;
 		static Scene* s_CurrentScene;
 		static Window* s_Window;
 
@@ -15,9 +16,13 @@ namespace Bolt
 		SceneManager() = delete;
 
 		static Scene& CurrentScene();
+		static Scene& GetSceneById(id_t id);
+		static Scene& GetSceneByName(const blt::string& name);
 
-		static Scene* CreateScene();
-		static void SetCurrentScene(Scene* scene);
+		static Scene& CreateScene(const blt::string& name = "");
+		static void SetCurrentScene(Scene& scene);
+		static void SetCurrentSceneById(id_t id);
+		static void SetCurrentSceneByName(const blt::string& name);
 
 		friend class Engine;
 		friend struct Scene;

@@ -1,5 +1,6 @@
 #include "Types.h"
-#include "Types.h"
+
+#include "Types.h"
 #include "PyInterpreter.h"
 
 namespace Bolt

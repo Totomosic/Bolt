@@ -37,12 +37,12 @@ namespace Aimbooster
 	public:
 		void Init() override
 		{
-			PrimaryWindow->SetClearColor(Color(52, 52, 52));
+			AppWindow->SetClearColor(Color(52, 52, 52));
 			isPlaying = false;
 
-			Scene* scene = SceneManager::CreateScene();
-			mainLayer = scene->CreateLayer("Main");
-			mainCamera = scene->CreateCamera(PrimaryWindow->GetFramebuffer().ViewFrustum(-100, 100), ProjectionType::Orthographic);
+			Scene& scene = SceneManager::CreateScene();
+			mainLayer = &scene.CreateLayer();
+			mainCamera = scene.CreateCamera(AppWindow->GetFramebuffer().ViewFrustum(-100, 100), ProjectionType::Orthographic);
 			mainLayer->SetActiveCamera(mainCamera);
 
 			arial = ResourceManager::Register(std::make_unique<Font>("res/arial.ttf", 24));
@@ -62,7 +62,7 @@ namespace Aimbooster
 			targetPrefab.Components().AddComponent<MeshRenderer>(targetMesh);
 			targetPrefab.Components().AddComponent<Target>(TARGET_LIFETIME, TARGET_SIZE, &factory);
 
-			factory = ObjectFactory(mainLayer);
+			factory = ObjectFactory(*mainLayer);
 			TARGET_PREFAB = factory.AddPrefab(std::move(targetPrefab));
 			TITLE_TARGET_PREFAB = factory.AddPrefab(std::move(titleTargetPrefab));
 
@@ -86,7 +86,7 @@ namespace Aimbooster
 				return false;
 			});
 
-			RenderSchedule schedule(*scene);
+			RenderSchedule schedule(scene);
 			schedule.AddRenderProcess({  });
 			SceneRenderer::AddRenderSchedule(schedule);
 
@@ -149,7 +149,7 @@ namespace Aimbooster
 
 			quitButton->EventHandler().OnClicked.Subscribe([this](id_t eventId, UIClickedEvent& args) -> bool
 			{
-				PrimaryWindow->Close();
+				AppWindow->Close();
 				return false;
 			});
 
@@ -278,9 +278,10 @@ int main()
 {
 	Engine e;
 	WindowCreateInfo createInfo;
+	createInfo.Title = "Aimbooster";
 	createInfo.Samples = 4;
 	createInfo.Resizable = true;
-	e.SetWindow(std::make_unique<Window>(1280, 720, "Aim Booster", createInfo));
-	e.SetApplication(std::make_unique<Aimbooster::App>());
+	e.SetWindowCreateInfo(createInfo);
+	e.SetApplication<Aimbooster::App>();
 	e.Run();
 }

@@ -12,15 +12,7 @@ namespace Bolt
 
 	Engine::Engine()
 	{
-		Filesystem::Initialize();
-		int result = glfwInit();
-		BLT_ASSERT(result != GL_NO_ERROR, "GLFW failed to initialise");
-		Random::Initialize();
-		WSADATA data;
-		if (WSAStartup(MAKEWORD(2, 2), &data) != 0)
-		{
-			BLT_ASSERT(false, "Failed to initalise WinSock2");
-		}
+		Initializer::PreOpenGL();
 	}
 
 	Engine::~Engine()
@@ -29,17 +21,11 @@ namespace Bolt
 		ResourceManager::Terminate();
 		Input::Terminate();
 		WSACleanup();
-		m_Window.release(); // TEMPORARY
 	}
 
 	bool Engine::ShouldClose() const
 	{
-		return m_Window->ShouldClose();
-	}
-
-	void Engine::SetWindow(std::unique_ptr<Window>&& window)
-	{
-		m_Window = std::move(window);
+		return m_CurrentApplication->AppWindow->ShouldClose();
 	}
 
 	void Engine::UpdateApplication()
@@ -54,7 +40,7 @@ namespace Bolt
 			scene->Update();
 		}
 		m_CurrentApplication->Render();
-		m_Window->SwapBuffers();
+		m_CurrentApplication->AppWindow->SwapBuffers();
 		Time::Update();
 		EventManager::FlushEvents(); // Flush #2 (likely other scene/app events)
 		if (scene != nullptr)
@@ -65,12 +51,15 @@ namespace Bolt
 
 	void Engine::SetApplication(std::unique_ptr<Application>&& app)
 	{
-		SceneManager::Terminate();
-		ResourceManager::Terminate();
-		Input::Terminate();
-		Time::Reset();
 		m_CurrentApplication = std::move(app);
-		m_CurrentApplication->Start(m_Window.get());
+		m_CurrentApplication->CreateWindowPtr(m_CreateInfo);
+		Initializer::PostOpenGL(m_CurrentApplication->AppWindow.get());
+		m_CurrentApplication->Start();
+	}
+
+	void Engine::SetWindowCreateInfo(const WindowCreateInfo& createInfo)
+	{
+		m_CreateInfo = createInfo;
 	}
 
 	void Engine::Run()

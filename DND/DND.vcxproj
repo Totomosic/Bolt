@@ -129,19 +129,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\BoltInclude.h" />
-    <ClInclude Include="src\Camera\CameraController.h" />
-    <ClInclude Include="src\Tilemap.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\Camera\CameraController.cpp" />
-    <ClCompile Include="src\Tilemap.cpp" />
-    <ClCompile Include="src\main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Bolt-Core\Bolt-Core.vcxproj">
       <Project>{2CF839F6-9862-EE6C-E1A0-9F124D4ACCC1}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\App.cpp" />
+    <ClCompile Include="src\GameManager.cpp" />
+    <ClCompile Include="src\Map\Tilemap.cpp" />
+    <ClCompile Include="src\Map\TilemapLayer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\GameManager.h" />
+    <ClInclude Include="src\Map\Tilemap.h" />
+    <ClInclude Include="src\Map\TilemapLayer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

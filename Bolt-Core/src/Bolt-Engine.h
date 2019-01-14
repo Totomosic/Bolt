@@ -1,4 +1,5 @@
 #pragma once
+#include "Engine\Commands\__Commands__.h"
 #include "Engine\Initialization\__Initialization__.h"
 #include "Engine\Networking\__Networking__.h"
 #include "Engine\Renderer\__Renderer__.h"

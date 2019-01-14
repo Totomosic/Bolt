@@ -74,6 +74,7 @@ namespace Bolt
 		void Clear(ClearBuffer buffer = ClearBuffer::Color | ClearBuffer::Depth) const;
 
 		friend class Window;
+		friend struct WindowData;
 
 	private:
 		void Create();

@@ -8,7 +8,7 @@ namespace Bolt
 	template<typename T>
 	class BLT_API IdManager
 	{
-	private:
+	public:
 		T m_MinId;
 		T m_MaxId;
 		mutable T m_CurrentMaxId;

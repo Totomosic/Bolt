@@ -22,12 +22,12 @@ namespace Bolt
 
 	public:
 		ObjectFactory();
-		ObjectFactory(Layer* layer);
+		ObjectFactory(Layer& layer);
 		ObjectFactory(GameObject* parent);
 
 		Layer* CurrentLayer() const;
 		GameObject* CurrentParent() const;
-		void SetCurrentLayer(Layer* layer);
+		void SetCurrentLayer(Layer& layer);
 		void SetCurrentParent(GameObject* parent);
 
 		id_t AddPrefab(ObjectPrefab&& prefab);

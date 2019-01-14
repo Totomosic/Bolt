@@ -7,6 +7,11 @@ namespace Bolt
 	struct BLT_API WindowCreateInfo
 	{
 	public:
+		int Width = 1280;
+		int Height = 720;
+		blt::string Title = "Bolt";
+		Color ClearColor = Color::Black;
+
 		bool Fullscreen = false;
 		bool Decorated = true;
 		bool Maximised = false;

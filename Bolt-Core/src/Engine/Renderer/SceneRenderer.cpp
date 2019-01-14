@@ -67,6 +67,8 @@ namespace Bolt
 				{
 					options.CameraOverride = process.Cameras.at(layer->Id());
 				}
+				// Always clear the depth buffer between layers
+				process.Options.RenderTarget->Clear(ClearBuffer::Depth);
 				RenderLayer(options, *layer);
 			}
 		}

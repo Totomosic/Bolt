@@ -12,7 +12,7 @@ namespace Bolt
 	}
 
 	UIroot::UIroot(Layer* layer, GameObject* object) : UIelement(),
-		m_Factory(layer)
+		m_Factory(*layer)
 	{
 		m_Root = this;
 		m_Object = object;

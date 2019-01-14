@@ -154,7 +154,7 @@ namespace Bolt
 	{
 		m_Id = id;
 		Enable();
-		m_UIroot.GetFactory().SetCurrentLayer(this);
+		m_UIroot.GetFactory().SetCurrentLayer(*this);
 		m_UIroot.m_Object = &m_GameObjects.GetGameObjectById(0);
 	}
 

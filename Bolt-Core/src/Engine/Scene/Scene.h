@@ -2,6 +2,7 @@
 #include "Layer.h"
 #include "ObjectCollection.h"
 #include "Physics\PhysicsManager.h"
+#include "SceneEvents.h"
 
 namespace Bolt
 {
@@ -12,10 +13,15 @@ namespace Bolt
 		static constexpr int MAX_LAYERS = LAYERS_PER_SCENE;
 		static constexpr int MAX_CAMERAS = 32;
 
+	// EventDispatchers work when put above members but not below, INVESTIGATE
+	public:
+		EventDispatcher<SceneLoadedEvent> OnLoad;
+		EventDispatcher<SceneUnloadedEvent> OnUnload;
+
 	private:
 		Layer m_Layers[MAX_LAYERS];
-		std::unordered_map<blt::string, int> m_LayerNames;
 		Camera m_Cameras[MAX_CAMERAS];
+		id_t m_Id;
 
 		PhysicsManager m_PhysEngine;
 
@@ -25,19 +31,14 @@ namespace Bolt
 		Scene& operator=(const Scene& other) = delete;
 		Scene(Scene&& other) = delete;
 		Scene& operator=(Scene&& other) = delete;
-		~Scene() = default;
 
 		const PhysicsManager& Physics() const;
 		PhysicsManager& Physics();
+		id_t Id() const;
 
 		const Layer& GetLayer(id_t id) const;
 		Layer& GetLayer(id_t id);
-		const Layer& GetLayer(const blt::string& name) const;
-		Layer& GetLayer(const blt::string& name);
-		id_t GetIdOfLayer(const blt::string& name) const;
-		id_t GetMaskOfLayer(const blt::string& name) const;
 		id_t GetMaskOfLayer(id_t id) const;
-		id_t GetMaskOfLayers(const std::vector<blt::string>& layers) const;
 		id_t GetMaskOfLayers(const std::vector<id_t>& layerIds) const;
 		const Camera* GetCameraById(id_t id) const;
 		Camera* GetCameraById(id_t id);
@@ -45,7 +46,7 @@ namespace Bolt
 		std::vector<const Layer*> GetAllLayers() const;
 		std::vector<const Layer*> GetLayers(id_t mask) const;
 
-		Layer* CreateLayer(const blt::string& name);
+		Layer& CreateLayer(Camera* activeCamera = nullptr);
 
 		Camera* CreateCamera(const Projection& projection = Projection());
 		Camera* CreateCamera(const Frustum& frustum, ProjectionType type);
@@ -54,6 +55,8 @@ namespace Bolt
 
 		void Update();
 		void UpdateTemporaryObjects();
+
+		friend class SceneManager;
 
 	private:
 		void ClearCameras();

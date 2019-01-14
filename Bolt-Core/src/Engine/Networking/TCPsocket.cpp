@@ -13,7 +13,7 @@ namespace Bolt
 
 	TCPsocket::TCPsocket(AddressFamily addressFamily) : TCPsocket(socket((int)addressFamily, SOCK_STREAM, IPPROTO_TCP))
 	{
-		
+		BLT_ASSERT(IsValid(), "Failed to create TCP socket");
 	}
 
 	TCPsocket::TCPsocket(TCPsocket&& other)
@@ -32,7 +32,7 @@ namespace Bolt
 
 	TCPsocket::~TCPsocket()
 	{
-		if (m_Socket != INVALID_SOCKET)
+		if (IsValid())
 		{
 			closesocket(m_Socket);
 		}
@@ -45,20 +45,20 @@ namespace Bolt
 
 	int TCPsocket::Bind(const SocketAddress& address)
 	{
-		BLT_ASSERT(m_Socket != INVALID_SOCKET, "Socket was invalid");
+		BLT_ASSERT(IsValid(), "Cannot Bind invalid Socket");
 		int err = bind(m_Socket, &address.m_SockAddr, address.GetSize());
-		if (err < 0)
+		if (err != NO_ERROR)
 		{
 			int errorCode = WSAGetLastError();
 			BLT_CORE_ERROR("Socket Error: " + std::to_string(errorCode));
-			return errorCode;
+			return -errorCode;
 		}
 		return NO_ERROR;
 	}
 
 	int TCPsocket::Listen(int backlog)
 	{
-		BLT_ASSERT(m_Socket != INVALID_SOCKET, "Socket was invalid");
+		BLT_ASSERT(IsValid(), "Cannot Listen on invalid Socket");
 		int err = listen(m_Socket, backlog);
 		if (err != NO_ERROR)
 		{
@@ -71,7 +71,7 @@ namespace Bolt
 
 	TCPsocket TCPsocket::Accept(SocketAddress* outAddress)
 	{
-		BLT_ASSERT(m_Socket != INVALID_SOCKET, "Socket was invalid");
+		BLT_ASSERT(IsValid(), "Cannot Accept on invalid Socket");
 		int length = SocketAddress::GetSize();
 		SOCKET newSocket = INVALID_SOCKET;
 		if (outAddress != nullptr)
@@ -93,7 +93,7 @@ namespace Bolt
 
 	int TCPsocket::Connect(const SocketAddress& address)
 	{
-		BLT_ASSERT(m_Socket != INVALID_SOCKET, "Socket was invalid");
+		BLT_ASSERT(IsValid(), "Cannot Connect invalid Socket");
 		int err = connect(m_Socket, &address.m_SockAddr, address.GetSize());
 		if (err < 0)
 		{
@@ -106,7 +106,7 @@ namespace Bolt
 
 	int TCPsocket::Send(const void* data, uint length)
 	{
-		BLT_ASSERT(m_Socket != INVALID_SOCKET, "Socket was invalid");
+		BLT_ASSERT(IsValid(), "Cannot Send with invalid Socket");
 		int bytesSent = send(m_Socket, static_cast<const char*>(data), (int)length, 0);
 		if (bytesSent < 0)
 		{
@@ -119,7 +119,7 @@ namespace Bolt
 
 	int TCPsocket::Recv(void* buffer, uint length)
 	{
-		BLT_ASSERT(m_Socket != INVALID_SOCKET, "Socket was invalid");
+		BLT_ASSERT(IsValid(), "Cannot Recv from invalid Socket");
 		int bytesReceived = recv(m_Socket, static_cast<char*>(buffer), (int)length, 0);
 		if (bytesReceived < 0)
 		{
@@ -132,6 +132,7 @@ namespace Bolt
 
 	int TCPsocket::Close()
 	{
+		BLT_ASSERT(IsValid(), "Cannot Close invalid Socket");
 		int err = closesocket(m_Socket);
 		m_Socket = INVALID_SOCKET;
 		if (err != NO_ERROR)

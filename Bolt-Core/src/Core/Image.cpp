@@ -1,5 +1,6 @@
 #include "Types.h"
-#include "Image.h"
+
+#include "Image.h"
 #include "Functions.h"
 
 namespace Bolt
@@ -28,8 +29,9 @@ namespace Bolt
 		Width = other.Width;
 		Height = other.Height;
 		Components = other.Components;
+		byte* myPixels = Pixels;
 		Pixels = other.Pixels;
-		other.Pixels = nullptr;
+		other.Pixels = myPixels;
 		return *this;
 	}
 
@@ -37,7 +39,7 @@ namespace Bolt
 	{
 		if (Pixels != nullptr)
 		{
-			std::free(Pixels);
+			delete[] Pixels;
 		}
 	}
 
@@ -54,13 +56,20 @@ namespace Bolt
 		}
 	}
 
+	byte* Image::ReleasePixels()
+	{
+		byte* pixelsPtr = Pixels;
+		Pixels = nullptr;
+		return pixelsPtr;
+	}
+
 	Image Image::ResizeLinear(int width, int height) const
 	{
 		Image result;
 		result.Width = width;
 		result.Height = height;
 		result.Components = Components;
-		result.Pixels = (byte*)std::malloc(width * height * Components);
+		result.Pixels = new byte[width * height * Components];
 
 		for (int i = 0; i < result.Width; i++)
 		{
@@ -93,7 +102,7 @@ namespace Bolt
 		result.Width = width;
 		result.Height = height;
 		result.Components = Components;
-		result.Pixels = (byte*)std::malloc(width * height * Components);
+		result.Pixels = new byte[width * height * Components];
 
 		for (int i = 0; i < result.Width; i++)
 		{

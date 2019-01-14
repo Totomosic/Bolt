@@ -35,9 +35,9 @@ namespace Bolt
 		return m_Object;
 	}
 
-	UIelement* UIelement::Parent() const
+	UIelement& UIelement::Parent() const
 	{
-		return m_Parent;
+		return *m_Parent;
 	}
 
 	UIEventHandler& UIelement::EventHandler() const
@@ -45,18 +45,18 @@ namespace Bolt
 		return m_Object->Components().GetComponent<UIEventHandler>();
 	}
 
-	UIelement* UIelement::GetElement(id_t index) const
+	UIelement& UIelement::GetElement(id_t index) const
 	{
-		return m_Children[index].get();
+		return *m_Children[index].get();
 	}
 
-	UIelement* UIelement::AddElement(std::unique_ptr<UIelement>&& element)
+	UIelement& UIelement::AddElement(std::unique_ptr<UIelement>&& element)
 	{
 		UIelement* ptr = element.get();
 		m_Children.push_back(std::move(element));
 		ptr->SetUIroot(m_Root);
 		ptr->SetParent(this);
-		return ptr;
+		return *ptr;
 	}
 
 	void UIelement::RemoveElement(UIelement* element)
@@ -89,17 +89,17 @@ namespace Bolt
 		m_Children.clear();
 	}
 
-	UIsurface* UIelement::Rectangle(float width, float height, const Color& color, Transform&& transform)
+	UIsurface& UIelement::Rectangle(float width, float height, const Color& color, Transform&& transform)
 	{
 		return AddElement<UIsurface>(width, height, color, std::move(transform));
 	}
 
-	UIsurface* UIelement::Rectangle(float width, float height, const Material& material, Transform&& transform)
+	UIsurface& UIelement::Rectangle(float width, float height, const Material& material, Transform&& transform)
 	{
 		return AddElement<UIsurface>(width, height, material, std::move(transform));
 	}
 
-	UIsurface* UIelement::Image(float width, float height, const ResourcePtr<const Texture2D>& texture, Transform&& transform)
+	UIsurface& UIelement::Image(float width, float height, const ResourcePtr<const Texture2D>& texture, Transform&& transform)
 	{
 		Material material;
 		material.Shader = Shader::DefaultTexture();
@@ -107,12 +107,12 @@ namespace Bolt
 		return AddElement<UIsurface>(width, height, material, std::move(transform));
 	}
 
-	Bolt::Text* UIelement::Text(const blt::string& text, const ResourcePtr<const Font>& font, const Color& color, Transform&& transform, AlignH horizontal, AlignV vertical)
+	Bolt::Text& UIelement::Text(const blt::string& text, const ResourcePtr<const Font>& font, const Color& color, Transform&& transform, AlignH horizontal, AlignV vertical)
 	{
 		return AddElement<Bolt::Text>(text, font, color, std::move(transform), horizontal, vertical);
 	}
 
-	Bolt::Text* UIelement::Text(const blt::string& text, const Color& color, Transform&& transform, AlignH horizontal, AlignV vertical)
+	Bolt::Text& UIelement::Text(const blt::string& text, const Color& color, Transform&& transform, AlignH horizontal, AlignV vertical)
 	{
 		return AddElement<Bolt::Text>(text, ResourceManager::DefaultFont(), color, std::move(transform), horizontal, vertical);
 	}

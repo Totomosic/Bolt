@@ -12,7 +12,7 @@ namespace Bolt
 		static constexpr id_t KEY_PRESSED				= 1;
 		static constexpr id_t KEY_RELEASED				= 2;
 		static constexpr id_t MOUSE_PRESSED				= 3;
-		static constexpr id_t MOUSE_RELEASED				= 4;
+		static constexpr id_t MOUSE_RELEASED			= 4;
 		static constexpr id_t MOUSE_SCROLLED			= 5;
 		static constexpr id_t MOUSE_POSITION_MOVED		= 6;
 
@@ -29,8 +29,13 @@ namespace Bolt
 		static constexpr id_t WINDOW_LOST_FOCUS			= 14;
 
 		// Scene Events
-		static constexpr id_t GAMEOBJECT_INSTANTIATED	= 15;
-		static constexpr id_t GAMEOBJECT_DESTROYED		= 16;
+		static constexpr id_t SCENE_LOADED				= 15;
+		static constexpr id_t SCENE_UNLOADED			= 16;
+		static constexpr id_t GAMEOBJECT_INSTANTIATED	= 17;
+		static constexpr id_t GAMEOBJECT_DESTROYED		= 18;
+
+		// Debugging Events
+		static constexpr id_t COMMAND_LINE_MESSAGE_RECEIVED = 19;
 
 	};
 
