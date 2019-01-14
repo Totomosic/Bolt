@@ -12,38 +12,26 @@ namespace Bolt
 
 	Application::~Application()
 	{
-		
+		AppWindow.release();
 	}
 
 	float Application::Width() const
 	{
-		return PrimaryWindow->Width();
+		return AppWindow->Width();
 	}
 
 	float Application::Height() const
 	{
-		return PrimaryWindow->Height();
+		return AppWindow->Height();
 	}
 
-	void Application::Start(Window* engineWindow)
+	void Application::Start()
 	{
-		SetPrimaryWindow(engineWindow);
 		Init();
 		Time::Update();
 		BLT_CORE_INFO("Init took " + std::to_string(Time::RenderingTimeline().CurrentRealTime()) + " seconds");
 		Time::Reset();
 		m_TickTimer = Time::CreateTimer(1.0, std::bind(&Application::Tick, this));
-	}
-
-	void Application::SetPrimaryWindow(Window* window)
-	{
-		PrimaryWindow = window;
-		if (!Initializer::Run(PrimaryWindow))
-		{
-			BLT_ASSERT(false, "Failed to initialize");
-		}
-		SceneManager::s_Window = PrimaryWindow;
-		GLState::Reset();
 	}
 
 	void Application::Init()
@@ -64,6 +52,11 @@ namespace Bolt
 	void Application::Render()
 	{
 	
+	}
+
+	void Application::CreateWindowPtr(const WindowCreateInfo& createInfo)
+	{
+		AppWindow = std::make_unique<Window>(createInfo);
 	}
 
 }

@@ -7,19 +7,19 @@ namespace Bolt
 {
 
 	template<typename T>
-	T Map(const T& value, const T& origMin, const T& origMax, const T& newMin, const T& newMax)
+	T Map(T value, T origMin, T origMax, T newMin, T newMax)
 	{
 		return (T)(((value - origMin) / (origMax - origMin)) * (newMax - newMin) + newMin);
 	}
 
 	template<typename T>
-	T Clamp(const T& value, const T& min, const T& max)
+	T Clamp(T value, T min, const T& max)
 	{
 		return (value > max) ? max : (value < min) ? min : value;
 	}
 
 	template<typename T, typename Time>
-	T Lerp(const T& a, const T& b, Time amount)
+	T Lerp(T a, T b, Time amount)
 	{
 		return (T)(a + (b - a) * amount);
 	}

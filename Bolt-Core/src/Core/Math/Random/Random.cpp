@@ -1,5 +1,6 @@
 #include "Types.h"
-#include "Random.h"
+
+#include "Random.h"
 
 namespace Bolt
 {

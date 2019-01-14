@@ -6,12 +6,12 @@
 namespace Bolt
 {
 
-	Window::Window(int width, int height, const blt::string& title, const WindowCreateInfo& info)
-		: m_WindowHandle(nullptr), m_Framebuffer(), m_Title(title), m_CreateInfo(info),
-		OnResize(Events::WINDOW_RESIZE), OnMoved(Events::WINDOW_MOVED), OnFocus(Events::WINDOW_FOCUSED), OnFocusLost(Events::WINDOW_LOST_FOCUS)
+	Window::Window(const WindowCreateInfo& info)
+		: m_Data{ nullptr, Framebuffer(), info.Title, info.Decorated }, OnResize(Events::WINDOW_RESIZE), OnMoved(Events::WINDOW_MOVED), OnFocus(Events::WINDOW_FOCUSED), OnFocusLost(Events::WINDOW_LOST_FOCUS)
 	{
-		m_Framebuffer.GetViewport().Width = width;
-		m_Framebuffer.GetViewport().Height = height;
+		m_Data.m_Framebuffer.GetViewport().Width = info.Width;
+		m_Data.m_Framebuffer.GetViewport().Height = info.Height;
+		m_Data.m_Framebuffer.ClearColor() = info.ClearColor;
 		
 		glfwWindowHint(GLFW_DECORATED, info.Decorated);
 		glfwWindowHint(GLFW_RESIZABLE, info.Resizable);
@@ -24,41 +24,46 @@ namespace Bolt
 		glfwWindowHint(GLFW_ALPHA_BITS, info.AlphaBits);
 		glfwWindowHint(GLFW_DEPTH_BITS, info.DepthBits);
 		glfwWindowHint(GLFW_SAMPLES, info.Samples);
-		m_Framebuffer.m_Samples = info.Samples;
+		m_Data.m_Framebuffer.m_Samples = info.Samples;
 
-		m_WindowHandle = glfwCreateWindow(Width(), Height(), m_Title.c_str(), nullptr, nullptr);
+		m_Data.m_WindowHandle = glfwCreateWindow(Width(), Height(), Title().c_str(), nullptr, nullptr);
 		MakeCurrent();
 		if (info.Maximised)
 		{
 			Maximize();
 		}
 
-		glfwSetCursorPosCallback(m_WindowHandle, Input::MousePositionCallback);
-		glfwSetScrollCallback(m_WindowHandle, Input::MouseScrollCallback);
-		glfwSetMouseButtonCallback(m_WindowHandle, Input::MouseButtonCallback);
-		glfwSetKeyCallback(m_WindowHandle, Input::KeyboardKeyCallback);
-		glfwSetFramebufferSizeCallback(m_WindowHandle, Input::WindowResizeCallback);
-		glfwSetCharCallback(m_WindowHandle, Input::CharPressedCallback);
+		glfwSetCursorPosCallback(WindowHandle(), Input::MousePositionCallback);
+		glfwSetScrollCallback(WindowHandle(), Input::MouseScrollCallback);
+		glfwSetMouseButtonCallback(WindowHandle(), Input::MouseButtonCallback);
+		glfwSetKeyCallback(WindowHandle(), Input::KeyboardKeyCallback);
+		glfwSetFramebufferSizeCallback(WindowHandle(), Input::WindowResizeCallback);
+		glfwSetCharCallback(WindowHandle(), Input::CharPressedCallback);
 	}
 
 	Window::~Window()
 	{
-		glfwDestroyWindow(m_WindowHandle);
+		glfwDestroyWindow(WindowHandle());
 	}
 
 	const Framebuffer& Window::GetFramebuffer() const
 	{
-		return m_Framebuffer;
+		return m_Data.m_Framebuffer;
 	}
 
 	int Window::Width() const
 	{
-		return m_Framebuffer.Width();
+		return GetFramebuffer().Width();
 	}
 
 	int Window::Height() const
 	{
-		return m_Framebuffer.Height();
+		return GetFramebuffer().Height();
+	}
+
+	float Window::Aspect() const
+	{
+		return GetFramebuffer().Aspect();
 	}
 
 	Vector2i Window::Size() const
@@ -68,47 +73,47 @@ namespace Bolt
 
 	const blt::string& Window::Title() const
 	{
-		return m_Title;
+		return m_Data.m_Title;
 	}
 
 	const Color& Window::ClearColor() const
 	{
-		return m_Framebuffer.ClearColor();
+		return GetFramebuffer().ClearColor();
 	}
 
 	Color& Window::ClearColor()
 	{
-		return m_Framebuffer.ClearColor();
+		return m_Data.m_Framebuffer.ClearColor();
 	}
 
 	GLFWwindow* Window::WindowHandle() const
 	{
-		return m_WindowHandle;
+		return m_Data.m_WindowHandle;
 	}
 
 	bool Window::ShouldClose() const
 	{
-		return glfwWindowShouldClose(m_WindowHandle);
+		return glfwWindowShouldClose(WindowHandle());
 	}
 
 	void Window::Close() const
 	{
- 		glfwSetWindowShouldClose(m_WindowHandle, true);
+ 		glfwSetWindowShouldClose(WindowHandle(), true);
 	}
 
 	void Window::Clear(ClearBuffer buffer) const
 	{
-		m_Framebuffer.Clear(buffer);
+		GetFramebuffer().Clear(buffer);
 	}
 
 	void Window::SwapBuffers() const
 	{
-		glfwSwapBuffers(m_WindowHandle);
+		glfwSwapBuffers(WindowHandle());
 	}
 
 	void Window::MakeCurrent() const
 	{
-		glfwMakeContextCurrent(m_WindowHandle);
+		glfwMakeContextCurrent(WindowHandle());
 	}
 
 	void Window::EnableVSync() const
@@ -128,30 +133,30 @@ namespace Bolt
 
 	void Window::Minimize() const
 	{
-		glfwIconifyWindow(m_WindowHandle);
+		glfwIconifyWindow(WindowHandle());
 	}
 
 	void Window::Restore() const
 	{
-		glfwRestoreWindow(m_WindowHandle);
+		glfwRestoreWindow(WindowHandle());
 	}
 
 	void Window::Maximize()
 	{
 		Monitor main = Monitor::Primary();
-		m_Framebuffer.GetViewport().Width = main.Width;
-		m_Framebuffer.GetViewport().Height = (m_CreateInfo.Decorated) ? main.Height - 63 : main.Height;
-		glfwMaximizeWindow(m_WindowHandle);
+		m_Data.m_Framebuffer.GetViewport().Width = main.Width;
+		m_Data.m_Framebuffer.GetViewport().Height = (m_Data.m_IsDecorated) ? main.Height - 63 : main.Height;
+		glfwMaximizeWindow(WindowHandle());
 	}
 
 	void Window::Hide() const
 	{
-		glfwHideWindow(m_WindowHandle);
+		glfwHideWindow(WindowHandle());
 	}
 
 	void Window::Show() const
 	{
-		glfwShowWindow(m_WindowHandle);
+		glfwShowWindow(WindowHandle());
 	}
 
 	void Window::SetSize(const Vector2i& size)
@@ -166,9 +171,9 @@ namespace Bolt
 		args->OldHeight = Height();
 		args->NewWidth = width;
 		args->NewHeight = height;
-		m_Framebuffer.GetViewport().Width = width;
-		m_Framebuffer.GetViewport().Height = height;
-		glfwSetWindowSize(m_WindowHandle, Width(), Height());
+		m_Data.m_Framebuffer.GetViewport().Width = width;
+		m_Data.m_Framebuffer.GetViewport().Height = height;
+		glfwSetWindowSize(WindowHandle(), Width(), Height());
 		OnResize.Post(std::move(args));
 	}
 
@@ -184,13 +189,13 @@ namespace Bolt
 
 	void Window::SetTitle(const blt::string& text)
 	{
-		m_Title = text;
-		glfwSetWindowTitle(m_WindowHandle, m_Title.c_str());
+		m_Data.m_Title = text;
+		glfwSetWindowTitle(WindowHandle(), Title().c_str());
 	}
 
 	void Window::SetClearColor(const Color& clearColor)
 	{
-		m_Framebuffer.ClearColor() = clearColor;
+		m_Data.m_Framebuffer.ClearColor() = clearColor;
 	}
 
 	void Window::SetPosition(const Vector2i& position)
@@ -200,7 +205,7 @@ namespace Bolt
 
 	void Window::SetPosition(int x, int y)
 	{
-		glfwSetWindowPos(m_WindowHandle, x, y);
+		glfwSetWindowPos(WindowHandle(), x, y);
 	}
 
 }

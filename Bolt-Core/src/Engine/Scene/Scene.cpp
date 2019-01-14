@@ -7,7 +7,7 @@ namespace Bolt
 {
 
 	Scene::Scene()
-		: m_Layers{}, m_LayerNames(), m_Cameras(), m_PhysEngine(this)
+		: OnLoad(Events::SCENE_LOADED), OnUnload(Events::SCENE_UNLOADED), m_Layers{}, m_Cameras(), m_Id(GameObject::InvalidID), m_PhysEngine(this)
 	{
 		ClearCameras();
 	}
@@ -22,6 +22,11 @@ namespace Bolt
 		return m_PhysEngine;
 	}
 
+	id_t Scene::Id() const
+	{
+		return m_Id;
+	}
+
 	const Layer& Scene::GetLayer(id_t id) const
 	{
 		return m_Layers[id];
@@ -32,39 +37,9 @@ namespace Bolt
 		return m_Layers[id];
 	}
 
-	const Layer& Scene::GetLayer(const blt::string& layerName) const
-	{
-		return GetLayer(GetIdOfLayer(layerName));
-	}
-
-	Layer& Scene::GetLayer(const blt::string& layerName)
-	{
-		return GetLayer(GetIdOfLayer(layerName));
-	}
-
-	id_t Scene::GetIdOfLayer(const blt::string& name) const
-	{
-		return m_LayerNames.at(name);
-	}
-
-	id_t Scene::GetMaskOfLayer(const blt::string& name) const
-	{
-		return GetMaskOfLayer(GetIdOfLayer(name));
-	}
-
 	id_t Scene::GetMaskOfLayer(id_t id) const
 	{
 		return BLT_BIT(id);
-	}
-
-	id_t Scene::GetMaskOfLayers(const std::vector<blt::string>& layers) const
-	{
-		id_t mask = 0;
-		for (const blt::string& name : layers)
-		{
-			mask |= GetMaskOfLayer(name);
-		}
-		return mask;
 	}
 
 	id_t Scene::GetMaskOfLayers(const std::vector<id_t>& layers) const
@@ -114,12 +89,12 @@ namespace Bolt
 		return result;
 	}
 
-	Layer* Scene::CreateLayer(const blt::string& name)
+	Layer& Scene::CreateLayer(Camera* activeCamera)
 	{
 		id_t id = FindNextId();
 		m_Layers[id].Create(id);
-		m_LayerNames[name] = id;
-		return &m_Layers[id];
+		m_Layers[id].SetActiveCamera(activeCamera);
+		return m_Layers[id];
 	}
 
 	Camera* Scene::CreateCamera(const Projection& projection)
@@ -149,7 +124,8 @@ namespace Bolt
 
 	void Scene::Update()
 	{
-		for (id_t i = 0; i < MAX_LAYERS; i++)
+		// Update layers in reverse order
+		for (int i = (int)MAX_LAYERS - 1; i >= 0; i--)
 		{
 			if (m_Layers[i].IsEnabled())
 			{

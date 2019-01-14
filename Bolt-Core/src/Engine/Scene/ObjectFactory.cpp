@@ -10,13 +10,13 @@ namespace Bolt
 	ResourcePtr<Model> ObjectFactory::s_EllipseModel = nullptr;
 	ResourcePtr<Model> ObjectFactory::s_CuboidModel = nullptr;
 
-	ObjectFactory::ObjectFactory() : ObjectFactory((Layer*)nullptr)
+	ObjectFactory::ObjectFactory() : ObjectFactory(*(Layer*)nullptr)
 	{
 	
 	}
 
-	ObjectFactory::ObjectFactory(Layer* layer)
-		: m_CurrentLayer(layer), m_CurrentParent(nullptr), m_Prefabs()
+	ObjectFactory::ObjectFactory(Layer& layer)
+		: m_CurrentLayer(&layer), m_CurrentParent(nullptr), m_Prefabs()
 	{
 	
 	}
@@ -37,9 +37,9 @@ namespace Bolt
 		return m_CurrentParent;
 	}
 
-	void ObjectFactory::SetCurrentLayer(Layer* layer)
+	void ObjectFactory::SetCurrentLayer(Layer& layer)
 	{
-		m_CurrentLayer = layer;
+		m_CurrentLayer = &layer;
 	}
 
 	void ObjectFactory::SetCurrentParent(GameObject* parent)

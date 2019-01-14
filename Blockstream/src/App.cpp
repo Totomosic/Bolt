@@ -10,12 +10,12 @@ namespace Blockstream
 
 	void BlockstreamClient::Init()
 	{
-		PrimaryWindow->SetClearColor(Color::SkyBlue);
+		AppWindow->SetClearColor(Color::SkyBlue);
 		scene = SceneManager::CreateScene();
-		mainLayer = scene->CreateLayer("Main");
-		uiLayer = scene->CreateLayer("UI");
-		mainCamera = scene->CreateCamera(Frustum::Perspective(PI / 3, PrimaryWindow->GetFramebuffer().Aspect(), 1.0f, 1000.0f), ProjectionType::Perspective);
-		uiCamera = scene->CreateCamera(PrimaryWindow->GetFramebuffer().ViewFrustum(1, 10000), ProjectionType::Orthographic);
+		mainLayer = scene->CreateLayer();
+		uiLayer = scene->CreateLayer();
+		mainCamera = scene->CreateCamera(Frustum::Perspective(PI / 3, AppWindow->GetFramebuffer().Aspect(), 1.0f, 1000.0f), ProjectionType::Perspective);
+		uiCamera = scene->CreateCamera(AppWindow->GetFramebuffer().ViewFrustum(1, 10000), ProjectionType::Orthographic);
 
 		mainLayer->SetActiveCamera(mainCamera);
 		uiLayer->SetActiveCamera(uiCamera);

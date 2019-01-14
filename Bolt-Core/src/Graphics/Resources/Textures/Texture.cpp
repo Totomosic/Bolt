@@ -1,5 +1,6 @@
 #include "Types.h"
-#include "Texture.h"
+
+#include "Texture.h"
 
 namespace Bolt
 {
@@ -8,6 +9,25 @@ namespace Bolt
 		m_Id(0), m_Width(width), m_Height(height), m_Target(target), m_Format(format), m_Mipmaps(mipmap)
 	{
 		Create();
+	}
+
+	Texture::Texture(Texture&& other)
+		: m_Id(other.m_Id), m_Width(other.m_Width), m_Height(other.m_Height), m_Target(other.m_Target), m_Format(other.m_Format), m_Mipmaps(other.m_Mipmaps)
+	{
+		other.m_Id = 0;
+	}
+
+	Texture& Texture::operator=(Texture&& other)
+	{
+		id_t id = m_Id;
+		m_Id = other.m_Id;
+		other.m_Id = id;
+		m_Width = other.m_Width;
+		m_Height = other.m_Height;
+		m_Target = other.m_Target;
+		m_Format = other.m_Format;
+		m_Mipmaps = other.m_Mipmaps;
+		return *this;
 	}
 
 	Texture::~Texture()

@@ -24,25 +24,25 @@ namespace Bolt
 		virtual ~UIelement();
 
 		GameObject* Object() const;
-		UIelement* Parent() const;
+		UIelement& Parent() const;
 		UIEventHandler& EventHandler() const;
-		UIelement* GetElement(id_t index) const;
-		UIelement* AddElement(std::unique_ptr<UIelement>&& element);
+		UIelement& GetElement(id_t index) const;
+		UIelement& AddElement(std::unique_ptr<UIelement>&& element);
 		void RemoveElement(UIelement* element);
 		void ReleaseGameObjects();
 		void Clear();
 
 		template<typename T, typename ...Args>
-		T* AddElement(Args&&... args)
+		T& AddElement(Args&&... args)
 		{
-			return (T*)AddElement(std::make_unique<T>(std::move(args)...));
+			return *(T*)&AddElement(std::make_unique<T>(std::move(args)...));
 		}
 
-		UIsurface* Rectangle(float width, float height, const Color& color = Color::White, Transform&& transform = Transform());
-		UIsurface* Rectangle(float width, float height, const Material& material = Material(), Transform&& transform = Transform());
-		UIsurface* Image(float width, float height, const ResourcePtr<const Texture2D>& texture, Transform&& transform = Transform());
-		Bolt::Text* Text(const blt::string& text, const ResourcePtr<const Font>& font, const Color& color = Color::White, Transform&& transform = Transform(), AlignH horizontal = AlignH::Center, AlignV vertical = AlignV::Center);
-		Bolt::Text* Text(const blt::string& text, const Color& color = Color::White, Transform&& transform = Transform(), AlignH horizontal = AlignH::Center, AlignV vertical = AlignV::Center);
+		UIsurface& Rectangle(float width, float height, const Color& color = Color::White, Transform&& transform = Transform());
+		UIsurface& Rectangle(float width, float height, const Material& material = Material(), Transform&& transform = Transform());
+		UIsurface& Image(float width, float height, const ResourcePtr<const Texture2D>& texture, Transform&& transform = Transform());
+		Bolt::Text& Text(const blt::string& text, const ResourcePtr<const Font>& font, const Color& color = Color::White, Transform&& transform = Transform(), AlignH horizontal = AlignH::Center, AlignV vertical = AlignV::Center);
+		Bolt::Text& Text(const blt::string& text, const Color& color = Color::White, Transform&& transform = Transform(), AlignH horizontal = AlignH::Center, AlignV vertical = AlignV::Center);
 
 		friend class UIroot;
 		friend struct Layer;

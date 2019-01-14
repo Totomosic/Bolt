@@ -34,7 +34,7 @@ namespace Bolt
 			resFile.Name = resource.Attributes.at("name");
 			resFile.Type = StringToType(resource.Name);
 			resFile.Attributes = resource;
-			result.Resources[resFile.Name] = std::move(resFile);
+			result.m_Resources[resFile.Name] = std::move(resFile);
 		}
 		return result;
 	}
@@ -56,7 +56,7 @@ namespace Bolt
 
 	ResourcePack& ResourceManager::LoadPack(ResourcePack& resourcePack)
 	{
-		for (auto& pair : resourcePack.Resources)
+		for (auto& pair : resourcePack.m_Resources)
 		{
 			pair.second = LoadFile(pair.second);
 		}
@@ -167,7 +167,7 @@ namespace Bolt
 		options.MipmapMode = (mipmapString == "Disabled") ? Mipmaps::Disabled : Mipmaps::Enabled;
 		options.Wrap = (wrapString == "Repeat") ? WrapMode::Repeat : (wrapString == "Clamp") ? WrapMode::Clamp : WrapMode::ClampToEdge;
 		std::unique_ptr<Texture2D> texture = std::make_unique<Texture2D>(image, options);
-		image.Pixels = nullptr;
+		image.ReleasePixels();
 		id_t id = Register(std::move(texture));
 		resourceFile.Id = id;
 		return resourceFile;

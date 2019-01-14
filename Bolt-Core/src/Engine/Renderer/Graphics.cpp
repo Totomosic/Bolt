@@ -2,6 +2,7 @@
 
 #include "Graphics.h"
 #include "SceneRenderer.h"
+#include "GLState.h"
 
 namespace Bolt
 {
@@ -103,6 +104,7 @@ namespace Bolt
 		s_Window = window;
 		s_Rectangle = new Model(RectangleFactory(1, 1));
 		s_Line = new Model(LineFactory(Vector3f::Right(), 1));
+		GLState::Reset();
 	}
 
 }

@@ -7,13 +7,19 @@
 namespace Bolt
 {
 
-	class BLT_API Window
+	struct BLT_API WindowData
 	{
-	private:
+	public:
 		GLFWwindow* m_WindowHandle;
 		Framebuffer m_Framebuffer;
 		blt::string m_Title;
-		WindowCreateInfo m_CreateInfo;
+		bool m_IsDecorated;
+	};
+
+	class BLT_API Window
+	{
+	private:
+		WindowData m_Data;
 
 	public:
 		EventDispatcher<WindowResizeEvent> OnResize;
@@ -22,7 +28,7 @@ namespace Bolt
 		EventDispatcher<WindowFocusedEvent> OnFocusLost;
 
 	public:
-		Window(int width, int height, const blt::string& title, const WindowCreateInfo& info = WindowCreateInfo());
+		Window(const WindowCreateInfo& info = WindowCreateInfo());
 		Window(const Window& other) = delete;
 		Window(Window&& other) = delete;
 		Window& operator=(const Window& other) = delete;
@@ -32,6 +38,7 @@ namespace Bolt
 		const Framebuffer& GetFramebuffer() const;
 		int Width() const;
 		int Height() const;
+		float Aspect() const;
 		Vector2i Size() const;
 		const blt::string& Title() const;
 		const Color& ClearColor() const;

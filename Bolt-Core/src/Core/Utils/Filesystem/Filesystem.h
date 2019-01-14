@@ -26,7 +26,7 @@ namespace Bolt
 		static void Close(File& file);
 		static XMLfile OpenXML(const Filepath& filepath, OpenMode mode = OpenMode::Read);
 
-		friend class Engine;
+		friend class Initializer;
 
 	private:
 		static void Initialize();

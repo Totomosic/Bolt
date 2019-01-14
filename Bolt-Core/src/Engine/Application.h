@@ -10,7 +10,7 @@ namespace Bolt
 		id_t m_TickTimer;
 
 	public:
-		Window* PrimaryWindow;
+		std::unique_ptr<Window> AppWindow;
 
 	public:
 		virtual ~Application();
@@ -18,13 +18,17 @@ namespace Bolt
 		float Width() const;
 		float Height() const;
 
-		void Start(Window* engineWindow);
-		void SetPrimaryWindow(Window* window);
+		void Start();
 
 		virtual void Init();
 		virtual void Tick();
 		virtual void Update();
 		virtual void Render();
+
+		friend class Engine;
+
+	private:
+		void CreateWindowPtr(const WindowCreateInfo& createInfo);
 
 	};
 

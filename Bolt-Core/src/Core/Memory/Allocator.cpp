@@ -1,5 +1,6 @@
 #include "Types.h"
-#include "Allocator.h"
+
+#include "Allocator.h"
 
 void* Allocate(size_t size)
 {

@@ -11,7 +11,7 @@ namespace Bolt
 	public:
 		using Listener = std::function<bool(id_t, T&)>;
 
-	private:
+	public:
 		id_t m_DispatcherId;
 		id_t m_EventId;
 		id_t m_ListenerId;
@@ -31,21 +31,8 @@ namespace Bolt
 			
 		}
 
-		EventDispatcher(const EventDispatcher<T>& other)
-			: m_DispatcherId(EventManager::GetNextDispatcherId()), m_EventId(other.m_EventId), m_ListenerId(EventManager::Subscribe(m_EventId, std::bind(&EventDispatcher::__EventCallback, this, std::placeholders::_1, std::placeholders::_2), m_DispatcherId)), m_Listeners(other.m_Listeners), m_IdManager(other.m_IdManager)
-		{
-		
-		}
-
-		EventDispatcher<T>& operator=(const EventDispatcher<T>& other)
-		{
-			m_DispatcherId = EventManager::GetNextDispatcherId();
-			m_EventId = other.m_EventId;
-			m_ListenerId = EventManager::Subscribe(m_EventId, std::bind(&EventDispatcher::__EventCallback, this, std::placeholders::_1, std::placeholders::_2), m_DispatcherId);
-			m_Listeners = other.m_Listeners;
-			m_IdManager = other.m_IdManager;
-			return *this;
-		}
+		EventDispatcher(const EventDispatcher<T>& other) = delete;
+		EventDispatcher<T>& operator=(const EventDispatcher<T>& other) = delete;
 
 		EventDispatcher(EventDispatcher<T>&& other)
 		{

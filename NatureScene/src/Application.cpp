@@ -20,13 +20,13 @@ namespace NatureScene
 	public:
 		void Init() override
 		{
-			PrimaryWindow->SetClearColor(Color::SkyBlue);
+			AppWindow->SetClearColor(Color::SkyBlue);
 
 			Scene* scene = SceneManager::CreateScene();
-			Layer* layer = scene->CreateLayer("Main");
-			Layer* uiLayer = scene->CreateLayer("UI");
-			perspectiveCamera = scene->CreateCamera(Frustum::Perspective(PI / 3, PrimaryWindow->GetFramebuffer().Aspect(), 1, 1000), ProjectionType::Perspective);
-			orthoCamera = scene->CreateCamera(PrimaryWindow->GetFramebuffer().ViewFrustum(), ProjectionType::Orthographic);
+			Layer* layer = scene->CreateLayer();
+			Layer* uiLayer = scene->CreateLayer();
+			perspectiveCamera = scene->CreateCamera(Frustum::Perspective(PI / 3, AppWindow->GetFramebuffer().Aspect(), 1, 1000), ProjectionType::Perspective);
+			orthoCamera = scene->CreateCamera(AppWindow->GetFramebuffer().ViewFrustum(), ProjectionType::Orthographic);
 			layer->SetActiveCamera(perspectiveCamera);
 			uiLayer->SetActiveCamera(orthoCamera);
 
@@ -125,7 +125,8 @@ void main()
 {
 	Engine e;
 	WindowCreateInfo info;
-	e.SetWindow(std::make_unique<Window>(1280, 720, "Scene", info));
-	e.SetApplication(std::make_unique<NatureScene::App>());
+	info.Title = "NatureScene";
+	e.SetWindowCreateInfo(info);
+	e.SetApplication<NatureScene::App>();
 	e.Run();
 }

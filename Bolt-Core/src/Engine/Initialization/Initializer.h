@@ -9,7 +9,8 @@ namespace Bolt
 	public:
 		Initializer() = delete;
 
-		static bool Run(Window* window);
+		static void PreOpenGL();
+		static void PostOpenGL(Window* window);
 
 	};
 

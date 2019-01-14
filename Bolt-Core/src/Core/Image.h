@@ -29,6 +29,7 @@ namespace Bolt
 
 		Image Resize(int width, int height, ResizeFilter filter) const;
 		byte* GetPixel(int x, int y) const;
+		byte* ReleasePixels();
 
 	private:
 		Image ResizeNearest(int width, int height) const;

@@ -766,6 +766,16 @@
     </ClInclude>
     <ClInclude Include="src\Logging.h" />
     <ClInclude Include="src\Types.h" />
+    <ClInclude Include="src\Bolt.h" />
+    <ClInclude Include="src\Engine\Networking\UDPsocket.h" />
+    <ClInclude Include="src\Engine\Networking\InputMemoryStream.h" />
+    <ClInclude Include="src\Engine\Networking\OutputMemoryStream.h" />
+    <ClInclude Include="src\Engine\Commands\__Commands__.h" />
+    <ClInclude Include="src\Engine\Commands\CommandLine.h" />
+    <ClInclude Include="src\Engine\Commands\Command.h" />
+    <ClInclude Include="src\Engine\Commands\CommandArg.h" />
+    <ClInclude Include="src\Engine\Commands\CmdDebugger.h" />
+    <ClInclude Include="src\Engine\Scene\SceneEvents.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\BoltTL\string.cpp">
@@ -1094,6 +1104,13 @@
     </ClCompile>
     <ClCompile Include="src\Logging.cpp" />
     <ClCompile Include="src\Types.cpp" />
+    <ClCompile Include="src\Engine\Networking\UDPsocket.cpp" />
+    <ClCompile Include="src\Engine\Networking\InputMemoryStream.cpp" />
+    <ClCompile Include="src\Engine\Networking\OutputMemoryStream.cpp" />
+    <ClCompile Include="src\Engine\Commands\Command.cpp" />
+    <ClCompile Include="src\Engine\Commands\CommandLine.cpp" />
+    <ClCompile Include="src\Engine\Commands\CmdDebugger.cpp" />
+    <ClCompile Include="src\Graphics\Resources\ResourcePack.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Graphics\Resources\Shaders\Source\DefaultColor_f.glsl">
