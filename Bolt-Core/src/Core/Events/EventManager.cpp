@@ -5,8 +5,10 @@
 namespace Bolt
 {
 
-	EventManager::EventInfo EventManager::s_EventQueue[MAX_EVENTS];
-	id_t EventManager::s_Tail = 0;
+	std::mutex EventManager::s_EventQueueMutex = std::mutex();
+	std::mutex EventManager::s_ListenersMutex = std::mutex();
+
+	EventQueue<EventManager::EventInfo> EventManager::s_EventQueue = EventQueue<EventManager::EventInfo>(EventManager::MAX_EVENTS);
 	std::unordered_map<id_t, std::vector<EventManager::EventListener>> EventManager::s_Listeners = std::unordered_map<id_t, std::vector<EventManager::EventListener>>();
 	std::unordered_map<id_t, id_t> EventManager::s_ListenerMap = std::unordered_map<id_t, id_t>();
 
@@ -25,6 +27,7 @@ namespace Bolt
 
 	id_t EventManager::Subscribe(id_t eventId, const EventManager::Listener& listener, id_t dispatcherId)
 	{
+		std::scoped_lock<std::mutex> lock(s_ListenersMutex);
 		id_t listenerId = FindNextListenerId();
 		id_t listenerIndex = s_Listeners[eventId].size();
 		s_Listeners.at(eventId).push_back({ listener, dispatcherId, listenerId });
@@ -39,6 +42,7 @@ namespace Bolt
 
 	void EventManager::Unsubscribe(id_t listenerId)
 	{
+		std::scoped_lock<std::mutex> lock(s_ListenersMutex);
 		BLT_ASSERT(s_ListenerMap.find(listenerId) != s_ListenerMap.end(), "Unable to find listener with Id " + std::to_string(listenerId));
 		id_t eventId = s_ListenerMap.at(listenerId);
 		std::vector<EventListener>& listenersVector = s_Listeners.at(eventId);
@@ -52,7 +56,8 @@ namespace Bolt
 
 	void EventManager::UpdateListener(id_t listenerId, const Listener& listener)
 	{
-		BLT_ASSERT(s_ListenerMap.find(listenerId) != s_ListenerMap.end(), "Unable to find listener with Id " + std::to_string(listenerId));
+		std::scoped_lock<std::mutex> lock(s_ListenersMutex);
+		BLT_ASSERT(s_ListenerMap.find(listenerId) != s_ListenerMap.end(), "Unable to find listener with Id " + std::to_string(listenerId));		
 		id_t eventId = s_ListenerMap.at(listenerId);
 		std::vector<EventListener>& listenersVector = s_Listeners.at(eventId);
 		for (EventListener& l : listenersVector)
@@ -67,8 +72,9 @@ namespace Bolt
 
 	void EventManager::Post(id_t eventId, id_t dispatcherId, std::unique_ptr<Event>&& args)
 	{
-		BLT_ASSERT(s_Tail < MAX_EVENTS, "Event overflow");
-		s_EventQueue[s_Tail++] = { eventId, dispatcherId, std::move(args) };
+		std::scoped_lock<std::mutex> lock(s_EventQueueMutex);
+		BLT_ASSERT(s_EventQueue.EventCount() < MAX_EVENTS, "Event overflow");		
+		s_EventQueue.AddEvent({ eventId, dispatcherId, std::move(args) });
 	}
 
 	void EventManager::Post(id_t eventId, std::unique_ptr<Event>&& args)
@@ -78,14 +84,22 @@ namespace Bolt
 
 	void EventManager::FlushEvents()
 	{
-		for (id_t i = 0; i < s_Tail; i++)
+		EventInfo* eventQueue;
+		id_t eventQueueLength;
 		{
-			EventInfo& e = s_EventQueue[i];
+			std::scoped_lock<std::mutex, std::mutex> lock(s_EventQueueMutex, s_ListenersMutex);
+			eventQueue = s_EventQueue.GetQueuePtr();
+			eventQueueLength = s_EventQueue.EventCount();
+			s_EventQueue.SwapQueues();
+		}
+		for (id_t i = 0; i < eventQueueLength; i++)
+		{
+			EventInfo& e = eventQueue[i];
 			for (auto& listener : s_Listeners[e.EventId])
 			{
 				if (listener.DispatcherId == EventManager::IGNORE_DISPATCHER_ID || e.DispatcherId == listener.DispatcherId)
 				{
-					if (listener.Callback(e.EventId, *e.Args))
+					if (listener.Callback(listener.ListenerId, *e.Args))
 					{
 						// Event has already been handled and should not be propogated to other event listeners
 						break;
@@ -93,7 +107,6 @@ namespace Bolt
 				}
 			}
 		}
-		s_Tail = 0;
 	}
 
 	id_t EventManager::FindNextListenerId()

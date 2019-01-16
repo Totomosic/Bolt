@@ -12,11 +12,12 @@ namespace Bolt
 		int m_Head;
 
 	public:
+		InputMemoryStream();
 		InputMemoryStream(uint capacity);
 		InputMemoryStream(const InputMemoryStream& other) = delete;
 		InputMemoryStream& operator=(const InputMemoryStream& other) = delete;
-		InputMemoryStream(InputMemoryStream&& other) = default;
-		InputMemoryStream& operator=(InputMemoryStream&& other) = default;
+		InputMemoryStream(InputMemoryStream&& other);
+		InputMemoryStream& operator=(InputMemoryStream&& other);
 		~InputMemoryStream();
 
 		byte* GetBufferPtr() const;
@@ -27,7 +28,7 @@ namespace Bolt
 		template<typename T>
 		void Read(T* outValue)
 		{
-			Read(outValue, sizeof(T));
+			Read((void*)outValue, sizeof(T));
 		}
 
 	};

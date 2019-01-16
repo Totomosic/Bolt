@@ -79,15 +79,12 @@ namespace Bolt
 
 	GameObject* ObjectFactory::Instantiate(const ObjectPrefab* prefab) const
 	{
-		GameObject* object = GameObject::Instantiate(CurrentLayer(), prefab);
-		object->MakeChildOf(CurrentParent());
-		return object;
+		return Instantiate(prefab, Transform());
 	}
 
 	GameObject* ObjectFactory::Instantiate(const ObjectPrefab* prefab, Transform transform) const
 	{
-		GameObject* object = Instantiate(prefab);
-		object->transform() = std::move(transform);
+		GameObject* object = GameObject::Instantiate(CurrentLayer(), prefab, std::move(transform));
 		object->MakeChildOf(CurrentParent());
 		return object;
 	}

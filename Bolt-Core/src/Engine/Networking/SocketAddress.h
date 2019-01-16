@@ -17,13 +17,32 @@ namespace Bolt
 		SocketAddress();
 
 		static size_t GetSize();
+		size_t GetHash() const;
+		blt::string ToString() const;
 
 		bool operator==(const SocketAddress& other) const;
 		bool operator!=(const SocketAddress& other) const;
 
 	private:
+		const sockaddr_in* GetAsSockAddrIn() const;
 		sockaddr_in* GetAsSockAddrIn();
+		const uint& GetIP4Ref() const;
+		uint& GetIP4Ref();
 
+	};
+
+}
+
+namespace std
+{
+
+	template<>
+	struct hash<Bolt::SocketAddress>
+	{
+		size_t operator()(const Bolt::SocketAddress& value) const
+		{
+			return value.GetHash();
+		}
 	};
 
 }

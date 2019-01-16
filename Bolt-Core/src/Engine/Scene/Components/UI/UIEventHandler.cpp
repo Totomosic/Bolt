@@ -71,7 +71,7 @@ namespace Bolt
 				MeshRenderer& renderer = gameObject()->Components().GetComponent<MeshRenderer>();
 				float viewWidth = camera()->ViewWidth();
 				float viewHeight = camera()->ViewHeight();
-				Vector3f mousePosition = Input::MousePosition(viewWidth, viewHeight);
+				Vector3f mousePosition = Input::MousePosition(viewWidth, viewHeight) + camera()->transform().Position();
 				std::vector<Cuboid> bounds = renderer.GetMeshBounds();
 				for (Cuboid& box : bounds)
 				{

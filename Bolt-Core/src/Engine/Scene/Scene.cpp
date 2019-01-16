@@ -89,6 +89,33 @@ namespace Bolt
 		return result;
 	}
 
+	std::vector<Layer*> Scene::GetAllLayers()
+	{
+		std::vector<Layer*> result;
+		for (int i = 0; i < MAX_LAYERS; i++)
+		{
+			if (m_Layers[i].m_Id != GameObject::InvalidID)
+			{
+				result.push_back(&m_Layers[i]);
+			}
+		}
+		return result;
+	}
+
+	std::vector<Layer*> Scene::GetLayers(id_t mask)
+	{
+		std::vector<Layer*> result;
+		id_t maxLayer = (int)log2(mask);
+		for (id_t i = 0; i <= maxLayer; i++)
+		{
+			if (BLT_IS_BIT_SET(mask, i))
+			{
+				result.push_back(&GetLayer(i));
+			}
+		}
+		return result;
+	}
+
 	Layer& Scene::CreateLayer(Camera* activeCamera)
 	{
 		id_t id = FindNextId();

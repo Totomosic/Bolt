@@ -5,6 +5,9 @@ project "DND"
     
     targetdir ("../bin/" .. outputdir .. "/DND")
     objdir ("../bin-int/" .. outputdir .. "/DND")
+
+    pchheader "bltpch.h"
+    pchsource "src/bltpch.cpp"
     
     files
     {
@@ -18,6 +21,7 @@ project "DND"
         "../Bolt-Core/src/",
         "../Bolt-Core/external/spdlog/include/",
         "C:/Users/Jordan Morrison/AppData/Local/Programs/Python/Python37-32/include/",
+        "src",
         "../%{IncludeDirs.GLFW}",
         "../%{IncludeDirs.Glad}"
     }

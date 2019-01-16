@@ -1,3 +1,4 @@
+#include "bltpch.h"
 #include "TilemapLayer.h"
 
 namespace DND
@@ -52,13 +53,22 @@ namespace DND
 
 	void TilemapLayer::SetTileImages(int x, int y, int w, int h, const Image& image, ResizeFilter filter)
 	{
-		for (int i = x; i < x + w; i++)
+		Image im;
+		im.Width = image.Width * w;
+		im.Height = image.Height * h;
+		im.Components = 4;
+		im.Pixels = new byte[im.Width * im.Height * im.Components];
+		for (int j = 0; j < h; j++)
 		{
-			for (int j = y; j < y + h; j++)
+			for (int h = 0; h < image.Height; h++)
 			{
-				SetTileImage(i, j, image, filter);
+				for (int i = 0; i < w; i++)
+				{
+					memcpy(im.Pixels + i * image.Width * 4 + j * im.Width* image.Height * 4 + h * im.Width * 4, image.Pixels + h * image.Width * 4, image.Width * 4);
+				}
 			}
 		}
+		m_Texture.SetRegion(x * PixelsPerTile().x, y * PixelsPerTile().y, w * PixelsPerTile().x, h * PixelsPerTile().y, im, filter);
 	}
 
 }

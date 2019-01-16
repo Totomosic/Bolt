@@ -200,18 +200,17 @@ namespace Bolt
 
 	GameObject* GameObject::Instantiate(Layer* layer, const ObjectPrefab* prefab)
 	{
-		GameObject* object = layer->AddGameObject(GameObject());
-		for (const auto& pair : prefab->Components().m_ComponentMap)
-		{
-			object->Components().AddComponent(pair.first, pair.second->Clone());
-		}
-		return object;
+		return Instantiate(layer, prefab, Transform());
 	}
 
 	GameObject* GameObject::Instantiate(Layer* layer, const ObjectPrefab* prefab, Transform transform)
 	{
-		GameObject* object = Instantiate(layer, prefab);
+		GameObject* object = layer->AddGameObject(GameObject());
 		object->transform() = std::move(transform);
+		for (const auto& pair : prefab->Components().m_ComponentMap)
+		{
+			object->Components().AddComponent(pair.first, pair.second->Clone());
+		}
 		return object;
 	}
 

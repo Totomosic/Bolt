@@ -10,6 +10,22 @@ namespace Bolt
 		ReallocBuffer(m_Capacity);
 	}
 
+	OutputMemoryStream::OutputMemoryStream(OutputMemoryStream&& other)
+		: m_Buffer(other.m_Buffer), m_Capacity(other.m_Capacity), m_Head(other.m_Head)
+	{
+		other.m_Buffer = nullptr;
+	}
+
+	OutputMemoryStream& OutputMemoryStream::operator=(OutputMemoryStream&& other)
+	{
+		byte* buff = m_Buffer;
+		m_Buffer = other.m_Buffer;
+		other.m_Buffer = buff;
+		m_Capacity = other.m_Capacity;
+		m_Head = other.m_Head;
+		return *this;
+	}
+
 	OutputMemoryStream::~OutputMemoryStream()
 	{
 		if (m_Buffer != nullptr)

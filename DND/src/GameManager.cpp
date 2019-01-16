@@ -1,3 +1,4 @@
+#include "bltpch.h"
 #include "GameManager.h"
 
 namespace DND
@@ -21,7 +22,7 @@ namespace DND
 	}
 
 	GameManager::GameManager(Layer& layer)
-		: m_Tilemap(layer, TILEMAP_WIDTH, TILEMAP_HEIGHT, TILE_WIDTH, TILE_HEIGHT)
+		: m_LocalCamera(nullptr), m_LocalPlayer(nullptr), m_Tilemap(layer, TILEMAP_WIDTH, TILEMAP_HEIGHT, TILE_WIDTH, TILE_HEIGHT), m_Network()
 	{
 	
 	}
@@ -49,6 +50,11 @@ namespace DND
 	Tilemap& GameManager::GetTilemap()
 	{
 		return m_Tilemap;
+	}
+
+	NetworkManager& GameManager::Network()
+	{
+		return m_Network;
 	}
 
 }

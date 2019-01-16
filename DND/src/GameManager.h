@@ -1,14 +1,17 @@
 #pragma once
-#include "Bolt.h"
+#include "bltpch.h"
 #include "Map/Tilemap.h"
+#include "Networking/NetworkManager.h"
 
 namespace DND
 {
 
 	constexpr int TILEMAP_WIDTH = 50;
 	constexpr int TILEMAP_HEIGHT = 50;
-	constexpr int TILE_WIDTH = 50;
-	constexpr int TILE_HEIGHT = 50;
+	constexpr int TILE_WIDTH = 40;
+	constexpr int TILE_HEIGHT = 40;
+
+	extern int PORT;
 
 	class GameManager
 	{
@@ -19,6 +22,8 @@ namespace DND
 		Camera* m_LocalCamera;
 		GameObject* m_LocalPlayer;
 		Tilemap m_Tilemap;
+
+		NetworkManager m_Network;
 
 	public:
 		static GameManager& Get();
@@ -32,6 +37,7 @@ namespace DND
 		void SetLocalPlayer(GameObject* player);
 
 		Tilemap& GetTilemap();
+		NetworkManager& Network();
 
 	};
 

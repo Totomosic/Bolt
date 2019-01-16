@@ -1,3 +1,4 @@
+#include "bltpch.h"
 #include "Tilemap.h"
 
 namespace DND
@@ -49,14 +50,41 @@ namespace DND
 		return m_Layers.at(index).Object;
 	}
 
+	Vector3f Tilemap::WorldPositionOfTile(int x, int y) const
+	{
+		float wx = ((float)x - (float)Width() / 2.0f) * TileWidth() + TileWidth() / 2.0f;
+		float wy = ((float)y - (float)Height() / 2.0f) * TileHeight() + TileHeight() / 2.0f;
+		return Vector3f(wx, wy, 0);
+	}
+
+	Tile Tilemap::TileFromWorldPosition(float x, float y) const
+	{
+		int tileX = (x + Width() * TileWidth() / 2.0f) / TileWidth();
+		int tileY = (y + Height() * TileHeight() / 2.0f) / TileHeight();
+		if (tileX < 0 || tileX >= Width())
+		{
+			tileX = -1;
+		}
+		if (tileY < 0 || tileY >= Height())
+		{
+			tileY = -1;
+		}
+		return Tile(tileX, tileY);
+	}
+
 	TilemapLayer& Tilemap::AddLayer(float resolution)
 	{
 		size_t index = m_Layers.size();
 		Tilemap::LayerInfo i = { nullptr, TilemapLayer(Width(), Height(), TileWidth(), TileHeight(), resolution) };
 		m_Layers.push_back(std::move(i));
 		Tilemap::LayerInfo& info =  m_Layers.at(index);
-		info.Object = m_Factory.Image(Width() * TileWidth(), Height() * TileHeight(), &info.TLayer.GetTexture(), Transform());
+		info.Object = m_Factory.Image(Width() * TileWidth(), Height() * TileHeight(), &info.TLayer.GetTexture(), Transform({ 0, 0, -25 }));
 		return info.TLayer;
+	}
+
+	void Tilemap::Clear()
+	{
+		m_Layers.clear();
 	}
 
 }

@@ -14,8 +14,6 @@ namespace Bolt
 
 	SocketAddress::SocketAddress(const blt::string& inAddress, const blt::string& inPort)
 	{
-		GetAsSockAddrIn()->sin_family = AF_INET;
-
 		addrinfo hint;
 		memset(&hint, 0, sizeof(addrinfo));
 		hint.ai_family = AF_INET;
@@ -42,7 +40,7 @@ namespace Bolt
 		}
 
 		memcpy(&m_SockAddr, result->ai_addr, sizeof(sockaddr));
-
+		GetAsSockAddrIn()->sin_family = AF_INET;
 		freeaddrinfo(result);
 	}
 
@@ -66,9 +64,23 @@ namespace Bolt
 		return sizeof(sockaddr);
 	}
 
+	size_t SocketAddress::GetHash() const
+	{
+		return (GetIP4Ref()) | ((static_cast<uint>(GetAsSockAddrIn()->sin_port)) << 13) | m_SockAddr.sa_family;
+	}
+
+	blt::string SocketAddress::ToString() const
+	{
+		const sockaddr_in* s = GetAsSockAddrIn();
+		uint16_t port = ntohs(s->sin_port);
+		uint32_t addr = (GetAsSockAddrIn()->sin_addr.S_un.S_addr);
+		char* bytes = (char*)&addr;
+		return "SocketAddress(" + std::to_string((int)bytes[0]) + "." + std::to_string((int)bytes[1]) + "." + std::to_string((int)bytes[2]) + "." + std::to_string((int)bytes[3]) + ":" + std::to_string(port) + ")";
+	}
+
 	bool SocketAddress::operator==(const SocketAddress& other) const
 	{
-		return (m_SockAddr.sa_data == other.m_SockAddr.sa_data) && (m_SockAddr.sa_family == other.m_SockAddr.sa_family);
+		return (GetAsSockAddrIn()->sin_port == other.GetAsSockAddrIn()->sin_port) && (GetIP4Ref() == other.GetIP4Ref());
 	}
 
 	bool SocketAddress::operator!=(const SocketAddress& other) const
@@ -76,9 +88,24 @@ namespace Bolt
 		return !(*this == other);
 	}
 
+	const sockaddr_in* SocketAddress::GetAsSockAddrIn() const
+	{
+		return reinterpret_cast<const sockaddr_in*>(&m_SockAddr);
+	}
+
 	sockaddr_in* SocketAddress::GetAsSockAddrIn()
 	{
 		return reinterpret_cast<sockaddr_in*>(&m_SockAddr);
+	}
+
+	const uint& SocketAddress::GetIP4Ref() const
+	{
+		return *reinterpret_cast<const uint*>(&GetAsSockAddrIn()->sin_addr.S_un.S_addr);
+	}
+
+	uint& SocketAddress::GetIP4Ref()
+	{
+		return *reinterpret_cast<uint*>(&GetAsSockAddrIn()->sin_addr.S_un.S_addr);
 	}
 
 }
