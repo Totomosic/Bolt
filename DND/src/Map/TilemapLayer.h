@@ -1,8 +1,10 @@
 #pragma once
-#include "Bolt.h"
+#include "bltpch.h"
 
 namespace DND
 {
+
+	using Tile = Vector2i;
 
 	class TilemapLayer
 	{

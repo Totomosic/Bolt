@@ -17,6 +17,7 @@
 #include <ios>
 #include <iostream>
 #include <memory>
+#include <mutex>
 #include <numeric>
 #include <ratio>
 #include <sstream>

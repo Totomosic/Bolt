@@ -15,8 +15,8 @@ namespace Bolt
 		OutputMemoryStream(uint capacity = 1);
 		OutputMemoryStream(const OutputMemoryStream& other) = delete;
 		OutputMemoryStream& operator=(const OutputMemoryStream& other) = delete;
-		OutputMemoryStream(OutputMemoryStream&& other) = default;
-		OutputMemoryStream& operator=(OutputMemoryStream&& other) = default;
+		OutputMemoryStream(OutputMemoryStream&& other);
+		OutputMemoryStream& operator=(OutputMemoryStream&& other);
 		~OutputMemoryStream();
 
 		byte* GetBufferPtr() const;

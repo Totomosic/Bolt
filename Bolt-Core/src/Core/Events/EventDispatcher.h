@@ -11,7 +11,7 @@ namespace Bolt
 	public:
 		using Listener = std::function<bool(id_t, T&)>;
 
-	public:
+	private:
 		id_t m_DispatcherId;
 		id_t m_EventId;
 		id_t m_ListenerId;
@@ -26,7 +26,7 @@ namespace Bolt
 		}
 
 		EventDispatcher(id_t eventId)
-			: m_DispatcherId(EventManager::GetNextDispatcherId()), m_EventId(eventId), m_ListenerId(EventManager::Subscribe(m_EventId, std::bind(&EventDispatcher::__EventCallback, this, std::placeholders::_1, std::placeholders::_2), m_DispatcherId)), m_Listeners(), m_IdManager(0, EventManager::IGNORE_DISPATCHER_ID - 1)
+			: m_DispatcherId(EventManager::GetNextDispatcherId()), m_EventId(eventId), m_ListenerId(EventManager::Subscribe(m_EventId, std::bind(&EventDispatcher::PrivateEventCallback, this, std::placeholders::_1, std::placeholders::_2), m_DispatcherId)), m_Listeners(), m_IdManager(0, EventManager::IGNORE_DISPATCHER_ID - 1)
 		{
 			
 		}
@@ -45,7 +45,7 @@ namespace Bolt
 			m_Listeners = std::move(other.m_Listeners);
 			m_IdManager = std::move(other.m_IdManager);
 
-			EventManager::UpdateListener(m_ListenerId, std::bind(&EventDispatcher::__EventCallback, this, std::placeholders::_1, std::placeholders::_2));
+			EventManager::UpdateListener(m_ListenerId, std::bind(&EventDispatcher::PrivateEventCallback, this, std::placeholders::_1, std::placeholders::_2));
 		}
 
 		EventDispatcher<T>& operator=(EventDispatcher<T>&& other)
@@ -62,18 +62,14 @@ namespace Bolt
 			m_Listeners = std::move(other.m_Listeners);
 			m_IdManager = std::move(other.m_IdManager);
 
-			EventManager::UpdateListener(m_ListenerId, std::bind(&EventDispatcher::__EventCallback, this, std::placeholders::_1, std::placeholders::_2));
+			EventManager::UpdateListener(m_ListenerId, std::bind(&EventDispatcher::PrivateEventCallback, this, std::placeholders::_1, std::placeholders::_2));
 
 			return *this;
 		}
 
 		~EventDispatcher()
 		{
-			if (m_ListenerId != EventManager::IGNORE_DISPATCHER_ID && m_DispatcherId != EventManager::IGNORE_DISPATCHER_ID)
-			{
-				EventManager::Unsubscribe(m_ListenerId);
-				EventManager::ReleaseDispatcherId(m_DispatcherId);
-			}
+			Destroy();
 		}
 
 		id_t EventId() const
@@ -96,6 +92,7 @@ namespace Bolt
 		void Unsubscribe(id_t listenerId)
 		{
 			m_Listeners.erase(listenerId);
+			m_IdManager.ReleaseId(listenerId);
 		}
 
 		// Post a new event with given args from this specific dispatcher
@@ -115,14 +112,20 @@ namespace Bolt
 			m_DispatcherId = EventManager::IGNORE_DISPATCHER_ID;
 		}
 
-		bool __EventCallback(id_t eventId, Event& args)
+		void Clear()
+		{
+			m_Listeners.clear();
+			m_IdManager.Reset();
+		}
+
+		bool PrivateEventCallback(id_t eventId, Event& args)
 		{
 			int size = m_Listeners.size();
 			auto it = m_Listeners.begin();
 			bool handled = false;
 			for (int i = 0; i < size; i++)
 			{
-				if (it->second(eventId, *(T*)&args))
+				if (it->second(it->first, *(T*)&args))
 				{
 					// Event was handled and should not be propogated to other event listeners
 					handled = true;

@@ -45,6 +45,8 @@ namespace Bolt
 
 		std::vector<const Layer*> GetAllLayers() const;
 		std::vector<const Layer*> GetLayers(id_t mask) const;
+		std::vector<Layer*> GetAllLayers();
+		std::vector<Layer*> GetLayers(id_t mask);
 
 		Layer& CreateLayer(Camera* activeCamera = nullptr);
 

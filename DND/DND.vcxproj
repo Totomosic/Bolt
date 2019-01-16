@@ -81,10 +81,11 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>bltpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>BLT_BUILD_STATIC;BLT_PLATFORM_WINDOWS;BLT_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\Bolt-Core\external;..\Bolt-Core\src;..\Bolt-Core\external\spdlog\include;..\..\..\..\..\AppData\Local\Programs\Python\Python37-32\include;..\Bolt-Core\vendor\GLFW\include;..\Bolt-Core\vendor\Glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Bolt-Core\external;..\Bolt-Core\src;..\Bolt-Core\external\spdlog\include;..\..\..\..\..\AppData\Local\Programs\Python\Python37-32\include;src;..\Bolt-Core\vendor\GLFW\include;..\Bolt-Core\vendor\Glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
@@ -96,10 +97,11 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>bltpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>BLT_BUILD_STATIC;BLT_PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\Bolt-Core\external;..\Bolt-Core\src;..\Bolt-Core\external\spdlog\include;..\..\..\..\..\AppData\Local\Programs\Python\Python37-32\include;..\Bolt-Core\vendor\GLFW\include;..\Bolt-Core\vendor\Glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Bolt-Core\external;..\Bolt-Core\src;..\Bolt-Core\external\spdlog\include;..\..\..\..\..\AppData\Local\Programs\Python\Python37-32\include;src;..\Bolt-Core\vendor\GLFW\include;..\Bolt-Core\vendor\Glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -117,9 +119,10 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|Win32'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>bltpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>..\Bolt-Core\external;..\Bolt-Core\src;..\Bolt-Core\external\spdlog\include;..\..\..\..\..\AppData\Local\Programs\Python\Python37-32\include;..\Bolt-Core\vendor\GLFW\include;..\Bolt-Core\vendor\Glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Bolt-Core\external;..\Bolt-Core\src;..\Bolt-Core\external\spdlog\include;..\..\..\..\..\AppData\Local\Programs\Python\Python37-32\include;src;..\Bolt-Core\vendor\GLFW\include;..\Bolt-Core\vendor\Glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
     </ClCompile>
     <Link>
@@ -129,20 +132,46 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Bolt-Core\Bolt-Core.vcxproj">
-      <Project>{2CF839F6-9862-EE6C-E1A0-9F124D4ACCC1}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\App.cpp" />
-    <ClCompile Include="src\GameManager.cpp" />
-    <ClCompile Include="src\Map\Tilemap.cpp" />
-    <ClCompile Include="src\Map\TilemapLayer.cpp" />
-  </ItemGroup>
-  <ItemGroup>
+    <ClInclude Include="src\Camera\PlayerCamera.h" />
+    <ClInclude Include="src\Entities\CharacterAnimator.h" />
+    <ClInclude Include="src\Entities\NPCController.h" />
+    <ClInclude Include="src\Entities\PlayerController.h" />
+    <ClInclude Include="src\Entities\TileMotion.h" />
+    <ClInclude Include="src\Entities\TileTransform.h" />
+    <ClInclude Include="src\Events.h" />
     <ClInclude Include="src\GameManager.h" />
     <ClInclude Include="src\Map\Tilemap.h" />
     <ClInclude Include="src\Map\TilemapLayer.h" />
+    <ClInclude Include="src\Networking\Deserialization.h" />
+    <ClInclude Include="src\Networking\NetworkIdentity.h" />
+    <ClInclude Include="src\Networking\NetworkManager.h" />
+    <ClInclude Include="src\Networking\NetworkServer.h" />
+    <ClInclude Include="src\Networking\Packets.h" />
+    <ClInclude Include="src\Networking\Serialization.h" />
+    <ClInclude Include="src\bltpch.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\App.cpp" />
+    <ClCompile Include="src\Camera\PlayerCamera.cpp" />
+    <ClCompile Include="src\Entities\CharacterAnimator.cpp" />
+    <ClCompile Include="src\Entities\NPCController.cpp" />
+    <ClCompile Include="src\Entities\PlayerController.cpp" />
+    <ClCompile Include="src\Entities\TileMotion.cpp" />
+    <ClCompile Include="src\Entities\TileTransform.cpp" />
+    <ClCompile Include="src\GameManager.cpp" />
+    <ClCompile Include="src\Map\Tilemap.cpp" />
+    <ClCompile Include="src\Map\TilemapLayer.cpp" />
+    <ClCompile Include="src\Networking\NetworkIdentity.cpp" />
+    <ClCompile Include="src\Networking\NetworkManager.cpp" />
+    <ClCompile Include="src\Networking\NetworkServer.cpp" />
+    <ClCompile Include="src\bltpch.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Bolt-Core\Bolt-Core.vcxproj">
+      <Project>{2CF839F6-9862-EE6C-E1A0-9F124D4ACCC1}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

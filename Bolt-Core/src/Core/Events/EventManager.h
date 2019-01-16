@@ -1,6 +1,7 @@
 #pragma once
 #include "Event.h"
 #include "IdManager.h"
+#include "EventQueue.h"
 
 namespace Bolt
 {
@@ -43,8 +44,10 @@ namespace Bolt
 		static constexpr id_t IGNORE_DISPATCHER_ID = (id_t)-1;
 
 	private:
-		static EventInfo s_EventQueue[MAX_EVENTS];
-		static id_t s_Tail;
+		static std::mutex s_EventQueueMutex;
+		static std::mutex s_ListenersMutex;
+
+		static EventQueue<EventInfo> s_EventQueue;
 		static std::unordered_map<id_t, std::vector<EventListener>> s_Listeners;
 		static std::unordered_map<id_t, id_t> s_ListenerMap;
 

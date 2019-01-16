@@ -33,7 +33,11 @@ namespace DND
 		TilemapLayer& GetLayer(int index);
 		GameObject* GetLayerObject(int index) const;
 
+		Vector3f WorldPositionOfTile(int x, int y) const;
+		Tile TileFromWorldPosition(float x, float y) const;
+
 		TilemapLayer& AddLayer(float resolution);
+		void Clear();
 
 	};
 

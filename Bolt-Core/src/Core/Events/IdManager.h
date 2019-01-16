@@ -8,7 +8,7 @@ namespace Bolt
 	template<typename T>
 	class BLT_API IdManager
 	{
-	public:
+	private:
 		T m_MinId;
 		T m_MaxId;
 		mutable T m_CurrentMaxId;
@@ -46,6 +46,11 @@ namespace Bolt
 		{
 			m_CurrentMaxId = Clamp<T>(value, m_MinId, m_MaxId);
 			m_AvailableIds.clear();
+		}
+
+		void SetNextAvailableId(T id)
+		{
+			m_CurrentMaxId = id;
 		}
 
 	};

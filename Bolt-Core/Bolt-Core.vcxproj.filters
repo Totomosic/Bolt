@@ -46,6 +46,9 @@
     <Filter Include="Engine">
       <UniqueIdentifier>{DBC7D3B0-C769-FE86-B024-12DB9C6585D7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Commands">
+      <UniqueIdentifier>{7C69CF98-E8F4-3C5D-F105-C0515D10995D}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Engine\Initialization">
       <UniqueIdentifier>{72880A54-DEF4-C54E-A7E8-5DAC1314E8B6}</UniqueIdentifier>
     </Filter>
@@ -147,6 +150,7 @@
     <ClInclude Include="src\Bolt-Core.h" />
     <ClInclude Include="src\Bolt-Engine.h" />
     <ClInclude Include="src\Bolt-Graphics.h" />
+    <ClInclude Include="src\Bolt.h" />
     <ClInclude Include="src\BoltDefines.h" />
     <ClInclude Include="src\BoltEngine.h" />
     <ClInclude Include="src\Core\BoltTL\__BoltTL__.h">
@@ -177,6 +181,9 @@
       <Filter>Core\Events</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Events\EventManager.h">
+      <Filter>Core\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Events\EventQueue.h">
       <Filter>Core\Events</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Events\Events.h">
@@ -314,6 +321,21 @@
     <ClInclude Include="src\Engine\Application.h">
       <Filter>Engine</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Commands\CmdDebugger.h">
+      <Filter>Engine\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Commands\Command.h">
+      <Filter>Engine\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Commands\CommandArg.h">
+      <Filter>Engine\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Commands\CommandLine.h">
+      <Filter>Engine\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Commands\__Commands__.h">
+      <Filter>Engine\Commands</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Engine.h">
       <Filter>Engine</Filter>
     </ClInclude>
@@ -323,13 +345,25 @@
     <ClInclude Include="src\Engine\Initialization\__Initialization__.h">
       <Filter>Engine\Initialization</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Networking\InputMemoryStream.h">
+      <Filter>Engine\Networking</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Networking\Networking.h">
+      <Filter>Engine\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Networking\OutputMemoryStream.h">
       <Filter>Engine\Networking</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Networking\SocketAddress.h">
       <Filter>Engine\Networking</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Networking\SocketUtil.h">
+      <Filter>Engine\Networking</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Networking\TCPsocket.h">
+      <Filter>Engine\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Networking\UDPsocket.h">
       <Filter>Engine\Networking</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Networking\__Networking__.h">
@@ -483,6 +517,9 @@
       <Filter>Engine\Scene\Query</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Scene\Scene.h">
+      <Filter>Engine\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Scene\SceneEvents.h">
       <Filter>Engine\Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Scene\SceneManager.h">
@@ -766,16 +803,6 @@
     </ClInclude>
     <ClInclude Include="src\Logging.h" />
     <ClInclude Include="src\Types.h" />
-    <ClInclude Include="src\Bolt.h" />
-    <ClInclude Include="src\Engine\Networking\UDPsocket.h" />
-    <ClInclude Include="src\Engine\Networking\InputMemoryStream.h" />
-    <ClInclude Include="src\Engine\Networking\OutputMemoryStream.h" />
-    <ClInclude Include="src\Engine\Commands\__Commands__.h" />
-    <ClInclude Include="src\Engine\Commands\CommandLine.h" />
-    <ClInclude Include="src\Engine\Commands\Command.h" />
-    <ClInclude Include="src\Engine\Commands\CommandArg.h" />
-    <ClInclude Include="src\Engine\Commands\CmdDebugger.h" />
-    <ClInclude Include="src\Engine\Scene\SceneEvents.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\BoltTL\string.cpp">
@@ -853,16 +880,37 @@
     <ClCompile Include="src\Engine\Application.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Commands\CmdDebugger.cpp">
+      <Filter>Engine\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Commands\Command.cpp">
+      <Filter>Engine\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Commands\CommandLine.cpp">
+      <Filter>Engine\Commands</Filter>
+    </ClCompile>
     <ClCompile Include="src\Engine\Engine.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Initialization\Initializer.cpp">
       <Filter>Engine\Initialization</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Networking\InputMemoryStream.cpp">
+      <Filter>Engine\Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Networking\OutputMemoryStream.cpp">
+      <Filter>Engine\Networking</Filter>
+    </ClCompile>
     <ClCompile Include="src\Engine\Networking\SocketAddress.cpp">
       <Filter>Engine\Networking</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Networking\SocketUtil.cpp">
+      <Filter>Engine\Networking</Filter>
+    </ClCompile>
     <ClCompile Include="src\Engine\Networking\TCPsocket.cpp">
+      <Filter>Engine\Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Networking\UDPsocket.cpp">
       <Filter>Engine\Networking</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Renderer\GLState.cpp">
@@ -1072,6 +1120,9 @@
     <ClCompile Include="src\Graphics\Resources\ResourceManager.cpp">
       <Filter>Graphics\Resources</Filter>
     </ClCompile>
+    <ClCompile Include="src\Graphics\Resources\ResourcePack.cpp">
+      <Filter>Graphics\Resources</Filter>
+    </ClCompile>
     <ClCompile Include="src\Graphics\Resources\Shaders\Compiler\ShaderCompiler.cpp">
       <Filter>Graphics\Resources\Shaders\Compiler</Filter>
     </ClCompile>
@@ -1104,13 +1155,6 @@
     </ClCompile>
     <ClCompile Include="src\Logging.cpp" />
     <ClCompile Include="src\Types.cpp" />
-    <ClCompile Include="src\Engine\Networking\UDPsocket.cpp" />
-    <ClCompile Include="src\Engine\Networking\InputMemoryStream.cpp" />
-    <ClCompile Include="src\Engine\Networking\OutputMemoryStream.cpp" />
-    <ClCompile Include="src\Engine\Commands\Command.cpp" />
-    <ClCompile Include="src\Engine\Commands\CommandLine.cpp" />
-    <ClCompile Include="src\Engine\Commands\CmdDebugger.cpp" />
-    <ClCompile Include="src\Graphics\Resources\ResourcePack.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Graphics\Resources\Shaders\Source\DefaultColor_f.glsl">

@@ -26,6 +26,8 @@ namespace Bolt
 		int RecvFrom(void* buffer, uint length, SocketAddress* outAddress);
 		int Close();
 
+		friend class SocketUtil;
+
 	};
 
 }

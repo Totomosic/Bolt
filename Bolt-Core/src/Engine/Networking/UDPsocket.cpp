@@ -48,10 +48,10 @@ namespace Bolt
 		if (err != NO_ERROR)
 		{
 			int errorCode = WSAGetLastError();
-			BLT_CORE_ERROR("Socket Error: " + std::to_string(errorCode));
-			return -errorCode;
+			BLT_CORE_ERROR("Socket Bind Error: " + std::to_string(errorCode));
+			return errorCode;
 		}
-		return NO_ERROR;
+		return err;
 	}
 
 	int UDPsocket::SendTo(const SocketAddress& address, const void* data, uint length)
@@ -61,7 +61,7 @@ namespace Bolt
 		if (bytes < 0)
 		{
 			int errorCode = WSAGetLastError();
-			BLT_CORE_ERROR("Socket Error: " + std::to_string(errorCode));
+			BLT_CORE_ERROR("Socket Send Error: " + std::to_string(errorCode));
 			return -errorCode;
 		}
 		return bytes;
@@ -71,22 +71,22 @@ namespace Bolt
 	{
 		BLT_ASSERT(IsValid(), "Cannot RecvFrom invalid Socket");
 		SocketAddress outAddr;
-		int fromLength;
+		int fromLength = outAddr.GetSize();
 		int bytes = recvfrom(m_Socket, (char*)buffer, length, 0, (outAddress == nullptr) ? &outAddr.m_SockAddr : &outAddress->m_SockAddr, &fromLength);
-		BLT_ASSERT(fromLength == outAddr.GetSize(), "Size mismatch error");
 		if (bytes < 0)
 		{
 			int errorCode = WSAGetLastError();
-			BLT_CORE_ERROR("Socket Error: " + std::to_string(errorCode));
+			BLT_CORE_ERROR("Socket Recv Error: " + std::to_string(errorCode));
 			return -errorCode;
 		}
+		BLT_ASSERT(fromLength == outAddr.GetSize(), "Size mismatch error");
 		return bytes;
 	}
 
 	int UDPsocket::Close()
 	{
 		BLT_ASSERT(IsValid(), "Cannot Close invalid Socket");
-		int err = closesocket(m_Socket);
+		int err = shutdown(m_Socket, SD_BOTH);
 		m_Socket = INVALID_SOCKET;
 		if (err != NO_ERROR)
 		{

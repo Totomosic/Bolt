@@ -4,16 +4,95 @@
     <Filter Include="Camera">
       <UniqueIdentifier>{CE7141AB-BA13-6C81-A3CE-7FD58F0FF3D1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Entities">
+      <UniqueIdentifier>{8AA33B53-7670-965E-9F89-84068BB5CBEC}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map">
+      <UniqueIdentifier>{6307880B-CF10-887C-588C-9E7CC494937C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Networking">
+      <UniqueIdentifier>{6D615D47-5919-9F94-C220-78F0AEF73985}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Camera\PlayerCamera.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Entities\CharacterAnimator.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Entities\NPCController.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Entities\PlayerController.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Entities\TileMotion.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Entities\TileTransform.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Events.h" />
+    <ClInclude Include="src\GameManager.h" />
+    <ClInclude Include="src\Map\Tilemap.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Map\TilemapLayer.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Networking\Deserialization.h">
+      <Filter>Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Networking\NetworkManager.h">
+      <Filter>Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Networking\NetworkServer.h">
+      <Filter>Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Networking\Packets.h">
+      <Filter>Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Networking\Serialization.h">
+      <Filter>Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bltpch.h" />
+    <ClInclude Include="src\Networking\NetworkIdentity.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\App.cpp" />
-    <ClCompile Include="src\Map\TilemapLayer.cpp" />
-    <ClCompile Include="src\Map\Tilemap.cpp" />
+    <ClCompile Include="src\Camera\PlayerCamera.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Entities\CharacterAnimator.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Entities\NPCController.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Entities\PlayerController.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Entities\TileMotion.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Entities\TileTransform.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
     <ClCompile Include="src\GameManager.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\Map\TilemapLayer.h" />
-    <ClInclude Include="src\Map\Tilemap.h" />
-    <ClInclude Include="src\GameManager.h" />
+    <ClCompile Include="src\Map\Tilemap.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Map\TilemapLayer.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Networking\NetworkManager.cpp">
+      <Filter>Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Networking\NetworkServer.cpp">
+      <Filter>Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bltpch.cpp" />
+    <ClCompile Include="src\Networking\NetworkIdentity.cpp" />
   </ItemGroup>
 </Project>

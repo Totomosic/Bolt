@@ -133,6 +133,7 @@
     <ClInclude Include="src\Core\Events\Event.h" />
     <ClInclude Include="src\Core\Events\EventDispatcher.h" />
     <ClInclude Include="src\Core\Events\EventManager.h" />
+    <ClInclude Include="src\Core\Events\EventQueue.h" />
     <ClInclude Include="src\Core\Events\Events.h" />
     <ClInclude Include="src\Core\Events\IdManager.h" />
     <ClInclude Include="src\Core\Events\__Events__.h" />
@@ -190,6 +191,7 @@
     <ClInclude Include="src\Engine\Networking\Networking.h" />
     <ClInclude Include="src\Engine\Networking\OutputMemoryStream.h" />
     <ClInclude Include="src\Engine\Networking\SocketAddress.h" />
+    <ClInclude Include="src\Engine\Networking\SocketUtil.h" />
     <ClInclude Include="src\Engine\Networking\TCPsocket.h" />
     <ClInclude Include="src\Engine\Networking\UDPsocket.h" />
     <ClInclude Include="src\Engine\Networking\__Networking__.h" />
@@ -374,6 +376,7 @@
     <ClCompile Include="src\Engine\Networking\InputMemoryStream.cpp" />
     <ClCompile Include="src\Engine\Networking\OutputMemoryStream.cpp" />
     <ClCompile Include="src\Engine\Networking\SocketAddress.cpp" />
+    <ClCompile Include="src\Engine\Networking\SocketUtil.cpp" />
     <ClCompile Include="src\Engine\Networking\TCPsocket.cpp" />
     <ClCompile Include="src\Engine\Networking\UDPsocket.cpp" />
     <ClCompile Include="src\Engine\Renderer\GLState.cpp" />
@@ -490,4 +493,4 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
-</Project>
+</Project> 
