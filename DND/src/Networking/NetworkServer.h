@@ -26,6 +26,8 @@ namespace DND
 		EventDispatcher<ReceivedPacketEvent> OnIntroductionPacket;
 		EventDispatcher<ReceivedPacketEvent> OnDisconnectPacket;
 
+		EventDispatcher<ReceivedPacketEvent> OnPlayerMovePacket;
+
 	private:
 		bool m_IsRunning;
 		SocketAddress m_Address;

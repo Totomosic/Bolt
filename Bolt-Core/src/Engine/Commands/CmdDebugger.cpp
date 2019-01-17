@@ -39,7 +39,7 @@ namespace Bolt
 		listenerThread.detach();
 	}
 
-	const CommandLine& CmdDebugger::CmdLine()
+	CommandLine& CmdDebugger::CmdLine()
 	{
 		return s_CommandLine;
 	}

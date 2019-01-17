@@ -14,11 +14,13 @@
 namespace DND
 {
 
-	int PORT = 12345;
 
 	class DndClient : public Application
 	{
 	public:
+		int PORT = 12345;
+		int TARGET_PORT = 12345;
+
 		id_t wizardCharacterPrefabId;
 
 	public:
@@ -37,6 +39,22 @@ namespace DND
 			CreateCharacterScene(characterScene, resources);
 			CreateServerScene(serverScene, resources, gameScene);
 			CreateGameScene(gameScene, resources);
+
+			Command setPortCommand("setport", [this](const Command::CommandArgList& args)
+			{
+				PORT = std::stoi(args[0].c_str());
+				BLT_CORE_INFO("PORT set to {}", PORT);
+			});
+			setPortCommand.AddArgument("port", CommandArgType::Int, false);
+			CmdDebugger::CmdLine().AddCommand(setPortCommand);
+
+			Command targetPortCommand("targetport", [this](const Command::CommandArgList& args)
+			{
+				TARGET_PORT = std::stoi(args[0].c_str());
+				BLT_CORE_INFO("TARGET PORT set to {}", TARGET_PORT);
+			});
+			targetPortCommand.AddArgument("port", CommandArgType::Int, false);
+			CmdDebugger::CmdLine().AddCommand(targetPortCommand);
 
 			RenderSchedule titleSchedule(titleScene);
 			titleSchedule.AddRenderProcess(RenderProcess());
@@ -91,7 +109,7 @@ namespace DND
 			hostButton.Text("Host");
 			hostButton.EventHandler().OnClicked.Subscribe([this, resources, &gameScene](id_t listenerId, UIClickedEvent& e)
 			{
-				GameManager::Get().Network().Server().SetAddress(SocketAddress("localhost", 12345));
+				GameManager::Get().Network().Server().SetAddress(SocketAddress("localhost", PORT));
 				WelcomePacket packet = GameManager::Get().Network().Host();				
 				SceneManager::SetCurrentScene(gameScene);
 				GameManager::Get().Network().Initialize(packet);
@@ -103,8 +121,8 @@ namespace DND
 			joinButton.Text("Join");
 			joinButton.EventHandler().OnClicked.Subscribe([this, &gameScene](id_t listenerId, UIClickedEvent& e)
 			{
-				GameManager::Get().Network().Server().SetAddress(SocketAddress("localhost", 12345 + 1));
-				GameManager::Get().Network().Connect(SocketAddress("localhost", 12345), [this, &gameScene](WelcomePacket packet)
+				GameManager::Get().Network().Server().SetAddress(SocketAddress("localhost", PORT));
+				GameManager::Get().Network().Connect(SocketAddress("localhost", TARGET_PORT), [this, &gameScene](WelcomePacket packet)
 				{
 					SceneManager::SetCurrentScene(gameScene);
 					GameManager::Get().Network().Initialize(packet);
@@ -207,8 +225,16 @@ namespace DND
 				GameManager::Get().Network().Server().SendPacket(player.Address, intro);
 				GameObject* newPlayer = GameManager::Get().Network().Factory().Instantiate(GameManager::Get().Network().Factory().GetPrefab(player.Character.CharacterPrefabId));
 				GameManager::Get().Network().IdentifyObject(newPlayer, player.Character.NetworkId, player.PlayerId);
+				GameManager::Get().Network().MakeNetworkObject(newPlayer);
 				newPlayer->Components().GetComponent<TileTransform>().SetCurrentTile(player.Character.CurrentTile, true);
 				maxNetworkId = std::max(maxNetworkId, player.Character.NetworkId);
+
+				NetworkPlayerInfo pl;
+				pl.Address = player.Address;
+				pl.PlayerId = player.PlayerId;
+				pl.PrefabId = player.Character.CharacterPrefabId;
+				pl.Player = newPlayer;
+				GameManager::Get().Network().AddOtherPlayer(pl);
 			}
 
 			GameManager::Get().Network().SetNextAvailableNetworkId(maxNetworkId + 1);

@@ -1,13 +1,14 @@
 #include "bltpch.h"
 #include "NetworkManager.h"
 #include "../Entities/TileTransform.h"
+#include "NetworkController.h"
 #include "NetworkIdentity.h"
 
 namespace DND
 {
 
 	NetworkManager::NetworkManager()
-		: m_NetworkIdManager(0, GameObject::InvalidID), m_PlayerIdManager(0, GameObject::InvalidID), m_Player(), m_OtherPlayers(), m_Factory(), m_Server()
+		: m_NetworkIdManager(0, GameObject::InvalidID), m_PlayerIdManager(0, GameObject::InvalidID), m_Player(), m_OtherPlayers(), m_Factory(), m_NetworkObjects(), m_Server()
 	{
 	
 	}
@@ -22,20 +23,23 @@ namespace DND
 		return m_Factory;
 	}
 
+	GameObject* NetworkManager::GetObjectByNetworkId(id_t networkId) const
+	{
+		return m_NetworkObjects.at(networkId);
+	}
+
 	WelcomePacket NetworkManager::Host()
 	{
 		WelcomePacket result;
 		result.NetworkId = m_NetworkIdManager.GetNextId();
 		result.PlayerId = m_PlayerIdManager.GetNextId();
 		m_Server.Initialize(true);
-		BLT_CORE_INFO("SERVER STARTED AT {}", m_Server.Address().ToString());
 		return result;
 	}
 
 	void NetworkManager::Connect(const SocketAddress& address, const NetworkManager::ConnectedCallback& callback)
 	{
 		m_Server.Initialize(true);
-		BLT_CORE_INFO("SERVER STARTED AT {}", m_Server.Address().ToString());
 		m_Server.OnWelcomePacket.Clear();
 		m_Server.OnWelcomePacket.Subscribe([callback, this](id_t listenerId, ReceivedPacketEvent& e)
 		{
@@ -82,6 +86,48 @@ namespace DND
 			e.Server->SendPacket(e.FromAddress, result);
 			return true;
 		});
+
+		m_Server.OnIntroductionPacket.Clear();
+		m_Server.OnIntroductionPacket.Subscribe([this](id_t listenerId, ReceivedPacketEvent& e)
+		{
+			BLT_CORE_INFO("RECEIVED INTRODUCTION PACKET");
+			IntroductionPacket packet;
+			Deserialize(e.Packet, packet);
+			GameObject* newPlayer = Factory().Instantiate(Factory().GetPrefab(packet.Character.CharacterPrefabId));
+			IdentifyObject(newPlayer, packet.Character.NetworkId, packet.PlayerId);
+			MakeNetworkObject(newPlayer);
+			newPlayer->Components().GetComponent<TileTransform>().SetCurrentTile(packet.Character.CurrentTile, true);
+
+			NetworkPlayerInfo pl;
+			pl.Address = e.FromAddress;
+			pl.PlayerId = packet.PlayerId;
+			pl.PrefabId = packet.Character.CharacterPrefabId;
+			pl.Player = newPlayer;
+			AddOtherPlayer(pl);
+
+			SetNextAvailableNetworkId(packet.Character.NetworkId);
+			return true;
+		});
+
+		m_Server.OnDisconnectPacket.Clear();
+		m_Server.OnDisconnectPacket.Subscribe([this](id_t listenerId, ReceivedPacketEvent& e)
+		{
+			BLT_CORE_INFO("RECEIVED DISCONNECT PACKET");
+			DisconnectPlayer(e.FromAddress);
+			return true;
+		});
+
+		m_Server.OnPlayerMovePacket.Clear();
+		m_Server.OnPlayerMovePacket.Subscribe([this](id_t listenerId, ReceivedPacketEvent& e)
+		{
+			BLT_CORE_INFO("RECEIVED PLAYER MOVE PACKET");
+			PlayerMovePacket packet;
+			Deserialize(e.Packet, packet);
+			GameObject* obj = GetObjectByNetworkId(packet.NetworkId);
+			obj->Components().GetComponent<NetworkController>().OnPlayerMovePacket(packet);
+			return true;
+		});
+
 	}
 
 	id_t NetworkManager::GetNextNetworkId() const
@@ -107,11 +153,28 @@ namespace DND
 	void NetworkManager::IdentifyObject(GameObject* object, id_t networkId, id_t playerId)
 	{
 		object->Components().AddComponent<NetworkIdentity>(networkId, playerId);
+		m_NetworkObjects[networkId] = object;
+	}
+
+	void NetworkManager::MakeNetworkObject(GameObject* object)
+	{
+		object->Components().AddComponent<NetworkController>();
 	}
 
 	void NetworkManager::SetNextAvailableNetworkId(id_t id)
 	{
 		m_NetworkIdManager.SetNextAvailableId(id);
+	}
+
+	void NetworkManager::AddOtherPlayer(const NetworkPlayerInfo& player)
+	{
+		m_OtherPlayers[player.Address] = player;
+	}
+
+	void NetworkManager::DisconnectPlayer(const SocketAddress& address)
+	{
+		Destroy(m_OtherPlayers[address].Player);
+		m_OtherPlayers.erase(address);
 	}
 
 }

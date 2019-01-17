@@ -1,5 +1,7 @@
 #include "bltpch.h"
 #include "TileMotion.h"
+#include "../GameManager.h"
+#include "../Networking/NetworkIdentity.h"
 
 namespace DND
 {

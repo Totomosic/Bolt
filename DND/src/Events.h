@@ -12,6 +12,8 @@ namespace DND
 	constexpr int SERVER_RECEIVED_INTRODUCTION_PACKET_EVENT = USER_EVENT_ID + 3;
 	constexpr int SERVER_RECEIVED_DISCONNECT_PACKET_EVENT = USER_EVENT_ID + 4;
 
+	constexpr int SERVER_RECEIVED_PLAYER_MOVE_PACKET_EVENT = USER_EVENT_ID + 5;
+
 	class ReceivedPacketEvent : public Event
 	{
 	public:

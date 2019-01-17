@@ -58,6 +58,7 @@
     </ClInclude>
     <ClInclude Include="src\bltpch.h" />
     <ClInclude Include="src\Networking\NetworkIdentity.h" />
+    <ClInclude Include="src\Networking\NetworkController.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\App.cpp" />
@@ -94,5 +95,6 @@
     </ClCompile>
     <ClCompile Include="src\bltpch.cpp" />
     <ClCompile Include="src\Networking\NetworkIdentity.cpp" />
+    <ClCompile Include="src\Networking\NetworkController.cpp" />
   </ItemGroup>
 </Project>

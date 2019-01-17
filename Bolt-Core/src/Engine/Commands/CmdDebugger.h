@@ -19,7 +19,7 @@ namespace Bolt
 	public:
 		static void Initialize();
 
-		static const CommandLine& CmdLine();
+		static CommandLine& CmdLine();
 
 	private:
 		static void CreateCommands();

@@ -27,6 +27,7 @@ namespace DND
 		NetworkPlayerInfo m_Player;
 		std::unordered_map<SocketAddress, NetworkPlayerInfo> m_OtherPlayers;
 		ObjectFactory m_Factory;
+		std::unordered_map<id_t, GameObject*> m_NetworkObjects;
 
 		NetworkServer m_Server;
 
@@ -35,6 +36,7 @@ namespace DND
 
 		NetworkServer& Server();
 		ObjectFactory& Factory();
+		GameObject* GetObjectByNetworkId(id_t networkId) const;
 
 		WelcomePacket Host();
 		void Connect(const SocketAddress& address, const ConnectedCallback& callback);
@@ -45,7 +47,20 @@ namespace DND
 		void SetPlayerPrefab(id_t prefabId);
 		void SetPlayer(GameObject* player);
 		void IdentifyObject(GameObject* object, id_t networkId, id_t playerId);
+		void MakeNetworkObject(GameObject* object);
 		void SetNextAvailableNetworkId(id_t id);
+		void AddOtherPlayer(const NetworkPlayerInfo& player);
+
+		void DisconnectPlayer(const SocketAddress& address);
+
+		template<typename T>
+		void SendPacketToAll(const T& packet)
+		{
+			for (auto& pair : m_OtherPlayers)
+			{
+				Server().SendPacket(pair.second.Address, packet);
+			}
+		}
 
 	};
 
