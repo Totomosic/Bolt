@@ -1,5 +1,7 @@
 #include "bltpch.h"
 #include "PlayerController.h"
+#include "../GameManager.h"
+#include "../Networking/NetworkIdentity.h"
 
 namespace DND
 {
@@ -16,21 +18,34 @@ namespace DND
 		TileMotion& m = gameObject()->Components().GetComponent<TileMotion>();
 		if (!m.IsMoving())
 		{
+			Tile moveToTile = Tile(-1, -1);
 			if (Input::KeyDown(m_Up))
 			{
-				m.SetTargetTile(t.CurrentTile() + Tile(0, 1));
+				moveToTile = t.CurrentTile() + Tile(0, 1);
+				m.SetTargetTile(moveToTile);
 			}
 			else if (Input::KeyDown(m_Down))
 			{
-				m.SetTargetTile(t.CurrentTile() + Tile(0, -1));
+				moveToTile = t.CurrentTile() + Tile(0, -1);
+				m.SetTargetTile(moveToTile);
 			}
 			else if (Input::KeyDown(m_Left))
 			{
-				m.SetTargetTile(t.CurrentTile() + Tile(-1, 0));
+				moveToTile = t.CurrentTile() + Tile(-1, 0);
+				m.SetTargetTile(moveToTile);
 			}
 			else if (Input::KeyDown(m_Right))
 			{
-				m.SetTargetTile(t.CurrentTile() + Tile(1, 0));
+				moveToTile = t.CurrentTile() + Tile(1, 0);
+				m.SetTargetTile(moveToTile);
+			}
+
+			if (moveToTile.x >= 0 && moveToTile.y >= 0)
+			{
+				PlayerMovePacket packet;
+				packet.NetworkId = gameObject()->Components().GetComponent<NetworkIdentity>().NetworkId;
+				packet.MoveToTile = moveToTile;
+				GameManager::Get().Network().SendPacketToAll(packet);
 			}
 		}
 	}

@@ -11,8 +11,6 @@ namespace DND
 	constexpr int TILE_WIDTH = 40;
 	constexpr int TILE_HEIGHT = 40;
 
-	extern int PORT;
-
 	class GameManager
 	{
 	private:

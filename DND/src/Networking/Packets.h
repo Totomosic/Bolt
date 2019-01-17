@@ -72,6 +72,13 @@ namespace DND
 
 	};
 
+	struct PlayerMovePacket
+	{
+	public:
+		id_t NetworkId;
+		Tile MoveToTile;
+	};
+
 	template<typename T>
 	inline PacketType TypeOfPacket()
 	{
@@ -98,6 +105,11 @@ namespace DND
 	inline PacketType TypeOfPacket<DisconnectPacket>()
 	{
 		return PacketType::Disconnect;
+	}
+	template<>
+	inline PacketType TypeOfPacket<PlayerMovePacket>()
+	{
+		return PacketType::PlayerMove;
 	}
 
 	template<>
@@ -180,6 +192,19 @@ namespace DND
 	inline void Deserialize(InputMemoryStream& stream, DisconnectPacket& outValue)
 	{
 
+	}
+
+	template<>
+	inline void Serialize(OutputMemoryStream& stream, const PlayerMovePacket& value)
+	{
+		Serialize(stream, value.NetworkId);
+		Serialize(stream, value.MoveToTile);
+	}
+	template<>
+	inline void Deserialize(InputMemoryStream& stream, PlayerMovePacket& outValue)
+	{
+		Deserialize(stream, outValue.NetworkId);
+		Deserialize(stream, outValue.MoveToTile);
 	}
 
 }

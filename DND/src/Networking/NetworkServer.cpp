@@ -17,21 +17,12 @@ namespace DND
 
 	bool PacketValidator::ValidateIncomingPacketId(id_t id)
 	{
-		if (id == 0)
-		{
-			m_CurrentPacketId = 1;
-			return true;
-		}
-		if (id == m_CurrentPacketId)
-		{
-			m_CurrentPacketId = id + 1;
-			return true;
-		}
-		return false;
+		return true;
 	}
 
 	NetworkServer::NetworkServer()
 		: OnHelloPacket(SERVER_RECEIVED_HELLO_PACKET_EVENT), OnWelcomePacket(SERVER_RECEIVED_WELCOME_PACKET_EVENT), OnIntroductionPacket(SERVER_RECEIVED_INTRODUCTION_PACKET_EVENT), OnDisconnectPacket(SERVER_RECEIVED_DISCONNECT_PACKET_EVENT),
+		OnPlayerMovePacket(SERVER_RECEIVED_PLAYER_MOVE_PACKET_EVENT),
 		m_IsRunning(true), m_Address(), m_Socket(), m_Validators()
 	{
 		
@@ -52,6 +43,7 @@ namespace DND
 		m_IsRunning = true;
 		if (runListenThread)
 		{
+			BLT_CORE_WARN("STARTED LISTENING ON {}", Address().ToString());
 			RunListenThread();
 		}
 	}
@@ -88,7 +80,7 @@ namespace DND
 						{
 							SendPacket(pair.first, packet);
 						}
-						BLT_CORE_ERROR("LISTENING THREAD TERMINATED");
+						BLT_CORE_WARN("LISTENING THREAD TERMINATED");
 						break;
 					}
 
@@ -107,13 +99,12 @@ namespace DND
 
 					if (pType == PacketType::Disconnect)
 					{
-						BLT_CORE_INFO("{} disconnected...", addr.ToString());
 						m_Validators.erase(addr);
 					}
 				}
 				else
 				{
-					BLT_CORE_FATAL("INVALID PACKET RECEIVED");
+					BLT_CORE_WARN("INVALID PACKET RECEIVED, STOPPING LISTENING");
 					break;
 				}
 			}
@@ -149,6 +140,8 @@ namespace DND
 			return OnIntroductionPacket;
 		case PacketType::Disconnect:
 			return OnDisconnectPacket;
+		case PacketType::PlayerMove:
+			return OnPlayerMovePacket;
 		}
 		BLT_ASSERT(false, "Unable to find dispatcher for type");
 		return *(EventDispatcher<ReceivedPacketEvent>*)nullptr;
