@@ -20,6 +20,8 @@ namespace DND
 	public:
 		int PORT = 12345;
 		int TARGET_PORT = 12345;
+		blt::string ADDRESS = "localhost";
+		blt::string TARGET_ADDRESS = "localhost";
 
 		id_t wizardCharacterPrefabId;
 
@@ -55,6 +57,22 @@ namespace DND
 			});
 			targetPortCommand.AddArgument("port", CommandArgType::Int, false);
 			CmdDebugger::CmdLine().AddCommand(targetPortCommand);
+
+			Command setAddressCommand("setaddr", [this](const Command::CommandArgList& args)
+			{
+				ADDRESS = args[0];
+				BLT_CORE_INFO("ADDRESS set to {}", ADDRESS);
+			});
+			setAddressCommand.AddArgument("addr", CommandArgType::String, false);
+			CmdDebugger::CmdLine().AddCommand(setAddressCommand);
+
+			Command setTargetAddressCommand("targetaddr", [this](const Command::CommandArgList& args)
+			{
+				TARGET_ADDRESS = args[0];
+				BLT_CORE_INFO("TARGET ADDRESS set to {}", TARGET_ADDRESS);
+			});
+			setTargetAddressCommand.AddArgument("addr", CommandArgType::String, false);
+			CmdDebugger::CmdLine().AddCommand(setTargetAddressCommand);
 
 			RenderSchedule titleSchedule(titleScene);
 			titleSchedule.AddRenderProcess(RenderProcess());
@@ -109,7 +127,7 @@ namespace DND
 			hostButton.Text("Host");
 			hostButton.EventHandler().OnClicked.Subscribe([this, resources, &gameScene](id_t listenerId, UIClickedEvent& e)
 			{
-				GameManager::Get().Network().Server().SetAddress(SocketAddress("localhost", PORT));
+				GameManager::Get().Network().Server().SetAddress(SocketAddress(ADDRESS, PORT));
 				WelcomePacket packet = GameManager::Get().Network().Host();				
 				SceneManager::SetCurrentScene(gameScene);
 				GameManager::Get().Network().Initialize(packet);
@@ -121,8 +139,8 @@ namespace DND
 			joinButton.Text("Join");
 			joinButton.EventHandler().OnClicked.Subscribe([this, &gameScene](id_t listenerId, UIClickedEvent& e)
 			{
-				GameManager::Get().Network().Server().SetAddress(SocketAddress("localhost", PORT));
-				GameManager::Get().Network().Connect(SocketAddress("localhost", TARGET_PORT), [this, &gameScene](WelcomePacket packet)
+				GameManager::Get().Network().Server().SetAddress(SocketAddress(ADDRESS, PORT));
+				GameManager::Get().Network().Connect(SocketAddress(TARGET_ADDRESS, TARGET_PORT), [this, &gameScene](WelcomePacket packet)
 				{
 					SceneManager::SetCurrentScene(gameScene);
 					GameManager::Get().Network().Initialize(packet);
