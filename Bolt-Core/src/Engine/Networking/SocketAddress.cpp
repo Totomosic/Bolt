@@ -75,7 +75,7 @@ namespace Bolt
 		uint16_t port = ntohs(s->sin_port);
 		uint32_t addr = (GetAsSockAddrIn()->sin_addr.S_un.S_addr);
 		char* bytes = (char*)&addr;
-		return "SocketAddress(" + std::to_string((int)bytes[0]) + "." + std::to_string((int)bytes[1]) + "." + std::to_string((int)bytes[2]) + "." + std::to_string((int)bytes[3]) + ":" + std::to_string(port) + ")";
+		return std::to_string((int)bytes[0]) + "." + std::to_string((int)bytes[1]) + "." + std::to_string((int)bytes[2]) + "." + std::to_string((int)bytes[3]) + ":" + std::to_string(port);
 	}
 
 	bool SocketAddress::operator==(const SocketAddress& other) const

@@ -31,7 +31,7 @@ namespace Bolt
 		Time::Update();
 		BLT_CORE_INFO("Init took " + std::to_string(Time::RenderingTimeline().CurrentRealTime()) + " seconds");
 		Time::Reset();
-		m_TickTimer = Time::CreateTimer(1.0, std::bind(&Application::Tick, this));
+		m_TickTimer = &Time::RenderingTimeline().AddTimer(1.0, std::bind(&Application::Tick, this));
 	}
 
 	void Application::Init()

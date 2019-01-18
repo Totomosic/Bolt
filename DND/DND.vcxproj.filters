@@ -59,6 +59,20 @@
     <ClInclude Include="src\bltpch.h" />
     <ClInclude Include="src\Networking\NetworkIdentity.h" />
     <ClInclude Include="src\Networking\NetworkController.h" />
+    <ClInclude Include="src\Scenes\CharacterScene.h" />
+    <ClInclude Include="src\Scenes\TitleScene.h" />
+    <ClInclude Include="src\Scenes\ServerScene.h" />
+    <ClInclude Include="src\Scenes\GameScene.h" />
+    <ClInclude Include="src\App.h" />
+    <ClInclude Include="src\Spells\SpellList.h" />
+    <ClInclude Include="src\Spells\SpellInfo.h" />
+    <ClInclude Include="src\Spells\SpellCaster.h" />
+    <ClInclude Include="src\Spells\BasicSpells.h" />
+    <ClInclude Include="src\Entities\Characters\CharacterStats.h" />
+    <ClInclude Include="src\Scenes\CharPrefabs.h" />
+    <ClInclude Include="src\PrefabList.h" />
+    <ClInclude Include="src\Entities\Healthbar.h" />
+    <ClInclude Include="src\Spells\Animators\FireballAnimator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\App.cpp" />
@@ -96,5 +110,16 @@
     <ClCompile Include="src\bltpch.cpp" />
     <ClCompile Include="src\Networking\NetworkIdentity.cpp" />
     <ClCompile Include="src\Networking\NetworkController.cpp" />
+    <ClCompile Include="src\Scenes\CharacterScene.cpp" />
+    <ClCompile Include="src\Scenes\GameScene.cpp" />
+    <ClCompile Include="src\Scenes\ServerScene.cpp" />
+    <ClCompile Include="src\Scenes\TitleScene.cpp" />
+    <ClCompile Include="src\Spells\SpellList.cpp" />
+    <ClCompile Include="src\Spells\SpellCaster.cpp" />
+    <ClCompile Include="src\Spells\BasicSpells.cpp" />
+    <ClCompile Include="src\Entities\Characters\CharacterStats.cpp" />
+    <ClCompile Include="src\Scenes\CharPrefabs.cpp" />
+    <ClCompile Include="src\Entities\Healthbar.cpp" />
+    <ClCompile Include="src\Spells\Animators\FireballAnimator.cpp" />
   </ItemGroup>
 </Project>

@@ -106,7 +106,7 @@ namespace Bolt
 
 	void Layer::Update()
 	{
-		const std::vector<GameObject*>& objects = m_GameObjects.GetAllGameObjects();
+		std::vector<GameObject*> objects = m_GameObjects.GetAllGameObjects();
 		for (GameObject* object : objects)
 		{
 			object->Update();

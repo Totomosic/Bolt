@@ -7,7 +7,7 @@ namespace Bolt
 	class BLT_API Application
 	{
 	private:
-		id_t m_TickTimer;
+		Timer* m_TickTimer;
 
 	public:
 		std::unique_ptr<Window> AppWindow;

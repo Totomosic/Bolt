@@ -22,8 +22,8 @@ namespace DND
 
 	NetworkServer::NetworkServer()
 		: OnHelloPacket(SERVER_RECEIVED_HELLO_PACKET_EVENT), OnWelcomePacket(SERVER_RECEIVED_WELCOME_PACKET_EVENT), OnIntroductionPacket(SERVER_RECEIVED_INTRODUCTION_PACKET_EVENT), OnDisconnectPacket(SERVER_RECEIVED_DISCONNECT_PACKET_EVENT),
-		OnPlayerMovePacket(SERVER_RECEIVED_PLAYER_MOVE_PACKET_EVENT),
-		m_IsRunning(true), m_Address(), m_Socket(), m_Validators()
+		OnPlayerMovePacket(SERVER_RECEIVED_PLAYER_MOVE_PACKET_EVENT), OnCastSpellPacket(SERVER_RECEIVED_CAST_SPELL_PACKET_EVENT), OnStatUpdatePacket(SERVER_RECEIVED_STAT_PACKET_EVENT), OnDeathPacket(SERVER_RECEIVED_DEATH_PACKET_EVENT),
+		m_IsRunning(false), m_Address(), m_Socket(), m_Validators()
 	{
 		
 	}
@@ -32,6 +32,7 @@ namespace DND
 	{
 		if (m_Address != address)
 		{
+			m_Socket = UDPsocket();
 			m_Address = address;
 			m_Socket.Bind(m_Address);
 		}
@@ -50,8 +51,13 @@ namespace DND
 
 	void NetworkServer::Terminate()
 	{
+		if (m_IsRunning)
+		{
+			StopListeningThread();
+		}
 		m_IsRunning = false;
-		StopListeningThread();
+		m_Socket = UDPsocket();
+		m_Address = SocketAddress();
 	}
 
 	void NetworkServer::RunListenThread()
@@ -142,6 +148,12 @@ namespace DND
 			return OnDisconnectPacket;
 		case PacketType::PlayerMove:
 			return OnPlayerMovePacket;
+		case PacketType::CastSpell:
+			return OnCastSpellPacket;
+		case PacketType::StatUpdate:
+			return OnStatUpdatePacket;
+		case PacketType::Death:
+			return OnDeathPacket;
 		}
 		BLT_ASSERT(false, "Unable to find dispatcher for type");
 		return *(EventDispatcher<ReceivedPacketEvent>*)nullptr;

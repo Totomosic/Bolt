@@ -1,6 +1,8 @@
 #include "bltpch.h"
 #include "GameManager.h"
 
+#include "Camera/PlayerCamera.h"
+
 namespace DND
 {
 
@@ -22,9 +24,17 @@ namespace DND
 	}
 
 	GameManager::GameManager(Layer& layer)
-		: m_LocalCamera(nullptr), m_LocalPlayer(nullptr), m_Tilemap(layer, TILEMAP_WIDTH, TILEMAP_HEIGHT, TILE_WIDTH, TILE_HEIGHT), m_Network()
+		: m_LocalCamera(nullptr), m_LocalPlayer(nullptr), m_Tilemap(layer, TILEMAP_WIDTH, TILEMAP_HEIGHT, TILE_WIDTH, TILE_HEIGHT), m_Prefabs(), m_Network(), m_Spells()
 	{
 	
+	}
+
+	void GameManager::Exit()
+	{
+		m_LocalCamera = nullptr;
+		m_LocalPlayer = nullptr;
+		Network().Exit();
+		SceneManager::SetCurrentSceneByName("Title");
 	}
 
 	Camera* GameManager::LocalCamera() const
@@ -45,6 +55,18 @@ namespace DND
 	void GameManager::SetLocalPlayer(GameObject* player)
 	{
 		m_LocalPlayer = player;
+		Network().SetPlayer(player);
+	}
+
+	Tile GameManager::CurrentlySelectedTile() const
+	{
+		BLT_ASSERT(m_LocalCamera != nullptr, "No local camera");
+		return m_LocalCamera->Components().GetComponent<PlayerCamera>().SelectedTile();
+	}
+
+	PrefabList& GameManager::Prefabs()
+	{
+		return m_Prefabs;
 	}
 
 	Tilemap& GameManager::GetTilemap()
@@ -55,6 +77,11 @@ namespace DND
 	NetworkManager& GameManager::Network()
 	{
 		return m_Network;
+	}
+
+	SpellList& GameManager::Spells()
+	{
+		return m_Spells;
 	}
 
 }

@@ -2,6 +2,7 @@
 #include "TileMotion.h"
 #include "../GameManager.h"
 #include "../Networking/NetworkIdentity.h"
+#include "PlayerController.h"
 
 namespace DND
 {
