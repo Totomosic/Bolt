@@ -5,14 +5,8 @@
 namespace Bolt
 {
 
-	Timer::Timer(double time, RepeatMode repeat, bool start)
-		: m_Time(time), m_CurrentTime(0.0), m_Callback(), m_UseCallback(false), m_IsRunning(start), m_Repeat(repeat)
-	{
-	
-	}
-
-	Timer::Timer(double time, Timer::TimerFunc callback, RepeatMode repeat, bool start)
-		: m_Time(time), m_CurrentTime(0.0), m_Callback(std::move(callback)), m_UseCallback(true), m_IsRunning(start), m_Repeat(repeat)
+	Timer::Timer(double time, Timer::TimerFunc callback, bool start)
+		: m_Time(time), m_CurrentTime(0.0), m_Callback(std::move(callback)), m_IsRunning(start)
 	{
 	
 	}
@@ -59,15 +53,9 @@ namespace Bolt
 			m_CurrentTime += elapsedTime;
 			if (m_CurrentTime >= m_Time)
 			{
-				if (m_UseCallback)
-				{
-					m_Callback();
-				}
-				if (m_Repeat == RepeatMode::Once)
-				{
-					return true;
-				}
+				m_Callback();
 				m_CurrentTime = 0.0;
+				return true;
 			}
 		}
 		return false;

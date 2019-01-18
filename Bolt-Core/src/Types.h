@@ -11,6 +11,7 @@
 #include <bitset>
 #include <chrono>
 #include <cstdlib>
+#include <deque>
 #include <direct.h>
 #include <fstream>
 #include <functional>

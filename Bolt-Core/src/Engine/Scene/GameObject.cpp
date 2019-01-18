@@ -9,7 +9,7 @@ namespace Bolt
 	GameObject::GameObject() : ObjectPrefab(),
 		m_Id(GameObject::InvalidID), m_Parent(nullptr), m_Layer(nullptr), m_Children(), m_Tags()
 	{
-	
+		m_Components.m_IsGameObject = true;
 	}
 
 	GameObject::GameObject(GameObject&& other)
@@ -34,6 +34,7 @@ namespace Bolt
 		m_Parent = other.m_Parent;
 		other.m_Tags = tags;
 		m_Components.SetGameObject(this);
+		m_Components.m_IsGameObject = true;
 	}
 
 	GameObject& GameObject::operator=(GameObject&& other)
@@ -61,6 +62,7 @@ namespace Bolt
 		m_Components = std::move(other.m_Components);
 		other.m_Tags = tags;
 		m_Components.SetGameObject(this);
+		m_Components.m_IsGameObject = true;
 		return *this;
 	}
 
@@ -147,10 +149,10 @@ namespace Bolt
 	{
 		for (int i = 0; i < ComponentManager::MAX_COMPONENTS; i++)
 		{
-			Component* c = m_Components.m_ComponentArray[i];
+ 			Component* c = m_Components.m_ComponentArray[i];
 			if (c != nullptr)
 			{
-				c->Update();
+ 				c->Update();
 			}
 		}
 	}

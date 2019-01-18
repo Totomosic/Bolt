@@ -19,11 +19,13 @@ namespace Bolt
 		std::vector<blt::string> m_Tags;
 		Layer* m_Layer;
 
-	public:
+	protected:
 		// Do not call directly, Use GameObject::Instantiate()
 		GameObject();
 		GameObject(const GameObject& other) = delete;
 		GameObject& operator=(const GameObject& other) = delete;
+
+	public:
 		GameObject(GameObject&& other);
 		GameObject& operator=(GameObject&& other);
 		virtual ~GameObject();
@@ -49,6 +51,7 @@ namespace Bolt
 
 		friend struct ObjectCollection;
 		friend struct Layer;
+		friend class Graphics;
 
 	private:
 		void SetLayer(Layer* layer);

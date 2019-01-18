@@ -1,7 +1,10 @@
 #pragma once
 #include "bltpch.h"
+
+#include "PrefabList.h"
 #include "Map/Tilemap.h"
 #include "Networking/NetworkManager.h"
+#include "Spells/SpellList.h"
 
 namespace DND
 {
@@ -21,7 +24,9 @@ namespace DND
 		GameObject* m_LocalPlayer;
 		Tilemap m_Tilemap;
 
+		PrefabList m_Prefabs;
 		NetworkManager m_Network;
+		SpellList m_Spells;
 
 	public:
 		static GameManager& Get();
@@ -29,13 +34,19 @@ namespace DND
 
 		GameManager(Layer& layer);
 
+		void Exit();
+
 		Camera* LocalCamera() const;
 		GameObject* LocalPlayer() const;
 		void SetLocalCamera(Camera* camera);
 		void SetLocalPlayer(GameObject* player);
 
+		Tile CurrentlySelectedTile() const;
+
+		PrefabList& Prefabs();
 		Tilemap& GetTilemap();
 		NetworkManager& Network();
+		SpellList& Spells();
 
 	};
 

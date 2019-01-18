@@ -20,6 +20,8 @@ namespace DND
 	public:
 		using ConnectedCallback = std::function<void(WelcomePacket)>;
 
+		static constexpr id_t InvalidId = (id_t)-1;
+
 	private:
 		IdManager<id_t> m_NetworkIdManager;
 		IdManager<id_t> m_PlayerIdManager;
@@ -37,18 +39,23 @@ namespace DND
 		NetworkServer& Server();
 		ObjectFactory& Factory();
 		GameObject* GetObjectByNetworkId(id_t networkId) const;
+		NetworkPlayerInfo& GetPlayerById(id_t playerId);
 
 		WelcomePacket Host();
 		void Connect(const SocketAddress& address, const ConnectedCallback& callback);
 		void Initialize(const WelcomePacket& initInfo);
+		void Exit();
+		void SetAddress(const SocketAddress& address);
 
 		id_t GetNextNetworkId() const;
+		id_t GetNextPlayerId() const;
 		void SetPlayerId(id_t playerId);
 		void SetPlayerPrefab(id_t prefabId);
 		void SetPlayer(GameObject* player);
 		void IdentifyObject(GameObject* object, id_t networkId, id_t playerId);
-		void MakeNetworkObject(GameObject* object);
+		void MakeNetworkPlayer(GameObject* player);
 		void SetNextAvailableNetworkId(id_t id);
+		void SetNextAvailablePlayerId(id_t id);
 		void AddOtherPlayer(const NetworkPlayerInfo& player);
 
 		void DisconnectPlayer(const SocketAddress& address);

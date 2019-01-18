@@ -5,7 +5,7 @@ namespace Bolt
 {
 
 	Timeline::Timeline(double timeScale)
-		: m_RealCurrentTime(0.0), m_CurrentTime(0.0), m_ElapsedTime(0.0), m_TimeScale(timeScale), m_IsPaused(false)
+		: m_RealCurrentTime(0.0), m_CurrentTime(0.0), m_ElapsedTime(0.0), m_TimeScale(timeScale), m_IsPaused(false), m_Timers(), m_Functions()
 	{
 	
 	}
@@ -67,6 +67,46 @@ namespace Bolt
 		m_ElapsedTime = 0.0;
 	}
 
+	Timer& Timeline::AddTimer(double time, const Timer::TimerFunc& callback)
+	{
+		std::unique_ptr<Timer> timer = std::make_unique<Timer>(time, callback, true);
+		Timer& result = *timer;
+		m_Timers.push_back(std::move(timer));
+		return result;
+	}
+
+	void Timeline::RemoveTimer(Timer* timer)
+	{
+		for (int i = 0; i < m_Timers.size(); i++)
+		{
+			if (m_Timers[i].get() == timer)
+			{
+				m_Timers.erase(m_Timers.begin() + i);
+				break;
+			}
+		}
+	}
+
+	Timer& Timeline::AddFunction(double time, const Timer::TimerFunc& callback)
+	{
+		std::unique_ptr<Timer> timer = std::make_unique<Timer>(time, callback, true);
+		Timer& result = *timer;
+		m_Functions.push_back(std::move(timer));
+		return result;
+	}
+
+	void Timeline::RemoveFunction(Timer* function)
+	{
+		for (int i = 0; i < m_Functions.size(); i++)
+		{
+			if (m_Functions[i].get() == function)
+			{
+				m_Functions.erase(m_Functions.begin() + i);
+				break;
+			}
+		}
+	}
+
 	void Timeline::Update(double elapsedRealSeconds)
 	{
 		m_RealCurrentTime += elapsedRealSeconds;
@@ -74,6 +114,17 @@ namespace Bolt
 		{
 			m_CurrentTime += elapsedRealSeconds * m_TimeScale;
 			m_ElapsedTime = elapsedRealSeconds * m_TimeScale;
+			for (std::unique_ptr<Timer>& timer : m_Timers)
+			{
+				timer->Update(m_ElapsedTime);
+			}
+			for (int i = m_Functions.size() - 1; i >= 0; i--)
+			{
+				if (m_Functions[i]->Update(m_ElapsedTime))
+				{
+					m_Functions.erase(m_Functions.begin() + i);
+				}
+			}
 		}
 		else
 		{

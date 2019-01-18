@@ -4,6 +4,7 @@
 
 #include "Serialization.h"
 #include "Deserialization.h"
+#include "Entities/Characters/CharacterStats.h"
 
 namespace DND
 {
@@ -18,6 +19,9 @@ namespace DND
 		Disconnect,
 
 		PlayerMove,
+		CastSpell,
+		StatUpdate,
+		Death,
 		MAX_PACKET_TYPES
 	};
 
@@ -41,6 +45,7 @@ namespace DND
 		id_t CharacterPrefabId;
 		Tile CurrentTile;
 		id_t NetworkId;
+		CharacterStats Stats;
 	};
 
 	struct PlayerInfo
@@ -79,6 +84,30 @@ namespace DND
 		Tile MoveToTile;
 	};
 
+	struct CastSpellPacket
+	{
+	public:
+		id_t PlayerId;
+		id_t CasterNetworkId;
+		id_t SpellId;
+		OutputMemoryStream SpellData;
+	};
+
+	struct StatUpdatePacket
+	{
+	public:
+		id_t NetworkId;
+		CharacterStats Stats;
+	};
+	
+	struct DeathPacket
+	{
+	public:
+		id_t NetworkId;
+		id_t PlayerId; // Should be set to InvalidID if not a player
+		id_t KillerId;
+	};
+
 	template<typename T>
 	inline PacketType TypeOfPacket()
 	{
@@ -111,6 +140,21 @@ namespace DND
 	{
 		return PacketType::PlayerMove;
 	}
+	template<>
+	inline PacketType TypeOfPacket<CastSpellPacket>()
+	{
+		return PacketType::CastSpell;
+	}
+	template<>
+	inline PacketType TypeOfPacket<StatUpdatePacket>()
+	{
+		return PacketType::StatUpdate;
+	}
+	template<>
+	inline PacketType TypeOfPacket<DeathPacket>()
+	{
+		return PacketType::Death;
+	}
 
 	template<>
 	inline void Serialize(OutputMemoryStream& stream, const HelloPacket& value)
@@ -129,6 +173,7 @@ namespace DND
 		Serialize(stream, value.CharacterPrefabId);
 		Serialize(stream, value.CurrentTile);
 		Serialize(stream, value.NetworkId);
+		Serialize(stream, value.Stats);
 	}
 	template<>
 	inline void Deserialize(InputMemoryStream& stream, CharacterInfo& outValue)
@@ -136,6 +181,7 @@ namespace DND
 		Deserialize(stream, outValue.CharacterPrefabId);
 		Deserialize(stream, outValue.CurrentTile);
 		Deserialize(stream, outValue.NetworkId);
+		Deserialize(stream, outValue.Stats);
 	}
 
 	template<>
@@ -205,6 +251,51 @@ namespace DND
 	{
 		Deserialize(stream, outValue.NetworkId);
 		Deserialize(stream, outValue.MoveToTile);
+	}
+
+	template<>
+	inline void Serialize(OutputMemoryStream& stream, const CastSpellPacket& value)
+	{
+		Serialize(stream, value.PlayerId);
+		Serialize(stream, value.CasterNetworkId);
+		Serialize(stream, value.SpellId);
+		Serialize(stream, value.SpellData);
+	}
+	template<>
+	inline void Deserialize(InputMemoryStream& stream, CastSpellPacket& outValue)
+	{
+		Deserialize(stream, outValue.PlayerId);
+		Deserialize(stream, outValue.CasterNetworkId);
+		Deserialize(stream, outValue.SpellId);
+		Deserialize(stream, outValue.SpellData);
+	}
+
+	template<>
+	inline void Serialize(OutputMemoryStream& stream, const StatUpdatePacket& value)
+	{
+		Serialize(stream, value.NetworkId);
+		Serialize(stream, value.Stats);
+	}
+	template<>
+	inline void Deserialize(InputMemoryStream& stream, StatUpdatePacket& outValue)
+	{
+		Deserialize(stream, outValue.NetworkId);
+		Deserialize(stream, outValue.Stats);
+	}
+
+	template<>
+	inline void Serialize(OutputMemoryStream& stream, const DeathPacket& value)
+	{
+		Serialize(stream, value.NetworkId);
+		Serialize(stream, value.PlayerId);
+		Serialize(stream, value.KillerId);
+	}
+	template<>
+	inline void Deserialize(InputMemoryStream& stream, DeathPacket& outValue)
+	{
+		Deserialize(stream, outValue.NetworkId);
+		Deserialize(stream, outValue.PlayerId);
+		Deserialize(stream, outValue.KillerId);
 	}
 
 }

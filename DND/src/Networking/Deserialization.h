@@ -68,4 +68,28 @@ namespace DND
 		}
 	}
 
+	template<>
+	inline void Deserialize(InputMemoryStream& stream, blt::string& outValue)
+	{
+		size_t length;
+		Deserialize(stream, length);
+		char* buffer = new char[length];
+		stream.Read(buffer, length);
+		outValue = blt::string(buffer, length);
+		delete[] buffer;
+	}
+
+	template<>
+	inline void Deserialize(InputMemoryStream& stream, OutputMemoryStream& outValue)
+	{
+		size_t length;
+		Deserialize(stream, length);
+		OutputMemoryStream outStream(length);
+		byte* buffer = new byte[length];
+		stream.Read(buffer, length);
+		outStream.Write(buffer, length);
+		outValue = std::move(outStream);
+		delete[] buffer;
+	}
+
 }

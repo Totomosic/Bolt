@@ -15,6 +15,7 @@ namespace Bolt
 		std::unordered_map<size_t, std::unique_ptr<Component>> m_ComponentMap;
 		Component* m_ComponentArray[MAX_COMPONENTS];
 		ObjectPrefab* m_GameObject;
+		bool m_IsGameObject;
 
 	public:
 		ComponentManager(ObjectPrefab* gameObject);

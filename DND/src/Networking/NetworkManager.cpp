@@ -3,6 +3,9 @@
 #include "../Entities/TileTransform.h"
 #include "NetworkController.h"
 #include "NetworkIdentity.h"
+#include "../Spells/SpellCaster.h"
+
+#include "../GameManager.h"
 
 namespace DND
 {
@@ -26,6 +29,23 @@ namespace DND
 	GameObject* NetworkManager::GetObjectByNetworkId(id_t networkId) const
 	{
 		return m_NetworkObjects.at(networkId);
+	}
+
+	NetworkPlayerInfo& NetworkManager::GetPlayerById(id_t playerId)
+	{
+		if (playerId == m_Player.PlayerId)
+		{
+			return m_Player;
+		}
+		for (auto& pair : m_OtherPlayers)
+		{
+			if (pair.second.PlayerId == playerId)
+			{
+				return pair.second;
+			}
+		}
+		BLT_ASSERT(false, "No player with id {}", playerId);
+		return *(NetworkPlayerInfo*)nullptr;
 	}
 
 	WelcomePacket NetworkManager::Host()
@@ -62,14 +82,15 @@ namespace DND
 		{
 			BLT_CORE_INFO("RECEIVED HELLO PACKET");
 			WelcomePacket result;
-			result.NetworkId = m_NetworkIdManager.GetNextId();
-			result.PlayerId = m_PlayerIdManager.GetNextId();
+			result.NetworkId = GetNextNetworkId();
+			result.PlayerId = GetNextPlayerId();
 			PlayerInfo me;
 			me.Address = m_Player.Address;
 			me.PlayerId = m_Player.PlayerId;
 			me.Character.CurrentTile = m_Player.Player->Components().GetComponent<TileTransform>().CurrentTile();
 			me.Character.NetworkId = m_Player.Player->Components().GetComponent<NetworkIdentity>().NetworkId;
 			me.Character.CharacterPrefabId = m_Player.PrefabId;
+			me.Character.Stats = m_Player.Player->Components().GetComponent<StatsComponent>().Stats();
 
 			result.Players.push_back(me);
 			for (auto& pair : m_OtherPlayers)
@@ -79,6 +100,7 @@ namespace DND
 				player.Address = pair.second.Address;
 				player.Character.CurrentTile = pair.second.Player->Components().GetComponent<TileTransform>().CurrentTile();
 				player.Character.NetworkId = pair.second.Player->Components().GetComponent<NetworkIdentity>().NetworkId;
+				player.Character.Stats = pair.second.Player->Components().GetComponent<StatsComponent>().Stats();
 				player.Character.CharacterPrefabId = pair.second.PrefabId;
 				result.Players.push_back(player);
 			}
@@ -94,9 +116,8 @@ namespace DND
 			IntroductionPacket packet;
 			Deserialize(e.Packet, packet);
 			GameObject* newPlayer = Factory().Instantiate(Factory().GetPrefab(packet.Character.CharacterPrefabId));
-			IdentifyObject(newPlayer, packet.Character.NetworkId, packet.PlayerId);
-			MakeNetworkObject(newPlayer);
 			newPlayer->Components().GetComponent<TileTransform>().SetCurrentTile(packet.Character.CurrentTile, true);
+			newPlayer->Components().GetComponent<StatsComponent>().SetStats(packet.Character.Stats);
 
 			NetworkPlayerInfo pl;
 			pl.Address = e.FromAddress;
@@ -105,7 +126,11 @@ namespace DND
 			pl.Player = newPlayer;
 			AddOtherPlayer(pl);
 
-			SetNextAvailableNetworkId(packet.Character.NetworkId);
+			IdentifyObject(newPlayer, packet.Character.NetworkId, packet.PlayerId);
+			MakeNetworkPlayer(newPlayer);
+
+			SetNextAvailableNetworkId(packet.Character.NetworkId + 1);
+			SetNextAvailablePlayerId(packet.PlayerId + 1);
 			return true;
 		});
 
@@ -128,11 +153,64 @@ namespace DND
 			return true;
 		});
 
+		m_Server.OnCastSpellPacket.Clear();
+		m_Server.OnCastSpellPacket.Subscribe([this](id_t listenerId, ReceivedPacketEvent& e)
+		{
+			BLT_CORE_INFO("RECEIVED CAST SPELL PACKET");
+			CastSpellPacket packet;
+			Deserialize(e.Packet, packet);
+			GameObject* caster = GetObjectByNetworkId(packet.CasterNetworkId);
+			caster->Components().GetComponent<SpellCaster>().Cast(packet.SpellId, packet.SpellData);
+			return true;
+		});
+
+		m_Server.OnStatUpdatePacket.Clear();
+		m_Server.OnStatUpdatePacket.Subscribe([this](id_t listenerId, ReceivedPacketEvent& e)
+		{
+			BLT_CORE_INFO("RECEIVED STAT UPDATE PACKET");
+			StatUpdatePacket packet;
+			Deserialize(e.Packet, packet);
+			GameObject* object = GetObjectByNetworkId(packet.NetworkId);
+			object->Components().GetComponent<StatsComponent>().SetStats(packet.Stats);
+			return true;
+		});
+
+		m_Server.OnDeathPacket.Clear();
+		m_Server.OnDeathPacket.Subscribe([this](id_t listenerId, ReceivedPacketEvent& e)
+		{
+			BLT_CORE_INFO("RECEIVED DEATH PACKET");
+			DeathPacket packet;
+			Deserialize(e.Packet, packet);
+			return true;
+		});
+
+	}
+
+	void NetworkManager::Exit()
+	{
+		m_Server.Terminate();
+		std::unordered_map<SocketAddress, NetworkPlayerInfo> players = m_OtherPlayers;
+		for (auto& pair : players)
+		{
+			DisconnectPlayer(pair.first);
+		}
+		m_OtherPlayers.clear();
+	}
+
+	void NetworkManager::SetAddress(const SocketAddress& address)
+	{
+		m_Player.Address = address;
+		m_Server.SetAddress(address);
 	}
 
 	id_t NetworkManager::GetNextNetworkId() const
 	{
 		return m_NetworkIdManager.GetNextId();
+	}
+	
+	id_t NetworkManager::GetNextPlayerId() const
+	{
+		return m_PlayerIdManager.GetNextId();
 	}
 
 	void NetworkManager::SetPlayerId(id_t playerId)
@@ -154,16 +232,22 @@ namespace DND
 	{
 		object->Components().AddComponent<NetworkIdentity>(networkId, playerId);
 		m_NetworkObjects[networkId] = object;
+		GetPlayerById(playerId).OwnedObjects.push_back(object);
 	}
 
-	void NetworkManager::MakeNetworkObject(GameObject* object)
+	void NetworkManager::MakeNetworkPlayer(GameObject* player)
 	{
-		object->Components().AddComponent<NetworkController>();
+		player->Components().AddComponent<NetworkController>();
 	}
 
 	void NetworkManager::SetNextAvailableNetworkId(id_t id)
 	{
 		m_NetworkIdManager.SetNextAvailableId(id);
+	}
+
+	void NetworkManager::SetNextAvailablePlayerId(id_t id)
+	{
+		m_PlayerIdManager.SetNextAvailableId(id);
 	}
 
 	void NetworkManager::AddOtherPlayer(const NetworkPlayerInfo& player)
@@ -173,8 +257,14 @@ namespace DND
 
 	void NetworkManager::DisconnectPlayer(const SocketAddress& address)
 	{
-		Destroy(m_OtherPlayers[address].Player);
-		m_OtherPlayers.erase(address);
+		if (m_OtherPlayers.find(address) != m_OtherPlayers.end())
+		{
+			NetworkPlayerInfo& player = m_OtherPlayers.at(address);
+			for (GameObject* object : player.OwnedObjects)
+			{
+				Destroy(object);
+			}
+			m_OtherPlayers.erase(address);
+		}
 	}
-
 }

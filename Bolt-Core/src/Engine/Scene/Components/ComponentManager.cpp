@@ -7,7 +7,7 @@ namespace Bolt
 {
 
 	ComponentManager::ComponentManager(ObjectPrefab* gameObject)
-		: m_ComponentMap(), m_ComponentArray(), m_GameObject(gameObject)
+		: m_ComponentMap(), m_ComponentArray(), m_GameObject(gameObject), m_IsGameObject(false)
 	{
 		for (int i = 0; i < ComponentManager::MAX_COMPONENTS; i++)
 		{
@@ -16,7 +16,7 @@ namespace Bolt
 	}
 
 	ComponentManager::ComponentManager(ComponentManager&& other)
-		: m_ComponentMap(std::move(other.m_ComponentMap)), m_GameObject(other.m_GameObject)
+		: m_ComponentMap(std::move(other.m_ComponentMap)), m_GameObject(other.m_GameObject), m_IsGameObject(other.m_IsGameObject)
 	{
 		for (int i = 0; i < ComponentManager::MAX_COMPONENTS; i++)
 		{
@@ -32,6 +32,7 @@ namespace Bolt
 	{
 		m_ComponentMap = std::move(other.m_ComponentMap);
 		m_GameObject = other.m_GameObject;
+		m_IsGameObject = other.m_IsGameObject;
 		for (int i = 0; i < ComponentManager::MAX_COMPONENTS; i++)
 		{
 			m_ComponentArray[i] = nullptr;
@@ -45,7 +46,10 @@ namespace Bolt
 
 	ComponentManager::~ComponentManager()
 	{
-	
+		for (auto& pair : m_ComponentMap)
+		{
+			pair.second->End();
+		}
 	}
 
 	Component& ComponentManager::GetComponentById(id_t id) const
@@ -91,7 +95,10 @@ namespace Bolt
 		Component* c = m_ComponentMap.at(componentTypeHash).get();
 		m_ComponentArray[id] = c;
 		c->SetGameObject(m_GameObject);
-		c->Start();
+		if (m_IsGameObject)
+		{
+			c->Start();
+		}
 		return c;
 	}
 
@@ -119,6 +126,10 @@ namespace Bolt
 
 	void ComponentManager::Clear()
 	{
+		for (auto& pair : m_ComponentMap)
+		{
+			pair.second->End();
+		}
 		m_ComponentMap.clear();
 	}
 

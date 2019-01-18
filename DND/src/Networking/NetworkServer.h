@@ -27,6 +27,9 @@ namespace DND
 		EventDispatcher<ReceivedPacketEvent> OnDisconnectPacket;
 
 		EventDispatcher<ReceivedPacketEvent> OnPlayerMovePacket;
+		EventDispatcher<ReceivedPacketEvent> OnCastSpellPacket;
+		EventDispatcher<ReceivedPacketEvent> OnStatUpdatePacket;
+		EventDispatcher<ReceivedPacketEvent> OnDeathPacket;
 
 	private:
 		bool m_IsRunning;
@@ -38,6 +41,7 @@ namespace DND
 		NetworkServer();
 
 		inline const SocketAddress& Address() const { return m_Address; }
+		inline bool IsRunning() const { return m_IsRunning; }
 
 		void SetAddress(const SocketAddress& address);
 		void Initialize(bool runListenThread);

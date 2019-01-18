@@ -66,4 +66,18 @@ namespace DND
 		}
 	}
 
+	template<>
+	inline void Serialize(OutputMemoryStream& stream, const blt::string& value)
+	{
+		Serialize(stream, value.size());
+		stream.Write(value.data(), value.size());
+	}
+
+	template<>
+	inline void Serialize(OutputMemoryStream& stream, const OutputMemoryStream& value)
+	{
+		Serialize(stream, value.GetRemainingDataSize());
+		stream.Write(value.GetBufferPtr(), value.GetRemainingDataSize());
+	}
+
 }
