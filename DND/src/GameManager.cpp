@@ -24,7 +24,7 @@ namespace DND
 	}
 
 	GameManager::GameManager(Layer& layer)
-		: m_LocalCamera(nullptr), m_LocalPlayer(nullptr), m_Tilemap(layer, TILEMAP_WIDTH, TILEMAP_HEIGHT, TILE_WIDTH, TILE_HEIGHT), m_Prefabs(), m_Network(), m_Spells()
+		: m_LocalCamera(nullptr), m_LocalPlayer(nullptr), m_Tilemap(layer, TILEMAP_WIDTH, TILEMAP_HEIGHT, TILE_WIDTH, TILE_HEIGHT), m_Prefabs(), m_Network(), m_Spells(), m_ActiveFunctions()
 	{
 	
 	}
@@ -33,8 +33,14 @@ namespace DND
 	{
 		m_LocalCamera = nullptr;
 		m_LocalPlayer = nullptr;
-		Network().Exit();
-		SceneManager::SetCurrentSceneByName("Title");
+		Network().Exit([this]()
+		{
+			for (Timer* func : m_ActiveFunctions)
+			{
+				Time::RenderingTimeline().RemoveFunction(func);
+			}
+			SceneManager::SetCurrentSceneByName("Title");
+		});		
 	}
 
 	Camera* GameManager::LocalCamera() const
@@ -82,6 +88,11 @@ namespace DND
 	SpellList& GameManager::Spells()
 	{
 		return m_Spells;
+	}
+
+	void GameManager::AddActiveFunction(Timer* function)
+	{
+		m_ActiveFunctions.push_back(function);
 	}
 
 }

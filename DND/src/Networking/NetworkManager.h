@@ -44,7 +44,7 @@ namespace DND
 		WelcomePacket Host();
 		void Connect(const SocketAddress& address, const ConnectedCallback& callback);
 		void Initialize(const WelcomePacket& initInfo);
-		void Exit();
+		void Exit(const std::function<void()>& onExit);
 		void SetAddress(const SocketAddress& address);
 
 		id_t GetNextNetworkId() const;
@@ -63,9 +63,12 @@ namespace DND
 		template<typename T>
 		void SendPacketToAll(const T& packet)
 		{
-			for (auto& pair : m_OtherPlayers)
+			if (Server().IsRunning())
 			{
-				Server().SendPacket(pair.second.Address, packet);
+				for (auto& pair : m_OtherPlayers)
+				{
+					Server().SendPacket(pair.second.Address, packet);
+				}
 			}
 		}
 

@@ -32,7 +32,8 @@ namespace Bolt
 	{
 		if (IsValid())
 		{
-			closesocket(m_Socket);
+			Shutdown();
+			Close();
 		}
 	}
 
@@ -61,6 +62,10 @@ namespace Bolt
 		if (bytes < 0)
 		{
 			int errorCode = WSAGetLastError();
+			if (errorCode == WSAEWOULDBLOCK)
+			{
+				return 0;
+			}
 			BLT_CORE_ERROR("Socket Send Error: " + std::to_string(errorCode));
 			return -errorCode;
 		}
@@ -76,6 +81,10 @@ namespace Bolt
 		if (bytes < 0)
 		{
 			int errorCode = WSAGetLastError();
+			if (errorCode == WSAEWOULDBLOCK)
+			{
+				return 0;
+			}
 			BLT_CORE_ERROR("Socket Recv Error: " + std::to_string(errorCode));
 			return -errorCode;
 		}
@@ -83,10 +92,22 @@ namespace Bolt
 		return bytes;
 	}
 
+	int UDPsocket::Shutdown()
+	{
+		BLT_ASSERT(IsValid(), "Cannot Shutdown invalid Socket");
+		int err = shutdown(m_Socket, SD_BOTH);
+		if (err != NO_ERROR)
+		{
+			int errorCode = WSAGetLastError();
+			BLT_CORE_ERROR("Socket Close Error: " + std::to_string(errorCode));
+		}
+		return err;
+	}
+
 	int UDPsocket::Close()
 	{
 		BLT_ASSERT(IsValid(), "Cannot Close invalid Socket");
-		int err = shutdown(m_Socket, SD_BOTH);
+		int err = closesocket(m_Socket);
 		m_Socket = INVALID_SOCKET;
 		if (err != NO_ERROR)
 		{
@@ -94,6 +115,12 @@ namespace Bolt
 			BLT_CORE_ERROR("Socket Close Error: " + std::to_string(errorCode));
 		}
 		return err;
+	}
+
+	void UDPsocket::SetBlocking(bool isBlocking)
+	{
+		u_long mode = (isBlocking) ? 0 : 1;
+		int result = ioctlsocket(m_Socket, FIONBIO, &mode);
 	}
 
 }

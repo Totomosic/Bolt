@@ -17,6 +17,8 @@ namespace DND
 	constexpr int SERVER_RECEIVED_STAT_PACKET_EVENT = USER_EVENT_ID + 7;
 	constexpr int SERVER_RECEIVED_DEATH_PACKET_EVENT = USER_EVENT_ID + 8;
 
+	constexpr int SERVER_SHUTDOWN_EVENT = USER_EVENT_ID + 50;
+
 	constexpr int STATS_CHANGED_EVENT = USER_EVENT_ID + 100;
 
 	class ReceivedPacketEvent : public Event

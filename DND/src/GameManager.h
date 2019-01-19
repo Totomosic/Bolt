@@ -28,6 +28,8 @@ namespace DND
 		NetworkManager m_Network;
 		SpellList m_Spells;
 
+		std::vector<Timer*> m_ActiveFunctions;
+
 	public:
 		static GameManager& Get();
 		static void Terminate();
@@ -47,6 +49,8 @@ namespace DND
 		Tilemap& GetTilemap();
 		NetworkManager& Network();
 		SpellList& Spells();
+		
+		void AddActiveFunction(Timer* function);
 
 	};
 

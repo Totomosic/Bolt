@@ -35,7 +35,7 @@ namespace DND
 		wizardCharacterPrefab.Components().AddComponent<TileMotion>(300);
 		wizardCharacterPrefab.Components().AddComponent<SpellCaster>();
 		wizardCharacterPrefab.Components().AddComponent<StatsComponent>(defaultStats);
-		wizardCharacterPrefab.Components().AddComponent<Healthbar>(factory.CurrentLayer(), Vector3f(0, TILE_HEIGHT * 0.75f + 5, 0));
+		wizardCharacterPrefab.Components().AddComponent<Healthbar>(factory.CurrentLayer(), Vector3f(0, TILE_HEIGHT * 0.75f + 5, 1));
 
 		prefabs.BlueWizard = GameManager::Get().Network().Factory().AddPrefab(std::move(wizardCharacterPrefab));
 	}
