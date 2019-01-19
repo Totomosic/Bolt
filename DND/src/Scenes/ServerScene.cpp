@@ -21,8 +21,7 @@ namespace DND
 		{
 			GameManager::Get().Network().SetAddress(SocketAddress(client.ADDRESS, client.PORT));
 			WelcomePacket packet = GameManager::Get().Network().Host();
-			SceneManager::SetCurrentScene(gameScene);
-			GameManager::Get().Network().Initialize(packet);
+			GameManager::Get().Initialize(packet, gameScene);
 			CreateSceneFromWelcome(packet, GameManager::Get().Prefabs().BlueWizard);
 			return true;
 		});
@@ -36,8 +35,7 @@ namespace DND
 			{
 				GameManager::Get().Network().Connect(SocketAddress(client.TARGET_ADDRESS, client.TARGET_PORT), [&client, &gameScene](WelcomePacket packet)
 				{
-					SceneManager::SetCurrentScene(gameScene);
-					GameManager::Get().Network().Initialize(packet);
+					GameManager::Get().Initialize(packet, gameScene);
 					CreateSceneFromWelcome(packet, GameManager::Get().Prefabs().BlueWizard);
 				});
 			}

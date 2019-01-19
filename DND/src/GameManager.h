@@ -6,6 +6,8 @@
 #include "Networking/NetworkManager.h"
 #include "Spells/SpellList.h"
 
+#include "UI/SpellCooldownMenu.h"
+
 namespace DND
 {
 
@@ -28,6 +30,8 @@ namespace DND
 		NetworkManager m_Network;
 		SpellList m_Spells;
 
+		std::vector<std::unique_ptr<UImenu>> m_UImenus;
+
 		std::vector<Timer*> m_ActiveFunctions;
 
 	public:
@@ -36,7 +40,9 @@ namespace DND
 
 		GameManager(Layer& layer);
 
+		void Initialize(const WelcomePacket& welcomePacket, Scene& scene);
 		void Exit();
+		void Update();
 
 		Camera* LocalCamera() const;
 		GameObject* LocalPlayer() const;
@@ -49,8 +55,9 @@ namespace DND
 		Tilemap& GetTilemap();
 		NetworkManager& Network();
 		SpellList& Spells();
-		
+
 		void AddActiveFunction(Timer* function);
+		void AddUIMenu(std::unique_ptr<UImenu>&& menu);
 
 	};
 

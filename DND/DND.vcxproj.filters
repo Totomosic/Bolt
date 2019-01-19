@@ -73,6 +73,9 @@
     <ClInclude Include="src\PrefabList.h" />
     <ClInclude Include="src\Entities\Healthbar.h" />
     <ClInclude Include="src\Spells\Animators\FireballAnimator.h" />
+    <ClInclude Include="src\Entities\SpellManager.h" />
+    <ClInclude Include="src\UI\SpellCooldownMenu.h" />
+    <ClInclude Include="src\UI\UImenu.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\App.cpp" />
@@ -121,5 +124,7 @@
     <ClCompile Include="src\Scenes\CharPrefabs.cpp" />
     <ClCompile Include="src\Entities\Healthbar.cpp" />
     <ClCompile Include="src\Spells\Animators\FireballAnimator.cpp" />
+    <ClCompile Include="src\Entities\SpellManager.cpp" />
+    <ClCompile Include="src\UI\SpellCooldownMenu.cpp" />
   </ItemGroup>
 </Project>

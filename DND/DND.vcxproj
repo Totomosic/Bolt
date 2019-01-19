@@ -136,6 +136,7 @@
     <ClInclude Include="src\Camera\PlayerCamera.h" />
     <ClInclude Include="src\Entities\Characters\CharacterStats.h" />
     <ClInclude Include="src\Entities\Healthbar.h" />
+    <ClInclude Include="src\Entities\SpellManager.h" />
     <ClInclude Include="src\PrefabList.h" />
     <ClInclude Include="src\Scenes\CharacterScene.h" />
     <ClInclude Include="src\Entities\CharacterAnimator.h" />
@@ -164,6 +165,8 @@
     <ClInclude Include="src\Spells\SpellCaster.h" />
     <ClInclude Include="src\Spells\SpellInfo.h" />
     <ClInclude Include="src\Spells\SpellList.h" />
+    <ClInclude Include="src\UI\SpellCooldownMenu.h" />
+    <ClInclude Include="src\UI\UImenu.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\App.cpp" />
@@ -173,6 +176,7 @@
     <ClCompile Include="src\Entities\Healthbar.cpp" />
     <ClCompile Include="src\Entities\NPCController.cpp" />
     <ClCompile Include="src\Entities\PlayerController.cpp" />
+    <ClCompile Include="src\Entities\SpellManager.cpp" />
     <ClCompile Include="src\Entities\TileMotion.cpp" />
     <ClCompile Include="src\Entities\TileTransform.cpp" />
     <ClCompile Include="src\GameManager.cpp" />
@@ -194,6 +198,7 @@
     <ClCompile Include="src\Spells\BasicSpells.cpp" />
     <ClCompile Include="src\Spells\SpellCaster.cpp" />
     <ClCompile Include="src\Spells\SpellList.cpp" />
+    <ClCompile Include="src\UI\SpellCooldownMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bolt-Core\Bolt-Core.vcxproj">

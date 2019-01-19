@@ -8,6 +8,8 @@
 #include "../Camera/PlayerCamera.h"
 #include "../Entities/PlayerController.h"
 
+#include "../UI/SpellCooldownMenu.h"
+
 namespace DND
 {
 
@@ -15,8 +17,10 @@ namespace DND
 	{
 		Projection orthoProj = Projection::Orthographic(0, client.Width(), 0, client.Height(), -100, 100);
 		Camera* gameCamera = gameScene.CreateCamera(orthoProj);
+		Camera* uiCamera = gameScene.CreateCamera(orthoProj);
 		Layer& gameLayer = gameScene.CreateLayer(gameCamera);
 		Layer& overlayGameLayer = gameScene.CreateLayer(gameCamera);
+		Layer& uiGameLayer = gameScene.CreateLayer(uiCamera);
 
 		gameCamera->transform().Translate(-client.Width() / 2, -client.Height() / 2, 50);
 
@@ -24,6 +28,8 @@ namespace DND
 		CreateCharacterPrefabs(GameManager::Get().Prefabs(), GameManager::Get().Network().Factory(), resources);		
 
 		CreateBasicSpells(resources);
+
+		GameManager::Get().AddUIMenu(std::make_unique<SpellCooldownMenu>(&uiGameLayer, Vector3f(uiCamera->ViewWidth() / 2, 50, -50), 300, 100, nullptr));
 
 		gameScene.OnLoad.Subscribe([gameCamera, &overlayGameLayer, resources](id_t listenerId, SceneLoadedEvent& e)
 		{
@@ -69,11 +75,11 @@ namespace DND
 		GameManager::Get().Network().SetPlayerPrefab(prefabId);
 		GameObject* player = GameManager::Get().Network().Factory().Instantiate(GameManager::Get().Network().Factory().GetPrefab(prefabId));
 		GameManager::Get().Network().IdentifyObject(player, packet.NetworkId, packet.PlayerId);
-		GameManager::Get().SetLocalPlayer(player);
 		player->Components().AddComponent<PlayerController>();
 
 		Tile currentTile = Tile(Random::NextInt(0, TILEMAP_WIDTH - 1), Random::NextInt(0, TILEMAP_HEIGHT - 1));
 		player->Components().GetComponent<TileTransform>().SetCurrentTile(currentTile, true);
+		GameManager::Get().SetLocalPlayer(player);
 
 		id_t maxNetworkId = packet.NetworkId;
 		id_t maxPlayerId = packet.PlayerId;

@@ -15,12 +15,18 @@ namespace DND
 
 		id_t explosionId = resources.GetResourceId("explosionAnimation");
 		id_t fireballId = resources.GetResourceId("fireballAnimation");
+		id_t fireballIcon = resources.GetResourceId("fireballIcon");
 
-		spells.AddSpell({ "Fireball", "", 0.5f, [](GameObject* caster, GameManager& gameManager)
+		spells.AddSpell({ "Fireball", "", 0.5f, 2.0f, 3, fireballIcon, [](GameObject* caster, GameManager& gameManager)
 		{
+			int damage = 0;
+			for (int i = 0; i < 8; i++)
+			{
+				damage += Random::NextInt(1, 6);
+			}
 			OutputMemoryStream data;
 			Serialize(data, gameManager.CurrentlySelectedTile());
-			Serialize(data, Random::NextInt(20, 80));
+			Serialize(data, damage);
 			return std::move(data);
 		},
 		[explosionId, fireballId](GameObject* caster, InputMemoryStream& castData, GameManager& gameManager)
@@ -29,6 +35,7 @@ namespace DND
 			int damage;
 			Deserialize(castData, selectedTile);
 			Deserialize(castData, damage);
+			BLT_CORE_INFO("FIREBALL DAMAGE {}", damage);
 
 			Vector3f position = gameManager.GetTilemap().WorldPositionOfTile(selectedTile.x, selectedTile.y);
 			position.z += 1;
@@ -51,7 +58,7 @@ namespace DND
 				Destroy(fireball);
 				if (gameManager.Network().Server().IsRunning())
 				{
-					GameObject* explosion = gameManager.Network().Factory().Image(5 * gameManager.GetTilemap().TileWidth(), 5 * gameManager.GetTilemap().TileHeight(), ResourceManager::Get<Texture2D>(explosionId), Transform(position));
+					GameObject* explosion = gameManager.Network().Factory().Image(6 * gameManager.GetTilemap().TileWidth(), 6 * gameManager.GetTilemap().TileHeight(), ResourceManager::Get<Texture2D>(explosionId), Transform(position));
 					explosion->Components().GetComponent<MeshRenderer>().Mesh.Materials[0].Textures.Animators[0] = std::make_unique<SpriteSheetAnimator>(9, 9, 1);
 					explosion->Components().GetComponent<MeshRenderer>().Mesh.Materials[0].RenderOptions.DepthFunc = DepthFunction::Lequal;
 					Destroy(explosion, 1);

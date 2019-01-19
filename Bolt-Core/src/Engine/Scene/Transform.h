@@ -39,6 +39,9 @@ namespace Bolt
 		void SetParent(const Transform* transform);
 		void SetUpdateOnInvalidate(bool update);
 
+		const Vector3f& LocalPosition() const;
+		const Quaternion& LocalOrientation() const;
+		const Vector3f& LocalScale() const;
 		Vector3f Position() const;
 		Quaternion Orientation() const;
 		Vector3f Scale() const;

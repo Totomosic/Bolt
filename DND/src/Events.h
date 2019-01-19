@@ -21,6 +21,8 @@ namespace DND
 
 	constexpr int STATS_CHANGED_EVENT = USER_EVENT_ID + 100;
 
+	constexpr int SPELL_CAST_EVENT = USER_EVENT_ID + 150;
+
 	class ReceivedPacketEvent : public Event
 	{
 	public:

@@ -20,8 +20,8 @@ namespace DND
 		ResourcePtr<Texture2D> leftWizard = ResourceManager::Get<Texture2D>(resources.GetResourceId("WizardStaticLeft"));
 
 		CharacterStats defaultStats;
-		defaultStats.MaxHealth = 100;
-		defaultStats.CurrentHealth = 100;
+		defaultStats.MaxHealth = 40;
+		defaultStats.CurrentHealth = defaultStats.MaxHealth;
 
 		ResourcePtr<Model> playerModel = ResourceManager::Get<Model>(ResourceManager::Register(std::make_unique<Model>(RectangleFactory(TILE_WIDTH * 0.9f, TILE_HEIGHT * 1.5f))));
 		Mesh wizardCharacterMesh;
