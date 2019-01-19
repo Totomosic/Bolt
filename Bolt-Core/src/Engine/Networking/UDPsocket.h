@@ -24,7 +24,10 @@ namespace Bolt
 		int Bind(const SocketAddress& address);
 		int SendTo(const SocketAddress& address, const void* data, uint length);
 		int RecvFrom(void* buffer, uint length, SocketAddress* outAddress);
+		int Shutdown();
 		int Close();
+
+		void SetBlocking(bool isBlocking);
 
 		friend class SocketUtil;
 

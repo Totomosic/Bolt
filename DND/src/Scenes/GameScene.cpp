@@ -20,7 +20,7 @@ namespace DND
 
 		gameCamera->transform().Translate(-client.Width() / 2, -client.Height() / 2, 50);
 
-		GameManager::Get().Network().Factory().SetCurrentLayer(gameLayer);
+		GameManager::Get().Network().Factory().SetCurrentLayer(overlayGameLayer);
 		CreateCharacterPrefabs(GameManager::Get().Prefabs(), GameManager::Get().Network().Factory(), resources);		
 
 		CreateBasicSpells(resources);

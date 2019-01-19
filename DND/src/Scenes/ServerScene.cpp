@@ -32,12 +32,19 @@ namespace DND
 		joinButton.EventHandler().OnClicked.Subscribe([&client, &gameScene](id_t listenerId, UIClickedEvent& e)
 		{
 			GameManager::Get().Network().SetAddress(SocketAddress(client.ADDRESS, client.PORT));
-			GameManager::Get().Network().Connect(SocketAddress(client.TARGET_ADDRESS, client.TARGET_PORT), [&client, &gameScene](WelcomePacket packet)
+			if (client.TARGET_PORT != client.PORT || client.TARGET_ADDRESS != client.ADDRESS)
 			{
-				SceneManager::SetCurrentScene(gameScene);
-				GameManager::Get().Network().Initialize(packet);
-				CreateSceneFromWelcome(packet, GameManager::Get().Prefabs().BlueWizard);
-			});
+				GameManager::Get().Network().Connect(SocketAddress(client.TARGET_ADDRESS, client.TARGET_PORT), [&client, &gameScene](WelcomePacket packet)
+				{
+					SceneManager::SetCurrentScene(gameScene);
+					GameManager::Get().Network().Initialize(packet);
+					CreateSceneFromWelcome(packet, GameManager::Get().Prefabs().BlueWizard);
+				});
+			}
+			else
+			{
+				BLT_CORE_ERROR("TARGET ADDRESS WAS SAME AS BOUND ADDRESS");
+			}
 			return true;
 		});
 	}

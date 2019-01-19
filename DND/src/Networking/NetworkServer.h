@@ -5,6 +5,12 @@
 namespace DND
 {
 
+	class ServerShutdownEvent : public Event
+	{
+	public:
+
+	};
+
 	class PacketValidator
 	{
 	public:
@@ -21,6 +27,8 @@ namespace DND
 	class NetworkServer
 	{
 	public:
+		EventDispatcher<ServerShutdownEvent> OnShutdown;
+
 		EventDispatcher<ReceivedPacketEvent> OnHelloPacket;
 		EventDispatcher<ReceivedPacketEvent> OnWelcomePacket;
 		EventDispatcher<ReceivedPacketEvent> OnIntroductionPacket;
@@ -64,6 +72,8 @@ namespace DND
 		}
 
 	private:
+		void ClearSocket();
+		void ResetSocket();
 		void StopListeningThread();
 		void DispatchPacketEvent(EventDispatcher<ReceivedPacketEvent>& dispatcher, std::unique_ptr<ReceivedPacketEvent>&& args);
 		EventDispatcher<ReceivedPacketEvent>& GetEventDispatcher(PacketType type);

@@ -16,6 +16,7 @@ namespace DND
 		ObjectFactory factory(*m_Layer);
 		m_Object = factory.Rectangle(1, 5, Color::Red, Transform(m_PositionOffset));
 		m_Object->MakeChildOf(gameObject());
+		
 		StatsComponent& c = gameObject()->Components().GetComponent<StatsComponent>();
 		float healthProp = c.Stats().CurrentHealth / (float)c.Stats().MaxHealth;
 		SetBarSize(m_BarLength * healthProp, m_BarLength);
@@ -27,10 +28,10 @@ namespace DND
 
 			if (e.Object == GameManager::Get().LocalPlayer() && e.Stats.CurrentHealth <= 0)
 			{
-				Time::RenderingTimeline().AddFunction(0.5f, []()
+				Time::RenderingTimeline().AddFunction(0.25, []()
 				{
 					GameManager::Get().Exit();
-				});				
+				});
 			}
 
 			return false;

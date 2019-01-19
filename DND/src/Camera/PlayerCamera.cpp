@@ -41,7 +41,7 @@ namespace DND
 		{
 			m_SelectedTile = t;
 			Vector3f worldTilePos = m_Tilemap->WorldPositionOfTile(t.x, t.y);
-			m_TileSelector->transform().SetLocalPosition(worldTilePos);
+			m_TileSelector->transform().SetLocalPosition(worldTilePos + Vector3f(0, 0, 25));
 		}
 	}
 

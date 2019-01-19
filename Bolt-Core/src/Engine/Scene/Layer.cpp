@@ -102,6 +102,7 @@ namespace Bolt
 		UI().ReleaseGameObjects();
 		UI().Clear();
 		m_GameObjects.Reset();
+		m_TemporaryObjects.clear();
 	}
 
 	void Layer::Update()

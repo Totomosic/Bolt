@@ -10,7 +10,7 @@ namespace DND
 		float m_CurrentTime;
 		float m_TotalTime;
 		Vector3f m_StartPosition;
-		Vector3f m_Target;
+		Vector2f m_ToTargetDir;
 		float m_Length;
 
 	public:

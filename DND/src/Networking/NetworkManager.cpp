@@ -186,15 +186,22 @@ namespace DND
 
 	}
 
-	void NetworkManager::Exit()
+	void NetworkManager::Exit(const std::function<void()>& onExit)
 	{
-		m_Server.Terminate();
-		std::unordered_map<SocketAddress, NetworkPlayerInfo> players = m_OtherPlayers;
-		for (auto& pair : players)
+		m_Server.OnShutdown.Clear();
+		m_Server.OnShutdown.Subscribe([this, onExit](id_t listenerId, ServerShutdownEvent& e)
 		{
-			DisconnectPlayer(pair.first);
-		}
-		m_OtherPlayers.clear();
+			BLT_CORE_INFO("SUCCESSFULLY SHUTDOWN SERVER");
+			std::unordered_map<SocketAddress, NetworkPlayerInfo> players = m_OtherPlayers;
+			for (auto& pair : players)
+			{
+				DisconnectPlayer(pair.first);
+			}
+			m_OtherPlayers.clear();
+			onExit();
+			return true;
+		});
+		m_Server.Terminate();		
 	}
 
 	void NetworkManager::SetAddress(const SocketAddress& address)

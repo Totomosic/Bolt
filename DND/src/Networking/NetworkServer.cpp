@@ -21,20 +21,19 @@ namespace DND
 	}
 
 	NetworkServer::NetworkServer()
-		: OnHelloPacket(SERVER_RECEIVED_HELLO_PACKET_EVENT), OnWelcomePacket(SERVER_RECEIVED_WELCOME_PACKET_EVENT), OnIntroductionPacket(SERVER_RECEIVED_INTRODUCTION_PACKET_EVENT), OnDisconnectPacket(SERVER_RECEIVED_DISCONNECT_PACKET_EVENT),
+		: OnShutdown(SERVER_SHUTDOWN_EVENT),
+		OnHelloPacket(SERVER_RECEIVED_HELLO_PACKET_EVENT), OnWelcomePacket(SERVER_RECEIVED_WELCOME_PACKET_EVENT), OnIntroductionPacket(SERVER_RECEIVED_INTRODUCTION_PACKET_EVENT), OnDisconnectPacket(SERVER_RECEIVED_DISCONNECT_PACKET_EVENT),
 		OnPlayerMovePacket(SERVER_RECEIVED_PLAYER_MOVE_PACKET_EVENT), OnCastSpellPacket(SERVER_RECEIVED_CAST_SPELL_PACKET_EVENT), OnStatUpdatePacket(SERVER_RECEIVED_STAT_PACKET_EVENT), OnDeathPacket(SERVER_RECEIVED_DEATH_PACKET_EVENT),
 		m_IsRunning(false), m_Address(), m_Socket(), m_Validators()
 	{
-		
+		ResetSocket();
 	}
 
 	void NetworkServer::SetAddress(const SocketAddress& address)
 	{
 		if (m_Address != address)
 		{
-			m_Socket = UDPsocket();
 			m_Address = address;
-			m_Socket.Bind(m_Address);
 		}
 	}
 
@@ -44,6 +43,8 @@ namespace DND
 		m_IsRunning = true;
 		if (runListenThread)
 		{
+			m_Socket.Bind(m_Address);
+			ClearSocket();
 			BLT_CORE_WARN("STARTED LISTENING ON {}", Address().ToString());
 			RunListenThread();
 		}
@@ -53,11 +54,12 @@ namespace DND
 	{
 		if (m_IsRunning)
 		{
+			m_IsRunning = false;
 			StopListeningThread();
+			m_Socket.Shutdown();
 		}
 		m_IsRunning = false;
-		m_Socket = UDPsocket();
-		m_Address = SocketAddress();
+		ResetSocket();
 	}
 
 	void NetworkServer::RunListenThread()
@@ -81,12 +83,6 @@ namespace DND
 
 					if (pType == PacketType::LocalSocketTerminate)
 					{
-						DisconnectPacket packet;
-						for (auto& pair : m_Validators)
-						{
-							SendPacket(pair.first, packet);
-						}
-						BLT_CORE_WARN("LISTENING THREAD TERMINATED");
 						break;
 					}
 
@@ -110,16 +106,43 @@ namespace DND
 				}
 				else
 				{
-					BLT_CORE_WARN("INVALID PACKET RECEIVED, STOPPING LISTENING");
+					BLT_CORE_ERROR("INVALID PACKET RECEIVED");
 					break;
 				}
 			}
+
+			std::unique_ptr<ServerShutdownEvent> e = std::make_unique<ServerShutdownEvent>();
+			OnShutdown.Post(std::move(e));
+
 		});
 		listeningThread.detach();
 	}
 
+	void NetworkServer::ClearSocket()
+	{
+		m_Socket.SetBlocking(false);
+		byte buffer[1024];
+		while (m_Socket.RecvFrom(buffer, 1024, nullptr) != 0)
+		{
+			BLT_CORE_INFO("CLEARING WAS REQUIRED");
+		}
+		m_Socket.SetBlocking(true);
+	}
+
+	void NetworkServer::ResetSocket()
+	{
+		m_Socket = UDPsocket();
+		m_Address = SocketAddress();
+	}
+
 	void NetworkServer::StopListeningThread()
 	{
+		DisconnectPacket dcPacket;
+		for (auto& pair : m_Validators)
+		{
+			SendPacket(pair.first, dcPacket);
+		}
+
 		OutputMemoryStream packet;
 		id_t packetId = 0;
 		PacketType type = PacketType::LocalSocketTerminate;

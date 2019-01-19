@@ -32,17 +32,20 @@ namespace DND
 
 			Vector3f position = gameManager.GetTilemap().WorldPositionOfTile(selectedTile.x, selectedTile.y);
 			position.z += 1;
-			GameObject* explosionShadow = gameManager.Network().Factory().Ellipse(gameManager.GetTilemap().TileWidth() * 0.75f, gameManager.GetTilemap().TileHeight() * 0.75f, Color(10, 10, 10, 200), Transform(position));
 
 			Vector3f startPosition = caster->transform().Position() + Vector3f(0, 0, 1);
 			float distance = (position.xy() - startPosition.xy()).Length();
-			float speed = 1000;
+			float speed = 600;
 			float time = distance / speed;
 			GameObject* fireball = gameManager.Network().Factory().Image(300, 300, ResourceManager::Get<Texture2D>(fireballId), Transform());
 			fireball->Components().GetComponent<MeshRenderer>().Mesh.Materials[0].Textures.Animators[0] = std::make_unique<SpriteSheetAnimator>(8, 1, 0.3f);
 			fireball->Components().AddComponent<FireballAnimator>(startPosition, position, time, 100);
+			fireball->Components().GetComponent<MeshRenderer>().Mesh.Materials[0].RenderOptions.DepthFunc = DepthFunction::Lequal;
 
-			Time::RenderingTimeline().AddFunction(time, [position, &gameManager, selectedTile, damage, explosionShadow, fireball, explosionId]()
+			position.z -= 0.05f;
+			GameObject* explosionShadow = gameManager.Network().Factory().Ellipse(gameManager.GetTilemap().TileWidth() * 0.75f, gameManager.GetTilemap().TileHeight() * 0.75f, Color(10, 10, 10, 200), Transform(position));
+
+			Timer& createExplosion = Time::RenderingTimeline().AddFunction(time, [position, &gameManager, selectedTile, damage, explosionShadow, fireball, explosionId]()
 			{
 				Destroy(explosionShadow);
 				Destroy(fireball);
@@ -50,6 +53,7 @@ namespace DND
 				{
 					GameObject* explosion = gameManager.Network().Factory().Image(5 * gameManager.GetTilemap().TileWidth(), 5 * gameManager.GetTilemap().TileHeight(), ResourceManager::Get<Texture2D>(explosionId), Transform(position));
 					explosion->Components().GetComponent<MeshRenderer>().Mesh.Materials[0].Textures.Animators[0] = std::make_unique<SpriteSheetAnimator>(9, 9, 1);
+					explosion->Components().GetComponent<MeshRenderer>().Mesh.Materials[0].RenderOptions.DepthFunc = DepthFunction::Lequal;
 					Destroy(explosion, 1);
 					GameObject* player = gameManager.LocalPlayer();
 					Tile playerTile = player->Components().GetComponent<TileTransform>().CurrentTile();
@@ -65,7 +69,7 @@ namespace DND
 					}
 				}
 			});
-
+			GameManager::Get().AddActiveFunction(&createExplosion);
 		}});
 
 	}
