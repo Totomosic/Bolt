@@ -93,9 +93,10 @@ namespace DND
 		{
 			GameManager::Get().Exit();
 		}
-		if (Input::KeyPressed(Keycode::N))
+
+		if (GameManager::Get().LocalPlayer() != nullptr)
 		{
-			BLT_CORE_INFO(GameManager::Get().Network().GetNextNetworkId());
+			GameManager::Get().Update();
 		}
 	}
 

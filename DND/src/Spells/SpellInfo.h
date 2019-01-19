@@ -16,6 +16,9 @@ namespace DND
 		blt::string Name;
 		blt::string Desc;
 		float CastTime;
+		float Cooldown;
+		int Level;
+		id_t SpellIconId;
 		CreateSpellFunc CreateFunc;
 		CastSpellFunc CastFunc;
 		id_t SpellId;

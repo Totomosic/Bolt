@@ -1,6 +1,7 @@
 #pragma once
 #include "TileMotion.h"
 #include "CharacterAnimator.h"
+#include "SpellManager.h"
 
 namespace DND
 {
@@ -19,11 +20,14 @@ namespace DND
 
 		Keycode m_LastPressed;
 
+		SpellManager m_Spells;
 		std::deque<PlayerAction> m_Actions;
 		bool m_CanMove;
 
 	public:
 		PlayerController();
+
+		inline SpellManager& Spells() { return m_Spells; }
 
 		inline bool IsFrozen() const { return !m_CanMove; }
 		inline void Freeze() { SetFreeze(true); }

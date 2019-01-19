@@ -8,13 +8,16 @@ namespace DND
 {
 
 	PlayerController::PlayerController() : Component(),
-		m_Left(Keycode::A), m_Up(Keycode::W), m_Right(Keycode::D), m_Down(Keycode::S), m_LastPressed(Keycode::Left), m_Actions(), m_CanMove(true)
+		m_Left(Keycode::A), m_Up(Keycode::W), m_Right(Keycode::D), m_Down(Keycode::S), m_LastPressed(Keycode::Left), m_Spells(5), m_Actions(), m_CanMove(true)
 	{
-	
+		m_Spells.SetSpell(0, 0);
+		m_Spells.MapKeyToSpell(Keycode::Q, 0);
 	}
 
 	void PlayerController::Update()
 	{
+		m_Spells.Update(Time::RenderingTimeline().DeltaTime());
+
 		TileTransform& t = gameObject()->Components().GetComponent<TileTransform>();
 		TileMotion& m = gameObject()->Components().GetComponent<TileMotion>();
 		m_LastPressed = TestPressedKeys();
@@ -58,25 +61,35 @@ namespace DND
 			}
 		}		
 
-		if (Input::KeyPressed(Keycode::Space))
+		for (Keycode key : Spells().MappedKeys())
 		{
-			QueueAction([this](GameObject* player)
+			if (Input::KeyPressed(key))
 			{
-				CastSpellPacket packet;
-				packet.CasterNetworkId = player->Components().GetComponent<NetworkIdentity>().NetworkId;
-				packet.SpellId = 0;
-				packet.SpellData = GameManager::Get().Spells().GetSpell(packet.SpellId).CreateFunc(player, GameManager::Get());
-
-				GameManager::Get().Network().SendPacketToAll(packet);
-				player->Components().GetComponent<SpellCaster>().Cast(packet.SpellId, packet.SpellData);
-
-				Freeze();
-				PlayerController* c = this;
-				Time::RenderingTimeline().AddFunction(GameManager::Get().Spells().GetSpell(packet.SpellId).CastTime, [c]()
+				id_t spellIndex = Spells().GetSpellIndex(key);
+				if (Spells().CanCast(spellIndex))
 				{
-					c->Unfreeze();
-				});
-			});
+					id_t spellId = Spells().GetSpellId(spellIndex);
+					QueueAction([this, spellIndex, spellId](GameObject* player)
+					{
+						CastSpellPacket packet;
+						packet.CasterNetworkId = player->Components().GetComponent<NetworkIdentity>().NetworkId;
+						packet.SpellId = spellId;
+						packet.SpellData = GameManager::Get().Spells().GetSpell(packet.SpellId).CreateFunc(player, GameManager::Get());
+
+						GameManager::Get().Network().SendPacketToAll(packet);
+						player->Components().GetComponent<SpellCaster>().Cast(packet.SpellId, packet.SpellData);
+
+						Spells().CastSpell(spellIndex);
+
+						Freeze();
+						PlayerController* c = this;
+						Time::RenderingTimeline().AddFunction(GameManager::Get().Spells().GetSpell(packet.SpellId).CastTime, [c]()
+						{
+							c->Unfreeze();
+						});
+					});
+				}
+			}
 		}
 
 		while (!IsFrozen() && !m_Actions.empty())

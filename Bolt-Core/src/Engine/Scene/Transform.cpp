@@ -97,6 +97,21 @@ namespace Bolt
 		m_UpdateOnInvalidate = update;
 	}
 
+	const Vector3f& Transform::LocalPosition() const
+	{
+		return m_Position;
+	}
+
+	const Quaternion& Transform::LocalOrientation() const
+	{
+		return m_Orientation;
+	}
+
+	const Vector3f& Transform::LocalScale() const
+	{
+		return m_Scale;
+	}
+
 	Vector3f Transform::Position() const
 	{
 		CheckRecalculate();

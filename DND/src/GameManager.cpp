@@ -24,9 +24,15 @@ namespace DND
 	}
 
 	GameManager::GameManager(Layer& layer)
-		: m_LocalCamera(nullptr), m_LocalPlayer(nullptr), m_Tilemap(layer, TILEMAP_WIDTH, TILEMAP_HEIGHT, TILE_WIDTH, TILE_HEIGHT), m_Prefabs(), m_Network(), m_Spells(), m_ActiveFunctions()
+		: m_LocalCamera(nullptr), m_LocalPlayer(nullptr), m_Tilemap(layer, TILEMAP_WIDTH, TILEMAP_HEIGHT, TILE_WIDTH, TILE_HEIGHT), m_Prefabs(), m_Network(), m_Spells(), m_UImenus(), m_ActiveFunctions()
 	{
 	
+	}
+
+	void GameManager::Initialize(const WelcomePacket& packet, Scene& scene)
+	{
+		Network().Initialize(packet);
+		SceneManager::SetCurrentScene(scene);
 	}
 
 	void GameManager::Exit()
@@ -35,12 +41,24 @@ namespace DND
 		m_LocalPlayer = nullptr;
 		Network().Exit([this]()
 		{
+			for (auto& menu : m_UImenus)
+			{
+				menu->DestroyMenu();
+			}
 			for (Timer* func : m_ActiveFunctions)
 			{
 				Time::RenderingTimeline().RemoveFunction(func);
 			}
 			SceneManager::SetCurrentSceneByName("Title");
 		});		
+	}
+
+	void GameManager::Update()
+	{
+		for (auto& menu : m_UImenus)
+		{
+			menu->Update();
+		}
 	}
 
 	Camera* GameManager::LocalCamera() const
@@ -62,6 +80,10 @@ namespace DND
 	{
 		m_LocalPlayer = player;
 		Network().SetPlayer(player);
+		for (auto& menu : m_UImenus)
+		{
+			menu->CreateMenu();
+		}
 	}
 
 	Tile GameManager::CurrentlySelectedTile() const
@@ -93,6 +115,11 @@ namespace DND
 	void GameManager::AddActiveFunction(Timer* function)
 	{
 		m_ActiveFunctions.push_back(function);
+	}
+
+	void GameManager::AddUIMenu(std::unique_ptr<UImenu>&& menu)
+	{
+		m_UImenus.push_back(std::move(menu));
 	}
 
 }
