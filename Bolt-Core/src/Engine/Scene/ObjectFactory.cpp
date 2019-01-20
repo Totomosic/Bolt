@@ -220,9 +220,16 @@ namespace Bolt
 
 	void ObjectFactory::Initialize()
 	{
-		s_RectangleModel = ResourcePtr<Model>(new Model(RectangleFactory(1, 1)), true);
-		s_EllipseModel = ResourcePtr<Model>(new Model(EllipseFactory(2, 2)), true);
-		s_CuboidModel = ResourcePtr<Model>(new Model(CuboidFactory(1, 1)), true);
+		s_RectangleModel = ResourcePtr<Model>(new Model(RectangleFactory(1, 1)), false);
+		s_EllipseModel = ResourcePtr<Model>(new Model(EllipseFactory(2, 2)), false);
+		s_CuboidModel = ResourcePtr<Model>(new Model(CuboidFactory(1, 1)), false);
+	}
+
+	void ObjectFactory::Terminate()
+	{
+		delete s_RectangleModel.Release();
+		delete s_EllipseModel.Release();
+		delete s_CuboidModel.Release();
 	}
 
 }

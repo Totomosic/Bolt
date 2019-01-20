@@ -28,4 +28,10 @@ namespace Bolt
 
 	};
 
+	struct BLT_API WindowClosedEvent : public Event
+	{
+	public:
+
+	};
+
 }

@@ -24,9 +24,9 @@ namespace Bolt
 		static void SetCurrentSceneById(id_t id);
 		static void SetCurrentSceneByName(const blt::string& name);
 
-		friend class Engine;
 		friend struct Scene;
 		friend class Application;
+		friend class Destructor;
 
 	private:
 		static void Terminate();

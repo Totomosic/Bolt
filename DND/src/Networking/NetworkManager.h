@@ -43,15 +43,12 @@ namespace DND
 
 		WelcomePacket Host();
 		void Connect(const SocketAddress& address, const ConnectedCallback& callback);
-		void Initialize(const WelcomePacket& initInfo);
+		void Initialize();
 		void Exit(const std::function<void()>& onExit);
-		void SetAddress(const SocketAddress& address);
 
 		id_t GetNextNetworkId() const;
 		id_t GetNextPlayerId() const;
-		void SetPlayerId(id_t playerId);
-		void SetPlayerPrefab(id_t prefabId);
-		void SetPlayer(GameObject* player);
+		void SetPlayer(const NetworkPlayerInfo& player);
 		void IdentifyObject(GameObject* object, id_t networkId, id_t playerId);
 		void MakeNetworkPlayer(GameObject* player);
 		void SetNextAvailableNetworkId(id_t id);
@@ -71,6 +68,8 @@ namespace DND
 				}
 			}
 		}
+
+		friend class GameManager;
 
 	};
 

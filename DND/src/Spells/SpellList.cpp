@@ -30,6 +30,7 @@ namespace DND
 		id_t index = m_SpellCount;
 		SpellInfo& info = m_Spells[index];
 		info = spell;
+		m_SpellCount++;
 		return info;
 	}
 

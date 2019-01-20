@@ -2,6 +2,7 @@
 
 #include "Application.h"
 #include "Initialization\Initializer.h"
+#include "Initialization\Destructor.h"
 #include "User\Input.h"
 #include "Renderer\Graphics.h"
 #include "Renderer\GLState.h"
@@ -12,7 +13,7 @@ namespace Bolt
 
 	Application::~Application()
 	{
-		AppWindow.release();
+		
 	}
 
 	float Application::Width() const
@@ -27,6 +28,8 @@ namespace Bolt
 
 	void Application::Start()
 	{
+		m_IsRunning = true;
+		m_ShouldExit = false;
 		Init();
 		Time::Update();
 		BLT_CORE_INFO("Init took " + std::to_string(Time::RenderingTimeline().CurrentRealTime()) + " seconds");
@@ -54,9 +57,20 @@ namespace Bolt
 	
 	}
 
+	void Application::Exit()
+	{
+		m_ShouldExit = true;
+	}
+
 	void Application::CreateWindowPtr(const WindowCreateInfo& createInfo)
 	{
 		AppWindow = std::make_unique<Window>(createInfo);
+	}
+
+	void Application::ExitPrivate()
+	{
+		Destructor::Run(std::move(AppWindow));
+		m_IsRunning = false;
 	}
 
 }

@@ -57,7 +57,8 @@ namespace DND
 	void TileTransform::UpdatePosition() const
 	{
 		Vector3f tilepos = PositionOfTile() + PositionOffset();
-		gameObject()->transform().SetLocalPosition(tilepos);
+		Vector3f localPos = gameObject()->transform().LocalPosition();
+		gameObject()->transform().SetLocalPosition(tilepos.x, tilepos.y, localPos.z);
 	}
 
 }

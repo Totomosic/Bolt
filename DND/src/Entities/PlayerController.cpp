@@ -11,7 +11,9 @@ namespace DND
 		m_Left(Keycode::A), m_Up(Keycode::W), m_Right(Keycode::D), m_Down(Keycode::S), m_LastPressed(Keycode::Left), m_Spells(5), m_Actions(), m_CanMove(true)
 	{
 		m_Spells.SetSpell(0, 0);
+		m_Spells.SetSpell(1, 1);
 		m_Spells.MapKeyToSpell(Keycode::Q, 0);
+		m_Spells.MapKeyToSpell(Keycode::E, 1);
 	}
 
 	void PlayerController::Update()
@@ -49,9 +51,9 @@ namespace DND
 			}
 			if (tileDiff.x != 0 || tileDiff.y != 0)
 			{
-				Tile moveToTile = t.CurrentTile() + tileDiff;
-				QueueAction([moveToTile, &m](GameObject* player)
+				QueueAction([tileDiff, &m, &t](GameObject* player)
 				{
+					Tile moveToTile = t.CurrentTile() + tileDiff;
 					m.SetTargetTile(moveToTile);
 					PlayerMovePacket packet;
 					packet.NetworkId = player->Components().GetComponent<NetworkIdentity>().NetworkId;
@@ -69,15 +71,16 @@ namespace DND
 				if (Spells().CanCast(spellIndex))
 				{
 					id_t spellId = Spells().GetSpellId(spellIndex);
-					QueueAction([this, spellIndex, spellId](GameObject* player)
+					GameState gameState = GameManager::Get().GetGameState();
+					QueueAction([this, spellIndex, spellId, gameState](GameObject* player)
 					{
 						CastSpellPacket packet;
 						packet.CasterNetworkId = player->Components().GetComponent<NetworkIdentity>().NetworkId;
 						packet.SpellId = spellId;
-						packet.SpellData = GameManager::Get().Spells().GetSpell(packet.SpellId).CreateFunc(player, GameManager::Get());
+						packet.SpellData = GameManager::Get().Spells().GetSpell(spellId).CreateFunc(gameObject(), gameState);
 
 						GameManager::Get().Network().SendPacketToAll(packet);
-						player->Components().GetComponent<SpellCaster>().Cast(packet.SpellId, packet.SpellData);
+						player->Components().GetComponent<SpellCaster>().Cast(packet.SpellId, packet.SpellData, gameState.Objects);
 
 						Spells().CastSpell(spellIndex);
 

@@ -105,6 +105,21 @@ namespace DND
 		Graphics::RenderScene();
 	}
 
+	void DndClient::Exit()
+	{
+		if (GameManager::Get().LocalPlayer() != nullptr)
+		{
+			GameManager::Get().Exit([this]()
+			{
+				Application::Exit();
+			});
+		}
+		else
+		{
+			Application::Exit();
+		}
+	}
+
 }
 
 int main()

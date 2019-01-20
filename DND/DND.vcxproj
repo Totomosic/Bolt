@@ -162,6 +162,7 @@
     <ClInclude Include="src\Scenes\TitleScene.h" />
     <ClInclude Include="src\Spells\Animators\FireballAnimator.h" />
     <ClInclude Include="src\Spells\BasicSpells.h" />
+    <ClInclude Include="src\Spells\Dice.h" />
     <ClInclude Include="src\Spells\SpellCaster.h" />
     <ClInclude Include="src\Spells\SpellInfo.h" />
     <ClInclude Include="src\Spells\SpellList.h" />
@@ -196,6 +197,7 @@
     <ClCompile Include="src\Scenes\TitleScene.cpp" />
     <ClCompile Include="src\Spells\Animators\FireballAnimator.cpp" />
     <ClCompile Include="src\Spells\BasicSpells.cpp" />
+    <ClCompile Include="src\Spells\Dice.cpp" />
     <ClCompile Include="src\Spells\SpellCaster.cpp" />
     <ClCompile Include="src\Spells\SpellList.cpp" />
     <ClCompile Include="src\UI\SpellCooldownMenu.cpp" />

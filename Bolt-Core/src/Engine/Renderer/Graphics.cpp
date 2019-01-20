@@ -9,8 +9,8 @@ namespace Bolt
 
 	Window* Graphics::s_Window = nullptr;
 
-	Model* Graphics::s_Rectangle = nullptr;
-	Model* Graphics::s_Line = nullptr;
+	ResourcePtr<Model> Graphics::s_Rectangle = nullptr;
+	ResourcePtr<Model> Graphics::s_Line = nullptr;
 
 	const Framebuffer* Graphics::DefaultFramebuffer()
 	{
@@ -102,9 +102,16 @@ namespace Bolt
 	void Graphics::Initialize(Window* window)
 	{
 		s_Window = window;
-		s_Rectangle = new Model(RectangleFactory(1, 1));
-		s_Line = new Model(LineFactory(Vector3f::Right(), 1));
+		s_Rectangle = ResourcePtr<Model>(new Model(RectangleFactory(1, 1)), false);
+		s_Line = ResourcePtr<Model>(new Model(LineFactory(Vector3f::Right(), 1)), false);
 		GLState::Reset();
+	}
+
+	void Graphics::Terminate()
+	{
+		s_Window = nullptr;
+		delete s_Rectangle.Release();
+		delete s_Line.Release();
 	}
 
 }

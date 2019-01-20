@@ -48,7 +48,7 @@ namespace Bolt
 			return Register((std::unique_ptr<Resource>&&)std::move(resource));
 		}
 
-		friend class Engine;
+		friend class Destructor;
 
 	private:
 		static void Terminate();

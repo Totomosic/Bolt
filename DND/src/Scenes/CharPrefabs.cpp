@@ -19,6 +19,11 @@ namespace DND
 		ResourcePtr<Texture2D> upWizard = ResourceManager::Get<Texture2D>(resources.GetResourceId("WizardStaticBackward"));
 		ResourcePtr<Texture2D> leftWizard = ResourceManager::Get<Texture2D>(resources.GetResourceId("WizardStaticLeft"));
 
+		ResourcePtr<Texture2D> downSwordsman = ResourceManager::Get<Texture2D>(resources.GetResourceId("SwordsmanStaticForward"));
+		ResourcePtr<Texture2D> rightSwordsman = ResourceManager::Get<Texture2D>(resources.GetResourceId("SwordsmanStaticRight"));
+		ResourcePtr<Texture2D> upSwordsman = ResourceManager::Get<Texture2D>(resources.GetResourceId("SwordsmanStaticBackward"));
+		ResourcePtr<Texture2D> leftSwordsman = ResourceManager::Get<Texture2D>(resources.GetResourceId("SwordsmanStaticLeft"));
+
 		CharacterStats defaultStats;
 		defaultStats.MaxHealth = 40;
 		defaultStats.CurrentHealth = defaultStats.MaxHealth;
@@ -37,7 +42,19 @@ namespace DND
 		wizardCharacterPrefab.Components().AddComponent<StatsComponent>(defaultStats);
 		wizardCharacterPrefab.Components().AddComponent<Healthbar>(factory.CurrentLayer(), Vector3f(0, TILE_HEIGHT * 0.75f + 5, 1));
 
+		Mesh swordsmanCharacterMesh = wizardCharacterMesh;
+
+		ObjectPrefab swordsmanCharacterPrefab;
+		swordsmanCharacterPrefab.Components().AddComponent<MeshRenderer>(swordsmanCharacterMesh);
+		swordsmanCharacterPrefab.Components().AddComponent<TileTransform>(&GameManager::Get().GetTilemap(), Tile(), Vector3f(0, 15, 0));
+		swordsmanCharacterPrefab.Components().AddComponent<CharacterAnimator>(Direction::Down, upSwordsman, rightSwordsman, downSwordsman, leftSwordsman);
+		swordsmanCharacterPrefab.Components().AddComponent<TileMotion>(350);
+		swordsmanCharacterPrefab.Components().AddComponent<SpellCaster>();
+		swordsmanCharacterPrefab.Components().AddComponent<StatsComponent>(defaultStats);
+		swordsmanCharacterPrefab.Components().AddComponent<Healthbar>(factory.CurrentLayer(), Vector3f(0, TILE_HEIGHT * 0.75f + 5, 1));
+
 		prefabs.BlueWizard = GameManager::Get().Network().Factory().AddPrefab(std::move(wizardCharacterPrefab));
+		prefabs.Swordsman = GameManager::Get().Network().Factory().AddPrefab(std::move(swordsmanCharacterPrefab));
 	}
 
 }

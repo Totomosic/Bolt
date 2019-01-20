@@ -1,5 +1,5 @@
 <RESOURCE_SETTINGS>
-	<Name>tileset</Name>
+	<Name>SwordsmanStaticLeft</Name>
 	<Wrap Mode>ClampToEdge</Wrap Mode>
 	<Min Filter>Nearest</Min Filter>
 	<Mag Filter>Nearest</Mag Filter>

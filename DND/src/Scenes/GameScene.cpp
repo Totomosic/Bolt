@@ -25,6 +25,7 @@ namespace DND
 		gameCamera->transform().Translate(-client.Width() / 2, -client.Height() / 2, 50);
 
 		GameManager::Get().Network().Factory().SetCurrentLayer(overlayGameLayer);
+		GameManager::Get().SetLocalCamera(gameCamera);
 		CreateCharacterPrefabs(GameManager::Get().Prefabs(), GameManager::Get().Network().Factory(), resources);		
 
 		CreateBasicSpells(resources);
@@ -34,12 +35,6 @@ namespace DND
 		gameScene.OnLoad.Subscribe([gameCamera, &overlayGameLayer, resources](id_t listenerId, SceneLoadedEvent& e)
 		{
 			CreateTilemap(resources);
-			if (GameManager::Get().LocalPlayer() != nullptr)
-			{
-				GameManager::Get().SetLocalCamera(gameCamera);
-				gameCamera->MakeChildOf(GameManager::Get().LocalPlayer());
-				gameCamera->Components().AddComponent<PlayerCamera>(&GameManager::Get().GetTilemap(), GameManager::Get().LocalPlayer(), &overlayGameLayer);
-			}
 			return true;
 		});
 
@@ -69,24 +64,30 @@ namespace DND
 		layer.SetTileImages(25, 0, 4, TILEMAP_HEIGHT, pathTileImage, ResizeFilter::Nearest);
 	}
 
-	void CreateSceneFromWelcome(const WelcomePacket& packet, id_t prefabId)
+	void CreateSceneFromWelcome(const WelcomePacket& packet, const PlayerCharacterInfo& playerInfo)
 	{
-		GameManager::Get().Network().SetPlayerId(packet.PlayerId);
-		GameManager::Get().Network().SetPlayerPrefab(prefabId);
-		GameObject* player = GameManager::Get().Network().Factory().Instantiate(GameManager::Get().Network().Factory().GetPrefab(prefabId));
-		GameManager::Get().Network().IdentifyObject(player, packet.NetworkId, packet.PlayerId);
+		GameObject* player = GameManager::Get().Network().Factory().Instantiate(GameManager::Get().Network().Factory().GetPrefab(playerInfo.PrefabId));
 		player->Components().AddComponent<PlayerController>();
-
 		Tile currentTile = Tile(Random::NextInt(0, TILEMAP_WIDTH - 1), Random::NextInt(0, TILEMAP_HEIGHT - 1));
 		player->Components().GetComponent<TileTransform>().SetCurrentTile(currentTile, true);
-		GameManager::Get().SetLocalPlayer(player);
+
+		NetworkPlayerInfo myPlayer;
+		myPlayer.Address = packet.Address;
+		myPlayer.Player = player;
+		myPlayer.PlayerId = packet.PlayerId;
+		myPlayer.PrefabId = playerInfo.PrefabId;
+		GameManager::Get().SetLocalPlayer(myPlayer);
+
+		GameManager::Get().Network().IdentifyObject(player, packet.NetworkId, packet.PlayerId);;
+		GameManager::Get().LocalCamera()->MakeChildOf(GameManager::Get().LocalPlayer());
+		GameManager::Get().LocalCamera()->Components().AddComponent<PlayerCamera>(&GameManager::Get().GetTilemap(), GameManager::Get().LocalPlayer(), GameManager::Get().Network().Factory().CurrentLayer());
 
 		id_t maxNetworkId = packet.NetworkId;
 		id_t maxPlayerId = packet.PlayerId;
 
 		IntroductionPacket intro;
 		intro.PlayerId = packet.PlayerId;
-		intro.Character.CharacterPrefabId = prefabId;
+		intro.Character.CharacterPrefabId = playerInfo.PrefabId;
 		intro.Character.CurrentTile = currentTile;
 		intro.Character.NetworkId = packet.NetworkId;
 		intro.Character.Stats = player->Components().GetComponent<StatsComponent>().Stats();

@@ -34,7 +34,8 @@ namespace Bolt
 	{
 		if (IsValid())
 		{
-			closesocket(m_Socket);
+			Shutdown();
+			Close();
 		}
 	}
 
@@ -50,7 +51,7 @@ namespace Bolt
 		if (err != NO_ERROR)
 		{
 			int errorCode = WSAGetLastError();
-			BLT_CORE_ERROR("Socket Error: " + std::to_string(errorCode));
+			BLT_CORE_ERROR("Socket Bind Error: " + std::to_string(errorCode));
 			return -errorCode;
 		}
 		return NO_ERROR;
@@ -63,7 +64,7 @@ namespace Bolt
 		if (err != NO_ERROR)
 		{
 			int errorCode = WSAGetLastError();
-			BLT_CORE_ERROR("Socket Error: " + std::to_string(errorCode));
+			BLT_CORE_ERROR("Socket Listen Error: " + std::to_string(errorCode));
 			return -errorCode;
 		}
 		return NO_ERROR;
@@ -80,14 +81,14 @@ namespace Bolt
 		}
 		else
 		{
-			SocketAddress* temp = &SocketAddress();
-			newSocket = accept(m_Socket, &temp->m_SockAddr, &length);
+			SocketAddress addr;
+			newSocket = accept(m_Socket, &addr.m_SockAddr, &length);
 		}
 		if (newSocket != INVALID_SOCKET)
 		{
 			return TCPsocket(newSocket);
 		}
-		BLT_CORE_ERROR("Socket Error");
+		BLT_CORE_ERROR("Socket Accept Error");
 		return TCPsocket(INVALID_SOCKET);
 	}
 
@@ -97,9 +98,13 @@ namespace Bolt
 		int err = connect(m_Socket, &address.m_SockAddr, address.GetSize());
 		if (err < 0)
 		{
-			int res = WSAGetLastError();
-			BLT_CORE_ERROR("Socket Error: " + std::to_string(res));
-			return -res;
+			int error = WSAGetLastError();
+			if (error = WSAEWOULDBLOCK)
+			{
+				return 0;
+			}
+			BLT_CORE_ERROR("Socket Connect Error: " + std::to_string(error));
+			return -error;
 		}
 		return NO_ERROR;
 	}
@@ -111,7 +116,11 @@ namespace Bolt
 		if (bytesSent < 0)
 		{
 			int error = WSAGetLastError();
-			BLT_CORE_ERROR("Socket send error");
+			if (error = WSAEWOULDBLOCK)
+			{
+				return 0;
+			}
+			BLT_CORE_ERROR("Socket Send Error: " + std::to_string(error));
 			return -error;
 		}
 		return bytesSent;
@@ -124,10 +133,26 @@ namespace Bolt
 		if (bytesReceived < 0)
 		{
 			int error = WSAGetLastError();
-			BLT_CORE_ERROR("Socket recv error: " + std::to_string(error));
+			if (error = WSAEWOULDBLOCK)
+			{
+				return 0;
+			}
+			BLT_CORE_ERROR("Socket Recv Error: " + std::to_string(error));
 			return -error;
 		}
 		return bytesReceived;
+	}
+
+	int TCPsocket::Shutdown()
+	{
+		BLT_ASSERT(IsValid(), "Cannot Shutdown invalid Socket");
+		int err = shutdown(m_Socket, SD_BOTH);
+		if (err != NO_ERROR)
+		{
+			int errorCode = WSAGetLastError();
+			BLT_CORE_ERROR("Socket Shutdown Error: " + std::to_string(errorCode));
+		}
+		return err;
 	}
 
 	int TCPsocket::Close()

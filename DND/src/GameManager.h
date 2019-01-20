@@ -16,6 +16,28 @@ namespace DND
 	constexpr int TILE_WIDTH = 40;
 	constexpr int TILE_HEIGHT = 40;
 
+	struct PlayerCharacterInfo
+	{
+	public:
+		id_t PrefabId;
+	};
+
+	struct GameStateObjects
+	{
+	public:
+		NetworkManager* Network;
+		ObjectFactory* Factory;
+		Tilemap* Map;
+		GameObject* LocalPlayer;
+	};
+
+	struct GameState
+	{
+	public:
+		GameStateObjects Objects;
+		Tile SelectedTile;
+	};
+
 	class GameManager
 	{
 	private:
@@ -40,15 +62,21 @@ namespace DND
 
 		GameManager(Layer& layer);
 
-		void Initialize(const WelcomePacket& welcomePacket, Scene& scene);
+		void Host(const SocketAddress& address, PlayerCharacterInfo player, const std::function<void(const WelcomePacket&, const PlayerCharacterInfo&)>& loadSceneCallback);
+		void Join(const SocketAddress& address, const SocketAddress& toAddress, PlayerCharacterInfo player, const std::function<void(const WelcomePacket&, const PlayerCharacterInfo&)>& loadSceneCallback);
+
+		void Initialize();
 		void Exit();
+		void Exit(const std::function<void()>& callback);
 		void Update();
 
 		Camera* LocalCamera() const;
 		GameObject* LocalPlayer() const;
 		void SetLocalCamera(Camera* camera);
-		void SetLocalPlayer(GameObject* player);
+		void SetLocalPlayer(const NetworkPlayerInfo& player);
 
+		GameStateObjects GetStateObjects();
+		GameState GetGameState();
 		Tile CurrentlySelectedTile() const;
 
 		PrefabList& Prefabs();

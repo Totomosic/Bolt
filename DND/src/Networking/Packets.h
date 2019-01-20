@@ -61,6 +61,7 @@ namespace DND
 	public:
 		id_t PlayerId;
 		id_t NetworkId;
+		SocketAddress Address;
 		std::vector<PlayerInfo> Players;
 		std::vector<CharacterInfo> Characters;
 	};
@@ -204,6 +205,7 @@ namespace DND
 	{
 		Serialize(stream, value.PlayerId);
 		Serialize(stream, value.NetworkId);
+		Serialize(stream, value.Address);
 		Serialize(stream, value.Players);
 		Serialize(stream, value.Characters);
 	}
@@ -212,6 +214,7 @@ namespace DND
 	{
 		Deserialize(stream, outValue.PlayerId);
 		Deserialize(stream, outValue.NetworkId);
+		Deserialize(stream, outValue.Address);
 		Deserialize(stream, outValue.Players);
 		Deserialize(stream, outValue.Characters);
 	}

@@ -5,12 +5,14 @@ namespace DND
 {
 
 	class GameManager;
+	struct GameState;
+	struct GameStateObjects;
 
 	struct SpellInfo
 	{
 	public:
-		using CreateSpellFunc = std::function<OutputMemoryStream(GameObject*, GameManager&)>;
-		using CastSpellFunc = std::function<void(GameObject*, InputMemoryStream&, GameManager&)>;
+		using CreateSpellFunc = std::function<OutputMemoryStream(GameObject*, const GameState&)>;
+		using CastSpellFunc = std::function<void(GameObject*, InputMemoryStream&, const GameStateObjects&)>;
 
 	public:
 		blt::string Name;

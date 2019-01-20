@@ -12,7 +12,7 @@ namespace DND
 
 	}
 
-	void SpellCaster::Cast(id_t spellId, const OutputMemoryStream& castData)
+	void SpellCaster::Cast(id_t spellId, const OutputMemoryStream& castData, const GameStateObjects& state)
 	{
 		SpellInfo& spell = GameManager::Get().Spells().GetSpell(spellId);
 		BLT_CORE_WARN("CASTING SPELL {}", spell.Name);
@@ -20,7 +20,7 @@ namespace DND
 		InputMemoryStream data(castData.GetRemainingDataSize());
 		memcpy(data.GetBufferPtr(), castData.GetBufferPtr(), castData.GetRemainingDataSize());
 
-		spell.CastFunc(gameObject(), data, GameManager::Get());
+		spell.CastFunc(gameObject(), data, state);
 	}
 
 	std::unique_ptr<Component> SpellCaster::Clone() const

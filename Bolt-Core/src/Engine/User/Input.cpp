@@ -377,4 +377,9 @@ namespace Bolt
 		s_PressedCharacters.push_back((char)code);
 	}
 
+	void Input::WindowClosedCallback(GLFWwindow* window)
+	{
+		s_Window->OnClose.Post(std::make_unique<WindowClosedEvent>());
+	}
+
 }

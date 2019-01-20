@@ -7,7 +7,8 @@ namespace Bolt
 {
 
 	Window::Window(const WindowCreateInfo& info)
-		: m_Data{ nullptr, Framebuffer(), info.Title, info.Decorated }, OnResize(Events::WINDOW_RESIZE), OnMoved(Events::WINDOW_MOVED), OnFocus(Events::WINDOW_FOCUSED), OnFocusLost(Events::WINDOW_LOST_FOCUS)
+		: m_Data{ nullptr, Framebuffer(), info.Title, info.Decorated }, OnResize(Events::WINDOW_RESIZE), OnMoved(Events::WINDOW_MOVED), OnFocus(Events::WINDOW_FOCUSED), OnFocusLost(Events::WINDOW_LOST_FOCUS),
+		OnClose(Events::WINDOW_CLOSED)
 	{
 		m_Data.m_Framebuffer.GetViewport().Width = info.Width;
 		m_Data.m_Framebuffer.GetViewport().Height = info.Height;
@@ -39,6 +40,7 @@ namespace Bolt
 		glfwSetKeyCallback(WindowHandle(), Input::KeyboardKeyCallback);
 		glfwSetFramebufferSizeCallback(WindowHandle(), Input::WindowResizeCallback);
 		glfwSetCharCallback(WindowHandle(), Input::CharPressedCallback);
+		glfwSetWindowCloseCallback(WindowHandle(), Input::WindowClosedCallback);
 	}
 
 	Window::~Window()

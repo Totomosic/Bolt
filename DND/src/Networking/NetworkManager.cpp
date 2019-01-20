@@ -53,6 +53,7 @@ namespace DND
 		WelcomePacket result;
 		result.NetworkId = m_NetworkIdManager.GetNextId();
 		result.PlayerId = m_PlayerIdManager.GetNextId();
+		result.Address = m_Server.Address();
 		m_Server.Initialize(true);
 		return result;
 	}
@@ -69,21 +70,23 @@ namespace DND
 			callback(packet);
 			return true;
 		});
-
 		HelloPacket hello;
 		m_Server.SendPacket(address, hello);
+		BLT_CORE_INFO("CONNECTING TO {}", address.ToString());
 	}
 
-	void NetworkManager::Initialize(const WelcomePacket& packet)
+	void NetworkManager::Initialize()
 	{
 		m_Server.OnHelloPacket.Clear();
 		m_Player.Address = m_Server.Address();
 		m_Server.OnHelloPacket.Subscribe([this](id_t listenerId, ReceivedPacketEvent& e)
 		{
 			BLT_CORE_INFO("RECEIVED HELLO PACKET");
+			BLT_CORE_INFO("INCOMING CONNECTION FROM {}", e.FromAddress.ToString());
 			WelcomePacket result;
 			result.NetworkId = GetNextNetworkId();
 			result.PlayerId = GetNextPlayerId();
+			result.Address = e.FromAddress;
 			PlayerInfo me;
 			me.Address = m_Player.Address;
 			me.PlayerId = m_Player.PlayerId;
@@ -160,7 +163,7 @@ namespace DND
 			CastSpellPacket packet;
 			Deserialize(e.Packet, packet);
 			GameObject* caster = GetObjectByNetworkId(packet.CasterNetworkId);
-			caster->Components().GetComponent<SpellCaster>().Cast(packet.SpellId, packet.SpellData);
+			caster->Components().GetComponent<SpellCaster>().Cast(packet.SpellId, packet.SpellData, GameManager::Get().GetStateObjects());
 			return true;
 		});
 
@@ -198,16 +201,12 @@ namespace DND
 				DisconnectPlayer(pair.first);
 			}
 			m_OtherPlayers.clear();
+			m_NetworkIdManager.Reset();
+			m_PlayerIdManager.Reset();
 			onExit();
 			return true;
 		});
 		m_Server.Terminate();		
-	}
-
-	void NetworkManager::SetAddress(const SocketAddress& address)
-	{
-		m_Player.Address = address;
-		m_Server.SetAddress(address);
 	}
 
 	id_t NetworkManager::GetNextNetworkId() const
@@ -220,19 +219,9 @@ namespace DND
 		return m_PlayerIdManager.GetNextId();
 	}
 
-	void NetworkManager::SetPlayerId(id_t playerId)
+	void NetworkManager::SetPlayer(const NetworkPlayerInfo& player)
 	{
-		m_Player.PlayerId = playerId;
-	}
-
-	void NetworkManager::SetPlayerPrefab(id_t prefabId)
-	{
-		m_Player.PrefabId = prefabId;
-	}
-
-	void NetworkManager::SetPlayer(GameObject* player)
-	{
-		m_Player.Player = player;
+		m_Player = player;
 	}
 
 	void NetworkManager::IdentifyObject(GameObject* object, id_t networkId, id_t playerId)

@@ -55,9 +55,11 @@ namespace Bolt
 		GameObject* Line(const Vector3f& p0, const Vector3f& p1, const Color& color = Color::White) const;
 
 		friend class Initializer;
+		friend class Destructor;
 
 	private:
 		static void Initialize();
+		static void Terminate();
 
 	};
 
