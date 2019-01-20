@@ -76,6 +76,7 @@
     <ClInclude Include="src\Entities\SpellManager.h" />
     <ClInclude Include="src\UI\SpellCooldownMenu.h" />
     <ClInclude Include="src\UI\UImenu.h" />
+    <ClInclude Include="src\Spells\Dice.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\App.cpp" />
@@ -126,5 +127,6 @@
     <ClCompile Include="src\Spells\Animators\FireballAnimator.cpp" />
     <ClCompile Include="src\Entities\SpellManager.cpp" />
     <ClCompile Include="src\UI\SpellCooldownMenu.cpp" />
+    <ClCompile Include="src\Spells\Dice.cpp" />
   </ItemGroup>
 </Project>

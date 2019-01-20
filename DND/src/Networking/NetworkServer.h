@@ -52,6 +52,7 @@ namespace DND
 		inline bool IsRunning() const { return m_IsRunning; }
 
 		void SetAddress(const SocketAddress& address);
+		void Bind();
 		void Initialize(bool runListenThread);
 		void Terminate();
 

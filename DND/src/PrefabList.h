@@ -8,6 +8,7 @@ namespace DND
 	{
 	public:
 		id_t BlueWizard;
+		id_t Swordsman;
 
 	};
 

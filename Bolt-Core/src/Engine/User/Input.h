@@ -115,6 +115,7 @@ namespace Bolt
 		static void ShowCursor();
 
 		friend class Initializer;
+		friend class Destructor;
 		friend class Window;
 		friend class Engine;
 
@@ -132,6 +133,7 @@ namespace Bolt
 		static void KeyboardKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 		static void WindowResizeCallback(GLFWwindow* window, int width, int height);
 		static void CharPressedCallback(GLFWwindow* window, uint code);
+		static void WindowClosedCallback(GLFWwindow* window);
 
 	};
 

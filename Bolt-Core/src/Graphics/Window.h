@@ -26,6 +26,7 @@ namespace Bolt
 		EventDispatcher<WindowMovedEvent> OnMoved;
 		EventDispatcher<WindowFocusedEvent> OnFocus;
 		EventDispatcher<WindowFocusedEvent> OnFocusLost;
+		EventDispatcher<WindowClosedEvent> OnClose;
 
 	public:
 		Window(const WindowCreateInfo& info = WindowCreateInfo());

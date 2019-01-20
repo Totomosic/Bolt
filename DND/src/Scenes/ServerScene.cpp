@@ -17,12 +17,11 @@ namespace DND
 
 		UIsurface& hostButton = serverLayer.UI().Rectangle(300, 100, Color::Green);
 		hostButton.Text("Host");
-		hostButton.EventHandler().OnClicked.Subscribe([&client, resources, &gameScene](id_t listenerId, UIClickedEvent& e)
+		hostButton.EventHandler().OnClicked.Subscribe([&client](id_t listenerId, UIClickedEvent& e)
 		{
-			GameManager::Get().Network().SetAddress(SocketAddress(client.ADDRESS, client.PORT));
-			WelcomePacket packet = GameManager::Get().Network().Host();
-			GameManager::Get().Initialize(packet, gameScene);
-			CreateSceneFromWelcome(packet, GameManager::Get().Prefabs().BlueWizard);
+			PlayerCharacterInfo player;
+			player.PrefabId = GameManager::Get().Prefabs().Swordsman;
+			GameManager::Get().Host(SocketAddress(client.ADDRESS, client.PORT), player, CreateSceneFromWelcome);
 			return true;
 		});
 
@@ -30,18 +29,15 @@ namespace DND
 		joinButton.Text("Join");
 		joinButton.EventHandler().OnClicked.Subscribe([&client, &gameScene](id_t listenerId, UIClickedEvent& e)
 		{
-			GameManager::Get().Network().SetAddress(SocketAddress(client.ADDRESS, client.PORT));
-			if (client.TARGET_PORT != client.PORT || client.TARGET_ADDRESS != client.ADDRESS)
+			if (client.ADDRESS != client.TARGET_ADDRESS || client.PORT != client.TARGET_PORT)
 			{
-				GameManager::Get().Network().Connect(SocketAddress(client.TARGET_ADDRESS, client.TARGET_PORT), [&client, &gameScene](WelcomePacket packet)
-				{
-					GameManager::Get().Initialize(packet, gameScene);
-					CreateSceneFromWelcome(packet, GameManager::Get().Prefabs().BlueWizard);
-				});
+				PlayerCharacterInfo player;
+				player.PrefabId = GameManager::Get().Prefabs().BlueWizard;
+				GameManager::Get().Join(SocketAddress(client.ADDRESS, client.PORT), SocketAddress(client.TARGET_ADDRESS, client.TARGET_PORT), player, CreateSceneFromWelcome);
 			}
 			else
 			{
-				BLT_CORE_ERROR("TARGET ADDRESS WAS SAME AS BOUND ADDRESS");
+				BLT_CORE_WARN("ATTEMPTED TO JOIN SELF");
 			}
 			return true;
 		});

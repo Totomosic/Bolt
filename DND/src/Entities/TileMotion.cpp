@@ -62,11 +62,18 @@ namespace DND
 	void TileMotion::SetTargetTile(const Tile& targetTile)
 	{
 		Tile currentTile = m_Transform->CurrentTile();
-		if (targetTile.x >= 0 && targetTile.x < m_Transform->GetTilemap().Width() && targetTile.y >= 0 && targetTile.y < m_Transform->GetTilemap().Height())
+		if (targetTile != currentTile)
 		{
-			m_TargetTile = targetTile;
-			m_Seeking = true;
-			m_Transform->SetCurrentTile(m_TargetTile, false);
+			if (targetTile.x >= 0 && targetTile.x < m_Transform->GetTilemap().Width() && targetTile.y >= 0 && targetTile.y < m_Transform->GetTilemap().Height())
+			{
+				m_TargetTile = targetTile;
+				m_Seeking = true;
+				m_Transform->SetCurrentTile(m_TargetTile, false);
+			}
+		}
+		else
+		{
+			m_Seeking = false;
 		}
 		if (HasAnimator())
 		{

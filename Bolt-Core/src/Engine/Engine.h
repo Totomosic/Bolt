@@ -10,6 +10,7 @@ namespace Bolt
 	private:
 		std::unique_ptr<Application> m_CurrentApplication;
 		WindowCreateInfo m_CreateInfo;
+		bool m_ShouldExit;
 
 	public:
 		Engine();

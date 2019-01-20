@@ -1,6 +1,6 @@
 <RESOURCE_SETTINGS>
 	<Name>tileset</Name>
-	<Wrap Mode>Repeat</Wrap Mode>
+	<Wrap Mode>ClampToEdge</Wrap Mode>
 	<Min Filter>Nearest</Min Filter>
 	<Mag Filter>Nearest</Mag Filter>
 	<Mipmaps>Enabled</Mipmaps>

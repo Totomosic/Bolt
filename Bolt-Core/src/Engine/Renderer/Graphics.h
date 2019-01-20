@@ -7,8 +7,8 @@ namespace Bolt
 	class BLT_API Graphics
 	{
 	private:
-		static Model* s_Rectangle;
-		static Model* s_Line;
+		static ResourcePtr<Model> s_Rectangle;
+		static ResourcePtr<Model> s_Line;
 
 	private:
 		static Window* s_Window;
@@ -27,9 +27,11 @@ namespace Bolt
 		static void RenderScene();
 
 		friend class Initializer;
+		friend class Destructor;
 
 	private:
 		static void Initialize(Window* window);
+		static void Terminate();
 
 	};
 

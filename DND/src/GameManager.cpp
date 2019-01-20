@@ -29,17 +29,47 @@ namespace DND
 	
 	}
 
-	void GameManager::Initialize(const WelcomePacket& packet, Scene& scene)
+	void GameManager::Host(const SocketAddress& address, PlayerCharacterInfo player, const std::function<void(const WelcomePacket&, const PlayerCharacterInfo&)>& loadSceneCallback)
 	{
-		Network().Initialize(packet);
-		SceneManager::SetCurrentScene(scene);
+		Network().Server().SetAddress(address);
+		Network().Server().Bind();
+		Network().Initialize();
+		WelcomePacket packet = Network().Host();
+		SceneManager::SetCurrentSceneByName("Game");
+		loadSceneCallback(packet, player);
+		Initialize();
+	}
+
+	void GameManager::Join(const SocketAddress& address, const SocketAddress& toAddress, PlayerCharacterInfo player, const std::function<void(const WelcomePacket&, const PlayerCharacterInfo&)>& loadSceneCallback)
+	{
+		Network().Server().SetAddress(address);
+		Network().Server().Bind();
+		Network().Initialize();
+		Network().Connect(toAddress, [this, player, loadSceneCallback](WelcomePacket packet)
+		{
+			SceneManager::SetCurrentSceneByName("Game");
+			loadSceneCallback(packet, player);
+			Initialize();
+		});
+	}
+
+	void GameManager::Initialize()
+	{
+		for (auto& menu : m_UImenus)
+		{
+			menu->CreateMenu();
+		}
 	}
 
 	void GameManager::Exit()
 	{
-		m_LocalCamera = nullptr;
+		Exit([]() {});
+	}
+
+	void GameManager::Exit(const std::function<void()>& callback)
+	{
 		m_LocalPlayer = nullptr;
-		Network().Exit([this]()
+		Network().Exit([this, callback]()
 		{
 			for (auto& menu : m_UImenus)
 			{
@@ -50,7 +80,8 @@ namespace DND
 				Time::RenderingTimeline().RemoveFunction(func);
 			}
 			SceneManager::SetCurrentSceneByName("Title");
-		});		
+			callback();
+		});
 	}
 
 	void GameManager::Update()
@@ -76,14 +107,22 @@ namespace DND
 		m_LocalCamera = camera;
 	}
 
-	void GameManager::SetLocalPlayer(GameObject* player)
+	void GameManager::SetLocalPlayer(const NetworkPlayerInfo& player)
 	{
-		m_LocalPlayer = player;
+		m_LocalPlayer = player.Player;
 		Network().SetPlayer(player);
-		for (auto& menu : m_UImenus)
-		{
-			menu->CreateMenu();
-		}
+	}
+
+	GameStateObjects GameManager::GetStateObjects()
+	{
+		return { &Network(), &Network().Factory(), &GetTilemap(), LocalPlayer() };
+	}
+
+	GameState GameManager::GetGameState()
+	{
+		GameState state = { GetStateObjects() };
+		state.SelectedTile = CurrentlySelectedTile();
+		return state;
 	}
 
 	Tile GameManager::CurrentlySelectedTile() const

@@ -37,15 +37,19 @@ namespace DND
 		}
 	}
 
+	void NetworkServer::Bind()
+	{
+		m_Socket.Bind(m_Address);
+	}
+
 	void NetworkServer::Initialize(bool runListenThread)
 	{
 		m_Validators.clear();		
 		m_IsRunning = true;
 		if (runListenThread)
 		{
-			m_Socket.Bind(m_Address);
 			ClearSocket();
-			BLT_CORE_WARN("STARTED LISTENING ON {}", Address().ToString());
+			BLT_CORE_WARN("LISTENING ON {}", m_Address.ToString());
 			RunListenThread();
 		}
 	}

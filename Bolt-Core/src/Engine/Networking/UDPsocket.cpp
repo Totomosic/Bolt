@@ -99,7 +99,7 @@ namespace Bolt
 		if (err != NO_ERROR)
 		{
 			int errorCode = WSAGetLastError();
-			BLT_CORE_ERROR("Socket Close Error: " + std::to_string(errorCode));
+			BLT_CORE_ERROR("Socket Shutdown Error: " + std::to_string(errorCode));
 		}
 		return err;
 	}

@@ -11,16 +11,14 @@ namespace Bolt
 {
 
 	Engine::Engine()
+		: m_CurrentApplication(), m_CreateInfo(), m_ShouldExit(false)
 	{
 		Initializer::PreOpenGL();
 	}
 
 	Engine::~Engine()
 	{
-		SceneManager::Terminate();
-		ResourceManager::Terminate();
-		Input::Terminate();
-		WSACleanup();
+		
 	}
 
 	bool Engine::ShouldClose() const
@@ -47,6 +45,10 @@ namespace Bolt
 		{
 			scene->UpdateTemporaryObjects();
 		}
+		if (m_CurrentApplication->m_ShouldExit)
+		{
+			m_CurrentApplication->ExitPrivate();
+		}
 	}
 
 	void Engine::SetApplication(std::unique_ptr<Application>&& app)
@@ -65,9 +67,19 @@ namespace Bolt
 	void Engine::Run()
 	{
 		BLT_ASSERT(m_CurrentApplication.get() != nullptr, "Must have a valid Application to run");
-		while (!ShouldClose())
+		m_CurrentApplication->AppWindow->OnClose.Subscribe([this](id_t listenerId, WindowClosedEvent& e)
+		{
+			m_ShouldExit = true;
+			return false;
+		});
+		while (m_CurrentApplication->m_IsRunning)
 		{
 			UpdateApplication();
+			if (m_ShouldExit)
+			{
+				m_CurrentApplication->Exit();
+				m_ShouldExit = false;
+			}
 		}
 	}
 

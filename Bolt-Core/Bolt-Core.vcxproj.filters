@@ -803,6 +803,7 @@
     </ClInclude>
     <ClInclude Include="src\Logging.h" />
     <ClInclude Include="src\Types.h" />
+    <ClInclude Include="src\Engine\Initialization\Destructor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\BoltTL\string.cpp">
@@ -1155,6 +1156,7 @@
     </ClCompile>
     <ClCompile Include="src\Logging.cpp" />
     <ClCompile Include="src\Types.cpp" />
+    <ClCompile Include="src\Engine\Initialization\Destructor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Graphics\Resources\Shaders\Source\DefaultColor_f.glsl">

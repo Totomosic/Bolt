@@ -12,11 +12,13 @@ namespace Bolt
 
 	const ResourceFile& ResourcePack::GetResource(const blt::string& resourceName) const
 	{
+		BLT_ASSERT(m_Resources.find(resourceName) != m_Resources.end(), "No resource exists named " + resourceName);
 		return m_Resources.at(resourceName);
 	}
 
 	ResourceFile& ResourcePack::GetResource(const blt::string& resourceName)
 	{
+		BLT_ASSERT(m_Resources.find(resourceName) != m_Resources.end(), "No resource exists named " + resourceName);
 		return m_Resources.at(resourceName);
 	}
 
