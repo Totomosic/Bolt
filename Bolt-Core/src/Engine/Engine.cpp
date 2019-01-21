@@ -67,7 +67,7 @@ namespace Bolt
 	void Engine::Run()
 	{
 		BLT_ASSERT(m_CurrentApplication.get() != nullptr, "Must have a valid Application to run");
-		m_CurrentApplication->AppWindow->OnClose.Subscribe([this](id_t listenerId, WindowClosedEvent& e)
+		m_CurrentApplication->AppWindow->OnClose().Subscribe([this](id_t listenerId, WindowClosedEvent& e)
 		{
 			m_ShouldExit = true;
 			return false;

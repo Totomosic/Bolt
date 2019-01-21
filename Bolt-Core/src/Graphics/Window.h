@@ -10,6 +10,12 @@ namespace Bolt
 	struct BLT_API WindowData
 	{
 	public:
+		EventDispatcher<WindowResizeEvent> m_OnResize;
+		EventDispatcher<WindowMovedEvent> m_OnMoved;
+		EventDispatcher<WindowFocusedEvent> m_OnFocus;
+		EventDispatcher<WindowFocusedEvent> m_OnFocusLost;
+		EventDispatcher<WindowClosedEvent> m_OnClose;
+
 		GLFWwindow* m_WindowHandle;
 		Framebuffer m_Framebuffer;
 		blt::string m_Title;
@@ -22,19 +28,18 @@ namespace Bolt
 		WindowData m_Data;
 
 	public:
-		EventDispatcher<WindowResizeEvent> OnResize;
-		EventDispatcher<WindowMovedEvent> OnMoved;
-		EventDispatcher<WindowFocusedEvent> OnFocus;
-		EventDispatcher<WindowFocusedEvent> OnFocusLost;
-		EventDispatcher<WindowClosedEvent> OnClose;
-
-	public:
 		Window(const WindowCreateInfo& info = WindowCreateInfo());
 		Window(const Window& other) = delete;
 		Window(Window&& other) = delete;
 		Window& operator=(const Window& other) = delete;
 		Window& operator=(Window&& other) = delete;
 		~Window();
+
+		inline EventDispatcher<WindowResizeEvent>& OnResize() { return m_Data.m_OnResize; }
+		inline EventDispatcher<WindowMovedEvent>& OnMoved() { return m_Data.m_OnMoved; }
+		inline EventDispatcher<WindowFocusedEvent>& OnFocus() { return m_Data.m_OnFocus; }
+		inline EventDispatcher<WindowFocusedEvent>& OnFocusLost() { return m_Data.m_OnFocusLost; }
+		inline EventDispatcher<WindowClosedEvent>& OnClose() { return m_Data.m_OnClose; }
 
 		const Framebuffer& GetFramebuffer() const;
 		int Width() const;
