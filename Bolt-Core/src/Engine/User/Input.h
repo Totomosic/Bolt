@@ -127,13 +127,11 @@ namespace Bolt
 		static MouseInstance::Button* GetMouseButton(MouseButton button);
 		static bool TestKeyMods(KeyMod mods);
 
-		static void MousePositionCallback(GLFWwindow* window, double mouseX, double mouseY);
-		static void MouseScrollCallback(GLFWwindow* window, double relX, double relY);
-		static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
-		static void KeyboardKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
-		static void WindowResizeCallback(GLFWwindow* window, int width, int height);
-		static void CharPressedCallback(GLFWwindow* window, uint code);
-		static void WindowClosedCallback(GLFWwindow* window);
+		static void MousePositionCallback(double mouseX, double mouseY);
+		static void MouseScrollCallback(double relX, double relY);
+		static void MouseButtonCallback(int button, int action, int mods);
+		static void KeyboardKeyCallback(int key, int scancode, int action, int mods);
+		static void CharPressedCallback(uint code);
 
 	};
 

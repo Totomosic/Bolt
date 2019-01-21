@@ -7,8 +7,7 @@ namespace Bolt
 {
 
 	Window::Window(const WindowCreateInfo& info)
-		: m_Data{ nullptr, Framebuffer(), info.Title, info.Decorated }, OnResize(Events::WINDOW_RESIZE), OnMoved(Events::WINDOW_MOVED), OnFocus(Events::WINDOW_FOCUSED), OnFocusLost(Events::WINDOW_LOST_FOCUS),
-		OnClose(Events::WINDOW_CLOSED)
+		: m_Data{ Events::WINDOW_RESIZE, Events::WINDOW_MOVED, Events::WINDOW_FOCUSED, Events::WINDOW_LOST_FOCUS, Events::WINDOW_CLOSED, nullptr, Framebuffer(), info.Title, info.Decorated }
 	{
 		m_Data.m_Framebuffer.GetViewport().Width = info.Width;
 		m_Data.m_Framebuffer.GetViewport().Height = info.Height;
@@ -33,14 +32,38 @@ namespace Bolt
 		{
 			Maximize();
 		}
+		glfwSetWindowUserPointer(WindowHandle(), this);
 
-		glfwSetCursorPosCallback(WindowHandle(), Input::MousePositionCallback);
-		glfwSetScrollCallback(WindowHandle(), Input::MouseScrollCallback);
-		glfwSetMouseButtonCallback(WindowHandle(), Input::MouseButtonCallback);
-		glfwSetKeyCallback(WindowHandle(), Input::KeyboardKeyCallback);
-		glfwSetFramebufferSizeCallback(WindowHandle(), Input::WindowResizeCallback);
-		glfwSetCharCallback(WindowHandle(), Input::CharPressedCallback);
-		glfwSetWindowCloseCallback(WindowHandle(), Input::WindowClosedCallback);
+		glfwSetCursorPosCallback(WindowHandle(), [](GLFWwindow* window, double x, double y)
+		{
+			Input::MousePositionCallback(x, y);
+		});
+		glfwSetScrollCallback(WindowHandle(), [](GLFWwindow* window, double x, double y)
+		{
+			Input::MouseScrollCallback(x, y);
+		});
+		glfwSetMouseButtonCallback(WindowHandle(), [](GLFWwindow* window, int button, int action, int mods)
+		{
+			Input::MouseButtonCallback(button, action, mods);
+		});
+		glfwSetKeyCallback(WindowHandle(), [](GLFWwindow* window, int key, int scancode, int action, int mods)
+		{
+			Input::KeyboardKeyCallback(key, scancode, action, mods);
+		});
+		glfwSetCharCallback(WindowHandle(), [](GLFWwindow* window, uint character)
+		{
+			Input::CharPressedCallback(character);
+		});
+		glfwSetFramebufferSizeCallback(WindowHandle(), [](GLFWwindow* windowHandle, int width, int height)
+		{
+			Window& window = *(Window*)glfwGetWindowUserPointer(windowHandle);
+			window.SetSize(width, height);
+		});
+		glfwSetWindowCloseCallback(WindowHandle(), [](GLFWwindow* windowHandle)
+		{
+			Window& window = *(Window*)glfwGetWindowUserPointer(windowHandle);
+			window.OnClose().Post(std::make_unique<WindowClosedEvent>());
+		});
 	}
 
 	Window::~Window()
@@ -176,7 +199,7 @@ namespace Bolt
 		m_Data.m_Framebuffer.GetViewport().Width = width;
 		m_Data.m_Framebuffer.GetViewport().Height = height;
 		glfwSetWindowSize(WindowHandle(), Width(), Height());
-		OnResize.Post(std::move(args));
+		OnResize().Post(std::move(args));
 	}
 
 	void Window::SetWidth(int width)

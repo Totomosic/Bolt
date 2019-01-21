@@ -11,11 +11,6 @@
 namespace Bolt
 {
 
-	Application::~Application()
-	{
-		
-	}
-
 	float Application::Width() const
 	{
 		return AppWindow->Width();

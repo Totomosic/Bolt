@@ -292,7 +292,7 @@ namespace Bolt
 		s_Mouse.RelYScroll = 0;
 	}
 
-	void Input::MousePositionCallback(GLFWwindow* window, double mouseX, double mouseY)
+	void Input::MousePositionCallback(double mouseX, double mouseY)
 	{
 		mouseY = (double)s_Window->Height() - mouseY;
 		s_Mouse.RelX = (float)mouseX - s_Mouse.X;
@@ -307,7 +307,7 @@ namespace Bolt
 		OnMouseMoved.Post(std::move(args));
 	}
 
-	void Input::MouseScrollCallback(GLFWwindow* window, double xScroll, double yScroll)
+	void Input::MouseScrollCallback(double xScroll, double yScroll)
 	{
 		s_Mouse.RelXScroll = (float)xScroll;
 		s_Mouse.RelYScroll = (float)yScroll;
@@ -319,7 +319,7 @@ namespace Bolt
 		OnMouseScrolled.Post(std::move(args));
 	}
 
-	void Input::MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+	void Input::MouseButtonCallback(int button, int action, int mods)
 	{
 		if (action != GLFW_REPEAT)
 		{
@@ -345,7 +345,7 @@ namespace Bolt
 		}
 	}
 
-	void Input::KeyboardKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+	void Input::KeyboardKeyCallback(int key, int scancode, int action, int mods)
 	{
 		if (action != GLFW_REPEAT)
 		{
@@ -367,19 +367,9 @@ namespace Bolt
 		}
 	}
 
-	void Input::WindowResizeCallback(GLFWwindow* window, int width, int height)
-	{
-		s_Window->SetSize(width, height);
-	}
-
-	void Input::CharPressedCallback(GLFWwindow* window, uint code)
+	void Input::CharPressedCallback(uint code)
 	{
 		s_PressedCharacters.push_back((char)code);
-	}
-
-	void Input::WindowClosedCallback(GLFWwindow* window)
-	{
-		s_Window->OnClose.Post(std::make_unique<WindowClosedEvent>());
 	}
 
 }

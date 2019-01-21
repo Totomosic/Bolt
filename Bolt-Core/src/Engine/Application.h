@@ -15,8 +15,6 @@ namespace Bolt
 		std::unique_ptr<Window> AppWindow;
 
 	public:
-		virtual ~Application();
-
 		float Width() const;
 		float Height() const;
 
