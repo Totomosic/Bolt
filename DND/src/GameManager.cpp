@@ -29,6 +29,23 @@ namespace DND
 	
 	}
 
+	void GameManager::Holepunch(const SocketAddress& address, const std::function<void(SocketAddress)>& callback)
+	{
+		Timer& holepuncher = Time::RenderingTimeline().AddFunction(0.5, [this, address]()
+		{
+			BLT_INFO("SENDING HOLEPUNCH PACKET TO {}", address.ToString());
+			HolepunchPacket packet;
+			Network().Server().SendPacket(address, packet);
+		});
+		Network().Server().OnHolepunchPacket.Clear();
+		Network().Server().OnHolepunchPacket.Subscribe([timerPtr = &holepuncher, callback](id_t listenerId, ReceivedPacketEvent& e)
+		{
+			Time::RenderingTimeline().RemoveTimer(timerPtr);
+			callback(e.FromAddress);
+			return true;
+		});
+	}
+
 	void GameManager::Host(PlayerCharacterInfo player, const std::function<void(const WelcomePacket&, const PlayerCharacterInfo&)>& loadSceneCallback)
 	{
 		WelcomePacket packet = Network().Host();
@@ -53,11 +70,6 @@ namespace DND
 		{
 			menu->CreateMenu();
 		}
-		AddActiveTimer(&Time::RenderingTimeline().AddTimer(1.0, [this]()
-		{
-			KeepAlivePacket packet;
-			Network().SendPacketToAll(packet);
-		}));
 	}
 
 	void GameManager::Exit()

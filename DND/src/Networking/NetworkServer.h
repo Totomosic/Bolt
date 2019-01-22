@@ -41,7 +41,7 @@ namespace DND
 
 		EventDispatcher<ReceivedPacketEvent> OnGetHostResponsePacket;
 		EventDispatcher<ReceivedPacketEvent> OnClientConnectingPacket;
-		EventDispatcher<ReceivedPacketEvent> OnIgnorePacket;
+		EventDispatcher<ReceivedPacketEvent> OnHolepunchPacket;
 
 	private:
 		bool m_IsRunning;

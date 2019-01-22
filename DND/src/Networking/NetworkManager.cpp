@@ -83,9 +83,10 @@ namespace DND
 			BLT_INFO("RECEIVED CLIENT CONNECTING PACKET");
 			ClientConnectingPacket packet;
 			Deserialize(e.Packet, packet);
-			BLT_INFO("SENT IGNORE PACKET TO {}", packet.ClientPublic.ToString());
-			IgnorePacket ignore;
-			Server().SendPacket(packet.ClientPublic, ignore);
+			GameManager::Get().Holepunch(packet.ClientPublic, [](SocketAddress client)
+			{
+			
+			});
 			return true;
 		});
 
@@ -120,7 +121,7 @@ namespace DND
 			}
 
 			e.Server->SendPacket(e.FromAddress, result);
-			return true;
+			return false;
 		});
 
 		m_Server.OnIntroductionPacket.Clear();
@@ -153,7 +154,7 @@ namespace DND
 		{
 			BLT_INFO("RECEIVED DISCONNECT PACKET");
 			DisconnectPlayer(e.FromAddress);
-			return true;
+			return false;
 		});
 
 		m_Server.OnPlayerMovePacket.Clear();

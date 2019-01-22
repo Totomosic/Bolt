@@ -27,22 +27,22 @@ namespace DND
 				button.Text(host.ToString(), Color::Black);
 				button.EventHandler().OnClicked.Subscribe([&client, host](id_t listenerId, UIClickedEvent& e)
 				{
-					GameManager::Get().Network().Server().OnIgnorePacket.Clear();
-					GameManager::Get().Network().Server().OnIgnorePacket.Subscribe([](id_t listenerId, ReceivedPacketEvent& e)
-					{
-						BLT_INFO("RECEIVED IGNORE PACKET FROM {}", e.FromAddress.ToString());
-						PlayerCharacterInfo player;
-						player.PrefabId = GameManager::Get().Prefabs().BlueWizard;
-						GameManager::Get().Join(e.FromAddress, player, CreateSceneFromWelcome);
-						return true;
-					});
 					AddHostPacket packet;
 					packet.PrivateAddress = GameManager::Get().Network().Server().Address();
 					GameManager::Get().Network().Server().SendPacket(SocketAddress(client.EC2_ADDRESS, client.EC2_PORT), packet);
 					ConnectToHostPacket connectingPacket;
 					connectingPacket.HostPublicAddress = host;
 					connectingPacket.PrivateAddress = packet.PrivateAddress;
-					GameManager::Get().Network().Server().SendPacket(SocketAddress(client.EC2_ADDRESS, client.EC2_PORT), connectingPacket);					
+					GameManager::Get().Network().Server().SendPacket(SocketAddress(client.EC2_ADDRESS, client.EC2_PORT), connectingPacket);
+					GameManager::Get().Holepunch(host, [](SocketAddress address)
+					{
+						BLT_CORE_INFO("Successfully holepunched to connect to {}", address.ToString());
+						BLT_INFO("SENDING HELLO PACKET TO {}", address.ToString());
+						PlayerCharacterInfo player;
+						player.PrefabId = GameManager::Get().Prefabs().BlueWizard;
+						GameManager::Get().Join(address, player, CreateSceneFromWelcome);
+						return false;
+					});
 					return true;
 				});
 				yOffset -= 55;

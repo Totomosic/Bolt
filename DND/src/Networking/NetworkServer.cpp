@@ -24,7 +24,7 @@ namespace DND
 		: OnShutdown(SERVER_SHUTDOWN_EVENT),
 		OnHelloPacket(SERVER_RECEIVED_HELLO_PACKET_EVENT), OnWelcomePacket(SERVER_RECEIVED_WELCOME_PACKET_EVENT), OnIntroductionPacket(SERVER_RECEIVED_INTRODUCTION_PACKET_EVENT), OnDisconnectPacket(SERVER_RECEIVED_DISCONNECT_PACKET_EVENT),
 		OnPlayerMovePacket(SERVER_RECEIVED_PLAYER_MOVE_PACKET_EVENT), OnCastSpellPacket(SERVER_RECEIVED_CAST_SPELL_PACKET_EVENT), OnStatUpdatePacket(SERVER_RECEIVED_STAT_PACKET_EVENT), OnDeathPacket(SERVER_RECEIVED_DEATH_PACKET_EVENT),
-		OnGetHostResponsePacket(SERVER_RECIEVED_GET_HOSTS_RESPONSE_PACKET), OnClientConnectingPacket(SERVER_RECIEVED_CLIENT_CONNECTING_PACKET), OnIgnorePacket(SERVER_RECEIVED_IGNORE_PACKET),
+		OnGetHostResponsePacket(SERVER_RECIEVED_GET_HOSTS_RESPONSE_PACKET), OnClientConnectingPacket(SERVER_RECIEVED_CLIENT_CONNECTING_PACKET), OnHolepunchPacket(SERVER_RECEIVED_HOLEPUNCH_PACKET),
 		m_IsRunning(false), m_Address(), m_Socket(), m_Validators()
 	{
 		ResetSocket();
@@ -87,6 +87,7 @@ namespace DND
 					stream.Read((byte*)&pType);
 					if (pType == PacketType::LocalSocketTerminate)
 					{
+						BLT_CORE_INFO("RECEIVED LOCAL SOCKET TERMINATED");
 						break;
 					}
 					if (pType == PacketType::KeepAlive)
@@ -190,8 +191,8 @@ namespace DND
 			return OnGetHostResponsePacket;
 		case PacketType::ClientConnecting:
 			return OnClientConnectingPacket;
-		case PacketType::Ignore:
-			return OnIgnorePacket;
+		case PacketType::Holepunch:
+			return OnHolepunchPacket;
 		}
 		BLT_ASSERT(false, "Unable to find dispatcher for type");
 		return *(EventDispatcher<ReceivedPacketEvent>*)nullptr;
