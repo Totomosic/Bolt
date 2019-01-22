@@ -27,11 +27,20 @@ namespace DND
 				button.Text(host.ToString(), Color::Black);
 				button.EventHandler().OnClicked.Subscribe([&client, host](id_t listenerId, UIClickedEvent& e)
 				{
+					GameManager::Get().Network().Server().OnIgnorePacket.Clear();
+					GameManager::Get().Network().Server().OnIgnorePacket.Subscribe([](id_t listenerId, ReceivedPacketEvent& e)
+					{
+						BLT_INFO("RECEIVED IGNORE PACKET FROM {}", e.FromAddress.ToString());
+						PlayerCharacterInfo player;
+						player.PrefabId = GameManager::Get().Prefabs().BlueWizard;
+						GameManager::Get().Join(e.FromAddress, player, CreateSceneFromWelcome);
+						return true;
+					});
 					AddHostPacket packet;
 					GameManager::Get().Network().Server().SendPacket(SocketAddress(client.EC2_ADDRESS, client.EC2_PORT), packet);
-					PlayerCharacterInfo player;
-					player.PrefabId = GameManager::Get().Prefabs().BlueWizard;
-					GameManager::Get().Join(host, player, CreateSceneFromWelcome);
+					ConnectToHostPacket connectingPacket;
+					connectingPacket.Host = host;
+					GameManager::Get().Network().Server().SendPacket(SocketAddress(client.EC2_ADDRESS, client.EC2_PORT), connectingPacket);					
 					return true;
 				});
 				yOffset -= 55;
