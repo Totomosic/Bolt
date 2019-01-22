@@ -14,7 +14,7 @@ namespace DND
 		None,
 		LocalSocketTerminate,
 
-		Ignore,
+		Holepunch,
 		AddHost,
 		GetHosts,
 		GetHostsResponse,
@@ -42,7 +42,7 @@ namespace DND
 	}	
 
 
-	struct IgnorePacket
+	struct HolepunchPacket
 	{
 
 	};
@@ -167,9 +167,9 @@ namespace DND
 	}
 
 	template<>
-	inline PacketType TypeOfPacket<IgnorePacket>()
+	inline PacketType TypeOfPacket<HolepunchPacket>()
 	{
-		return PacketType::Ignore;
+		return PacketType::Holepunch;
 	}
 	template<>
 	inline PacketType TypeOfPacket<AddHostPacket>()
@@ -243,12 +243,12 @@ namespace DND
 	}
 
 	template<>
-	inline void Serialize(OutputMemoryStream& stream, const IgnorePacket& packet)
+	inline void Serialize(OutputMemoryStream& stream, const HolepunchPacket& packet)
 	{
 		
 	}
 	template<>
-	inline void Deserialize(InputMemoryStream& stream, IgnorePacket& packet)
+	inline void Deserialize(InputMemoryStream& stream, HolepunchPacket& packet)
 	{
 
 	}
