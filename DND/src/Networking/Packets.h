@@ -13,6 +13,15 @@ namespace DND
 	{
 		None,
 		LocalSocketTerminate,
+
+		Ignore,
+		AddHost,
+		GetHosts,
+		GetHostsResponse,
+		ConnectToHost,
+		ClientConnecting,
+
+		KeepAlive,
 		Hello,
 		Welcome,
 		Introduce,
@@ -33,10 +42,42 @@ namespace DND
 	}	
 
 
-	struct HelloPacket
+	struct IgnorePacket
+	{
+
+	};
+
+	struct AddHostPacket
+	{
+	
+	};
+
+	struct GetHostsPacket
+	{
+
+	};
+
+	struct GetHostsResponsePacket
 	{
 	public:
-		int Placeholder;
+		std::vector<SocketAddress> Hosts;
+	};
+
+	struct ConnectToHostPacket
+	{
+	public:
+		SocketAddress Host;
+	};
+
+	struct ClientConnectingPacket
+	{
+	public:
+		SocketAddress Client;
+	};
+
+	struct HelloPacket
+	{
+
 	};
 
 	struct CharacterInfo
@@ -54,6 +95,11 @@ namespace DND
 		SocketAddress Address;
 		id_t PlayerId;
 		CharacterInfo Character;
+	};
+
+	struct KeepAlivePacket
+	{
+
 	};
 
 	struct WelcomePacket
@@ -117,6 +163,41 @@ namespace DND
 	}
 
 	template<>
+	inline PacketType TypeOfPacket<IgnorePacket>()
+	{
+		return PacketType::Ignore;
+	}
+	template<>
+	inline PacketType TypeOfPacket<AddHostPacket>()
+	{
+		return PacketType::AddHost;
+	}
+	template<>
+	inline PacketType TypeOfPacket<GetHostsPacket>()
+	{
+		return PacketType::GetHosts;
+	}
+	template<>
+	inline PacketType TypeOfPacket<GetHostsResponsePacket>()
+	{
+		return PacketType::GetHostsResponse;
+	}
+	template<>
+	inline PacketType TypeOfPacket<ConnectToHostPacket>()
+	{
+		return PacketType::ConnectToHost;
+	}
+	template<>
+	inline PacketType TypeOfPacket<ClientConnectingPacket>()
+	{
+		return PacketType::ClientConnecting;
+	}
+	template<>
+	inline PacketType TypeOfPacket<KeepAlivePacket>()
+	{
+		return PacketType::KeepAlive;
+	}
+	template<>
 	inline PacketType TypeOfPacket<HelloPacket>()
 	{
 		return PacketType::Hello;
@@ -155,6 +236,83 @@ namespace DND
 	inline PacketType TypeOfPacket<DeathPacket>()
 	{
 		return PacketType::Death;
+	}
+
+	template<>
+	inline void Serialize(OutputMemoryStream& stream, const IgnorePacket& packet)
+	{
+		
+	}
+	template<>
+	inline void Deserialize(InputMemoryStream& stream, IgnorePacket& packet)
+	{
+
+	}
+
+	template<>
+	inline void Serialize(OutputMemoryStream& stream, const AddHostPacket& value)
+	{
+		
+	}
+	template<>
+	inline void Deserialize(InputMemoryStream& stream, AddHostPacket& value)
+	{
+
+	}
+
+	template<>
+	inline void Serialize<GetHostsPacket>(OutputMemoryStream& stream, const GetHostsPacket& value)
+	{
+		
+	}
+	template<>
+	inline void Deserialize(InputMemoryStream& stream, GetHostsPacket& value)
+	{
+		
+	}
+
+	template<>
+	inline void Serialize(OutputMemoryStream& stream, const GetHostsResponsePacket& value)
+	{
+		Serialize(stream, value.Hosts);
+	}
+	template<>
+	inline void Deserialize(InputMemoryStream& stream, GetHostsResponsePacket& value)
+	{
+		Deserialize(stream, value.Hosts);
+	}
+
+	template<>
+	inline void Serialize(OutputMemoryStream& stream, const ConnectToHostPacket& value)
+	{
+		Serialize(stream, value.Host);
+	}
+	template<>
+	inline void Deserialize(InputMemoryStream& stream, ConnectToHostPacket& value)
+	{
+		Deserialize(stream, value.Host);
+	}
+
+	template<>
+	inline void Serialize(OutputMemoryStream& stream, const ClientConnectingPacket& value)
+	{
+		Serialize(stream, value.Client);
+	}
+	template<>
+	inline void Deserialize(InputMemoryStream& stream, ClientConnectingPacket& value)
+	{
+		Deserialize(stream, value.Client);
+	}
+
+	template<>
+	inline void Serialize(OutputMemoryStream& stream, const KeepAlivePacket& value)
+	{
+		
+	}
+	template<>
+	inline void Deserialize(InputMemoryStream& stream, KeepAlivePacket& outValue)
+	{
+		
 	}
 
 	template<>

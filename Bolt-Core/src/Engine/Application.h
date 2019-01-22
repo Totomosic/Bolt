@@ -1,5 +1,6 @@
 #pragma once
 #include "Bolt-Graphics.h"
+#include "EngineCreateInfo.h"
 
 namespace Bolt
 {

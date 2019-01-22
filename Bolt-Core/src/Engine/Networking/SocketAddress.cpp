@@ -73,8 +73,8 @@ namespace Bolt
 	{
 		const sockaddr_in* s = GetAsSockAddrIn();
 		uint16_t port = ntohs(s->sin_port);
-		uint32_t addr = (GetAsSockAddrIn()->sin_addr.S_un.S_addr);
-		char* bytes = (char*)&addr;
+		uint32_t addr = ((GetAsSockAddrIn()->sin_addr.S_un.S_addr));
+		byte* bytes = (byte*)&addr;
 		return std::to_string((int)bytes[0]) + "." + std::to_string((int)bytes[1]) + "." + std::to_string((int)bytes[2]) + "." + std::to_string((int)bytes[3]) + ":" + std::to_string(port);
 	}
 

@@ -4,9 +4,10 @@
 #include "PrefabList.h"
 #include "Map/Tilemap.h"
 #include "Networking/NetworkManager.h"
+#include "Networking/NetworkIdentity.h"
 #include "Spells/SpellList.h"
 
-#include "UI/SpellCooldownMenu.h"
+#include "UI/UImenu.h"
 
 namespace DND
 {
@@ -55,6 +56,7 @@ namespace DND
 		std::vector<std::unique_ptr<UImenu>> m_UImenus;
 
 		std::vector<Timer*> m_ActiveFunctions;
+		std::vector<Timer*> m_ActiveTimers;
 
 	public:
 		static GameManager& Get();
@@ -62,8 +64,8 @@ namespace DND
 
 		GameManager(Layer& layer);
 
-		void Host(const SocketAddress& address, PlayerCharacterInfo player, const std::function<void(const WelcomePacket&, const PlayerCharacterInfo&)>& loadSceneCallback);
-		void Join(const SocketAddress& address, const SocketAddress& toAddress, PlayerCharacterInfo player, const std::function<void(const WelcomePacket&, const PlayerCharacterInfo&)>& loadSceneCallback);
+		void Host(PlayerCharacterInfo player, const std::function<void(const WelcomePacket&, const PlayerCharacterInfo&)>& loadSceneCallback);
+		void Join(const SocketAddress& toAddress, PlayerCharacterInfo player, const std::function<void(const WelcomePacket&, const PlayerCharacterInfo&)>& loadSceneCallback);
 
 		void Initialize();
 		void Exit();
@@ -85,6 +87,7 @@ namespace DND
 		SpellList& Spells();
 
 		void AddActiveFunction(Timer* function);
+		void AddActiveTimer(Timer* timer);
 		void AddUIMenu(std::unique_ptr<UImenu>&& menu);
 
 	};

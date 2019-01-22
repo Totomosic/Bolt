@@ -15,23 +15,19 @@ namespace DND
 		return m_SpellCount;
 	}
 
-	const SpellInfo& SpellList::GetSpell(id_t id) const
+	Spell* SpellList::GetSpell(id_t id) const
 	{
-		return m_Spells[id];
+		return m_Spells[id].get();
 	}
 
-	SpellInfo& SpellList::GetSpell(id_t id)
-	{
-		return m_Spells[id];
-	}
-
-	SpellInfo& SpellList::AddSpell(const SpellInfo& spell)
+	Spell& SpellList::AddSpell(std::unique_ptr<Spell>&& spell)
 	{
 		id_t index = m_SpellCount;
-		SpellInfo& info = m_Spells[index];
-		info = spell;
+		std::unique_ptr<Spell>& info = m_Spells[index];
+		info = std::move(spell);
+		info->SetId(index);
 		m_SpellCount++;
-		return info;
+		return *info;
 	}
 
 }

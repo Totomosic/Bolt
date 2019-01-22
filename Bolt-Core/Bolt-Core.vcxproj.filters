@@ -339,6 +339,12 @@
     <ClInclude Include="src\Engine\Engine.h">
       <Filter>Engine</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\EngineCreateInfo.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Initialization\Destructor.h">
+      <Filter>Engine\Initialization</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Initialization\Initializer.h">
       <Filter>Engine\Initialization</Filter>
     </ClInclude>
@@ -803,7 +809,6 @@
     </ClInclude>
     <ClInclude Include="src\Logging.h" />
     <ClInclude Include="src\Types.h" />
-    <ClInclude Include="src\Engine\Initialization\Destructor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\BoltTL\string.cpp">
@@ -892,6 +897,9 @@
     </ClCompile>
     <ClCompile Include="src\Engine\Engine.cpp">
       <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Initialization\Destructor.cpp">
+      <Filter>Engine\Initialization</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Initialization\Initializer.cpp">
       <Filter>Engine\Initialization</Filter>
@@ -1156,7 +1164,6 @@
     </ClCompile>
     <ClCompile Include="src\Logging.cpp" />
     <ClCompile Include="src\Types.cpp" />
-    <ClCompile Include="src\Engine\Initialization\Destructor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Graphics\Resources\Shaders\Source\DefaultColor_f.glsl">

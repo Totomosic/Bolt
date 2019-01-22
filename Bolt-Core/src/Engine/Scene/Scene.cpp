@@ -129,7 +129,7 @@ namespace Bolt
 		id_t id = FindNextCameraId();
 		Camera* camera = &m_Cameras[id];
 		camera->SetProjection(projection);
-		camera->SetID(id);
+		camera->SetId(id);
 		camera->m_Layer = nullptr;
 		return camera;
 	}
@@ -141,7 +141,7 @@ namespace Bolt
 
 	void Scene::RemoveCamera(id_t id)
 	{
-		m_Cameras[id].SetID(GameObject::InvalidID);
+		m_Cameras[id].SetId(GameObject::InvalidID);
 	}
 
 	void Scene::RemoveCamera(const Camera* camera)

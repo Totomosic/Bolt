@@ -59,13 +59,13 @@ namespace Bolt
 
 	Component& ComponentManager::GetComponent(size_t componentTypeHash) const
 	{
-		BLT_ASSERT(HasComponent(componentTypeHash), "Does not have given component type");
+		BLT_ASSERT(HasComponentPrivate(componentTypeHash), "Does not have given component type");
 		return *m_ComponentMap.at(componentTypeHash);
 	}
 
 	bool ComponentManager::HasComponentById(id_t id) const
 	{
-		return m_ComponentArray[id] != nullptr;
+		return (m_ComponentArray[id] != nullptr) && (m_ComponentArray[id]->IsEnabled());
 	}
 
 	bool ComponentManager::HasComponent(size_t componentTypeHash) const
@@ -74,7 +74,8 @@ namespace Bolt
 		{
 			return false;
 		}
-		return m_ComponentMap.find(componentTypeHash) != m_ComponentMap.end();
+		auto it = m_ComponentMap.find(componentTypeHash);
+		return (it != m_ComponentMap.end()) && ((*it).second->IsEnabled());
 	}
 
 	std::vector<Component*> ComponentManager::GetComponents() const
@@ -119,6 +120,7 @@ namespace Bolt
 
 	void ComponentManager::RemoveComponent(size_t componentTypeHash)
 	{
+		BLT_ASSERT(HasComponentPrivate(componentTypeHash), "Does not have given component type");
 		Component& component = GetComponent(componentTypeHash);
 		m_ComponentArray[component.m_Id] = nullptr;
 		m_ComponentMap.erase(componentTypeHash);
@@ -158,6 +160,16 @@ namespace Bolt
 		{
 			pair.second->SetGameObject(object);
 		}
+	}
+
+	bool ComponentManager::HasComponentPrivate(size_t componentTypeHash) const
+	{
+		if (m_ComponentMap.empty())
+		{
+			return false;
+		}
+		auto it = m_ComponentMap.find(componentTypeHash);
+		return (it != m_ComponentMap.end());
 	}
 
 }

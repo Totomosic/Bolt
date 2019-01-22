@@ -19,7 +19,7 @@ namespace DND
 	void FireballAnimator::Update()
 	{
 		m_CurrentTime += Time::RenderingTimeline().DeltaTime();
-		gameObject()->transform().SetLocalPosition(m_StartPosition + Vector3f(m_ToTargetDir, 0) * m_Length * m_CurrentTime / m_TotalTime);		
+		gameObject()->transform().SetLocalPosition(m_StartPosition + Vector3f(m_ToTargetDir, 0) * m_Length * m_CurrentTime / m_TotalTime);
 	}
 
 	std::unique_ptr<Component> FireballAnimator::Clone() const

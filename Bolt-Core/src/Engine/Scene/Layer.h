@@ -58,9 +58,11 @@ namespace Bolt
 
 		void Update();
 		void UpdateTemporaryObjects();
-		void MarkGameObjectForDelete(GameObject* object, float timeToDelete = 0.0f);
 
 		void Transfer(XMLserializer& backend, bool isWriting);
+
+		// Deletes given object after timeToDelete seconds. Will not be deleted instantly.
+		friend void BLT_API Destroy(GameObject* object, float timeToDelete = 0.0f);
 
 		friend struct Scene;
 		friend class Graphics;
@@ -68,11 +70,9 @@ namespace Bolt
 
 	private:
 		GameObject* AddTemporaryGameObject(GameObject&& object);
+		void MarkGameObjectForDelete(GameObject* object, float timeToDelete = 0.0f);
 		void Create(id_t id);
 
 	};
-
-	// Deletes given object after timeToDelete seconds. Will not be deleted instantly.
-	void BLT_API Destroy(GameObject* object, float timeToDelete = 0.0f);
 
 }

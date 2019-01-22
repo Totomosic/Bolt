@@ -39,6 +39,9 @@ namespace DND
 		EventDispatcher<ReceivedPacketEvent> OnStatUpdatePacket;
 		EventDispatcher<ReceivedPacketEvent> OnDeathPacket;
 
+		EventDispatcher<ReceivedPacketEvent> OnGetHostResponsePacket;
+		EventDispatcher<ReceivedPacketEvent> OnClientConnectingPacket;
+
 	private:
 		bool m_IsRunning;
 		SocketAddress m_Address;

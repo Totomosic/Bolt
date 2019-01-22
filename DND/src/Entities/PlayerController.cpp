@@ -8,17 +8,15 @@ namespace DND
 {
 
 	PlayerController::PlayerController() : Component(),
-		m_Left(Keycode::A), m_Up(Keycode::W), m_Right(Keycode::D), m_Down(Keycode::S), m_LastPressed(Keycode::Left), m_Spells(5), m_Actions(), m_CanMove(true)
+		m_Left(Keycode::A), m_Up(Keycode::W), m_Right(Keycode::D), m_Down(Keycode::S), m_LastPressed(Keycode::Left), m_Spells(), m_Actions(), m_CanMove(true)
 	{
-		m_Spells.SetSpell(0, 0);
-		m_Spells.SetSpell(1, 1);
-		m_Spells.MapKeyToSpell(Keycode::Q, 0);
-		m_Spells.MapKeyToSpell(Keycode::E, 1);
+		id_t fireball = m_Spells.AddSpell(0);
+		m_SpellKeyMap[Keycode::Q] = fireball;
 	}
 
 	void PlayerController::Update()
 	{
-		m_Spells.Update(Time::RenderingTimeline().DeltaTime());
+		Spells().Update();
 
 		TileTransform& t = gameObject()->Components().GetComponent<TileTransform>();
 		TileMotion& m = gameObject()->Components().GetComponent<TileMotion>();
@@ -61,35 +59,19 @@ namespace DND
 					GameManager::Get().Network().SendPacketToAll(packet);
 				});
 			}
-		}		
+		}
 
-		for (Keycode key : Spells().MappedKeys())
+		for (auto pair : m_SpellKeyMap)
 		{
-			if (Input::KeyPressed(key))
+			if (Input::KeyPressed(pair.first))
 			{
-				id_t spellIndex = Spells().GetSpellIndex(key);
-				if (Spells().CanCast(spellIndex))
+				if (Spells().CanCast(pair.second))
 				{
-					id_t spellId = Spells().GetSpellId(spellIndex);
-					GameState gameState = GameManager::Get().GetGameState();
-					QueueAction([this, spellIndex, spellId, gameState](GameObject* player)
+					GameState state = GameManager::Get().GetGameState();
+					QueueAction([this, pair, state](GameObject* player)
 					{
-						CastSpellPacket packet;
-						packet.CasterNetworkId = player->Components().GetComponent<NetworkIdentity>().NetworkId;
-						packet.SpellId = spellId;
-						packet.SpellData = GameManager::Get().Spells().GetSpell(spellId).CreateFunc(gameObject(), gameState);
-
-						GameManager::Get().Network().SendPacketToAll(packet);
-						player->Components().GetComponent<SpellCaster>().Cast(packet.SpellId, packet.SpellData, gameState.Objects);
-
-						Spells().CastSpell(spellIndex);
-
-						Freeze();
-						PlayerController* c = this;
-						Time::RenderingTimeline().AddFunction(GameManager::Get().Spells().GetSpell(packet.SpellId).CastTime, [c]()
-						{
-							c->Unfreeze();
-						});
+						std::unique_ptr<SpellInstance> spellInstance = Spells().GetSpell(pair.second)->CreateInstance(gameObject(), state);
+						Spells().CastSpell(pair.second, spellInstance, player, GameManager::Get().GetStateObjects());
 					});
 				}
 			}
@@ -150,11 +132,11 @@ namespace DND
 		return Tile();
 	}
 
-	void PlayerController::QueueAction(const PlayerController::PlayerAction& action)
+	void PlayerController::QueueAction(PlayerController::PlayerAction&& action)
 	{
 		if (m_Actions.size() < PlayerController::MAX_QUEUED_ACTIONS)
 		{
-			m_Actions.push_back(action);
+			m_Actions.push_back(std::move(action));
 		}
 	}
 

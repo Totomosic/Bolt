@@ -14,13 +14,13 @@ namespace DND
 
 	void SpellCaster::Cast(id_t spellId, const OutputMemoryStream& castData, const GameStateObjects& state)
 	{
-		SpellInfo& spell = GameManager::Get().Spells().GetSpell(spellId);
-		BLT_CORE_WARN("CASTING SPELL {}", spell.Name);
+		Spell* spell = GameManager::Get().Spells().GetSpell(spellId);
 
 		InputMemoryStream data(castData.GetRemainingDataSize());
 		memcpy(data.GetBufferPtr(), castData.GetBufferPtr(), castData.GetRemainingDataSize());
 
-		spell.CastFunc(gameObject(), data, state);
+		std::unique_ptr<SpellInstance> instance = spell->CreateInstance(data);
+		instance->Cast(spell, gameObject(), state);
 	}
 
 	std::unique_ptr<Component> SpellCaster::Clone() const

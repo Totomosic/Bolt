@@ -1,6 +1,7 @@
 #pragma once
 #include "Bolt-Graphics.h"
 #include "Application.h"
+#include "EngineCreateInfo.h"
 
 namespace Bolt
 {
@@ -9,16 +10,18 @@ namespace Bolt
 	{
 	private:
 		std::unique_ptr<Application> m_CurrentApplication;
-		WindowCreateInfo m_CreateInfo;
+		EngineCreateInfo m_CreateInfo;
+		WindowCreateInfo m_WindowCreateInfo;
 		bool m_ShouldExit;
 
 	public:
-		Engine();
+		Engine(EngineCreateInfo createInfo = EngineCreateInfo());
 		~Engine();
 
 		bool ShouldClose() const;
 
 		void UpdateApplication();
+		void UpdateApplicationNoGraphics();
 		void SetApplication(std::unique_ptr<Application>&& app);
 		void SetWindowCreateInfo(const WindowCreateInfo& createInfo);
 		void Run();

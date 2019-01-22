@@ -36,10 +36,12 @@ namespace DND
 		CreateServerScene(*this, serverScene, resources, gameScene);
 		CreateGameScene(*this, gameScene, resources);
 
+		BLT_INFO(sizeof(sockaddr));
+
 		Command setPortCommand("setport", [this](const Command::CommandArgList& args)
 		{
 			PORT = std::stoi(args[0].c_str());
-			BLT_CORE_INFO("PORT set to {}", PORT);
+			BLT_INFO("PORT set to {}", PORT);
 		});
 		setPortCommand.AddArgument("port", CommandArgType::Int, false);
 		CmdDebugger::CmdLine().AddCommand(setPortCommand);
@@ -47,7 +49,7 @@ namespace DND
 		Command targetPortCommand("targetport", [this](const Command::CommandArgList& args)
 		{
 			TARGET_PORT = std::stoi(args[0].c_str());
-			BLT_CORE_INFO("TARGET PORT set to {}", TARGET_PORT);
+			BLT_INFO("TARGET PORT set to {}", TARGET_PORT);
 		});
 		targetPortCommand.AddArgument("port", CommandArgType::Int, false);
 		CmdDebugger::CmdLine().AddCommand(targetPortCommand);
@@ -55,7 +57,7 @@ namespace DND
 		Command setAddressCommand("setaddr", [this](const Command::CommandArgList& args)
 		{
 			ADDRESS = args[0];
-			BLT_CORE_INFO("ADDRESS set to {}", ADDRESS);
+			BLT_INFO("ADDRESS set to {}", ADDRESS);
 		});
 		setAddressCommand.AddArgument("addr", CommandArgType::String, false);
 		CmdDebugger::CmdLine().AddCommand(setAddressCommand);
@@ -63,10 +65,41 @@ namespace DND
 		Command setTargetAddressCommand("targetaddr", [this](const Command::CommandArgList& args)
 		{
 			TARGET_ADDRESS = args[0];
-			BLT_CORE_INFO("TARGET ADDRESS set to {}", TARGET_ADDRESS);
+			BLT_INFO("TARGET ADDRESS set to {}", TARGET_ADDRESS);
 		});
 		setTargetAddressCommand.AddArgument("addr", CommandArgType::String, false);
 		CmdDebugger::CmdLine().AddCommand(setTargetAddressCommand);
+
+		Command addHost("addhost", [this](const Command::CommandArgList& args)
+		{
+			AddHostPacket packet;
+			GameManager::Get().Network().Server().SendPacket(SocketAddress(EC2_ADDRESS, EC2_PORT), packet);
+		});
+		CmdDebugger::CmdLine().AddCommand(addHost);
+
+		Command getHosts("gethosts", [this](const Command::CommandArgList& args)
+		{
+			
+		});
+		CmdDebugger::CmdLine().AddCommand(getHosts);
+
+		Command connectToHostCommand("conntohost", [this](const Command::CommandArgList& args)
+		{
+			blt::string addr = args[0];
+			uint16_t port = std::stoi(args[1].c_str());
+			ConnectToHostPacket packet;
+			packet.Host = SocketAddress(addr, port);
+			GameManager::Get().Network().Server().SendPacket(SocketAddress(EC2_ADDRESS, EC2_PORT), packet);
+			Time::RenderingTimeline().AddFunction(1.0, [addr, port]()
+			{
+				HelloPacket helloPacket;
+				GameManager::Get().Network().Server().SendPacket(SocketAddress(addr, port), helloPacket);
+				BLT_INFO("SENT HELLO PACKET TO {}", SocketAddress(addr, port).ToString());
+			});
+		});
+		connectToHostCommand.AddArgument("addr", CommandArgType::String, false);
+		connectToHostCommand.AddArgument("port", CommandArgType::Int, false);
+		CmdDebugger::CmdLine().AddCommand(connectToHostCommand);
 
 		RenderSchedule titleSchedule(titleScene);
 		titleSchedule.AddRenderProcess(RenderProcess());
@@ -97,6 +130,14 @@ namespace DND
 		if (GameManager::Get().LocalPlayer() != nullptr)
 		{
 			GameManager::Get().Update();
+			if (Input::KeyPressed(Keycode::O))
+			{
+				GameManager::Get().LocalCamera()->Components().GetComponent<PlayerCamera>().ShowTileSelector();
+			}
+			if (Input::KeyPressed(Keycode::P))
+			{
+				GameManager::Get().LocalCamera()->Components().GetComponent<PlayerCamera>().HideTileSelector();
+			}
 		}
 	}
 
@@ -124,7 +165,8 @@ namespace DND
 
 int main()
 {
-	Engine e;
+	EngineCreateInfo eInfo;
+	Engine e(eInfo);
 	WindowCreateInfo info;
 	info.Title = "Dnd";
 	e.SetWindowCreateInfo(info);

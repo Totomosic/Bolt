@@ -15,7 +15,7 @@ namespace Bolt
 	}
 
 	Component::Component(id_t id)
-		: m_Id(id), m_GameObject(nullptr)
+		: m_Id(id), m_GameObject(nullptr), m_IsEnabled(true)
 	{
 		
 	}
@@ -48,6 +48,31 @@ namespace Bolt
 	Layer* Component::layer() const
 	{
 		return gameObject()->GetLayer();
+	}
+
+	bool Component::IsEnabled() const
+	{
+		return m_IsEnabled;
+	}
+
+	id_t Component::Id() const
+	{
+		return m_Id;
+	}
+
+	void Component::Enable()
+	{
+		SetEnabled(true);
+	}
+
+	void Component::Disable()
+	{
+		SetEnabled(false);
+	}
+
+	void Component::SetEnabled(bool isEnabled)
+	{
+		m_IsEnabled = isEnabled;
 	}
 
 	void Component::Start()

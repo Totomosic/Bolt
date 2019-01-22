@@ -40,12 +40,24 @@ namespace Bolt
 	#define BLT_CORE_ERROR(...) ::Bolt::Log::GetCoreLogger()->error(__VA_ARGS__)
 	#define BLT_CORE_FATAL(...) ::Bolt::Log::GetCoreLogger()->critical(__VA_ARGS__)
 
+	#define BLT_TRACE(...) ::Bolt::Log::GetClientLogger()->trace(__VA_ARGS__)
+	#define BLT_INFO(...) ::Bolt::Log::GetClientLogger()->info(__VA_ARGS__)
+	#define BLT_WARN(...) ::Bolt::Log::GetClientLogger()->warn(__VA_ARGS__)
+	#define BLT_ERROR(...) ::Bolt::Log::GetClientLogger()->error(__VA_ARGS__)
+	#define BLT_FATAL(...) ::Bolt::Log::GetClientLogger()->critical(__VA_ARGS__)
+
 	#define BLT_ASSERT(arg, ...) { if (!(arg)) { BLT_CORE_FATAL(__VA_ARGS__); __debugbreak(); } }
 #else
 	#define BLT_CORE_INFO(...)
 	#define BLT_CORE_WARN(...)
 	#define BLT_CORE_ERROR(...)
 	#define BLT_CORE_FATAL(...)
+
+	#define BLT_TRACE(...)
+	#define BLT_INFO(...)
+	#define BLT_WARN(...)
+	#define BLT_ERROR(...)
+	#define BLT_FATAL(...)
 
 	#define BLT_ASSERT(arg, ...)
 #endif

@@ -14,6 +14,7 @@ namespace Bolt
 	protected:
 		ObjectPrefab* m_GameObject;
 		id_t m_Id;
+		bool m_IsEnabled;
 
 	public:
 		Component();
@@ -24,6 +25,12 @@ namespace Bolt
 		GameObject* gameObject() const;
 		Camera* camera() const;
 		Layer* layer() const;
+		bool IsEnabled() const;
+		id_t Id() const;
+
+		void Enable();
+		void Disable();
+		void SetEnabled(bool isEnabled);
 
 		virtual void Start();
 		virtual void Update();

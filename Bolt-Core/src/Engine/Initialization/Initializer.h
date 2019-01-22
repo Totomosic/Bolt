@@ -1,5 +1,6 @@
 #pragma once
 #include "Bolt-Graphics.h"
+#include "Engine/EngineCreateInfo.h"
 
 namespace Bolt
 {
@@ -9,8 +10,8 @@ namespace Bolt
 	public:
 		Initializer() = delete;
 
-		static void PreOpenGL();
-		static void PostOpenGL(Window* window);
+		static void PreOpenGL(const EngineCreateInfo& createInfo);
+		static void PostOpenGL(const EngineCreateInfo& createInfo, Window* window);
 
 	};
 

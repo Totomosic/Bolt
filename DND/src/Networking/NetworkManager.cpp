@@ -54,17 +54,15 @@ namespace DND
 		result.NetworkId = m_NetworkIdManager.GetNextId();
 		result.PlayerId = m_PlayerIdManager.GetNextId();
 		result.Address = m_Server.Address();
-		m_Server.Initialize(true);
 		return result;
 	}
 
 	void NetworkManager::Connect(const SocketAddress& address, const NetworkManager::ConnectedCallback& callback)
 	{
-		m_Server.Initialize(true);
 		m_Server.OnWelcomePacket.Clear();
 		m_Server.OnWelcomePacket.Subscribe([callback, this](id_t listenerId, ReceivedPacketEvent& e)
 		{
-			BLT_CORE_INFO("RECEIVED WELCOME PACKET");
+			BLT_INFO("RECEIVED WELCOME PACKET");
 			WelcomePacket packet;
 			Deserialize(e.Packet, packet);
 			callback(packet);
@@ -72,17 +70,31 @@ namespace DND
 		});
 		HelloPacket hello;
 		m_Server.SendPacket(address, hello);
-		BLT_CORE_INFO("CONNECTING TO {}", address.ToString());
+		BLT_INFO("CONNECTING TO {}", address.ToString());
 	}
 
 	void NetworkManager::Initialize()
 	{
-		m_Server.OnHelloPacket.Clear();
 		m_Player.Address = m_Server.Address();
+
+		m_Server.OnClientConnectingPacket.Clear();
+		m_Server.OnClientConnectingPacket.Subscribe([this](id_t listenerId, ReceivedPacketEvent& e)
+		{
+			BLT_INFO("RECEIVED CLIENT CONNECTING PACKET");
+			ClientConnectingPacket packet;
+			Deserialize(e.Packet, packet);
+			BLT_INFO("SENT IGNORE PACKET TO {}", packet.Client.ToString());
+			BLT_ASSERT(packet.Client.m_SockAddr.sa_family == AF_INET, "NOT INET ADDRESS");
+			IgnorePacket ignore;
+			Server().SendPacket(packet.Client, ignore);
+			return true;
+		});
+
+		m_Server.OnHelloPacket.Clear();
 		m_Server.OnHelloPacket.Subscribe([this](id_t listenerId, ReceivedPacketEvent& e)
 		{
-			BLT_CORE_INFO("RECEIVED HELLO PACKET");
-			BLT_CORE_INFO("INCOMING CONNECTION FROM {}", e.FromAddress.ToString());
+			BLT_INFO("RECEIVED HELLO PACKET");
+			BLT_INFO("INCOMING CONNECTION FROM {}", e.FromAddress.ToString());
 			WelcomePacket result;
 			result.NetworkId = GetNextNetworkId();
 			result.PlayerId = GetNextPlayerId();
@@ -115,7 +127,7 @@ namespace DND
 		m_Server.OnIntroductionPacket.Clear();
 		m_Server.OnIntroductionPacket.Subscribe([this](id_t listenerId, ReceivedPacketEvent& e)
 		{
-			BLT_CORE_INFO("RECEIVED INTRODUCTION PACKET");
+			BLT_INFO("RECEIVED INTRODUCTION PACKET");
 			IntroductionPacket packet;
 			Deserialize(e.Packet, packet);
 			GameObject* newPlayer = Factory().Instantiate(Factory().GetPrefab(packet.Character.CharacterPrefabId));
@@ -140,7 +152,7 @@ namespace DND
 		m_Server.OnDisconnectPacket.Clear();
 		m_Server.OnDisconnectPacket.Subscribe([this](id_t listenerId, ReceivedPacketEvent& e)
 		{
-			BLT_CORE_INFO("RECEIVED DISCONNECT PACKET");
+			BLT_INFO("RECEIVED DISCONNECT PACKET");
 			DisconnectPlayer(e.FromAddress);
 			return true;
 		});
@@ -148,7 +160,7 @@ namespace DND
 		m_Server.OnPlayerMovePacket.Clear();
 		m_Server.OnPlayerMovePacket.Subscribe([this](id_t listenerId, ReceivedPacketEvent& e)
 		{
-			BLT_CORE_INFO("RECEIVED PLAYER MOVE PACKET");
+			BLT_INFO("RECEIVED PLAYER MOVE PACKET");
 			PlayerMovePacket packet;
 			Deserialize(e.Packet, packet);
 			GameObject* obj = GetObjectByNetworkId(packet.NetworkId);
@@ -159,7 +171,7 @@ namespace DND
 		m_Server.OnCastSpellPacket.Clear();
 		m_Server.OnCastSpellPacket.Subscribe([this](id_t listenerId, ReceivedPacketEvent& e)
 		{
-			BLT_CORE_INFO("RECEIVED CAST SPELL PACKET");
+			BLT_INFO("RECEIVED CAST SPELL PACKET");
 			CastSpellPacket packet;
 			Deserialize(e.Packet, packet);
 			GameObject* caster = GetObjectByNetworkId(packet.CasterNetworkId);
@@ -170,7 +182,7 @@ namespace DND
 		m_Server.OnStatUpdatePacket.Clear();
 		m_Server.OnStatUpdatePacket.Subscribe([this](id_t listenerId, ReceivedPacketEvent& e)
 		{
-			BLT_CORE_INFO("RECEIVED STAT UPDATE PACKET");
+			BLT_INFO("RECEIVED STAT UPDATE PACKET");
 			StatUpdatePacket packet;
 			Deserialize(e.Packet, packet);
 			GameObject* object = GetObjectByNetworkId(packet.NetworkId);
@@ -181,12 +193,13 @@ namespace DND
 		m_Server.OnDeathPacket.Clear();
 		m_Server.OnDeathPacket.Subscribe([this](id_t listenerId, ReceivedPacketEvent& e)
 		{
-			BLT_CORE_INFO("RECEIVED DEATH PACKET");
+			BLT_INFO("RECEIVED DEATH PACKET");
 			DeathPacket packet;
 			Deserialize(e.Packet, packet);
 			return true;
 		});
 
+		m_Server.Initialize(true);
 	}
 
 	void NetworkManager::Exit(const std::function<void()>& onExit)
@@ -194,7 +207,7 @@ namespace DND
 		m_Server.OnShutdown.Clear();
 		m_Server.OnShutdown.Subscribe([this, onExit](id_t listenerId, ServerShutdownEvent& e)
 		{
-			BLT_CORE_INFO("SUCCESSFULLY SHUTDOWN SERVER");
+			BLT_INFO("SUCCESSFULLY SHUTDOWN SERVER");
 			std::unordered_map<SocketAddress, NetworkPlayerInfo> players = m_OtherPlayers;
 			for (auto& pair : players)
 			{
