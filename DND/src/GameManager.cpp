@@ -65,6 +65,13 @@ namespace DND
 		{
 			SceneManager::SetCurrentSceneByName("Game");
 			loadSceneCallback(packet, player);
+			for (PlayerInfo& info : packet.Players)
+			{
+				Holepunch(info.Address, info.Address, [](SocketAddress address)
+				{
+
+				});
+			}
 			Initialize();
 		});
 	}
@@ -75,6 +82,11 @@ namespace DND
 		{
 			menu->CreateMenu();
 		}
+		AddActiveTimer(&Time::RenderingTimeline().AddTimer(0.5, [this]()
+		{
+			KeepAlivePacket packet;
+			Network().SendPacketToAll(packet);
+		}));
 	}
 
 	void GameManager::Exit()
