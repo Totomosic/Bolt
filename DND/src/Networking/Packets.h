@@ -44,7 +44,8 @@ namespace DND
 
 	struct HolepunchPacket
 	{
-
+	public:
+		SocketAddress ContactAddress;
 	};
 
 	struct AddHostPacket
@@ -245,12 +246,12 @@ namespace DND
 	template<>
 	inline void Serialize(OutputMemoryStream& stream, const HolepunchPacket& packet)
 	{
-		
+		Serialize(stream, packet.ContactAddress);
 	}
 	template<>
 	inline void Deserialize(InputMemoryStream& stream, HolepunchPacket& packet)
 	{
-
+		Deserialize(stream, packet.ContactAddress);
 	}
 
 	template<>
