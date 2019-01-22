@@ -21,10 +21,10 @@
     <RootNamespace>Bolt-Core</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Globals">
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Globals">
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -185,6 +185,7 @@
     <ClInclude Include="src\Engine\Commands\CommandLine.h" />
     <ClInclude Include="src\Engine\Commands\__Commands__.h" />
     <ClInclude Include="src\Engine\Engine.h" />
+    <ClInclude Include="src\Engine\EngineCreateInfo.h" />
     <ClInclude Include="src\Engine\Initialization\Destructor.h" />
     <ClInclude Include="src\Engine\Initialization\Initializer.h" />
     <ClInclude Include="src\Engine\Initialization\__Initialization__.h" />

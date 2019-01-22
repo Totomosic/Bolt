@@ -7,18 +7,43 @@
     <Filter Include="Entities">
       <UniqueIdentifier>{8AA33B53-7670-965E-9F89-84068BB5CBEC}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Entities\Characters">
+      <UniqueIdentifier>{19333DE3-8594-1AF1-0E02-61A37A6251B0}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Map">
       <UniqueIdentifier>{6307880B-CF10-887C-588C-9E7CC494937C}</UniqueIdentifier>
     </Filter>
     <Filter Include="Networking">
       <UniqueIdentifier>{6D615D47-5919-9F94-C220-78F0AEF73985}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scenes">
+      <UniqueIdentifier>{86EEB3D0-7290-DEA6-5B4B-F2FA478C65F7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Spells">
+      <UniqueIdentifier>{78259FD1-64C7-C9A7-4D82-DDFB39C350F8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Spells\Animators">
+      <UniqueIdentifier>{552EDBFB-4127-FA4D-6A59-DFD256B1D959}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Spells\Basic">
+      <UniqueIdentifier>{294E77FF-15B1-06A4-BE36-3F5AAA78D226}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{83755900-6F01-880B-D8AF-880BC45A880B}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\App.h" />
     <ClInclude Include="src\Camera\PlayerCamera.h">
       <Filter>Camera</Filter>
     </ClInclude>
     <ClInclude Include="src\Entities\CharacterAnimator.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Entities\Characters\CharacterStats.h">
+      <Filter>Entities\Characters</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Entities\Healthbar.h">
       <Filter>Entities</Filter>
     </ClInclude>
     <ClInclude Include="src\Entities\NPCController.h">
@@ -44,6 +69,12 @@
     <ClInclude Include="src\Networking\Deserialization.h">
       <Filter>Networking</Filter>
     </ClInclude>
+    <ClInclude Include="src\Networking\NetworkController.h">
+      <Filter>Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Networking\NetworkIdentity.h">
+      <Filter>Networking</Filter>
+    </ClInclude>
     <ClInclude Include="src\Networking\NetworkManager.h">
       <Filter>Networking</Filter>
     </ClInclude>
@@ -56,27 +87,53 @@
     <ClInclude Include="src\Networking\Serialization.h">
       <Filter>Networking</Filter>
     </ClInclude>
-    <ClInclude Include="src\bltpch.h" />
-    <ClInclude Include="src\Networking\NetworkIdentity.h" />
-    <ClInclude Include="src\Networking\NetworkController.h" />
-    <ClInclude Include="src\Scenes\CharacterScene.h" />
-    <ClInclude Include="src\Scenes\TitleScene.h" />
-    <ClInclude Include="src\Scenes\ServerScene.h" />
-    <ClInclude Include="src\Scenes\GameScene.h" />
-    <ClInclude Include="src\App.h" />
-    <ClInclude Include="src\Spells\SpellList.h" />
-    <ClInclude Include="src\Spells\SpellInfo.h" />
-    <ClInclude Include="src\Spells\SpellCaster.h" />
-    <ClInclude Include="src\Spells\BasicSpells.h" />
-    <ClInclude Include="src\Entities\Characters\CharacterStats.h" />
-    <ClInclude Include="src\Scenes\CharPrefabs.h" />
     <ClInclude Include="src\PrefabList.h" />
-    <ClInclude Include="src\Entities\Healthbar.h" />
-    <ClInclude Include="src\Spells\Animators\FireballAnimator.h" />
-    <ClInclude Include="src\Entities\SpellManager.h" />
-    <ClInclude Include="src\UI\SpellCooldownMenu.h" />
-    <ClInclude Include="src\UI\UImenu.h" />
-    <ClInclude Include="src\Spells\Dice.h" />
+    <ClInclude Include="src\Scenes\CharPrefabs.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scenes\CharacterScene.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scenes\GameScene.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scenes\ServerScene.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scenes\TitleScene.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Spells\Animators\FireballAnimator.h">
+      <Filter>Spells\Animators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Spells\Basic\FireballSpell.h">
+      <Filter>Spells\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Spells\BasicSpells.h">
+      <Filter>Spells</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Spells\Dice.h">
+      <Filter>Spells</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Spells\Spell.h">
+      <Filter>Spells</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Spells\SpellCaster.h">
+      <Filter>Spells</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Spells\SpellInstance.h">
+      <Filter>Spells</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Spells\SpellList.h">
+      <Filter>Spells</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Spells\SpellManager.h">
+      <Filter>Spells</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\UImenu.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bltpch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\App.cpp" />
@@ -84,6 +141,12 @@
       <Filter>Camera</Filter>
     </ClCompile>
     <ClCompile Include="src\Entities\CharacterAnimator.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Entities\Characters\CharacterStats.cpp">
+      <Filter>Entities\Characters</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Entities\Healthbar.cpp">
       <Filter>Entities</Filter>
     </ClCompile>
     <ClCompile Include="src\Entities\NPCController.cpp">
@@ -105,28 +168,57 @@
     <ClCompile Include="src\Map\TilemapLayer.cpp">
       <Filter>Map</Filter>
     </ClCompile>
+    <ClCompile Include="src\Networking\NetworkController.cpp">
+      <Filter>Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Networking\NetworkIdentity.cpp">
+      <Filter>Networking</Filter>
+    </ClCompile>
     <ClCompile Include="src\Networking\NetworkManager.cpp">
       <Filter>Networking</Filter>
     </ClCompile>
     <ClCompile Include="src\Networking\NetworkServer.cpp">
       <Filter>Networking</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scenes\CharPrefabs.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scenes\CharacterScene.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scenes\GameScene.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scenes\ServerScene.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scenes\TitleScene.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Spells\Animators\FireballAnimator.cpp">
+      <Filter>Spells\Animators</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Spells\Basic\FireballSpell.cpp">
+      <Filter>Spells\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Spells\BasicSpells.cpp">
+      <Filter>Spells</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Spells\Dice.cpp">
+      <Filter>Spells</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Spells\Spell.cpp">
+      <Filter>Spells</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Spells\SpellCaster.cpp">
+      <Filter>Spells</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Spells\SpellList.cpp">
+      <Filter>Spells</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Spells\SpellManager.cpp">
+      <Filter>Spells</Filter>
+    </ClCompile>
     <ClCompile Include="src\bltpch.cpp" />
-    <ClCompile Include="src\Networking\NetworkIdentity.cpp" />
-    <ClCompile Include="src\Networking\NetworkController.cpp" />
-    <ClCompile Include="src\Scenes\CharacterScene.cpp" />
-    <ClCompile Include="src\Scenes\GameScene.cpp" />
-    <ClCompile Include="src\Scenes\ServerScene.cpp" />
-    <ClCompile Include="src\Scenes\TitleScene.cpp" />
-    <ClCompile Include="src\Spells\SpellList.cpp" />
-    <ClCompile Include="src\Spells\SpellCaster.cpp" />
-    <ClCompile Include="src\Spells\BasicSpells.cpp" />
-    <ClCompile Include="src\Entities\Characters\CharacterStats.cpp" />
-    <ClCompile Include="src\Scenes\CharPrefabs.cpp" />
-    <ClCompile Include="src\Entities\Healthbar.cpp" />
-    <ClCompile Include="src\Spells\Animators\FireballAnimator.cpp" />
-    <ClCompile Include="src\Entities\SpellManager.cpp" />
-    <ClCompile Include="src\UI\SpellCooldownMenu.cpp" />
-    <ClCompile Include="src\Spells\Dice.cpp" />
   </ItemGroup>
 </Project>

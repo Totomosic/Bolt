@@ -61,12 +61,12 @@ namespace DND
 
 	void PlayerCamera::HideTileSelector()
 	{
-		
+		m_TileSelector->Components().GetComponent<MeshRenderer>().Disable();
 	}
 
 	void PlayerCamera::ShowTileSelector()
 	{
-	
+		m_TileSelector->Components().GetComponent<MeshRenderer>().Enable();
 	}
 
 	std::unique_ptr<Component> PlayerCamera::Clone() const

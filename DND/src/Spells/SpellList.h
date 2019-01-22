@@ -1,6 +1,6 @@
 #pragma once
 #include "bltpch.h"
-#include "SpellInfo.h"
+#include "Spell.h"
 
 namespace DND
 {
@@ -11,17 +11,16 @@ namespace DND
 		static constexpr size_t MAX_SPELLS = 100;
 
 	private:
-		SpellInfo m_Spells[MAX_SPELLS];
+		std::unique_ptr<Spell> m_Spells[MAX_SPELLS];
 		int m_SpellCount;
 
 	public:
 		SpellList();
 
 		int SpellCount() const;
-		const SpellInfo& GetSpell(id_t id) const;
-		SpellInfo& GetSpell(id_t id);
+		Spell* GetSpell(id_t id) const;
 
-		SpellInfo& AddSpell(const SpellInfo& spell);
+		Spell& AddSpell(std::unique_ptr<Spell>&& spell);
 
 	};
 

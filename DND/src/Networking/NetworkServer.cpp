@@ -24,6 +24,7 @@ namespace DND
 		: OnShutdown(SERVER_SHUTDOWN_EVENT),
 		OnHelloPacket(SERVER_RECEIVED_HELLO_PACKET_EVENT), OnWelcomePacket(SERVER_RECEIVED_WELCOME_PACKET_EVENT), OnIntroductionPacket(SERVER_RECEIVED_INTRODUCTION_PACKET_EVENT), OnDisconnectPacket(SERVER_RECEIVED_DISCONNECT_PACKET_EVENT),
 		OnPlayerMovePacket(SERVER_RECEIVED_PLAYER_MOVE_PACKET_EVENT), OnCastSpellPacket(SERVER_RECEIVED_CAST_SPELL_PACKET_EVENT), OnStatUpdatePacket(SERVER_RECEIVED_STAT_PACKET_EVENT), OnDeathPacket(SERVER_RECEIVED_DEATH_PACKET_EVENT),
+		OnGetHostResponsePacket(SERVER_RECIEVED_GET_HOSTS_RESPONSE_PACKET), OnClientConnectingPacket(SERVER_RECIEVED_CLIENT_CONNECTING_PACKET),
 		m_IsRunning(false), m_Address(), m_Socket(), m_Validators()
 	{
 		ResetSocket();
@@ -49,7 +50,7 @@ namespace DND
 		if (runListenThread)
 		{
 			ClearSocket();
-			BLT_CORE_WARN("LISTENING ON {}", m_Address.ToString());
+			BLT_WARN("LISTENING ON {}", m_Address.ToString());
 			RunListenThread();
 		}
 	}
@@ -84,10 +85,19 @@ namespace DND
 					PacketType pType;
 					stream.Read(&pId);
 					stream.Read((byte*)&pType);
-
 					if (pType == PacketType::LocalSocketTerminate)
 					{
 						break;
+					}
+					if (pType == PacketType::Ignore)
+					{
+						BLT_INFO("RECEIVED IGNORE PACKET");
+						continue;
+					}
+					if (pType == PacketType::KeepAlive)
+					{
+						BLT_INFO("RECEIVED KEEP ALIVE PACKET");
+						continue;
 					}
 
 					std::unique_ptr<ReceivedPacketEvent> e = std::make_unique<ReceivedPacketEvent>();
@@ -110,7 +120,7 @@ namespace DND
 				}
 				else
 				{
-					BLT_CORE_ERROR("INVALID PACKET RECEIVED");
+					BLT_ERROR("INVALID PACKET RECEIVED");
 					break;
 				}
 			}
@@ -128,7 +138,7 @@ namespace DND
 		byte buffer[1024];
 		while (m_Socket.RecvFrom(buffer, 1024, nullptr) != 0)
 		{
-			BLT_CORE_INFO("CLEARING WAS REQUIRED");
+			BLT_INFO("CLEARING WAS REQUIRED");
 		}
 		m_Socket.SetBlocking(true);
 	}
@@ -181,6 +191,10 @@ namespace DND
 			return OnStatUpdatePacket;
 		case PacketType::Death:
 			return OnDeathPacket;
+		case PacketType::GetHostsResponse:
+			return OnGetHostResponsePacket;
+		case PacketType::ClientConnecting:
+			return OnClientConnectingPacket;
 		}
 		BLT_ASSERT(false, "Unable to find dispatcher for type");
 		return *(EventDispatcher<ReceivedPacketEvent>*)nullptr;

@@ -134,12 +134,9 @@
   <ItemGroup>
     <ClInclude Include="src\App.h" />
     <ClInclude Include="src\Camera\PlayerCamera.h" />
+    <ClInclude Include="src\Entities\CharacterAnimator.h" />
     <ClInclude Include="src\Entities\Characters\CharacterStats.h" />
     <ClInclude Include="src\Entities\Healthbar.h" />
-    <ClInclude Include="src\Entities\SpellManager.h" />
-    <ClInclude Include="src\PrefabList.h" />
-    <ClInclude Include="src\Scenes\CharacterScene.h" />
-    <ClInclude Include="src\Entities\CharacterAnimator.h" />
     <ClInclude Include="src\Entities\NPCController.h" />
     <ClInclude Include="src\Entities\PlayerController.h" />
     <ClInclude Include="src\Entities\TileMotion.h" />
@@ -155,19 +152,23 @@
     <ClInclude Include="src\Networking\NetworkServer.h" />
     <ClInclude Include="src\Networking\Packets.h" />
     <ClInclude Include="src\Networking\Serialization.h" />
-    <ClInclude Include="src\bltpch.h" />
+    <ClInclude Include="src\PrefabList.h" />
     <ClInclude Include="src\Scenes\CharPrefabs.h" />
+    <ClInclude Include="src\Scenes\CharacterScene.h" />
     <ClInclude Include="src\Scenes\GameScene.h" />
     <ClInclude Include="src\Scenes\ServerScene.h" />
     <ClInclude Include="src\Scenes\TitleScene.h" />
     <ClInclude Include="src\Spells\Animators\FireballAnimator.h" />
+    <ClInclude Include="src\Spells\Basic\FireballSpell.h" />
     <ClInclude Include="src\Spells\BasicSpells.h" />
     <ClInclude Include="src\Spells\Dice.h" />
+    <ClInclude Include="src\Spells\Spell.h" />
     <ClInclude Include="src\Spells\SpellCaster.h" />
-    <ClInclude Include="src\Spells\SpellInfo.h" />
+    <ClInclude Include="src\Spells\SpellInstance.h" />
     <ClInclude Include="src\Spells\SpellList.h" />
-    <ClInclude Include="src\UI\SpellCooldownMenu.h" />
+    <ClInclude Include="src\Spells\SpellManager.h" />
     <ClInclude Include="src\UI\UImenu.h" />
+    <ClInclude Include="src\bltpch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\App.cpp" />
@@ -177,7 +178,6 @@
     <ClCompile Include="src\Entities\Healthbar.cpp" />
     <ClCompile Include="src\Entities\NPCController.cpp" />
     <ClCompile Include="src\Entities\PlayerController.cpp" />
-    <ClCompile Include="src\Entities\SpellManager.cpp" />
     <ClCompile Include="src\Entities\TileMotion.cpp" />
     <ClCompile Include="src\Entities\TileTransform.cpp" />
     <ClCompile Include="src\GameManager.cpp" />
@@ -187,20 +187,22 @@
     <ClCompile Include="src\Networking\NetworkIdentity.cpp" />
     <ClCompile Include="src\Networking\NetworkManager.cpp" />
     <ClCompile Include="src\Networking\NetworkServer.cpp" />
-    <ClCompile Include="src\bltpch.cpp">
-      <PrecompiledHeader>Create</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="src\Scenes\CharacterScene.cpp" />
     <ClCompile Include="src\Scenes\CharPrefabs.cpp" />
+    <ClCompile Include="src\Scenes\CharacterScene.cpp" />
     <ClCompile Include="src\Scenes\GameScene.cpp" />
     <ClCompile Include="src\Scenes\ServerScene.cpp" />
     <ClCompile Include="src\Scenes\TitleScene.cpp" />
     <ClCompile Include="src\Spells\Animators\FireballAnimator.cpp" />
+    <ClCompile Include="src\Spells\Basic\FireballSpell.cpp" />
     <ClCompile Include="src\Spells\BasicSpells.cpp" />
     <ClCompile Include="src\Spells\Dice.cpp" />
+    <ClCompile Include="src\Spells\Spell.cpp" />
     <ClCompile Include="src\Spells\SpellCaster.cpp" />
     <ClCompile Include="src\Spells\SpellList.cpp" />
-    <ClCompile Include="src\UI\SpellCooldownMenu.cpp" />
+    <ClCompile Include="src\Spells\SpellManager.cpp" />
+    <ClCompile Include="src\bltpch.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bolt-Core\Bolt-Core.vcxproj">

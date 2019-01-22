@@ -74,6 +74,7 @@ namespace Bolt
 	private:
 		id_t FindNextId() const;
 		void SetGameObject(ObjectPrefab* object);
+		bool HasComponentPrivate(size_t componentHasType) const;
 
 	};
 

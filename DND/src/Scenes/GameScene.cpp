@@ -8,8 +8,6 @@
 #include "../Camera/PlayerCamera.h"
 #include "../Entities/PlayerController.h"
 
-#include "../UI/SpellCooldownMenu.h"
-
 namespace DND
 {
 
@@ -29,8 +27,6 @@ namespace DND
 		CreateCharacterPrefabs(GameManager::Get().Prefabs(), GameManager::Get().Network().Factory(), resources);		
 
 		CreateBasicSpells(resources);
-
-		GameManager::Get().AddUIMenu(std::make_unique<SpellCooldownMenu>(&uiGameLayer, Vector3f(uiCamera->ViewWidth() / 2, 50, -50), 300, 100, nullptr));
 
 		gameScene.OnLoad.Subscribe([gameCamera, &overlayGameLayer, resources](id_t listenerId, SceneLoadedEvent& e)
 		{

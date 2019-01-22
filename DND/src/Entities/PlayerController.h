@@ -1,7 +1,7 @@
 #pragma once
 #include "TileMotion.h"
 #include "CharacterAnimator.h"
-#include "SpellManager.h"
+#include "../Spells/SpellManager.h"
 
 namespace DND
 {
@@ -21,6 +21,7 @@ namespace DND
 		Keycode m_LastPressed;
 
 		SpellManager m_Spells;
+		std::unordered_map<Keycode, id_t> m_SpellKeyMap;
 		std::deque<PlayerAction> m_Actions;
 		bool m_CanMove;
 
@@ -42,7 +43,7 @@ namespace DND
 		Keycode TestPressedKeys() const;
 		Tile GetTileOffset(Keycode key) const;
 
-		void QueueAction(const PlayerAction& action);
+		void QueueAction(PlayerAction&& action);
 
 	};
 

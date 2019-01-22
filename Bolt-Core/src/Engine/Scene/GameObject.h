@@ -12,12 +12,20 @@ namespace Bolt
 	public:
 		static constexpr id_t InvalidID = (id_t)-1;
 
+		struct BLT_API TempComponent
+		{
+		public:
+			Component* component;
+			float TimeToDelete;
+		};
+
 	protected:
 		id_t m_Id;
 		GameObject* m_Parent;
 		std::vector<GameObject*> m_Children;
 		std::vector<blt::string> m_Tags;
 		Layer* m_Layer;
+		std::vector<TempComponent> m_TemporaryComponents;
 
 	protected:
 		// Do not call directly, Use GameObject::Instantiate()
@@ -42,20 +50,24 @@ namespace Bolt
 		void RemoveTag(const blt::string& tag);
 		void RemoveAllTags();
 
-		void SetID(id_t id);
-
 		void Update();
 		void LateUpdate();
 
 		void Transfer(XMLserializer& backend, bool isWriting) override;
 
+		friend void Destroy(Component* component, float timeToDelete = 0.0f);
+
 		friend struct ObjectCollection;
 		friend struct Layer;
+		friend struct Scene;
 		friend class Graphics;
 
 	private:
 		void SetLayer(Layer* layer);
 		void AddTagPrivate(const blt::string& tag);
+		void MarkComponentForDelete(Component* component, float timeToDelete);
+		void OnDestroy();
+		void SetId(id_t id);
 
 	public:
 		static GameObject* Instantiate(Layer* layer, Transform transform = Transform());

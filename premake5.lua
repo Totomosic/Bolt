@@ -55,7 +55,7 @@ project "Bolt-Core"
 
     filter { "system:windows", "configurations:debug" }
         cppdialect "C++17"
-        systemversion "10.0.16299.0"
+        systemversion "latest"
 
         defines
         {
@@ -69,7 +69,7 @@ project "Bolt-Core"
 
     filter { "system:windows", "configurations:release" }
         cppdialect "C++17"
-        systemversion "10.0.16299.0"
+        systemversion "latest"
 
         defines
         {

@@ -1,5 +1,6 @@
 #include "Types.h"
-#include "Monitor.h"
+
+#include "Monitor.h"
 
 namespace Bolt
 {
@@ -9,6 +10,7 @@ namespace Bolt
 		Monitor result;
 		result.Handle = glfwGetPrimaryMonitor();
 		result.VideoMode = glfwGetVideoMode(result.Handle);
+		result.Name = glfwGetMonitorName(result.Handle);
 		result.Width = result.VideoMode->width;
 		result.Height = result.VideoMode->height;
 		result.RedBits = result.VideoMode->redBits;

@@ -24,27 +24,21 @@ namespace DND
 	}
 
 	GameManager::GameManager(Layer& layer)
-		: m_LocalCamera(nullptr), m_LocalPlayer(nullptr), m_Tilemap(layer, TILEMAP_WIDTH, TILEMAP_HEIGHT, TILE_WIDTH, TILE_HEIGHT), m_Prefabs(), m_Network(), m_Spells(), m_UImenus(), m_ActiveFunctions()
+		: m_LocalCamera(nullptr), m_LocalPlayer(nullptr), m_Tilemap(layer, TILEMAP_WIDTH, TILEMAP_HEIGHT, TILE_WIDTH, TILE_HEIGHT), m_Prefabs(), m_Network(), m_Spells(), m_UImenus(), m_ActiveFunctions(), m_ActiveTimers()
 	{
 	
 	}
 
-	void GameManager::Host(const SocketAddress& address, PlayerCharacterInfo player, const std::function<void(const WelcomePacket&, const PlayerCharacterInfo&)>& loadSceneCallback)
+	void GameManager::Host(PlayerCharacterInfo player, const std::function<void(const WelcomePacket&, const PlayerCharacterInfo&)>& loadSceneCallback)
 	{
-		Network().Server().SetAddress(address);
-		Network().Server().Bind();
-		Network().Initialize();
 		WelcomePacket packet = Network().Host();
 		SceneManager::SetCurrentSceneByName("Game");
 		loadSceneCallback(packet, player);
 		Initialize();
 	}
 
-	void GameManager::Join(const SocketAddress& address, const SocketAddress& toAddress, PlayerCharacterInfo player, const std::function<void(const WelcomePacket&, const PlayerCharacterInfo&)>& loadSceneCallback)
+	void GameManager::Join(const SocketAddress& toAddress, PlayerCharacterInfo player, const std::function<void(const WelcomePacket&, const PlayerCharacterInfo&)>& loadSceneCallback)
 	{
-		Network().Server().SetAddress(address);
-		Network().Server().Bind();
-		Network().Initialize();
 		Network().Connect(toAddress, [this, player, loadSceneCallback](WelcomePacket packet)
 		{
 			SceneManager::SetCurrentSceneByName("Game");
@@ -59,6 +53,11 @@ namespace DND
 		{
 			menu->CreateMenu();
 		}
+		AddActiveTimer(&Time::RenderingTimeline().AddTimer(1.0, [this]()
+		{
+			KeepAlivePacket packet;
+			Network().SendPacketToAll(packet);
+		}));
 	}
 
 	void GameManager::Exit()
@@ -78,6 +77,10 @@ namespace DND
 			for (Timer* func : m_ActiveFunctions)
 			{
 				Time::RenderingTimeline().RemoveFunction(func);
+			}
+			for (Timer* timer : m_ActiveTimers)
+			{
+				Time::RenderingTimeline().RemoveTimer(timer);
 			}
 			SceneManager::SetCurrentSceneByName("Title");
 			callback();
@@ -154,6 +157,11 @@ namespace DND
 	void GameManager::AddActiveFunction(Timer* function)
 	{
 		m_ActiveFunctions.push_back(function);
+	}
+
+	void GameManager::AddActiveTimer(Timer* timer)
+	{
+		m_ActiveTimers.push_back(timer);
 	}
 
 	void GameManager::AddUIMenu(std::unique_ptr<UImenu>&& menu)

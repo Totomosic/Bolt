@@ -53,7 +53,7 @@ namespace Bolt
 	{
 		id_t id = FindNextId();
 		m_GameObjects[id] = { std::move(object), true };
-		m_GameObjects[id].Object.SetID(id);
+		m_GameObjects[id].Object.SetId(id);
 		m_ActiveGameObjects.push_back(&m_GameObjects[id].Object);
 		return id;
 	}
@@ -71,11 +71,9 @@ namespace Bolt
 			return;
 		}
 		GameObject* obj = &m_GameObjects[id].Object;
-		obj->Components().Clear();
 		RemoveAllTags(obj);
+		obj->OnDestroy();
 		m_GameObjects[id].Enabled = false;
-		obj->SetID(GameObject::InvalidID);
-		obj->SetLayer(nullptr);
 		ReleaseId(id);
 		auto it = std::find(m_ActiveGameObjects.begin(), m_ActiveGameObjects.end(), obj);
 		if (it != m_ActiveGameObjects.end())
@@ -173,7 +171,7 @@ namespace Bolt
 		for (id_t i = 0; i < ObjectCollection::RESERVED_GAMEOBJECTS; i++)
 		{
 			m_GameObjects[i].Enabled = true;
-			m_GameObjects[i].Object.SetID(i);
+			m_GameObjects[i].Object.SetId(i);
 			//m_ActiveGameObjects.push_back(&m_GameObjects[i].Object);
 		}
 	}

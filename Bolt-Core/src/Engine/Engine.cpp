@@ -10,10 +10,10 @@
 namespace Bolt
 {
 
-	Engine::Engine()
-		: m_CurrentApplication(), m_CreateInfo(), m_ShouldExit(false)
+	Engine::Engine(EngineCreateInfo createInfo)
+		: m_CurrentApplication(), m_CreateInfo(createInfo), m_WindowCreateInfo(), m_ShouldExit(false)
 	{
-		Initializer::PreOpenGL();
+		Initializer::PreOpenGL(m_CreateInfo);
 	}
 
 	Engine::~Engine()
@@ -51,34 +51,76 @@ namespace Bolt
 		}
 	}
 
+	void Engine::UpdateApplicationNoGraphics()
+	{
+		Scene* scene = &SceneManager::CurrentScene();
+		m_CurrentApplication->Update();
+		if (scene != nullptr)
+		{
+			scene->Update();
+		}
+		Time::Update();
+		EventManager::FlushEvents();
+		if (scene != nullptr)
+		{
+			scene->UpdateTemporaryObjects();
+		}
+		if (m_CurrentApplication->m_ShouldExit)
+		{
+			m_CurrentApplication->ExitPrivate();
+		}
+	}
+
 	void Engine::SetApplication(std::unique_ptr<Application>&& app)
 	{
 		m_CurrentApplication = std::move(app);
-		m_CurrentApplication->CreateWindowPtr(m_CreateInfo);
-		Initializer::PostOpenGL(m_CurrentApplication->AppWindow.get());
+		if (m_CreateInfo.UseGraphics)
+		{
+			m_CurrentApplication->CreateWindowPtr(m_WindowCreateInfo);
+		}
+		else
+		{
+			BLT_CORE_WARN("Skipped Creating Window");
+		}
+		Initializer::PostOpenGL(m_CreateInfo, m_CurrentApplication->AppWindow.get());
 		m_CurrentApplication->Start();
 	}
 
 	void Engine::SetWindowCreateInfo(const WindowCreateInfo& createInfo)
 	{
-		m_CreateInfo = createInfo;
+		m_WindowCreateInfo = createInfo;
 	}
 
 	void Engine::Run()
 	{
 		BLT_ASSERT(m_CurrentApplication.get() != nullptr, "Must have a valid Application to run");
-		m_CurrentApplication->AppWindow->OnClose().Subscribe([this](id_t listenerId, WindowClosedEvent& e)
+		if (m_CreateInfo.UseGraphics)
 		{
-			m_ShouldExit = true;
-			return false;
-		});
-		while (m_CurrentApplication->m_IsRunning)
-		{
-			UpdateApplication();
-			if (m_ShouldExit)
+			m_CurrentApplication->AppWindow->OnClose().Subscribe([this](id_t listenerId, WindowClosedEvent& e)
 			{
-				m_CurrentApplication->Exit();
-				m_ShouldExit = false;
+				m_ShouldExit = true;
+				return false;
+			});
+			while (m_CurrentApplication->m_IsRunning)
+			{
+				UpdateApplication();
+				if (m_ShouldExit)
+				{
+					m_CurrentApplication->Exit();
+					m_ShouldExit = false;
+				}
+			}
+		}
+		else
+		{
+			while (m_CurrentApplication->m_IsRunning)
+			{
+				UpdateApplicationNoGraphics();
+				if (m_ShouldExit)
+				{
+					m_CurrentApplication->Exit();
+					m_ShouldExit = false;
+				}
 			}
 		}
 	}

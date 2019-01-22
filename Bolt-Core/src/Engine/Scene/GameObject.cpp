@@ -7,7 +7,7 @@ namespace Bolt
 {
 
 	GameObject::GameObject() : ObjectPrefab(),
-		m_Id(GameObject::InvalidID), m_Parent(nullptr), m_Layer(nullptr), m_Children(), m_Tags()
+		m_Id(GameObject::InvalidID), m_Parent(nullptr), m_Layer(nullptr), m_Children(), m_Tags(), m_TemporaryComponents()
 	{
 		m_Components.m_IsGameObject = true;
 	}
@@ -29,10 +29,10 @@ namespace Bolt
 				}
 			}
 		}
-		std::vector<blt::string> tags = m_Tags;
-		m_Tags = other.m_Tags;
+		std::vector<blt::string> tags = std::move(m_Tags);
+		m_Tags = std::move(other.m_Tags);
 		m_Parent = other.m_Parent;
-		other.m_Tags = tags;
+		other.m_Tags = std::move(tags);
 		m_Components.SetGameObject(this);
 		m_Components.m_IsGameObject = true;
 	}
@@ -53,14 +53,14 @@ namespace Bolt
 				}
 			}
 		}
-		std::vector<blt::string> tags = m_Tags;
-		m_Tags = other.m_Tags;
+		std::vector<blt::string> tags = std::move(m_Tags);
+		m_Tags = std::move(other.m_Tags);
 		m_Parent = other.m_Parent;
 		m_Id = other.m_Id;
 		m_Transform = std::move(other.m_Transform);
 		m_Layer = other.m_Layer;
 		m_Components = std::move(other.m_Components);
-		other.m_Tags = tags;
+		other.m_Tags = std::move(tags);
 		m_Components.SetGameObject(this);
 		m_Components.m_IsGameObject = true;
 		return *this;
@@ -140,7 +140,7 @@ namespace Bolt
 		m_Layer->GameObjects().RemoveAllTags(this);
 	}
 
-	void GameObject::SetID(id_t id)
+	void GameObject::SetId(id_t id)
 	{
 		m_Id = id;
 	}
@@ -167,6 +167,16 @@ namespace Bolt
 				c->LateUpdate();
 			}
 		}
+		for (int i = m_TemporaryComponents.size() - 1; i >= 0; i--)
+		{
+			TempComponent& c = m_TemporaryComponents[i];
+			c.TimeToDelete -= Time::RenderingTimeline().DeltaTime();
+			if (c.TimeToDelete <= 0)
+			{
+				m_Components.RemoveComponentById(c.component->Id());
+				m_TemporaryComponents.erase(m_TemporaryComponents.begin() + i);
+			}
+		}
 	}
 
 	void GameObject::Transfer(XMLserializer& backend, bool isWriting)
@@ -178,9 +188,34 @@ namespace Bolt
 		BLT_TRANSFER(backend, m_Layer);
 	}
 
+	void Destroy(Component* c, float timeToDelete)
+	{
+		if (c->gameObject() == nullptr)
+		{
+			BLT_CORE_WARN("Deleting component that either is not attached to GameObject or has already been deleted, Id = {}", c->Id());
+			return;
+		}
+		c->gameObject()->MarkComponentForDelete(c, timeToDelete);
+	}
+
 	void GameObject::SetLayer(Layer* layer)
 	{
 		m_Layer = layer;
+	}
+
+	void GameObject::MarkComponentForDelete(Component* component, float timeToDelete)
+	{
+		m_TemporaryComponents.push_back({ component, timeToDelete });
+	}
+
+	void GameObject::OnDestroy()
+	{
+		m_TemporaryComponents.clear();
+		m_Components.Clear();
+		m_Transform.Reset();
+		MakeStandalone();
+		SetLayer(nullptr);
+		SetId(GameObject::InvalidID);
 	}
 
 	void GameObject::AddTagPrivate(const blt::string& tag)
