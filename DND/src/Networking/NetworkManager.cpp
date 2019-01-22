@@ -83,7 +83,7 @@ namespace DND
 			BLT_INFO("RECEIVED CLIENT CONNECTING PACKET");
 			ClientConnectingPacket packet;
 			Deserialize(e.Packet, packet);
-			GameManager::Get().Holepunch(packet.ClientPublic, [](SocketAddress client)
+			GameManager::Get().Holepunch(packet.ClientPublic, packet.ClientPrivate, [](SocketAddress client)
 			{
 			
 			});

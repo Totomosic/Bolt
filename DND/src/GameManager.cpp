@@ -29,19 +29,24 @@ namespace DND
 	
 	}
 
-	void GameManager::Holepunch(const SocketAddress& address, const std::function<void(SocketAddress)>& callback)
+	void GameManager::Holepunch(const SocketAddress& publicAddress, const SocketAddress& privateAddress, const std::function<void(SocketAddress)>& callback)
 	{
-		Timer& holepuncher = Time::RenderingTimeline().AddFunction(0.5, [this, address]()
+		Timer& holepuncher = Time::RenderingTimeline().AddFunction(0.5, [this, publicAddress, privateAddress]()
 		{
-			BLT_INFO("SENDING HOLEPUNCH PACKET TO {}", address.ToString());
+			BLT_INFO("SENDING HOLEPUNCH PACKET TO {}", publicAddress.ToString());
+			BLT_INFO("SENDING HOLEPUNCH PACKET TO {}", privateAddress.ToString());
 			HolepunchPacket packet;
-			Network().Server().SendPacket(address, packet);
+			Network().Server().SendPacket(publicAddress, packet);
+			Network().Server().SendPacket(privateAddress, packet);
 		});
 		Network().Server().OnHolepunchPacket.Clear();
-		Network().Server().OnHolepunchPacket.Subscribe([timerPtr = &holepuncher, callback](id_t listenerId, ReceivedPacketEvent& e)
+		Network().Server().OnHolepunchPacket.Subscribe([timerPtr = &holepuncher, callback, this](id_t listenerId, ReceivedPacketEvent& e)
 		{
+			BLT_CORE_INFO("RECEIVED HOLEPUNCH PACKET FROM {}", e.FromAddress.ToString());
+			BLT_CORE_INFO("REMOVED TIMER");
 			Time::RenderingTimeline().RemoveTimer(timerPtr);
 			callback(e.FromAddress);
+			Network().Server().OnHolepunchPacket.Unsubscribe(listenerId);
 			return true;
 		});
 	}

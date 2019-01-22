@@ -64,7 +64,7 @@ namespace DND
 
 		GameManager(Layer& layer);
 
-		void Holepunch(const SocketAddress& address, const std::function<void(SocketAddress)>& callback);
+		void Holepunch(const SocketAddress& publicAddress, const SocketAddress& privateAddress, const std::function<void(SocketAddress)>& callback);
 		void Host(PlayerCharacterInfo player, const std::function<void(const WelcomePacket&, const PlayerCharacterInfo&)>& loadSceneCallback);
 		void Join(const SocketAddress& toAddress, PlayerCharacterInfo player, const std::function<void(const WelcomePacket&, const PlayerCharacterInfo&)>& loadSceneCallback);
 

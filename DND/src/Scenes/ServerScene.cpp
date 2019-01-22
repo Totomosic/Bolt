@@ -21,20 +21,22 @@ namespace DND
 			GetHostsResponsePacket packet;
 			Deserialize(e.Packet, packet);
 			float yOffset = 200;
-			for (auto& host : packet.HostPublicAddresses)
+			for (int i = 0; i < packet.HostPublicAddresses.size(); i++)
 			{
+				SocketAddress& hostPublicAddress = packet.HostPublicAddresses[i];
+				SocketAddress& hostPrivateAddress = packet.HostPrivateAddresses[i];
 				UIsurface& button = joinableGamesLayer.UI().Rectangle(300, 50, Color::White, Transform({ 0, yOffset, 0 }));
-				button.Text(host.ToString(), Color::Black);
-				button.EventHandler().OnClicked.Subscribe([&client, host](id_t listenerId, UIClickedEvent& e)
+				button.Text(hostPublicAddress.ToString(), Color::Black);
+				button.EventHandler().OnClicked.Subscribe([&client, hostPublicAddress, hostPrivateAddress](id_t listenerId, UIClickedEvent& e)
 				{
 					AddHostPacket packet;
 					packet.PrivateAddress = GameManager::Get().Network().Server().Address();
 					GameManager::Get().Network().Server().SendPacket(SocketAddress(client.EC2_ADDRESS, client.EC2_PORT), packet);
 					ConnectToHostPacket connectingPacket;
-					connectingPacket.HostPublicAddress = host;
+					connectingPacket.HostPublicAddress = hostPublicAddress;
 					connectingPacket.PrivateAddress = packet.PrivateAddress;
 					GameManager::Get().Network().Server().SendPacket(SocketAddress(client.EC2_ADDRESS, client.EC2_PORT), connectingPacket);
-					GameManager::Get().Holepunch(host, [](SocketAddress address)
+					GameManager::Get().Holepunch(hostPublicAddress, hostPrivateAddress, [](SocketAddress address)
 					{
 						BLT_CORE_INFO("Successfully holepunched to connect to {}", address.ToString());
 						BLT_INFO("SENDING HELLO PACKET TO {}", address.ToString());
