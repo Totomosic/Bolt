@@ -21,7 +21,7 @@ namespace DND
 			GetHostsResponsePacket packet;
 			Deserialize(e.Packet, packet);
 			float yOffset = 200;
-			for (auto& host : packet.Hosts)
+			for (auto& host : packet.HostPublicAddresses)
 			{
 				UIsurface& button = joinableGamesLayer.UI().Rectangle(300, 50, Color::White, Transform({ 0, yOffset, 0 }));
 				button.Text(host.ToString(), Color::Black);
@@ -37,9 +37,11 @@ namespace DND
 						return true;
 					});
 					AddHostPacket packet;
+					packet.PrivateAddress = GameManager::Get().Network().Server().Address();
 					GameManager::Get().Network().Server().SendPacket(SocketAddress(client.EC2_ADDRESS, client.EC2_PORT), packet);
 					ConnectToHostPacket connectingPacket;
-					connectingPacket.Host = host;
+					connectingPacket.HostPublicAddress = host;
+					connectingPacket.PrivateAddress = packet.PrivateAddress;
 					GameManager::Get().Network().Server().SendPacket(SocketAddress(client.EC2_ADDRESS, client.EC2_PORT), connectingPacket);					
 					return true;
 				});
@@ -53,6 +55,7 @@ namespace DND
 		hostButton.EventHandler().OnClicked.Subscribe([&client](id_t listenerId, UIClickedEvent& e)
 		{
 			AddHostPacket packet;
+			packet.PrivateAddress = GameManager::Get().Network().Server().Address();
 			GameManager::Get().Network().Server().SendPacket(SocketAddress(client.EC2_ADDRESS, client.EC2_PORT), packet);
 			PlayerCharacterInfo player;
 			player.PrefabId = GameManager::Get().Prefabs().Swordsman;

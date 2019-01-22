@@ -83,10 +83,9 @@ namespace DND
 			BLT_INFO("RECEIVED CLIENT CONNECTING PACKET");
 			ClientConnectingPacket packet;
 			Deserialize(e.Packet, packet);
-			BLT_INFO("SENT IGNORE PACKET TO {}", packet.Client.ToString());
-			BLT_ASSERT(packet.Client.m_SockAddr.sa_family == AF_INET, "NOT INET ADDRESS");
+			BLT_INFO("SENT IGNORE PACKET TO {}", packet.ClientPublic.ToString());
 			IgnorePacket ignore;
-			Server().SendPacket(packet.Client, ignore);
+			Server().SendPacket(packet.ClientPublic, ignore);
 			return true;
 		});
 
