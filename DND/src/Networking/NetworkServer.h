@@ -41,6 +41,7 @@ namespace DND
 
 		EventDispatcher<ReceivedPacketEvent> OnGetHostResponsePacket;
 		EventDispatcher<ReceivedPacketEvent> OnClientConnectingPacket;
+		EventDispatcher<ReceivedPacketEvent> OnIgnorePacket;
 
 	private:
 		bool m_IsRunning;
