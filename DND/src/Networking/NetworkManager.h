@@ -64,6 +64,7 @@ namespace DND
 			{
 				for (auto& pair : m_OtherPlayers)
 				{
+					BLT_CORE_INFO("SENDING PACKET TO {}", pair.second.Address.ToString());
 					Server().SendPacket(pair.second.Address, packet);
 				}
 			}
