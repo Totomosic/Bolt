@@ -146,6 +146,12 @@ namespace DND
 
 			SetNextAvailableNetworkId(packet.Character.NetworkId + 1);
 			SetNextAvailablePlayerId(packet.PlayerId + 1);
+
+			GameManager::Get().Holepunch(pl.Address, pl.Address, [](SocketAddress address)
+			{
+
+			});
+
 			return true;
 		});
 
