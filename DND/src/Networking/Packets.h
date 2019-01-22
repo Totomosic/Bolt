@@ -49,7 +49,8 @@ namespace DND
 
 	struct AddHostPacket
 	{
-	
+	public:
+		SocketAddress PrivateAddress;
 	};
 
 	struct GetHostsPacket
@@ -60,19 +61,22 @@ namespace DND
 	struct GetHostsResponsePacket
 	{
 	public:
-		std::vector<SocketAddress> Hosts;
+		std::vector<SocketAddress> HostPublicAddresses;
+		std::vector<SocketAddress> HostPrivateAddresses;
 	};
 
 	struct ConnectToHostPacket
 	{
 	public:
-		SocketAddress Host;
+		SocketAddress HostPublicAddress;
+		SocketAddress PrivateAddress;
 	};
 
 	struct ClientConnectingPacket
 	{
 	public:
-		SocketAddress Client;
+		SocketAddress ClientPublic;
+		SocketAddress ClientPrivate;
 	};
 
 	struct HelloPacket
@@ -252,16 +256,16 @@ namespace DND
 	template<>
 	inline void Serialize(OutputMemoryStream& stream, const AddHostPacket& value)
 	{
-		
+		Serialize(stream, value.PrivateAddress);
 	}
 	template<>
 	inline void Deserialize(InputMemoryStream& stream, AddHostPacket& value)
 	{
-
+		Deserialize(stream, value.PrivateAddress);
 	}
 
 	template<>
-	inline void Serialize<GetHostsPacket>(OutputMemoryStream& stream, const GetHostsPacket& value)
+	inline void Serialize(OutputMemoryStream& stream, const GetHostsPacket& value)
 	{
 		
 	}
@@ -274,34 +278,40 @@ namespace DND
 	template<>
 	inline void Serialize(OutputMemoryStream& stream, const GetHostsResponsePacket& value)
 	{
-		Serialize(stream, value.Hosts);
+		Serialize(stream, value.HostPublicAddresses);
+		Serialize(stream, value.HostPrivateAddresses);
 	}
 	template<>
 	inline void Deserialize(InputMemoryStream& stream, GetHostsResponsePacket& value)
 	{
-		Deserialize(stream, value.Hosts);
+		Deserialize(stream, value.HostPublicAddresses);
+		Deserialize(stream, value.HostPrivateAddresses);
 	}
 
 	template<>
 	inline void Serialize(OutputMemoryStream& stream, const ConnectToHostPacket& value)
 	{
-		Serialize(stream, value.Host);
+		Serialize(stream, value.HostPublicAddress);
+		Serialize(stream, value.PrivateAddress);
 	}
 	template<>
 	inline void Deserialize(InputMemoryStream& stream, ConnectToHostPacket& value)
 	{
-		Deserialize(stream, value.Host);
+		Deserialize(stream, value.HostPublicAddress);
+		Deserialize(stream, value.PrivateAddress);
 	}
 
 	template<>
 	inline void Serialize(OutputMemoryStream& stream, const ClientConnectingPacket& value)
 	{
-		Serialize(stream, value.Client);
+		Serialize(stream, value.ClientPublic);
+		Serialize(stream, value.ClientPrivate);
 	}
 	template<>
 	inline void Deserialize(InputMemoryStream& stream, ClientConnectingPacket& value)
 	{
-		Deserialize(stream, value.Client);
+		Deserialize(stream, value.ClientPublic);
+		Deserialize(stream, value.ClientPrivate);
 	}
 
 	template<>

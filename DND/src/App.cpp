@@ -70,37 +70,6 @@ namespace DND
 		setTargetAddressCommand.AddArgument("addr", CommandArgType::String, false);
 		CmdDebugger::CmdLine().AddCommand(setTargetAddressCommand);
 
-		Command addHost("addhost", [this](const Command::CommandArgList& args)
-		{
-			AddHostPacket packet;
-			GameManager::Get().Network().Server().SendPacket(SocketAddress(EC2_ADDRESS, EC2_PORT), packet);
-		});
-		CmdDebugger::CmdLine().AddCommand(addHost);
-
-		Command getHosts("gethosts", [this](const Command::CommandArgList& args)
-		{
-			
-		});
-		CmdDebugger::CmdLine().AddCommand(getHosts);
-
-		Command connectToHostCommand("conntohost", [this](const Command::CommandArgList& args)
-		{
-			blt::string addr = args[0];
-			uint16_t port = std::stoi(args[1].c_str());
-			ConnectToHostPacket packet;
-			packet.Host = SocketAddress(addr, port);
-			GameManager::Get().Network().Server().SendPacket(SocketAddress(EC2_ADDRESS, EC2_PORT), packet);
-			Time::RenderingTimeline().AddFunction(1.0, [addr, port]()
-			{
-				HelloPacket helloPacket;
-				GameManager::Get().Network().Server().SendPacket(SocketAddress(addr, port), helloPacket);
-				BLT_INFO("SENT HELLO PACKET TO {}", SocketAddress(addr, port).ToString());
-			});
-		});
-		connectToHostCommand.AddArgument("addr", CommandArgType::String, false);
-		connectToHostCommand.AddArgument("port", CommandArgType::Int, false);
-		CmdDebugger::CmdLine().AddCommand(connectToHostCommand);
-
 		RenderSchedule titleSchedule(titleScene);
 		titleSchedule.AddRenderProcess(RenderProcess());
 		SceneRenderer::AddRenderSchedule(titleSchedule);
