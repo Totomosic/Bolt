@@ -145,12 +145,14 @@
     <ClInclude Include="src\GameManager.h" />
     <ClInclude Include="src\Map\Tilemap.h" />
     <ClInclude Include="src\Map\TilemapLayer.h" />
+    <ClInclude Include="src\Networking\ConnectionManager.h" />
     <ClInclude Include="src\Networking\Deserialization.h" />
     <ClInclude Include="src\Networking\NetworkController.h" />
     <ClInclude Include="src\Networking\NetworkIdentity.h" />
     <ClInclude Include="src\Networking\NetworkManager.h" />
     <ClInclude Include="src\Networking\NetworkServer.h" />
-    <ClInclude Include="src\Networking\Packets.h" />
+    <ClInclude Include="src\Networking\NetworkPackets.h" />
+    <ClInclude Include="src\Networking\NetworkPacketSerialization.h" />
     <ClInclude Include="src\Networking\Serialization.h" />
     <ClInclude Include="src\PrefabList.h" />
     <ClInclude Include="src\Scenes\CharPrefabs.h" />
@@ -183,6 +185,7 @@
     <ClCompile Include="src\GameManager.cpp" />
     <ClCompile Include="src\Map\Tilemap.cpp" />
     <ClCompile Include="src\Map\TilemapLayer.cpp" />
+    <ClCompile Include="src\Networking\ConnectionManager.cpp" />
     <ClCompile Include="src\Networking\NetworkController.cpp" />
     <ClCompile Include="src\Networking\NetworkIdentity.cpp" />
     <ClCompile Include="src\Networking\NetworkManager.cpp" />

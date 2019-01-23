@@ -12,8 +12,6 @@ namespace DND
 	public:
 		NetworkController();
 
-		void OnPlayerMovePacket(const PlayerMovePacket& packet);
-
 		std::unique_ptr<Component> Clone() const override;
 
 	};

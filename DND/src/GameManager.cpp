@@ -24,56 +24,9 @@ namespace DND
 	}
 
 	GameManager::GameManager(Layer& layer)
-		: m_LocalCamera(nullptr), m_LocalPlayer(nullptr), m_Tilemap(layer, TILEMAP_WIDTH, TILEMAP_HEIGHT, TILE_WIDTH, TILE_HEIGHT), m_Prefabs(), m_Network(), m_Spells(), m_UImenus(), m_ActiveFunctions(), m_ActiveTimers()
+		: m_LocalCamera(nullptr), m_LocalPlayer(nullptr), m_Tilemap(layer, TILEMAP_WIDTH, TILEMAP_HEIGHT, TILE_WIDTH, TILE_HEIGHT), m_Prefabs(), m_Factory(layer), m_Network(), m_Spells(), m_UImenus(), m_ActiveFunctions(), m_ActiveTimers()
 	{
 	
-	}
-
-	void GameManager::Holepunch(const SocketAddress& publicAddress, const SocketAddress& privateAddress, const std::function<void(SocketAddress)>& callback)
-	{
-		Timer& holepuncher = Time::RenderingTimeline().AddFunction(0.5, [this, publicAddress, privateAddress]()
-		{
-			BLT_INFO("SENDING HOLEPUNCH PACKET TO {}", publicAddress.ToString());
-			BLT_INFO("SENDING HOLEPUNCH PACKET TO {}", privateAddress.ToString());
-			HolepunchPacket packet;
-			Network().Server().SendPacket(publicAddress, packet);
-			Network().Server().SendPacket(privateAddress, packet);
-		});
-		Network().Server().OnHolepunchPacket.Clear();
-		Network().Server().OnHolepunchPacket.Subscribe([timerPtr = &holepuncher, callback, this](id_t listenerId, ReceivedPacketEvent& e)
-		{
-			BLT_CORE_INFO("RECEIVED HOLEPUNCH PACKET FROM {}", e.FromAddress.ToString());
-			BLT_CORE_INFO("REMOVED TIMER");
-			Time::RenderingTimeline().RemoveTimer(timerPtr);
-			callback(e.FromAddress);
-			Network().Server().OnHolepunchPacket.Unsubscribe(listenerId);
-			return true;
-		});
-	}
-
-	void GameManager::Host(PlayerCharacterInfo player, const std::function<void(const WelcomePacket&, const PlayerCharacterInfo&)>& loadSceneCallback)
-	{
-		WelcomePacket packet = Network().Host();
-		SceneManager::SetCurrentSceneByName("Game");
-		loadSceneCallback(packet, player);
-		Initialize();
-	}
-
-	void GameManager::Join(const SocketAddress& toAddress, PlayerCharacterInfo player, const std::function<void(const WelcomePacket&, const PlayerCharacterInfo&)>& loadSceneCallback)
-	{
-		Network().Connect(toAddress, [this, player, loadSceneCallback](WelcomePacket packet)
-		{
-			SceneManager::SetCurrentSceneByName("Game");
-			loadSceneCallback(packet, player);
-			for (PlayerInfo& info : packet.Players)
-			{
-				Holepunch(info.Address, info.Address, [](SocketAddress address)
-				{
-
-				});
-			}
-			Initialize();
-		});
 	}
 
 	void GameManager::Initialize()
@@ -82,11 +35,6 @@ namespace DND
 		{
 			menu->CreateMenu();
 		}
-		AddActiveTimer(&Time::RenderingTimeline().AddTimer(0.5, [this]()
-		{
-			KeepAlivePacket packet;
-			Network().SendPacketToAll(packet);
-		}));
 	}
 
 	void GameManager::Exit()
@@ -139,15 +87,9 @@ namespace DND
 		m_LocalCamera = camera;
 	}
 
-	void GameManager::SetLocalPlayer(const NetworkPlayerInfo& player)
-	{
-		m_LocalPlayer = player.Player;
-		Network().SetPlayer(player);
-	}
-
 	GameStateObjects GameManager::GetStateObjects()
 	{
-		return { &Network(), &Network().Factory(), &GetTilemap(), LocalPlayer() };
+		return { &Network(), &Factory(), &GetTilemap(), LocalPlayer() };
 	}
 
 	GameState GameManager::GetGameState()
@@ -166,6 +108,11 @@ namespace DND
 	PrefabList& GameManager::Prefabs()
 	{
 		return m_Prefabs;
+	}
+
+	ObjectFactory& GameManager::Factory()
+	{
+		return m_Factory;
 	}
 
 	Tilemap& GameManager::GetTilemap()

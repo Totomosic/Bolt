@@ -53,8 +53,8 @@ namespace DND
 		swordsmanCharacterPrefab.Components().AddComponent<StatsComponent>(defaultStats);
 		swordsmanCharacterPrefab.Components().AddComponent<Healthbar>(factory.CurrentLayer(), Vector3f(0, TILE_HEIGHT * 0.75f + 5, 1));
 
-		prefabs.BlueWizard = GameManager::Get().Network().Factory().AddPrefab(std::move(wizardCharacterPrefab));
-		prefabs.Swordsman = GameManager::Get().Network().Factory().AddPrefab(std::move(swordsmanCharacterPrefab));
+		prefabs.BlueWizard = GameManager::Get().Factory().AddPrefab(std::move(wizardCharacterPrefab));
+		prefabs.Swordsman = GameManager::Get().Factory().AddPrefab(std::move(swordsmanCharacterPrefab));
 	}
 
 }

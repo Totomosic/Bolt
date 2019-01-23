@@ -4,198 +4,161 @@
 namespace DND
 {
 
-	PacketValidator::PacketValidator()
-		: m_CurrentPacketId(0)
-	{
-	
-	}
-
-	id_t PacketValidator::GetNextPacketId()
-	{
-		return m_CurrentPacketId++;
-	}
-
-	bool PacketValidator::ValidateIncomingPacketId(id_t id)
-	{
-		return true;
-	}
-
 	NetworkServer::NetworkServer()
-		: OnShutdown(SERVER_SHUTDOWN_EVENT),
-		OnHelloPacket(SERVER_RECEIVED_HELLO_PACKET_EVENT), OnWelcomePacket(SERVER_RECEIVED_WELCOME_PACKET_EVENT), OnIntroductionPacket(SERVER_RECEIVED_INTRODUCTION_PACKET_EVENT), OnDisconnectPacket(SERVER_RECEIVED_DISCONNECT_PACKET_EVENT),
-		OnPlayerMovePacket(SERVER_RECEIVED_PLAYER_MOVE_PACKET_EVENT), OnCastSpellPacket(SERVER_RECEIVED_CAST_SPELL_PACKET_EVENT), OnStatUpdatePacket(SERVER_RECEIVED_STAT_PACKET_EVENT), OnDeathPacket(SERVER_RECEIVED_DEATH_PACKET_EVENT),
-		OnGetHostResponsePacket(SERVER_RECIEVED_GET_HOSTS_RESPONSE_PACKET), OnClientConnectingPacket(SERVER_RECIEVED_CLIENT_CONNECTING_PACKET), OnHolepunchPacket(SERVER_RECEIVED_HOLEPUNCH_PACKET),
-		m_IsRunning(false), m_Address(), m_Socket(), m_Validators()
+		: m_OnPacketReceived(SERVER_RECEIVED_PACKET_EVENT), m_PacketListeners(), m_SocketAddress(), m_Socket(), m_IsRunning(false)
 	{
-		ResetSocket();
-	}
-
-	void NetworkServer::SetAddress(const SocketAddress& address)
-	{
-		if (m_Address != address)
+		m_OnPacketReceived.Subscribe([this](id_t listenerId, ReceivedPacketEvent& e)
 		{
-			m_Address = address;
-		}
+			std::vector<ListenerId> removeListeners;
+			for (ListenerInfo& listener : m_PacketListeners[e.Type])
+			{
+				bool result = (*listener.Listener)(e);
+				if (listener.ListenCount > 0 && result)
+				{
+					listener.ListenCount -= 1;
+					if (listener.ListenCount <= 0)
+					{
+						removeListeners.push_back({ e.Type, listener.Listener.get() });
+					}
+				}
+			}
+			for (ListenerId& id : removeListeners)
+			{
+				RemovePacketListener(id);
+			}
+			return true;
+		});
 	}
 
-	void NetworkServer::Bind()
+	const SocketAddress& NetworkServer::BoundAddress() const
 	{
-		m_Socket.Bind(m_Address);
+		return m_SocketAddress;
 	}
 
-	void NetworkServer::Initialize(bool runListenThread)
+	bool NetworkServer::IsRunning() const
 	{
-		m_Validators.clear();		
+		return m_IsRunning;
+	}
+
+	void NetworkServer::Initialize(const SocketAddress& bindAddress, NetworkServer::OnInitCallback callback)
+	{
+		BLT_ASSERT(!IsRunning(), "SERVER IS ALREADY RUNNING");
 		m_IsRunning = true;
-		if (runListenThread)
+		m_SocketAddress = bindAddress;
+		m_Socket = UDPsocket();
+		m_Socket.Bind(m_SocketAddress);
+		std::thread listenerThread([this]()
 		{
-			ClearSocket();
-			BLT_WARN("LISTENING ON {}", m_Address.ToString());
-			RunListenThread();
-		}
-	}
-
-	void NetworkServer::Terminate()
-	{
-		if (m_IsRunning)
-		{
-			m_IsRunning = false;
-			StopListeningThread();
-			m_Socket.Shutdown();
-		}
-		m_IsRunning = false;
-		ResetSocket();
-	}
-
-	void NetworkServer::RunListenThread()
-	{
-		std::thread listeningThread([this]()
-		{
-			constexpr size_t MAX_PACKET_SIZE = 1024;
+			BLT_CORE_INFO("STARTING SERVER ON {}", m_SocketAddress.ToString());
+			constexpr int MAX_PACKET_SIZE = 1024;
 			while (true)
 			{
 				byte buffer[MAX_PACKET_SIZE];
-				SocketAddress addr;
-				int bytesReceived = m_Socket.RecvFrom(buffer, MAX_PACKET_SIZE, &addr);
-				if (bytesReceived > 4)
+				SocketAddress fromAddress;
+				int bytesReceived = m_Socket.RecvFrom(buffer, MAX_PACKET_SIZE, &fromAddress);
+				if (bytesReceived >= sizeof(id_t) + sizeof(PacketType))
 				{
-					InputMemoryStream stream(bytesReceived);
-					memcpy(stream.GetBufferPtr(), buffer, bytesReceived);
-					id_t pId;
-					PacketType pType;
-					stream.Read(&pId);
-					stream.Read((byte*)&pType);
-					if (pType == PacketType::LocalSocketTerminate)
+					InputMemoryStream packetData((uint)bytesReceived);
+					memcpy(packetData.GetBufferPtr(), buffer, bytesReceived);
+
+					id_t packetValidator;
+					PacketType packetType;
+					Deserialize(packetData, packetValidator);
+					Deserialize(packetData, packetType);
+
+					if (packetValidator != PACKET_VALIDATOR)
 					{
-						BLT_CORE_INFO("RECEIVED LOCAL SOCKET TERMINATED");
-						break;
-					}
-					if (pType == PacketType::KeepAlive)
-					{
-						BLT_INFO("RECEIVED KEEP ALIVE PACKET");
+						BLT_CORE_ERROR("PACKET DOES NOT MATCH VALIDATOR, {}", packetValidator);
 						continue;
 					}
 
+					BLT_CORE_INFO("RECEIVED PACKET, Type = {0} From = {1}", (int)packetType, fromAddress.ToString());
+
+					if (packetType == PacketType::LocalServerTerminate)
+					{
+						break;
+					}
+
 					std::unique_ptr<ReceivedPacketEvent> e = std::make_unique<ReceivedPacketEvent>();
-					e->FromAddress = addr;
+					e->FromAddress = fromAddress;
+					e->Type = packetType;
 					e->Server = this;
-					e->PacketId = pId;
-					e->Type = pType;
-					e->Packet = std::move(stream);
-
-					PacketValidator& validator = m_Validators[addr];
-					if (validator.ValidateIncomingPacketId(pId))
-					{
-						DispatchPacketEvent(GetEventDispatcher(pType), std::move(e));
-					}
-
-					if (pType == PacketType::Disconnect)
-					{
-						m_Validators.erase(addr);
-					}
+					e->Packet = std::move(packetData);
+					m_OnPacketReceived.Post(std::move(e));
 				}
 				else
 				{
-					BLT_ERROR("INVALID PACKET RECEIVED");
+					BLT_CORE_ERROR("INVALID PACKET RECEIVED, BYTE COUNT {}, EXITING SERVER...", bytesReceived);
 					break;
 				}
 			}
-
-			std::unique_ptr<ServerShutdownEvent> e = std::make_unique<ServerShutdownEvent>();
-			OnShutdown.Post(std::move(e));
-
+			BLT_CORE_INFO("STOPPING SERVER ON {}", m_SocketAddress.ToString());
+			m_IsRunning = false;
+			EventManager::Post(SERVER_SHUTDOWN_EVENT);
 		});
-		listeningThread.detach();
+		listenerThread.detach();
+		callback();
 	}
 
-	void NetworkServer::ClearSocket()
+	void NetworkServer::Exit(NetworkServer::OnExitCallback callback)
 	{
-		m_Socket.SetBlocking(false);
-		byte buffer[1024];
-		while (m_Socket.RecvFrom(buffer, 1024, nullptr) != 0)
+		BLT_ASSERT(IsRunning(), "SERVER IS NOT RUNNING");
+		EventManager::Subscribe(SERVER_SHUTDOWN_EVENT, [callback = std::move(callback)](id_t listenerId, Event& e)
 		{
-			BLT_INFO("CLEARING WAS REQUIRED");
-		}
-		m_Socket.SetBlocking(true);
+			callback();
+			EventManager::Unsubscribe(listenerId);
+			return true;
+		});
+		StopListeningThread();
+		ClearAllListeners();
+		m_IsRunning = false;
 	}
 
-	void NetworkServer::ResetSocket()
+	NetworkServer::ListenerId NetworkServer::AddPacketListener(PacketType packetType, NetworkServer::PacketListener listener)
 	{
-		m_Socket = UDPsocket();
-		m_Address = SocketAddress();
+		return AddTemporaryPacketListener(packetType, std::move(listener), 0);
+	}
+
+	NetworkServer::ListenerId NetworkServer::AddTemporaryPacketListener(PacketType packetType, NetworkServer::PacketListener listener, int count)
+	{
+		std::vector<ListenerInfo>& listeners = m_PacketListeners[packetType];
+		std::unique_ptr<PacketListener> listenerPtr = std::make_unique<PacketListener>();
+		*listenerPtr = std::move(listener);
+		ListenerId id = { packetType, listenerPtr.get() };
+		listeners.push_back({ std::move(listenerPtr), count });
+		return id;
+	}
+
+	void NetworkServer::RemovePacketListener(const NetworkServer::ListenerId& id)
+	{
+		BLT_ASSERT(m_PacketListeners.find(id.Type) != m_PacketListeners.end(), "No listeners for Packet Type {}", (int)id.Type);
+		std::vector<ListenerInfo>& listeners = m_PacketListeners.at(id.Type);
+		for (int i = 0; i < listeners.size(); i++)
+		{
+			if (listeners[i].Listener.get() == id.Listener)
+			{
+				listeners.erase(listeners.begin() + i);
+				return;
+			}
+		}
+		BLT_ASSERT(false, "Unable to find listener");
+	}
+
+	void NetworkServer::ClearPacketListeners(PacketType packetType)
+	{
+		m_PacketListeners[packetType].clear();
+		m_PacketListeners.erase(packetType);
+	}
+
+	void NetworkServer::ClearAllListeners()
+	{
+		m_PacketListeners.clear();
 	}
 
 	void NetworkServer::StopListeningThread()
 	{
-		DisconnectPacket dcPacket;
-		for (auto& pair : m_Validators)
-		{
-			SendPacket(pair.first, dcPacket);
-		}
-
-		OutputMemoryStream packet;
-		id_t packetId = 0;
-		PacketType type = PacketType::LocalSocketTerminate;
-		Serialize(packet, packetId);
-		Serialize(packet, (byte)type);
-		int bytesSent = m_Socket.SendTo(m_Address, packet.GetBufferPtr(), packet.GetRemainingDataSize());
-		BLT_ASSERT(bytesSent == packet.GetRemainingDataSize(), "Unable to send");
-	}
-
-	void NetworkServer::DispatchPacketEvent(EventDispatcher<ReceivedPacketEvent>& dispatcher, std::unique_ptr<ReceivedPacketEvent>&& args)
-	{
-		dispatcher.Post(std::move(args));
-	}
-
-	EventDispatcher<ReceivedPacketEvent>& NetworkServer::GetEventDispatcher(PacketType type)
-	{
-		switch (type)
-		{
-		case PacketType::Hello:
-			return OnHelloPacket;
-		case PacketType::Welcome:
-			return OnWelcomePacket;
-		case PacketType::Introduce:
-			return OnIntroductionPacket;
-		case PacketType::Disconnect:
-			return OnDisconnectPacket;
-		case PacketType::PlayerMove:
-			return OnPlayerMovePacket;
-		case PacketType::CastSpell:
-			return OnCastSpellPacket;
-		case PacketType::StatUpdate:
-			return OnStatUpdatePacket;
-		case PacketType::Death:
-			return OnDeathPacket;
-		case PacketType::GetHostsResponse:
-			return OnGetHostResponsePacket;
-		case PacketType::ClientConnecting:
-			return OnClientConnectingPacket;
-		case PacketType::Holepunch:
-			return OnHolepunchPacket;
-		}
-		BLT_ASSERT(false, "Unable to find dispatcher for type");
-		return *(EventDispatcher<ReceivedPacketEvent>*)nullptr;
+		LocalServerTerminatePacket packet;
+		SendPacket(BoundAddress(), packet);
 	}
 
 }

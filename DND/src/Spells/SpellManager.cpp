@@ -35,12 +35,6 @@ namespace DND
 		m_Spells[index].Cooldown = result.Cooldown;
 		m_Spells[index].MaxCooldown = result.Cooldown;
 		OutputMemoryStream stream = instance->SerializeInstance();
-		CastSpellPacket packet;
-		packet.SpellId = spell->Id();
-		packet.CasterNetworkId = caster->Components().GetComponent<NetworkIdentity>().NetworkId;
-		packet.PlayerId = caster->Components().GetComponent<NetworkIdentity>().OwningPlayerId;
-		packet.SpellData = std::move(stream);
-		GameManager::Get().Network().SendPacketToAll(packet);
 	}
 
 	void SpellManager::Update()

@@ -1,0 +1,123 @@
+#pragma once
+#include "bltpch.h"
+#include "../Map/Tilemap.h"
+
+#include "Serialization.h"
+#include "Deserialization.h"
+#include "Entities/Characters/CharacterStats.h"
+
+namespace DND
+{
+
+	constexpr id_t PACKET_VALIDATOR = 0xFFEEDDCC;
+
+	struct AddressPair
+	{
+	public:
+		SocketAddress PublicEndpoint;
+		SocketAddress PrivateEndpoint;
+	};
+
+	template<>
+	inline void Serialize(OutputMemoryStream& stream, const AddressPair& value)
+	{
+		Serialize(stream, value.PublicEndpoint);
+		Serialize(stream, value.PrivateEndpoint);
+	}
+	template<>
+	inline void Deserialize(InputMemoryStream& stream, AddressPair& value)
+	{
+		Deserialize(stream, value.PublicEndpoint);
+		Deserialize(stream, value.PrivateEndpoint);
+	}
+
+	enum class PacketType : byte
+	{
+		LocalServerTerminate,
+
+		RegisterAsHost,
+		AddressPairResponse,
+		GetAllHosts,
+		GetAllHostsResponse,
+		ConnectToAddress,
+		DisconnectHost,
+
+		Holepunch,
+		HolepunchAck,
+
+		MAX_PACKET_TYPES
+	};
+
+	struct LocalServerTerminatePacket
+	{
+	public:
+		constexpr static PacketType Type = PacketType::LocalServerTerminate;
+	};
+
+	struct RegisterAsHostPacket
+	{
+	public:
+		constexpr static PacketType Type = PacketType::RegisterAsHost;
+		
+	public:
+		SocketAddress PrivateEndpoint;
+	};
+
+	struct AddressPairResponsePacket
+	{
+	public:
+		constexpr static PacketType Type = PacketType::AddressPairResponse;
+
+	public:
+		AddressPair Address;
+	};
+
+	struct GetAllHostsPacket
+	{
+	public:
+		constexpr static PacketType Type = PacketType::GetAllHosts;
+	};
+
+	struct GetAllHostsResponsePacket
+	{
+	public:
+		constexpr static PacketType Type = PacketType::GetAllHostsResponse;
+		
+	public:
+		std::vector<AddressPair> HostAddresses;
+	};
+
+	struct ConnectToAddressPacket
+	{
+	public:
+		constexpr static PacketType Type = PacketType::ConnectToAddress;
+		
+	public:
+		AddressPair Address;
+	};
+
+	struct DisconnectHostPacket
+	{
+	public:
+		constexpr static PacketType Type = PacketType::DisconnectHost;
+
+	public:
+		SocketAddress PrivateEndpoint;
+	};
+
+	struct HolepunchPacket
+	{
+	public:
+		constexpr static PacketType Type = PacketType::Holepunch;
+	};
+
+	struct HolepunchAckPacket
+	{
+	public:
+		constexpr static PacketType Type = PacketType::HolepunchAck;
+
+	public:
+		AddressPair MyAddress;
+	};
+
+}

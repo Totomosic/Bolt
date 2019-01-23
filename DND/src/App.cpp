@@ -13,7 +13,7 @@
 #include "Entities/NPCController.h"
 #include "Camera/PlayerCamera.h"
 
-#include "Networking/Packets.h"
+#include "Networking/NetworkPackets.h"
 #include "Networking/NetworkServer.h"
 #include "Networking/NetworkManager.h"
 
@@ -36,7 +36,7 @@ namespace DND
 		CreateServerScene(*this, serverScene, resources, gameScene);
 		CreateGameScene(*this, gameScene, resources);
 
-		BLT_INFO(sizeof(sockaddr));
+		BLT_INFO(SocketUtil::IsBigEndian());
 
 		Command setPortCommand("setport", [this](const Command::CommandArgList& args)
 		{
@@ -117,7 +117,7 @@ namespace DND
 
 	void DndClient::Exit()
 	{
-		if (GameManager::Get().LocalPlayer() != nullptr)
+		if (GameManager::Get().Network().Server().IsRunning())
 		{
 			GameManager::Get().Exit([this]()
 			{

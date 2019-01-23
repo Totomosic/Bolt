@@ -50,6 +50,7 @@ namespace DND
 		Tilemap m_Tilemap;
 
 		PrefabList m_Prefabs;
+		ObjectFactory m_Factory;
 		NetworkManager m_Network;
 		SpellList m_Spells;
 
@@ -64,10 +65,6 @@ namespace DND
 
 		GameManager(Layer& layer);
 
-		void Holepunch(const SocketAddress& publicAddress, const SocketAddress& privateAddress, const std::function<void(SocketAddress)>& callback);
-		void Host(PlayerCharacterInfo player, const std::function<void(const WelcomePacket&, const PlayerCharacterInfo&)>& loadSceneCallback);
-		void Join(const SocketAddress& toAddress, PlayerCharacterInfo player, const std::function<void(const WelcomePacket&, const PlayerCharacterInfo&)>& loadSceneCallback);
-
 		void Initialize();
 		void Exit();
 		void Exit(const std::function<void()>& callback);
@@ -76,13 +73,13 @@ namespace DND
 		Camera* LocalCamera() const;
 		GameObject* LocalPlayer() const;
 		void SetLocalCamera(Camera* camera);
-		void SetLocalPlayer(const NetworkPlayerInfo& player);
 
 		GameStateObjects GetStateObjects();
 		GameState GetGameState();
 		Tile CurrentlySelectedTile() const;
 
 		PrefabList& Prefabs();
+		ObjectFactory& Factory();
 		Tilemap& GetTilemap();
 		NetworkManager& Network();
 		SpellList& Spells();

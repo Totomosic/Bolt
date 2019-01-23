@@ -51,10 +51,6 @@ namespace DND
 					CharacterStats newStats = player->Components().GetComponent<StatsComponent>().Stats();
 					newStats.CurrentHealth -= damage;
 					player->Components().GetComponent<StatsComponent>().SetStats(newStats);
-					StatUpdatePacket packet;
-					packet.NetworkId = player->Components().GetComponent<NetworkIdentity>().NetworkId;
-					packet.Stats = newStats;
-					state.Network->SendPacketToAll(packet);
 				}
 			}
 		});
