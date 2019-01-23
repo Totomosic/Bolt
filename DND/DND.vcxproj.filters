@@ -136,6 +136,12 @@
     </ClInclude>
     <ClInclude Include="src\Networking\NetworkPacketSerialization.h" />
     <ClInclude Include="src\Networking\ConnectionManager.h" />
+    <ClInclude Include="src\Networking\GameStatePackets.h" />
+    <ClInclude Include="src\Networking\GameStatePacketSerialization.h" />
+    <ClInclude Include="src\Networking\NetworkObjects.h" />
+    <ClInclude Include="src\PlayerManager.h" />
+    <ClInclude Include="src\Networking\GamePlayPackets.h" />
+    <ClInclude Include="src\Networking\GamePlayPacketSerialization.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\App.cpp" />
@@ -223,5 +229,7 @@
     </ClCompile>
     <ClCompile Include="src\bltpch.cpp" />
     <ClCompile Include="src\Networking\ConnectionManager.cpp" />
+    <ClCompile Include="src\Networking\NetworkObjects.cpp" />
+    <ClCompile Include="src\PlayerManager.cpp" />
   </ItemGroup>
 </Project>

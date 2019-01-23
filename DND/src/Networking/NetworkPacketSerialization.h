@@ -114,4 +114,15 @@ namespace DND
 		Deserialize(stream, value.MyAddress);
 	}
 
+	template<>
+	inline void Serialize(OutputMemoryStream& stream, const ConnectionEstablishedPacket& value)
+	{
+		
+	}
+	template<>
+	inline void Deserialize(InputMemoryStream& stream, ConnectionEstablishedPacket& value)
+	{
+		
+	}
+
 }

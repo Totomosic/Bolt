@@ -11,6 +11,11 @@ namespace DND
 		
 	}
 
+	void NetworkController::MoveToTile(const Tile& tile) const
+	{
+		gameObject()->Components().GetComponent<TileMotion>().SetTargetTile(tile);
+	}
+
 	std::unique_ptr<Component> NetworkController::Clone() const
 	{
 		return std::make_unique<NetworkController>();

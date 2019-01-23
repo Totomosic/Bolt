@@ -43,7 +43,7 @@ namespace DND
 				explosion->Components().GetComponent<MeshRenderer>().Mesh.Materials[0].Textures.Animators[0] = std::make_unique<SpriteSheetAnimator>(9, 9, 1);
 				explosion->Components().GetComponent<MeshRenderer>().Mesh.Materials[0].RenderOptions.DepthFunc = DepthFunction::Lequal;
 				Destroy(explosion, 1);
-				GameObject* player = state.LocalPlayer;
+				GameObject* player = state.Players->LocalPlayerObject();
 				Tile playerTile = player->Components().GetComponent<TileTransform>().CurrentTile();
 				Tile selectedTile = state.Map->TileFromWorldPosition(target.x, target.y);
 				if (playerTile.x >= selectedTile.x - 2 && playerTile.x <= selectedTile.x + 2 && playerTile.y >= selectedTile.y - 2 && playerTile.y <= selectedTile.y + 2)

@@ -26,7 +26,7 @@ namespace DND
 			float healthProp = e.Stats.CurrentHealth / (float)e.Stats.MaxHealth;
 			SetBarSize(m_BarLength * healthProp, m_BarLength);
 
-			if (e.Object == GameManager::Get().LocalPlayer() && e.Stats.CurrentHealth <= 0)
+			if (e.Object == GameManager::Get().Players().LocalPlayerObject() && e.Stats.CurrentHealth <= 0)
 			{
 				Time::RenderingTimeline().AddFunction(0.25, []()
 				{

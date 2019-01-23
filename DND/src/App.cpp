@@ -95,19 +95,6 @@ namespace DND
 		{
 			GameManager::Get().Exit();
 		}
-
-		if (GameManager::Get().LocalPlayer() != nullptr)
-		{
-			GameManager::Get().Update();
-			if (Input::KeyPressed(Keycode::O))
-			{
-				GameManager::Get().LocalCamera()->Components().GetComponent<PlayerCamera>().ShowTileSelector();
-			}
-			if (Input::KeyPressed(Keycode::P))
-			{
-				GameManager::Get().LocalCamera()->Components().GetComponent<PlayerCamera>().HideTileSelector();
-			}
-		}
 	}
 
 	void DndClient::Render()
