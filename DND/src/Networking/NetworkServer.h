@@ -1,5 +1,6 @@
 #pragma once
 #include "NetworkPacketSerialization.h"
+#include "GameStatePacketSerialization.h"
 #include "../Events.h"
 
 namespace DND

@@ -131,17 +131,18 @@ namespace DND
 
 	void NetworkServer::RemovePacketListener(const NetworkServer::ListenerId& id)
 	{
-		BLT_ASSERT(m_PacketListeners.find(id.Type) != m_PacketListeners.end(), "No listeners for Packet Type {}", (int)id.Type);
-		std::vector<ListenerInfo>& listeners = m_PacketListeners.at(id.Type);
-		for (int i = 0; i < listeners.size(); i++)
+		if (m_PacketListeners.find(id.Type) != m_PacketListeners.end())
 		{
-			if (listeners[i].Listener.get() == id.Listener)
+			std::vector<ListenerInfo>& listeners = m_PacketListeners.at(id.Type);
+			for (int i = 0; i < listeners.size(); i++)
 			{
-				listeners.erase(listeners.begin() + i);
-				return;
+				if (listeners[i].Listener.get() == id.Listener)
+				{
+					listeners.erase(listeners.begin() + i);
+					return;
+				}
 			}
 		}
-		BLT_ASSERT(false, "Unable to find listener");
 	}
 
 	void NetworkServer::ClearPacketListeners(PacketType packetType)

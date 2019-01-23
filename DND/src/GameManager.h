@@ -6,8 +6,7 @@
 #include "Networking/NetworkManager.h"
 #include "Networking/NetworkIdentity.h"
 #include "Spells/SpellList.h"
-
-#include "UI/UImenu.h"
+#include "PlayerManager.h"
 
 namespace DND
 {
@@ -29,7 +28,7 @@ namespace DND
 		NetworkManager* Network;
 		ObjectFactory* Factory;
 		Tilemap* Map;
-		GameObject* LocalPlayer;
+		PlayerManager* Players;
 	};
 
 	struct GameState
@@ -41,20 +40,21 @@ namespace DND
 
 	class GameManager
 	{
+	public:
+		using LoadGameCallback = std::function<void(const WelcomePacket&, PlayerCharacterInfo)>;
+
 	private:
 		static GameManager* s_Instance;
 
 	private:
 		Camera* m_LocalCamera;
-		GameObject* m_LocalPlayer;
+		PlayerManager m_Players;
 		Tilemap m_Tilemap;
 
 		PrefabList m_Prefabs;
 		ObjectFactory m_Factory;
 		NetworkManager m_Network;
 		SpellList m_Spells;
-
-		std::vector<std::unique_ptr<UImenu>> m_UImenus;
 
 		std::vector<Timer*> m_ActiveFunctions;
 		std::vector<Timer*> m_ActiveTimers;
@@ -63,7 +63,12 @@ namespace DND
 		static GameManager& Get();
 		static void Terminate();
 
+	private:
 		GameManager(Layer& layer);
+
+	public:
+		void Host(PlayerCharacterInfo player, LoadGameCallback callback);
+		void Join(id_t connectionId, PlayerCharacterInfo player, LoadGameCallback callback);
 
 		void Initialize();
 		void Exit();
@@ -71,13 +76,13 @@ namespace DND
 		void Update();
 
 		Camera* LocalCamera() const;
-		GameObject* LocalPlayer() const;
 		void SetLocalCamera(Camera* camera);
 
 		GameStateObjects GetStateObjects();
 		GameState GetGameState();
 		Tile CurrentlySelectedTile() const;
 
+		PlayerManager& Players();
 		PrefabList& Prefabs();
 		ObjectFactory& Factory();
 		Tilemap& GetTilemap();
@@ -86,7 +91,9 @@ namespace DND
 
 		void AddActiveFunction(Timer* function);
 		void AddActiveTimer(Timer* timer);
-		void AddUIMenu(std::unique_ptr<UImenu>&& menu);
+
+	private:
+		void InitializeListeners();
 
 	};
 

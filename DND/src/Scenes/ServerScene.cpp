@@ -27,6 +27,7 @@ namespace DND
 				{
 					PlayerCharacterInfo player;
 					player.PrefabId = GameManager::Get().Prefabs().Swordsman;
+					GameManager::Get().Host(player, CreateSceneFromWelcome);
 					return true;
 				});
 			});
@@ -40,9 +41,14 @@ namespace DND
 					button.Text(address.PublicEndpoint.ToString(), Color::Black);
 					button.EventHandler().OnClicked.Subscribe([address](id_t listenerId, UIClickedEvent& e)
 					{
-						GameManager::Get().Network().ConnectTo(address, [](id_t connectionId)
+						GameManager::Get().Network().ConnectTo(address, 5000, [](id_t connectionId)
 						{
-							BLT_CORE_WARN("CONNECTED!!!!");
+							if (connectionId != GameObject::InvalidID)
+							{
+								PlayerCharacterInfo playerInfo;
+								playerInfo.PrefabId = GameManager::Get().Prefabs().BlueWizard;
+								GameManager::Get().Join(connectionId, playerInfo, CreateSceneFromWelcome);
+							}
 						});
 						return true;
 					});

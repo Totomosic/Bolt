@@ -9,15 +9,15 @@ namespace DND
 	
 	}
 
-	NetworkIdentity::NetworkIdentity(id_t networkId, id_t owningPlayerId) : Component(),
-		NetworkId(networkId), OwningPlayerId(owningPlayerId)
+	NetworkIdentity::NetworkIdentity(id_t networkId) : Component(),
+		NetworkId(networkId)
 	{
 	
 	}
 
 	std::unique_ptr<Component> NetworkIdentity::Clone() const
 	{
-		return std::make_unique<NetworkIdentity>(NetworkId, OwningPlayerId);
+		return std::make_unique<NetworkIdentity>(NetworkId);
 	}
 
 }

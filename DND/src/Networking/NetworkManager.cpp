@@ -1,11 +1,5 @@
 #include "bltpch.h"
 #include "NetworkManager.h"
-#include "../Entities/TileTransform.h"
-#include "NetworkController.h"
-#include "NetworkIdentity.h"
-#include "../Spells/SpellCaster.h"
-
-#include "../GameManager.h"
 
 namespace DND
 {
@@ -13,7 +7,7 @@ namespace DND
 	SocketAddress NetworkManager::EC2_SERVER_ADDRESS;
 
 	NetworkManager::NetworkManager()
-		: m_Address(), m_Server(), m_Connections()
+		: m_Address(), m_Server(), m_Connections(), m_Objects()
 	{
 		EC2_SERVER_ADDRESS = SocketAddress("ec2-18-219-148-3.us-east-2.compute.amazonaws.com", 12345);
 	}
@@ -38,9 +32,12 @@ namespace DND
 			{
 				ConnectToAddressPacket packet;
 				Deserialize(e.Packet, packet);
-				netManager->ConnectToWithoutServer(packet.Address, [](id_t connectionId)
+				netManager->ConnectToWithoutServer(packet.Address, 2000, [](id_t connectionId)
 				{
-					
+					if (connectionId != GameObject::InvalidID)
+					{
+						BLT_CORE_WARN("Connected!!!!");
+					}
 				});
 				return true;
 			});
@@ -83,26 +80,32 @@ namespace DND
 		m_Server.SendPacket(NetworkManager::EC2_SERVER_ADDRESS, packet);
 	}
 
-	void NetworkManager::ConnectTo(const AddressPair& address, NetworkManager::OnConnectedCallback callback)
+	void NetworkManager::ConnectTo(const AddressPair& address, int timeoutMilliseconds, NetworkManager::OnConnectedCallback callback)
 	{
-		ConnectToWithoutServer(address, std::move(callback));
+		ConnectToWithoutServer(address, timeoutMilliseconds, std::move(callback));
 
 		ConnectToAddressPacket packet;
 		packet.Address = address;
 		m_Server.SendPacket(NetworkManager::EC2_SERVER_ADDRESS, packet);
 	}
 
-	void NetworkManager::ConnectToWithoutServer(const AddressPair& address, NetworkManager::OnConnectedCallback callback)
+	void NetworkManager::ConnectToWithoutServer(const AddressPair& address, int timeoutMilliseconds, NetworkManager::OnConnectedCallback callback)
 	{
 		Timer* holePunchFunc = &Time::RenderingTimeline().AddTimer(0.5, [this, address]()
 		{
 			HolepunchPacket packet;
-			//BLT_CORE_INFO("SENDING HOLEPUNCH PACKET TO {}", address.PrivateEndpoint.ToString());
-			//m_Server.SendPacket(address.PrivateEndpoint, packet);
+			BLT_CORE_INFO("SENDING HOLEPUNCH PACKET TO {}", address.PrivateEndpoint.ToString());
+			m_Server.SendPacket(address.PrivateEndpoint, packet);
 			BLT_CORE_INFO("SENDING HOLEPUNCH PACKET TO {}", address.PublicEndpoint.ToString());
 			m_Server.SendPacket(address.PublicEndpoint, packet);
 		});
-		m_Server.AddTemporaryPacketListener(PacketType::Holepunch, [this, address](ReceivedPacketEvent& e)
+		Timer* timeoutFunc = &Time::RenderingTimeline().AddFunction(timeoutMilliseconds / 1000.0f, [this]()
+		{
+			HolepunchAckPacket packet;
+			packet.MyAddress = m_Address;
+			m_Server.SendPacket(m_Server.BoundAddress(), packet);
+		});
+		NetworkServer::ListenerId listenerId = m_Server.AddTemporaryPacketListener(PacketType::Holepunch, [this, address](ReceivedPacketEvent& e)
 		{
 			HolepunchAckPacket packet;
 			packet.MyAddress = m_Address;
@@ -114,16 +117,38 @@ namespace DND
 			}
 			return result;
 		}, 1);
-		m_Server.AddTemporaryPacketListener(PacketType::HolepunchAck, [this, address, holePunchFunc, callback = std::move(callback)](ReceivedPacketEvent& e)
+		m_Server.AddTemporaryPacketListener(PacketType::HolepunchAck, [this, address, holePunchFunc, timeoutFunc, listenerId, callback = callback](ReceivedPacketEvent& e)
 		{
 			HolepunchAckPacket packet;
 			Deserialize(e.Packet, packet);
-			bool result = address.PublicEndpoint == packet.MyAddress.PublicEndpoint || address.PrivateEndpoint == packet.MyAddress.PrivateEndpoint;
+			bool result = address.PublicEndpoint == packet.MyAddress.PublicEndpoint || address.PrivateEndpoint == packet.MyAddress.PrivateEndpoint || e.FromAddress == m_Server.BoundAddress();
 			if (result)
 			{
 				Time::RenderingTimeline().RemoveTimer(holePunchFunc);
-				id_t connectionId = m_Connections.AddConnection(address, e.FromAddress);
-				BLT_CORE_INFO("ESTABLISHED CONNECTION Id = {0} WITH ADDRESS {1} {2} USING {3}", connectionId, address.PublicEndpoint.ToString(), address.PrivateEndpoint.ToString(), e.FromAddress.ToString());
+				if (e.FromAddress != m_Server.BoundAddress())
+				{
+					Time::RenderingTimeline().RemoveFunction(timeoutFunc);
+					id_t connectionId = m_Connections.AddConnection(address, e.FromAddress);
+					BLT_CORE_INFO("ESTABLISHED CONNECTION Id = {0} WITH ADDRESS {1} {2} USING {3}", connectionId, address.PublicEndpoint.ToString(), address.PrivateEndpoint.ToString(), e.FromAddress.ToString());
+					ConnectionEstablishedPacket connectionPacket;
+					m_Server.SendPacket(e.FromAddress, connectionPacket);
+				}
+				else
+				{
+					BLT_CORE_ERROR("CONNECTION REQUEST TIMED OUT");
+					m_Server.RemovePacketListener(listenerId);
+					callback(GameObject::InvalidID);
+				}
+			}
+			return result;
+		}, 1);
+		m_Server.AddTemporaryPacketListener(PacketType::ConnectionEstablished, [this, address, callback = callback](ReceivedPacketEvent& e)
+		{
+			bool result = address.PublicEndpoint == e.FromAddress || address.PrivateEndpoint == e.FromAddress;
+			if (result)
+			{
+				id_t connectionId = m_Connections.GetConnectionId(address);
+				BLT_CORE_INFO("CONNECTION {}", connectionId);
 				callback(connectionId);
 			}
 			return result;

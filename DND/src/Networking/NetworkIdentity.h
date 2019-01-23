@@ -8,11 +8,10 @@ namespace DND
 	{
 	public:
 		id_t NetworkId;
-		id_t OwningPlayerId;
 
 	public:
 		NetworkIdentity();
-		NetworkIdentity(id_t networkId, id_t owningPlayerId);
+		NetworkIdentity(id_t networkId);
 
 		std::unique_ptr<Component> Clone() const override;
 

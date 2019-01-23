@@ -4,6 +4,8 @@
 #include "../Networking/NetworkIdentity.h"
 #include "../Spells/SpellCaster.h"
 
+#include "../Networking/GamePlayPacketSerialization.h"
+
 namespace DND
 {
 
@@ -53,6 +55,10 @@ namespace DND
 				{
 					Tile moveToTile = t.CurrentTile() + tileDiff;
 					m.SetTargetTile(moveToTile);
+					EntityMovedPacket packet;
+					packet.NetworkId = player->Components().GetComponent<NetworkIdentity>().NetworkId;
+					packet.MoveToTile = moveToTile;
+					GameManager::Get().Network().SendPacketToAll(packet);
 				});
 			}
 		}

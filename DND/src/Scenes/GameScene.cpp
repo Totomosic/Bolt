@@ -7,6 +7,7 @@
 #include "../GameManager.h"
 #include "../Camera/PlayerCamera.h"
 #include "../Entities/PlayerController.h"
+#include "../Networking/NetworkController.h"
 
 namespace DND
 {
@@ -31,6 +32,7 @@ namespace DND
 		gameScene.OnLoad.Subscribe([gameCamera, &overlayGameLayer, resources](id_t listenerId, SceneLoadedEvent& e)
 		{
 			CreateTilemap(resources);
+			GameManager::Get().LocalCamera()->Components().AddComponent<PlayerCamera>(&GameManager::Get().GetTilemap(), GameManager::Get().Players().LocalPlayerObject(), &overlayGameLayer);
 			return true;
 		});
 
@@ -60,9 +62,70 @@ namespace DND
 		layer.SetTileImages(25, 0, 4, TILEMAP_HEIGHT, pathTileImage, ResizeFilter::Nearest);
 	}
 
-	void CreateSceneFromWelcome(const PlayerCharacterInfo& playerInfo)
+	void CreateSceneFromWelcome(const WelcomePacket& packet, const PlayerCharacterInfo& playerInfo)
 	{
+		GameObject* player = GameManager::Get().Factory().Instantiate(GameManager::Get().Factory().GetPrefab(playerInfo.PrefabId));
+		PlayerManager::PlayerInfo myPlayer;
+		myPlayer.PlayerId = packet.PlayerId;
+		myPlayer.Character.CurrentTile = Tile(0, 0);
+		myPlayer.Character.NetworkId = packet.NetworkId;
+		myPlayer.Character.PrefabId = playerInfo.PrefabId;
+
+		player->Components().GetComponent<TileTransform>().SetCurrentTile(myPlayer.Character.CurrentTile, true);
+		player->Components().AddComponent<PlayerController>();
 		
+		GameManager::Get().Network().Objects().IdentifyObject(packet.NetworkId, player);
+		GameManager::Get().Players().SetLocalPlayer(myPlayer, player);
+
+		for (const NetworkPlayerInfo& p : packet.Players)
+		{
+			if (p.Connection.Address.PrivateEndpoint == GameManager::Get().Network().Address().PrivateEndpoint)
+			{
+				continue;
+			}
+			id_t connectionId = GameManager::Get().Network().Connections().GetConnectionId(p.Connection.Address);
+			std::function<void(id_t)> sendIntroductionFunc = [myPlayer, p](id_t connectionId)
+			{
+				IntroductionPacket packet;
+				packet.Player.Character = myPlayer.Character;
+				packet.Player.PlayerId = myPlayer.PlayerId;
+				packet.Player.Connection.Address = GameManager::Get().Network().Address();
+				const SocketAddress& address = GameManager::Get().Network().Connections().GetRoutableAddress(connectionId);
+				BLT_CORE_INFO("SENDING INTRODUCTION PACKET TO {}", address.ToString());
+				GameManager::Get().Network().Server().SendPacket(address, packet);
+
+				GameObject* object = GameManager::Get().Factory().Instantiate(GameManager::Get().Factory().GetPrefab(p.Character.PrefabId));
+				object->Components().GetComponent<TileTransform>().SetCurrentTile(p.Character.CurrentTile, true);
+				object->Components().AddComponent<NetworkController>();
+				PlayerManager::PlayerInfo pInfo;
+				pInfo.Character = p.Character;
+				pInfo.PlayerId = p.PlayerId;
+				GameManager::Get().Players().AddPlayer(pInfo.PlayerId, pInfo, object, connectionId);
+				GameManager::Get().Network().Objects().IdentifyObject(p.Character.NetworkId, object);
+			};
+			if (connectionId == GameObject::InvalidID)
+			{
+				BLT_CORE_INFO("CREATING NEW CONNECTION");
+				GameManager::Get().Network().ConnectTo(p.Connection.Address, 5000, [sendIntro = std::move(sendIntroductionFunc)](id_t connectionId)
+				{
+					if (connectionId != GameObject::InvalidID)
+					{
+						sendIntro(connectionId);
+					}
+				});
+			}
+			else
+			{
+				BLT_CORE_INFO("CONNECTION ALREADY EXISTED ID = {}", connectionId);
+				sendIntroductionFunc(connectionId);
+			}
+		}
+
+		GameManager::Get().Network().Objects().SetNextAvailableNetworkId(packet.NextNetworkId);
+		GameManager::Get().Players().SetNextAvailablePlayerId(packet.NextPlayerId);
+
+		GameManager::Get().LocalCamera()->MakeChildOf(player);
+		SceneManager::SetCurrentSceneByName("Game");
 	}
 
 }

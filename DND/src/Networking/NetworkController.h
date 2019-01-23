@@ -12,6 +12,8 @@ namespace DND
 	public:
 		NetworkController();
 
+		void MoveToTile(const Tile& tile) const;
+
 		std::unique_ptr<Component> Clone() const override;
 
 	};

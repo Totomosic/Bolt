@@ -18,6 +18,8 @@ namespace DND
 		const AddressPair& GetAddressPair(id_t connectionId) const;
 		const SocketAddress& GetRoutableAddress(id_t connectionId) const;
 		const std::unordered_map<id_t, AddressPair>& Connections() const;
+		id_t GetConnectionId(const AddressPair& address) const;
+		std::vector<SocketAddress> GetAllRoutableAddresses() const;
 
 		id_t AddConnection(const AddressPair& address, const SocketAddress& routableAddress);
 		void RemoveConnection(id_t connectionId);

@@ -1,10 +1,8 @@
 #pragma once
 #include "bltpch.h"
-#include "../Map/Tilemap.h"
 
 #include "Serialization.h"
 #include "Deserialization.h"
-#include "Entities/Characters/CharacterStats.h"
 
 namespace DND
 {
@@ -44,6 +42,15 @@ namespace DND
 
 		Holepunch,
 		HolepunchAck,
+		ConnectionEstablished,
+
+		Hello,
+		Welcome,
+		Introduction,
+		NotAcceptingClients,
+		PlayerDisconnect,
+
+		EntityMoved,
 
 		MAX_PACKET_TYPES
 	};
@@ -118,6 +125,12 @@ namespace DND
 
 	public:
 		AddressPair MyAddress;
+	};
+
+	struct ConnectionEstablishedPacket
+	{
+	public:
+		constexpr static PacketType Type = PacketType::ConnectionEstablished;
 	};
 
 }
