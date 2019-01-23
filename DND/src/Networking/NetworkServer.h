@@ -52,14 +52,16 @@ namespace DND
 		template<typename T>
 		void SendPacket(const SocketAddress& toAddress, const T& packet)
 		{
-			BLT_ASSERT(IsRunning(), "Server is not running");
-			PacketType type = T::Type;
-			OutputMemoryStream packetData;
-			Serialize(packetData, PACKET_VALIDATOR);
-			Serialize(packetData, (byte)type);
-			Serialize(packetData, packet);
-			int bytesSent = m_Socket.SendTo(toAddress, packetData.GetBufferPtr(), packetData.GetRemainingDataSize());
-			BLT_ASSERT(bytesSent == packetData.GetRemainingDataSize(), "UNABLE TO SEND ALL {} BYTES", packetData.GetRemainingDataSize());
+			if (IsRunning())
+			{
+				PacketType type = T::Type;
+				OutputMemoryStream packetData;
+				Serialize(packetData, PACKET_VALIDATOR);
+				Serialize(packetData, (byte)type);
+				Serialize(packetData, packet);
+				int bytesSent = m_Socket.SendTo(toAddress, packetData.GetBufferPtr(), packetData.GetRemainingDataSize());
+				BLT_ASSERT(bytesSent == packetData.GetRemainingDataSize(), "UNABLE TO SEND ALL {} BYTES", packetData.GetRemainingDataSize());
+			}
 		}
 
 	private:

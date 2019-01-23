@@ -56,7 +56,6 @@ namespace DND
 		NetworkManager m_Network;
 		SpellList m_Spells;
 
-		std::vector<Timer*> m_ActiveFunctions;
 		std::vector<Timer*> m_ActiveTimers;
 
 	public:
@@ -68,7 +67,7 @@ namespace DND
 
 	public:
 		void Host(PlayerCharacterInfo player, LoadGameCallback callback);
-		void Join(id_t connectionId, PlayerCharacterInfo player, LoadGameCallback callback);
+		void Join(const SocketAddress& address, PlayerCharacterInfo player, LoadGameCallback callback);
 
 		void Initialize();
 		void Exit();
@@ -89,7 +88,6 @@ namespace DND
 		NetworkManager& Network();
 		SpellList& Spells();
 
-		void AddActiveFunction(Timer* function);
 		void AddActiveTimer(Timer* timer);
 
 	private:

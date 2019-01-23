@@ -5,7 +5,7 @@ namespace Bolt
 {
 
 	Timeline::Timeline(double timeScale)
-		: m_RealCurrentTime(0.0), m_CurrentTime(0.0), m_ElapsedTime(0.0), m_TimeScale(timeScale), m_IsPaused(false), m_Timers(), m_Functions()
+		: m_RealCurrentTime(0.0), m_CurrentTime(0.0), m_ElapsedTime(0.0), m_TimeScale(timeScale), m_IsPaused(false), m_Timers()
 	{
 	
 	}
@@ -69,39 +69,34 @@ namespace Bolt
 
 	Timer& Timeline::AddTimer(double time, const Timer::TimerFunc& callback)
 	{
+		return AddTemporaryTimer(time, 0, callback);
+	}
+
+	Timer& Timeline::AddTemporaryTimer(double time, int invokeCount, const Timer::TimerFunc& callback)
+	{
 		std::unique_ptr<Timer> timer = std::make_unique<Timer>(time, callback, true);
 		Timer& result = *timer;
-		m_Timers.push_back(std::move(timer));
+		m_Timers.push_back({ std::move(timer), invokeCount });
 		return result;
+	}
+
+	Timer& Timeline::AddTemporaryTimerByTime(double time, double timeToDelete, const Timer::TimerFunc& callback)
+	{
+		return AddTemporaryTimer(time, (int)(timeToDelete / time) + 1, callback);
+	}
+
+	Timer& Timeline::AddFunction(double time, const Timer::TimerFunc& callback)
+	{
+		return AddTemporaryTimer(time, 1, callback);
 	}
 
 	void Timeline::RemoveTimer(Timer* timer)
 	{
 		for (int i = 0; i < m_Timers.size(); i++)
 		{
-			if (m_Timers[i].get() == timer)
+			if (m_Timers[i].Timer.get() == timer)
 			{
 				m_Timers.erase(m_Timers.begin() + i);
-				break;
-			}
-		}
-	}
-
-	Timer& Timeline::AddFunction(double time, const Timer::TimerFunc& callback)
-	{
-		std::unique_ptr<Timer> timer = std::make_unique<Timer>(time, callback, true);
-		Timer& result = *timer;
-		m_Functions.push_back(std::move(timer));
-		return result;
-	}
-
-	void Timeline::RemoveFunction(Timer* function)
-	{
-		for (int i = 0; i < m_Functions.size(); i++)
-		{
-			if (m_Functions[i].get() == function)
-			{
-				m_Functions.erase(m_Functions.begin() + i);
 				break;
 			}
 		}
@@ -114,15 +109,19 @@ namespace Bolt
 		{
 			m_CurrentTime += elapsedRealSeconds * m_TimeScale;
 			m_ElapsedTime = elapsedRealSeconds * m_TimeScale;
-			for (std::unique_ptr<Timer>& timer : m_Timers)
+			for (int i = m_Timers.size() - 1; i >= 0; i--)
 			{
-				timer->Update(m_ElapsedTime);
-			}
-			for (int i = m_Functions.size() - 1; i >= 0; i--)
-			{
-				if (m_Functions[i]->Update(m_ElapsedTime))
+				TimerInfo& timer = m_Timers[i];
+				if (timer.Timer->Update(m_ElapsedTime))
 				{
-					m_Functions.erase(m_Functions.begin() + i);
+					if (timer.InvokesLeft > 0)
+					{
+						timer.InvokesLeft -= 1;
+						if (timer.InvokesLeft <= 0)
+						{
+							m_Timers.erase(m_Timers.begin() + i);
+						}
+					}
 				}
 			}
 		}

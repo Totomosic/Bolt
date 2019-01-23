@@ -7,6 +7,14 @@ namespace Bolt
 
 	class BLT_API Timeline
 	{
+	public:
+		struct BLT_API TimerInfo
+		{
+		public:
+			std::unique_ptr<Timer> Timer;
+			int InvokesLeft;
+		};
+
 	private:
 		// Current time disregarding pauses/timescale changes
 		double m_RealCurrentTime;
@@ -19,8 +27,7 @@ namespace Bolt
 		// Is Paused
 		bool m_IsPaused;
 
-		std::vector<std::unique_ptr<Timer>> m_Timers;
-		std::vector<std::unique_ptr<Timer>> m_Functions;
+		std::vector<TimerInfo> m_Timers;
 
 	public:
 		Timeline(double timeScale = 1.0f);
@@ -40,9 +47,10 @@ namespace Bolt
 		void Reset();
 
 		Timer& AddTimer(double time, const Timer::TimerFunc& callback);
-		void RemoveTimer(Timer* timer);
 		Timer& AddFunction(double time, const Timer::TimerFunc& callback);
-		void RemoveFunction(Timer* function);
+		Timer& AddTemporaryTimer(double time, int invokeCount, const Timer::TimerFunc& callback);
+		Timer& AddTemporaryTimerByTime(double time, double timeToDelete, const Timer::TimerFunc& callback);
+		void RemoveTimer(Timer* timer);
 
 		void Update(double elapsedRealSeconds);
 

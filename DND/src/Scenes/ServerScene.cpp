@@ -16,51 +16,55 @@ namespace DND
 
 		serverCamera->transform().Translate(-serverCamera->ViewWidth() / 2, -serverCamera->ViewHeight() / 2, 50);
 
+		UIsurface& hostButton = serverLayer.UI().Rectangle(300, 100, Color::Green, Transform({ 0, -200, 0 }));
+		hostButton.Text("Host");
+		hostButton.EventHandler().OnClicked.Subscribe([&client](id_t listenerId, UIClickedEvent& e)
+		{
+			PlayerCharacterInfo player;
+			player.PrefabId = GameManager::Get().Prefabs().Swordsman;
+			GameManager::Get().Host(player, CreateSceneFromWelcome);
+			return true;
+		});
 
 		serverScene.OnLoad.Subscribe([&client, &serverLayer, &joinableGamesLayer](id_t listenerId, SceneLoadedEvent& e)
 		{
-			GameManager::Get().Network().Initialize(SocketAddress(client.ADDRESS, client.PORT), [&client, &serverLayer](const AddressPair& address)
+			GameManager::Get().Network().Initialize(SocketAddress(client.ADDRESS, client.PORT), [&client, &serverLayer, &joinableGamesLayer](const AddressPair& address)
 			{
-				UIsurface& hostButton = serverLayer.UI().Rectangle(300, 100, Color::Green, Transform({ 0, -200, 0 }));
-				hostButton.Text("Host");
-				hostButton.EventHandler().OnClicked.Subscribe([&client](id_t listenerId, UIClickedEvent& e)
+				GameManager::Get().Network().GetAllHosts([&joinableGamesLayer](std::vector<AddressPair> hosts)
 				{
-					PlayerCharacterInfo player;
-					player.PrefabId = GameManager::Get().Prefabs().Swordsman;
-					GameManager::Get().Host(player, CreateSceneFromWelcome);
-					return true;
-				});
-			});
-
-			GameManager::Get().Network().GetAllHosts([&joinableGamesLayer](std::vector<AddressPair> hosts)
-			{
-				float yOffset = 200;
-				for (AddressPair& address : hosts)
-				{
-					UIsurface& button = joinableGamesLayer.UI().Rectangle(300, 50, Color::White, Transform({ 0, yOffset, 0 }));
-					button.Text(address.PublicEndpoint.ToString(), Color::Black);
-					button.EventHandler().OnClicked.Subscribe([address](id_t listenerId, UIClickedEvent& e)
+					float yOffset = 200;
+					for (AddressPair& address : hosts)
 					{
-						GameManager::Get().Network().ConnectTo(address, 5000, [](id_t connectionId)
+						UIsurface& button = joinableGamesLayer.UI().Rectangle(300, 50, Color::White, Transform({ 0, yOffset, 0 }));
+						button.Text(address.PublicEndpoint.ToString(), Color::Black);
+						button.EventHandler().OnClicked.Subscribe([address](id_t listenerId, UIClickedEvent& e)
 						{
-							if (connectionId != GameObject::InvalidID)
+							GameManager::Get().Network().ConnectTo(address, 10000, [](id_t connectionId)
 							{
-								PlayerCharacterInfo playerInfo;
-								playerInfo.PrefabId = GameManager::Get().Prefabs().BlueWizard;
-								GameManager::Get().Join(connectionId, playerInfo, CreateSceneFromWelcome);
-							}
+								if (connectionId != GameObject::InvalidID)
+								{
+									PlayerCharacterInfo playerInfo;
+									playerInfo.PrefabId = GameManager::Get().Prefabs().BlueWizard;
+									GameManager::Get().Join(GameManager::Get().Network().Connections().GetRoutableAddress(connectionId), playerInfo, CreateSceneFromWelcome);
+								}
+								else
+								{
+									BLT_CORE_ERROR("CONNECTION FAILED");
+								}
+							});
+							return true;
 						});
-						return true;
-					});
-				}
-			});
+						yOffset -= 55;
+					}
+				});
+			});			
 
 			return true;
 		});
 
 		serverScene.OnUnload.Subscribe([&joinableGamesLayer, &serverLayer](id_t listenerId, SceneUnloadedEvent& e)
 		{
-			serverLayer.UI().Clear();
+			//serverLayer.UI().Clear();
 			joinableGamesLayer.UI().Clear();
 			return true;
 		});

@@ -32,13 +32,22 @@ namespace DND
 			{
 				ConnectToAddressPacket packet;
 				Deserialize(e.Packet, packet);
-				netManager->ConnectToWithoutServer(packet.Address, 2000, [](id_t connectionId)
+				netManager->ConnectToWithoutServer(packet.Address, 10000, [](id_t connectionId)
 				{
 					if (connectionId != GameObject::InvalidID)
 					{
 						BLT_CORE_WARN("Connected!!!!");
 					}
 				});
+				return true;
+			});
+
+			server->AddPacketListener(PacketType::Holepunch, [netManager = netManager](ReceivedPacketEvent& e)
+			{
+				HolepunchAckPacket packet;
+				packet.MyAddress = netManager->Address();
+				BLT_CORE_INFO("SENDING HOLEPUNCH_ACK PACKET TO {}", e.FromAddress.ToString());
+				netManager->Server().SendPacket(e.FromAddress, packet);
 				return true;
 			});
 
@@ -91,9 +100,10 @@ namespace DND
 
 	void NetworkManager::ConnectToWithoutServer(const AddressPair& address, int timeoutMilliseconds, NetworkManager::OnConnectedCallback callback)
 	{
-		Timer* holePunchFunc = &Time::RenderingTimeline().AddTimer(0.5, [this, address]()
+		Timer* holePunchFunc = &Time::RenderingTimeline().AddTemporaryTimerByTime(0.5, timeoutMilliseconds / 1000.0, [this, address]()
 		{
 			HolepunchPacket packet;
+			packet.MyAddress = m_Address;
 			BLT_CORE_INFO("SENDING HOLEPUNCH PACKET TO {}", address.PrivateEndpoint.ToString());
 			m_Server.SendPacket(address.PrivateEndpoint, packet);
 			BLT_CORE_INFO("SENDING HOLEPUNCH PACKET TO {}", address.PublicEndpoint.ToString());
@@ -107,13 +117,13 @@ namespace DND
 		});
 		NetworkServer::ListenerId listenerId = m_Server.AddTemporaryPacketListener(PacketType::Holepunch, [this, address](ReceivedPacketEvent& e)
 		{
-			HolepunchAckPacket packet;
-			packet.MyAddress = m_Address;
 			bool result = e.FromAddress == address.PublicEndpoint || e.FromAddress == address.PrivateEndpoint;
 			if (result)
 			{
-				BLT_CORE_INFO("SENDING HOLEPUNCH_ACK PACKET TO {}", e.FromAddress.ToString());
-				m_Server.SendPacket(e.FromAddress, packet);
+				HolepunchPacket incomingPacket;
+				Deserialize(e.Packet, incomingPacket);
+				id_t connectionId = m_Connections.AddConnection(incomingPacket.MyAddress, e.FromAddress);
+				BLT_CORE_INFO("ESTABLISHED CONNECTION Id = {0} WITH ADDRESS {1} {2} USING {3}", connectionId, address.PublicEndpoint.ToString(), address.PrivateEndpoint.ToString(), e.FromAddress.ToString());
 			}
 			return result;
 		}, 1);
@@ -121,17 +131,22 @@ namespace DND
 		{
 			HolepunchAckPacket packet;
 			Deserialize(e.Packet, packet);
-			bool result = address.PublicEndpoint == packet.MyAddress.PublicEndpoint || address.PrivateEndpoint == packet.MyAddress.PrivateEndpoint || e.FromAddress == m_Server.BoundAddress();
+			bool result = e.FromAddress == address.PublicEndpoint || e.FromAddress == address.PrivateEndpoint || e.FromAddress == m_Server.BoundAddress();
 			if (result)
 			{
-				Time::RenderingTimeline().RemoveTimer(holePunchFunc);
 				if (e.FromAddress != m_Server.BoundAddress())
 				{
-					Time::RenderingTimeline().RemoveFunction(timeoutFunc);
-					id_t connectionId = m_Connections.AddConnection(address, e.FromAddress);
-					BLT_CORE_INFO("ESTABLISHED CONNECTION Id = {0} WITH ADDRESS {1} {2} USING {3}", connectionId, address.PublicEndpoint.ToString(), address.PrivateEndpoint.ToString(), e.FromAddress.ToString());
-					ConnectionEstablishedPacket connectionPacket;
-					m_Server.SendPacket(e.FromAddress, connectionPacket);
+					BLT_CORE_INFO("RECEIVED HOLEPUNCH_ACK FROM {}", e.FromAddress.ToString());
+					Time::RenderingTimeline().RemoveTimer(timeoutFunc);
+					id_t connectionId = m_Connections.GetConnectionId(packet.MyAddress);
+					if (connectionId == GameObject::InvalidID)
+					{
+						result = false;
+					}
+					else
+					{
+						callback(connectionId);
+					}
 				}
 				else
 				{
@@ -139,17 +154,6 @@ namespace DND
 					m_Server.RemovePacketListener(listenerId);
 					callback(GameObject::InvalidID);
 				}
-			}
-			return result;
-		}, 1);
-		m_Server.AddTemporaryPacketListener(PacketType::ConnectionEstablished, [this, address, callback = callback](ReceivedPacketEvent& e)
-		{
-			bool result = address.PublicEndpoint == e.FromAddress || address.PrivateEndpoint == e.FromAddress;
-			if (result)
-			{
-				id_t connectionId = m_Connections.GetConnectionId(address);
-				BLT_CORE_INFO("CONNECTION {}", connectionId);
-				callback(connectionId);
 			}
 			return result;
 		}, 1);
