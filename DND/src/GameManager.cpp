@@ -28,7 +28,7 @@ namespace DND
 	}
 
 	GameManager::GameManager(Layer& layer)
-		: m_LocalCamera(nullptr), m_Tilemap(layer, TILEMAP_WIDTH, TILEMAP_HEIGHT, TILE_WIDTH, TILE_HEIGHT), m_Prefabs(), m_Factory(layer), m_Network(), m_Spells(), m_ActiveFunctions(), m_ActiveTimers()
+		: m_LocalCamera(nullptr), m_Tilemap(layer, TILEMAP_WIDTH, TILEMAP_HEIGHT, TILE_WIDTH, TILE_HEIGHT), m_Prefabs(), m_Factory(layer), m_Network(), m_Spells(), m_ActiveTimers()
 	{
 	
 	}
@@ -46,10 +46,8 @@ namespace DND
 		callback(packet, std::move(player));
 	}
 
-	void GameManager::Join(id_t connectionId, PlayerCharacterInfo player, GameManager::LoadGameCallback callback)
+	void GameManager::Join(const SocketAddress& address, PlayerCharacterInfo player, GameManager::LoadGameCallback callback)
 	{
-		const SocketAddress& address = Network().Connections().GetRoutableAddress(connectionId);
-		
 		Network().Server().AddTemporaryPacketListener(PacketType::Welcome, [player = std::move(player), callback = std::move(callback)](ReceivedPacketEvent& e)
 		{
 			BLT_CORE_INFO("RECEIVED WELCOME PACKET FROM {}", e.FromAddress.ToString());
@@ -83,10 +81,6 @@ namespace DND
 		Network().SendPacketToAll(packet);
 		Network().Exit([this, callback]()
 		{
-			for (Timer* func : m_ActiveFunctions)
-			{
-				Time::RenderingTimeline().RemoveFunction(func);
-			}
 			for (Timer* timer : m_ActiveTimers)
 			{
 				Time::RenderingTimeline().RemoveTimer(timer);
@@ -160,11 +154,6 @@ namespace DND
 	SpellList& GameManager::Spells()
 	{
 		return m_Spells;
-	}
-
-	void GameManager::AddActiveFunction(Timer* function)
-	{
-		m_ActiveFunctions.push_back(function);
 	}
 
 	void GameManager::AddActiveTimer(Timer* timer)

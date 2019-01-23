@@ -54,7 +54,7 @@ namespace DND
 				}
 			}
 		});
-		GameManager::Get().AddActiveFunction(&createExplosion);
+		GameManager::Get().AddActiveTimer(&createExplosion);
 		SpellInstance::SpellCastResult result;
 		result.Cooldown = 2;
 		return result;

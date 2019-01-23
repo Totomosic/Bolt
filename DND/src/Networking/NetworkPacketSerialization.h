@@ -95,12 +95,12 @@ namespace DND
 	template<>
 	inline void Serialize(OutputMemoryStream& stream, const HolepunchPacket& value)
 	{
-
+		Serialize(stream, value.MyAddress);
 	}
 	template<>
 	inline void Deserialize(InputMemoryStream& stream, HolepunchPacket& value)
 	{
-
+		Deserialize(stream, value.MyAddress);
 	}
 
 	template<>

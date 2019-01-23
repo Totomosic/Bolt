@@ -116,6 +116,9 @@ namespace DND
 	{
 	public:
 		constexpr static PacketType Type = PacketType::Holepunch;
+
+	public:
+		AddressPair MyAddress;
 	};
 
 	struct HolepunchAckPacket

@@ -106,11 +106,16 @@ namespace DND
 			if (connectionId == GameObject::InvalidID)
 			{
 				BLT_CORE_INFO("CREATING NEW CONNECTION");
-				GameManager::Get().Network().ConnectTo(p.Connection.Address, 5000, [sendIntro = std::move(sendIntroductionFunc)](id_t connectionId)
+				GameManager::Get().Network().ConnectTo(p.Connection.Address, 10000, [sendIntro = std::move(sendIntroductionFunc)](id_t connectionId)
 				{
 					if (connectionId != GameObject::InvalidID)
 					{
 						sendIntro(connectionId);
+					}
+					else
+					{
+						BLT_CORE_ERROR("FAILED TO CONNECT, EXITING...");
+						GameManager::Get().Exit();
 					}
 				});
 			}
