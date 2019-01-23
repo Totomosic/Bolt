@@ -14,6 +14,8 @@ namespace Bolt
 	public:
 		SocketUtil() = delete;
 
+		static bool IsBigEndian();
+
 		static int Select(const UDPsocketSet* inReadSet, UDPsocketSet* outReadSet,
 			const UDPsocketSet* inWriteSet, UDPsocketSet* outWriteSet,
 			const UDPsocketSet* inErrorSet, UDPsocketSet* outErrorSet, int timeOutMilliseconds = -1);

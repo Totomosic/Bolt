@@ -4,6 +4,11 @@
 namespace Bolt
 {
 
+	bool SocketUtil::IsBigEndian()
+	{
+		return htonl(47) == 47;
+	}
+
 	int SocketUtil::Select(const UDPsocketSet* inReadSet, UDPsocketSet* outReadSet,
 		const UDPsocketSet* inWriteSet, UDPsocketSet* outWriteSet,
 		const UDPsocketSet* inErrorSet, UDPsocketSet* outErrorSet, int timeoutMilliseconds)

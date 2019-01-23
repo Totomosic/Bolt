@@ -53,10 +53,6 @@ namespace DND
 				{
 					Tile moveToTile = t.CurrentTile() + tileDiff;
 					m.SetTargetTile(moveToTile);
-					PlayerMovePacket packet;
-					packet.NetworkId = player->Components().GetComponent<NetworkIdentity>().NetworkId;
-					packet.MoveToTile = moveToTile;
-					GameManager::Get().Network().SendPacketToAll(packet);
 				});
 			}
 		}

@@ -12,9 +12,6 @@ namespace DND
 		blt::string ADDRESS = "192.168.1.77";
 		blt::string TARGET_ADDRESS = "localhost";
 
-		blt::string EC2_ADDRESS = "ec2-18-219-148-3.us-east-2.compute.amazonaws.com";
-		int EC2_PORT = 12345;
-
 	public:
 		void Init() override;
 		void Tick() override;
