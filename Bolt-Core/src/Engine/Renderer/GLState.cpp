@@ -18,19 +18,19 @@ namespace Bolt
 
 	void GLState::Reset()
 	{
-		s_DepthEnabled = false;
-		s_BlendEnabled = false;
-		s_CullFaceEnabled = false;
-		s_DepthFunction = DepthFunction::Less;
+		s_DepthEnabled = true;
+		s_BlendEnabled = true;
+		s_CullFaceEnabled = true;
+		s_DepthFunction = DepthFunction::Lequal;
 		s_BlendSrc = BlendSrc::SrcAlpha;
 		s_BlendDst = BlendDst::OneMinusSrcAlpha;
 		s_CullFace = CullFace::Back;
 		s_PolygonMode = PolygonMode::Fill;
 		s_RenderToDepthBuffer = true;
 
-		GL_CALL(glDisable(GL_DEPTH_TEST));
-		GL_CALL(glDisable(GL_BLEND));
-		GL_CALL(glDisable(GL_CULL_FACE));
+		GL_CALL(glEnable(GL_DEPTH_TEST));
+		GL_CALL(glEnable(GL_BLEND));
+		GL_CALL(glEnable(GL_CULL_FACE));
 		GL_CALL(glDepthFunc((GLenum)s_DepthFunction));
 		GL_CALL(glBlendFunc((GLenum)s_BlendSrc, (GLenum)s_BlendDst));
 		GL_CALL(glCullFace((GLenum)s_CullFace));

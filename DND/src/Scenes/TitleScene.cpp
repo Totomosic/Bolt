@@ -16,7 +16,7 @@ namespace DND
 		UIsurface& backdrop = background.Rectangle(400, 600, Color(52, 52, 52, 220), Transform({ 0, 0, 5 }));
 		Text& title = backdrop.Text("Dungeons and Dragons", Color::White, Transform({ 0, 180, 5 }));
 
-		UIsurface& playButton = backdrop.Rectangle(300, 100, Color::Green);
+		UIsurface& playButton = backdrop.Rectangle(300, 100, Color::Green, Transform({ 0, 0, 1 }));
 		playButton.Text("Play");
 		playButton.EventHandler().OnClicked.Subscribe([](id_t listenerId, UIClickedEvent& e)
 		{

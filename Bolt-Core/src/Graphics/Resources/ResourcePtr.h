@@ -33,6 +33,7 @@ namespace Bolt
 			{
 				m_Ptr = (pointer)other.m_Ptr->Clone().release();
 				m_OwnsPtr = true;
+				BLT_CORE_WARN("Copied resource ({}) when copying ResourcePtr (constructor)", typeid(T).name());
 			}
 			else
 			{
@@ -47,6 +48,7 @@ namespace Bolt
 			{
 				m_Ptr = (pointer)other.m_Ptr->Clone().release();
 				m_OwnsPtr = true;
+				BLT_CORE_WARN("Copied resource ({}) when copying ResourcePtr (operator=)", typeid(T).name());
 			}
 			else
 			{
@@ -105,7 +107,7 @@ namespace Bolt
 			if (m_OwnsPtr)
 			{
 				result.Set((Other*)m_Ptr->Clone().release());
-				BLT_CORE_WARN("Copied resource when converting ResourcePtr");
+				BLT_CORE_WARN("Copied resource ({0}) when converting ResourcePtr to ({1})", typeid(T).name(), typeid(Other).name());
 			}
 			return std::move(result);
 		}
@@ -113,6 +115,7 @@ namespace Bolt
 		ResourcePtr<T> Clone() const
 		{
 			pointer newResource = (pointer)m_Ptr->Clone().release();
+			BLT_CORE_WARN("Cloned Resource ({}) through ResourcePtr", typeid(T).name());
 			return ResourcePtr<T>(newResource, true);
 		}
 

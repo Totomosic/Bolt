@@ -1,7 +1,0 @@
-<RESOURCE_SETTINGS>
-	<Name>sandTileTexture</Name>
-	<Wrap Mode>Repeat</Wrap Mode>
-	<Min Filter>Nearest</Min Filter>
-	<Mag Filter>Nearest</Mag Filter>
-	<Mipmaps>Enabled</Mipmaps>
-</RESOURCE_SETTINGS>
