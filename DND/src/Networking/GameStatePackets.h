@@ -2,10 +2,32 @@
 #include "NetworkPackets.h"
 
 #include "../Map/Tilemap.h"
-#include "Entities/Characters/CharacterStats.h"
 
 namespace DND
 {
+
+	struct CharacterStats
+	{
+	public:
+		int MaxHealth;
+		int CurrentHealth;
+
+		int Strength;
+		int Dexterity;
+		int Wisdom;
+
+	public:
+		inline static CharacterStats GetDelta(const CharacterStats& newStats, const CharacterStats& oldStats)
+		{
+			CharacterStats result;
+			result.MaxHealth = newStats.MaxHealth - oldStats.MaxHealth;
+			result.CurrentHealth = newStats.CurrentHealth - oldStats.CurrentHealth;
+			result.Strength = newStats.Strength - oldStats.Strength;
+			result.Dexterity = newStats.Dexterity - oldStats.Dexterity;
+			result.Wisdom = newStats.Wisdom - oldStats.Wisdom;
+			return result;
+		}
+	};
 
 	struct ConnectionInfo
 	{
@@ -19,6 +41,7 @@ namespace DND
 		id_t NetworkId;
 		id_t PrefabId;
 		Tile CurrentTile;
+		CharacterStats Stats;
 	};
 
 	struct NetworkPlayerInfo

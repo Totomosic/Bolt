@@ -7,3 +7,4 @@
 #include "MeshRenderer.h"
 #include "MotionEngine.h"
 #include "PhysicsHandle.h"
+#include "TriggerComponent.h"

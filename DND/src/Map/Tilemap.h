@@ -11,10 +11,10 @@ namespace DND
 		{
 			GameObject* Object;
 			TilemapLayer TLayer;
+			float Resolution;
 		};
 
 	private:
-		ObjectFactory m_Factory;
 		std::vector<LayerInfo> m_Layers;
 		int m_Width;
 		int m_Height;
@@ -22,12 +22,11 @@ namespace DND
 		int m_TileHeight;
 
 	public:
-		Tilemap(Layer& layer, int width, int height, int tileWidth, int tileHeight);
+		Tilemap();
+		Tilemap(int width, int height);
 
 		int Width() const;
 		int Height() const;
-		int TileWidth() const;
-		int TileHeight() const;
 		const std::vector<LayerInfo>& Layers() const;
 		const TilemapLayer& GetLayer(int index) const;
 		TilemapLayer& GetLayer(int index);
@@ -38,6 +37,17 @@ namespace DND
 
 		TilemapLayer& AddLayer(float resolution);
 		void Clear();
+
+		void Show();
+		void Hide();
+		void Load(const ObjectFactory& factory, const std::unordered_map<id_t, Image>& tiles);
+		void Unload();
+
+		friend class TilemapManager;
+
+	private:
+		Image CreateImage(const LayerInfo& layer, const std::unordered_map<id_t, Image>& tiles);
+		void SetTileSize(const Vector2i& size);
 
 	};
 

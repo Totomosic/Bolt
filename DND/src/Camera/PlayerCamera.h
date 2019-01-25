@@ -1,6 +1,6 @@
 #pragma once
 #include "bltpch.h"
-#include "../Map/Tilemap.h"
+#include "../Map/TilemapManager.h"
 
 namespace DND
 {
@@ -8,14 +8,14 @@ namespace DND
 	class PlayerCamera : public Component
 	{
 	private:
-		Tilemap* m_Tilemap;
+		TilemapManager* m_Tilemap;
 		GameObject* m_Player;
 		GameObject* m_TileSelector;
 		Tile m_SelectedTile;
 		Layer* m_Layer;
 
 	public:
-		PlayerCamera(Tilemap* tilemap, GameObject* player, Layer* selectorLayer);
+		PlayerCamera(TilemapManager* tilemap, GameObject* player, Layer* selectorLayer);
 
 		GameObject* Player() const;
 		GameObject* TileSelector() const;

@@ -20,7 +20,7 @@ namespace DND
 		memcpy(data.GetBufferPtr(), castData.GetBufferPtr(), castData.GetRemainingDataSize());
 
 		std::unique_ptr<SpellInstance> instance = spell->CreateInstance(data);
-		instance->Cast(spell, gameObject(), state);
+		instance->Cast(gameObject(), state);
 	}
 
 	std::unique_ptr<Component> SpellCaster::Clone() const

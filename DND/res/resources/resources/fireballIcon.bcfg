@@ -1,6 +1,6 @@
 <RESOURCE_SETTINGS>
-	<Name>fireballIcon</Name>
-	<Wrap Mode>ClampToEdge</Wrap Mode>
+	<Name>FireballIcon</Name>
+	<Wrap Mode>Repeat</Wrap Mode>
 	<Min Filter>Linear</Min Filter>
 	<Mag Filter>Linear</Mag Filter>
 	<Mipmaps>Enabled</Mipmaps>

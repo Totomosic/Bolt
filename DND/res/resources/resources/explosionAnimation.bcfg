@@ -1,5 +1,5 @@
 <RESOURCE_SETTINGS>
-	<Name>explosionAnimation</Name>
+	<Name>ExplosionAnimation</Name>
 	<Wrap Mode>ClampToEdge</Wrap Mode>
 	<Min Filter>Linear</Min Filter>
 	<Mag Filter>Linear</Mag Filter>

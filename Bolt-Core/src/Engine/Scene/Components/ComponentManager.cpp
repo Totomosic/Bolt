@@ -7,83 +7,84 @@ namespace Bolt
 {
 
 	ComponentManager::ComponentManager(ObjectPrefab* gameObject)
-		: m_ComponentMap(), m_ComponentArray(), m_GameObject(gameObject), m_IsGameObject(false)
+		: m_ComponentIdManager(0, MAX_COMPONENTS), m_ComponentArray(), m_TypeHashMap(), m_OrderedIndex(), m_GameObject(gameObject), m_IsGameObject(false)
 	{
-		for (int i = 0; i < ComponentManager::MAX_COMPONENTS; i++)
-		{
-			m_ComponentArray[i] = nullptr;
-		}
+		
 	}
 
 	ComponentManager::ComponentManager(ComponentManager&& other)
-		: m_ComponentMap(std::move(other.m_ComponentMap)), m_GameObject(other.m_GameObject), m_IsGameObject(other.m_IsGameObject)
+		: m_ComponentIdManager(std::move(other.m_ComponentIdManager)), m_TypeHashMap(std::move(other.m_TypeHashMap)), m_OrderedIndex(std::move(other.m_OrderedIndex)), m_GameObject(other.m_GameObject), m_IsGameObject(other.m_IsGameObject)
 	{
-		for (int i = 0; i < ComponentManager::MAX_COMPONENTS; i++)
+		for (id_t index : m_OrderedIndex)
 		{
-			m_ComponentArray[i] = nullptr;
-		}
-		for (auto& pair : m_ComponentMap)
-		{
-			m_ComponentArray[pair.second->m_Id] = pair.second.get();
+			m_ComponentArray[index] = std::move(other.m_ComponentArray[index]);
 		}
 	}
 
 	ComponentManager& ComponentManager::operator=(ComponentManager&& other)
 	{
-		m_ComponentMap = std::move(other.m_ComponentMap);
+		m_ComponentIdManager = std::move(other.m_ComponentIdManager);
+		m_TypeHashMap = std::move(other.m_TypeHashMap);
 		m_GameObject = other.m_GameObject;
 		m_IsGameObject = other.m_IsGameObject;
-		for (int i = 0; i < ComponentManager::MAX_COMPONENTS; i++)
+		m_OrderedIndex = std::move(other.m_OrderedIndex);
+		for (id_t index : m_OrderedIndex)
 		{
-			m_ComponentArray[i] = nullptr;
-		}
-		for (auto& pair : m_ComponentMap)
-		{
-			m_ComponentArray[pair.second->m_Id] = pair.second.get();
+			m_ComponentArray[index] = std::move(other.m_ComponentArray[index]);
 		}
 		return *this;
 	}
 
 	ComponentManager::~ComponentManager()
 	{
-		for (auto& pair : m_ComponentMap)
+		for (id_t index : m_OrderedIndex)
 		{
-			pair.second->End();
+			m_ComponentArray[index].component->End();
 		}
 	}
 
 	Component& ComponentManager::GetComponentById(id_t id) const
 	{
-		return *m_ComponentArray[id];
+		return *m_ComponentArray[id].component;
 	}
 
 	Component& ComponentManager::GetComponent(size_t componentTypeHash) const
 	{
 		BLT_ASSERT(HasComponentPrivate(componentTypeHash), "Does not have given component type");
-		return *m_ComponentMap.at(componentTypeHash);
+		return *m_ComponentArray[m_TypeHashMap.at(componentTypeHash)].component;
 	}
 
 	bool ComponentManager::HasComponentById(id_t id) const
 	{
-		return (m_ComponentArray[id] != nullptr) && (m_ComponentArray[id]->IsEnabled());
+		return (!m_ComponentIdManager.IsIdAvailable(id)) && (m_ComponentArray[id].component->IsEnabled());
 	}
 
 	bool ComponentManager::HasComponent(size_t componentTypeHash) const
 	{
-		if (m_ComponentMap.empty())
+		if (m_TypeHashMap.empty())
 		{
 			return false;
 		}
-		auto it = m_ComponentMap.find(componentTypeHash);
-		return (it != m_ComponentMap.end()) && ((*it).second->IsEnabled());
+		auto it = m_TypeHashMap.find(componentTypeHash);
+		return (it != m_TypeHashMap.end()) && (m_ComponentArray[it->second].component->IsEnabled());
 	}
 
 	std::vector<Component*> ComponentManager::GetComponents() const
 	{
 		std::vector<Component*> result;
-		for (const auto& pair : m_ComponentMap)
+		for (id_t index : m_OrderedIndex)
 		{
-			result.push_back(pair.second.get());
+			result.push_back(m_ComponentArray[index].component.get());
+		}
+		return result;
+	}
+
+	std::vector<ComponentManager::ComponentInfoPtr> ComponentManager::GetComponentsOrdered() const
+	{
+		std::vector<ComponentInfoPtr> result;
+		for (id_t index : m_OrderedIndex)
+		{
+			result.push_back({ m_ComponentArray[index].component.get(), m_ComponentArray[index].type_hash });
 		}
 		return result;
 	}
@@ -92,9 +93,10 @@ namespace Bolt
 	{
 		id_t id = FindNextId();
 		component->m_Id = id;
-		m_ComponentMap[componentTypeHash] = std::move(component);
-		Component* c = m_ComponentMap.at(componentTypeHash).get();
-		m_ComponentArray[id] = c;
+		m_ComponentArray[id] = { std::move(component), componentTypeHash };
+		m_TypeHashMap[componentTypeHash] = id;
+		m_OrderedIndex.push_back(id);
+		Component* c = m_ComponentArray[id].component.get();
 		c->SetGameObject(m_GameObject);
 		if (m_IsGameObject)
 		{
@@ -105,71 +107,68 @@ namespace Bolt
 
 	void ComponentManager::RemoveComponentById(id_t id)
 	{
-		Component* component = m_ComponentArray[id];
-		component->End();
-		for (auto& pair : m_ComponentMap)
+		ComponentInfo& c = m_ComponentArray[id];
+		c.component->End();
+		m_TypeHashMap.erase(c.type_hash);
+		auto it = std::find(m_OrderedIndex.begin(), m_OrderedIndex.end(), id);
+		if (it != m_OrderedIndex.end())
 		{
-			if (pair.second.get() == component)
-			{
-				m_ComponentMap.erase(pair.first);
-				break;
-			}
+			m_OrderedIndex.erase(it);
 		}
-		m_ComponentArray[id] = nullptr;
+		m_ComponentIdManager.ReleaseId(id);
 	}
 
 	void ComponentManager::RemoveComponent(size_t componentTypeHash)
 	{
 		BLT_ASSERT(HasComponentPrivate(componentTypeHash), "Does not have given component type");
 		Component& component = GetComponent(componentTypeHash);
-		m_ComponentArray[component.m_Id] = nullptr;
-		m_ComponentMap.erase(componentTypeHash);
+		m_TypeHashMap.erase(componentTypeHash);
+		auto it = std::find(m_OrderedIndex.begin(), m_OrderedIndex.end(), component.Id());
+		if (it != m_OrderedIndex.end())
+		{
+			m_OrderedIndex.erase(it);
+		}
+		m_ComponentIdManager.ReleaseId(component.Id());
 	}
 
 	void ComponentManager::Clear()
 	{
-		for (auto& pair : m_ComponentMap)
+		for (id_t index : m_OrderedIndex)
 		{
-			pair.second->End();
+			m_ComponentArray[index].component->End();
 		}
-		m_ComponentMap.clear();
+		m_TypeHashMap.clear();
+		m_OrderedIndex.clear();
+		m_ComponentIdManager.Reset();
 	}
 
 	void ComponentManager::Transfer(XMLserializer& backend, bool isWriting)
 	{
-		BLT_TRANSFER(backend, m_ComponentMap);
 		BLT_TRANSFER(backend, m_GameObject);
 	}
 
 	id_t ComponentManager::FindNextId() const
 	{
-		for (id_t i = 0; i < ComponentManager::MAX_COMPONENTS; i++)
-		{
-			if (m_ComponentArray[i] == nullptr)
-			{
-				return i;
-			}
-		}
-		return GameObject::InvalidID;
+		return m_ComponentIdManager.GetNextId();
 	}
 
 	void ComponentManager::SetGameObject(ObjectPrefab* object)
 	{
 		m_GameObject = object;
-		for (auto& pair : m_ComponentMap)
+		for (id_t index : m_OrderedIndex)
 		{
-			pair.second->SetGameObject(object);
+			m_ComponentArray[index].component->SetGameObject(object);
 		}
 	}
 
 	bool ComponentManager::HasComponentPrivate(size_t componentTypeHash) const
 	{
-		if (m_ComponentMap.empty())
+		if (m_TypeHashMap.empty())
 		{
 			return false;
 		}
-		auto it = m_ComponentMap.find(componentTypeHash);
-		return (it != m_ComponentMap.end());
+		auto it = m_TypeHashMap.find(componentTypeHash);
+		return (it != m_TypeHashMap.end());
 	}
 
 }

@@ -9,7 +9,7 @@ namespace DND
 	class PlayerController : public Component
 	{
 	public:
-		using PlayerAction = std::function<void(GameObject*)>;
+		using PlayerAction = std::function<bool(GameObject*)>;
 		static constexpr int MAX_QUEUED_ACTIONS = 2;
 
 	private:
@@ -35,6 +35,7 @@ namespace DND
 		inline void Unfreeze() { SetFreeze(false); }
 		inline void SetFreeze(bool isFrozen) { m_CanMove = !isFrozen; }
 
+		void FreezeFor(float seconds);
 		void Update() override;
 
 		std::unique_ptr<Component> Clone() const override;

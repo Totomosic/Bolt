@@ -25,19 +25,22 @@ namespace DND
 
 		GameManager::Get().Factory().SetCurrentLayer(overlayGameLayer);
 		GameManager::Get().SetLocalCamera(gameCamera);
-		CreateCharacterPrefabs(GameManager::Get().Prefabs(), GameManager::Get().Factory(), resources);		
 
+		CreateTilemap(resources);
+		CreateCharacterPrefabs(GameManager::Get().Prefabs(), GameManager::Get().Animations(), GameManager::Get().Factory(), resources);		
 		CreateBasicSpells(resources);
 
 		gameScene.OnLoad.Subscribe([gameCamera, &overlayGameLayer, resources](id_t listenerId, SceneLoadedEvent& e)
 		{
-			CreateTilemap(resources);
-			GameManager::Get().LocalCamera()->Components().AddComponent<PlayerCamera>(&GameManager::Get().GetTilemap(), GameManager::Get().Players().LocalPlayerObject(), &overlayGameLayer);
+			GameManager::Get().MapManager().LoadTilemap(0);
+			GameManager::Get().MapManager().SetCurrentMap(0);
+			GameManager::Get().LocalCamera()->Components().AddComponent<PlayerCamera>(&GameManager::Get().MapManager(), GameManager::Get().Players().LocalPlayerObject(), &overlayGameLayer);
 			return true;
 		});
 
 		gameScene.OnUnload.Subscribe([gameCamera](id_t listenerId, SceneUnloadedEvent& e)
 		{
+			GameManager::Get().MapManager().UnloadTilemap(GameManager::Get().MapManager().CurrentMapId());
 			if (gameCamera->Components().HasComponent<PlayerCamera>())
 			{
 				gameCamera->Components().RemoveComponent<PlayerCamera>();
@@ -46,20 +49,24 @@ namespace DND
 			{
 				layer->Clear();
 			}
-			GameManager::Get().GetTilemap().Clear();
 			return true;
 		});
 	}
 
 	void CreateTilemap(const ResourcePack& resources)
 	{
-		ResourcePtr<Texture2D> tileset = ResourceManager::Get<Texture2D>(resources.GetResourceId("tileset"));
+		ResourcePtr<Texture2D> tileset = ResourceManager::Get<Texture2D>(resources.GetResourceId("Tileset"));
 		Image grassTileImage = tileset->GetImage(0, 0, 32, 32);
 		Image pathTileImage = tileset->GetImage(0, 32, 32, 32);
 
-		TilemapLayer& layer = GameManager::Get().GetTilemap().AddLayer(1.0f);
-		layer.SetTileImages(0, 0, TILEMAP_WIDTH, TILEMAP_HEIGHT, grassTileImage, ResizeFilter::Nearest);
-		layer.SetTileImages(25, 0, 4, TILEMAP_HEIGHT, pathTileImage, ResizeFilter::Nearest);
+		TilemapManager& mapManager = GameManager::Get().MapManager();
+		id_t grassTileId = mapManager.TileImages().AddTile(std::move(grassTileImage));
+		id_t pathTileId = mapManager.TileImages().AddTile(std::move(pathTileImage));
+
+		Tilemap tilemap(50, 50);
+		TilemapLayer& layer = tilemap.AddLayer(1.0f);
+		layer.SetRegion(0, 0, 50, 50, grassTileId);
+		id_t tilemapId = mapManager.AddMap(std::move(tilemap));
 	}
 
 	void CreateSceneFromWelcome(const WelcomePacket& packet, const PlayerCharacterInfo& playerInfo)
@@ -70,6 +77,7 @@ namespace DND
 		myPlayer.Character.CurrentTile = Tile(0, 0);
 		myPlayer.Character.NetworkId = packet.NetworkId;
 		myPlayer.Character.PrefabId = playerInfo.PrefabId;
+		myPlayer.Character.Stats = player->Components().GetComponent<StatsComponent>().Stats();
 
 		player->Components().GetComponent<TileTransform>().SetCurrentTile(myPlayer.Character.CurrentTile, true);
 		player->Components().AddComponent<PlayerController>();
@@ -96,6 +104,7 @@ namespace DND
 
 				GameObject* object = GameManager::Get().Factory().Instantiate(GameManager::Get().Factory().GetPrefab(p.Character.PrefabId));
 				object->Components().GetComponent<TileTransform>().SetCurrentTile(p.Character.CurrentTile, true);
+				object->Components().GetComponent<StatsComponent>().SetStats(p.Character.Stats);
 				object->Components().AddComponent<NetworkController>();
 				PlayerManager::PlayerInfo pInfo;
 				pInfo.Character = p.Character;

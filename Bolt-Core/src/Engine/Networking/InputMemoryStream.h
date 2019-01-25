@@ -22,6 +22,7 @@ namespace Bolt
 
 		byte* GetBufferPtr() const;
 		int GetRemainingDataSize() const;
+		void Reset(int to = 0);
 
 		void Read(void* buffer, uint length);
 		

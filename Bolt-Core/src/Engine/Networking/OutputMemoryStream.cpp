@@ -44,6 +44,11 @@ namespace Bolt
 		return m_Head;
 	}
 
+	void OutputMemoryStream::Reset(int to)
+	{
+		m_Head = to;
+	}
+
 	void OutputMemoryStream::Write(const void* data, uint length)
 	{
 		if (m_Capacity < m_Head + length)

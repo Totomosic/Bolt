@@ -41,7 +41,7 @@ namespace DND
 		void GetAllHosts(OnGetHostsCallback callback);
 
 		void ConnectTo(const AddressPair& address, int timeoutMilliseconds, OnConnectedCallback callback);
-		void ConnectToWithoutServer(const AddressPair& address, int timeoutMilliseconds, OnConnectedCallback callback);
+		id_t ConnectToWithoutServer(const AddressPair& address);
 		void DisconnectFrom(id_t connectionId);
 
 		template<typename T>

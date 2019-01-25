@@ -15,48 +15,55 @@ namespace DND
 	
 	}
 
-	SpellInstance::SpellCastResult FireballInstance::Cast(Spell* spell, GameObject* caster, const GameStateObjects& state)
+	SpellInstance::SpellCastResult FireballInstance::Cast(GameObject* caster, const GameStateObjects& state)
 	{
 		BLT_INFO("FIREBALL DAMAGE {}", m_Damage.ToString());
-		FireballSpell* fireSpell = (FireballSpell*)spell;
 
 		float distance = (m_Target.xy() - m_Start.xy()).Length();
 		float time = distance / m_Speed;
-		GameObject* fireball = state.Factory->Image(300, 300, ResourceManager::Get<Texture2D>(fireSpell->m_FireballAnimation), Transform());
-		fireball->Components().GetComponent<MeshRenderer>().Mesh.Materials[0].Textures.Animators[0] = std::make_unique<SpriteSheetAnimator>(8, 1, 0.3f);
+		GameObject* fireball = state.Factory->Image(300, 300, state.Animations->Fireball.Animation, Transform());
+		fireball->Components().AddComponent<SpriteAnimator>(state.Animations->Fireball.Animation);
+		fireball->Components().GetComponent<SpriteAnimator>().PlayAnimationUntilStopped(state.Animations->Fireball, 0.3f);
 		fireball->Components().AddComponent<FireballAnimator>(m_Start, m_Target, time, 100);
 		fireball->Components().GetComponent<MeshRenderer>().Mesh.Materials[0].RenderOptions.DepthFunc = DepthFunction::Lequal;
 
 		m_Target.z -= 0.05f;
-		GameObject* explosionShadow = state.Factory->Ellipse(state.Map->TileWidth() * 0.75f, state.Map->TileHeight() * 0.75f, Color(10, 10, 10, 200), Transform(m_Target));
+		GameObject* explosionShadow = state.Factory->Ellipse(state.MapManager->TileWidth() * 0.75f, state.MapManager->TileHeight() * 0.75f, Color(10, 10, 10, 200), Transform(m_Target));
 
 		Vector3f target = m_Target;
 		int damage = m_Damage.Result;
 
-		Timer& createExplosion = Time::RenderingTimeline().AddFunction(time, [target, damage, fireSpell, explosionShadow, fireball, state]()
+		Timer& createExplosion = Time::RenderingTimeline().AddFunction(time, [target, damage, explosionShadow, fireball, state]()
 		{
 			Destroy(explosionShadow);
 			Destroy(fireball);
 			if (state.Network->Server().IsRunning())
 			{
-				GameObject* explosion = state.Factory->Image(6 * state.Map->TileWidth(), 6 * state.Map->TileHeight(), ResourceManager::Get<Texture2D>(fireSpell->m_ExplosionAnimation), Transform(target));
-				explosion->Components().GetComponent<MeshRenderer>().Mesh.Materials[0].Textures.Animators[0] = std::make_unique<SpriteSheetAnimator>(9, 9, 1);
+				GameObject* explosion = state.Factory->Image(9 * state.MapManager->TileWidth(), 9 * state.MapManager->TileHeight(), state.Animations->FireballExplosion.Animation, Transform(target));
+				explosion->Components().AddComponent<SpriteAnimator>(state.Animations->FireballExplosion.Animation);
+				explosion->Components().GetComponent<SpriteAnimator>().PlayAnimationUntilStopped(state.Animations->FireballExplosion, 1.0f);
 				explosion->Components().GetComponent<MeshRenderer>().Mesh.Materials[0].RenderOptions.DepthFunc = DepthFunction::Lequal;
 				Destroy(explosion, 1);
 				GameObject* player = state.Players->LocalPlayerObject();
 				Tile playerTile = player->Components().GetComponent<TileTransform>().CurrentTile();
-				Tile selectedTile = state.Map->TileFromWorldPosition(target.x, target.y);
-				if (playerTile.x >= selectedTile.x - 2 && playerTile.x <= selectedTile.x + 2 && playerTile.y >= selectedTile.y - 2 && playerTile.y <= selectedTile.y + 2)
+				Tile selectedTile = state.MapManager->CurrentMap().TileFromWorldPosition(target.x, target.y);
+				if (playerTile.x >= selectedTile.x - 3 && playerTile.x <= selectedTile.x + 3 && playerTile.y >= selectedTile.y - 3 && playerTile.y <= selectedTile.y + 3)
 				{
 					CharacterStats newStats = player->Components().GetComponent<StatsComponent>().Stats();
 					newStats.CurrentHealth -= damage;
 					player->Components().GetComponent<StatsComponent>().SetStats(newStats);
+					StatsUpdatePacket packet;
+					packet.NetworkId = player->Components().GetComponent<NetworkIdentity>().NetworkId;
+					packet.NewStats = newStats;
+					state.Network->SendPacketToAll(packet);
 				}
 			}
 		});
 		GameManager::Get().AddActiveTimer(&createExplosion);
 		SpellInstance::SpellCastResult result;
 		result.Cooldown = 2;
+		result.CastTime = 0;
+		result.Type = CastType::Action;
 		return result;
 	}
 
@@ -70,8 +77,7 @@ namespace DND
 		return result;
 	}
 
-	FireballSpell::FireballSpell(id_t explosionId, id_t fireballId) : Spell("Fireball", "", 3),
-		m_ExplosionAnimation(explosionId), m_FireballAnimation(fireballId)
+	FireballSpell::FireballSpell(int level) : Spell("Fireball", "", level)
 	{
 	
 	}
@@ -92,9 +98,9 @@ namespace DND
 	std::unique_ptr<SpellInstance> FireballSpell::CreateInstance(GameObject* caster, const GameState& state)
 	{
 		Vector3f startPosition = caster->transform().Position() + Vector3f(0, 0, 1);
-		Vector3f target = state.Objects.Map->WorldPositionOfTile(state.SelectedTile.x, state.SelectedTile.y);
+		Vector3f target = state.Objects.MapManager->CurrentMap().WorldPositionOfTile(state.SelectedTile.x, state.SelectedTile.y);
 		target.z = startPosition.z;
-		float speed = 600;
+		float speed = 400;
 		DiceRollResult damage = Dice::Roll(8, 6, 0);
 		return std::make_unique<FireballInstance>(startPosition, target, speed, damage);
 	}

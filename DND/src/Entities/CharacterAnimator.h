@@ -1,5 +1,5 @@
 #pragma once
-#include "bltpch.h"
+#include "SpriteAnimator.h"
 
 namespace DND
 {
@@ -20,17 +20,12 @@ namespace DND
 		Direction m_CurrentDir;
 
 	public:
-		CharacterAnimator(Direction currentDirection, ResourcePtr<Texture2D> up, ResourcePtr<Texture2D> right, ResourcePtr<Texture2D> down, ResourcePtr<Texture2D> left);
+		CharacterAnimator(ResourcePtr<Texture2D> up, ResourcePtr<Texture2D> right, ResourcePtr<Texture2D> down, ResourcePtr<Texture2D> left);
 
 		Direction CurrentDirection() const;
 		void SetDirection(Direction direction);
 
-		void Start() override;
-
 		std::unique_ptr<Component> Clone() const override;
-
-	private:
-		void SetCharacterTexture(const ResourcePtr<Texture2D>& texture) const;
 
 	};
 

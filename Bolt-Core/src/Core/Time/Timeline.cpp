@@ -5,7 +5,7 @@ namespace Bolt
 {
 
 	Timeline::Timeline(double timeScale)
-		: m_RealCurrentTime(0.0), m_CurrentTime(0.0), m_ElapsedTime(0.0), m_TimeScale(timeScale), m_IsPaused(false), m_Timers()
+		: m_RealCurrentTime(0.0), m_CurrentTime(0.0), m_ElapsedTime(0.0), m_TimeScale(timeScale), m_IsPaused(false), m_TimersMutex(), m_Timers()
 	{
 	
 	}
@@ -74,9 +74,10 @@ namespace Bolt
 
 	Timer& Timeline::AddTemporaryTimer(double time, int invokeCount, const Timer::TimerFunc& callback)
 	{
+		std::scoped_lock<std::mutex> lock(m_TimersMutex);
 		std::unique_ptr<Timer> timer = std::make_unique<Timer>(time, callback, true);
 		Timer& result = *timer;
-		m_Timers.push_back({ std::move(timer), invokeCount });
+		m_Timers.AddTimerInfo({ std::move(timer), invokeCount });
 		return result;
 	}
 
@@ -92,14 +93,8 @@ namespace Bolt
 
 	void Timeline::RemoveTimer(Timer* timer)
 	{
-		for (int i = 0; i < m_Timers.size(); i++)
-		{
-			if (m_Timers[i].Timer.get() == timer)
-			{
-				m_Timers.erase(m_Timers.begin() + i);
-				break;
-			}
-		}
+		std::scoped_lock<std::mutex> lock(m_TimersMutex);
+		m_Timers.RemoveTimer(timer);
 	}
 
 	void Timeline::Update(double elapsedRealSeconds)
@@ -109,9 +104,15 @@ namespace Bolt
 		{
 			m_CurrentTime += elapsedRealSeconds * m_TimeScale;
 			m_ElapsedTime = elapsedRealSeconds * m_TimeScale;
-			for (int i = m_Timers.size() - 1; i >= 0; i--)
+			std::vector<TimerInfo> timers;
 			{
-				TimerInfo& timer = m_Timers[i];
+				std::scoped_lock<std::mutex> lock(m_TimersMutex);
+				timers = std::move(m_Timers.Queue());
+				m_Timers.SwapQueues();
+			}
+			for (int i = timers.size() - 1; i >= 0; i--)
+			{
+				TimerInfo& timer = timers[i];
 				if (timer.Timer->Update(m_ElapsedTime))
 				{
 					if (timer.InvokesLeft > 0)
@@ -119,9 +120,16 @@ namespace Bolt
 						timer.InvokesLeft -= 1;
 						if (timer.InvokesLeft <= 0)
 						{
-							m_Timers.erase(m_Timers.begin() + i);
+							timers.erase(timers.begin() + i);
 						}
 					}
+				}
+			}			
+			{
+				std::scoped_lock<std::mutex> lock(m_TimersMutex);
+				for (TimerInfo& info : timers)
+				{
+					m_Timers.AddTimerInfo(std::move(info));
 				}
 			}
 		}

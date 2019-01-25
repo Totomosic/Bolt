@@ -5,7 +5,7 @@
 namespace Bolt
 {
 
-	void PopulateMaterialMap(std::vector<GameObject*>& objects, std::unordered_map<Material, std::vector<std::pair<const Material*, RenderData>>>& materialMap)
+	void PopulateMaterialMap(std::vector<GameObject*>& objects, std::vector<std::pair<const Material*, std::vector<RenderData>>>& materialMap)
 	{
 		for (GameObject* object : objects)
 		{
@@ -25,21 +25,34 @@ namespace Bolt
 					renderData.Indices = indexBuffer.get();
 					renderData.Vertices = modelData.Vertices.get();
 					renderData.Transform = object->transform().TransformMatrix() * model.Transform;
-					materialMap[material].push_back({ &material, std::move(renderData) });
+					bool found = false;
+					for (auto& pair : materialMap)
+					{
+						if (*pair.first == material)
+						{
+							pair.second.push_back(std::move(renderData));
+							found = true;
+						}
+					}
+					if (!found)
+					{
+						std::vector<RenderData> data = { std::move(renderData) };
+						materialMap.push_back({ &material, std::move(data) });
+					}
 				}
 			}
 		}
 	}
 
-	void PopulateRenderPass(RenderPass& renderPass, std::unordered_map<Material, std::vector<std::pair<const Material*, RenderData>>>& materialMap)
+	void PopulateRenderPass(RenderPass& renderPass, std::vector<std::pair<const Material*, std::vector<RenderData>>>& materialMap)
 	{
 		for (auto& pair : materialMap)
 		{
 			RenderGroup group;
-			group.Material = pair.second[0].first;
-			for (const std::pair<const Material*, RenderData>& dataPair : pair.second)
+			group.Material = pair.first;
+			for (const RenderData& data : pair.second)
 			{
-				group.Renderables.push_back(dataPair.second);
+				group.Renderables.push_back(data);
 			}
 			renderPass.RenderGroups.push_back(std::move(group));
 		}
@@ -96,7 +109,7 @@ namespace Bolt
 		transparentPass.RenderTarget = passData.RenderTarget;
 		ProjectionType projection = layer.ActiveCamera()->CameraProjection().Type;
 
-		std::unordered_map<Material, std::vector<std::pair<const Material*, RenderData>>> materialMap;
+		std::vector<std::pair<const Material*, std::vector<RenderData>>> materialMap;
 		std::vector<GameObject*> objects = layer.GameObjects().Query(SGQTransparency(false)).GameObjects;
 
 		PopulateMaterialMap(objects, materialMap);
@@ -107,7 +120,7 @@ namespace Bolt
 		{
 			std::sort(objects.begin(), objects.end(), [](GameObject* left, GameObject* right)
 			{
-				return left->transform().Position().z >= right->transform().Position().z;
+				return left->transform().Position().z < right->transform().Position().z;
 			});
 		}
 		else if (projection == ProjectionType::Perspective)

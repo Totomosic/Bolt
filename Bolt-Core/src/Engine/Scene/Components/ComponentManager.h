@@ -9,11 +9,27 @@ namespace Bolt
 	class BLT_API ComponentManager
 	{
 	public:
-		static constexpr int MAX_COMPONENTS = 20;
+		constexpr static int MAX_COMPONENTS = 20;
+
+		struct BLT_API ComponentInfo
+		{
+		public:
+			std::unique_ptr<Component> component;
+			size_t type_hash;
+		};
+
+		struct BLT_API ComponentInfoPtr
+		{
+		public:
+			Component* component;
+			size_t type_hash;
+		};
 
 	private:
-		std::unordered_map<size_t, std::unique_ptr<Component>> m_ComponentMap;
-		Component* m_ComponentArray[MAX_COMPONENTS];
+		IdManager<id_t> m_ComponentIdManager;
+		ComponentInfo m_ComponentArray[MAX_COMPONENTS];
+		std::unordered_map<size_t, id_t> m_TypeHashMap;
+		std::vector<id_t> m_OrderedIndex;
 		ObjectPrefab* m_GameObject;
 		bool m_IsGameObject;
 
@@ -30,6 +46,7 @@ namespace Bolt
 		bool HasComponentById(id_t id) const;
 		bool HasComponent(size_t componentTypeHash) const;
 		std::vector<Component*> GetComponents() const;
+		std::vector<ComponentInfoPtr> GetComponentsOrdered() const;
 
 		Component* AddComponent(size_t componentTypeHash, std::unique_ptr<Component>&& component);
 		void RemoveComponentById(id_t id);

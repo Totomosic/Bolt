@@ -1,6 +1,7 @@
 #pragma once
 #include "TileTransform.h"
 #include "CharacterAnimator.h"
+#include "SpriteAnimator.h"
 
 namespace DND
 {

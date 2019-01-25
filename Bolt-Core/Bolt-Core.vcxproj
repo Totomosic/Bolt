@@ -81,7 +81,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>Types.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>NOMINMAX;BLT_PLATFORM_WINDOWS;BLT_BUILD_STATIC;BLT_DEBUG;GAMEOBJECTS_PER_LAYER=10000;LAYERS_PER_SCENE=6;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NOMINMAX;BLT_PLATFORM_WINDOWS;BLT_BUILD_STATIC;BLT_DEBUG;GAMEOBJECTS_PER_LAYER=1000;LAYERS_PER_SCENE=6;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>external;src;external\spdlog\include;..\..\..\..\..\AppData\Local\Programs\Python\Python37-32\include;vendor\Glad\include;vendor\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -95,7 +95,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>Types.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>NOMINMAX;BLT_PLATFORM_WINDOWS;BLT_BUILD_STATIC;GAMEOBJECTS_PER_LAYER=10000;LAYERS_PER_SCENE=6;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NOMINMAX;BLT_PLATFORM_WINDOWS;BLT_BUILD_STATIC;GAMEOBJECTS_PER_LAYER=1000;LAYERS_PER_SCENE=6;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>external;src;external\spdlog\include;..\..\..\..\..\AppData\Local\Programs\Python\Python37-32\include;vendor\Glad\include;vendor\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -166,6 +166,7 @@
     <ClInclude Include="src\Core\Time\Time.h" />
     <ClInclude Include="src\Core\Time\Timeline.h" />
     <ClInclude Include="src\Core\Time\Timer.h" />
+    <ClInclude Include="src\Core\Time\TimerSet.h" />
     <ClInclude Include="src\Core\Time\__Time__.h" />
     <ClInclude Include="src\Core\Utils\Filesystem\Directorypath.h" />
     <ClInclude Include="src\Core\Utils\Filesystem\File.h" />
@@ -217,6 +218,7 @@
     <ClInclude Include="src\Engine\Scene\Components\MeshRenderer.h" />
     <ClInclude Include="src\Engine\Scene\Components\MotionEngine.h" />
     <ClInclude Include="src\Engine\Scene\Components\PhysicsHandle.h" />
+    <ClInclude Include="src\Engine\Scene\Components\TriggerComponent.h" />
     <ClInclude Include="src\Engine\Scene\Components\UI\UIEventHandler.h" />
     <ClInclude Include="src\Engine\Scene\Components\UI\__UI__.h" />
     <ClInclude Include="src\Engine\Scene\Components\__Components__.h" />
@@ -361,6 +363,7 @@
     <ClCompile Include="src\Core\Time\Time.cpp" />
     <ClCompile Include="src\Core\Time\Timeline.cpp" />
     <ClCompile Include="src\Core\Time\Timer.cpp" />
+    <ClCompile Include="src\Core\Time\TimerSet.cpp" />
     <ClCompile Include="src\Core\Utils\Filesystem\Directorypath.cpp" />
     <ClCompile Include="src\Core\Utils\Filesystem\File.cpp" />
     <ClCompile Include="src\Core\Utils\Filesystem\FileLoader.cpp" />
@@ -395,6 +398,7 @@
     <ClCompile Include="src\Engine\Scene\Components\MeshRenderer.cpp" />
     <ClCompile Include="src\Engine\Scene\Components\MotionEngine.cpp" />
     <ClCompile Include="src\Engine\Scene\Components\PhysicsHandle.cpp" />
+    <ClCompile Include="src\Engine\Scene\Components\TriggerComponent.cpp" />
     <ClCompile Include="src\Engine\Scene\Components\UI\UIEventHandler.cpp" />
     <ClCompile Include="src\Engine\Scene\GameObject.cpp" />
     <ClCompile Include="src\Engine\Scene\Layer.cpp" />

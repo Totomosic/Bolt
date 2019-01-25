@@ -139,6 +139,7 @@ namespace Bolt
 		{
 			texture->GenerateMipmaps();
 		}
+		delete[] imageData;
 		return std::move(texture);
 	}
 	

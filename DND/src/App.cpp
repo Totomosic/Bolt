@@ -36,8 +36,6 @@ namespace DND
 		CreateServerScene(*this, serverScene, resources, gameScene);
 		CreateGameScene(*this, gameScene, resources);
 
-		BLT_INFO(SocketUtil::IsBigEndian());
-
 		Command setPortCommand("setport", [this](const Command::CommandArgList& args)
 		{
 			PORT = std::stoi(args[0].c_str());
@@ -70,6 +68,8 @@ namespace DND
 		setTargetAddressCommand.AddArgument("addr", CommandArgType::String, false);
 		CmdDebugger::CmdLine().AddCommand(setTargetAddressCommand);
 
+		BLT_CORE_INFO(SocketUtil::IsBigEndian());
+
 		RenderSchedule titleSchedule(titleScene);
 		titleSchedule.AddRenderProcess(RenderProcess());
 		SceneRenderer::AddRenderSchedule(titleSchedule);
@@ -94,6 +94,15 @@ namespace DND
 		if (Input::KeyPressed(Keycode::Esc))
 		{
 			GameManager::Get().Exit();
+		}
+
+		if (Input::KeyPressed(Keycode::P))
+		{
+			BLT_INFO("PLAYER ID = {}", GameManager::Get().Players().PeekNextPlayerId());
+		}
+		if (Input::KeyPressed(Keycode::N))
+		{
+			BLT_INFO("NETWORK ID = {}", GameManager::Get().Network().Objects().PeekNextNetworkId());
 		}
 	}
 

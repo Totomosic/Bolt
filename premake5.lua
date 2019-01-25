@@ -63,7 +63,7 @@ project "Bolt-Core"
             "BLT_PLATFORM_WINDOWS",
             "BLT_BUILD_STATIC",
             "BLT_DEBUG",
-            "GAMEOBJECTS_PER_LAYER=10000",
+            "GAMEOBJECTS_PER_LAYER=1000",
             "LAYERS_PER_SCENE=6"
         }
 
@@ -76,7 +76,7 @@ project "Bolt-Core"
             "NOMINMAX",
             "BLT_PLATFORM_WINDOWS",
             "BLT_BUILD_STATIC",
-            "GAMEOBJECTS_PER_LAYER=10000",
+            "GAMEOBJECTS_PER_LAYER=1000",
             "LAYERS_PER_SCENE=6"
         }
 

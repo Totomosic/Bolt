@@ -2,7 +2,8 @@
 #include "bltpch.h"
 
 #include "PrefabList.h"
-#include "Map/Tilemap.h"
+#include "AnimationList.h"
+#include "Map/TilemapManager.h"
 #include "Networking/NetworkManager.h"
 #include "Networking/NetworkIdentity.h"
 #include "Spells/SpellList.h"
@@ -11,10 +12,8 @@
 namespace DND
 {
 
-	constexpr int TILEMAP_WIDTH = 50;
-	constexpr int TILEMAP_HEIGHT = 50;
-	constexpr int TILE_WIDTH = 40;
-	constexpr int TILE_HEIGHT = 40;
+	constexpr int TILE_WIDTH = 30;
+	constexpr int TILE_HEIGHT = 30;
 
 	struct PlayerCharacterInfo
 	{
@@ -25,9 +24,11 @@ namespace DND
 	struct GameStateObjects
 	{
 	public:
+		AnimationList* Animations;
+		PrefabList* Prefabs;
 		NetworkManager* Network;
 		ObjectFactory* Factory;
-		Tilemap* Map;
+		TilemapManager* MapManager;
 		PlayerManager* Players;
 	};
 
@@ -49,9 +50,10 @@ namespace DND
 	private:
 		Camera* m_LocalCamera;
 		PlayerManager m_Players;
-		Tilemap m_Tilemap;
+		TilemapManager m_TilemapManager;
 
 		PrefabList m_Prefabs;
+		AnimationList m_Animations;
 		ObjectFactory m_Factory;
 		NetworkManager m_Network;
 		SpellList m_Spells;
@@ -67,7 +69,7 @@ namespace DND
 
 	public:
 		void Host(PlayerCharacterInfo player, LoadGameCallback callback);
-		void Join(const SocketAddress& address, PlayerCharacterInfo player, LoadGameCallback callback);
+		void Join(id_t connectionId, PlayerCharacterInfo player, LoadGameCallback callback);
 
 		void Initialize();
 		void Exit();
@@ -82,9 +84,10 @@ namespace DND
 		Tile CurrentlySelectedTile() const;
 
 		PlayerManager& Players();
+		AnimationList& Animations();
 		PrefabList& Prefabs();
 		ObjectFactory& Factory();
-		Tilemap& GetTilemap();
+		TilemapManager& MapManager();
 		NetworkManager& Network();
 		SpellList& Spells();
 

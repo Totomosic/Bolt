@@ -132,6 +132,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\AnimationList.h" />
     <ClInclude Include="src\App.h" />
     <ClInclude Include="src\Camera\PlayerCamera.h" />
     <ClInclude Include="src\Entities\CharacterAnimator.h" />
@@ -139,25 +140,28 @@
     <ClInclude Include="src\Entities\Healthbar.h" />
     <ClInclude Include="src\Entities\NPCController.h" />
     <ClInclude Include="src\Entities\PlayerController.h" />
+    <ClInclude Include="src\Entities\SpriteAnimator.h" />
     <ClInclude Include="src\Entities\TileMotion.h" />
     <ClInclude Include="src\Entities\TileTransform.h" />
     <ClInclude Include="src\Events.h" />
     <ClInclude Include="src\GameManager.h" />
     <ClInclude Include="src\Map\Tilemap.h" />
     <ClInclude Include="src\Map\TilemapLayer.h" />
+    <ClInclude Include="src\Map\TilemapManager.h" />
+    <ClInclude Include="src\Map\Tileset.h" />
     <ClInclude Include="src\Networking\ConnectionManager.h" />
     <ClInclude Include="src\Networking\Deserialization.h" />
-    <ClInclude Include="src\Networking\GamePlayPackets.h" />
     <ClInclude Include="src\Networking\GamePlayPacketSerialization.h" />
-    <ClInclude Include="src\Networking\GameStatePackets.h" />
+    <ClInclude Include="src\Networking\GamePlayPackets.h" />
     <ClInclude Include="src\Networking\GameStatePacketSerialization.h" />
+    <ClInclude Include="src\Networking\GameStatePackets.h" />
     <ClInclude Include="src\Networking\NetworkController.h" />
     <ClInclude Include="src\Networking\NetworkIdentity.h" />
     <ClInclude Include="src\Networking\NetworkManager.h" />
     <ClInclude Include="src\Networking\NetworkObjects.h" />
-    <ClInclude Include="src\Networking\NetworkServer.h" />
-    <ClInclude Include="src\Networking\NetworkPackets.h" />
     <ClInclude Include="src\Networking\NetworkPacketSerialization.h" />
+    <ClInclude Include="src\Networking\NetworkPackets.h" />
+    <ClInclude Include="src\Networking\NetworkServer.h" />
     <ClInclude Include="src\Networking\Serialization.h" />
     <ClInclude Include="src\PlayerManager.h" />
     <ClInclude Include="src\PrefabList.h" />
@@ -168,6 +172,7 @@
     <ClInclude Include="src\Scenes\TitleScene.h" />
     <ClInclude Include="src\Spells\Animators\FireballAnimator.h" />
     <ClInclude Include="src\Spells\Basic\FireballSpell.h" />
+    <ClInclude Include="src\Spells\Basic\TeleportSpell.h" />
     <ClInclude Include="src\Spells\BasicSpells.h" />
     <ClInclude Include="src\Spells\Dice.h" />
     <ClInclude Include="src\Spells\Spell.h" />
@@ -186,11 +191,14 @@
     <ClCompile Include="src\Entities\Healthbar.cpp" />
     <ClCompile Include="src\Entities\NPCController.cpp" />
     <ClCompile Include="src\Entities\PlayerController.cpp" />
+    <ClCompile Include="src\Entities\SpriteAnimator.cpp" />
     <ClCompile Include="src\Entities\TileMotion.cpp" />
     <ClCompile Include="src\Entities\TileTransform.cpp" />
     <ClCompile Include="src\GameManager.cpp" />
     <ClCompile Include="src\Map\Tilemap.cpp" />
     <ClCompile Include="src\Map\TilemapLayer.cpp" />
+    <ClCompile Include="src\Map\TilemapManager.cpp" />
+    <ClCompile Include="src\Map\Tileset.cpp" />
     <ClCompile Include="src\Networking\ConnectionManager.cpp" />
     <ClCompile Include="src\Networking\NetworkController.cpp" />
     <ClCompile Include="src\Networking\NetworkIdentity.cpp" />
@@ -205,6 +213,7 @@
     <ClCompile Include="src\Scenes\TitleScene.cpp" />
     <ClCompile Include="src\Spells\Animators\FireballAnimator.cpp" />
     <ClCompile Include="src\Spells\Basic\FireballSpell.cpp" />
+    <ClCompile Include="src\Spells\Basic\TeleportSpell.cpp" />
     <ClCompile Include="src\Spells\BasicSpells.cpp" />
     <ClCompile Include="src\Spells\Dice.cpp" />
     <ClCompile Include="src\Spells\Spell.cpp" />

@@ -1,12 +1,8 @@
 #include "bltpch.h"
-#include "Dice.h"
-#include "SpellList.h"
 #include "../GameManager.h"
-#include "../Entities/TileMotion.h"
-#include "../Networking/NetworkIdentity.h"
+#include "SpellList.h"
 
-#include "Animators/FireballAnimator.h"
-
+#include "Basic/TeleportSpell.h"
 #include "Basic/FireballSpell.h"
 
 namespace DND
@@ -16,13 +12,8 @@ namespace DND
 	{
 		SpellList& spells = GameManager::Get().Spells();
 
-		id_t explosionId = resources.GetResourceId("explosionAnimation");
-		id_t fireballId = resources.GetResourceId("fireballAnimation");
-		id_t fireballIcon = resources.GetResourceId("fireballIcon");
-
-		id_t teleportIcon = resources.GetResourceId("teleportIcon");
-
-		spells.AddSpell(std::make_unique<FireballSpell>(explosionId, fireballId));
+		spells.AddSpell(std::make_unique<TeleportSpell>(2));
+		spells.AddSpell(std::make_unique<FireballSpell>(3));
 
 	}
 

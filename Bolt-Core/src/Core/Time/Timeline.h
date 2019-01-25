@@ -1,20 +1,12 @@
 #pragma once
 #include "Types.h"
-#include "Timer.h"
+#include "TimerSet.h"
 
 namespace Bolt
 {
 
 	class BLT_API Timeline
 	{
-	public:
-		struct BLT_API TimerInfo
-		{
-		public:
-			std::unique_ptr<Timer> Timer;
-			int InvokesLeft;
-		};
-
 	private:
 		// Current time disregarding pauses/timescale changes
 		double m_RealCurrentTime;
@@ -27,7 +19,8 @@ namespace Bolt
 		// Is Paused
 		bool m_IsPaused;
 
-		std::vector<TimerInfo> m_Timers;
+		std::mutex m_TimersMutex;
+		TimerSet m_Timers;
 
 	public:
 		Timeline(double timeScale = 1.0f);

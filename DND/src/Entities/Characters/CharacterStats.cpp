@@ -5,8 +5,8 @@
 namespace DND
 {
 
-	UpdatedStatsEvent::UpdatedStatsEvent(const CharacterStats& stats, GameObject* object) : Event(),
-		Stats(stats), Object(object)
+	UpdatedStatsEvent::UpdatedStatsEvent(const CharacterStats& stats, CharacterStats statsDelta, GameObject* object) : Event(),
+		Stats(stats), StatsDelta(statsDelta), Object(object)
 	{
 	
 	}
@@ -19,8 +19,9 @@ namespace DND
 
 	void StatsComponent::SetStats(const CharacterStats& stats)
 	{
+		CharacterStats delta = CharacterStats::GetDelta(stats, m_Stats);
 		m_Stats = stats;
-		OnStatsChanged.Post(std::make_unique<UpdatedStatsEvent>(m_Stats, gameObject()));
+		OnStatsChanged.Post(std::make_unique<UpdatedStatsEvent>(m_Stats, delta, gameObject()));
 	}
 
 	std::unique_ptr<Component> StatsComponent::Clone() const

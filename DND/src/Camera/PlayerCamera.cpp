@@ -5,7 +5,7 @@
 namespace DND
 {
 
-	PlayerCamera::PlayerCamera(Tilemap* tilemap, GameObject* player, Layer* selectorLayer) : Component(),
+	PlayerCamera::PlayerCamera(TilemapManager* tilemap, GameObject* player, Layer* selectorLayer) : Component(),
 		m_Tilemap(tilemap), m_Player(player), m_TileSelector(nullptr), m_SelectedTile(), m_Layer(selectorLayer)
 	{
 	
@@ -36,11 +36,11 @@ namespace DND
 	{
 		Vector3f mousePos = Input::MousePosition(camera()->ViewWidth(), camera()->ViewHeight());
 		Vector3f worldPos = mousePos + camera()->transform().Position();
-		Tile t = m_Tilemap->TileFromWorldPosition(worldPos.x, worldPos.y);
+		Tile t = m_Tilemap->CurrentMap().TileFromWorldPosition(worldPos.x, worldPos.y);
 		if (t.x >= 0 && t.y >= 0)
 		{
 			m_SelectedTile = t;
-			Vector3f worldTilePos = m_Tilemap->WorldPositionOfTile(t.x, t.y);
+			Vector3f worldTilePos = m_Tilemap->CurrentMap().WorldPositionOfTile(t.x, t.y);
 			m_TileSelector->transform().SetLocalPosition(worldTilePos + Vector3f(0, 0, 25));
 		}
 	}

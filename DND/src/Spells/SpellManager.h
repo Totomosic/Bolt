@@ -25,7 +25,7 @@ namespace DND
 		Spell* GetSpell(id_t index) const;
 		id_t AddSpell(id_t spellId);
 
-		void CastSpell(id_t index, const std::unique_ptr<SpellInstance>& instance, GameObject* caster, const GameStateObjects& state);
+		SpellInstance::SpellCastResult CastSpell(id_t index, const std::unique_ptr<SpellInstance>& instance, GameObject* caster, const GameStateObjects& state);
 
 		void Update();
 

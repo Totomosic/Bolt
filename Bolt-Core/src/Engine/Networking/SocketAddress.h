@@ -23,6 +23,10 @@ namespace Bolt
 		bool operator==(const SocketAddress& other) const;
 		bool operator!=(const SocketAddress& other) const;
 
+		friend std::ostream& operator<<(std::ostream& stream, const SocketAddress& address);
+
+		friend class SocketUtil;
+
 	private:
 		const sockaddr_in* GetAsSockAddrIn() const;
 		sockaddr_in* GetAsSockAddrIn();

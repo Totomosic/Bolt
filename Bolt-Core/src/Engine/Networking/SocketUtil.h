@@ -15,6 +15,7 @@ namespace Bolt
 		SocketUtil() = delete;
 
 		static bool IsBigEndian();
+		static bool IsOnSameSubnet(const SocketAddress& a, const SocketAddress& b, int sigBits);
 
 		static int Select(const UDPsocketSet* inReadSet, UDPsocketSet* outReadSet,
 			const UDPsocketSet* inWriteSet, UDPsocketSet* outWriteSet,
