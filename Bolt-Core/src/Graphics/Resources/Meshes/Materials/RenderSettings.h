@@ -45,7 +45,7 @@ namespace Bolt
 		bool UseDepthTest = true;
 		bool UseBlend = true;
 		bool UseCullFace = true;
-		DepthFunction DepthFunc = DepthFunction::Less;
+		DepthFunction DepthFunc = DepthFunction::Lequal;
 		BlendSrc BlendSrcFunc = BlendSrc::SrcAlpha;
 		BlendDst BlendDstFunc = BlendDst::OneMinusSrcAlpha;
 		CullFace CulledFaces = CullFace::Back;

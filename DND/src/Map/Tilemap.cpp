@@ -112,7 +112,7 @@ namespace DND
 				Image image = CreateImage(layer, tiles);
 				TextureCreateOptions options;
 				Texture2D* texture = new Texture2D(image, options);
-				layer.Object = factory.Image(Width() * m_TileWidth, Height() * m_TileHeight, ResourcePtr<Texture2D>(texture, true), Transform({ 0, 0, -25 }));
+				layer.Object = factory.Image(Width() * m_TileWidth, Height() * m_TileHeight, ResourcePtr<const Texture2D>((const Texture2D*)texture, true), Transform({ 0, 0, -25 }));
 			}
 		}
 	}

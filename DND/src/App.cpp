@@ -68,7 +68,7 @@ namespace DND
 		setTargetAddressCommand.AddArgument("addr", CommandArgType::String, false);
 		CmdDebugger::CmdLine().AddCommand(setTargetAddressCommand);
 
-		BLT_CORE_INFO(SocketUtil::IsBigEndian());
+		BLT_CORE_INFO("Is big endian, {}", SocketUtil::IsBigEndian());
 
 		RenderSchedule titleSchedule(titleScene);
 		titleSchedule.AddRenderProcess(RenderProcess());

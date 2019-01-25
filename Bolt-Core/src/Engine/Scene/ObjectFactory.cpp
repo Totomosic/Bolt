@@ -110,8 +110,7 @@ namespace Bolt
 	GameObject* ObjectFactory::Rectangle(float width, float height, const Color& color, Transform transform) const
 	{
 		Mesh mesh;
-		// TODO: CHANGE
-		mesh.Models.push_back({ s_RectangleModel.Get(), Matrix4f::Scale(width, height, 1), { 0 } });
+		mesh.Models.push_back({ s_RectangleModel, Matrix4f::Scale(width, height, 1), { 0 } });
 		mesh.Materials[0].BaseColor = color;
 		mesh.Materials[0].Shader = Shader::DefaultColor();
 		return Instantiate(mesh, std::move(transform));
@@ -120,8 +119,7 @@ namespace Bolt
 	GameObject* ObjectFactory::Rectangle(float width, float height, const Material& material, Transform transform) const
 	{
 		Mesh mesh;
-		// TODO: CHANGE
-		mesh.Models.push_back({ s_RectangleModel.Get(), Matrix4f::Scale(width, height, 1),{ 0 } });
+		mesh.Models.push_back({ s_RectangleModel, Matrix4f::Scale(width, height, 1),{ 0 } });
 		mesh.Materials[0] = material;
 		return Instantiate(mesh, std::move(transform));
 	}
@@ -138,8 +136,7 @@ namespace Bolt
 	GameObject* ObjectFactory::Ellipse(float width, float height, const Color& color, Transform transform) const
 	{
 		Mesh mesh;
-		// TODO: CHANGE
-		mesh.Models.push_back({ s_EllipseModel.Get(), Matrix4f::Scale(width / 2, height / 2, 1), { 0 } });
+		mesh.Models.push_back({ s_EllipseModel, Matrix4f::Scale(width / 2, height / 2, 1), { 0 } });
 		mesh.Materials[0].BaseColor = color;
 		mesh.Materials[0].Shader = Shader::DefaultColor();
 		return Instantiate(mesh, std::move(transform));
@@ -148,8 +145,7 @@ namespace Bolt
 	GameObject* ObjectFactory::Ellipse(float width, float height, const Material& material, Transform transform) const
 	{
 		Mesh mesh;
-		// TODO: CHANGE
-		mesh.Models.push_back({ s_EllipseModel.Get(), Matrix4f::Scale(width / 2, height / 2, 1), { 0 } });
+		mesh.Models.push_back({ s_EllipseModel, Matrix4f::Scale(width / 2, height / 2, 1), { 0 } });
 		mesh.Materials[0] = material;
 		return Instantiate(mesh, std::move(transform));
 	}
@@ -157,8 +153,7 @@ namespace Bolt
 	GameObject* ObjectFactory::Cuboid(float width, float height, float depth, const Color& color, Transform transform) const
 	{
 		Mesh mesh;
-		// TODO: CHANGE
-		mesh.Models.push_back({ s_CuboidModel.Get(), Matrix4f::Scale(width, height, depth),{ 0 } });
+		mesh.Models.push_back({ s_CuboidModel, Matrix4f::Scale(width, height, depth),{ 0 } });
 		mesh.Materials[0].BaseColor = color;
 		mesh.Materials[0].Shader = Shader::LightingColor();
 		return Instantiate(mesh, std::move(transform));
@@ -167,8 +162,7 @@ namespace Bolt
 	GameObject* ObjectFactory::Cuboid(float width, float height, float depth, const Material& material, Transform transform) const
 	{
 		Mesh mesh;
-		// TODO: CHANGE
-		mesh.Models.push_back({ s_EllipseModel.Get(), Matrix4f::Scale(width, height, depth),{ 0 } });
+		mesh.Models.push_back({ s_CuboidModel, Matrix4f::Scale(width, height, depth),{ 0 } });
 		mesh.Materials[0] = material;
 		return Instantiate(mesh, std::move(transform));
 	}
