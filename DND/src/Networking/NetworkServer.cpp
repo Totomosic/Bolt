@@ -12,6 +12,7 @@ namespace DND
 			std::vector<ListenerId> removeListeners;
 			for (ListenerInfo& listener : m_PacketListeners[e.Type])
 			{
+				e.Packet.Reset(PACKET_HEADER_SIZE);
 				bool result = (*listener.Listener)(e);
 				if (listener.ListenCount > 0 && result)
 				{
@@ -51,12 +52,12 @@ namespace DND
 		{
 			BLT_CORE_INFO("STARTING SERVER ON {}", m_SocketAddress.ToString());
 			constexpr int MAX_PACKET_SIZE = 1024;
+			byte buffer[MAX_PACKET_SIZE];
 			while (true)
-			{
-				byte buffer[MAX_PACKET_SIZE];
+			{				
 				SocketAddress fromAddress;
 				int bytesReceived = m_Socket.RecvFrom(buffer, MAX_PACKET_SIZE, &fromAddress);
-				if (bytesReceived >= sizeof(id_t) + sizeof(PacketType))
+				if (bytesReceived >= (int)PACKET_HEADER_SIZE)
 				{
 					InputMemoryStream packetData((uint)bytesReceived);
 					memcpy(packetData.GetBufferPtr(), buffer, bytesReceived);
@@ -88,8 +89,7 @@ namespace DND
 				}
 				else
 				{
-					BLT_CORE_ERROR("INVALID PACKET RECEIVED, BYTE COUNT {}, EXITING SERVER...", bytesReceived);
-					break;
+					BLT_CORE_ERROR("INVALID PACKET RECEIVED, BYTE COUNT {}", bytesReceived);
 				}
 			}
 			BLT_CORE_INFO("STOPPING SERVER ON {}", m_SocketAddress.ToString());
@@ -102,14 +102,20 @@ namespace DND
 
 	void NetworkServer::Exit(NetworkServer::OnExitCallback callback)
 	{
-		BLT_ASSERT(IsRunning(), "SERVER IS NOT RUNNING");
 		EventManager::Subscribe(SERVER_SHUTDOWN_EVENT, [callback = std::move(callback)](id_t listenerId, Event& e)
 		{
 			callback();
 			EventManager::Unsubscribe(listenerId);
 			return true;
 		});
-		StopListeningThread();
+		if (IsRunning())
+		{
+			StopListeningThread();
+		}	
+		else
+		{
+			EventManager::Post(SERVER_SHUTDOWN_EVENT);
+		}
 		ClearAllListeners();
 		m_IsRunning = false;
 	}

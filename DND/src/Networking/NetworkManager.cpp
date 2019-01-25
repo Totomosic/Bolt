@@ -32,13 +32,9 @@ namespace DND
 			{
 				ConnectToAddressPacket packet;
 				Deserialize(e.Packet, packet);
-				netManager->ConnectToWithoutServer(packet.Address, 10000, [](id_t connectionId)
-				{
-					if (connectionId != GameObject::InvalidID)
-					{
-						BLT_CORE_WARN("Connected!!!!");
-					}
-				});
+				netManager->ConnectToWithoutServer(packet.Address);
+				ConnectionEstablishedPacket connectionPacket;
+				netManager->Server().SendPacket(packet.Address.PrivateEndpoint, connectionPacket);
 				return true;
 			});
 
@@ -91,73 +87,28 @@ namespace DND
 
 	void NetworkManager::ConnectTo(const AddressPair& address, int timeoutMilliseconds, NetworkManager::OnConnectedCallback callback)
 	{
-		ConnectToWithoutServer(address, timeoutMilliseconds, std::move(callback));
+		id_t connectionId = ConnectToWithoutServer(address);
+		Server().AddTemporaryPacketListener(PacketType::ConnectionEstablished, [address, connectionId, callback = std::move(callback)](ReceivedPacketEvent& e)
+		{
+			if (e.FromAddress == address.PrivateEndpoint)
+			{
+				BLT_CORE_INFO("ESTABLISHED CONNECTION WITH {0} Id = {1}", address.PrivateEndpoint, connectionId);
+				callback(connectionId);
+				return true;
+			}
+			return false;
+		}, 1);		
 
 		ConnectToAddressPacket packet;
 		packet.Address = address;
 		m_Server.SendPacket(NetworkManager::EC2_SERVER_ADDRESS, packet);
 	}
 
-	void NetworkManager::ConnectToWithoutServer(const AddressPair& address, int timeoutMilliseconds, NetworkManager::OnConnectedCallback callback)
+	id_t NetworkManager::ConnectToWithoutServer(const AddressPair& address)
 	{
-		Timer* holePunchFunc = &Time::RenderingTimeline().AddTemporaryTimerByTime(0.5, timeoutMilliseconds / 1000.0, [this, address]()
-		{
-			HolepunchPacket packet;
-			packet.MyAddress = m_Address;
-			BLT_CORE_INFO("SENDING HOLEPUNCH PACKET TO {}", address.PrivateEndpoint.ToString());
-			m_Server.SendPacket(address.PrivateEndpoint, packet);
-			BLT_CORE_INFO("SENDING HOLEPUNCH PACKET TO {}", address.PublicEndpoint.ToString());
-			m_Server.SendPacket(address.PublicEndpoint, packet);
-		});
-		Timer* timeoutFunc = &Time::RenderingTimeline().AddFunction(timeoutMilliseconds / 1000.0f, [this]()
-		{
-			HolepunchAckPacket packet;
-			packet.MyAddress = m_Address;
-			m_Server.SendPacket(m_Server.BoundAddress(), packet);
-		});
-		NetworkServer::ListenerId listenerId = m_Server.AddTemporaryPacketListener(PacketType::Holepunch, [this, address](ReceivedPacketEvent& e)
-		{
-			bool result = e.FromAddress == address.PublicEndpoint || e.FromAddress == address.PrivateEndpoint;
-			if (result)
-			{
-				HolepunchPacket incomingPacket;
-				Deserialize(e.Packet, incomingPacket);
-				id_t connectionId = m_Connections.AddConnection(incomingPacket.MyAddress, e.FromAddress);
-				BLT_CORE_INFO("ESTABLISHED CONNECTION Id = {0} WITH ADDRESS {1} {2} USING {3}", connectionId, address.PublicEndpoint.ToString(), address.PrivateEndpoint.ToString(), e.FromAddress.ToString());
-			}
-			return result;
-		}, 1);
-		m_Server.AddTemporaryPacketListener(PacketType::HolepunchAck, [this, address, holePunchFunc, timeoutFunc, listenerId, callback = callback](ReceivedPacketEvent& e)
-		{
-			HolepunchAckPacket packet;
-			Deserialize(e.Packet, packet);
-			bool result = e.FromAddress == address.PublicEndpoint || e.FromAddress == address.PrivateEndpoint || e.FromAddress == m_Server.BoundAddress();
-			if (result)
-			{
-				if (e.FromAddress != m_Server.BoundAddress())
-				{
-					BLT_CORE_INFO("RECEIVED HOLEPUNCH_ACK FROM {}", e.FromAddress.ToString());
-					Time::RenderingTimeline().RemoveTimer(timeoutFunc);
-					id_t connectionId = m_Connections.GetConnectionId(packet.MyAddress);
-					if (connectionId == GameObject::InvalidID)
-					{
-						result = false;
-					}
-					else
-					{
-						callback(connectionId);
-					}
-				}
-				else
-				{
-					BLT_CORE_ERROR("CONNECTION REQUEST TIMED OUT");
-					m_Server.RemovePacketListener(listenerId);
-					callback(GameObject::InvalidID);
-				}
-			}
-			return result;
-		}, 1);
-		
+		const SocketAddress& addr = address.PrivateEndpoint;
+		id_t connectionId = m_Connections.AddConnection(address, addr);
+		return connectionId;
 	}
 
 	void NetworkManager::DisconnectFrom(id_t connectionId)

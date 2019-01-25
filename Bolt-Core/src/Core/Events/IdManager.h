@@ -21,6 +21,35 @@ namespace Bolt
 			
 		}
 
+		bool IsIdAvailable(T id) const
+		{
+			if (id > m_CurrentMaxId)
+			{
+				return true;
+			}
+			auto it = std::find(m_AvailableIds.begin(), m_AvailableIds.end(), id);
+			if (it != m_AvailableIds.end())
+			{
+				return true;
+			}
+			return false;
+		}
+
+		T PeekNextId() const
+		{
+			if (m_CurrentMaxId < m_MaxId)
+			{
+				return m_CurrentMaxId;
+			}
+			if (m_AvailableIds.size() > 0)
+			{
+				T id = m_AvailableIds.back();
+				return id;
+			}
+			BLT_ASSERT(false, "No available Id");
+			return m_MaxId;
+		}
+
 		T GetNextId() const
 		{
 			if (m_CurrentMaxId < m_MaxId)

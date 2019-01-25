@@ -1,5 +1,5 @@
 <RESOURCE_SETTINGS>
-	<Name>fireballAnimation</Name>
+	<Name>FireballAnimation</Name>
 	<Wrap Mode>ClampToEdge</Wrap Mode>
 	<Min Filter>Linear</Min Filter>
 	<Mag Filter>Linear</Mag Filter>

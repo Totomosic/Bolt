@@ -17,6 +17,11 @@ namespace DND
 		return m_NetworkIdManager.GetNextId();
 	}
 
+	id_t NetworkObjects::PeekNextNetworkId() const
+	{
+		return m_NetworkIdManager.PeekNextId();
+	}
+
 	void NetworkObjects::SetNextAvailableNetworkId(id_t networkId)
 	{
 		m_NetworkIdManager.SetNextAvailableId(networkId);

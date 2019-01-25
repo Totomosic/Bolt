@@ -12,8 +12,23 @@ namespace DND
 	PlayerController::PlayerController() : Component(),
 		m_Left(Keycode::A), m_Up(Keycode::W), m_Right(Keycode::D), m_Down(Keycode::S), m_LastPressed(Keycode::Left), m_Spells(), m_Actions(), m_CanMove(true)
 	{
-		id_t fireball = m_Spells.AddSpell(0);
+		id_t fireball = m_Spells.AddSpell(1);
+		id_t teleport = m_Spells.AddSpell(0);
 		m_SpellKeyMap[Keycode::Q] = fireball;
+		m_SpellKeyMap[Keycode::E] = teleport;
+
+	}
+
+	void PlayerController::FreezeFor(float seconds)
+	{
+		if (seconds > 0.0f)
+		{
+			GameManager::Get().AddActiveTimer(&Time::RenderingTimeline().AddFunction(seconds, [this]()
+			{
+				Unfreeze();
+			}));
+			Freeze();
+		}
 	}
 
 	void PlayerController::Update()
@@ -51,14 +66,19 @@ namespace DND
 			}
 			if (tileDiff.x != 0 || tileDiff.y != 0)
 			{
-				QueueAction([tileDiff, &m, &t](GameObject* player)
+				QueueAction([this, tileDiff, &m, &t](GameObject* player)
 				{
+					if (IsFrozen())
+					{
+						return false;
+					}
 					Tile moveToTile = t.CurrentTile() + tileDiff;
 					m.SetTargetTile(moveToTile);
 					EntityMovedPacket packet;
 					packet.NetworkId = player->Components().GetComponent<NetworkIdentity>().NetworkId;
 					packet.MoveToTile = moveToTile;
 					GameManager::Get().Network().SendPacketToAll(packet);
+					return true;
 				});
 			}
 		}
@@ -67,21 +87,26 @@ namespace DND
 		{
 			if (Input::KeyPressed(pair.first))
 			{
-				if (Spells().CanCast(pair.second))
+				GameState state = GameManager::Get().GetGameState();
+				QueueAction([this, pair, state](GameObject* player)
 				{
-					GameState state = GameManager::Get().GetGameState();
-					QueueAction([this, pair, state](GameObject* player)
+					if (Spells().CanCast(pair.second))
 					{
+						if (IsFrozen())
+						{
+							return false;
+						}
 						std::unique_ptr<SpellInstance> spellInstance = Spells().GetSpell(pair.second)->CreateInstance(gameObject(), state);
-						Spells().CastSpell(pair.second, spellInstance, player, GameManager::Get().GetStateObjects());
-					});
-				}
+						SpellInstance::SpellCastResult result = Spells().CastSpell(pair.second, spellInstance, player, GameManager::Get().GetStateObjects());
+						FreezeFor(result.CastTime);
+					}
+					return true;
+				});
 			}
 		}
 
-		while (!IsFrozen() && !m_Actions.empty())
+		if (!m_Actions.empty() && m_Actions.front()(gameObject()))
 		{
-			m_Actions.front()(gameObject());
 			m_Actions.pop_front();
 		}
 	}

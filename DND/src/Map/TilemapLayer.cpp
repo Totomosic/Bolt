@@ -4,26 +4,15 @@
 namespace DND
 {
 
-	TilemapLayer::TilemapLayer()
-		: m_Texture(0, 0)
+	TilemapLayer::TilemapLayer() : TilemapLayer(1, 1)
 	{
 	
 	}
 
-	TilemapLayer::TilemapLayer(int width, int height, int tileWidth, int tileHeight, float tilemapResolution)
-		: m_Width(width), m_Height(height), m_TileWidth(tileWidth), m_TileHeight(tileHeight), m_PixelsPerTileX(tileWidth * tilemapResolution), m_PixelsPerTileY(tileHeight * tilemapResolution), m_Texture(m_PixelsPerTileX * m_Width, m_PixelsPerTileY * m_Height)
+	TilemapLayer::TilemapLayer(int width, int height)
+		: m_Width(width), m_Height(height), m_TileIds(std::make_unique<id_t[]>(width * height))
 	{
 		
-	}
-
-	const Texture2D& TilemapLayer::GetTexture() const
-	{
-		return m_Texture;
-	}
-
-	Texture2D& TilemapLayer::GetTexture()
-	{
-		return m_Texture;
 	}
 
 	int TilemapLayer::Width() const
@@ -36,39 +25,30 @@ namespace DND
 		return m_Height;
 	}
 
-	Vector2i TilemapLayer::TileSize() const
+	id_t* TilemapLayer::Tiles() const
 	{
-		return { m_TileWidth, m_TileHeight };
+		return m_TileIds.get();
 	}
 
-	Vector2i TilemapLayer::PixelsPerTile() const
+	id_t TilemapLayer::GetTile(int x, int y) const
 	{
-		return { m_PixelsPerTileX, m_PixelsPerTileY };
+		return m_TileIds[x + y * Width()];
 	}
 
-	void TilemapLayer::SetTileImage(int x, int y, const Image& image, ResizeFilter filter)
+	id_t& TilemapLayer::GetTile(int x, int y)
 	{
-		m_Texture.SetRegion(x * PixelsPerTile().x, y * PixelsPerTile().y, PixelsPerTile().x, PixelsPerTile().y, image, filter);
+		return m_TileIds[x + y * Width()];
 	}
 
-	void TilemapLayer::SetTileImages(int x, int y, int w, int h, const Image& image, ResizeFilter filter)
+	void TilemapLayer::SetRegion(int x, int y, int width, int height, id_t tileId)
 	{
-		Image im;
-		im.Width = image.Width * w;
-		im.Height = image.Height * h;
-		im.Components = 4;
-		im.Pixels = new byte[im.Width * im.Height * im.Components];
-		for (int j = 0; j < h; j++)
+		for (int i = x; i < x + width; i++)
 		{
-			for (int h = 0; h < image.Height; h++)
+			for (int j = y; j < y + height; j++)
 			{
-				for (int i = 0; i < w; i++)
-				{
-					memcpy(im.Pixels + i * image.Width * 4 + j * im.Width* image.Height * 4 + h * im.Width * 4, image.Pixels + h * image.Width * 4, image.Width * 4);
-				}
+				GetTile(i, j) = tileId;
 			}
 		}
-		m_Texture.SetRegion(x * PixelsPerTile().x, y * PixelsPerTile().y, w * PixelsPerTile().x, h * PixelsPerTile().y, im, filter);
 	}
 
 }

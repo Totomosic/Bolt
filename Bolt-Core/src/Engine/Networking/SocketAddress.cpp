@@ -88,6 +88,12 @@ namespace Bolt
 		return !(*this == other);
 	}
 
+	std::ostream& operator<<(std::ostream& stream, const SocketAddress& address)
+	{
+		stream << address.ToString();
+		return stream;
+	}
+
 	const sockaddr_in* SocketAddress::GetAsSockAddrIn() const
 	{
 		return reinterpret_cast<const sockaddr_in*>(&m_SockAddr);

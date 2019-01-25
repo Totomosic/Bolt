@@ -46,7 +46,7 @@ namespace DND
 		if (IsMoving())
 		{
 			Transform& t = gameObject()->transform();
-			Vector3f targetPosition = m_Transform->GetTilemap().WorldPositionOfTile(m_TargetTile.x, m_TargetTile.y) + m_Transform->PositionOffset();
+			Vector3f targetPosition = m_Transform->GetTilemap().CurrentMap().WorldPositionOfTile(m_TargetTile.x, m_TargetTile.y) + m_Transform->PositionOffset();
 			Vector3f toTarget = targetPosition - t.Position();
 			Vector3f dir = toTarget.Normalize();
 			float length = std::min<float>(Time::RenderingTimeline().DeltaTime() * m_Speed, toTarget.Length());
@@ -64,7 +64,7 @@ namespace DND
 		Tile currentTile = m_Transform->CurrentTile();
 		if (targetTile != currentTile)
 		{
-			if (targetTile.x >= 0 && targetTile.x < m_Transform->GetTilemap().Width() && targetTile.y >= 0 && targetTile.y < m_Transform->GetTilemap().Height())
+			if (targetTile.x >= 0 && targetTile.x < m_Transform->GetTilemap().CurrentMap().Width() && targetTile.y >= 0 && targetTile.y < m_Transform->GetTilemap().CurrentMap().Height())
 			{
 				m_TargetTile = targetTile;
 				m_Seeking = true;

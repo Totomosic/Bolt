@@ -7,8 +7,6 @@
 namespace DND
 {
 
-	constexpr id_t PACKET_VALIDATOR = 0xFFEEDDCC;
-
 	struct AddressPair
 	{
 	public:
@@ -51,9 +49,14 @@ namespace DND
 		PlayerDisconnect,
 
 		EntityMoved,
+		CastSpell,
+		StatsUpdate,
 
 		MAX_PACKET_TYPES
 	};
+
+	constexpr id_t PACKET_VALIDATOR = 0xFFEEDDCC;
+	constexpr id_t PACKET_HEADER_SIZE = sizeof(id_t) + sizeof(PacketType);
 
 	struct LocalServerTerminatePacket
 	{

@@ -5,6 +5,25 @@ namespace DND
 {
 
 	template<>
+	inline void Serialize(OutputMemoryStream& stream, const CharacterStats& value)
+	{
+		Serialize(stream, value.MaxHealth);
+		Serialize(stream, value.CurrentHealth);
+		Serialize(stream, value.Strength);
+		Serialize(stream, value.Dexterity);
+		Serialize(stream, value.Wisdom);
+	}
+	template<>
+	inline void Deserialize(InputMemoryStream& stream, CharacterStats& outValue)
+	{
+		Deserialize(stream, outValue.MaxHealth);
+		Deserialize(stream, outValue.CurrentHealth);
+		Deserialize(stream, outValue.Strength);
+		Deserialize(stream, outValue.Dexterity);
+		Deserialize(stream, outValue.Wisdom);
+	}
+
+	template<>
 	inline void Serialize(OutputMemoryStream& stream, const ConnectionInfo& value)
 	{
 		Serialize(stream, value.Address);
@@ -21,6 +40,7 @@ namespace DND
 		Serialize(stream, value.NetworkId);
 		Serialize(stream, value.PrefabId);
 		Serialize(stream, value.CurrentTile);
+		Serialize(stream, value.Stats);
 	}
 	template<>
 	inline void Deserialize(InputMemoryStream& stream, CharacterInfo& value)
@@ -28,6 +48,7 @@ namespace DND
 		Deserialize(stream, value.NetworkId);
 		Deserialize(stream, value.PrefabId);
 		Deserialize(stream, value.CurrentTile);
+		Deserialize(stream, value.Stats);
 	}
 
 	template<>

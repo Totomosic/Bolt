@@ -23,17 +23,19 @@ namespace DND
 
 		c.OnStatsChanged.Subscribe([this](id_t listenerId, UpdatedStatsEvent& e)
 		{
-			float healthProp = e.Stats.CurrentHealth / (float)e.Stats.MaxHealth;
-			SetBarSize(m_BarLength * healthProp, m_BarLength);
-
-			if (e.Object == GameManager::Get().Players().LocalPlayerObject() && e.Stats.CurrentHealth <= 0)
+			if (e.StatsDelta.CurrentHealth != 0 || e.StatsDelta.MaxHealth != 0)
 			{
-				Time::RenderingTimeline().AddFunction(0.25, []()
-				{
-					GameManager::Get().Exit();
-				});
-			}
+				float healthProp = e.Stats.CurrentHealth / (float)e.Stats.MaxHealth;
+				SetBarSize(m_BarLength * healthProp, m_BarLength);
 
+				if (e.Object == GameManager::Get().Players().LocalPlayerObject() && e.Stats.CurrentHealth <= 0)
+				{
+					Time::RenderingTimeline().AddFunction(0.25, []()
+					{
+						GameManager::Get().Exit();
+					});
+				}
+			}
 			return false;
 		});
 	}

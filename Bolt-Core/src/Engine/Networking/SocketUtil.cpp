@@ -9,6 +9,20 @@ namespace Bolt
 		return htonl(47) == 47;
 	}
 
+	bool SocketUtil::IsOnSameSubnet(const SocketAddress& a, const SocketAddress& b, int sigBits)
+	{
+		id_t mask = 0;
+		for (int i = 0; i < sigBits; i++)
+		{
+			mask += 1 << (i);
+		}
+		id_t amask = a.GetIP4Ref() & mask;
+		id_t bmask = b.GetIP4Ref() & mask;
+		bool result = amask == bmask;
+		BLT_CORE_INFO("COMPARING {0} and {1} RESULT {2}", a.ToString(), b.ToString(), result);
+		return result;
+	}
+
 	int SocketUtil::Select(const UDPsocketSet* inReadSet, UDPsocketSet* outReadSet,
 		const UDPsocketSet* inWriteSet, UDPsocketSet* outWriteSet,
 		const UDPsocketSet* inErrorSet, UDPsocketSet* outErrorSet, int timeoutMilliseconds)

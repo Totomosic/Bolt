@@ -147,25 +147,19 @@ namespace Bolt
 
 	void GameObject::Update()
 	{
-		for (int i = 0; i < ComponentManager::MAX_COMPONENTS; i++)
+		std::vector<Component*> components = m_Components.GetComponents();
+		for (Component* c : components)
 		{
- 			Component* c = m_Components.m_ComponentArray[i];
-			if (c != nullptr)
-			{
- 				c->Update();
-			}
+			c->Update();
 		}
 	}
 
 	void GameObject::LateUpdate()
 	{
-		for (int i = 0; i < ComponentManager::MAX_COMPONENTS; i++)
+		std::vector<Component*> components = m_Components.GetComponents();
+		for (Component* c : components)
 		{
-			Component* c = m_Components.m_ComponentArray[i];
-			if (c != nullptr)
-			{
-				c->LateUpdate();
-			}
+			c->LateUpdate();
 		}
 		for (int i = m_TemporaryComponents.size() - 1; i >= 0; i--)
 		{
@@ -244,9 +238,10 @@ namespace Bolt
 	{
 		GameObject* object = layer->AddGameObject(GameObject());
 		object->transform() = std::move(transform);
-		for (const auto& pair : prefab->Components().m_ComponentMap)
+		std::vector<ComponentManager::ComponentInfoPtr>& components = prefab->Components().GetComponentsOrdered();
+		for (ComponentManager::ComponentInfoPtr& component : components)
 		{
-			object->Components().AddComponent(pair.first, pair.second->Clone());
+			object->Components().AddComponent(component.type_hash, component.component->Clone());
 		}
 		return object;
 	}

@@ -15,9 +15,19 @@ namespace DND
 		return m_PlayerIdManager.GetNextId();
 	}
 
+	id_t PlayerManager::PeekNextPlayerId() const
+	{
+		return m_PlayerIdManager.PeekNextId();
+	}
+
 	void PlayerManager::SetNextAvailablePlayerId(id_t playerId)
 	{
 		m_PlayerIdManager.SetNextAvailableId(playerId);
+	}
+
+	bool PlayerManager::HasPlayer(id_t playerId) const
+	{
+		return m_OtherPlayers.find(playerId) != m_OtherPlayers.end();
 	}
 
 	const PlayerManager::PlayerInfo& PlayerManager::LocalPlayer() const

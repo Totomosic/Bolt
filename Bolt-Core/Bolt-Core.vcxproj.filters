@@ -435,6 +435,9 @@
     <ClInclude Include="src\Engine\Scene\Components\PhysicsHandle.h">
       <Filter>Engine\Scene\Components</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Scene\Components\TriggerComponent.h">
+      <Filter>Engine\Scene\Components</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\Scene\Components\UI\UIEventHandler.h">
       <Filter>Engine\Scene\Components\UI</Filter>
     </ClInclude>
@@ -809,6 +812,7 @@
     </ClInclude>
     <ClInclude Include="src\Logging.h" />
     <ClInclude Include="src\Types.h" />
+    <ClInclude Include="src\Core\Time\TimerSet.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\BoltTL\string.cpp">
@@ -959,6 +963,9 @@
       <Filter>Engine\Scene\Components</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Scene\Components\PhysicsHandle.cpp">
+      <Filter>Engine\Scene\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Scene\Components\TriggerComponent.cpp">
       <Filter>Engine\Scene\Components</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Scene\Components\UI\UIEventHandler.cpp">
@@ -1164,6 +1171,7 @@
     </ClCompile>
     <ClCompile Include="src\Logging.cpp" />
     <ClCompile Include="src\Types.cpp" />
+    <ClCompile Include="src\Core\Time\TimerSet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Graphics\Resources\Shaders\Source\DefaultColor_f.glsl">

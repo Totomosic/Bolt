@@ -41,7 +41,7 @@ namespace Bolt
 
 	const std::vector<GameObject*>& ObjectCollection::GetGameObjectsByTag(const blt::string& tag) const
 	{
-		return m_Tags.at(tag);
+		return m_Tags[tag];
 	}
 
 	bool ObjectCollection::TagExists(const blt::string& tag) const

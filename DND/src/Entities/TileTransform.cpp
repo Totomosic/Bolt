@@ -4,7 +4,7 @@
 namespace DND
 {
 
-	TileTransform::TileTransform(Tilemap* tilemap, Tile currentTile, Vector3f positionOffset) : Component(),
+	TileTransform::TileTransform(TilemapManager* tilemap, Tile currentTile, Vector3f positionOffset) : Component(),
 		m_CurrentTile(currentTile), m_PositionOffset(positionOffset), m_Tilemap(tilemap)
 	{
 	
@@ -20,14 +20,14 @@ namespace DND
 		return m_PositionOffset;
 	}
 
-	Tilemap& TileTransform::GetTilemap() const
+	TilemapManager& TileTransform::GetTilemap() const
 	{
 		return *m_Tilemap;
 	}
 
 	Vector3f TileTransform::PositionOfTile() const
 	{
-		return GetTilemap().WorldPositionOfTile(CurrentTile().x, CurrentTile().y);
+		return GetTilemap().CurrentMap().WorldPositionOfTile(CurrentTile().x, CurrentTile().y);
 	}
 
 	void TileTransform::Start()

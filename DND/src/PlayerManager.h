@@ -32,8 +32,10 @@ namespace DND
 		PlayerManager();
 
 		id_t GetNextPlayerId() const;
+		id_t PeekNextPlayerId() const;
 		void SetNextAvailablePlayerId(id_t playerId);
 
+		bool HasPlayer(id_t playerId) const;
 		const PlayerInfo& LocalPlayer() const;
 		GameObject* LocalPlayerObject() const;
 		void SetLocalPlayer(PlayerInfo player, GameObject* object);

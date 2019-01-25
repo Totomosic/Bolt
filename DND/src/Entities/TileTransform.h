@@ -1,6 +1,6 @@
 #pragma once
 #include "bltpch.h"
-#include "../Map/Tilemap.h"
+#include "../Map/TilemapManager.h"
 
 namespace DND
 {
@@ -10,14 +10,14 @@ namespace DND
 	private:
 		Tile m_CurrentTile;
 		Vector3f m_PositionOffset;
-		Tilemap* m_Tilemap;
+		TilemapManager* m_Tilemap;
 
 	public:
-		TileTransform(Tilemap* tilemap, Tile currentTile = Tile(), Vector3f positionOffset = Vector3f());
+		TileTransform(TilemapManager* tilemap, Tile currentTile = Tile(), Vector3f positionOffset = Vector3f());
 
 		const Tile& CurrentTile() const;
 		const Vector3f& PositionOffset() const;
-		Tilemap& GetTilemap() const;
+		TilemapManager& GetTilemap() const;
 		Vector3f PositionOfTile() const;
 
 		void Start() override;

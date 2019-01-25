@@ -55,6 +55,7 @@ namespace DND
 			if (IsRunning())
 			{
 				PacketType type = T::Type;
+				BLT_CORE_WARN("SENDING PACKET TYPE = {0} TO {1}", (int)type, toAddress);
 				OutputMemoryStream packetData;
 				Serialize(packetData, PACKET_VALIDATOR);
 				Serialize(packetData, (byte)type);

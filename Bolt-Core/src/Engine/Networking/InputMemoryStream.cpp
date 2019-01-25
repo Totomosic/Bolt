@@ -49,6 +49,11 @@ namespace Bolt
 		return m_Capacity - m_Head;
 	}
 
+	void InputMemoryStream::Reset(int to)
+	{
+		m_Head = to;
+	}
+
 	void InputMemoryStream::Read(void* buffer, uint length)
 	{
 		BLT_ASSERT(length <= GetRemainingDataSize(), "Not enough data left in Input Stream");

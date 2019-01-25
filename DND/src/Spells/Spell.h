@@ -2,6 +2,9 @@
 #include "SpellInstance.h"
 #include "../Networking/Serialization.h"
 #include "../Networking/Deserialization.h"
+#include "../Networking/GamePlayPacketSerialization.h"
+#include "../Entities/Characters/CharacterStats.h"
+#include "../Entities/TileTransform.h"
 
 namespace DND
 {

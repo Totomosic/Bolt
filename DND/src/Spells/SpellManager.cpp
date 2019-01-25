@@ -28,13 +28,17 @@ namespace DND
 		return index;
 	}
 
-	void SpellManager::CastSpell(id_t index, const std::unique_ptr<SpellInstance>& instance, GameObject* caster, const GameStateObjects& state)
+	SpellInstance::SpellCastResult SpellManager::CastSpell(id_t index, const std::unique_ptr<SpellInstance>& instance, GameObject* caster, const GameStateObjects& state)
 	{
-		Spell* spell = GetSpell(index);
-		SpellInstance::SpellCastResult result = instance->Cast(spell, caster, state);
+		SpellInstance::SpellCastResult result = instance->Cast(caster, state);
 		m_Spells[index].Cooldown = result.Cooldown;
 		m_Spells[index].MaxCooldown = result.Cooldown;
-		OutputMemoryStream stream = instance->SerializeInstance();
+		CastSpellPacket packet;
+		packet.NetworkId = caster->Components().GetComponent<NetworkIdentity>().NetworkId;
+		packet.SpellId = GetSpell(index)->Id();
+		packet.SpellData = instance->SerializeInstance();
+		GameManager::Get().Network().SendPacketToAll(packet);
+		return result;
 	}
 
 	void SpellManager::Update()

@@ -14,6 +14,7 @@ namespace DND
 		NetworkObjects();
 
 		id_t GetNextNetworkId() const;
+		id_t PeekNextNetworkId() const;
 		void SetNextAvailableNetworkId(id_t id);
 
 		GameObject* GetObjectByNetworkId(id_t networkId) const;

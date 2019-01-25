@@ -12,7 +12,7 @@
 namespace DND
 {
 
-	void CreateCharacterPrefabs(PrefabList& prefabs, ObjectFactory& factory, const ResourcePack& resources)
+	void CreateCharacterPrefabs(PrefabList& prefabs, AnimationList& animations, ObjectFactory& factory, const ResourcePack& resources)
 	{
 		ResourcePtr<Texture2D> downWizard = ResourceManager::Get<Texture2D>(resources.GetResourceId("WizardStaticForward"));
 		ResourcePtr<Texture2D> rightWizard = ResourceManager::Get<Texture2D>(resources.GetResourceId("WizardStaticRight"));
@@ -23,6 +23,17 @@ namespace DND
 		ResourcePtr<Texture2D> rightSwordsman = ResourceManager::Get<Texture2D>(resources.GetResourceId("SwordsmanStaticRight"));
 		ResourcePtr<Texture2D> upSwordsman = ResourceManager::Get<Texture2D>(resources.GetResourceId("SwordsmanStaticBackward"));
 		ResourcePtr<Texture2D> leftSwordsman = ResourceManager::Get<Texture2D>(resources.GetResourceId("SwordsmanStaticLeft"));
+
+		ResourcePtr<Texture2D> fireballAnimation = ResourceManager::Get<Texture2D>(resources.GetResourceId("FireballAnimation"));
+		ResourcePtr<Texture2D> fireballExplosionAnimation = ResourceManager::Get<Texture2D>(resources.GetResourceId("ExplosionAnimation"));
+
+		ResourcePtr<Texture2D> downSwordsmanTeleportAnimation = ResourceManager::Get<Texture2D>(resources.GetResourceId("SwordsmanForwardTeleport"));
+		ResourcePtr<Texture2D> downSwordsmanHealAnimation = ResourceManager::Get<Texture2D>(resources.GetResourceId("SwordsmanForwardHeal"));
+
+		animations.Fireball = { fireballAnimation, 8, 1 };
+		animations.FireballExplosion = { fireballExplosionAnimation, 9, 9 };
+		animations.SwordsmanForwardTeleport = { downSwordsmanTeleportAnimation, 13, 1 };
+		animations.SwordsmanForwardHeal = { downSwordsmanHealAnimation, 7, 1 };
 
 		CharacterStats defaultStats;
 		defaultStats.MaxHealth = 40;
@@ -35,9 +46,10 @@ namespace DND
 
 		ObjectPrefab wizardCharacterPrefab;
 		wizardCharacterPrefab.Components().AddComponent<MeshRenderer>(wizardCharacterMesh);
-		wizardCharacterPrefab.Components().AddComponent<TileTransform>(&GameManager::Get().GetTilemap(), Tile(), Vector3f(0, 15, 0));
-		wizardCharacterPrefab.Components().AddComponent<CharacterAnimator>(Direction::Down, upWizard, rightWizard, downWizard, leftWizard);
-		wizardCharacterPrefab.Components().AddComponent<TileMotion>(300);
+		wizardCharacterPrefab.Components().AddComponent<SpriteAnimator>(downWizard);
+		wizardCharacterPrefab.Components().AddComponent<TileTransform>(&GameManager::Get().MapManager(), Tile(), Vector3f(0, 15, 0));
+		wizardCharacterPrefab.Components().AddComponent<CharacterAnimator>(upWizard, rightWizard, downWizard, leftWizard);
+		wizardCharacterPrefab.Components().AddComponent<TileMotion>(200);
 		wizardCharacterPrefab.Components().AddComponent<SpellCaster>();
 		wizardCharacterPrefab.Components().AddComponent<StatsComponent>(defaultStats);
 		wizardCharacterPrefab.Components().AddComponent<Healthbar>(factory.CurrentLayer(), Vector3f(0, TILE_HEIGHT * 0.75f + 5, 1));
@@ -46,9 +58,10 @@ namespace DND
 
 		ObjectPrefab swordsmanCharacterPrefab;
 		swordsmanCharacterPrefab.Components().AddComponent<MeshRenderer>(swordsmanCharacterMesh);
-		swordsmanCharacterPrefab.Components().AddComponent<TileTransform>(&GameManager::Get().GetTilemap(), Tile(), Vector3f(0, 15, 0));
-		swordsmanCharacterPrefab.Components().AddComponent<CharacterAnimator>(Direction::Down, upSwordsman, rightSwordsman, downSwordsman, leftSwordsman);
-		swordsmanCharacterPrefab.Components().AddComponent<TileMotion>(350);
+		swordsmanCharacterPrefab.Components().AddComponent<SpriteAnimator>(downSwordsman);
+		swordsmanCharacterPrefab.Components().AddComponent<TileTransform>(&GameManager::Get().MapManager(), Tile(), Vector3f(0, 15, 0));
+		swordsmanCharacterPrefab.Components().AddComponent<CharacterAnimator>(upSwordsman, rightSwordsman, downSwordsman, leftSwordsman);
+		swordsmanCharacterPrefab.Components().AddComponent<TileMotion>(225);
 		swordsmanCharacterPrefab.Components().AddComponent<SpellCaster>();
 		swordsmanCharacterPrefab.Components().AddComponent<StatsComponent>(defaultStats);
 		swordsmanCharacterPrefab.Components().AddComponent<Healthbar>(factory.CurrentLayer(), Vector3f(0, TILE_HEIGHT * 0.75f + 5, 1));

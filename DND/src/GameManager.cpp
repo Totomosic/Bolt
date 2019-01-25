@@ -4,6 +4,7 @@
 #include "Camera/PlayerCamera.h"
 #include "Entities/TileTransform.h"
 #include "Networking/NetworkController.h"
+#include "Spells/SpellCaster.h"
 
 #include "Networking/GamePlayPacketSerialization.h"
 
@@ -28,7 +29,7 @@ namespace DND
 	}
 
 	GameManager::GameManager(Layer& layer)
-		: m_LocalCamera(nullptr), m_Tilemap(layer, TILEMAP_WIDTH, TILEMAP_HEIGHT, TILE_WIDTH, TILE_HEIGHT), m_Prefabs(), m_Factory(layer), m_Network(), m_Spells(), m_ActiveTimers()
+		: m_LocalCamera(nullptr), m_TilemapManager(layer, TILE_WIDTH, TILE_HEIGHT), m_Prefabs(), m_Animations(), m_Factory(layer), m_Network(), m_Spells(), m_ActiveTimers()
 	{
 	
 	}
@@ -46,8 +47,9 @@ namespace DND
 		callback(packet, std::move(player));
 	}
 
-	void GameManager::Join(const SocketAddress& address, PlayerCharacterInfo player, GameManager::LoadGameCallback callback)
+	void GameManager::Join(id_t connectionId, PlayerCharacterInfo player, GameManager::LoadGameCallback callback)
 	{
+		const SocketAddress& address = Network().Connections().GetRoutableAddress(connectionId);
 		Network().Server().AddTemporaryPacketListener(PacketType::Welcome, [player = std::move(player), callback = std::move(callback)](ReceivedPacketEvent& e)
 		{
 			BLT_CORE_INFO("RECEIVED WELCOME PACKET FROM {}", e.FromAddress.ToString());
@@ -85,12 +87,12 @@ namespace DND
 			{
 				Time::RenderingTimeline().RemoveTimer(timer);
 			}
+			Players().Clear();
+			Network().Objects().Clear();
+			Network().m_Connections.ClearConnections();
 			SceneManager::SetCurrentSceneByName("Title");
 			callback();
 		});
-		Players().Clear();
-		Network().Objects().Clear();
-		Network().m_Connections.ClearConnections();
 	}
 
 	void GameManager::Update()
@@ -110,7 +112,7 @@ namespace DND
 
 	GameStateObjects GameManager::GetStateObjects()
 	{
-		return { &Network(), &Factory(), &GetTilemap(), &Players() };
+		return { &Animations(), &Prefabs(), &Network(), &Factory(), &MapManager(), &Players() };
 	}
 
 	GameState GameManager::GetGameState()
@@ -131,6 +133,11 @@ namespace DND
 		return m_Players;
 	}
 
+	AnimationList& GameManager::Animations()
+	{
+		return m_Animations;
+	}
+
 	PrefabList& GameManager::Prefabs()
 	{
 		return m_Prefabs;
@@ -141,9 +148,9 @@ namespace DND
 		return m_Factory;
 	}
 
-	Tilemap& GameManager::GetTilemap()
+	TilemapManager& GameManager::MapManager()
 	{
-		return m_Tilemap;
+		return m_TilemapManager;
 	}
 
 	NetworkManager& GameManager::Network()
@@ -166,14 +173,15 @@ namespace DND
 		Network().Server().AddPacketListener(PacketType::Hello, [this](ReceivedPacketEvent& e)
 		{
 			WelcomePacket packet;
-			packet.PlayerId = Players().GetNextPlayerId();
-			packet.NetworkId = Network().Objects().GetNextNetworkId();
-			packet.NextPlayerId = packet.NextPlayerId + 1;
-			packet.NextNetworkId = packet.NextNetworkId + 1;
+			packet.PlayerId = Players().PeekNextPlayerId();
+			packet.NetworkId = Network().Objects().PeekNextNetworkId();
+			packet.NextPlayerId = packet.PlayerId + 1;
+			packet.NextNetworkId = packet.NetworkId + 1;
 			
 			NetworkPlayerInfo me;
 			me.Character = Players().LocalPlayer().Character;
 			me.Character.CurrentTile = Players().LocalPlayerObject()->Components().GetComponent<TileTransform>().CurrentTile();
+			me.Character.Stats = Players().LocalPlayerObject()->Components().GetComponent<StatsComponent>().Stats();
 			me.PlayerId = Players().LocalPlayer().PlayerId;
 			me.Connection.Address = Network().Address();
 			packet.Players.push_back(me);
@@ -184,6 +192,7 @@ namespace DND
 				player.PlayerId = pair.second.Player.PlayerId;
 				player.Character = pair.second.Player.Character;
 				player.Character.CurrentTile = pair.second.PlayerObject->Components().GetComponent<TileTransform>().CurrentTile();
+				player.Character.Stats = pair.second.PlayerObject->Components().GetComponent<StatsComponent>().Stats();
 				player.Connection.Address = Network().Connections().GetAddressPair(pair.second.ConnectionId);
 				packet.Players.push_back(player);
 			}
@@ -202,9 +211,13 @@ namespace DND
 			player.PlayerId = packet.Player.PlayerId;
 			id_t connectionId = Network().Connections().GetConnectionId(packet.Player.Connection.Address);
 
+			Players().SetNextAvailablePlayerId(packet.Player.PlayerId + 1);
+			Network().Objects().SetNextAvailableNetworkId(packet.Player.Character.NetworkId + 1);
+
 			GameObject* object = Factory().Instantiate(Factory().GetPrefab(player.Character.PrefabId));
 			object->Components().AddComponent<NetworkController>();
 			object->Components().GetComponent<TileTransform>().SetCurrentTile(player.Character.CurrentTile, true);
+			object->Components().GetComponent<StatsComponent>().SetStats(player.Character.Stats);
 
 			Network().Objects().IdentifyObject(player.Character.NetworkId, object);
 			Players().AddPlayer(player.PlayerId, player, object, connectionId);
@@ -216,13 +229,16 @@ namespace DND
 		{
 			PlayerDisconnectPacket packet;
 			Deserialize(e.Packet, packet);
-			id_t connectionId = Players().GetPlayer(packet.PlayerId).ConnectionId;
-			Network().m_Connections.RemoveConnection(connectionId);
-			GameObject* playerObject = Players().GetPlayer(packet.PlayerId).PlayerObject;
-			id_t networkId = playerObject->Components().GetComponent<NetworkIdentity>().NetworkId;
-			Network().Objects().ReleaseObject(networkId);
-			Destroy(playerObject);
-			Players().RemovePlayer(packet.PlayerId);
+			if (Players().HasPlayer(packet.PlayerId))
+			{
+				id_t connectionId = Players().GetPlayer(packet.PlayerId).ConnectionId;
+				Network().m_Connections.RemoveConnection(connectionId);
+				GameObject* playerObject = Players().GetPlayer(packet.PlayerId).PlayerObject;
+				id_t networkId = playerObject->Components().GetComponent<NetworkIdentity>().NetworkId;
+				Network().Objects().ReleaseObject(networkId);
+				Destroy(playerObject);
+				Players().RemovePlayer(packet.PlayerId);
+			}
 			return true;
 		});
 
@@ -232,6 +248,24 @@ namespace DND
 			Deserialize(e.Packet, packet);
 			GameObject* object = Network().Objects().GetObjectByNetworkId(packet.NetworkId);
 			object->Components().GetComponent<NetworkController>().MoveToTile(packet.MoveToTile);
+			return true;
+		});
+
+		Network().Server().AddPacketListener(PacketType::CastSpell, [this](ReceivedPacketEvent& e)
+		{
+			CastSpellPacket packet;
+			Deserialize(e.Packet, packet);
+			GameObject* object = Network().Objects().GetObjectByNetworkId(packet.NetworkId);
+			object->Components().GetComponent<SpellCaster>().Cast(packet.SpellId, packet.SpellData, GetStateObjects());
+			return true;
+		});
+
+		Network().Server().AddPacketListener(PacketType::StatsUpdate, [this](ReceivedPacketEvent& e)
+		{
+			StatsUpdatePacket packet;
+			Deserialize(e.Packet, packet);
+			GameObject* object = Network().Objects().GetObjectByNetworkId(packet.NetworkId);
+			object->Components().GetComponent<StatsComponent>().SetStats(packet.NewStats);
 			return true;
 		});
 	}
