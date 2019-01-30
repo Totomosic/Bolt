@@ -46,4 +46,28 @@ namespace DND
 		Deserialize(stream, value.NewStats);
 	}
 
+	template<>
+	inline void Serialize(OutputMemoryStream& stream, const CreateNPCPacket& value)
+	{
+		Serialize(stream, value.OwnerNetworkId);
+		Serialize(stream, value.Character);
+	}
+	template<>
+	inline void Deserialize(InputMemoryStream& stream, CreateNPCPacket& value)
+	{
+		Deserialize(stream, value.OwnerNetworkId);
+		Deserialize(stream, value.Character);
+	}
+
+	template<>
+	inline void Serialize(OutputMemoryStream& stream, const DestroyNPCPacket& value)
+	{
+		Serialize(stream, value.NetworkId);
+	}
+	template<>
+	inline void Deserialize(InputMemoryStream& stream, DestroyNPCPacket& value)
+	{
+		Deserialize(stream, value.NetworkId);
+	}
+
 }

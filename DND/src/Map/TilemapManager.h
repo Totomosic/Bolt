@@ -35,14 +35,19 @@ namespace DND
 		id_t CurrentMapId() const;
 		const Tilemap& CurrentMap() const;
 		Tilemap& CurrentMap();
+		const Tilemap& GetMap(id_t mapId) const;
+		Tilemap& GetMap(id_t mapId);
 		int TileWidth() const;
 		int TileHeight() const;
+		bool IsLoaded(id_t mapId) const;
 
 		void SetCurrentMap(id_t mapId);
 		id_t AddMap(Tilemap tilemap);
 
 		void LoadTilemap(id_t mapId);
+		void LoadTilemapAsync(id_t mapId, std::function<void()> callback);
 		void UnloadTilemap(id_t mapId);
+		void UnloadAllTilemaps();
 		//void LoadTilemapAsync(id_t mapId, MapLoadedCallback callback = MapLoadedCallback());
 
 	};

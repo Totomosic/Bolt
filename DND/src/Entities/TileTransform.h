@@ -10,19 +10,20 @@ namespace DND
 	private:
 		Tile m_CurrentTile;
 		Vector3f m_PositionOffset;
-		TilemapManager* m_Tilemap;
+		id_t m_MapId;
 
 	public:
-		TileTransform(TilemapManager* tilemap, Tile currentTile = Tile(), Vector3f positionOffset = Vector3f());
+		TileTransform(id_t mapId, Tile currentTile = Tile(), Vector3f positionOffset = Vector3f());
 
 		const Tile& CurrentTile() const;
 		const Vector3f& PositionOffset() const;
-		TilemapManager& GetTilemap() const;
 		Vector3f PositionOfTile() const;
+		id_t CurrentMapId() const;
 
 		void Start() override;
 		void SetCurrentTile(Tile tile, bool updatePosition);
 		void SetPositionOffset(Vector3f positionOffset);
+		void SetCurrentMapId(id_t mapId);
 
 		std::unique_ptr<Component> Clone() const override;
 

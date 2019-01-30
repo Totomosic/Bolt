@@ -9,6 +9,22 @@
 namespace DND
 {
 
+	void TestGameObject(id_t networkId, const Vector3f& selectedTile, int damage, const GameStateObjects& state)
+	{
+		GameObject* object = GameManager::Get().Network().Objects().GetObjectByNetworkId(networkId);
+		Tile objectTile = object->Components().GetComponent<TileTransform>().CurrentTile();
+		if (objectTile.x >= selectedTile.x - 3 && objectTile.x <= selectedTile.x + 3 && objectTile.y >= selectedTile.y - 3 && objectTile.y <= selectedTile.y + 3)
+		{
+			CharacterStats newStats = object->Components().GetComponent<StatsComponent>().Stats();
+			newStats.CurrentHealth -= damage;
+			object->Components().GetComponent<StatsComponent>().SetStats(newStats);
+			StatsUpdatePacket packet;
+			packet.NetworkId = networkId;
+			packet.NewStats = newStats;
+			state.Network->SendPacketToAll(packet);
+		}
+	}
+
 	FireballInstance::FireballInstance(const Vector3f& start, const Vector3f& target, float speed, const DiceRollResult& damage) : SpellInstance(),
 		m_Start(start), m_Target(target), m_Speed(speed), m_Damage(damage)
 	{
@@ -44,18 +60,13 @@ namespace DND
 				explosion->Components().GetComponent<SpriteAnimator>().PlayAnimationUntilStopped(state.Animations->FireballExplosion, 1.0f);
 				explosion->Components().GetComponent<MeshRenderer>().Mesh.Materials[0].RenderOptions.DepthFunc = DepthFunction::Lequal;
 				Destroy(explosion, 1);
-				GameObject* player = state.Players->LocalPlayerObject();
-				Tile playerTile = player->Components().GetComponent<TileTransform>().CurrentTile();
 				Tile selectedTile = state.MapManager->CurrentMap().TileFromWorldPosition(target.x, target.y);
-				if (playerTile.x >= selectedTile.x - 3 && playerTile.x <= selectedTile.x + 3 && playerTile.y >= selectedTile.y - 3 && playerTile.y <= selectedTile.y + 3)
+				const NetworkObjects::ObjectInfo& playerInfo = GameManager::Get().Network().Objects().GetObjectInfoByNetworkId(GameManager::Get().Players().LocalPlayer().Player.NetworkId);
+				TestGameObject(GameManager::Get().Players().LocalPlayer().Player.NetworkId, selectedTile, damage, state);
+				for (int i = playerInfo.OwnedObjects.size() - 1; i >= 0; i--)
 				{
-					CharacterStats newStats = player->Components().GetComponent<StatsComponent>().Stats();
-					newStats.CurrentHealth -= damage;
-					player->Components().GetComponent<StatsComponent>().SetStats(newStats);
-					StatsUpdatePacket packet;
-					packet.NetworkId = player->Components().GetComponent<NetworkIdentity>().NetworkId;
-					packet.NewStats = newStats;
-					state.Network->SendPacketToAll(packet);
+					id_t networkId = playerInfo.OwnedObjects[i];
+					TestGameObject(networkId, selectedTile, damage, state);
 				}
 			}
 		});

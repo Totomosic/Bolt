@@ -1,11 +1,12 @@
 #include "bltpch.h"
 #include "TileTransform.h"
+#include "../GameManager.h"
 
 namespace DND
 {
 
-	TileTransform::TileTransform(TilemapManager* tilemap, Tile currentTile, Vector3f positionOffset) : Component(),
-		m_CurrentTile(currentTile), m_PositionOffset(positionOffset), m_Tilemap(tilemap)
+	TileTransform::TileTransform(id_t mapId, Tile currentTile, Vector3f positionOffset) : Component(),
+		m_CurrentTile(currentTile), m_PositionOffset(positionOffset), m_MapId(mapId)
 	{
 	
 	}
@@ -20,14 +21,14 @@ namespace DND
 		return m_PositionOffset;
 	}
 
-	TilemapManager& TileTransform::GetTilemap() const
-	{
-		return *m_Tilemap;
-	}
-
 	Vector3f TileTransform::PositionOfTile() const
 	{
-		return GetTilemap().CurrentMap().WorldPositionOfTile(CurrentTile().x, CurrentTile().y);
+		return GameManager::Get().MapManager().GetMap(m_MapId).WorldPositionOfTile(CurrentTile().x, CurrentTile().y);
+	}
+
+	id_t TileTransform::CurrentMapId() const
+	{
+		return m_MapId;
 	}
 
 	void TileTransform::Start()
@@ -49,9 +50,14 @@ namespace DND
 		m_PositionOffset = positionOffset;
 	}
 
+	void TileTransform::SetCurrentMapId(id_t mapId)
+	{
+		m_MapId = mapId;
+	}
+
 	std::unique_ptr<Component> TileTransform::Clone() const
 	{
-		return std::make_unique<TileTransform>(m_Tilemap, m_CurrentTile, m_PositionOffset);
+		return std::make_unique<TileTransform>(m_MapId, m_CurrentTile, m_PositionOffset);
 	}
 
 	void TileTransform::UpdatePosition() const

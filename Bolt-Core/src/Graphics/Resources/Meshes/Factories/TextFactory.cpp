@@ -1,5 +1,6 @@
 #include "Types.h"
-#include "TextFactory.h"
+
+#include "TextFactory.h"
 
 namespace Bolt
 {

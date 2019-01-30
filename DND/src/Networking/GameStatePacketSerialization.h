@@ -39,16 +39,20 @@ namespace DND
 	{
 		Serialize(stream, value.NetworkId);
 		Serialize(stream, value.PrefabId);
+		Serialize(stream, value.MapId);
 		Serialize(stream, value.CurrentTile);
 		Serialize(stream, value.Stats);
+		Serialize(stream, value.OwnedCharacters);
 	}
 	template<>
 	inline void Deserialize(InputMemoryStream& stream, CharacterInfo& value)
 	{
 		Deserialize(stream, value.NetworkId);
 		Deserialize(stream, value.PrefabId);
+		Deserialize(stream, value.MapId);
 		Deserialize(stream, value.CurrentTile);
 		Deserialize(stream, value.Stats);
+		Deserialize(stream, value.OwnedCharacters);
 	}
 
 	template<>
@@ -85,7 +89,6 @@ namespace DND
 		Serialize(stream, value.NextPlayerId);
 		Serialize(stream, value.NextNetworkId);
 		Serialize(stream, value.Players);
-		Serialize(stream, value.OtherCharacters);
 	}
 	template<>
 	inline void Deserialize(InputMemoryStream& stream, WelcomePacket& value)
@@ -95,7 +98,6 @@ namespace DND
 		Deserialize(stream, value.NextPlayerId);
 		Deserialize(stream, value.NextNetworkId);
 		Deserialize(stream, value.Players);
-		Deserialize(stream, value.OtherCharacters);
 	}
 
 	template<>

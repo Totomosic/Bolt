@@ -7,25 +7,24 @@ namespace DND
 	class PlayerManager
 	{
 	public:
-		struct PlayerInfo
+		struct PlayerCharacterInfo
 		{
 		public:
-			id_t PlayerId;
-			CharacterInfo Character;
+			id_t NetworkId;
+			GameObject* PlayerObject;
 		};
 
 		struct PlayerInstance
 		{
 		public:
-			PlayerInfo Player;
+			id_t PlayerId;
+			PlayerCharacterInfo Player;
 			id_t ConnectionId;
-			GameObject* PlayerObject;
 		};
 
 	private:
 		IdManager<id_t> m_PlayerIdManager;
-		PlayerInfo m_LocalPlayer;
-		GameObject* m_LocalPlayerObject;
+		PlayerInstance m_LocalPlayer;
 		std::unordered_map<id_t, PlayerInstance> m_OtherPlayers;
 
 	public:
@@ -35,14 +34,15 @@ namespace DND
 		id_t PeekNextPlayerId() const;
 		void SetNextAvailablePlayerId(id_t playerId);
 
-		bool HasPlayer(id_t playerId) const;
-		const PlayerInfo& LocalPlayer() const;
+		const PlayerInstance& LocalPlayer() const;
 		GameObject* LocalPlayerObject() const;
-		void SetLocalPlayer(PlayerInfo player, GameObject* object);
+		void SetLocalPlayer(id_t playerId, PlayerCharacterInfo character);
+
+		bool HasPlayer(id_t playerId) const;
 		const PlayerInstance& GetPlayer(id_t playerId) const;
 		const std::unordered_map<id_t, PlayerInstance>& OtherPlayers() const;
 
-		id_t AddPlayer(id_t playerId, const PlayerInfo& player, GameObject* object, id_t connectionId);
+		id_t AddPlayer(id_t playerId, const PlayerCharacterInfo& player, id_t connectionId);
 		void RemovePlayer(id_t playerId);
 		void Clear();
 

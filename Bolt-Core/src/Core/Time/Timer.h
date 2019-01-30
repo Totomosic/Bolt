@@ -16,7 +16,12 @@ namespace Bolt
 		bool m_IsRunning;
 
 	public:
-		Timer(double time, TimerFunc callback, bool start = true);
+		Timer(double time, Timer::TimerFunc callback, bool start = true);
+		Timer(const Timer& other) = delete;
+		Timer& operator=(const Timer& other) = delete;
+		Timer(Timer&& other) = default;
+		Timer& operator=(Timer&& other) = default;
+		~Timer() = default;
 
 		double TotalTime() const;
 		double& TotalTime();

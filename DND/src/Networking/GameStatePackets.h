@@ -40,8 +40,10 @@ namespace DND
 	public:
 		id_t NetworkId;
 		id_t PrefabId;
+		id_t MapId;
 		Tile CurrentTile;
 		CharacterStats Stats;
+		std::vector<CharacterInfo> OwnedCharacters;
 	};
 
 	struct NetworkPlayerInfo
@@ -69,7 +71,6 @@ namespace DND
 		id_t NextPlayerId;
 		id_t NextNetworkId;
 		std::vector<NetworkPlayerInfo> Players;
-		std::vector<CharacterInfo> OtherCharacters;
 	};
 
 	struct IntroductionPacket

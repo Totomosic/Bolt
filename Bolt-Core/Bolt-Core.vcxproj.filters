@@ -291,9 +291,6 @@
     <ClInclude Include="src\Core\Utils\Filesystem\File.h">
       <Filter>Core\Utils\Filesystem</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Utils\Filesystem\FileLoader.h">
-      <Filter>Core\Utils\Filesystem</Filter>
-    </ClInclude>
     <ClInclude Include="src\Core\Utils\Filesystem\Filepath.h">
       <Filter>Core\Utils\Filesystem</Filter>
     </ClInclude>
@@ -813,6 +810,7 @@
     <ClInclude Include="src\Logging.h" />
     <ClInclude Include="src\Types.h" />
     <ClInclude Include="src\Core\Time\TimerSet.h" />
+    <ClInclude Include="src\Graphics\Resources\Shaders\Components\__Components__.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\BoltTL\string.cpp">
@@ -867,9 +865,6 @@
       <Filter>Core\Utils\Filesystem</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\Utils\Filesystem\File.cpp">
-      <Filter>Core\Utils\Filesystem</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Core\Utils\Filesystem\FileLoader.cpp">
       <Filter>Core\Utils\Filesystem</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\Utils\Filesystem\Filepath.cpp">

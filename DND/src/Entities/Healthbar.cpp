@@ -35,6 +35,11 @@ namespace DND
 						GameManager::Get().Exit();
 					});
 				}
+				else if (e.Stats.CurrentHealth <= 0)
+				{
+					id_t networkId = gameObject()->Components().GetComponent<NetworkIdentity>().NetworkId;
+					GameManager::Get().Network().Objects().DestroyObject(networkId);
+				}
 			}
 			return false;
 		});

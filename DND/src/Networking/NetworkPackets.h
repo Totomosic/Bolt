@@ -52,6 +52,9 @@ namespace DND
 		CastSpell,
 		StatsUpdate,
 
+		CreateNPC,
+		DestroyNPC,
+
 		MAX_PACKET_TYPES
 	};
 

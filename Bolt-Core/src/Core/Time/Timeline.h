@@ -39,10 +39,10 @@ namespace Bolt
 		// Resets current and elapsed time, leaves time scale unchanged
 		void Reset();
 
-		Timer& AddTimer(double time, const Timer::TimerFunc& callback);
-		Timer& AddFunction(double time, const Timer::TimerFunc& callback);
-		Timer& AddTemporaryTimer(double time, int invokeCount, const Timer::TimerFunc& callback);
-		Timer& AddTemporaryTimerByTime(double time, double timeToDelete, const Timer::TimerFunc& callback);
+		Timer& AddTimer(double time, Timer::TimerFunc callback);
+		Timer& AddFunction(double time, Timer::TimerFunc callback);
+		Timer& AddTemporaryTimer(double time, int invokeCount, Timer::TimerFunc callback);
+		Timer& AddTemporaryTimerByTime(double time, double timeToDelete, Timer::TimerFunc callback);
 		void RemoveTimer(Timer* timer);
 
 		void Update(double elapsedRealSeconds);

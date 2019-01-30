@@ -180,6 +180,20 @@ namespace Bolt
 		}
 	}
 
+	SGQueryResult Scene::Query(const SGQuery& query) const
+	{
+		SGQueryResult result;
+		for (const Layer* layer : GetAllLayers())
+		{
+			std::vector<GameObject*> objects = query.Evaluate(layer->GameObjects(), &result.MostRelevant, &result.LeastRelevant);
+			for (GameObject* object : objects)
+			{
+				result.GameObjects.push_back(object);
+			}
+		}
+		return result;
+	}
+
 	void Scene::ClearCameras()
 	{
 		for (id_t i = 0; i < Scene::MAX_CAMERAS; i++)

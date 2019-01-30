@@ -58,6 +58,8 @@ namespace Bolt
 		void Update();
 		void UpdateTemporaryObjects();
 
+		SGQueryResult Query(const SGQuery& query) const;
+
 		friend class SceneManager;
 
 	private:

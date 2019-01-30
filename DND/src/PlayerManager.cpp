@@ -5,7 +5,7 @@ namespace DND
 {
 
 	PlayerManager::PlayerManager()
-		: m_PlayerIdManager(0, GameObject::InvalidID - 1), m_LocalPlayer(), m_LocalPlayerObject(nullptr), m_OtherPlayers()
+		: m_PlayerIdManager(0, GameObject::InvalidID - 1), m_LocalPlayer(), m_OtherPlayers()
 	{
 	
 	}
@@ -25,19 +25,25 @@ namespace DND
 		m_PlayerIdManager.SetNextAvailableId(playerId);
 	}
 
-	bool PlayerManager::HasPlayer(id_t playerId) const
-	{
-		return m_OtherPlayers.find(playerId) != m_OtherPlayers.end();
-	}
-
-	const PlayerManager::PlayerInfo& PlayerManager::LocalPlayer() const
+	const PlayerManager::PlayerInstance& PlayerManager::LocalPlayer() const
 	{
 		return m_LocalPlayer;
 	}
 
 	GameObject* PlayerManager::LocalPlayerObject() const
 	{
-		return m_LocalPlayerObject;
+		return m_LocalPlayer.Player.PlayerObject;
+	}
+
+	void PlayerManager::SetLocalPlayer(id_t playerId, PlayerManager::PlayerCharacterInfo character)
+	{
+		m_LocalPlayer = { playerId, character, (id_t)-1 };
+		BLT_CORE_INFO("PLAYER ID = {0} NETWORK ID = {1}", m_LocalPlayer.PlayerId, m_LocalPlayer.Player.NetworkId);
+	}
+
+	bool PlayerManager::HasPlayer(id_t playerId) const
+	{
+		return m_OtherPlayers.find(playerId) != m_OtherPlayers.end();
 	}
 
 	const PlayerManager::PlayerInstance& PlayerManager::GetPlayer(id_t playerId) const
@@ -45,21 +51,14 @@ namespace DND
 		return m_OtherPlayers.at(playerId);
 	}
 
-	void PlayerManager::SetLocalPlayer(PlayerInfo player, GameObject* object)
-	{
-		m_LocalPlayer = std::move(player);
-		BLT_CORE_INFO("PLAYER ID = {0} NETWORK ID = {1}", m_LocalPlayer.PlayerId, m_LocalPlayer.Character.NetworkId);
-		m_LocalPlayerObject = object;
-	}
-
 	const std::unordered_map<id_t, PlayerManager::PlayerInstance>& PlayerManager::OtherPlayers() const
 	{
 		return m_OtherPlayers;
 	}
 
-	id_t PlayerManager::AddPlayer(id_t playerId, const PlayerInfo& player, GameObject* object, id_t connectionId)
+	id_t PlayerManager::AddPlayer(id_t playerId, const PlayerManager::PlayerCharacterInfo& player, id_t connectionId)
 	{
-		m_OtherPlayers[playerId] = { player, connectionId, object };
+		m_OtherPlayers[playerId] = { playerId, player, connectionId };
 		return playerId;
 	}
 
@@ -73,7 +72,7 @@ namespace DND
 	{
 		m_OtherPlayers.clear();
 		m_PlayerIdManager.Reset();
-		m_LocalPlayerObject = nullptr;
+		m_LocalPlayer.Player.PlayerObject = nullptr;
 	}
 
 }
