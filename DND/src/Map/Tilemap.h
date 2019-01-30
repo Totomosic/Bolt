@@ -41,12 +41,15 @@ namespace DND
 		void Show();
 		void Hide();
 		void Load(const ObjectFactory& factory, const std::unordered_map<id_t, Image>& tiles);
+		void LoadAsync(const ObjectFactory& factory, const std::unordered_map<id_t, Image>& tiles, std::function<void()> callback);
 		void Unload();
 
 		friend class TilemapManager;
 
-	private:
 		Image CreateImage(const LayerInfo& layer, const std::unordered_map<id_t, Image>& tiles);
+		void CreateImagesAsync(const std::vector<LayerInfo>& layers, const std::unordered_map<id_t, Image>& tiles, std::function<void(std::vector<Image>*)> callback);
+
+	private:
 		void SetTileSize(const Vector2i& size);
 
 	};

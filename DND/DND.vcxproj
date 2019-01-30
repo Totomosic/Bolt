@@ -136,6 +136,7 @@
     <ClInclude Include="src\App.h" />
     <ClInclude Include="src\Camera\PlayerCamera.h" />
     <ClInclude Include="src\Entities\CharacterAnimator.h" />
+    <ClInclude Include="src\Entities\Characters\CharacterPrefabId.h" />
     <ClInclude Include="src\Entities\Characters\CharacterStats.h" />
     <ClInclude Include="src\Entities\Healthbar.h" />
     <ClInclude Include="src\Entities\NPCController.h" />
@@ -187,6 +188,7 @@
     <ClCompile Include="src\App.cpp" />
     <ClCompile Include="src\Camera\PlayerCamera.cpp" />
     <ClCompile Include="src\Entities\CharacterAnimator.cpp" />
+    <ClCompile Include="src\Entities\Characters\CharacterPrefabId.cpp" />
     <ClCompile Include="src\Entities\Characters\CharacterStats.cpp" />
     <ClCompile Include="src\Entities\Healthbar.cpp" />
     <ClCompile Include="src\Entities\NPCController.cpp" />

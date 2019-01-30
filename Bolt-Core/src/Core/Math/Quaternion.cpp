@@ -1,5 +1,6 @@
 #include "Types.h"
-#include "Quaternion.h"
+
+#include "Quaternion.h"
 
 namespace Bolt
 {
@@ -38,7 +39,9 @@ namespace Bolt
 	{
 		Quaternion q(*this);
 		if (q.w > 1.0f)
+		{
 			q = q.Normalize();
+		}
 
 		float w = 2.0f * (float)acos(q.w);
 		float den = (float)sqrt(1.0 - q.w * q.w);

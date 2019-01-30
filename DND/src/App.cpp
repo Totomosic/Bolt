@@ -104,6 +104,23 @@ namespace DND
 		{
 			BLT_INFO("NETWORK ID = {}", GameManager::Get().Network().Objects().PeekNextNetworkId());
 		}
+		if (Input::KeyPressed(Keycode::M))
+		{
+			GameManager::Get().SetCurrentMap(1);
+		}
+		if (Input::KeyPressed(Keycode::K))
+		{
+			CharacterInfo character;
+			character.CurrentTile = Tile(Random::NextInt(0, 20), Random::NextInt(0, 20));
+			character.PrefabId = GameManager::Get().Prefabs().Swordsman;
+			character.NetworkId = GameManager::Get().Network().Objects().GetNextNetworkId();
+			character.Stats = { 30, 30, 1, 1, 1 };
+			GameObject* object = GameManager::Get().CreateNetworkObject(character, GameManager::Get().Players().LocalPlayer().Player.NetworkId);
+			CreateNPCPacket packet;
+			packet.Character = character;
+			packet.OwnerNetworkId = GameManager::Get().Players().LocalPlayer().Player.NetworkId;
+			GameManager::Get().Network().SendPacketToAll(packet);
+		}
 	}
 
 	void DndClient::Render()

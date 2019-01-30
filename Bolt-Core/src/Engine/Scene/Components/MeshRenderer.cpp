@@ -33,8 +33,8 @@ namespace Bolt
 
 	Cuboid MeshRenderer::GetOverallMeshBounds() const
 	{
-		float MAX_VALUE = +1e100;
-		float MIN_VALUE = -1e100;
+		float MAX_VALUE = +1e20;
+		float MIN_VALUE = -1e20;
 		BLT_ASSERT(Mesh.Models.size() > 0, "No models in mesh");
 		Cuboid result;
 		result.Min = Vector3f(MAX_VALUE, MAX_VALUE, MAX_VALUE);

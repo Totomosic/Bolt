@@ -9,30 +9,33 @@ namespace DND
 
 	void CreateHostList(UIsurface& background, UIsurface& loadingSymbol, const std::vector<AddressPair>& hosts)
 	{
-		background.RemoveElement(&loadingSymbol);
-		float yOffset = 200;
-		for (const AddressPair& address : hosts)
+		if (SceneManager::CurrentScene().Id() == SceneManager::GetSceneByName("Server").Id())
 		{
-			UIsurface& button = background.Rectangle(300, 50, Color::White, Transform({ 0, yOffset, 0 }));
-			button.Text(address.PublicEndpoint.ToString(), Color::Black);
-			button.EventHandler().OnClicked.Subscribe([address](id_t listenerId, UIClickedEvent& e)
+			background.RemoveElement(&loadingSymbol);
+			float yOffset = 200;
+			for (const AddressPair& address : hosts)
 			{
-				GameManager::Get().Network().ConnectTo(address, 10000, [](id_t connectionId)
+				UIsurface& button = background.Rectangle(300, 50, Color::White, Transform({ 0, yOffset, 0 }));
+				button.Text(address.PublicEndpoint.ToString(), Color::Black);
+				button.EventHandler().OnClicked.Subscribe([address](id_t listenerId, UIClickedEvent& e)
 				{
-					if (connectionId != GameObject::InvalidID)
+					GameManager::Get().Network().ConnectTo(address, 10000, [](id_t connectionId)
 					{
-						PlayerCharacterInfo playerInfo;
-						playerInfo.PrefabId = GameManager::Get().Prefabs().BlueWizard;
-						GameManager::Get().Join(connectionId, playerInfo, CreateSceneFromWelcome);
-					}
-					else
-					{
-						BLT_CORE_ERROR("CONNECTION FAILED");
-					}
+						if (connectionId != GameObject::InvalidID)
+						{
+							PlayerCharacterInfo playerInfo;
+							playerInfo.PrefabId = GameManager::Get().Prefabs().BlueWizard;
+							GameManager::Get().Join(connectionId, playerInfo, CreateSceneFromWelcome);
+						}
+						else
+						{
+							BLT_CORE_ERROR("CONNECTION FAILED");
+						}
+					});
+					return true;
 				});
-				return true;
-			});
-			yOffset -= 55;
+				yOffset -= 55;
+			}
 		}
 	}
 

@@ -170,7 +170,6 @@
     <ClInclude Include="src\Core\Time\__Time__.h" />
     <ClInclude Include="src\Core\Utils\Filesystem\Directorypath.h" />
     <ClInclude Include="src\Core\Utils\Filesystem\File.h" />
-    <ClInclude Include="src\Core\Utils\Filesystem\FileLoader.h" />
     <ClInclude Include="src\Core\Utils\Filesystem\Filepath.h" />
     <ClInclude Include="src\Core\Utils\Filesystem\Filesystem.h" />
     <ClInclude Include="src\Core\Utils\Filesystem\XML\XMLNodePath.h" />
@@ -323,6 +322,7 @@
     <ClInclude Include="src\Graphics\Resources\Shaders\Compiler\ComShaderProgram.h" />
     <ClInclude Include="src\Graphics\Resources\Shaders\Compiler\ShaderCompiler.h" />
     <ClInclude Include="src\Graphics\Resources\Shaders\Compiler\__Compiler__.h" />
+    <ClInclude Include="src\Graphics\Resources\Shaders\Components\__Components__.h" />
     <ClInclude Include="src\Graphics\Resources\Shaders\Shader.h" />
     <ClInclude Include="src\Graphics\Resources\Shaders\Uniform.h" />
     <ClInclude Include="src\Graphics\Resources\Shaders\UniformManager.h" />
@@ -366,7 +366,6 @@
     <ClCompile Include="src\Core\Time\TimerSet.cpp" />
     <ClCompile Include="src\Core\Utils\Filesystem\Directorypath.cpp" />
     <ClCompile Include="src\Core\Utils\Filesystem\File.cpp" />
-    <ClCompile Include="src\Core\Utils\Filesystem\FileLoader.cpp" />
     <ClCompile Include="src\Core\Utils\Filesystem\Filepath.cpp" />
     <ClCompile Include="src\Core\Utils\Filesystem\Filesystem.cpp" />
     <ClCompile Include="src\Core\Utils\Filesystem\XML\XMLNodePath.cpp" />

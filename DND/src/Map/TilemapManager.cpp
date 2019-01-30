@@ -35,6 +35,16 @@ namespace DND
 		return m_Maps.at(m_CurrentMap).Map;
 	}
 
+	const Tilemap& TilemapManager::GetMap(id_t mapId) const
+	{
+		return m_Maps.at(mapId).Map;
+	}
+
+	Tilemap& TilemapManager::GetMap(id_t mapId)
+	{
+		return m_Maps.at(mapId).Map;
+	}
+
 	int TilemapManager::TileWidth() const
 	{
 		return m_TileWidth;
@@ -43,6 +53,11 @@ namespace DND
 	int TilemapManager::TileHeight() const
 	{
 		return m_TileHeight;
+	}
+
+	bool TilemapManager::IsLoaded(id_t mapId) const
+	{
+		return m_Maps.at(mapId).IsLoaded;
 	}
 
 	void TilemapManager::SetCurrentMap(id_t mapId)
@@ -75,11 +90,33 @@ namespace DND
 		map.IsLoaded = true;
 	}
 
+	void TilemapManager::LoadTilemapAsync(id_t mapId, std::function<void()> callback)
+	{
+		TilemapInfo& map = m_Maps.at(mapId);
+		map.Map.LoadAsync(m_Factory, TileImages().TileImages(), [&map, callback = std::move(callback)]()
+		{
+			map.IsLoaded = true;
+			callback();
+		});
+		
+	}
+
 	void TilemapManager::UnloadTilemap(id_t mapId)
 	{
 		TilemapInfo& map = m_Maps.at(mapId);
 		map.Map.Unload();
 		map.IsLoaded = false;
+	}
+
+	void TilemapManager::UnloadAllTilemaps()
+	{
+		for (auto& pair : m_Maps)
+		{
+			if (pair.second.IsLoaded)
+			{
+				pair.second.Map.Unload();
+			}
+		}
 	}
 
 }

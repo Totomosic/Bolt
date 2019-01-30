@@ -1,5 +1,6 @@
 #include "Types.h"
-#include "ScrollAnimator.h"
+
+#include "ScrollAnimator.h"
 
 namespace Bolt
 {

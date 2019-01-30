@@ -165,6 +165,7 @@
     <ClInclude Include="src\bltpch.h" />
     <ClInclude Include="src\Map\TilemapManager.h" />
     <ClInclude Include="src\Map\Tileset.h" />
+    <ClInclude Include="src\Entities\Characters\CharacterPrefabId.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\App.cpp" />
@@ -266,5 +267,6 @@
     <ClCompile Include="src\bltpch.cpp" />
     <ClCompile Include="src\Map\TilemapManager.cpp" />
     <ClCompile Include="src\Map\Tileset.cpp" />
+    <ClCompile Include="src\Entities\Characters\CharacterPrefabId.cpp" />
   </ItemGroup>
 </Project>

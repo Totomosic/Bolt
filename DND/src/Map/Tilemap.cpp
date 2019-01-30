@@ -117,6 +117,29 @@ namespace DND
 		}
 	}
 
+	void Tilemap::LoadAsync(const ObjectFactory& factory, const std::unordered_map<id_t, Image>& tiles, std::function<void()> callback)
+	{
+		CreateImagesAsync(m_Layers, tiles, [&factory, &layers = m_Layers, tilewidth = Width() * m_TileWidth, tileheight = Height() * m_TileHeight, callback = std::move(callback)](std::vector<Image>* images)
+		{
+			Time::RenderingTimeline().AddFunction(0.0, [&factory, &layers, images = images, tilewidth, tileheight, callback = std::move(callback)]()
+			{
+				for (int i = 0; i < layers.size(); i++)
+				{
+					LayerInfo& info = layers[i];
+					if (info.Object == nullptr)
+					{
+						const Image& image = (*images)[i];
+						TextureCreateOptions options;
+						Texture2D* texture = new Texture2D(image, options);
+						info.Object = factory.Image(tilewidth, tileheight, ResourcePtr<const Texture2D>((const Texture2D*)texture, true), Transform({ 0, 0, -25 }));
+					}
+				}
+				delete images;
+				callback();
+			});
+		});
+	}
+
 	void Tilemap::Unload()
 	{
 		for (LayerInfo& layer : m_Layers)
@@ -157,7 +180,33 @@ namespace DND
 				}
 			}
 		}
-		return image;
+		return std::move(image);
+	}
+
+	void Tilemap::CreateImagesAsync(const std::vector<Tilemap::LayerInfo>& layers, const std::unordered_map<id_t, Image>& tiles, std::function<void(std::vector<Image>*)> callback)
+	{
+		std::thread t([tilemap = this, &layers, &tiles, callback = std::move(callback)]()
+		{
+			std::mutex imagesMutex;
+			std::vector<Image>* images = new std::vector<Image>();
+			for (const LayerInfo& i : layers)
+			{
+				if (i.Object == nullptr)
+				{
+					std::thread imageThread([&images, &imagesMutex, &i, &tiles, tilemap = tilemap]()
+					{
+						Image image = tilemap->CreateImage(i, tiles);
+						{
+							std::scoped_lock<std::mutex> lock(imagesMutex);
+							images->push_back(std::move(image));
+						}
+					});
+					imageThread.join();
+				}
+			}
+			callback(images);
+		});
+		t.detach();
 	}
 
 	void Tilemap::SetTileSize(const Vector2i& size)

@@ -36,4 +36,23 @@ namespace DND
 		CharacterStats NewStats;
 	};
 
+	struct CreateNPCPacket
+	{
+	public:
+		constexpr static PacketType Type = PacketType::CreateNPC;
+
+	public:
+		id_t OwnerNetworkId;
+		CharacterInfo Character;
+	};
+
+	struct DestroyNPCPacket
+	{
+	public:
+		constexpr static PacketType Type = PacketType::DestroyNPC;
+
+	public:
+		id_t NetworkId;
+	};
+
 }

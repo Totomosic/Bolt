@@ -8,6 +8,7 @@
 #include "Networking/NetworkIdentity.h"
 #include "Spells/SpellList.h"
 #include "PlayerManager.h"
+#include "Entities/Characters/CharacterPrefabId.h"
 
 namespace DND
 {
@@ -90,6 +91,9 @@ namespace DND
 		TilemapManager& MapManager();
 		NetworkManager& Network();
 		SpellList& Spells();
+
+		GameObject* CreateNetworkObject(const CharacterInfo& character, id_t ownerNetworkId = GameObject::InvalidID);
+		void SetCurrentMap(id_t mapId);
 
 		void AddActiveTimer(Timer* timer);
 
