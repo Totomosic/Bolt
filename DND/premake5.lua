@@ -3,8 +3,8 @@ project "DND"
     kind "ConsoleApp"
     language "C++"
     
-    targetdir ("../bin/" .. outputdir .. "/DND")
-    objdir ("../bin-int/" .. outputdir .. "/DND")
+    targetdir (SolutionDir .. "bin/" .. outputdir .. "/DND")
+    objdir (SolutionDir .. "bin-int/" .. outputdir .. "/DND")
 
     pchheader "bltpch.h"
     pchsource "src/bltpch.cpp"
@@ -12,7 +12,9 @@ project "DND"
     files
     {
         "src/**.h",
-        "src/**.cpp"
+        "src/**.cpp",
+        "src/**.hpp",
+        "src/**.c"
     }
     
     includedirs
@@ -20,16 +22,14 @@ project "DND"
         "../Bolt-Core/external/",
         "../Bolt-Core/src/",
         "../Bolt-Core/external/spdlog/include/",
-        "C:/Users/Jordan Morrison/AppData/Local/Programs/Python/Python37-32/include/",
-        "src",
         "../%{IncludeDirs.GLFW}",
-        "../%{IncludeDirs.Glad}"
+        "../%{IncludeDirs.Glad}",
+        "src"
     }
 
     libdirs
     {
-        "../Bolt-Core/external/**",
-        "C:/Users/Jordan Morrison/AppData/Local/Programs/Python/Python37-32/libs/"
+        "../Bolt-Core/external/**"
     }
 
     links
@@ -39,13 +39,12 @@ project "DND"
         "FreeImage.lib",
         "freetype26d.lib",
         "freetype-gl.lib",
-        "python37.lib",
         "ws2_32.lib"
     }
 
     filter { "system:windows", "configurations:debug" }
         cppdialect "C++17"
-        systemversion "10.0.16299.0"
+        systemversion "latest"
         optimize "Off"
 
         defines
@@ -57,7 +56,7 @@ project "DND"
     
     filter { "system:windows", "configurations:release" }
         cppdialect "C++17"
-        systemversion "10.0.16299.0"
+        systemversion "latest"
         optimize "On"
 
         defines

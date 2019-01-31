@@ -5,8 +5,8 @@
 namespace DND
 {
 
-	TileTransform::TileTransform(id_t mapId, Tile currentTile, Vector3f positionOffset) : Component(),
-		m_CurrentTile(currentTile), m_PositionOffset(positionOffset), m_MapId(mapId)
+	TileTransform::TileTransform(Tile currentTile, Vector3f positionOffset) : Component(),
+		m_CurrentTile(currentTile), m_PositionOffset(positionOffset)
 	{
 	
 	}
@@ -23,12 +23,7 @@ namespace DND
 
 	Vector3f TileTransform::PositionOfTile() const
 	{
-		return GameManager::Get().MapManager().GetMap(m_MapId).WorldPositionOfTile(CurrentTile().x, CurrentTile().y);
-	}
-
-	id_t TileTransform::CurrentMapId() const
-	{
-		return m_MapId;
+		return GameManager::Get().MapManager().GetMap(gameObject()->Components().GetComponent<TileMapTracker>().MapId()).WorldPositionOfTile(CurrentTile().x, CurrentTile().y);
 	}
 
 	void TileTransform::Start()
@@ -50,14 +45,9 @@ namespace DND
 		m_PositionOffset = positionOffset;
 	}
 
-	void TileTransform::SetCurrentMapId(id_t mapId)
-	{
-		m_MapId = mapId;
-	}
-
 	std::unique_ptr<Component> TileTransform::Clone() const
 	{
-		return std::make_unique<TileTransform>(m_MapId, m_CurrentTile, m_PositionOffset);
+		return std::make_unique<TileTransform>(m_CurrentTile, m_PositionOffset);
 	}
 
 	void TileTransform::UpdatePosition() const

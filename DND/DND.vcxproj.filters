@@ -41,19 +41,22 @@
     <ClInclude Include="src\Entities\CharacterAnimator.h">
       <Filter>Entities</Filter>
     </ClInclude>
+    <ClInclude Include="src\Entities\Characters\CharacterPrefabId.h">
+      <Filter>Entities\Characters</Filter>
+    </ClInclude>
     <ClInclude Include="src\Entities\Characters\CharacterStats.h">
       <Filter>Entities\Characters</Filter>
     </ClInclude>
     <ClInclude Include="src\Entities\Healthbar.h">
       <Filter>Entities</Filter>
     </ClInclude>
-    <ClInclude Include="src\Entities\NPCController.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
     <ClInclude Include="src\Entities\PlayerController.h">
       <Filter>Entities</Filter>
     </ClInclude>
     <ClInclude Include="src\Entities\SpriteAnimator.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Entities\TileMapTracker.h">
       <Filter>Entities</Filter>
     </ClInclude>
     <ClInclude Include="src\Entities\TileMotion.h">
@@ -64,10 +67,19 @@
     </ClInclude>
     <ClInclude Include="src\Events.h" />
     <ClInclude Include="src\GameManager.h" />
+    <ClInclude Include="src\Map\MapLinkManager.h">
+      <Filter>Map</Filter>
+    </ClInclude>
     <ClInclude Include="src\Map\Tilemap.h">
       <Filter>Map</Filter>
     </ClInclude>
     <ClInclude Include="src\Map\TilemapLayer.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Map\TilemapManager.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Map\Tileset.h">
       <Filter>Map</Filter>
     </ClInclude>
     <ClInclude Include="src\Networking\ConnectionManager.h">
@@ -163,9 +175,6 @@
       <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="src\bltpch.h" />
-    <ClInclude Include="src\Map\TilemapManager.h" />
-    <ClInclude Include="src\Map\Tileset.h" />
-    <ClInclude Include="src\Entities\Characters\CharacterPrefabId.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\App.cpp" />
@@ -175,19 +184,22 @@
     <ClCompile Include="src\Entities\CharacterAnimator.cpp">
       <Filter>Entities</Filter>
     </ClCompile>
+    <ClCompile Include="src\Entities\Characters\CharacterPrefabId.cpp">
+      <Filter>Entities\Characters</Filter>
+    </ClCompile>
     <ClCompile Include="src\Entities\Characters\CharacterStats.cpp">
       <Filter>Entities\Characters</Filter>
     </ClCompile>
     <ClCompile Include="src\Entities\Healthbar.cpp">
       <Filter>Entities</Filter>
     </ClCompile>
-    <ClCompile Include="src\Entities\NPCController.cpp">
-      <Filter>Entities</Filter>
-    </ClCompile>
     <ClCompile Include="src\Entities\PlayerController.cpp">
       <Filter>Entities</Filter>
     </ClCompile>
     <ClCompile Include="src\Entities\SpriteAnimator.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Entities\TileMapTracker.cpp">
       <Filter>Entities</Filter>
     </ClCompile>
     <ClCompile Include="src\Entities\TileMotion.cpp">
@@ -197,10 +209,19 @@
       <Filter>Entities</Filter>
     </ClCompile>
     <ClCompile Include="src\GameManager.cpp" />
+    <ClCompile Include="src\Map\MapLinkManager.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
     <ClCompile Include="src\Map\Tilemap.cpp">
       <Filter>Map</Filter>
     </ClCompile>
     <ClCompile Include="src\Map\TilemapLayer.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Map\TilemapManager.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Map\Tileset.cpp">
       <Filter>Map</Filter>
     </ClCompile>
     <ClCompile Include="src\Networking\ConnectionManager.cpp">
@@ -265,8 +286,5 @@
       <Filter>Spells</Filter>
     </ClCompile>
     <ClCompile Include="src\bltpch.cpp" />
-    <ClCompile Include="src\Map\TilemapManager.cpp" />
-    <ClCompile Include="src\Map\Tileset.cpp" />
-    <ClCompile Include="src\Entities\Characters\CharacterPrefabId.cpp" />
   </ItemGroup>
 </Project>

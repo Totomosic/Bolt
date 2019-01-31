@@ -81,40 +81,58 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>Types.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>NOMINMAX;BLT_PLATFORM_WINDOWS;BLT_BUILD_STATIC;BLT_DEBUG;GAMEOBJECTS_PER_LAYER=1000;LAYERS_PER_SCENE=6;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>external;src;external\spdlog\include;..\..\..\..\..\AppData\Local\Programs\Python\Python37-32\include;vendor\Glad\include;vendor\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NOMINMAX;GLEW_STATIC;BLT_BUILD_STATIC;BLT_PLATFORM_WINDOWS;BLT_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>external;src;external\spdlog\include;vendor\GLFW\include;vendor\Glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
     </Link>
+    <Lib>
+      <AdditionalDependencies>opengl32.lib;FreeImage.lib;freetype26d.lib;freetype-gl.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>external\FreeImage;external\FreeType;external\FreeType-GL;external\spdlog;external\FreeImage\bin;external\FreeImage\include;external\FreeImage\lib;external\FreeImage\include\FreeImage;external\FreeType\include;external\FreeType\lib;external\FreeType\include\config;external\FreeType\include\internal;external\FreeType\include\internal\services;external\FreeType-GL\include;external\FreeType-GL\lib;external\spdlog\bench;external\spdlog\cmake;external\spdlog\example;external\spdlog\include;external\spdlog\tests;external\spdlog\bench\logs;external\spdlog\example\jni;external\spdlog\example\logs;external\spdlog\include\spdlog;external\spdlog\include\spdlog\details;external\spdlog\include\spdlog\fmt;external\spdlog\include\spdlog\sinks;external\spdlog\include\spdlog\fmt\bundled;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>Types.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>NOMINMAX;BLT_PLATFORM_WINDOWS;BLT_BUILD_STATIC;GAMEOBJECTS_PER_LAYER=1000;LAYERS_PER_SCENE=6;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>external;src;external\spdlog\include;..\..\..\..\..\AppData\Local\Programs\Python\Python37-32\include;vendor\Glad\include;vendor\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>NOMINMAX;GLEW_STATIC;BLT_BUILD_STATIC;BLT_PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>external;src;external\spdlog\include;vendor\GLFW\include;vendor\Glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <StringPooling>true</StringPooling>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <Lib>
+      <AdditionalDependencies>opengl32.lib;FreeImage.lib;freetype26d.lib;freetype-gl.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>external\FreeImage;external\FreeType;external\FreeType-GL;external\spdlog;external\FreeImage\bin;external\FreeImage\include;external\FreeImage\lib;external\FreeImage\include\FreeImage;external\FreeType\include;external\FreeType\lib;external\FreeType\include\config;external\FreeType\include\internal;external\FreeType\include\internal\services;external\FreeType-GL\include;external\FreeType-GL\lib;external\spdlog\bench;external\spdlog\cmake;external\spdlog\example;external\spdlog\include;external\spdlog\tests;external\spdlog\bench\logs;external\spdlog\example\jni;external\spdlog\example\logs;external\spdlog\include\spdlog;external\spdlog\include\spdlog\details;external\spdlog\include\spdlog\fmt;external\spdlog\include\spdlog\sinks;external\spdlog\include\spdlog\fmt\bundled;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|Win32'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>Types.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>external;src;external\spdlog\include;..\..\..\..\..\AppData\Local\Programs\Python\Python37-32\include;vendor\Glad\include;vendor\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>external;src;external\spdlog\include;vendor\GLFW\include;vendor\Glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
     </Link>
+    <Lib>
+      <AdditionalDependencies>opengl32.lib;FreeImage.lib;freetype26d.lib;freetype-gl.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>external\FreeImage;external\FreeType;external\FreeType-GL;external\spdlog;external\FreeImage\bin;external\FreeImage\include;external\FreeImage\lib;external\FreeImage\include\FreeImage;external\FreeType\include;external\FreeType\lib;external\FreeType\include\config;external\FreeType\include\internal;external\FreeType\include\internal\services;external\FreeType-GL\include;external\FreeType-GL\lib;external\spdlog\bench;external\spdlog\cmake;external\spdlog\example;external\spdlog\include;external\spdlog\tests;external\spdlog\bench\logs;external\spdlog\example\jni;external\spdlog\example\logs;external\spdlog\include\spdlog;external\spdlog\include\spdlog\details;external\spdlog\include\spdlog\fmt;external\spdlog\include\spdlog\sinks;external\spdlog\include\spdlog\fmt\bundled;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Bolt-Core.h" />
@@ -257,14 +275,6 @@
     <ClInclude Include="src\Engine\Scene\UI\UIsurface.h" />
     <ClInclude Include="src\Engine\Scene\UI\__UI__.h" />
     <ClInclude Include="src\Engine\Scene\__Scene__.h" />
-    <ClInclude Include="src\Engine\Scripting\JavaScript\JSscript.h" />
-    <ClInclude Include="src\Engine\Scripting\JavaScript\__JavaScript__.h" />
-    <ClInclude Include="src\Engine\Scripting\Python\PyInterpreter.h" />
-    <ClInclude Include="src\Engine\Scripting\Python\PyMethods.h" />
-    <ClInclude Include="src\Engine\Scripting\Python\PyModule.h" />
-    <ClInclude Include="src\Engine\Scripting\Python\PyScript.h" />
-    <ClInclude Include="src\Engine\Scripting\Python\__Python__.h" />
-    <ClInclude Include="src\Engine\Scripting\__Scripting__.h" />
     <ClInclude Include="src\Engine\Serialization\XMLReadTraits.h" />
     <ClInclude Include="src\Engine\Serialization\XMLWriteTraits.h" />
     <ClInclude Include="src\Engine\Serialization\XMLserializer.h" />
@@ -420,10 +430,6 @@
     <ClCompile Include="src\Engine\Scene\UI\UIelement.cpp" />
     <ClCompile Include="src\Engine\Scene\UI\UIroot.cpp" />
     <ClCompile Include="src\Engine\Scene\UI\UIsurface.cpp" />
-    <ClCompile Include="src\Engine\Scripting\Python\PyInterpreter.cpp" />
-    <ClCompile Include="src\Engine\Scripting\Python\PyMethods.cpp" />
-    <ClCompile Include="src\Engine\Scripting\Python\PyModule.cpp" />
-    <ClCompile Include="src\Engine\Scripting\Python\PyScript.cpp" />
     <ClCompile Include="src\Engine\Serialization\XMLserializer.cpp" />
     <ClCompile Include="src\Engine\User\Input.cpp" />
     <ClCompile Include="src\Graphics\Buffers\ArrayDescriptor.cpp" />
@@ -471,29 +477,11 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\Graphics\Resources\Shaders\Source\DefaultColor_f.glsl" />
-    <None Include="src\Graphics\Resources\Shaders\Source\DefaultColor_v.glsl" />
-    <None Include="src\Graphics\Resources\Shaders\Source\DefaultFont_f.glsl" />
-    <None Include="src\Graphics\Resources\Shaders\Source\DefaultFont_v.glsl" />
-    <None Include="src\Graphics\Resources\Shaders\Source\DefaultSkybox_f.glsl" />
-    <None Include="src\Graphics\Resources\Shaders\Source\DefaultSkybox_v.glsl" />
-    <None Include="src\Graphics\Resources\Shaders\Source\DefaultTexture_f.glsl" />
-    <None Include="src\Graphics\Resources\Shaders\Source\DefaultTexture_v.glsl" />
-    <None Include="src\Graphics\Resources\Shaders\Source\Headers\BoltLighting.glh" />
-    <None Include="src\Graphics\Resources\Shaders\Source\Headers\BoltMaterials.glh" />
-    <None Include="src\Graphics\Resources\Shaders\Source\LightingColor_f.glsl" />
-    <None Include="src\Graphics\Resources\Shaders\Source\LightingColor_v.glsl" />
-    <None Include="src\Graphics\Resources\Shaders\Source\LightingTexture_f.glsl" />
-    <None Include="src\Graphics\Resources\Shaders\Source\LightingTexture_v.glsl" />
-    <None Include="src\Graphics\Resources\Shaders\Source\SpriteTexture_f.glsl" />
-    <None Include="src\Graphics\Resources\Shaders\Source\SpriteTexture_v.glsl" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="vendor\Glad\Glad.vcxproj">
-      <Project>{BDD6857C-A90D-870D-52FA-6C103E10030F}</Project>
-    </ProjectReference>
     <ProjectReference Include="vendor\GLFW\GLFW.vcxproj">
       <Project>{154B857C-0182-860D-AA6E-6C109684020F}</Project>
+    </ProjectReference>
+    <ProjectReference Include="vendor\Glad\Glad.vcxproj">
+      <Project>{BDD6857C-A90D-870D-52FA-6C103E10030F}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

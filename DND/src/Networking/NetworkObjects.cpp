@@ -50,13 +50,13 @@ namespace DND
 		IdentifyObject(GetNextNetworkId(), object);
 	}
 
-	void NetworkObjects::IdentifyObject(id_t networkId, GameObject* object, id_t owner)
+	void NetworkObjects::IdentifyObject(id_t networkId, GameObject* object, id_t ownerNetworkId)
 	{
 		m_NetworkObjects[networkId] = { GameObject::InvalidID, object, {} };
 		object->Components().AddComponent<NetworkIdentity>(networkId);
-		if (owner != GameObject::InvalidID)
+		if (ownerNetworkId != GameObject::InvalidID)
 		{
-			SetOwner(networkId, owner);
+			SetOwner(networkId, ownerNetworkId);
 		}
 	}
 
@@ -110,7 +110,7 @@ namespace DND
 		CharacterInfo character;
 		character.NetworkId = networkId;
 		character.PrefabId = objInfo.Object->Components().GetComponent<CharacterPrefabId>().PrefabId;
-		character.MapId = objInfo.Object->Components().GetComponent<TileTransform>().CurrentMapId();
+		character.MapId = objInfo.Object->Components().GetComponent<TileMapTracker>().MapId();
 		character.CurrentTile = objInfo.Object->Components().GetComponent<TileTransform>().CurrentTile();
 		character.Stats = objInfo.Object->Components().GetComponent<StatsComponent>().Stats();
 		for (id_t ownedObject : objInfo.OwnedObjects)

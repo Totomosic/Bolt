@@ -161,36 +161,51 @@ namespace DND
 		return m_Spells;
 	}
 
-	GameObject* GameManager::CreateNetworkObject(const CharacterInfo& character, id_t ownerNetworkId)
+	GameObject* GameManager::CreateObject(id_t mapId)
+	{
+		GameObject* object = m_Factory.Instantiate();
+		object->Components().AddComponent<TileMapTracker>(mapId);
+		return object;
+	}
+
+	GameObject* GameManager::CreateCharacter(const CharacterInfo& character, id_t ownerNetworkId)
 	{
 		GameObject* object = m_Factory.Instantiate(m_Factory.GetPrefab(character.PrefabId));
 		Network().Objects().IdentifyObject(character.NetworkId, object, ownerNetworkId);
 		object->Components().AddComponent<CharacterPrefabId>(character.PrefabId);
-		object->Components().GetComponent<TileTransform>().SetCurrentMapId(character.MapId);
-		object->Components().GetComponent<TileTransform>().SetCurrentTile(character.CurrentTile, true);		
+		object->Components().GetComponent<TileMapTracker>().SetMapId(character.MapId);
+		object->Components().GetComponent<TileTransform>().SetCurrentTile(character.CurrentTile, true);
 		if (object->Components().HasComponent<TileMotion>())
 		{
 			object->Components().GetComponent<TileMotion>().SetTargetTile(character.CurrentTile);
 		}
 		object->Components().GetComponent<StatsComponent>().SetStats(character.Stats);
-		object->Components().AddComponent<NetworkController>();
 		for (const CharacterInfo& ownedCharacters : character.OwnedCharacters)
 		{
-			CreateNetworkObject(ownedCharacters, character.NetworkId);
+			CreateCharacter(ownedCharacters, character.NetworkId);
 		}
+		return object;
+	}
 
-		object->Components().GetComponent<MeshRenderer>().SetEnabled(character.MapId == MapManager().CurrentMapId());
-
+	GameObject* GameManager::CreateNetworkCharacter(const CharacterInfo& character, id_t ownerNetworkId)
+	{
+		GameObject* object = CreateCharacter(character, ownerNetworkId);
+		object->Components().AddComponent<NetworkController>();
+		for (const CharacterInfo& chr : character.OwnedCharacters)
+		{
+			GameObject* obj = Network().Objects().GetObjectByNetworkId(chr.NetworkId);
+			obj->Components().AddComponent<NetworkController>();
+		}
 		return object;
 	}
 
 	void GameManager::SetCurrentMap(id_t mapId)
 	{
 		MapManager().SetCurrentMap(mapId);
-		SGQueryResult result = SceneManager::CurrentScene().Query(SGQComponents({ typeid(TileTransform), typeid(MeshRenderer) }));
+		SGQueryResult result = SceneManager::CurrentScene().Query(SGQComponents({ typeid(TileMapTracker) }));
 		for (GameObject* object : result.GameObjects)
 		{
-			object->Components().GetComponent<MeshRenderer>().SetEnabled(object->Components().GetComponent<TileTransform>().CurrentMapId() == mapId);
+			object->Components().GetComponent<TileMapTracker>().CurrentMapChanged(mapId);
 		}
 	}
 
@@ -235,13 +250,8 @@ namespace DND
 			
 			PlayerManager::PlayerCharacterInfo player;
 			player.NetworkId = packet.Player.Character.NetworkId;
-			player.PlayerObject = CreateNetworkObject(packet.Player.Character);
+			player.PlayerObject = CreateNetworkCharacter(packet.Player.Character);
 			id_t connectionId = Network().Connections().GetConnectionId(packet.Player.Connection.Address);
-
-			for (CharacterInfo& ownedCharacter : packet.Player.Character.OwnedCharacters)
-			{
-				CreateNetworkObject(ownedCharacter, packet.Player.Character.NetworkId);
-			}
 
 			Players().SetNextAvailablePlayerId(packet.Player.PlayerId + 1);
 			Network().Objects().SetNextAvailableNetworkId(packet.Player.Character.NetworkId + 1);
@@ -301,7 +311,7 @@ namespace DND
 		{
 			CreateNPCPacket packet;
 			Deserialize(e.Packet, packet);
-			GameObject* object = CreateNetworkObject(packet.Character, packet.OwnerNetworkId);
+			GameObject* object = CreateNetworkCharacter(packet.Character, packet.OwnerNetworkId);
 			id_t netId = Network().Objects().GetNextNetworkId();
 			BLT_ASSERT(netId == packet.Character.NetworkId, "NETWORK ID MISMATCH");
 			return true;

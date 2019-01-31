@@ -30,8 +30,8 @@ namespace DND
 		bool HasObject(id_t networkId) const;
 		const ObjectInfo& GetObjectInfoByNetworkId(id_t networkId) const;
 		GameObject* GetObjectByNetworkId(id_t networkId) const;
-		void IdentifyObject(GameObject* object, id_t owner = GameObject::InvalidID);
-		void IdentifyObject(id_t networkId, GameObject* object, id_t owner = GameObject::InvalidID);
+		void IdentifyObject(GameObject* object, id_t ownerNetworkId = GameObject::InvalidID);
+		void IdentifyObject(id_t networkId, GameObject* object, id_t ownerNetworkId = GameObject::InvalidID);
 		void SetOwner(id_t object, id_t owner);
 		void DestroyObject(id_t networkId);
 		void ReleaseObject(id_t networkId);

@@ -10,7 +10,6 @@
 #include "GameManager.h"
 #include "Entities/TileMotion.h"
 #include "Entities/PlayerController.h"
-#include "Entities/NPCController.h"
 #include "Camera/PlayerCamera.h"
 
 #include "Networking/NetworkPackets.h"
@@ -104,10 +103,6 @@ namespace DND
 		{
 			BLT_INFO("NETWORK ID = {}", GameManager::Get().Network().Objects().PeekNextNetworkId());
 		}
-		if (Input::KeyPressed(Keycode::M))
-		{
-			GameManager::Get().SetCurrentMap(1);
-		}
 		if (Input::KeyPressed(Keycode::K))
 		{
 			CharacterInfo character;
@@ -115,7 +110,7 @@ namespace DND
 			character.PrefabId = GameManager::Get().Prefabs().Swordsman;
 			character.NetworkId = GameManager::Get().Network().Objects().GetNextNetworkId();
 			character.Stats = { 30, 30, 1, 1, 1 };
-			GameObject* object = GameManager::Get().CreateNetworkObject(character, GameManager::Get().Players().LocalPlayer().Player.NetworkId);
+			GameObject* object = GameManager::Get().CreateNetworkCharacter(character, GameManager::Get().Players().LocalPlayer().Player.NetworkId);
 			CreateNPCPacket packet;
 			packet.Character = character;
 			packet.OwnerNetworkId = GameManager::Get().Players().LocalPlayer().Player.NetworkId;

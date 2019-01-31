@@ -5,13 +5,15 @@ PREMAKE_FORMAT_STRING_TEMPLATE = """project "{0}"
     kind "ConsoleApp"
     language "C++"
     
-    targetdir ("../bin/" .. outputdir .. "/{0}")
-    objdir ("../bin-int/" .. outputdir .. "/{0}")
+    targetdir (SolutionDir .. "bin/" .. outputdir .. "/{0}")
+    objdir (SolutionDir .. "bin-int/" .. outputdir .. "/{0}")
     
     files
     {{
         "src/**.h",
-        "src/**.cpp"
+        "src/**.cpp",
+        "src/**.hpp",
+        "src/**.c"
     }}
     
     includedirs
@@ -19,15 +21,14 @@ PREMAKE_FORMAT_STRING_TEMPLATE = """project "{0}"
         "../Bolt-Core/external/",
         "../Bolt-Core/src/",
         "../Bolt-Core/external/spdlog/include/",
-        "C:/Users/Jordan Morrison/AppData/Local/Programs/Python/Python37-32/include/",
         "../%{{IncludeDirs.GLFW}}",
-        "../%{{IncludeDirs.Glad}}"
+        "../%{{IncludeDirs.Glad}}",
+        "src"
     }}
 
     libdirs
     {{
-        "../Bolt-Core/external/**",
-        "C:/Users/Jordan Morrison/AppData/Local/Programs/Python/Python37-32/libs/"
+        "../Bolt-Core/external/**"
     }}
 
     links
@@ -37,13 +38,12 @@ PREMAKE_FORMAT_STRING_TEMPLATE = """project "{0}"
         "FreeImage.lib",
         "freetype26d.lib",
         "freetype-gl.lib",
-        "python37.lib",
         "ws2_32.lib"
     }}
 
     filter {{ "system:windows", "configurations:debug" }}
         cppdialect "C++17"
-        systemversion "10.0.16299.0"
+        systemversion "latest"
         optimize "Off"
 
         defines
@@ -55,7 +55,7 @@ PREMAKE_FORMAT_STRING_TEMPLATE = """project "{0}"
     
     filter {{ "system:windows", "configurations:release" }}
         cppdialect "C++17"
-        systemversion "10.0.16299.0"
+        systemversion "latest"
         optimize "On"
 
         defines
@@ -64,7 +64,8 @@ PREMAKE_FORMAT_STRING_TEMPLATE = """project "{0}"
             "BLT_PLATFORM_WINDOWS"
         }}"""
 
-SOLUTION_PREMAKE_FILE = "../premake5.lua"
+SOLUTION_PREMAKE_FILE = "C:\\Users\\Jordan Morrison\\Desktop\\C++\\OpenGL\\Bolt\\premake5.lua"
+PROJECTS_DIR = "C:\\Users\\Jordan Morrison\\Desktop\\C++\\OpenGL\\Bolt-Projects\\"
 
 def create_dir(name):
     if not os.path.exists(name):
@@ -73,17 +74,17 @@ def create_dir(name):
 def main():
     prj_name = input("Project Name: ")
 
-    create_dir("../{}".format(prj_name))
-    create_dir("../{}/src".format(prj_name))
-    create_dir("../{}/res".format(prj_name))
+    create_dir("{}{}".format(PROJECTS_DIR, prj_name))
+    create_dir("{}{}\\src".format(PROJECTS_DIR, prj_name))
+    create_dir("{}{}\\res".format(PROJECTS_DIR, prj_name))
 
-    f = open("../{}/premake5.lua".format(prj_name), "w")
+    f = open("{}{}/premake5.lua".format(PROJECTS_DIR, prj_name), "w")
     src = PREMAKE_FORMAT_STRING_TEMPLATE.format(prj_name)
     f.write(src)
     f.close()
 
     f = open(SOLUTION_PREMAKE_FILE, "a")
-    f.write("\ninclude \"{}\"".format(prj_name))
+    f.write("\ninclude (ProjectsDir .. \"{}\")".format(prj_name))
     f.close()
 
 if __name__ == "__main__":

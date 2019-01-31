@@ -115,7 +115,7 @@ namespace DND
 
 				PlayerManager::PlayerCharacterInfo pInfo;
 				pInfo.NetworkId = p.Character.NetworkId;
-				pInfo.PlayerObject = GameManager::Get().CreateNetworkObject(p.Character);
+				pInfo.PlayerObject = GameManager::Get().CreateNetworkCharacter(p.Character);
 				GameManager::Get().Players().AddPlayer(p.PlayerId, pInfo, connectionId);
 			};
 			if (connectionId == GameObject::InvalidID)

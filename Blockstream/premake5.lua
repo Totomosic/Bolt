@@ -3,13 +3,15 @@ project "Blockstream"
     kind "ConsoleApp"
     language "C++"
     
-    targetdir ("../bin/" .. outputdir .. "/Blockstream")
-    objdir ("../bin-int/" .. outputdir .. "/Blockstream")
+    targetdir (SolutionDir .. "bin/" .. outputdir .. "/Blockstream")
+    objdir (SolutionDir .. "bin-int/" .. outputdir .. "/Blockstream")
     
     files
     {
-        "src/**.h",
-        "src/**.cpp"
+        "**.h",
+        "**.cpp",
+        "**.hpp",
+        "**.c"
     }
     
     includedirs
@@ -17,15 +19,13 @@ project "Blockstream"
         "../Bolt-Core/external/",
         "../Bolt-Core/src/",
         "../Bolt-Core/external/spdlog/include/",
-        "C:/Users/Jordan Morrison/AppData/Local/Programs/Python/Python37-32/include/",
         "../%{IncludeDirs.GLFW}",
         "../%{IncludeDirs.Glad}"
     }
 
     libdirs
     {
-        "../Bolt-Core/external/**",
-        "C:/Users/Jordan Morrison/AppData/Local/Programs/Python/Python37-32/libs/"
+        "../Bolt-Core/external/**"
     }
 
     links
@@ -35,13 +35,12 @@ project "Blockstream"
         "FreeImage.lib",
         "freetype26d.lib",
         "freetype-gl.lib",
-        "python37.lib",
         "ws2_32.lib"
     }
 
     filter { "system:windows", "configurations:debug" }
         cppdialect "C++17"
-        systemversion "10.0.16299.0"
+        systemversion "latest"
         optimize "Off"
 
         defines
@@ -53,7 +52,7 @@ project "Blockstream"
     
     filter { "system:windows", "configurations:release" }
         cppdialect "C++17"
-        systemversion "10.0.16299.0"
+        systemversion "latest"
         optimize "On"
 
         defines

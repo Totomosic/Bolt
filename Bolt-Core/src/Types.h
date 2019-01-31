@@ -6,7 +6,6 @@
 #include "Core\BoltTL\__BoltTL__.h"
 #include "BoltDefines.h"
 
-#include <Python.h>
 #include <algorithm>
 #include <bitset>
 #include <chrono>

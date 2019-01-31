@@ -17,15 +17,13 @@ project "NatureScene"
         "../Bolt-Core/external/",
         "../Bolt-Core/src/",
         "../Bolt-Core/external/spdlog/include/",
-        "C:/Users/Jordan Morrison/AppData/Local/Programs/Python/Python37-32/include/",
         "../%{IncludeDirs.GLFW}",
         "../%{IncludeDirs.Glad}"
     }
 
     libdirs
     {
-        "../Bolt-Core/external/**",
-        "C:/Users/Jordan Morrison/AppData/Local/Programs/Python/Python37-32/libs/"
+        "../Bolt-Core/external/**"
     }
 
     links
@@ -35,7 +33,6 @@ project "NatureScene"
         "FreeImage.lib",
         "freetype26d.lib",
         "freetype-gl.lib",
-        "python37.lib",
         "ws2_32.lib"
     }
 
