@@ -92,7 +92,9 @@ namespace DND
 		NetworkManager& Network();
 		SpellList& Spells();
 
-		GameObject* CreateNetworkObject(const CharacterInfo& character, id_t ownerNetworkId = GameObject::InvalidID);
+		GameObject* CreateObject(id_t mapId);
+		GameObject* CreateCharacter(const CharacterInfo& character, id_t ownerNetworkId = GameObject::InvalidID);
+		GameObject* CreateNetworkCharacter(const CharacterInfo& character, id_t ownerNetworkId = GameObject::InvalidID);
 		void SetCurrentMap(id_t mapId);
 
 		void AddActiveTimer(Timer* timer);

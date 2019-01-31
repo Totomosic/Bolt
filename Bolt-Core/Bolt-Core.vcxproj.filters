@@ -85,15 +85,6 @@
     <Filter Include="Engine\Scene\UI">
       <UniqueIdentifier>{65D59BAE-D160-0973-DA71-8C67467C6573}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Scripting">
-      <UniqueIdentifier>{9D0A0F60-8903-2EB2-B235-13379E8D0DBE}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Scripting\JavaScript">
-      <UniqueIdentifier>{0336D403-6F43-02EA-F829-FED46436CEA0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Scripting\Python">
-      <UniqueIdentifier>{CE2B3C35-3A63-84CC-436D-E8EFAF23ABC5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Serialization">
       <UniqueIdentifier>{A843FDD7-94D2-86A1-3DF1-9A9C295F9747}</UniqueIdentifier>
     </Filter>
@@ -130,11 +121,8 @@
     <Filter Include="Graphics\Resources\Shaders\Compiler">
       <UniqueIdentifier>{6334DAF9-CFED-44A4-584D-5F7EC405FB13}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Graphics\Resources\Shaders\Source">
-      <UniqueIdentifier>{B97062AE-25DF-B72D-6EC8-722DDA75ADC9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Graphics\Resources\Shaders\Source\Headers">
-      <UniqueIdentifier>{6428E488-D042-472A-1965-57BE85BE6E31}</UniqueIdentifier>
+    <Filter Include="Graphics\Resources\Shaders\Components">
+      <UniqueIdentifier>{4EFC5BE7-BAC0-5AD7-8326-8BA1EFA9F60C}</UniqueIdentifier>
     </Filter>
     <Filter Include="Graphics\Resources\Textures">
       <UniqueIdentifier>{D31D1D08-3F2B-4BEE-C811-47D9341E17A5}</UniqueIdentifier>
@@ -280,6 +268,9 @@
       <Filter>Core\Time</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Time\Timer.h">
+      <Filter>Core\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Time\TimerSet.h">
       <Filter>Core\Time</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Time\__Time__.h">
@@ -552,30 +543,6 @@
     <ClInclude Include="src\Engine\Scene\__Scene__.h">
       <Filter>Engine\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\Scripting\JavaScript\JSscript.h">
-      <Filter>Engine\Scripting\JavaScript</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\Scripting\JavaScript\__JavaScript__.h">
-      <Filter>Engine\Scripting\JavaScript</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\Scripting\Python\PyInterpreter.h">
-      <Filter>Engine\Scripting\Python</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\Scripting\Python\PyMethods.h">
-      <Filter>Engine\Scripting\Python</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\Scripting\Python\PyModule.h">
-      <Filter>Engine\Scripting\Python</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\Scripting\Python\PyScript.h">
-      <Filter>Engine\Scripting\Python</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\Scripting\Python\__Python__.h">
-      <Filter>Engine\Scripting\Python</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\Scripting\__Scripting__.h">
-      <Filter>Engine\Scripting</Filter>
-    </ClInclude>
     <ClInclude Include="src\Engine\Serialization\XMLReadTraits.h">
       <Filter>Engine\Serialization</Filter>
     </ClInclude>
@@ -747,6 +714,9 @@
     <ClInclude Include="src\Graphics\Resources\Shaders\Compiler\__Compiler__.h">
       <Filter>Graphics\Resources\Shaders\Compiler</Filter>
     </ClInclude>
+    <ClInclude Include="src\Graphics\Resources\Shaders\Components\__Components__.h">
+      <Filter>Graphics\Resources\Shaders\Components</Filter>
+    </ClInclude>
     <ClInclude Include="src\Graphics\Resources\Shaders\Shader.h">
       <Filter>Graphics\Resources\Shaders</Filter>
     </ClInclude>
@@ -809,8 +779,6 @@
     </ClInclude>
     <ClInclude Include="src\Logging.h" />
     <ClInclude Include="src\Types.h" />
-    <ClInclude Include="src\Core\Time\TimerSet.h" />
-    <ClInclude Include="src\Graphics\Resources\Shaders\Components\__Components__.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\BoltTL\string.cpp">
@@ -859,6 +827,9 @@
       <Filter>Core\Time</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\Time\Timer.cpp">
+      <Filter>Core\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Time\TimerSet.cpp">
       <Filter>Core\Time</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\Utils\Filesystem\Directorypath.cpp">
@@ -1029,18 +1000,6 @@
     <ClCompile Include="src\Engine\Scene\UI\UIsurface.cpp">
       <Filter>Engine\Scene\UI</Filter>
     </ClCompile>
-    <ClCompile Include="src\Engine\Scripting\Python\PyInterpreter.cpp">
-      <Filter>Engine\Scripting\Python</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Engine\Scripting\Python\PyMethods.cpp">
-      <Filter>Engine\Scripting\Python</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Engine\Scripting\Python\PyModule.cpp">
-      <Filter>Engine\Scripting\Python</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Engine\Scripting\Python\PyScript.cpp">
-      <Filter>Engine\Scripting\Python</Filter>
-    </ClCompile>
     <ClCompile Include="src\Engine\Serialization\XMLserializer.cpp">
       <Filter>Engine\Serialization</Filter>
     </ClCompile>
@@ -1166,56 +1125,5 @@
     </ClCompile>
     <ClCompile Include="src\Logging.cpp" />
     <ClCompile Include="src\Types.cpp" />
-    <ClCompile Include="src\Core\Time\TimerSet.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="src\Graphics\Resources\Shaders\Source\DefaultColor_f.glsl">
-      <Filter>Graphics\Resources\Shaders\Source</Filter>
-    </None>
-    <None Include="src\Graphics\Resources\Shaders\Source\DefaultColor_v.glsl">
-      <Filter>Graphics\Resources\Shaders\Source</Filter>
-    </None>
-    <None Include="src\Graphics\Resources\Shaders\Source\DefaultFont_f.glsl">
-      <Filter>Graphics\Resources\Shaders\Source</Filter>
-    </None>
-    <None Include="src\Graphics\Resources\Shaders\Source\DefaultFont_v.glsl">
-      <Filter>Graphics\Resources\Shaders\Source</Filter>
-    </None>
-    <None Include="src\Graphics\Resources\Shaders\Source\DefaultSkybox_f.glsl">
-      <Filter>Graphics\Resources\Shaders\Source</Filter>
-    </None>
-    <None Include="src\Graphics\Resources\Shaders\Source\DefaultSkybox_v.glsl">
-      <Filter>Graphics\Resources\Shaders\Source</Filter>
-    </None>
-    <None Include="src\Graphics\Resources\Shaders\Source\DefaultTexture_f.glsl">
-      <Filter>Graphics\Resources\Shaders\Source</Filter>
-    </None>
-    <None Include="src\Graphics\Resources\Shaders\Source\DefaultTexture_v.glsl">
-      <Filter>Graphics\Resources\Shaders\Source</Filter>
-    </None>
-    <None Include="src\Graphics\Resources\Shaders\Source\Headers\BoltLighting.glh">
-      <Filter>Graphics\Resources\Shaders\Source\Headers</Filter>
-    </None>
-    <None Include="src\Graphics\Resources\Shaders\Source\Headers\BoltMaterials.glh">
-      <Filter>Graphics\Resources\Shaders\Source\Headers</Filter>
-    </None>
-    <None Include="src\Graphics\Resources\Shaders\Source\LightingColor_f.glsl">
-      <Filter>Graphics\Resources\Shaders\Source</Filter>
-    </None>
-    <None Include="src\Graphics\Resources\Shaders\Source\LightingColor_v.glsl">
-      <Filter>Graphics\Resources\Shaders\Source</Filter>
-    </None>
-    <None Include="src\Graphics\Resources\Shaders\Source\LightingTexture_f.glsl">
-      <Filter>Graphics\Resources\Shaders\Source</Filter>
-    </None>
-    <None Include="src\Graphics\Resources\Shaders\Source\LightingTexture_v.glsl">
-      <Filter>Graphics\Resources\Shaders\Source</Filter>
-    </None>
-    <None Include="src\Graphics\Resources\Shaders\Source\SpriteTexture_f.glsl">
-      <Filter>Graphics\Resources\Shaders\Source</Filter>
-    </None>
-    <None Include="src\Graphics\Resources\Shaders\Source\SpriteTexture_v.glsl">
-      <Filter>Graphics\Resources\Shaders\Source</Filter>
-    </None>
   </ItemGroup>
 </Project>

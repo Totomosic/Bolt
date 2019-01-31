@@ -34,10 +34,12 @@ namespace DND
 	SpellInstance::SpellCastResult FireballInstance::Cast(GameObject* caster, const GameStateObjects& state)
 	{
 		BLT_INFO("FIREBALL DAMAGE {}", m_Damage.ToString());
+		id_t mapId = caster->Components().GetComponent<TileMapTracker>().MapId();
 
 		float distance = (m_Target.xy() - m_Start.xy()).Length();
 		float time = distance / m_Speed;
 		GameObject* fireball = state.Factory->Image(300, 300, state.Animations->Fireball.Animation, Transform());
+		fireball->Components().AddComponent<TileMapTracker>(mapId);
 		fireball->Components().AddComponent<SpriteAnimator>(state.Animations->Fireball.Animation);
 		fireball->Components().GetComponent<SpriteAnimator>().PlayAnimationUntilStopped(state.Animations->Fireball, 0.3f);
 		fireball->Components().AddComponent<FireballAnimator>(m_Start, m_Target, time, 100);
@@ -45,17 +47,20 @@ namespace DND
 
 		m_Target.z -= 0.05f;
 		GameObject* explosionShadow = state.Factory->Ellipse(state.MapManager->TileWidth() * 0.75f, state.MapManager->TileHeight() * 0.75f, Color(10, 10, 10, 200), Transform(m_Target));
+		explosionShadow->Components().AddComponent<TileMapTracker>(mapId);
 
 		Vector3f target = m_Target;
 		int damage = m_Damage.Result;
+		
 
-		Timer& createExplosion = Time::RenderingTimeline().AddFunction(time, [target, damage, explosionShadow, fireball, state]()
+		Timer& createExplosion = Time::RenderingTimeline().AddFunction(time, [mapId, target, damage, explosionShadow, fireball, state]()
 		{
 			Destroy(explosionShadow);
 			Destroy(fireball);
 			if (state.Network->Server().IsRunning())
 			{
 				GameObject* explosion = state.Factory->Image(9 * state.MapManager->TileWidth(), 9 * state.MapManager->TileHeight(), state.Animations->FireballExplosion.Animation, Transform(target));
+				explosion->Components().AddComponent<TileMapTracker>(mapId);
 				explosion->Components().AddComponent<SpriteAnimator>(state.Animations->FireballExplosion.Animation);
 				explosion->Components().GetComponent<SpriteAnimator>().PlayAnimationUntilStopped(state.Animations->FireballExplosion, 1.0f);
 				explosion->Components().GetComponent<MeshRenderer>().Mesh.Materials[0].RenderOptions.DepthFunc = DepthFunction::Lequal;

@@ -16,6 +16,7 @@ namespace DND
 		ObjectFactory factory(*m_Layer);
 		m_Object = factory.Rectangle(1, 5, Color::Red, Transform(m_PositionOffset));
 		m_Object->MakeChildOf(gameObject());
+		m_Object->Components().AddComponent<TileMapTracker>(gameObject()->Components().GetComponent<TileMapTracker>().MapId());
 		
 		StatsComponent& c = gameObject()->Components().GetComponent<StatsComponent>();
 		float healthProp = c.Stats().CurrentHealth / (float)c.Stats().MaxHealth;

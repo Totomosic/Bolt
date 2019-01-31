@@ -47,7 +47,8 @@ namespace DND
 		ObjectPrefab wizardCharacterPrefab;
 		wizardCharacterPrefab.Components().AddComponent<MeshRenderer>(wizardCharacterMesh);
 		wizardCharacterPrefab.Components().AddComponent<SpriteAnimator>(downWizard);
-		wizardCharacterPrefab.Components().AddComponent<TileTransform>(0, Tile(), Vector3f(0, 15, 0));
+		wizardCharacterPrefab.Components().AddComponent<TileMapTracker>(0);
+		wizardCharacterPrefab.Components().AddComponent<TileTransform>(Tile(), Vector3f(0, 15, 0));
 		wizardCharacterPrefab.Components().AddComponent<CharacterAnimator>(upWizard, rightWizard, downWizard, leftWizard);
 		wizardCharacterPrefab.Components().AddComponent<TileMotion>(200);
 		wizardCharacterPrefab.Components().AddComponent<SpellCaster>();
@@ -59,7 +60,8 @@ namespace DND
 		ObjectPrefab swordsmanCharacterPrefab;
 		swordsmanCharacterPrefab.Components().AddComponent<MeshRenderer>(swordsmanCharacterMesh);
 		swordsmanCharacterPrefab.Components().AddComponent<SpriteAnimator>(downSwordsman);
-		swordsmanCharacterPrefab.Components().AddComponent<TileTransform>(0, Tile(), Vector3f(0, 15, 0));
+		swordsmanCharacterPrefab.Components().AddComponent<TileMapTracker>(0);
+		swordsmanCharacterPrefab.Components().AddComponent<TileTransform>(Tile(), Vector3f(0, 15, 0));
 		swordsmanCharacterPrefab.Components().AddComponent<CharacterAnimator>(upSwordsman, rightSwordsman, downSwordsman, leftSwordsman);
 		swordsmanCharacterPrefab.Components().AddComponent<TileMotion>(225);
 		swordsmanCharacterPrefab.Components().AddComponent<SpellCaster>();

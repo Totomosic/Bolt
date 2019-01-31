@@ -1,17 +1,20 @@
-project "Aimbooster"
+project "Bolt-Core"
     location ""
-    kind "ConsoleApp"
+    kind "StaticLib"
     language "C++"
     
-    targetdir (SolutionDir .. "bin/" .. outputdir .. "/Aimbooster")
-    objdir (SolutionDir .. "bin-int/" .. outputdir .. "/Aimbooster")
+    targetdir (SolutionDir .. "bin/" .. outputdir .. "/Bolt-Core")
+    objdir (SolutionDir .. "bin-int/" .. outputdir .. "/Bolt-Core")
+
+    pchheader "Types.h"
+    pchsource "src/Types.cpp"
     
     files
     {
-        "**.h",
-        "**.cpp",
-        "**.hpp",
-        "**.c"
+        "src/**.h",
+        "src/**.cpp",
+        "src/**.hpp",
+        "src/**.c"
     }
     
     includedirs
@@ -30,12 +33,13 @@ project "Aimbooster"
 
     links
     {
-        "Bolt-Core",
         "opengl32.lib",
         "FreeImage.lib",
         "freetype26d.lib",
         "freetype-gl.lib",
-        "ws2_32.lib"
+        "ws2_32.lib",
+        "GLFW",
+        "Glad"
     }
 
     filter { "system:windows", "configurations:debug" }
@@ -45,6 +49,8 @@ project "Aimbooster"
 
         defines
         {
+            "NOMINMAX",
+            "GLEW_STATIC",
             "BLT_BUILD_STATIC",
             "BLT_PLATFORM_WINDOWS",
             "BLT_DEBUG"
@@ -57,6 +63,8 @@ project "Aimbooster"
 
         defines
         {
+            "NOMINMAX",
+            "GLEW_STATIC",
             "BLT_BUILD_STATIC",
             "BLT_PLATFORM_WINDOWS"
         }
