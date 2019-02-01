@@ -212,6 +212,21 @@ namespace Bolt
 		return Instantiate(mesh, std::move(t));
 	}
 
+	ResourcePtr<const Model> ObjectFactory::SquareModel()
+	{
+		return s_RectangleModel;
+	}
+
+	ResourcePtr<const Model> ObjectFactory::CircleModel()
+	{
+		return s_EllipseModel;
+	}
+
+	ResourcePtr<const Model> ObjectFactory::CubeModel()
+	{
+		return s_CuboidModel;
+	}
+
 	void ObjectFactory::Initialize()
 	{
 		s_RectangleModel = ResourcePtr<Model>(new Model(RectangleFactory(1, 1)), false);

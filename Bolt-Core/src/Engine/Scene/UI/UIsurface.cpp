@@ -22,7 +22,7 @@ namespace Bolt
 	{
 		UIelement::SetUIroot(root);
 		Mesh mesh;
-		mesh.Models.push_back({ ResourcePtr<const Model>(new Model(RectangleFactory(m_Width, m_Height)), true), Matrix4f::Identity(), { 0 } });
+		mesh.Models.push_back({ ObjectFactory::SquareModel(), Matrix4f::Scale(m_Width, m_Height, 1), { 0 } });
 		mesh.Materials[0] = m_Material;
 		m_Object->Components().AddComponent(std::make_unique<MeshRenderer>(std::move(mesh)));
 		m_Object->transform() = std::move(m_Transform);

@@ -4,8 +4,6 @@
 namespace DND
 {
 
-	class DndClient;
-
-	void CreateTitleScene(DndClient& client, Scene& titleScene, const ResourcePack& resources);
+	Scene& CreateTitleScene(const ResourcePack& resources);
 
 }

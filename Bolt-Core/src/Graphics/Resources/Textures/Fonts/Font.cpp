@@ -49,7 +49,7 @@ namespace Bolt
 			{
 				result.y = chr.Height;
 			}
-			result.x = current.x + chr.OffsetX + chr.AdvanceX + chr.Kerning;
+			result.x = current.x + chr.AdvanceX + chr.Kerning;
 			return result;
 		});
 		return size;

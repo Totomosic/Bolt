@@ -75,11 +75,6 @@ namespace DND
 		id_t id = m_MapIdManager.GetNextId();
 		map.SetTileSize({ m_TileWidth, m_TileHeight });
 		m_Maps[id] = { std::move(map), false };
-		if (m_CurrentMap == GameObject::InvalidID)
-		{
-			LoadTilemap(id);
-			SetCurrentMap(id);
-		}
 		return id;
 	}
 

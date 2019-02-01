@@ -57,6 +57,11 @@ namespace Bolt
 		friend class Initializer;
 		friend class Destructor;
 
+	public:
+		static ResourcePtr<const Model> SquareModel();
+		static ResourcePtr<const Model> CircleModel();
+		static ResourcePtr<const Model> CubeModel();
+
 	private:
 		static void Initialize();
 		static void Terminate();

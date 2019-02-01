@@ -4,8 +4,6 @@
 namespace DND
 {
 
-	class DndClient;
-
-	void CreateServerScene(DndClient& client, Scene& serverScene, const ResourcePack& resources, Scene& gameScene);
+	Scene& CreateServerScene(const ResourcePack& resources);
 
 }

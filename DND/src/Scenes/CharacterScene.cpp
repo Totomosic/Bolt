@@ -1,15 +1,25 @@
 #include "bltpch.h"
 #include "CharacterScene.h"
-#include "../App.h"
 
 namespace DND
 {
 
-	void CreateCharacterScene(DndClient& client, Scene& characterScene, const ResourcePack& resources)
+	Scene& CreateCharacterScene(const ResourcePack& resources)
 	{
-		Projection orthoProj = Projection::Orthographic(0, client.Width(), 0, client.Height(), -100, 100);
-		Camera* characterCamera = characterScene.CreateCamera(orthoProj);
-		Layer& characterLayer = characterScene.CreateLayer(characterCamera);
+		Scene& scene = SceneManager::CreateScene("Character");
+		Camera* camera = scene.CreateCamera(Projection::Orthographic(0, 1920, 0, 1080, 0, 100));
+		Layer& layer = scene.CreateLayer(camera);
+
+		scene.OnLoad.Subscribe([](id_t listenerId, SceneLoadedEvent& e)
+		{
+			SceneManager::SetCurrentSceneByName("Server");
+			return true;
+		});
+
+		RenderSchedule schedule(scene);
+		schedule.AddRenderProcess({});
+		SceneRenderer::AddRenderSchedule(schedule);
+		return scene;
 	}
 
 }

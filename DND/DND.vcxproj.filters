@@ -33,43 +33,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\AnimationList.h" />
-    <ClInclude Include="src\App.h" />
-    <ClInclude Include="src\Camera\PlayerCamera.h">
-      <Filter>Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Entities\CharacterAnimator.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Entities\Characters\CharacterPrefabId.h">
-      <Filter>Entities\Characters</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Entities\Characters\CharacterStats.h">
-      <Filter>Entities\Characters</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Entities\Healthbar.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Entities\PlayerController.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Entities\SpriteAnimator.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Entities\TileMapTracker.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Entities\TileMotion.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Entities\TileTransform.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Events.h" />
-    <ClInclude Include="src\GameManager.h" />
-    <ClInclude Include="src\Map\MapLinkManager.h">
-      <Filter>Map</Filter>
-    </ClInclude>
     <ClInclude Include="src\Map\Tilemap.h">
       <Filter>Map</Filter>
     </ClInclude>
@@ -82,136 +45,22 @@
     <ClInclude Include="src\Map\Tileset.h">
       <Filter>Map</Filter>
     </ClInclude>
-    <ClInclude Include="src\Networking\ConnectionManager.h">
-      <Filter>Networking</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Networking\Deserialization.h">
-      <Filter>Networking</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Networking\GamePlayPacketSerialization.h">
-      <Filter>Networking</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Networking\GamePlayPackets.h">
-      <Filter>Networking</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Networking\GameStatePacketSerialization.h">
-      <Filter>Networking</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Networking\GameStatePackets.h">
-      <Filter>Networking</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Networking\NetworkController.h">
-      <Filter>Networking</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Networking\NetworkIdentity.h">
-      <Filter>Networking</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Networking\NetworkManager.h">
-      <Filter>Networking</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Networking\NetworkObjects.h">
-      <Filter>Networking</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Networking\NetworkPacketSerialization.h">
-      <Filter>Networking</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Networking\NetworkPackets.h">
-      <Filter>Networking</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Networking\NetworkServer.h">
-      <Filter>Networking</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Networking\Serialization.h">
-      <Filter>Networking</Filter>
-    </ClInclude>
-    <ClInclude Include="src\PlayerManager.h" />
-    <ClInclude Include="src\PrefabList.h" />
-    <ClInclude Include="src\Scenes\CharPrefabs.h">
-      <Filter>Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scenes\CharacterScene.h">
-      <Filter>Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scenes\GameScene.h">
-      <Filter>Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scenes\ServerScene.h">
-      <Filter>Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scenes\TitleScene.h">
-      <Filter>Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Spells\Animators\FireballAnimator.h">
-      <Filter>Spells\Animators</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Spells\Basic\FireballSpell.h">
-      <Filter>Spells\Basic</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Spells\Basic\TeleportSpell.h">
-      <Filter>Spells\Basic</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Spells\BasicSpells.h">
-      <Filter>Spells</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Spells\Dice.h">
-      <Filter>Spells</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Spells\Spell.h">
-      <Filter>Spells</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Spells\SpellCaster.h">
-      <Filter>Spells</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Spells\SpellInstance.h">
-      <Filter>Spells</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Spells\SpellList.h">
-      <Filter>Spells</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Spells\SpellManager.h">
-      <Filter>Spells</Filter>
-    </ClInclude>
-    <ClInclude Include="src\UI\UImenu.h">
-      <Filter>UI</Filter>
-    </ClInclude>
     <ClInclude Include="src\bltpch.h" />
+    <ClInclude Include="src\Scenes\TitleScene.h" />
+    <ClInclude Include="src\Scenes\CharacterScene.h" />
+    <ClInclude Include="src\Scenes\ServerScene.h" />
+    <ClInclude Include="src\Scenes\GameScene.h" />
+    <ClInclude Include="src\DndInstance.h" />
+    <ClInclude Include="src\Network\Packets.h" />
+    <ClInclude Include="src\Events.h" />
+    <ClInclude Include="src\Network\Serialization.h" />
+    <ClInclude Include="src\Network\Deserialization.h" />
+    <ClInclude Include="src\Network\NetworkServer.h" />
+    <ClInclude Include="src\NetworkManager.h" />
+    <ClInclude Include="src\Network\AddressPair.h" />
+    <ClInclude Include="src\Network\ServerInitPackets.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\App.cpp" />
-    <ClCompile Include="src\Camera\PlayerCamera.cpp">
-      <Filter>Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Entities\CharacterAnimator.cpp">
-      <Filter>Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Entities\Characters\CharacterPrefabId.cpp">
-      <Filter>Entities\Characters</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Entities\Characters\CharacterStats.cpp">
-      <Filter>Entities\Characters</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Entities\Healthbar.cpp">
-      <Filter>Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Entities\PlayerController.cpp">
-      <Filter>Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Entities\SpriteAnimator.cpp">
-      <Filter>Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Entities\TileMapTracker.cpp">
-      <Filter>Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Entities\TileMotion.cpp">
-      <Filter>Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Entities\TileTransform.cpp">
-      <Filter>Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GameManager.cpp" />
-    <ClCompile Include="src\Map\MapLinkManager.cpp">
-      <Filter>Map</Filter>
-    </ClCompile>
     <ClCompile Include="src\Map\Tilemap.cpp">
       <Filter>Map</Filter>
     </ClCompile>
@@ -224,67 +73,14 @@
     <ClCompile Include="src\Map\Tileset.cpp">
       <Filter>Map</Filter>
     </ClCompile>
-    <ClCompile Include="src\Networking\ConnectionManager.cpp">
-      <Filter>Networking</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Networking\NetworkController.cpp">
-      <Filter>Networking</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Networking\NetworkIdentity.cpp">
-      <Filter>Networking</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Networking\NetworkManager.cpp">
-      <Filter>Networking</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Networking\NetworkObjects.cpp">
-      <Filter>Networking</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Networking\NetworkServer.cpp">
-      <Filter>Networking</Filter>
-    </ClCompile>
-    <ClCompile Include="src\PlayerManager.cpp" />
-    <ClCompile Include="src\Scenes\CharPrefabs.cpp">
-      <Filter>Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scenes\CharacterScene.cpp">
-      <Filter>Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scenes\GameScene.cpp">
-      <Filter>Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scenes\ServerScene.cpp">
-      <Filter>Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scenes\TitleScene.cpp">
-      <Filter>Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Spells\Animators\FireballAnimator.cpp">
-      <Filter>Spells\Animators</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Spells\Basic\FireballSpell.cpp">
-      <Filter>Spells\Basic</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Spells\Basic\TeleportSpell.cpp">
-      <Filter>Spells\Basic</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Spells\BasicSpells.cpp">
-      <Filter>Spells</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Spells\Dice.cpp">
-      <Filter>Spells</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Spells\Spell.cpp">
-      <Filter>Spells</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Spells\SpellCaster.cpp">
-      <Filter>Spells</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Spells\SpellList.cpp">
-      <Filter>Spells</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Spells\SpellManager.cpp">
-      <Filter>Spells</Filter>
-    </ClCompile>
     <ClCompile Include="src\bltpch.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Scenes\TitleScene.cpp" />
+    <ClCompile Include="src\Scenes\CharacterScene.cpp" />
+    <ClCompile Include="src\Scenes\ServerScene.cpp" />
+    <ClCompile Include="src\Scenes\GameScene.cpp" />
+    <ClCompile Include="src\DndInstance.cpp" />
+    <ClCompile Include="src\Network\NetworkServer.cpp" />
+    <ClCompile Include="src\NetworkManager.cpp" />
   </ItemGroup>
 </Project>

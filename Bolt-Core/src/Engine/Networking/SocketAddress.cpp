@@ -1,5 +1,4 @@
 #include "Types.h"
-
 #include "SocketAddress.h"
 
 namespace Bolt
