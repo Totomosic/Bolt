@@ -53,7 +53,9 @@ project "Bolt-Core"
             "GLEW_STATIC",
             "BLT_BUILD_STATIC",
             "BLT_PLATFORM_WINDOWS",
-            "BLT_DEBUG"
+            "BLT_DEBUG",
+            "LAYERS_PER_SCENE=6",
+            "GAMEOBJECTS_PER_LAYER=1000"
         }
     
     filter { "system:windows", "configurations:release" }
@@ -66,5 +68,7 @@ project "Bolt-Core"
             "NOMINMAX",
             "GLEW_STATIC",
             "BLT_BUILD_STATIC",
-            "BLT_PLATFORM_WINDOWS"
+            "BLT_PLATFORM_WINDOWS",
+            "LAYERS_PER_SCENE=6",
+            "GAMEOBJECTS_PER_LAYER=1000"
         }
