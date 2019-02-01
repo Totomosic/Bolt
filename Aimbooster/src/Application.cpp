@@ -149,7 +149,7 @@ namespace Aimbooster
 
 			quitButton.EventHandler().OnClicked.Subscribe([this](id_t eventId, UIClickedEvent& args) -> bool
 			{
-				AppWindow->Close();
+				Exit();
 				return false;
 			});
 
