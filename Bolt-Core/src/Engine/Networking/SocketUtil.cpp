@@ -23,6 +23,27 @@ namespace Bolt
 		return result;
 	}
 
+	std::vector<uint> SocketUtil::GetIP4Addresses()
+	{
+		std::vector<uint> result;
+		char name[255];
+		if (gethostname(name, sizeof(name)) == 0)
+		{
+			PHOSTENT hostinfo;
+			if ((hostinfo = gethostbyname(name)) != NULL)
+			{
+				int nCount = 0;
+				while (hostinfo->h_addr_list[nCount])
+				{
+					in_addr addr = *(struct in_addr*)hostinfo->h_addr_list[nCount++];
+					uint a = ntohl(addr.S_un.S_addr);
+					result.push_back(a);
+				}
+			}
+		}
+		return result;
+	}
+
 	int SocketUtil::Select(const UDPsocketSet* inReadSet, UDPsocketSet* outReadSet,
 		const UDPsocketSet* inWriteSet, UDPsocketSet* outWriteSet,
 		const UDPsocketSet* inErrorSet, UDPsocketSet* outErrorSet, int timeoutMilliseconds)

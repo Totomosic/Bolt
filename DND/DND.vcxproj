@@ -132,101 +132,41 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\AnimationList.h" />
-    <ClInclude Include="src\App.h" />
-    <ClInclude Include="src\Camera\PlayerCamera.h" />
-    <ClInclude Include="src\Entities\CharacterAnimator.h" />
-    <ClInclude Include="src\Entities\Characters\CharacterPrefabId.h" />
-    <ClInclude Include="src\Entities\Characters\CharacterStats.h" />
-    <ClInclude Include="src\Entities\Healthbar.h" />
-    <ClInclude Include="src\Entities\PlayerController.h" />
-    <ClInclude Include="src\Entities\SpriteAnimator.h" />
-    <ClInclude Include="src\Entities\TileMapTracker.h" />
-    <ClInclude Include="src\Entities\TileMotion.h" />
-    <ClInclude Include="src\Entities\TileTransform.h" />
+    <ClInclude Include="src\DndInstance.h" />
     <ClInclude Include="src\Events.h" />
-    <ClInclude Include="src\GameManager.h" />
-    <ClInclude Include="src\Map\MapLinkManager.h" />
     <ClInclude Include="src\Map\Tilemap.h" />
     <ClInclude Include="src\Map\TilemapLayer.h" />
     <ClInclude Include="src\Map\TilemapManager.h" />
     <ClInclude Include="src\Map\Tileset.h" />
-    <ClInclude Include="src\Networking\ConnectionManager.h" />
-    <ClInclude Include="src\Networking\Deserialization.h" />
-    <ClInclude Include="src\Networking\GamePlayPacketSerialization.h" />
-    <ClInclude Include="src\Networking\GamePlayPackets.h" />
-    <ClInclude Include="src\Networking\GameStatePacketSerialization.h" />
-    <ClInclude Include="src\Networking\GameStatePackets.h" />
-    <ClInclude Include="src\Networking\NetworkController.h" />
-    <ClInclude Include="src\Networking\NetworkIdentity.h" />
-    <ClInclude Include="src\Networking\NetworkManager.h" />
-    <ClInclude Include="src\Networking\NetworkObjects.h" />
-    <ClInclude Include="src\Networking\NetworkPacketSerialization.h" />
-    <ClInclude Include="src\Networking\NetworkPackets.h" />
-    <ClInclude Include="src\Networking\NetworkServer.h" />
-    <ClInclude Include="src\Networking\Serialization.h" />
-    <ClInclude Include="src\PlayerManager.h" />
-    <ClInclude Include="src\PrefabList.h" />
-    <ClInclude Include="src\Scenes\CharPrefabs.h" />
+    <ClInclude Include="src\bltpch.h" />
+    <ClInclude Include="src\NetworkManager.h" />
+    <ClInclude Include="src\Network\AddressPair.h" />
+    <ClInclude Include="src\Network\Deserialization.h" />
+    <ClInclude Include="src\Network\NetworkServer.h" />
+    <ClInclude Include="src\Network\Packets.h" />
+    <ClInclude Include="src\Network\Serialization.h" />
+    <ClInclude Include="src\Network\ServerInitPackets.h" />
     <ClInclude Include="src\Scenes\CharacterScene.h" />
     <ClInclude Include="src\Scenes\GameScene.h" />
     <ClInclude Include="src\Scenes\ServerScene.h" />
     <ClInclude Include="src\Scenes\TitleScene.h" />
-    <ClInclude Include="src\Spells\Animators\FireballAnimator.h" />
-    <ClInclude Include="src\Spells\Basic\FireballSpell.h" />
-    <ClInclude Include="src\Spells\Basic\TeleportSpell.h" />
-    <ClInclude Include="src\Spells\BasicSpells.h" />
-    <ClInclude Include="src\Spells\Dice.h" />
-    <ClInclude Include="src\Spells\Spell.h" />
-    <ClInclude Include="src\Spells\SpellCaster.h" />
-    <ClInclude Include="src\Spells\SpellInstance.h" />
-    <ClInclude Include="src\Spells\SpellList.h" />
-    <ClInclude Include="src\Spells\SpellManager.h" />
-    <ClInclude Include="src\UI\UImenu.h" />
-    <ClInclude Include="src\bltpch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\App.cpp" />
-    <ClCompile Include="src\Camera\PlayerCamera.cpp" />
-    <ClCompile Include="src\Entities\CharacterAnimator.cpp" />
-    <ClCompile Include="src\Entities\Characters\CharacterPrefabId.cpp" />
-    <ClCompile Include="src\Entities\Characters\CharacterStats.cpp" />
-    <ClCompile Include="src\Entities\Healthbar.cpp" />
-    <ClCompile Include="src\Entities\PlayerController.cpp" />
-    <ClCompile Include="src\Entities\SpriteAnimator.cpp" />
-    <ClCompile Include="src\Entities\TileMapTracker.cpp" />
-    <ClCompile Include="src\Entities\TileMotion.cpp" />
-    <ClCompile Include="src\Entities\TileTransform.cpp" />
-    <ClCompile Include="src\GameManager.cpp" />
-    <ClCompile Include="src\Map\MapLinkManager.cpp" />
+    <ClCompile Include="src\DndInstance.cpp" />
+    <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Map\Tilemap.cpp" />
     <ClCompile Include="src\Map\TilemapLayer.cpp" />
     <ClCompile Include="src\Map\TilemapManager.cpp" />
     <ClCompile Include="src\Map\Tileset.cpp" />
-    <ClCompile Include="src\Networking\ConnectionManager.cpp" />
-    <ClCompile Include="src\Networking\NetworkController.cpp" />
-    <ClCompile Include="src\Networking\NetworkIdentity.cpp" />
-    <ClCompile Include="src\Networking\NetworkManager.cpp" />
-    <ClCompile Include="src\Networking\NetworkObjects.cpp" />
-    <ClCompile Include="src\Networking\NetworkServer.cpp" />
-    <ClCompile Include="src\PlayerManager.cpp" />
-    <ClCompile Include="src\Scenes\CharPrefabs.cpp" />
+    <ClCompile Include="src\bltpch.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\NetworkManager.cpp" />
+    <ClCompile Include="src\Network\NetworkServer.cpp" />
     <ClCompile Include="src\Scenes\CharacterScene.cpp" />
     <ClCompile Include="src\Scenes\GameScene.cpp" />
     <ClCompile Include="src\Scenes\ServerScene.cpp" />
     <ClCompile Include="src\Scenes\TitleScene.cpp" />
-    <ClCompile Include="src\Spells\Animators\FireballAnimator.cpp" />
-    <ClCompile Include="src\Spells\Basic\FireballSpell.cpp" />
-    <ClCompile Include="src\Spells\Basic\TeleportSpell.cpp" />
-    <ClCompile Include="src\Spells\BasicSpells.cpp" />
-    <ClCompile Include="src\Spells\Dice.cpp" />
-    <ClCompile Include="src\Spells\Spell.cpp" />
-    <ClCompile Include="src\Spells\SpellCaster.cpp" />
-    <ClCompile Include="src\Spells\SpellList.cpp" />
-    <ClCompile Include="src\Spells\SpellManager.cpp" />
-    <ClCompile Include="src\bltpch.cpp">
-      <PrecompiledHeader>Create</PrecompiledHeader>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bolt-Core\Bolt-Core.vcxproj">
