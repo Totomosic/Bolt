@@ -146,6 +146,17 @@
     <ClInclude Include="src\Network\Packets.h" />
     <ClInclude Include="src\Network\Serialization.h" />
     <ClInclude Include="src\Network\ServerInitPackets.h" />
+    <ClInclude Include="src\Players\Camera\CameraController.h" />
+    <ClInclude Include="src\Players\Characters\Entities\CurrentMap.h" />
+    <ClInclude Include="src\Players\Characters\Entities\EntityNetworkData.h" />
+    <ClInclude Include="src\Players\Characters\Entities\NetworkIdentity.h" />
+    <ClInclude Include="src\Players\Characters\Entities\TileTransform.h" />
+    <ClInclude Include="src\Players\Characters\NetworkObjectManager.h" />
+    <ClInclude Include="src\Players\Player.h" />
+    <ClInclude Include="src\Players\PlayerManager.h" />
+    <ClInclude Include="src\Players\PlayerNetworkData.h" />
+    <ClInclude Include="src\Players\GameNetworkData.h" />
+    <ClInclude Include="src\ScenePackets.h" />
     <ClInclude Include="src\Scenes\CharacterScene.h" />
     <ClInclude Include="src\Scenes\GameScene.h" />
     <ClInclude Include="src\Scenes\ServerScene.h" />
@@ -163,6 +174,13 @@
     </ClCompile>
     <ClCompile Include="src\NetworkManager.cpp" />
     <ClCompile Include="src\Network\NetworkServer.cpp" />
+    <ClCompile Include="src\Players\Camera\CameraController.cpp" />
+    <ClCompile Include="src\Players\Characters\Entities\CurrentMap.cpp" />
+    <ClCompile Include="src\Players\Characters\Entities\NetworkIdentity.cpp" />
+    <ClCompile Include="src\Players\Characters\Entities\TileTransform.cpp" />
+    <ClCompile Include="src\Players\Characters\NetworkObjectManager.cpp" />
+    <ClCompile Include="src\Players\Player.cpp" />
+    <ClCompile Include="src\Players\PlayerManager.cpp" />
     <ClCompile Include="src\Scenes\CharacterScene.cpp" />
     <ClCompile Include="src\Scenes\GameScene.cpp" />
     <ClCompile Include="src\Scenes\ServerScene.cpp" />

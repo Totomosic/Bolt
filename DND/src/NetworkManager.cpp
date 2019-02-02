@@ -44,7 +44,7 @@ namespace DND
 	{
 		m_Server.Initialize();
 
-		m_Server.AddPacketListener(PacketType::AddressPairResponse, [this, callback = std::move(callback)](ReceivedPacket& packet)
+		m_Server.AddPacketListenerTimeout(PacketType::AddressPairResponse, 5, [this, callback](ReceivedPacket& packet)
 		{
 			{
 				std::scoped_lock<std::mutex> lock(m_InitializedMutex);
@@ -54,8 +54,13 @@ namespace DND
 				m_IsInitialized = true;
 				BLT_INFO("NetworkManager Initialized with Public={0}, Private={1}", m_Address.PublicEndpoint, m_Address.PrivateEndpoint);
 			}
-			callback();
+			callback(true);
 			return true;
+		},
+		[callback]()
+		{
+			BLT_ERROR("NetworkManager initialization timed out");
+			callback(false);
 		});
 
 		UploadAddressPacket addressPacket;
@@ -68,6 +73,45 @@ namespace DND
 		std::scoped_lock<std::mutex> lock(m_InitializedMutex);
 		m_IsInitialized = false;
 		m_Server.Terminate(std::move(callback));
+	}
+
+	void NetworkManager::RegisterAsHost()
+	{
+		BLT_INFO("REGISTERING AS HOST Public={0}, Private={1}", Address().PublicEndpoint, Address().PrivateEndpoint);
+		RegisterAsHostPacket packet;
+		packet.PrivateEndpoint = m_Server.Address();
+		m_Server.SendPacket(s_Ec2Address, packet);
+	}
+
+	void NetworkManager::RemoveAsHost()
+	{
+		BLT_INFO("REMOVING AS HOST Public={0}, Private={1}", Address().PublicEndpoint, Address().PrivateEndpoint);
+		RemoveAsHostPacket packet;
+		packet.PrivateEndpoint = m_Server.Address();
+		m_Server.SendPacket(s_Ec2Address, packet);
+	}
+
+	void NetworkManager::GetAllHosts(float timeout, NetworkManager::GetHostsCallback callback, NetworkManager::GetHostsTimeoutCallback timeoutCallback)
+	{
+		m_Server.AddPacketListenerTimeout(PacketType::GetHostsResponse, timeout, [callback = std::move(callback)](ReceivedPacket& packet)
+		{
+			GetHostsResponsePacket response;
+			Deserialize(packet.Packet, response);
+			callback(response.Hosts);
+			return true;
+		},
+		[callback = std::move(timeoutCallback)]()
+		{
+			callback();
+		});
+
+		GetAllHostsPacket p;
+		m_Server.SendPacket(s_Ec2Address, p);
+	}
+
+	void NetworkManager::Update()
+	{
+		m_Server.Update(Time::RenderingTimeline().DeltaTime());
 	}
 
 }

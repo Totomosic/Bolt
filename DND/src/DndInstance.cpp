@@ -1,31 +1,27 @@
 #include "bltpch.h"
 #include "DndInstance.h"
+#include "NetworkManager.h"
 
 namespace DND
 {
 
-	DndInstance::DndInstance(Layer& layer, const ResourcePtr<Texture2D>& tileset) : Component(),
-		m_Tilemap(layer, 50, 50)
+	DndInstance::DndInstance(TilemapManager&& tilemap, ObjectFactory&& factory, Camera* mainCamera) : Component(),
+		m_Tilemap(std::move(tilemap)), m_ObjectManager(std::move(factory), m_Tilemap), m_PlayerManager(m_ObjectManager), m_Camera(mainCamera)
 	{
-		id_t grassTileId = m_Tilemap.TileImages().AddTile(tileset->GetImage(0, 0, 32, 32));
-		id_t pathTileId = m_Tilemap.TileImages().AddTile(tileset->GetImage(0, 32, 32, 32));
-
-		Tilemap map0(50, 50);
-		TilemapLayer& map0Layer = map0.AddLayer(1.0f);
-		map0Layer.SetRegion(0, 0, map0Layer.Width(), map0Layer.Height(), grassTileId);
-		map0Layer.SetRegion(22, 0, 6, map0Layer.Height(), pathTileId);
-		m_Tilemap.AddMap(std::move(map0));
+		
 	}
 
 	void DndInstance::Start()
 	{
+		NetworkManager::Get().RegisterAsHost();
 		m_Tilemap.LoadTilemap(0);
-		m_Tilemap.SetCurrentMap(0);		
+		m_Tilemap.SetCurrentMap(0);
+
 	}
 
 	void DndInstance::End()
 	{
-
+		NetworkManager::Get().RemoveAsHost();
 	}
 
 	std::unique_ptr<Component> DndInstance::Clone() const

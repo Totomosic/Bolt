@@ -150,6 +150,7 @@
     <ClInclude Include="src\Core\Color.h" />
     <ClInclude Include="src\Core\Events\Event.h" />
     <ClInclude Include="src\Core\Events\EventDispatcher.h" />
+    <ClInclude Include="src\Core\Events\EventListener.h" />
     <ClInclude Include="src\Core\Events\EventManager.h" />
     <ClInclude Include="src\Core\Events\EventQueue.h" />
     <ClInclude Include="src\Core\Events\Events.h" />

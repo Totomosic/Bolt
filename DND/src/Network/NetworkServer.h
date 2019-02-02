@@ -30,13 +30,15 @@ namespace DND
 	{
 	public:
 		using PacketReceivedCallback = std::function<bool(ReceivedPacket&)>;
+		using ListenerTimeoutCallback = std::function<void()>;
 		using ServerTerminatedCallback = std::function<void()>;
 
-		struct PacketListenerId
+		struct ListenerInfo
 		{
 		public:
-			PacketType Type;
-			PacketReceivedCallback* CallbackPtr;
+			PacketReceivedCallback Callback;
+			float SecondsRemaining;
+			ListenerTimeoutCallback TimeoutCallback;
 		};
 
 	private:
@@ -44,7 +46,7 @@ namespace DND
 
 		SocketAddress m_BoundAddress;
 		UDPsocket m_Socket;
-		std::unordered_map<PacketType, std::vector<std::unique_ptr<PacketReceivedCallback>>> m_Callbacks;
+		std::unordered_map<PacketType, std::vector<ListenerInfo>> m_Callbacks;
 
 	public:
 		NetworkServer(SocketAddress address);
@@ -55,6 +57,9 @@ namespace DND
 		void Initialize();
 		void Terminate(ServerTerminatedCallback callback);
 		void AddPacketListener(PacketType type, PacketReceivedCallback listener);
+		void AddPacketListenerTimeout(PacketType type, float timeoutSeconds, PacketReceivedCallback listener, ListenerTimeoutCallback timeoutCallback);
+
+		void Update(float deltaTime);
 
 		template<typename T>
 		void SendPacket(const SocketAddress& address, const T& packet)

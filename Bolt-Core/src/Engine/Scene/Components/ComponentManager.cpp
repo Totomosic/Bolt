@@ -91,6 +91,10 @@ namespace Bolt
 
 	Component* ComponentManager::AddComponent(size_t componentTypeHash, std::unique_ptr<Component>&& component)
 	{
+		if (HasComponentPrivate(componentTypeHash))
+		{
+			RemoveComponentById(m_TypeHashMap.at(componentTypeHash));
+		}
 		id_t id = FindNextId();
 		component->m_Id = id;
 		m_ComponentArray[id] = { std::move(component), componentTypeHash };

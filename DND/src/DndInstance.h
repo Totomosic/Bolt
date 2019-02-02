@@ -1,5 +1,9 @@
 #pragma once
 #include "Map/TilemapManager.h"
+#include "Players/Characters/NetworkObjectManager.h"
+#include "Players/PlayerManager.h"
+
+#include "ScenePackets.h"
 
 namespace DND
 {
@@ -8,9 +12,12 @@ namespace DND
 	{
 	private:
 		TilemapManager m_Tilemap;
+		NetworkObjectManager m_ObjectManager;
+		PlayerManager m_PlayerManager;
+		Camera* m_Camera;
 
 	public:
-		DndInstance(Layer& layer, const ResourcePtr<Texture2D>& tileset);
+		DndInstance(TilemapManager&& tilemap, ObjectFactory&& factory, Camera* mainCamera);
 
 		void Start() override;
 		void End() override;

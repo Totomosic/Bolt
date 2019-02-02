@@ -14,8 +14,10 @@ namespace DND
 	public:
 		static NetworkManager& Get();
 
-		using InitCallback = std::function<void()>;
+		using InitCallback = std::function<void(bool)>;
 		using TerminateCallback = std::function<void()>;
+		using GetHostsCallback = std::function<void(std::vector<AddressPair>)>;
+		using GetHostsTimeoutCallback = std::function<void()>;
 
 	private:
 		NetworkServer m_Server;
@@ -32,6 +34,12 @@ namespace DND
 
 		void Initialize(InitCallback callback);
 		void Terminate(TerminateCallback callback);
+
+		void RegisterAsHost();
+		void RemoveAsHost();
+		void GetAllHosts(float timeout, GetHostsCallback callback, GetHostsTimeoutCallback timeoutCallback);
+
+		void Update();
 
 	};
 
