@@ -74,7 +74,7 @@ namespace Bolt
 		template<typename T, typename... Args>
 		T* AddComponent(Args&&... args)
 		{
-			return AddComponent<T>(std::make_unique<T>(args...));
+			return AddComponent<T>(std::make_unique<T>(std::forward<Args>(args)...));
 		}
 
 		template<typename T>

@@ -9,13 +9,13 @@ namespace Bolt
 	class BLT_API EventDispatcher
 	{
 	public:
-		using Listener = std::function<bool(id_t, T&)>;
+		using Listener = EventListenerContainer<T>;
 
 	private:
 		id_t m_DispatcherId;
 		id_t m_EventId;
 		id_t m_ListenerId;
-		std::unordered_map<id_t, Listener> m_Listeners;
+		std::unordered_map<id_t, std::unique_ptr<Listener>> m_Listeners;
 		IdManager<id_t> m_IdManager;
 
 	public:
@@ -82,10 +82,11 @@ namespace Bolt
 			return m_DispatcherId;
 		}
 
-		id_t Subscribe(const Listener& listener)
+		template<typename FuncType>
+		id_t Subscribe(FuncType listener)
 		{
 			id_t id = m_IdManager.GetNextId();
-			m_Listeners[id] = listener;
+			m_Listeners[id] = std::make_unique<EventListener<FuncType, T>>(std::move(listener));
 			return id;
 		}
 
@@ -118,14 +119,13 @@ namespace Bolt
 			m_IdManager.Reset();
 		}
 
-		bool PrivateEventCallback(id_t eventId, Event& args)
+		bool PrivateEventCallback(id_t listenerId, Event& args)
 		{
-			int size = m_Listeners.size();
 			auto it = m_Listeners.begin();
 			bool handled = false;
-			for (int i = 0; i < size; i++)
+			while (it != m_Listeners.end())
 			{
-				if (it->second(it->first, *(T*)&args))
+				if ((*it->second)(it->first, *(T*)&args))
 				{
 					// Event was handled and should not be propogated to other event listeners
 					handled = true;

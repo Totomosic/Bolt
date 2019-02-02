@@ -779,6 +779,7 @@
     </ClInclude>
     <ClInclude Include="src\Logging.h" />
     <ClInclude Include="src\Types.h" />
+    <ClInclude Include="src\Core\Events\EventListener.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\BoltTL\string.cpp">

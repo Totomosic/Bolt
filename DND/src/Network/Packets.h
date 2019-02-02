@@ -21,7 +21,12 @@ namespace DND
 		RegisterAsHost,
 		GetAllHosts,
 		GetHostsResponse,
-		RemoveAsHost
+		RemoveAsHost,
+
+		Hello,
+		Welcome,
+		Introduction,
+		Disconnect
 	};
 
 	template<>

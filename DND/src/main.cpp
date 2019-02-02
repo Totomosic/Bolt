@@ -26,9 +26,9 @@ namespace DND
 
 			SceneManager::SetCurrentScene(titleScene);
 
-			NetworkManager::Get().Initialize([]()
+			NetworkManager::Get().Initialize([](bool initialized)
 			{
-
+				
 			});
 		}
 
@@ -39,7 +39,7 @@ namespace DND
 
 		void Update() override
 		{
-		
+			NetworkManager::Get().Update();
 		}
 
 		void Render() override

@@ -2,6 +2,7 @@
 #include "Event.h"
 #include "IdManager.h"
 #include "EventQueue.h"
+#include "EventListener.h"
 
 namespace Bolt
 {
@@ -10,12 +11,11 @@ namespace Bolt
 	{
 	public:
 		// Event handler function, returns whether the event has been handled and should not be passed on to other listeners
-		using Listener = std::function<bool(id_t, Event&)>;
 
-		struct BLT_API EventListener
+		struct BLT_API EventListenerInfo
 		{
 		public:
-			Listener Callback;
+			std::unique_ptr<EventListenerContainer<Event>> Callback;
 			id_t DispatcherId;
 			id_t ListenerId;
 		};
@@ -28,12 +28,12 @@ namespace Bolt
 			std::unique_ptr<Event> Args;
 		};
 
-		struct BLT_API ListenerInfo
+		/*struct BLT_API ListenerInfo
 		{
 		public:
 			id_t EventId;
 			Listener ListenerPtr;
-		};		
+		};*/		
 
 	public:
 		// Max events that can be queued per frame
@@ -48,7 +48,7 @@ namespace Bolt
 		static std::mutex s_ListenersMutex;
 
 		static EventQueue<EventInfo> s_EventQueue;
-		static std::unordered_map<id_t, std::vector<EventListener>> s_Listeners;
+		static std::unordered_map<id_t, std::vector<EventListenerInfo>> s_Listeners;
 		static std::unordered_map<id_t, id_t> s_ListenerMap;
 
 		static IdManager<id_t> s_ListenerIdManager;
@@ -63,13 +63,28 @@ namespace Bolt
 		static void ReleaseDispatcherId(id_t id);
 		
 		// Register a listener to a specific event from an dispatcher with given id, returns a Listener Id
-		static id_t Subscribe(id_t eventId, const Listener& listener, id_t dispatcherId);
+		template<typename FuncType>
+		static id_t Subscribe(id_t eventId, FuncType listener, id_t dispatcherId)
+		{
+			return Subscribe(eventId, (std::unique_ptr<EventListenerContainer<Event>>)std::make_unique<EventListener<FuncType, Event>>(std::move(listener)), dispatcherId);
+		}
+
 		// Register a listener to a specific event from any dispatcher, returns a listener Id
-		static id_t Subscribe(id_t eventId, const Listener& listener);
+		template<typename FuncType>
+		static id_t Subscribe(id_t eventId, FuncType listener)
+		{
+			return Subscribe(eventId, std::move(listener), EventManager::IGNORE_DISPATCHER_ID);
+		}
+
 		// Stop a listener from receiving events
 		static void Unsubscribe(id_t listenerId);
+
 		// Update a listener
-		static void UpdateListener(id_t listenerId, const Listener& listener);
+		template<typename FuncType>
+		static void UpdateListener(id_t listenerId, FuncType listener)
+		{
+			UpdateListener(listenerId, (std::unique_ptr<EventListenerContainer<Event>>)std::make_unique<EventListener<FuncType, Event>>(std::move(listener)));
+		}
 
 		// Post a new event with given args from a specific dispatcher
 		static void Post(id_t eventId, id_t dispatcherId, std::unique_ptr<Event>&& args = nullptr);
@@ -80,6 +95,10 @@ namespace Bolt
 		static void FlushEvents();
 		static id_t FindNextListenerId();
 		static void ReleaseListenerId(id_t id);
+
+	private:
+		static id_t Subscribe(id_t eventId, std::unique_ptr<EventListenerContainer<Event>>&& listener, id_t dispatcherId);
+		static void UpdateListener(id_t listenerId, std::unique_ptr<EventListenerContainer<Event>>&& listener);
 
 	};
 

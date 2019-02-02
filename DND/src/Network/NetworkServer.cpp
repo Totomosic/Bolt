@@ -9,11 +9,11 @@ namespace DND
 	{
 		m_OnReceivedPacket.Subscribe([this](id_t listenerId, ReceivedPacket& packet)
 		{
-			std::vector<std::unique_ptr<PacketReceivedCallback>>& callbacks = m_Callbacks[packet.Type];
+			std::vector<ListenerInfo>& callbacks = m_Callbacks[packet.Type];
 			for (int i = callbacks.size() - 1; i >= 0; i--)
 			{
-				std::unique_ptr<PacketReceivedCallback>& callbackPtr = callbacks[i];
-				if ((*callbackPtr)(packet))
+				ListenerInfo& callbackInfo = callbacks[i];
+				if (callbackInfo.Callback(packet))
 				{
 					callbacks.erase(callbacks.begin() + i);
 				}
@@ -94,9 +94,34 @@ namespace DND
 
 	void NetworkServer::AddPacketListener(PacketType type, NetworkServer::PacketReceivedCallback listener)
 	{
-		std::unique_ptr<PacketReceivedCallback> listenerPtr = std::make_unique<PacketReceivedCallback>();
-		*listenerPtr = std::move(listener);
-		m_Callbacks[type].push_back(std::move(listenerPtr));
+		AddPacketListenerTimeout(type, -1.0f, std::move(listener), []()
+		{
+		
+		});
+	}
+
+	void NetworkServer::AddPacketListenerTimeout(PacketType type, float timeoutSeconds, NetworkServer::PacketReceivedCallback listener, NetworkServer::ListenerTimeoutCallback timeoutCallback)
+	{
+		m_Callbacks[type].push_back({ std::move(listener), timeoutSeconds, std::move(timeoutCallback) });
+	}
+
+	void NetworkServer::Update(float deltaTime)
+	{
+		for (auto& pair : m_Callbacks)
+		{
+			for (int i = pair.second.size() - 1; i >= 0; i--)
+			{
+				ListenerInfo& info = pair.second[i];
+				if (info.SecondsRemaining > 0.0f)
+				{
+					info.SecondsRemaining -= deltaTime;
+					if (info.SecondsRemaining <= 0.0f)
+					{
+						info.TimeoutCallback();
+					}
+				}
+			}
+		}
 	}
 
 	bool NetworkServer::Bind()

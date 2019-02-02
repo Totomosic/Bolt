@@ -24,6 +24,11 @@ namespace Bolt
 		ObjectFactory();
 		ObjectFactory(Layer& layer);
 		ObjectFactory(GameObject* parent);
+		ObjectFactory(const ObjectFactory& other) = delete;
+		ObjectFactory& operator=(const ObjectFactory& other) = delete;
+		ObjectFactory(ObjectFactory&& other) = default;
+		ObjectFactory& operator=(ObjectFactory&& other) = default;
+		~ObjectFactory() = default;
 
 		Layer* CurrentLayer() const;
 		GameObject* CurrentParent() const;
