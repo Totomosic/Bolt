@@ -4,8 +4,8 @@
 namespace DND
 {
 
-	NetworkObjectManager::NetworkObjectManager(ObjectFactory&& factory, TilemapManager& mapManager)
-		: m_NetworkIdManager(0, GameObject::InvalidID - 1), m_Objects(), m_Factory(std::move(factory)), m_MapManager(&mapManager)
+	NetworkObjectManager::NetworkObjectManager(ObjectFactory& factory, TilemapManager& mapManager)
+		: m_NetworkIdManager(0, GameObject::InvalidID - 1), m_Objects(), m_Factory(&factory), m_MapManager(&mapManager)
 	{
 	
 	}
@@ -22,12 +22,12 @@ namespace DND
 
 	const ObjectFactory& NetworkObjectManager::Factory() const
 	{
-		return m_Factory;
+		return *m_Factory;
 	}
 
 	ObjectFactory& NetworkObjectManager::Factory()
 	{
-		return m_Factory;
+		return *m_Factory;
 	}
 
 	bool NetworkObjectManager::HasObjectWithNetworkId(id_t networkId) const

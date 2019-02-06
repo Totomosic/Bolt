@@ -96,8 +96,14 @@ namespace Bolt
 			m_IdManager.ReleaseId(listenerId);
 		}
 
+		// Post a new event with no args from thsi specific dispatcher
+		void Post()
+		{
+			EventManager::Post(m_EventId, m_DispatcherId);
+		}
+
 		// Post a new event with given args from this specific dispatcher
-		void Post(std::unique_ptr<T>&& args = nullptr)
+		void Post(T args)
 		{
 			EventManager::Post(m_EventId, m_DispatcherId, std::move(args));
 		}

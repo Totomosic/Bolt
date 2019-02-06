@@ -1,6 +1,7 @@
 #include "Types.h"
-
 #include "EventManager.h"
+
+#include "../Tasks/TaskEvents.h"
 
 namespace Bolt
 {
@@ -39,16 +40,14 @@ namespace Bolt
 		ReleaseListenerId(listenerId);
 	}
 
-	void EventManager::Post(id_t eventId, id_t dispatcherId, std::unique_ptr<Event>&& args)
+	void EventManager::Post(id_t eventId, id_t dispatcherId)
 	{
-		std::scoped_lock<std::mutex> lock(s_EventQueueMutex);
-		BLT_ASSERT(s_EventQueue.EventCount() < MAX_EVENTS, "Event overflow");		
-		s_EventQueue.AddEvent({ eventId, dispatcherId, std::move(args) });
+		Post<Event>(eventId, dispatcherId, std::unique_ptr<Event>());
 	}
 
-	void EventManager::Post(id_t eventId, std::unique_ptr<Event>&& args)
+	void EventManager::Post(id_t eventId)
 	{
-		return Post(eventId, EventManager::IGNORE_DISPATCHER_ID, std::move(args));
+		Post(eventId, EventManager::IGNORE_DISPATCHER_ID);
 	}
 
 	void EventManager::FlushEvents()
@@ -88,7 +87,17 @@ namespace Bolt
 		s_ListenerIdManager.ReleaseId(id);
 	}
 
-	id_t EventManager::Subscribe(id_t eventId, std::unique_ptr<EventListenerContainer<Event>>&& listener, id_t dispatcherId)
+	void EventManager::Initialize()
+	{
+		Subscribe(Events::TASK_CONTINUE_ON_MAIN_THREAD, [](id_t listenerId, Event& eArgs)
+		{
+			TaskCompletedEvent& e = *(TaskCompletedEvent*)&eArgs;
+			e.Execute();
+			return true;
+		});
+	}
+
+	id_t EventManager::Subscribe(id_t eventId, std::unique_ptr<EventListenerContainer<Event>> listener, id_t dispatcherId)
 	{
 		std::scoped_lock<std::mutex> lock(s_ListenersMutex);
 		id_t listenerId = FindNextListenerId();
@@ -98,7 +107,7 @@ namespace Bolt
 		return listenerId;
 	}
 
-	void EventManager::UpdateListener(id_t listenerId, std::unique_ptr<EventListenerContainer<Event>>&& listener)
+	void EventManager::UpdateListener(id_t listenerId, std::unique_ptr<EventListenerContainer<Event>> listener)
 	{
 		std::scoped_lock<std::mutex> lock(s_ListenersMutex);
 		BLT_ASSERT(s_ListenerMap.find(listenerId) != s_ListenerMap.end(), "Unable to find listener with Id " + std::to_string(listenerId));

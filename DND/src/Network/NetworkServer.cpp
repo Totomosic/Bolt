@@ -59,10 +59,10 @@ namespace DND
 						{
 							break;
 						}
-						std::unique_ptr<ReceivedPacket> packetEventArgs = std::make_unique<ReceivedPacket>();
-						packetEventArgs->Type = packetType;
-						packetEventArgs->FromAddress = fromAddress;
-						packetEventArgs->Packet = std::move(packet);
+						ReceivedPacket packetEventArgs;
+						packetEventArgs.Type = packetType;
+						packetEventArgs.FromAddress = fromAddress;
+						packetEventArgs.Packet = std::move(packet);
 						m_OnReceivedPacket.Post(std::move(packetEventArgs));
 					}
 					else

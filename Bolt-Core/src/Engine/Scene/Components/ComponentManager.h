@@ -66,13 +66,13 @@ namespace Bolt
 		}
 
 		template<typename T>
-		T* AddComponent(std::unique_ptr<T>&& component)
+		T& AddComponent(std::unique_ptr<T>&& component)
 		{
-			return (T*)AddComponent(typeid(T).hash_code(), std::move(component));
+			return *(T*)AddComponent(typeid(T).hash_code(), std::move(component));
 		}
 
 		template<typename T, typename... Args>
-		T* AddComponent(Args&&... args)
+		T& AddComponent(Args&&... args)
 		{
 			return AddComponent<T>(std::make_unique<T>(std::forward<Args>(args)...));
 		}

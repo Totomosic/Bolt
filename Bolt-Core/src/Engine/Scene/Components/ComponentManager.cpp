@@ -113,6 +113,7 @@ namespace Bolt
 	{
 		ComponentInfo& c = m_ComponentArray[id];
 		c.component->End();
+		c.component.reset(nullptr);
 		m_TypeHashMap.erase(c.type_hash);
 		auto it = std::find(m_OrderedIndex.begin(), m_OrderedIndex.end(), id);
 		if (it != m_OrderedIndex.end())
@@ -125,14 +126,8 @@ namespace Bolt
 	void ComponentManager::RemoveComponent(size_t componentTypeHash)
 	{
 		BLT_ASSERT(HasComponentPrivate(componentTypeHash), "Does not have given component type");
-		Component& component = GetComponent(componentTypeHash);
-		m_TypeHashMap.erase(componentTypeHash);
-		auto it = std::find(m_OrderedIndex.begin(), m_OrderedIndex.end(), component.Id());
-		if (it != m_OrderedIndex.end())
-		{
-			m_OrderedIndex.erase(it);
-		}
-		m_ComponentIdManager.ReleaseId(component.Id());
+		id_t id = m_TypeHashMap.at(componentTypeHash);
+		RemoveComponentById(id);
 	}
 
 	void ComponentManager::Clear()
@@ -140,6 +135,7 @@ namespace Bolt
 		for (id_t index : m_OrderedIndex)
 		{
 			m_ComponentArray[index].component->End();
+			m_ComponentArray[index].component.reset(nullptr);
 		}
 		m_TypeHashMap.clear();
 		m_OrderedIndex.clear();

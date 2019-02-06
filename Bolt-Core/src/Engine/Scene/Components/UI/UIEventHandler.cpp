@@ -19,26 +19,26 @@ namespace Bolt
 		bool hovering = IsHovering();
 		if (hovering)
 		{
-			auto args = std::make_unique<UIHoverEvent>();
-			args->Object = gameObject();
-			args->ScreenPosition = Input::MousePosition().xy();
-			args->ObjectRelPosition = args->ScreenPosition - args->Object->transform().Position().xy();
+			UIHoverEvent args;
+			args.Object = gameObject();
+			args.ScreenPosition = Input::MousePosition().xy();
+			args.ObjectRelPosition = args.ScreenPosition - args.Object->transform().Position().xy();
 			OnHover.Post(std::move(args));
 		}
 		if (!m_IsHovering && hovering)
 		{
-			auto args = std::make_unique<UIHoverEvent>();
-			args->Object = gameObject();
-			args->ScreenPosition = Input::MousePosition().xy();
-			args->ObjectRelPosition = args->ScreenPosition - args->Object->transform().Position().xy();
+			UIHoverEvent args;
+			args.Object = gameObject();
+			args.ScreenPosition = Input::MousePosition().xy();
+			args.ObjectRelPosition = args.ScreenPosition - args.Object->transform().Position().xy();
 			OnHoverEntry.Post(std::move(args));
 		}
 		if (m_IsHovering && !hovering)
 		{
-			auto args = std::make_unique<UIHoverEvent>();
-			args->Object = gameObject();
-			args->ScreenPosition = Input::MousePosition().xy();
-			args->ObjectRelPosition = args->ScreenPosition - args->Object->transform().Position().xy();
+			UIHoverEvent args;
+			args.Object = gameObject();
+			args.ScreenPosition = Input::MousePosition().xy();
+			args.ObjectRelPosition = args.ScreenPosition - args.Object->transform().Position().xy();
 			OnHoverExit.Post(std::move(args));
 		}
 		if (m_IsHovering)
@@ -46,11 +46,11 @@ namespace Bolt
 			int button = (Input::MouseButtonReleased(MouseButton::Left)) ? (int)MouseButton::Left : (Input::MouseButtonReleased(MouseButton::Right)) ? (int)MouseButton::Right : (Input::MouseButtonDown(MouseButton::Middle)) ? (int)MouseButton::Middle : -1;
 			if (button != -1)
 			{
-				auto args = std::make_unique<UIClickedEvent>();
-				args->Object = gameObject();
-				args->ScreenPosition = Input::MousePosition().xy();
-				args->ObjectRelPosition = args->ScreenPosition - args->Object->transform().Position().xy();
-				args->Button = (MouseButton)button;
+				UIClickedEvent args;
+				args.Object = gameObject();
+				args.ScreenPosition = Input::MousePosition().xy();
+				args.ObjectRelPosition = args.ScreenPosition - args.Object->transform().Position().xy();
+				args.Button = (MouseButton)button;
 				OnClicked.Post(std::move(args));
 			}
 		}

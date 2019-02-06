@@ -299,11 +299,11 @@ namespace Bolt
 		s_Mouse.RelY = (float)mouseY - s_Mouse.Y;
 		s_Mouse.X = (float)mouseX;
 		s_Mouse.Y = (float)mouseY;
-		std::unique_ptr<Bolt::MouseMovedEvent> args = std::make_unique<Bolt::MouseMovedEvent>();
-		args->x = (float)mouseX;
-		args->y = (float)mouseY;
-		args->relX = s_Mouse.RelX;
-		args->relY = s_Mouse.RelY;
+		MouseMovedEvent args;
+		args.x = (float)mouseX;
+		args.y = (float)mouseY;
+		args.relX = s_Mouse.RelX;
+		args.relY = s_Mouse.RelY;
 		OnMouseMoved.Post(std::move(args));
 	}
 
@@ -313,9 +313,9 @@ namespace Bolt
 		s_Mouse.RelYScroll = (float)yScroll;
 		s_Mouse.XScroll += (float)xScroll;
 		s_Mouse.YScroll += (float)yScroll;
-		std::unique_ptr<Bolt::MouseScrolledEvent> args = std::make_unique<Bolt::MouseScrolledEvent>();
-		args->xOffset = (float)xScroll;
-		args->yOffset = (float)yScroll;
+		MouseScrolledEvent args;
+		args.xOffset = (float)xScroll;
+		args.yOffset = (float)yScroll;
 		OnMouseScrolled.Post(std::move(args));
 	}
 
@@ -328,19 +328,19 @@ namespace Bolt
 		}
 		if (action == (int)ButtonState::Pressed || action == GLFW_REPEAT)
 		{
-			std::unique_ptr<Bolt::MousePressedEvent> args = std::make_unique<Bolt::MousePressedEvent>();
-			args->Button = (MouseButton)button;
-			args->IsRepeat = action == GLFW_REPEAT;
-			args->x = s_Mouse.X;
-			args->y = s_Mouse.Y;
+			MousePressedEvent args;
+			args.Button = (MouseButton)button;
+			args.IsRepeat = action == GLFW_REPEAT;
+			args.x = s_Mouse.X;
+			args.y = s_Mouse.Y;
 			OnMousePressed.Post(std::move(args));
 		}
 		else
 		{
-			std::unique_ptr<Bolt::MouseReleasedEvent> args = std::make_unique<Bolt::MouseReleasedEvent>();
-			args->Button = (MouseButton)button;
-			args->x = s_Mouse.X;
-			args->y = s_Mouse.Y;
+			MouseReleasedEvent args;
+			args.Button = (MouseButton)button;
+			args.x = s_Mouse.X;
+			args.y = s_Mouse.Y;
 			OnMouseReleased.Post(std::move(args));
 		}
 	}
@@ -354,15 +354,15 @@ namespace Bolt
 		}
 		if (action == (int)ButtonState::Pressed || action == GLFW_REPEAT)
 		{
-			std::unique_ptr<Bolt::KeyPressedEvent> args = std::make_unique<Bolt::KeyPressedEvent>();
-			args->KeyCode = (Keycode)key;
-			args->IsRepeat = action == GLFW_REPEAT;
+			KeyPressedEvent args;
+			args.KeyCode = (Keycode)key;
+			args.IsRepeat = action == GLFW_REPEAT;
 			OnKeyPressed.Post(std::move(args));
 		}
 		else
 		{
-			std::unique_ptr<Bolt::KeyReleasedEvent> args = std::make_unique<Bolt::KeyReleasedEvent>();
-			args->KeyCode = (Keycode)key;
+			KeyReleasedEvent args;
+			args.KeyCode = (Keycode)key;
 			OnKeyReleased.Post(std::move(args));
 		}
 	}

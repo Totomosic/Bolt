@@ -159,6 +159,7 @@
     <ClInclude Include="src\ScenePackets.h" />
     <ClInclude Include="src\Scenes\CharacterScene.h" />
     <ClInclude Include="src\Scenes\GameScene.h" />
+    <ClInclude Include="src\Scenes\LoadingScene.h" />
     <ClInclude Include="src\Scenes\ServerScene.h" />
     <ClInclude Include="src\Scenes\TitleScene.h" />
   </ItemGroup>
@@ -183,6 +184,7 @@
     <ClCompile Include="src\Players\PlayerManager.cpp" />
     <ClCompile Include="src\Scenes\CharacterScene.cpp" />
     <ClCompile Include="src\Scenes\GameScene.cpp" />
+    <ClCompile Include="src\Scenes\LoadingScene.cpp" />
     <ClCompile Include="src\Scenes\ServerScene.cpp" />
     <ClCompile Include="src\Scenes\TitleScene.cpp" />
   </ItemGroup>

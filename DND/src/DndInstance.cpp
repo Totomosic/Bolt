@@ -5,23 +5,26 @@
 namespace DND
 {
 
-	DndInstance::DndInstance(TilemapManager&& tilemap, ObjectFactory&& factory, Camera* mainCamera) : Component(),
-		m_Tilemap(std::move(tilemap)), m_ObjectManager(std::move(factory), m_Tilemap), m_PlayerManager(m_ObjectManager), m_Camera(mainCamera)
-	{
-		
-	}
-
-	void DndInstance::Start()
+	DndInstance::DndInstance(DndInitData initData) : Component(),
+		m_Tilemap(initData.MapManager), m_ObjectManager(initData.Factory, m_Tilemap), m_PlayerManager(m_ObjectManager), m_Camera(initData.MainCamera)
 	{
 		NetworkManager::Get().RegisterAsHost();
-		m_Tilemap.LoadTilemap(0);
-		m_Tilemap.SetCurrentMap(0);
-
+		m_Tilemap.LoadTilemapAsync(0, [this, callback = std::move(initData.TilemapReadyCallback)]()
+		{
+			m_Tilemap.SetCurrentMap(0);
+			callback();
+		});		
 	}
 
 	void DndInstance::End()
 	{
 		NetworkManager::Get().RemoveAsHost();
+		m_Tilemap.UnloadAllTilemaps();
+	}
+
+	void DndInstance::CreateGame(const WelcomePacket& data)
+	{
+		
 	}
 
 	std::unique_ptr<Component> DndInstance::Clone() const

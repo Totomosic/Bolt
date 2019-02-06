@@ -3,6 +3,7 @@
 #include "Scenes/CharacterScene.h"
 #include "Scenes/GameScene.h"
 #include "Scenes/ServerScene.h"
+#include "Scenes/LoadingScene.h"
 #include "Scenes/TitleScene.h"
 
 #include "NetworkManager.h"
@@ -19,6 +20,7 @@ namespace DND
 			ResourceManager::LoadPack(resources);
 			ResourceManager::Register(std::make_unique<Font>("res/arial.ttf", 42));
 
+			Scene& loadingScene = CreateLoadingScene(resources);
 			Scene& titleScene = CreateTitleScene(resources);
 			Scene& characterScene = CreateCharacterScene(resources);
 			Scene& serverScene = CreateServerScene(resources);
@@ -29,7 +31,7 @@ namespace DND
 			NetworkManager::Get().Initialize([](bool initialized)
 			{
 				
-			});
+			});			
 		}
 
 		void Tick() override
@@ -40,6 +42,10 @@ namespace DND
 		void Update() override
 		{
 			NetworkManager::Get().Update();
+			if (Input::KeyPressed(Keycode::Esc))
+			{
+				SceneManager::SetCurrentSceneByName("Title");
+			}
 		}
 
 		void Render() override

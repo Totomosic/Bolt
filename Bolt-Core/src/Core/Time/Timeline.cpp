@@ -67,30 +67,6 @@ namespace Bolt
 		m_ElapsedTime = 0.0;
 	}
 
-	Timer& Timeline::AddTimer(double time, Timer::TimerFunc callback)
-	{
-		return AddTemporaryTimer(time, 0, std::move(callback));
-	}
-
-	Timer& Timeline::AddTemporaryTimer(double time, int invokeCount, Timer::TimerFunc callback)
-	{
-		std::scoped_lock<std::mutex> lock(m_TimersMutex);
-		std::unique_ptr<Timer> timer = std::make_unique<Timer>(time, std::move(callback), true);
-		Timer& result = *timer;
-		m_Timers.AddTimerInfo({ std::move(timer), invokeCount });
-		return result;
-	}
-
-	Timer& Timeline::AddTemporaryTimerByTime(double time, double timeToDelete, Timer::TimerFunc callback)
-	{
-		return AddTemporaryTimer(time, (int)(timeToDelete / time) + 1, std::move(callback));
-	}
-
-	Timer& Timeline::AddFunction(double time, Timer::TimerFunc callback)
-	{
-		return AddTemporaryTimer(time, 1, std::move(callback));
-	}
-
 	void Timeline::RemoveTimer(Timer* timer)
 	{
 		std::scoped_lock<std::mutex> lock(m_TimersMutex);
@@ -137,6 +113,15 @@ namespace Bolt
 		{
 			m_ElapsedTime = 0.0;
 		}
+	}
+
+	Timer& Timeline::AddTemporaryTimer(double time, int invokeCount, std::unique_ptr<TimerCallbackContainer>&& callback)
+	{
+		std::scoped_lock<std::mutex> lock(m_TimersMutex);
+		std::unique_ptr<Timer> timer = std::make_unique<Timer>(time, std::move(callback), true);
+		Timer& result = *timer;
+		m_Timers.AddTimerInfo({ std::move(timer), invokeCount });
+		return result;
 	}
 
 }

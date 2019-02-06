@@ -4,10 +4,10 @@
 namespace Bolt
 {
 
-	Timer::Timer(double time, Timer::TimerFunc callback, bool start)
+	Timer::Timer(double time, std::unique_ptr<TimerCallbackContainer>&& callback, bool start)
 		: m_Time(time), m_CurrentTime(0.0), m_Callback(std::move(callback)), m_IsRunning(start)
 	{
-	
+		
 	}
 
 	double Timer::TotalTime() const
@@ -52,7 +52,7 @@ namespace Bolt
 			m_CurrentTime += elapsedTime;
 			if (m_CurrentTime >= m_Time)
 			{
-				m_Callback();
+				(*m_Callback)();
 				m_CurrentTime = 0.0;
 				return true;
 			}

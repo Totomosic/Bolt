@@ -8,19 +8,29 @@
 namespace DND
 {
 
+	struct DndInitData
+	{
+	public:
+		TilemapManager& MapManager;
+		ObjectFactory& Factory;
+		Camera* MainCamera;
+		std::function<void()> TilemapReadyCallback;
+
+	};
+
 	class DndInstance : public Component
 	{
 	private:
-		TilemapManager m_Tilemap;
+		TilemapManager& m_Tilemap;
 		NetworkObjectManager m_ObjectManager;
 		PlayerManager m_PlayerManager;
 		Camera* m_Camera;
 
 	public:
-		DndInstance(TilemapManager&& tilemap, ObjectFactory&& factory, Camera* mainCamera);
+		DndInstance(DndInitData init);
 
-		void Start() override;
 		void End() override;
+		void CreateGame(const WelcomePacket& data);
 
 		std::unique_ptr<Component> Clone() const override;
 

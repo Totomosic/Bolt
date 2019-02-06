@@ -12,8 +12,8 @@ namespace Bolt
 		m_Material.BaseColor = color;
 	}
 
-	UIsurface::UIsurface(float width, float height, const Material& material, Transform&& transform) : UIelement(),
-		m_Width(width), m_Height(height), m_Transform(std::move(transform)), m_Material(material)
+	UIsurface::UIsurface(float width, float height, Material material, Transform&& transform) : UIelement(),
+		m_Width(width), m_Height(height), m_Transform(std::move(transform)), m_Material(std::move(material))
 	{
 		
 	}
@@ -24,7 +24,7 @@ namespace Bolt
 		Mesh mesh;
 		mesh.Models.push_back({ ObjectFactory::SquareModel(), Matrix4f::Scale(m_Width, m_Height, 1), { 0 } });
 		mesh.Materials[0] = m_Material;
-		m_Object->Components().AddComponent(std::make_unique<MeshRenderer>(std::move(mesh)));
+		m_Object->Components().AddComponent<MeshRenderer>(std::move(mesh));
 		m_Object->transform() = std::move(m_Transform);
 	}
 

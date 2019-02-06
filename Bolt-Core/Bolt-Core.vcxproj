@@ -182,9 +182,15 @@
     <ClInclude Include="src\Core\Math\__Math__.h" />
     <ClInclude Include="src\Core\Memory\Allocator.h" />
     <ClInclude Include="src\Core\Memory\__Memory__.h" />
+    <ClInclude Include="src\Core\Tasks\Task.h" />
+    <ClInclude Include="src\Core\Tasks\TaskEvents.h" />
+    <ClInclude Include="src\Core\Tasks\TaskManager.h" />
+    <ClInclude Include="src\Core\Tasks\TaskResult.h" />
+    <ClInclude Include="src\Core\Tasks\__Tasks__.h" />
     <ClInclude Include="src\Core\Time\Time.h" />
     <ClInclude Include="src\Core\Time\Timeline.h" />
     <ClInclude Include="src\Core\Time\Timer.h" />
+    <ClInclude Include="src\Core\Time\TimerCallback.h" />
     <ClInclude Include="src\Core\Time\TimerSet.h" />
     <ClInclude Include="src\Core\Time\__Time__.h" />
     <ClInclude Include="src\Core\Utils\Filesystem\Directorypath.h" />

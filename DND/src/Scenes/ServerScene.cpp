@@ -20,11 +20,18 @@ namespace DND
 		{
 			region.Clear();
 			float yOffset = 300;
-			for (const AddressPair& host : hosts)
+			if (hosts.size() > 0)
 			{
-				UIsurface& joinButton = region.Rectangle(800, 150, Color::Black, Transform({ 0, yOffset, 1 }));
-				joinButton.Text(host.PublicEndpoint.ToString(), Color::White, Transform({ 0, 0, 1 }));
-				yOffset -= 175;
+				for (const AddressPair& host : hosts)
+				{
+					UIsurface& joinButton = region.Rectangle(800, 150, Color::Black, Transform({ 0, yOffset, 1 }));
+					joinButton.Text(host.PublicEndpoint.ToString(), Color::White, Transform({ 0, 0, 1 }));
+					yOffset -= 175;
+				}
+			}
+			else
+			{
+				region.Text("No active games found.", Color::Black, Transform({ 0, 300, 1 }));
 			}
 		},
 		[&region]()
@@ -48,7 +55,10 @@ namespace DND
 		hostButton.EventHandler().OnClicked.Subscribe([](id_t listenerId, UIClickedEvent& e)
 		{
 			// START GAME
-			SceneManager::SetCurrentSceneByName("Game");
+			StartGameEvent startGameEvent;
+			startGameEvent.IsHosting = true;
+			startGameEvent.Character;
+			EventManager::Post(START_GAME_EVENT, std::move(startGameEvent));
 			return true;
 		});
 

@@ -39,13 +39,36 @@ namespace Bolt
 		// Resets current and elapsed time, leaves time scale unchanged
 		void Reset();
 
-		Timer& AddTimer(double time, Timer::TimerFunc callback);
-		Timer& AddFunction(double time, Timer::TimerFunc callback);
-		Timer& AddTemporaryTimer(double time, int invokeCount, Timer::TimerFunc callback);
-		Timer& AddTemporaryTimerByTime(double time, double timeToDelete, Timer::TimerFunc callback);
+		template<typename FuncType>
+		Timer& AddTimer(double time, FuncType callback)
+		{
+			return AddTemporaryTimer(time, 0, std::move(callback));
+		}
+
+		template<typename FuncType>
+		Timer& AddFunction(double time, FuncType callback)
+		{
+			return AddTemporaryTimer(time, 1, std::move(callback));
+		}
+
+		template<typename FuncType>
+		Timer& AddTemporaryTimer(double time, int invokeCount, FuncType callback)
+		{
+			return AddTemporaryTimer(time, invokeCount, (std::unique_ptr<TimerCallbackContainer>)std::make_unique<TimerCallback<FuncType>>(std::move(callback)));
+		}
+
+		template<typename FuncType>
+		Timer& AddTemporaryTimerByTime(double time, double timeToDelete, FuncType callback)
+		{
+			return AddTemporaryTimer(time, (int)(timeToDelete / time) + 1, std::move(callback));
+		}
+
 		void RemoveTimer(Timer* timer);
 
 		void Update(double elapsedRealSeconds);
+
+	private:
+		Timer& AddTemporaryTimer(double time, int invokeCount, std::unique_ptr<TimerCallbackContainer>&& callback);
 
 	};
 

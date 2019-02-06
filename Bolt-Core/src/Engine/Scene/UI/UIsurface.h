@@ -14,7 +14,7 @@ namespace Bolt
 
 	public:
 		UIsurface(float width, float height, const Color& color = Color::White, Transform&& transform = Transform());
-		UIsurface(float width, float height, const Material& material, Transform&& transform = Transform());
+		UIsurface(float width, float height, Material material, Transform&& transform = Transform());
 
 		inline float Width() const { return m_Width; }
 		inline float Height() const { return m_Height; }
