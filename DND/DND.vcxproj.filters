@@ -70,6 +70,7 @@
     <ClInclude Include="src\Players\GameNetworkData.h" />
     <ClInclude Include="src\Players\Camera\CameraController.h" />
     <ClInclude Include="src\ScenePackets.h" />
+    <ClInclude Include="src\Scenes\LoadingScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Map\Tilemap.cpp">
@@ -100,5 +101,6 @@
     <ClCompile Include="src\Players\PlayerManager.cpp" />
     <ClCompile Include="src\Players\Characters\Entities\NetworkIdentity.cpp" />
     <ClCompile Include="src\Players\Camera\CameraController.cpp" />
+    <ClCompile Include="src\Scenes\LoadingScene.cpp" />
   </ItemGroup>
 </Project>

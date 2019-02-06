@@ -87,18 +87,44 @@ namespace Bolt
 		}
 
 		// Post a new event with given args from a specific dispatcher
-		static void Post(id_t eventId, id_t dispatcherId, std::unique_ptr<Event>&& args = nullptr);
+		template<typename EventType>
+		static void Post(id_t eventId, id_t dispatcherId, EventType args)
+		{
+			std::unique_ptr<EventType> e = std::make_unique<EventType>();
+			*e = std::move(args);
+			Post(eventId, dispatcherId, std::move(e));
+		}
+
 		// Post a new event with given args
-		static void Post(id_t eventId, std::unique_ptr<Event>&& args = nullptr);
+		template<typename EventType>
+		static void Post(id_t eventId, EventType args)
+		{
+			Post(eventId, EventManager::IGNORE_DISPATCHER_ID, std::move(args));
+		}
+
+		static void Post(id_t eventId, id_t dispatcherId);
+		static void Post(id_t eventId);
 
 		// Called automatically every frame before Application::Update() runs, processes all events from previous frame
 		static void FlushEvents();
 		static id_t FindNextListenerId();
 		static void ReleaseListenerId(id_t id);
 
+		friend class Initializer;
+
 	private:
-		static id_t Subscribe(id_t eventId, std::unique_ptr<EventListenerContainer<Event>>&& listener, id_t dispatcherId);
-		static void UpdateListener(id_t listenerId, std::unique_ptr<EventListenerContainer<Event>>&& listener);
+		static void Initialize();
+
+		static id_t Subscribe(id_t eventId, std::unique_ptr<EventListenerContainer<Event>> listener, id_t dispatcherId);
+		static void UpdateListener(id_t listenerId, std::unique_ptr<EventListenerContainer<Event>> listener);
+		// Post a new event with given args from a specific dispatcher
+		template<typename EventType>
+		static void Post(id_t eventId, id_t dispatcherId, std::unique_ptr<EventType> args)
+		{
+			std::scoped_lock<std::mutex> lock(s_EventQueueMutex);
+			BLT_ASSERT(s_EventQueue.EventCount() < MAX_EVENTS, "Event overflow");
+			s_EventQueue.AddEvent(EventInfo{ eventId, dispatcherId, std::move(args) });
+		}
 
 	};
 

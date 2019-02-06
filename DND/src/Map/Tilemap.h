@@ -47,7 +47,7 @@ namespace DND
 		friend class TilemapManager;
 
 		Image CreateImage(const LayerInfo& layer, const std::unordered_map<id_t, Image>& tiles);
-		void CreateImagesAsync(const std::vector<LayerInfo>& layers, const std::unordered_map<id_t, Image>& tiles, std::function<void(std::vector<Image>*)> callback);
+		Task<std::vector<Image>> CreateImagesAsync(const std::vector<LayerInfo>& layers, const std::unordered_map<id_t, Image>& tiles);
 
 	private:
 		void SetTileSize(const Vector2i& size);

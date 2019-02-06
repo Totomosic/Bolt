@@ -15,7 +15,7 @@ namespace Bolt
 
 	public:
 		EventQueue(size_t maxEvents)
-			: m_Queue(new T[maxEvents]), m_QueueBackBuffer(new T[maxEvents]), m_Capacity(maxEvents), m_QueueTail(0)
+			: m_Queue(new T[maxEvents]{}), m_QueueBackBuffer(new T[maxEvents]{}), m_Capacity(maxEvents), m_QueueTail(0)
 		{
 			
 		}

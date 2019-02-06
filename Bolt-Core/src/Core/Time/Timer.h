@@ -1,22 +1,19 @@
 #pragma once
-#include "Types.h"
+#include "TimerCallback.h"
 
 namespace Bolt
 {
 
 	class BLT_API Timer
 	{
-	public:
-		using TimerFunc = std::function<void()>;
-
 	private:
 		double m_Time;
 		double m_CurrentTime;
-		TimerFunc m_Callback;
+		std::unique_ptr<TimerCallbackContainer> m_Callback;
 		bool m_IsRunning;
 
 	public:
-		Timer(double time, Timer::TimerFunc callback, bool start = true);
+		Timer(double time, std::unique_ptr<TimerCallbackContainer>&& callback, bool start = true);
 		Timer(const Timer& other) = delete;
 		Timer& operator=(const Timer& other) = delete;
 		Timer(Timer&& other) = default;

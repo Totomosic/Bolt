@@ -86,6 +86,10 @@ namespace Bolt
 
 	void UIelement::Clear()
 	{
+		for (std::unique_ptr<UIelement>& child : m_Children)
+		{
+			child->Clear();
+		}
 		m_Children.clear();
 	}
 
@@ -104,7 +108,7 @@ namespace Bolt
 		Material material;
 		material.Shader = Shader::DefaultTexture();
 		material.Textures.Textures.push_back(texture);
-		return AddElement<UIsurface>(width, height, material, std::move(transform));
+		return AddElement<UIsurface>(width, height, std::move(material), std::move(transform));
 	}
 
 	Bolt::Text& UIelement::Text(const blt::string& text, const ResourcePtr<const Font>& font, const Color& color, Transform&& transform, AlignH horizontal, AlignV vertical)

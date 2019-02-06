@@ -8,7 +8,9 @@ void* Allocate(size_t size)
 	{
 		BLT_CORE_WARN("Large Allocation: {} MB", size / 1024.0f / 1024.0f);
 	}
-	return BLT_ALLOC(size);
+	void* ptr = BLT_ALLOC(size);
+	BLT_ASSERT(ptr != nullptr, "Unable to allocate memory.");
+	return ptr;
 }
 
 void Free(void* block)

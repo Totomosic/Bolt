@@ -14,6 +14,7 @@
 #include <direct.h>
 #include <fstream>
 #include <functional>
+#include <future>
 #include <ios>
 #include <iostream>
 #include <memory>

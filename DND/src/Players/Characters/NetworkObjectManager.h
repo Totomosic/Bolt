@@ -22,11 +22,11 @@ namespace DND
 		IdManager<id_t> m_NetworkIdManager;
 		std::unordered_map<id_t, NetworkObject> m_Objects;
 
-		ObjectFactory m_Factory;
+		ObjectFactory* m_Factory;
 		TilemapManager* m_MapManager;
 
 	public:
-		NetworkObjectManager(ObjectFactory&& factory, TilemapManager& mapManager);
+		NetworkObjectManager(ObjectFactory& factory, TilemapManager& mapManager);
 
 		const IdManager<id_t>& NetworkIds() const;
 		IdManager<id_t>& NetworkIds();

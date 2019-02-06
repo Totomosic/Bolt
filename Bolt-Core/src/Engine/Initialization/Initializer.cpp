@@ -71,6 +71,8 @@ namespace Bolt
 		}
 		CmdDebugger::Initialize();
 		BLT_CORE_INFO("Command line Debugger Initialized");
+		EventManager::Initialize();
+		BLT_CORE_INFO("EventManager Initialized");
 	}
 
 }

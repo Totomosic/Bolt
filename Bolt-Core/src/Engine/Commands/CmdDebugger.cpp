@@ -31,9 +31,9 @@ namespace Bolt
 			while (true)
 			{
 				std::cin.getline(buffer, 256 * sizeof(char));
-				std::unique_ptr<CommandLineEvent> e = std::make_unique<CommandLineEvent>();
-				e->String = blt::string(buffer);
-				EventManager::Post(Events::COMMAND_LINE_MESSAGE_RECEIVED, std::move(e));
+				CommandLineEvent e;
+				e.String = buffer;
+				EventManager::Post(Events::COMMAND_LINE_MESSAGE_RECEIVED, e);
 			}
 		});
 		listenerThread.detach();

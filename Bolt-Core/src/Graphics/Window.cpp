@@ -62,7 +62,7 @@ namespace Bolt
 		glfwSetWindowCloseCallback(WindowHandle(), [](GLFWwindow* windowHandle)
 		{
 			Window& window = *(Window*)glfwGetWindowUserPointer(windowHandle);
-			window.OnClose().Post(std::make_unique<WindowClosedEvent>());
+			window.OnClose().Post(WindowClosedEvent());
 		});
 	}
 
@@ -191,11 +191,11 @@ namespace Bolt
 
 	void Window::SetSize(int width, int height)
 	{
-		std::unique_ptr<WindowResizeEvent> args = std::make_unique<WindowResizeEvent>();
-		args->OldWidth = Width();
-		args->OldHeight = Height();
-		args->NewWidth = width;
-		args->NewHeight = height;
+		WindowResizeEvent args;
+		args.OldWidth = Width();
+		args.OldHeight = Height();
+		args.NewWidth = width;
+		args.NewHeight = height;
 		m_Data.m_Framebuffer.GetViewport().Width = width;
 		m_Data.m_Framebuffer.GetViewport().Height = height;
 		glfwSetWindowSize(WindowHandle(), Width(), Height());

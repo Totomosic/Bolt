@@ -780,6 +780,12 @@
     <ClInclude Include="src\Logging.h" />
     <ClInclude Include="src\Types.h" />
     <ClInclude Include="src\Core\Events\EventListener.h" />
+    <ClInclude Include="src\Core\Time\TimerCallback.h" />
+    <ClInclude Include="src\Core\Tasks\__Tasks__.h" />
+    <ClInclude Include="src\Core\Tasks\Task.h" />
+    <ClInclude Include="src\Core\Tasks\TaskManager.h" />
+    <ClInclude Include="src\Core\Tasks\TaskResult.h" />
+    <ClInclude Include="src\Core\Tasks\TaskEvents.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\BoltTL\string.cpp">

@@ -53,15 +53,15 @@ namespace Bolt
 	{
 		if (s_CurrentScene != nullptr)
 		{
-			std::unique_ptr<SceneUnloadedEvent> e = std::make_unique<SceneUnloadedEvent>();
-			e->UnloadedScene = s_CurrentScene;
+			SceneUnloadedEvent e;
+			e.UnloadedScene = s_CurrentScene;
 			s_CurrentScene->OnUnload.Post(std::move(e));
 		}
 		s_CurrentScene = &scene;
 		if (s_CurrentScene != nullptr)
 		{
-			std::unique_ptr<SceneLoadedEvent> e = std::make_unique<SceneLoadedEvent>();
-			e->LoadedScene = s_CurrentScene;
+			SceneLoadedEvent e;
+			e.LoadedScene = s_CurrentScene;
 			s_CurrentScene->OnLoad.Post(std::move(e));
 		}
 	}

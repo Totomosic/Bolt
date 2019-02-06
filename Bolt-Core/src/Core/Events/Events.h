@@ -38,6 +38,9 @@ namespace Bolt
 		// Debugging Events
 		static constexpr id_t COMMAND_LINE_MESSAGE_RECEIVED = 20;
 
+		// Task Events
+		static constexpr id_t TASK_CONTINUE_ON_MAIN_THREAD = 21;
+
 	};
 
 }
