@@ -28,7 +28,9 @@ namespace DND
 		Hello,
 		Welcome,
 		Introduction,
-		Disconnect
+		Disconnect,
+
+		MoveToTile
 	};
 
 	template<>

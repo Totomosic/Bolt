@@ -1,8 +1,10 @@
 #include "bltpch.h"
 #include "DndInstance.h"
 
+#include "GameplayPackets.h"
 #include "NetworkManager.h"
 #include "Players/Camera/CameraController.h"
+#include "Players/Characters/Entities/TileMotion.h"
 
 namespace DND
 {
@@ -60,6 +62,15 @@ namespace DND
 			{
 				m_Players.RemovePlayer(packet.PlayerId);
 			}
+			return false;
+		});
+
+		NetworkManager::Get().Server().AddPacketListener(PacketType::MoveToTile, [this](ReceivedPacket& p)
+		{
+			MoveToTilePacket packet;
+			Deserialize(p.Packet, packet);
+			GameObject* object = m_Objects.GetObjectByNetworkId(packet.NetworkId);
+			object->Components().GetComponent<TileMotion>().MoveToBottomLeftTile(packet.MoveTile);
 			return false;
 		});
 	}
