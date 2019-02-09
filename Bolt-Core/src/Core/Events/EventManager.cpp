@@ -67,7 +67,8 @@ namespace Bolt
 			{
 				if (listener.DispatcherId == EventManager::IGNORE_DISPATCHER_ID || e.DispatcherId == listener.DispatcherId)
 				{
-					if ((*listener.Callback)(listener.ListenerId, *e.Args))
+					ListenerResponse response = (*listener.Callback)(listener.ListenerId, *e.Args);
+					if (response.HandledEvent)
 					{
 						// Event has already been handled and should not be propogated to other event listeners
 						break;
@@ -93,7 +94,8 @@ namespace Bolt
 		{
 			TaskCompletedEvent& e = *(TaskCompletedEvent*)&eArgs;
 			e.Execute();
-			return true;
+			ListenerResponse response;
+			return response;
 		});
 	}
 

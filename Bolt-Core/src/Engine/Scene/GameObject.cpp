@@ -173,6 +173,19 @@ namespace Bolt
 		}
 	}
 
+	ObjectPrefab GameObject::GetPrefab() const
+	{
+		ObjectPrefab prefab;
+		prefab.transform().SetLocalPosition(transform().LocalPosition());
+		prefab.transform().SetLocalOrientation(transform().LocalOrientation());
+		prefab.transform().SetLocalScale(transform().LocalScale());
+		for (ComponentManager::ComponentInfoPtr& c : Components().GetComponentsOrdered())
+		{
+			prefab.Components().AddComponent(c.type_hash, c.component->Clone());
+		}
+		return std::move(prefab);
+	}
+
 	void GameObject::Transfer(XMLserializer& backend, bool isWriting)
 	{
 		ObjectPrefab::Transfer(backend, isWriting);

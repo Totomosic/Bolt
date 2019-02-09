@@ -12,9 +12,8 @@ namespace Bolt
 
 	UIelement::UIelement() : UIelement(nullptr)
 	{
-
+		
 	}
-
 
 	UIelement::UIelement(GameObject* object)
 		: m_Root(nullptr), m_Parent(nullptr), m_Children(), m_Object(object)
@@ -86,10 +85,6 @@ namespace Bolt
 
 	void UIelement::Clear()
 	{
-		for (std::unique_ptr<UIelement>& child : m_Children)
-		{
-			child->Clear();
-		}
 		m_Children.clear();
 	}
 
@@ -129,10 +124,7 @@ namespace Bolt
 			m_Object = m_Root->GetFactory().Instantiate();
 			m_Object->Components().AddComponent<UIEventHandler>();
 		}
-		else
-		{
-			BLT_ASSERT(m_Object->GetLayer() == m_Root->GetFactory().CurrentLayer(), "Layer Mismatch");
-		}
+		BLT_ASSERT(m_Object->GetLayer() == m_Root->GetFactory().CurrentLayer(), "Layer Mismatch");
 		m_Object->MakeChildOf(root->Object());
 		m_Parent = nullptr;
 	}

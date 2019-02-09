@@ -29,8 +29,10 @@ namespace DND
 	public:
 		NetworkManager();
 
+		NetworkServer& Server();
 		const AddressPair& Address() const;
 		bool IsInitialized() const;
+		const SocketAddress& EC2Address() const;
 
 		void Initialize(InitCallback callback);
 		void Terminate(TerminateCallback callback);
@@ -40,6 +42,12 @@ namespace DND
 		void GetAllHosts(float timeout, GetHostsCallback callback, GetHostsTimeoutCallback timeoutCallback);
 
 		void Update();
+
+		template<typename T>
+		void SendPacket(const SocketAddress& to, const T& packet)
+		{
+			m_Server.SendPacket(to, packet);
+		}
 
 	};
 

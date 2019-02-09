@@ -10,6 +10,7 @@ namespace Bolt
 	{
 	public:
 		Scene* LoadedScene;
+		std::unique_ptr<Event> LoadData;
 	};
 
 	class BLT_API SceneUnloadedEvent : public Event

@@ -37,8 +37,16 @@ namespace Bolt
 
 		T& AddEvent(T e)
 		{
-			m_Queue[m_QueueTail] = std::move(e);
-			return m_Queue[m_QueueTail++];
+			size_t currentIndex = m_QueueTail;
+			if (currentIndex == MaxEvents())
+			{
+				currentIndex--;
+				m_QueueTail--;
+				BLT_CORE_WARN("EventQueue already contained {} events. Overriding most recent event.", MaxEvents());
+			}
+			m_Queue[currentIndex] = std::move(e);
+			m_QueueTail++;
+			return m_Queue[currentIndex];
 		}
 
 		void SwapQueues()

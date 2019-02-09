@@ -16,9 +16,9 @@ namespace Bolt
 		Transform* m_Parent;
 		mutable std::vector<Transform*> m_Children;
 
-		Vector3f m_Position;
-		Quaternion m_Orientation;
-		Vector3f m_Scale;
+		Vector3f m_LocalPosition;
+		Quaternion m_LocalOrientation;
+		Vector3f m_LocalScale;
 
 		mutable Matrix4f m_TransformMatrix;
 		mutable Matrix4f m_InverseTransformMatrix;
@@ -56,6 +56,20 @@ namespace Bolt
 		void SetLocalOrientation(const Quaternion& orientation);
 		void SetLocalScale(const Vector3f& scale);
 		void SetLocalScale(float x, float y, float z);
+
+		void SetLocalX(float x);
+		void SetLocalY(float y);
+		void SetLocalZ(float z);
+		void SetLocalXY(float x, float y);
+		void SetLocalXY(const Vector2f& xy);
+		void SetLocalXZ(float x, float z);
+		void SetLocalXZ(const Vector2f& xz);
+		void SetLocalYZ(float y, float z);
+		void SetLocalYZ(const Vector2f& yz);
+		
+		void SetLocalXScale(float x);
+		void SetLocalYScale(float y);
+		void SetLocalZScale(float z);
 
 		void Translate(const Vector3f& translation);
 		void Translate(float x, float y, float z);

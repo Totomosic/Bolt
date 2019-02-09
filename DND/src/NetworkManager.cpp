@@ -28,6 +28,11 @@ namespace DND
 		m_Server.SetAddress(addr);
 	}
 
+	NetworkServer& NetworkManager::Server()
+	{
+		return m_Server;
+	}
+
 	const AddressPair& NetworkManager::Address() const
 	{
 		std::scoped_lock<std::mutex> lock(m_InitializedMutex);
@@ -38,6 +43,11 @@ namespace DND
 	{
 		std::scoped_lock<std::mutex> lock(m_InitializedMutex);
 		return m_IsInitialized;
+	}
+
+	const SocketAddress& NetworkManager::EC2Address() const
+	{
+		return s_Ec2Address;
 	}
 
 	void NetworkManager::Initialize(NetworkManager::InitCallback callback)

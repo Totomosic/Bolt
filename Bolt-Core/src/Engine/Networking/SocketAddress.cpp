@@ -21,25 +21,25 @@ namespace Bolt
 		int error = getaddrinfo(inAddress.c_str(), inPort.c_str(), &hint, &result);
 		if (error != 0 && result != nullptr)
 		{
-			freeaddrinfo(result);
-			BLT_ASSERT(false, "Socket Error");
+			BLT_ERROR("SocketAddress Hostname Error");
 		}
 		else if (error != 0)
 		{
-			BLT_ASSERT(false, "Socket Error");
+			BLT_ERROR("SocketAddress Hostname Error");
 		}
-		while (!result->ai_addr && result->ai_next)
+		else
 		{
-			result = result->ai_next;
-		}
-		if (!result->ai_addr)
-		{
-			freeaddrinfo(result);
-			BLT_ASSERT(false, "Socket Error");
-		}
-
-		memcpy(&m_SockAddr, result->ai_addr, sizeof(sockaddr));
-		GetAsSockAddrIn()->sin_family = AF_INET;
+			while (!result->ai_addr && result->ai_next)
+			{
+				result = result->ai_next;
+			}
+			if (!result->ai_addr)
+			{
+				BLT_ERROR("SocketAddress Hostname Error");
+			}
+			memcpy(&m_SockAddr, result->ai_addr, sizeof(sockaddr));
+			GetAsSockAddrIn()->sin_family = AF_INET;
+		}		
 		freeaddrinfo(result);
 	}
 

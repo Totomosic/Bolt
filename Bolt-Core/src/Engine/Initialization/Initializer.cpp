@@ -13,6 +13,8 @@ namespace Bolt
 	{
 		Log::Initialize();
 		BLT_CORE_INFO("Logger Initialized");
+		EventManager::Initialize();
+		BLT_CORE_INFO("EventManager Initialized");
 		Filesystem::Initialize();
 		BLT_CORE_INFO("Filesystem Intialized");
 		if (createInfo.UseGraphics)
@@ -71,8 +73,6 @@ namespace Bolt
 		}
 		CmdDebugger::Initialize();
 		BLT_CORE_INFO("Command line Debugger Initialized");
-		EventManager::Initialize();
-		BLT_CORE_INFO("EventManager Initialized");
 	}
 
 }

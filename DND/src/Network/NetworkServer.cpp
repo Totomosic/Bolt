@@ -19,7 +19,8 @@ namespace DND
 				}
 				packet.Packet.Reset(PACKET_HEADER_SIZE);
 			}
-			return true;
+			ListenerResponse response;
+			return response;
 		});
 	}
 
@@ -87,7 +88,8 @@ namespace DND
 		{
 			callback();
 			EventManager::Unsubscribe(listenerId);
-			return true;
+			ListenerResponse response;
+			return response;
 		});
 		TerminateServer();
 	}

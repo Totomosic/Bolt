@@ -25,6 +25,16 @@ namespace DND
 		return m_Height;
 	}
 
+	int Tilemap::TileWidth() const
+	{
+		return m_TileWidth;
+	}
+
+	int Tilemap::TileHeight() const
+	{
+		return m_TileHeight;
+	}
+
 	const std::vector<Tilemap::LayerInfo>& Tilemap::Layers() const
 	{
 		return m_Layers;
@@ -52,6 +62,11 @@ namespace DND
 		return Vector3f(wx, wy, 0);
 	}
 
+	Vector3f Tilemap::WorldPositionOfTile(const Tile& tile) const
+	{
+		return WorldPositionOfTile(tile.x, tile.y);
+	}
+
 	Tile Tilemap::TileFromWorldPosition(float x, float y) const
 	{
 		int tileX = (x + Width() * m_TileWidth / 2.0f) / m_TileWidth;
@@ -65,6 +80,11 @@ namespace DND
 			tileY = -1;
 		}
 		return Tile(tileX, tileY);
+	}
+
+	Tile Tilemap::TileFromWorldPosition(const Vector2f& worldPos) const
+	{
+		return TileFromWorldPosition(worldPos.x, worldPos.y);
 	}
 
 	TilemapLayer& Tilemap::AddLayer(float resolution)

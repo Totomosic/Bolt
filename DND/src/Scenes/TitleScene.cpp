@@ -19,7 +19,8 @@ namespace DND
 		playButton.EventHandler().OnClicked.Subscribe([](id_t listenerId, UIClickedEvent& e)
 		{
 			SceneManager::SetCurrentSceneByName("Character");
-			return true;
+			ListenerResponse response;
+			return response;
 		});
 
 		RenderSchedule schedule(scene);

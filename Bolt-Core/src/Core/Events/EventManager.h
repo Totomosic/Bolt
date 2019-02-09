@@ -122,7 +122,6 @@ namespace Bolt
 		static void Post(id_t eventId, id_t dispatcherId, std::unique_ptr<EventType> args)
 		{
 			std::scoped_lock<std::mutex> lock(s_EventQueueMutex);
-			BLT_ASSERT(s_EventQueue.EventCount() < MAX_EVENTS, "Event overflow");
 			s_EventQueue.AddEvent(EventInfo{ eventId, dispatcherId, std::move(args) });
 		}
 
