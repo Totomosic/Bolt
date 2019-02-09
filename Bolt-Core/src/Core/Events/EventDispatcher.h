@@ -125,13 +125,14 @@ namespace Bolt
 			m_IdManager.Reset();
 		}
 
-		bool PrivateEventCallback(id_t listenerId, Event& args)
+		ListenerResponse PrivateEventCallback(id_t listenerId, Event& args)
 		{
 			auto it = m_Listeners.begin();
 			bool handled = false;
 			while (it != m_Listeners.end())
 			{
-				if ((*it->second)(it->first, *(T*)&args))
+				ListenerResponse response = (*it->second)(it->first, *(T*)&args);
+				if (response.HandledEvent)
 				{
 					// Event was handled and should not be propogated to other event listeners
 					handled = true;
@@ -139,7 +140,9 @@ namespace Bolt
 				}
 				it++;
 			}
-			return handled;
+			ListenerResponse response;
+			response.HandledEvent = handled;
+			return response;
 		}
 
 	};

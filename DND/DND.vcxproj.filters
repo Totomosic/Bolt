@@ -50,7 +50,6 @@
     <ClInclude Include="src\Scenes\CharacterScene.h" />
     <ClInclude Include="src\Scenes\ServerScene.h" />
     <ClInclude Include="src\Scenes\GameScene.h" />
-    <ClInclude Include="src\DndInstance.h" />
     <ClInclude Include="src\Network\Packets.h" />
     <ClInclude Include="src\Events.h" />
     <ClInclude Include="src\Network\Serialization.h" />
@@ -71,6 +70,19 @@
     <ClInclude Include="src\Players\Camera\CameraController.h" />
     <ClInclude Include="src\ScenePackets.h" />
     <ClInclude Include="src\Scenes\LoadingScene.h" />
+    <ClInclude Include="src\GlobalState.h" />
+    <ClInclude Include="src\DndInstance.h" />
+    <ClInclude Include="src\Scenes\GameData.h" />
+    <ClInclude Include="src\Players\Characters\Entities\TileMotion.h" />
+    <ClInclude Include="src\Players\Characters\Entities\EntityStats.h" />
+    <ClInclude Include="src\Players\Characters\Entities\StatsComponent.h" />
+    <ClInclude Include="src\Players\Characters\Controllers\PlayerController.h" />
+    <ClInclude Include="src\Players\Characters\Controllers\MotionController.h" />
+    <ClInclude Include="src\Players\Characters\Controllers\Actions.h" />
+    <ClInclude Include="src\Players\Characters\Entities\SpriteAnimator.h" />
+    <ClInclude Include="src\Players\Characters\Entities\CharacterAnimator.h" />
+    <ClInclude Include="src\Players\Characters\Entities\NetworkComponent.h" />
+    <ClInclude Include="src\DndServer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Map\Tilemap.cpp">
@@ -91,7 +103,6 @@
     <ClCompile Include="src\Scenes\CharacterScene.cpp" />
     <ClCompile Include="src\Scenes\ServerScene.cpp" />
     <ClCompile Include="src\Scenes\GameScene.cpp" />
-    <ClCompile Include="src\DndInstance.cpp" />
     <ClCompile Include="src\Network\NetworkServer.cpp" />
     <ClCompile Include="src\NetworkManager.cpp" />
     <ClCompile Include="src\Players\Player.cpp" />
@@ -102,5 +113,16 @@
     <ClCompile Include="src\Players\Characters\Entities\NetworkIdentity.cpp" />
     <ClCompile Include="src\Players\Camera\CameraController.cpp" />
     <ClCompile Include="src\Scenes\LoadingScene.cpp" />
+    <ClCompile Include="src\GlobalState.cpp" />
+    <ClCompile Include="src\DndInstance.cpp" />
+    <ClCompile Include="src\Scenes\GameData.cpp" />
+    <ClCompile Include="src\Players\Characters\Entities\TileMotion.cpp" />
+    <ClCompile Include="src\Players\Characters\Entities\StatsComponent.cpp" />
+    <ClCompile Include="src\Players\Characters\Controllers\PlayerController.cpp" />
+    <ClCompile Include="src\Players\Characters\Controllers\MotionController.cpp" />
+    <ClCompile Include="src\Players\Characters\Entities\SpriteAnimator.cpp" />
+    <ClCompile Include="src\Players\Characters\Entities\CharacterAnimator.cpp" />
+    <ClCompile Include="src\Players\Characters\Entities\NetworkComponent.cpp" />
+    <ClCompile Include="src\DndServer.cpp" />
   </ItemGroup>
 </Project>

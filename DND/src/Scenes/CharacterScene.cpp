@@ -13,7 +13,8 @@ namespace DND
 		scene.OnLoad.Subscribe([](id_t listenerId, SceneLoadedEvent& e)
 		{
 			SceneManager::SetCurrentSceneByName("Server");
-			return true;
+			ListenerResponse response;
+			return response;
 		});
 
 		RenderSchedule schedule(scene);

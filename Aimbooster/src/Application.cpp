@@ -132,25 +132,33 @@ namespace Aimbooster
 			playButton.EventHandler().OnClicked.Subscribe([this](id_t eventId, UIClickedEvent& args) -> bool
 			{
 				CreateGameScreen();
-				return false;
+				ListenerResponse response;
+				response.HandledEvent = false;
+				return response;
 			});
 
 			playButton.EventHandler().OnHoverEntry.Subscribe([](id_t eventId, UIHoverEvent& args) -> bool
 			{
 				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0].BaseColor = Color::Green;
-				return false;
+				ListenerResponse response;
+				response.HandledEvent = false;
+				return response;
 			});
 
 			playButton.EventHandler().OnHoverExit.Subscribe([](id_t eventId, UIHoverEvent& args) -> bool
 			{
 				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0].BaseColor = Color(0, 200, 0 );
-				return false;
+				ListenerResponse response;
+				response.HandledEvent = false;
+				return response;
 			});
 
 			quitButton.EventHandler().OnClicked.Subscribe([this](id_t eventId, UIClickedEvent& args) -> bool
 			{
 				Exit();
-				return false;
+				ListenerResponse response;
+				response.HandledEvent = false;
+				return response;
 			});
 
 			quitButton.EventHandler().OnHoverEntry.Subscribe([](id_t eventId, UIHoverEvent& args) -> bool

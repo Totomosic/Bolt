@@ -6,13 +6,13 @@ namespace Bolt
 {
 
 	Transform::Transform(Vector3f position, Quaternion orientation, Vector3f scale)
-		: m_Parent(nullptr), m_Children(), m_Position(position), m_Orientation(orientation), m_Scale(scale), m_TransformMatrix(Matrix4f::Identity()), m_InverseTransformMatrix(Matrix4f::Identity()), m_IsValid(false), m_UpdateOnInvalidate(false)
+		: m_Parent(nullptr), m_Children(), m_LocalPosition(position), m_LocalOrientation(orientation), m_LocalScale(scale), m_TransformMatrix(Matrix4f::Identity()), m_InverseTransformMatrix(Matrix4f::Identity()), m_IsValid(false), m_UpdateOnInvalidate(false)
 	{
 		RecalculateMatrix();
 	}
 
 	Transform::Transform(Transform&& other)
-		: m_Parent(other.m_Parent), m_Children(std::move(other.m_Children)), m_Position(other.m_Position), m_Orientation(other.m_Orientation), m_Scale(other.m_Scale), 
+		: m_Parent(other.m_Parent), m_Children(std::move(other.m_Children)), m_LocalPosition(other.m_LocalPosition), m_LocalOrientation(other.m_LocalOrientation), m_LocalScale(other.m_LocalScale),
 		m_TransformMatrix(other.m_TransformMatrix), m_InverseTransformMatrix(other.m_InverseTransformMatrix), m_IsValid(other.m_IsValid), m_UpdateOnInvalidate(other.m_UpdateOnInvalidate)
 	{
 		if (m_Parent != nullptr)
@@ -29,9 +29,9 @@ namespace Bolt
 	{
 		m_Parent = other.m_Parent;
 		m_Children = std::move(other.m_Children);
-		m_Position = other.m_Position;
-		m_Orientation = other.m_Orientation;
-		m_Scale = other.m_Scale;
+		m_LocalPosition = other.m_LocalPosition;
+		m_LocalOrientation = other.m_LocalOrientation;
+		m_LocalScale = other.m_LocalScale;
 		m_TransformMatrix = other.m_TransformMatrix;
 		m_InverseTransformMatrix = other.m_InverseTransformMatrix;
 		m_IsValid = other.m_IsValid;
@@ -88,7 +88,7 @@ namespace Bolt
 		{
 			transform->m_Children.push_back(this);
 		}
-		m_Parent = (Transform*)transform;		
+		m_Parent = (Transform*)transform;
 		RecalculateMatrix();
 	}
 
@@ -99,17 +99,17 @@ namespace Bolt
 
 	const Vector3f& Transform::LocalPosition() const
 	{
-		return m_Position;
+		return m_LocalPosition;
 	}
 
 	const Quaternion& Transform::LocalOrientation() const
 	{
-		return m_Orientation;
+		return m_LocalOrientation;
 	}
 
 	const Vector3f& Transform::LocalScale() const
 	{
-		return m_Scale;
+		return m_LocalScale;
 	}
 
 	Vector3f Transform::Position() const
@@ -123,9 +123,9 @@ namespace Bolt
 		CheckRecalculate();
 		if (HasParent())
 		{
-			return Parent().Orientation() * m_Orientation;
+			return Parent().Orientation() * m_LocalOrientation;
 		}
-		return m_Orientation;
+		return m_LocalOrientation;
 	}
 
 	Vector3f Transform::Scale() const
@@ -133,9 +133,9 @@ namespace Bolt
 		CheckRecalculate();
 		if (HasParent())
 		{
-			return Parent().Scale() * m_Scale;
+			return Parent().Scale() * m_LocalScale;
 		}
-		return m_Scale;
+		return m_LocalScale;
 	}
 
 	const Matrix4f& Transform::TransformMatrix() const
@@ -167,7 +167,7 @@ namespace Bolt
 
 	void Transform::SetLocalPosition(const Vector3f& position)
 	{
-		m_Position = position;
+		m_LocalPosition = position;
 		Invalidate();
 	}
 
@@ -178,13 +178,13 @@ namespace Bolt
 
 	void Transform::SetLocalOrientation(const Quaternion& orientation)
 	{
-		m_Orientation = orientation;
+		m_LocalOrientation = orientation;
 		Invalidate();
 	}
 
 	void Transform::SetLocalScale(const Vector3f& scale)
 	{
-		m_Scale = scale;
+		m_LocalScale = scale;
 		Invalidate();
 	}
 
@@ -193,9 +193,69 @@ namespace Bolt
 		SetLocalScale(Vector3f(x, y, z));
 	}
 
+	void Transform::SetLocalX(float x)
+	{
+		SetLocalPosition(x, m_LocalPosition.y, m_LocalPosition.z);
+	}
+
+	void Transform::SetLocalY(float y)
+	{
+		SetLocalPosition(m_LocalPosition.x, y, m_LocalPosition.z);
+	}
+
+	void Transform::SetLocalZ(float z)
+	{
+		SetLocalPosition(m_LocalPosition.x, m_LocalPosition.y, z);
+	}
+
+	void Transform::SetLocalXY(float x, float y)
+	{
+		SetLocalPosition(x, y, m_LocalPosition.z);
+	}
+
+	void Transform::SetLocalXY(const Vector2f& xy)
+	{
+		SetLocalPosition(xy.x, xy.y, m_LocalPosition.z);
+	}
+
+	void Transform::SetLocalXZ(float x, float z)
+	{
+		SetLocalPosition(x, m_LocalPosition.y, z);
+	}
+
+	void Transform::SetLocalXZ(const Vector2f& xz)
+	{
+		SetLocalPosition(xz.x, m_LocalPosition.y, xz.y);
+	}
+
+	void Transform::SetLocalYZ(float y, float z)
+	{
+		SetLocalPosition(m_LocalPosition.x, y, z);
+	}
+
+	void Transform::SetLocalYZ(const Vector2f& yz)
+	{
+		SetLocalPosition(m_LocalPosition.x, yz.x, yz.y);
+	}
+
+	void Transform::SetLocalXScale(float x)
+	{
+		SetLocalScale(x, m_LocalScale.y, m_LocalScale.z);
+	}
+
+	void Transform::SetLocalYScale(float y)
+	{
+		SetLocalScale(m_LocalScale.x, y, m_LocalScale.z);	
+	}
+
+	void Transform::SetLocalZScale(float z)
+	{
+		SetLocalScale(m_LocalScale.x, m_LocalScale.y, z);
+	}
+
 	void Transform::Translate(const Vector3f& translation)
 	{
-		SetLocalPosition(m_Position + translation);
+		SetLocalPosition(m_LocalPosition + translation);
 	}
 
 	void Transform::Translate(float x, float y, float z)
@@ -205,7 +265,7 @@ namespace Bolt
 
 	void Transform::Rotate(const Quaternion& rotation)
 	{
-		SetLocalOrientation(m_Orientation * rotation);
+		SetLocalOrientation(m_LocalOrientation * rotation);
 	}
 
 	void Transform::Rotate(float angle, Vector3f axis, Space rotationSpace)
@@ -219,17 +279,17 @@ namespace Bolt
 
 	void Transform::Reset()
 	{
-		m_Position = Vector3f(0, 0, 0);
-		m_Orientation = Quaternion::Identity();
-		m_Scale = Vector3f(1, 1, 1);
+		m_LocalPosition = Vector3f(0, 0, 0);
+		m_LocalOrientation = Quaternion::Identity();
+		m_LocalScale = Vector3f(1, 1, 1);
 		Invalidate();
 	}
 
 	void Transform::Transfer(XMLserializer& backend, bool isWriting)
 	{
-		BLT_TRANSFER(backend, m_Position);
-		BLT_TRANSFER(backend, m_Orientation);
-		BLT_TRANSFER(backend, m_Scale);
+		BLT_TRANSFER(backend, m_LocalPosition);
+		BLT_TRANSFER(backend, m_LocalOrientation);
+		BLT_TRANSFER(backend, m_LocalScale);
 
 		BLT_TRANSFER(backend, m_Parent);
 		BLT_TRANSFER(backend, m_Children);
@@ -237,7 +297,7 @@ namespace Bolt
 
 	void Transform::RecalculateMatrix() const
 	{
-		m_TransformMatrix = Matrix4f::Translation(m_Position) * m_Orientation.ToMatrix4f() * Matrix4f::Scale(m_Scale);
+		m_TransformMatrix = Matrix4f::Translation(m_LocalPosition) * m_LocalOrientation.ToMatrix4f() * Matrix4f::Scale(m_LocalScale);
 		if (HasParent())
 		{
 			m_TransformMatrix = Parent().TransformMatrix() * m_TransformMatrix;

@@ -4,8 +4,8 @@
 namespace DND
 {
 
-	TilemapManager::TilemapManager(Layer& layer, int tileWidth, int tileHeight)
-		: m_MapIdManager(0, GameObject::InvalidID - 1), m_Maps(), m_CurrentMap((id_t)-1), m_Tileset(), m_Factory(layer), m_TileWidth(tileWidth), m_TileHeight(tileHeight)
+	TilemapManager::TilemapManager(int tileWidth, int tileHeight)
+		: m_MapIdManager(0, GameObject::InvalidID - 1), m_Maps(), m_CurrentMap((id_t)-1), m_Tileset(), m_Factory(), m_TileWidth(tileWidth), m_TileHeight(tileHeight)
 	{
 	
 	}
@@ -58,6 +58,11 @@ namespace DND
 	bool TilemapManager::IsLoaded(id_t mapId) const
 	{
 		return m_Maps.at(mapId).IsLoaded;
+	}
+
+	void TilemapManager::SetMapLayer(Layer& layer)
+	{
+		m_Factory.SetCurrentLayer(layer);
 	}
 
 	void TilemapManager::SetCurrentMap(id_t mapId)

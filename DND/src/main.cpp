@@ -1,6 +1,7 @@
 #include "bltpch.h"
 
 #include "Scenes/CharacterScene.h"
+#include "Scenes/GameData.h"
 #include "Scenes/GameScene.h"
 #include "Scenes/ServerScene.h"
 #include "Scenes/LoadingScene.h"
@@ -20,6 +21,9 @@ namespace DND
 			ResourceManager::LoadPack(resources);
 			ResourceManager::Register(std::make_unique<Font>("res/arial.ttf", 42));
 
+			CreateTilemaps(resources);
+			CreateCharacterPrefabs(resources);
+
 			Scene& loadingScene = CreateLoadingScene(resources);
 			Scene& titleScene = CreateTitleScene(resources);
 			Scene& characterScene = CreateCharacterScene(resources);
@@ -36,7 +40,7 @@ namespace DND
 
 		void Tick() override
 		{
-		
+			AppWindow->SetTitle("DND " + std::to_string((int)Time::FramesPerSecond()));
 		}
 
 		void Update() override

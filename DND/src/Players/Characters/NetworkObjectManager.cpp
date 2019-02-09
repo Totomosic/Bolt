@@ -1,11 +1,16 @@
 #include "bltpch.h"
 #include "NetworkObjectManager.h"
 
+#include "Entities/StatsComponent.h"
+#include "Entities/TileMotion.h"
+#include "Entities/NetworkComponent.h"
+#include "../../DndServer.h"
+
 namespace DND
 {
 
 	NetworkObjectManager::NetworkObjectManager(ObjectFactory& factory, TilemapManager& mapManager)
-		: m_NetworkIdManager(0, GameObject::InvalidID - 1), m_Objects(), m_Factory(&factory), m_MapManager(&mapManager)
+		: m_NetworkIdManager(0, GameObject::InvalidID - 1), m_Objects(), m_Factory(&factory), m_MapManager(&mapManager), m_Server(nullptr)
 	{
 	
 	}
@@ -92,6 +97,10 @@ namespace DND
 	{
 		GameObject* object = Factory().Instantiate(Factory().GetPrefab(data.PrefabId));
 		object->Components().AddComponent<CurrentMap>(data.MapId, m_MapManager);
+		object->Components().AddComponent<TileTransform>(data.TransformData.BottomLeftTile, data.TransformData.Width, data.TransformData.Height);
+		object->Components().AddComponent<TileMotion>(data.TilesPerSecondSpeed);
+		object->Components().AddComponent<StatsComponent>(data.MaxStats, data.CurrentStats);
+		object->Components().AddComponent<NetworkComponent>(*m_Server);
 		AddObject(data.NetworkId, object, ownerNetworkId);
 		for (const EntityNetworkData& childData : data.OwnedObjects)
 		{
@@ -105,7 +114,15 @@ namespace DND
 		const NetworkObject& object = GetObjectInfoByNetworkId(networkId);
 		EntityNetworkData data;
 		data.NetworkId = networkId;
+		data.PrefabId = 0;
 		data.MapId = object.Object->Components().GetComponent<CurrentMap>().MapId();
+		TileTransform& transform = object.Object->Components().GetComponent<TileTransform>();
+		data.TransformData.BottomLeftTile = transform.BottomLeftTile();
+		data.TransformData.Width = transform.Width();
+		data.TransformData.Height = transform.Height();
+		data.TilesPerSecondSpeed = object.Object->Components().GetComponent<TileMotion>().TilesPerSecond();
+		data.MaxStats = object.Object->Components().GetComponent<StatsComponent>().MaxStats();
+		data.CurrentStats = object.Object->Components().GetComponent<StatsComponent>().CurrentStats();
 		for (id_t childNetId : object.OwnedNetworkIds)
 		{
 			data.OwnedObjects.push_back(GetEntityData(childNetId));

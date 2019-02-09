@@ -7,6 +7,8 @@
 namespace DND
 {
 
+	class DndServer;
+
 	class NetworkObjectManager
 	{
 	public:
@@ -24,6 +26,7 @@ namespace DND
 
 		ObjectFactory* m_Factory;
 		TilemapManager* m_MapManager;
+		DndServer* m_Server;
 
 	public:
 		NetworkObjectManager(ObjectFactory& factory, TilemapManager& mapManager);
@@ -44,6 +47,8 @@ namespace DND
 		GameObject* CreateFromNetworkData(const EntityNetworkData& data, id_t ownerNetworkId = GameObject::InvalidID);
 		EntityNetworkData GetEntityData(id_t networkId) const;
 		EntityNetworkData GetEntityData(GameObject* object) const;
+
+		friend class DndInstance;
 
 	private:
 		void SetObjectParent(id_t networkId, id_t parentNetworkId);

@@ -22,6 +22,8 @@ namespace DND
 		GetAllHosts,
 		GetHostsResponse,
 		RemoveAsHost,
+		ConnectToHost,
+		ConnectionEstablished,
 
 		Hello,
 		Welcome,

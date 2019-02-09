@@ -1,38 +1,38 @@
 #pragma once
-#include "Map/TilemapManager.h"
-#include "Players/Characters/NetworkObjectManager.h"
-#include "Players/PlayerManager.h"
-
 #include "ScenePackets.h"
+#include "Players/PlayerManager.h"
+#include "DndServer.h"
 
 namespace DND
 {
 
-	struct DndInitData
-	{
-	public:
-		TilemapManager& MapManager;
-		ObjectFactory& Factory;
-		Camera* MainCamera;
-		std::function<void()> TilemapReadyCallback;
-
-	};
-
 	class DndInstance : public Component
 	{
 	private:
-		TilemapManager& m_Tilemap;
-		NetworkObjectManager m_ObjectManager;
-		PlayerManager m_PlayerManager;
-		Camera* m_Camera;
+		TilemapManager* m_MapManager;
+		NetworkObjectManager m_Objects;
+		PlayerManager m_Players;
+		DndServer m_Server;
+
+		GameObject* m_TileSelector;
 
 	public:
-		DndInstance(DndInitData init);
+		DndInstance(TilemapManager& mapManager, ObjectFactory& entityFactory);
 
+		TilemapManager& MapManager() const;
+
+		void StartGame(EntityNetworkData myCharacter);
+		void StartGame(const AddressPair& address, EntityNetworkData myCharacter, std::function<void()> timeoutCallback);
+		void Update() override;
 		void End() override;
-		void CreateGame(const WelcomePacket& data);
+
+		WelcomePacket GetWelcomePacket() const;
 
 		std::unique_ptr<Component> Clone() const override;
+
+	private:
+		void StartGameFromWelcome(const WelcomePacket& welcome, EntityNetworkData myCharacter);
+		void ConnectToHost(const AddressPair& host, std::function<void(WelcomePacket)> callback, std::function<void()> timeoutCallback);
 
 	};
 

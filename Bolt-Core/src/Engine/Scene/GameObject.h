@@ -53,6 +53,8 @@ namespace Bolt
 		void Update();
 		void LateUpdate();
 
+		ObjectPrefab GetPrefab() const;
+
 		void Transfer(XMLserializer& backend, bool isWriting) override;
 
 		friend void Destroy(Component* component, float timeToDelete = 0.0f);

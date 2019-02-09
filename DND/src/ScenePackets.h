@@ -77,4 +77,24 @@ namespace DND
 		Deserialize(stream, value.PlayerObject);
 	}
 
+	struct DisconnectPacket
+	{
+	public:
+		static constexpr PacketType Type = PacketType::Disconnect;
+
+	public:
+		id_t PlayerId;
+	};
+
+	template<>
+	inline void Serialize(OutputMemoryStream& stream, const DisconnectPacket& value)
+	{
+		Serialize(stream, value.PlayerId);
+	}
+	template<>
+	inline void Deserialize(InputMemoryStream& stream, DisconnectPacket& value)
+	{
+		Deserialize(stream, value.PlayerId);
+	}
+
 }

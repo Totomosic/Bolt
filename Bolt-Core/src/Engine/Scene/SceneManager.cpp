@@ -62,6 +62,7 @@ namespace Bolt
 		{
 			SceneLoadedEvent e;
 			e.LoadedScene = s_CurrentScene;
+			e.LoadData = nullptr;
 			s_CurrentScene->OnLoad.Post(std::move(e));
 		}
 	}

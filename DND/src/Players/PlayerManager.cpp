@@ -1,6 +1,8 @@
 #include "bltpch.h"
 #include "PlayerManager.h"
 
+#include "Characters/Controllers/PlayerController.h"
+
 namespace DND
 {
 
@@ -96,6 +98,7 @@ namespace DND
 		GameObject* player = m_ObjectManager->CreateFromNetworkData(data.PlayerObject);
 		Player p(data.Address, data.PlayerId, player);
 		SetLocalPlayer(std::move(p));
+		player->Components().AddComponent<PlayerController>();
 	}
 
 	PlayerNetworkData PlayerManager::GetPlayerData(id_t playerId) const
@@ -113,7 +116,8 @@ namespace DND
 		std::vector<PlayerNetworkData> result;
 		for (Player& player : OtherPlayers())
 		{
-			result.push_back(GetPlayerNetworkData(player));
+			PlayerNetworkData data = GetPlayerNetworkData(player);
+			result.push_back(data);
 		}
 		return result;
 	}
@@ -121,7 +125,8 @@ namespace DND
 	std::vector<PlayerNetworkData> PlayerManager::GetAllPlayerData() const
 	{
 		std::vector<PlayerNetworkData> result = GetOtherPlayerData();
-		result.push_back(GetLocalPlayerData());
+		PlayerNetworkData data = GetLocalPlayerData();
+		result.push_back(data);
 		return result;
 	}
 

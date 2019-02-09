@@ -27,13 +27,17 @@ namespace DND
 
 		int Width() const;
 		int Height() const;
+		int TileWidth() const;
+		int TileHeight() const;
 		const std::vector<LayerInfo>& Layers() const;
 		const TilemapLayer& GetLayer(int index) const;
 		TilemapLayer& GetLayer(int index);
 		GameObject* GetLayerObject(int index) const;
 
 		Vector3f WorldPositionOfTile(int x, int y) const;
+		Vector3f WorldPositionOfTile(const Tile& tile) const;
 		Tile TileFromWorldPosition(float x, float y) const;
+		Tile TileFromWorldPosition(const Vector2f& worldPos) const;
 
 		TilemapLayer& AddLayer(float resolution);
 		void Clear();

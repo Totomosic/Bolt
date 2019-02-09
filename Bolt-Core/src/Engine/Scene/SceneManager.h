@@ -24,6 +24,39 @@ namespace Bolt
 		static void SetCurrentSceneById(id_t id);
 		static void SetCurrentSceneByName(const blt::string& name);
 
+		template<typename LoadDataT>
+		static void SetCurrentScene(Scene& scene, LoadDataT data)
+		{
+			if (s_CurrentScene != nullptr)
+			{
+				SceneUnloadedEvent e;
+				e.UnloadedScene = s_CurrentScene;
+				s_CurrentScene->OnUnload.Post(std::move(e));
+			}
+			s_CurrentScene = &scene;
+			if (s_CurrentScene != nullptr)
+			{
+				std::unique_ptr<LoadDataT> dataPtr = std::make_unique<LoadDataT>();
+				*dataPtr = std::move(data);
+				SceneLoadedEvent e;
+				e.LoadedScene = s_CurrentScene;
+				e.LoadData = std::move(dataPtr);
+				s_CurrentScene->OnLoad.Post(std::move(e));
+			}
+		}
+
+		template<typename LoadDataT>
+		static void SetCurrentSceneById(id_t id, LoadDataT data)
+		{
+			SetCurrentScene(GetSceneById(id), std::move(data));
+		}
+
+		template<typename LoadDataT>
+		static void SetCurrentSceneByName(const blt::string& name, LoadDataT data)
+		{
+			SetCurrentScene(GetSceneByName(name), std::move(data));
+		}
+
 		friend struct Scene;
 		friend class Application;
 		friend class Destructor;

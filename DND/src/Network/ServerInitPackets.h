@@ -124,4 +124,44 @@ namespace DND
 		Deserialize(stream, value.Hosts);
 	}
 
+	struct ConnectToHostPacket
+	{
+	public:
+		static constexpr PacketType Type = PacketType::ConnectToHost;
+		
+	public:
+		AddressPair HostAddress;
+		SocketAddress PrivateEndpoint;
+	};
+
+	template<>
+	inline void Serialize(OutputMemoryStream& stream, const ConnectToHostPacket& value)
+	{
+		Serialize(stream, value.HostAddress);
+		Serialize(stream, value.PrivateEndpoint);
+	}
+	template<>
+	inline void Deserialize(InputMemoryStream& stream, ConnectToHostPacket& value)
+	{
+		Deserialize(stream, value.HostAddress);
+		Deserialize(stream, value.PrivateEndpoint);
+	}
+
+	struct ConnectionEstablishedPacket
+	{
+	public:
+		static constexpr PacketType Type = PacketType::ConnectionEstablished;
+	};
+
+	template<>
+	inline void Serialize(OutputMemoryStream& stream, const ConnectionEstablishedPacket& value)
+	{
+		
+	}
+	template<>
+	inline void Deserialize(InputMemoryStream& stream, ConnectionEstablishedPacket& value)
+	{
+		
+	}
+
 }

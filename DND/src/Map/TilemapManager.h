@@ -28,7 +28,7 @@ namespace DND
 		int m_TileHeight;
 
 	public:
-		TilemapManager(Layer& layer, int tileWidth, int tileHeight);
+		TilemapManager(int tileWidth, int tileHeight);
 
 		const Tileset& TileImages() const;
 		Tileset& TileImages();
@@ -41,6 +41,7 @@ namespace DND
 		int TileHeight() const;
 		bool IsLoaded(id_t mapId) const;
 
+		void SetMapLayer(Layer& layer);
 		void SetCurrentMap(id_t mapId);
 		id_t AddMap(Tilemap tilemap);
 

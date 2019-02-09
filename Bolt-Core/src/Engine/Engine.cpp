@@ -99,7 +99,9 @@ namespace Bolt
 			m_CurrentApplication->AppWindow->OnClose().Subscribe([this](id_t listenerId, WindowClosedEvent& e)
 			{
 				m_ShouldExit = true;
-				return false;
+				ListenerResponse response;
+				response.HandledEvent = false;
+				return response;
 			});
 			while (m_CurrentApplication->m_IsRunning)
 			{

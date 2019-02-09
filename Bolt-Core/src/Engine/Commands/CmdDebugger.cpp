@@ -14,7 +14,7 @@ namespace Bolt
 
 		CreateCommands();
 
-		EventManager::Subscribe(Events::COMMAND_LINE_MESSAGE_RECEIVED, [](id_t eventId, Event& args) -> bool
+		EventManager::Subscribe(Events::COMMAND_LINE_MESSAGE_RECEIVED, [](id_t eventId, Event& args)
 		{
 			CommandLineEvent& e = *(CommandLineEvent*)&args;
 			CommandProcessResult result = s_CommandLine.ProcessCommand(e.String);
@@ -22,7 +22,9 @@ namespace Bolt
 			{
 				s_Logger->error(result.ErrDesc);
 			}
-			return false;
+			ListenerResponse response;
+			response.HandledEvent = false;
+			return response;
 		});
 
 		std::thread listenerThread([]()
