@@ -58,6 +58,7 @@ namespace DND
 		void Terminate(ServerTerminatedCallback callback);
 		void AddPacketListener(PacketType type, PacketReceivedCallback listener);
 		void AddPacketListenerTimeout(PacketType type, float timeoutSeconds, PacketReceivedCallback listener, ListenerTimeoutCallback timeoutCallback);
+		void ClearPacketListeners();
 
 		void Update(float deltaTime);
 
