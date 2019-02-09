@@ -107,6 +107,11 @@ namespace DND
 		m_Callbacks[type].push_back({ std::move(listener), timeoutSeconds, std::move(timeoutCallback) });
 	}
 
+	void NetworkServer::ClearPacketListeners()
+	{
+		m_Callbacks.clear();
+	}
+
 	void NetworkServer::Update(float deltaTime)
 	{
 		for (auto& pair : m_Callbacks)

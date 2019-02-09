@@ -111,6 +111,7 @@ namespace DND
 
 		m_Objects.NetworkIds().Reset();
 		m_Players.PlayerIds().Reset();
+		NetworkManager::Get().Server().ClearPacketListeners();
 	}
 
 	WelcomePacket DndInstance::GetWelcomePacket() const
