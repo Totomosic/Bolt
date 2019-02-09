@@ -83,6 +83,7 @@
     <ClInclude Include="src\Players\Characters\Entities\CharacterAnimator.h" />
     <ClInclude Include="src\Players\Characters\Entities\NetworkComponent.h" />
     <ClInclude Include="src\DndServer.h" />
+    <ClInclude Include="src\GameplayPackets.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Map\Tilemap.cpp">
