@@ -50,6 +50,13 @@ namespace DND
 			{
 				SceneManager::SetCurrentSceneByName("Title");
 			}
+			if (Input::KeyPressed(Keycode::R))
+			{
+				NetworkManager::Get().Reconnect([](bool initialized)
+				{
+
+				});
+			}
 		}
 
 		void Render() override

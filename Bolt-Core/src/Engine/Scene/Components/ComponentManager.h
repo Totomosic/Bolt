@@ -43,6 +43,8 @@ namespace Bolt
 
 		Component& GetComponentById(id_t id) const;
 		Component& GetComponent(size_t componentTypeHash) const;
+		// Returns true if component type exists and returns component through outComponent
+		bool GetComponent(size_t componentTypeHash, Component** outComponent) const;
 		bool HasComponentById(id_t id) const;
 		bool HasComponent(size_t componentTypeHash) const;
 		std::vector<Component*> GetComponents() const;
@@ -57,6 +59,12 @@ namespace Bolt
 		T& GetComponent() const
 		{
 			return (T&)GetComponent(typeid(T).hash_code());
+		}
+
+		template<typename T>
+		bool GetComponent(T** outComponent)
+		{
+			return GetComponent(typeid(T).hash_code(), (Component**)outComponent);
 		}
 
 		template<typename T>

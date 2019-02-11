@@ -33,7 +33,11 @@ namespace DND
 
 	void CurrentMap::CurrentMapChanged(id_t currentMapId)
 	{
-		
+		MeshRenderer* mr;
+		if (gameObject()->Components().GetComponent(&mr))
+		{
+			mr->SetEnabled(currentMapId == MapId());
+		}
 	}
 
 	std::unique_ptr<Component> CurrentMap::Clone() const
