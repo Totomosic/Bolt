@@ -36,6 +36,7 @@ namespace DND
 
 		void Initialize(InitCallback callback);
 		void Terminate(TerminateCallback callback);
+		void Reconnect(InitCallback callback);
 
 		void RegisterAsHost();
 		void RemoveAsHost();

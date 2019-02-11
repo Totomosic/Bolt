@@ -54,6 +54,19 @@ namespace Bolt
 		return *m_ComponentArray[m_TypeHashMap.at(componentTypeHash)].component;
 	}
 
+	bool ComponentManager::GetComponent(size_t componentTypeHash, Component** outComponent) const
+	{
+		auto it = m_TypeHashMap.find(componentTypeHash);
+		if (it == m_TypeHashMap.end())
+		{
+			// Didn't find component
+			*outComponent = nullptr;
+			return false;
+		}
+		*outComponent = m_ComponentArray[it->second].component.get();
+		return true;
+	}
+
 	bool ComponentManager::HasComponentById(id_t id) const
 	{
 		return (!m_ComponentIdManager.IsIdAvailable(id)) && (m_ComponentArray[id].component->IsEnabled());

@@ -53,7 +53,18 @@ namespace DND
 	void NetworkManager::Initialize(NetworkManager::InitCallback callback)
 	{
 		m_Server.Initialize();
+		Reconnect(std::move(callback));
+	}
 
+	void NetworkManager::Terminate(NetworkManager::TerminateCallback callback)
+	{
+		std::scoped_lock<std::mutex> lock(m_InitializedMutex);
+		m_IsInitialized = false;
+		m_Server.Terminate(std::move(callback));
+	}
+
+	void NetworkManager::Reconnect(NetworkManager::InitCallback callback)
+	{
 		m_Server.AddPacketListenerTimeout(PacketType::AddressPairResponse, 5, [this, callback](ReceivedPacket& packet)
 		{
 			{
@@ -67,7 +78,7 @@ namespace DND
 			callback(true);
 			return true;
 		},
-		[callback]()
+			[callback]()
 		{
 			BLT_ERROR("NetworkManager initialization timed out");
 			callback(false);
@@ -76,13 +87,6 @@ namespace DND
 		UploadAddressPacket addressPacket;
 		addressPacket.PrivateEndpoint = m_Server.Address();
 		m_Server.SendPacket(s_Ec2Address, addressPacket);
-	}
-
-	void NetworkManager::Terminate(NetworkManager::TerminateCallback callback)
-	{
-		std::scoped_lock<std::mutex> lock(m_InitializedMutex);
-		m_IsInitialized = false;
-		m_Server.Terminate(std::move(callback));
 	}
 
 	void NetworkManager::RegisterAsHost()
