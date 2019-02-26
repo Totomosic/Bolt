@@ -1,6 +1,6 @@
 #pragma once
 #include "Bolt-Core.h"
-#include "..\..\Shaders\__Shaders__.h"
+#include "Shaders\__Shaders__.h"
 
 #include "LightSettings.h"
 #include "RenderSettings.h"

@@ -54,7 +54,7 @@ namespace Bolt
 				BLT_ASSERT(false, "Failed to initialize Glad");
 			}
 			BLT_CORE_INFO("Glad Initialized");
-			Input::Initialize(window);
+			Input::Get().Initialize(window);
 			BLT_CORE_INFO("Input Initialized");
 			Shader::Initialize();
 			BLT_CORE_INFO("Shader Initialized");

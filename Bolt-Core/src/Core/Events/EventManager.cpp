@@ -40,16 +40,6 @@ namespace Bolt
 		ReleaseListenerId(listenerId);
 	}
 
-	void EventManager::Post(id_t eventId, id_t dispatcherId)
-	{
-		Post<Event>(eventId, dispatcherId, std::unique_ptr<Event>());
-	}
-
-	void EventManager::Post(id_t eventId)
-	{
-		Post(eventId, EventManager::IGNORE_DISPATCHER_ID);
-	}
-
 	void EventManager::FlushEvents()
 	{
 		EventInfo* eventQueue;
@@ -67,7 +57,7 @@ namespace Bolt
 			{
 				if (listener.DispatcherId == EventManager::IGNORE_DISPATCHER_ID || e.DispatcherId == listener.DispatcherId)
 				{
-					ListenerResponse response = (*listener.Callback)(listener.ListenerId, *e.Args);
+					ListenerResponse response = (*listener.Callback)(*e.Args);
 					if (response.HandledEvent)
 					{
 						// Event has already been handled and should not be propogated to other event listeners
@@ -90,7 +80,7 @@ namespace Bolt
 
 	void EventManager::Initialize()
 	{
-		Subscribe(Events::TASK_CONTINUE_ON_MAIN_THREAD, [](id_t listenerId, Event& eArgs)
+		Subscribe(Events::TASK_CONTINUE_ON_MAIN_THREAD, [](Event& eArgs)
 		{
 			TaskCompletedEvent& e = *(TaskCompletedEvent*)&eArgs;
 			e.Execute();

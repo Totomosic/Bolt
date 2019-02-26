@@ -179,7 +179,7 @@ namespace Bolt
 
 	std::ostream& operator<<(std::ostream& stream, const Color& color)
 	{
-		stream << "<<" << color.r << color.g << color.b << color.a << ">>";
+		stream << "Color(" << color.r << ", " << color.g << ", " << color.b << ", " << color.a << ')';
 		return stream;
 	}
 

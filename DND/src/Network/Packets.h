@@ -1,5 +1,6 @@
 #pragma once
 #include "bltpch.h"
+#include "Events.h"
 #include "Serialization.h"
 #include "Deserialization.h"
 
@@ -50,6 +51,8 @@ namespace DND
 		PacketType Type;
 		SocketAddress FromAddress;
 		InputMemoryStream Packet;
+
+		BLT_EVENT_ID_DEF(PACKET_RECEIVED_EVENT);
 	};
 
 }

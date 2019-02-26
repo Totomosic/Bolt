@@ -49,7 +49,7 @@ namespace Bolt
 		const blt::string& Title() const;
 		const Color& ClearColor() const;
 		Color& ClearColor();
-		GLFWwindow* WindowHandle() const;
+		void* GetNativeWindow() const;
 
 		bool ShouldClose() const;
 		void Close() const;

@@ -52,67 +52,71 @@ namespace Bolt
 	class BLT_API Input
 	{
 	private:
-		static MouseInstance s_Mouse;
-		static KeyboardInstance s_Keyboard;
-		static Window* s_Window;
+		MouseInstance s_Mouse;
+		KeyboardInstance s_Keyboard;
+		Window* s_Window;
 
-		static std::vector<char> s_PressedCharacters;
-		static std::vector<KeyboardInstance::Key> s_ChangedKeys;
-		static std::vector<MouseInstance::Button> s_ChangedButtons;
-
-	public:
-		static EventDispatcher<Bolt::KeyPressedEvent> OnKeyPressed;
-		static EventDispatcher<Bolt::KeyReleasedEvent> OnKeyReleased;
-		static EventDispatcher<Bolt::MousePressedEvent> OnMousePressed;
-		static EventDispatcher<Bolt::MouseReleasedEvent> OnMouseReleased;
-		static EventDispatcher<Bolt::MouseScrolledEvent> OnMouseScrolled;
-		static EventDispatcher<Bolt::MouseMovedEvent> OnMouseMoved;
+		std::vector<char> s_PressedCharacters;
+		std::vector<KeyboardInstance::Key> s_ChangedKeys;
+		std::vector<MouseInstance::Button> s_ChangedButtons;
 
 	public:
-		Input() = delete;
+		EventDispatcher<Bolt::KeyPressedEvent> OnKeyPressed;
+		EventDispatcher<Bolt::KeyReleasedEvent> OnKeyReleased;
+		EventDispatcher<Bolt::MousePressedEvent> OnMousePressed;
+		EventDispatcher<Bolt::MouseReleasedEvent> OnMouseReleased;
+		EventDispatcher<Bolt::MouseScrolledEvent> OnMouseScrolled;
+		EventDispatcher<Bolt::MouseMovedEvent> OnMouseMoved;
 
-		static const MouseInstance& Mouse();
-		static const KeyboardInstance& Keyboard();
+	private:
+		Input();
 
-		static const std::vector<char>& PressedCharacters();
+	public:
+		static Input& Get();
+
+	public:
+		const MouseInstance& Mouse();
+		const KeyboardInstance& Keyboard();
+
+		const std::vector<char>& PressedCharacters();
 
 		// Mouse position relative to the bottom left of the window
-		static Vector3f MousePosition();
+		Vector3f MousePosition();
 		// Mouse position relative to bottom left of region with given [width, height]
-		static Vector3f MousePosition(float width, float height);
+		Vector3f MousePosition(float width, float height);
 		// Mouse position change since last frame relative to the bottom left of the window
-		static Vector3f RelMousePosition();
+		Vector3f RelMousePosition();
 		// Mouse position change since last frame relative to the bottom left of region with given [width, height]
-		static Vector3f RelMousePosition(float width, float height);
+		Vector3f RelMousePosition(float width, float height);
 		// Mouse position in the range [-1, 1] from the centre of the window
-		static Vector3f NormalizedMousePosition();
+		Vector3f NormalizedMousePosition();
 		// Mouse posiiton change from last frame in the range [-1, 1] from the centre of the window
-		static Vector3f RelNormalizedMousePosition();
+		Vector3f RelNormalizedMousePosition();
 		// Total scroll vector of the mouse
-		static Vector2f MouseScroll();
+		Vector2f MouseScroll();
 		// Change in scroll from the last frame
-		static Vector2f RelMouseScroll();
+		Vector2f RelMouseScroll();
 
 		// Returns true if mouseButton is held down during this frame
-		static bool MouseButtonDown(MouseButton mouseButton, KeyMod mods = KeyMod::Ignore);
+		bool MouseButtonDown(MouseButton mouseButton, KeyMod mods = KeyMod::Ignore);
 		// Returns true if mouseButton was pressed this frame
-		static bool MouseButtonPressed(MouseButton mouseButton, KeyMod mods = KeyMod::Ignore);
+		bool MouseButtonPressed(MouseButton mouseButton, KeyMod mods = KeyMod::Ignore);
 		// Returns true if mouseButton is not held down during this frame
-		static bool MouseButtonUp(MouseButton mouseButton, KeyMod mods = KeyMod::Ignore);
+		bool MouseButtonUp(MouseButton mouseButton, KeyMod mods = KeyMod::Ignore);
 		// Returns true if mouseButton was released this frame
-		static bool MouseButtonReleased(MouseButton mouseButton, KeyMod mods = KeyMod::Ignore);
+		bool MouseButtonReleased(MouseButton mouseButton, KeyMod mods = KeyMod::Ignore);
 
 		// Returns true if key is held down during this frame
-		static bool KeyDown(Keycode key, KeyMod mods = KeyMod::Ignore);
+		bool KeyDown(Keycode key, KeyMod mods = KeyMod::Ignore);
 		// Returns true if key is pressed this frame
-		static bool KeyPressed(Keycode key, KeyMod mods = KeyMod::Ignore);
+		bool KeyPressed(Keycode key, KeyMod mods = KeyMod::Ignore);
 		// Returns true if key is not held down during this frame
-		static bool KeyUp(Keycode key, KeyMod mods = KeyMod::Ignore);
+		bool KeyUp(Keycode key, KeyMod mods = KeyMod::Ignore);
 		// Returns true if key is released this frame
-		static bool KeyReleased(Keycode key, KeyMod mods = KeyMod::Ignore);
+		bool KeyReleased(Keycode key, KeyMod mods = KeyMod::Ignore);
 
-		static void HideCursor();
-		static void ShowCursor();
+		void HideCursor();
+		void ShowCursor();
 
 		friend class Initializer;
 		friend class Destructor;
@@ -120,18 +124,18 @@ namespace Bolt
 		friend class Engine;
 
 	private:
-		static void Update();
-		static void Initialize(Window* window);
-		static void Terminate();
-		static KeyboardInstance::Key* GetKey(Keycode keycode);
-		static MouseInstance::Button* GetMouseButton(MouseButton button);
-		static bool TestKeyMods(KeyMod mods);
+		void Update();
+		void Initialize(Window* window);
+		void Terminate();
+		KeyboardInstance::Key* GetKey(Keycode keycode);
+		MouseInstance::Button* GetMouseButton(MouseButton button);
+		bool TestKeyMods(KeyMod mods);
 
-		static void MousePositionCallback(double mouseX, double mouseY);
-		static void MouseScrollCallback(double relX, double relY);
-		static void MouseButtonCallback(int button, int action, int mods);
-		static void KeyboardKeyCallback(int key, int scancode, int action, int mods);
-		static void CharPressedCallback(uint code);
+		void MousePositionCallback(double mouseX, double mouseY);
+		void MouseScrollCallback(double relX, double relY);
+		void MouseButtonCallback(int button, int action, int mods);
+		void KeyboardKeyCallback(int key, int scancode, int action, int mods);
+		void CharPressedCallback(uint code);
 
 	};
 

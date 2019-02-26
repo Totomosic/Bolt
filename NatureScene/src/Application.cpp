@@ -79,33 +79,33 @@ namespace NatureScene
 		void Update() override
 		{
 			fpsText->SetText("fps " + std::to_string((int)Time::FramesPerSecond()));
-			if (Input::KeyDown(Keycode::W))
+			if (Input::Get().KeyDown(Keycode::W))
 			{
 				perspectiveCamera->transform().Translate(perspectiveCamera->transform().Forward() * CAMERA_SPEED * Time::RenderingTimeline().DeltaTime());
 			}
-			if (Input::KeyDown(Keycode::S))
+			if (Input::Get().KeyDown(Keycode::S))
 			{
 				perspectiveCamera->transform().Translate(perspectiveCamera->transform().Forward() * -CAMERA_SPEED * Time::RenderingTimeline().DeltaTime());
 			}
-			if (Input::KeyDown(Keycode::D))
+			if (Input::Get().KeyDown(Keycode::D))
 			{
 				perspectiveCamera->transform().Translate(perspectiveCamera->transform().Right() * CAMERA_SPEED * Time::RenderingTimeline().DeltaTime());
 			}
-			if (Input::KeyDown(Keycode::A))
+			if (Input::Get().KeyDown(Keycode::A))
 			{
 				perspectiveCamera->transform().Translate(perspectiveCamera->transform().Right() * -CAMERA_SPEED * Time::RenderingTimeline().DeltaTime());
 			}
-			if (Input::MouseButtonDown(MouseButton::Left))
+			if (Input::Get().MouseButtonDown(MouseButton::Left))
 			{
-				float x = Input::RelMousePosition().x * MOUSE_X_SENSITIVITY;
-				float y = Input::RelMousePosition().y * MOUSE_Y_SENSITIVITY;
+				float x = Input::Get().RelMousePosition().x * MOUSE_X_SENSITIVITY;
+				float y = Input::Get().RelMousePosition().y * MOUSE_Y_SENSITIVITY;
 				perspectiveCamera->transform().Rotate(-x, Vector3f::Up(), Space::World);			
 				perspectiveCamera->transform().Rotate(y, Vector3f::Right(), Space::Local);				
 			}
 
-			if (Input::MouseButtonPressed(MouseButton::Right))
+			if (Input::Get().MouseButtonPressed(MouseButton::Right))
 			{
-				Ray ray = perspectiveCamera->NDCToWorldRay(Input::NormalizedMousePosition());
+				Ray ray = perspectiveCamera->NDCToWorldRay(Input::Get().NormalizedMousePosition());
 				GameObject* line = Factory.Line(ray.Origin, ray.Origin + ray.Direction * 100, Color::Black);
 				Destroy(line, 5);
 			}

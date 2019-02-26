@@ -8,6 +8,8 @@ namespace Bolt
 	{
 	public:
 		blt::string String;
+
+		BLT_EVENT_ID_DEF(Events::COMMAND_LINE_MESSAGE_RECEIVED);
 	};
 
 	class BLT_API CmdDebugger

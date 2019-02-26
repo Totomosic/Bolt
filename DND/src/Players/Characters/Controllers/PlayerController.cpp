@@ -45,23 +45,23 @@ namespace DND
 		m_LastPressed = GetLastPressedKey();
 		if (CanMove())
 		{
-			if (Input::KeyDown(m_LastPressed))
+			if (Input::Get().KeyDown(m_LastPressed))
 			{
 				PushAction(GetAction(m_LastPressed));
 			}
-			else if (Input::KeyDown(Keycode::W))
+			else if (Input::Get().KeyDown(Keycode::W))
 			{
 				PushAction(GetAction(Keycode::W));
 			}
-			else if (Input::KeyDown(Keycode::S))
+			else if (Input::Get().KeyDown(Keycode::S))
 			{
 				PushAction(GetAction(Keycode::S));
 			}
-			else if (Input::KeyDown(Keycode::A))
+			else if (Input::Get().KeyDown(Keycode::A))
 			{
 				PushAction(GetAction(Keycode::A));
 			}
-			else if (Input::KeyDown(Keycode::D))
+			else if (Input::Get().KeyDown(Keycode::D))
 			{
 				PushAction(GetAction(Keycode::D));
 			}
@@ -84,19 +84,19 @@ namespace DND
 
 	Keycode PlayerController::GetLastPressedKey() const
 	{
-		if (Input::KeyPressed(Keycode::W))
+		if (Input::Get().KeyPressed(Keycode::W))
 		{
 			return Keycode::W;
 		}
-		if (Input::KeyPressed(Keycode::S))
+		if (Input::Get().KeyPressed(Keycode::S))
 		{
 			return Keycode::S;
 		}
-		if (Input::KeyPressed(Keycode::A))
+		if (Input::Get().KeyPressed(Keycode::A))
 		{
 			return Keycode::A;
 		}
-		if (Input::KeyPressed(Keycode::D))
+		if (Input::Get().KeyPressed(Keycode::D))
 		{
 			return Keycode::D;
 		}

@@ -705,30 +705,6 @@
     <ClInclude Include="src\Graphics\Resources\ResourcePtr.h">
       <Filter>Graphics\Resources</Filter>
     </ClInclude>
-    <ClInclude Include="src\Graphics\Resources\Shaders\Compiler\ComShaderProgram.h">
-      <Filter>Graphics\Resources\Shaders\Compiler</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Graphics\Resources\Shaders\Compiler\ShaderCompiler.h">
-      <Filter>Graphics\Resources\Shaders\Compiler</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Graphics\Resources\Shaders\Compiler\__Compiler__.h">
-      <Filter>Graphics\Resources\Shaders\Compiler</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Graphics\Resources\Shaders\Components\__Components__.h">
-      <Filter>Graphics\Resources\Shaders\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Graphics\Resources\Shaders\Shader.h">
-      <Filter>Graphics\Resources\Shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Graphics\Resources\Shaders\Uniform.h">
-      <Filter>Graphics\Resources\Shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Graphics\Resources\Shaders\UniformManager.h">
-      <Filter>Graphics\Resources\Shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Graphics\Resources\Shaders\__Shaders__.h">
-      <Filter>Graphics\Resources\Shaders</Filter>
-    </ClInclude>
     <ClInclude Include="src\Graphics\Resources\Textures\Fonts\Font.h">
       <Filter>Graphics\Resources\Textures\Fonts</Filter>
     </ClInclude>
@@ -786,6 +762,41 @@
     <ClInclude Include="src\Core\Tasks\TaskManager.h" />
     <ClInclude Include="src\Core\Tasks\TaskResult.h" />
     <ClInclude Include="src\Core\Tasks\TaskEvents.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Compiler\__Compiler__.h">
+      <Filter>Graphics\Resources\Shaders\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Compiler\ComShaderProgram.h">
+      <Filter>Graphics\Resources\Shaders\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Compiler\ShaderCompiler.h">
+      <Filter>Graphics\Resources\Shaders\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\__Shaders__.h">
+      <Filter>Graphics\Resources\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Shader.h">
+      <Filter>Graphics\Resources\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Uniform.h">
+      <Filter>Graphics\Resources\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\UniformManager.h">
+      <Filter>Graphics\Resources\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\__Components__.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\ShaderValue.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\ShaderEnums.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\FunctionDecl.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\FunctionDef.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\FunctionContext.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\BuiltInFunc.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\ShaderProgramFactory.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\ShaderFactory.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\BuiltInContext.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\ShaderInstance.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\MaterialInterface.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\ShaderLinkContext.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\UniformLink.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\BoltTL\string.cpp">
@@ -1100,15 +1111,6 @@
     <ClCompile Include="src\Graphics\Resources\ResourcePack.cpp">
       <Filter>Graphics\Resources</Filter>
     </ClCompile>
-    <ClCompile Include="src\Graphics\Resources\Shaders\Compiler\ShaderCompiler.cpp">
-      <Filter>Graphics\Resources\Shaders\Compiler</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\Resources\Shaders\Shader.cpp">
-      <Filter>Graphics\Resources\Shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\Resources\Shaders\UniformManager.cpp">
-      <Filter>Graphics\Resources\Shaders</Filter>
-    </ClCompile>
     <ClCompile Include="src\Graphics\Resources\Textures\Fonts\Font.cpp">
       <Filter>Graphics\Resources\Textures\Fonts</Filter>
     </ClCompile>
@@ -1132,5 +1134,26 @@
     </ClCompile>
     <ClCompile Include="src\Logging.cpp" />
     <ClCompile Include="src\Types.cpp" />
+    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\Compiler\ShaderCompiler.cpp">
+      <Filter>Graphics\Resources\Shaders\Compiler</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\Shader.cpp">
+      <Filter>Graphics\Resources\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\UniformManager.cpp">
+      <Filter>Graphics\Resources\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\ShaderValue.cpp" />
+    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\FunctionDecl.cpp" />
+    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\FunctionDef.cpp" />
+    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\FunctionContext.cpp" />
+    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\BuiltInFunc.cpp" />
+    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\ShaderProgramFactory.cpp" />
+    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\ShaderFactory.cpp" />
+    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\BuiltInContext.cpp" />
+    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\ShaderInstance.cpp" />
+    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\MaterialInterface.cpp" />
+    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\ShaderLinkContext.cpp" />
+    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\UniformLink.cpp" />
   </ItemGroup>
 </Project>

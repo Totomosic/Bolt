@@ -17,6 +17,7 @@ namespace DND
 	public:
 		void Init() override
 		{
+			AppWindow->CentreOnMonitor(Monitor::Primary());
 			ResourcePack resources = ResourceManager::FetchPack("res/resources.pack");
 			ResourceManager::LoadPack(resources);
 			ResourceManager::Register(std::make_unique<Font>("res/arial.ttf", 42));
@@ -32,6 +33,28 @@ namespace DND
 
 			SceneManager::SetCurrentScene(titleScene);
 
+			ShaderFactory s;
+			s.CurrentShader(ShaderType::Vertex);
+			ShaderValuePtr position = s.GetStream(ShaderStream::Position);
+			ShaderValuePtr texCoord = s.GetStream(ShaderStream::TexCoord);
+			ShaderValuePtr modelMatrix = s.RendererUniform(RendererUniform::ModelMatrix);
+			ShaderValuePtr viewMatrix = s.RendererUniform(RendererUniform::ViewMatrix);
+			ShaderValuePtr projectionMatrix = s.RendererUniform(RendererUniform::ProjectionMatrix);
+			ShaderValuePtr worldPosition = s.FuncResult(s.Operations().Mul(), { modelMatrix, position });
+			ShaderValuePtr viewPosition = s.FuncResult(s.Operations().Mul(), { viewMatrix, worldPosition });
+			ShaderValuePtr screenPosition = s.FuncResult(s.Operations().Mul(), { projectionMatrix, viewPosition });
+			s.SetAttribute(ShaderAttribute::Position, screenPosition);
+			ShaderValuePtr worldPositionPass = s.Pass(worldPosition);
+			ShaderValuePtr texCoordPass = s.Pass(texCoord);
+
+			s.CurrentShader(ShaderType::Fragment);
+			ShaderValuePtr texture = s.Uniform("BaseTexture", ValueType::Texture2D);
+			s.SetAttribute(ShaderAttribute::FragColor, s.FuncResult(s.Operations().Texture(), { texture, texCoordPass }));
+
+			BLT_INFO(s.VertexSource());
+			BLT_INFO(s.FragmentSource());
+			ShaderLinkContext link(s);
+
 			NetworkManager::Get().Initialize([](bool initialized)
 			{
 				
@@ -46,11 +69,11 @@ namespace DND
 		void Update() override
 		{
 			NetworkManager::Get().Update();
-			if (Input::KeyPressed(Keycode::Esc))
+			if (Input::Get().KeyPressed(Keycode::Esc))
 			{
 				SceneManager::SetCurrentSceneByName("Title");
 			}
-			if (Input::KeyPressed(Keycode::R))
+			if (Input::Get().KeyPressed(Keycode::R))
 			{
 				NetworkManager::Get().Reconnect([](bool initialized)
 				{

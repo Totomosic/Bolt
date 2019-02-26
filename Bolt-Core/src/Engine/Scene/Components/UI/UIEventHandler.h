@@ -13,6 +13,8 @@ namespace Bolt
 		Vector2f ScreenPosition;
 		Vector2f ObjectRelPosition;
 		MouseButton Button;
+
+		BLT_EVENT_ID_DEF(Events::ON_CLICKED);
 	};
 
 	class BLT_API UIHoverEvent : public Event
@@ -21,6 +23,28 @@ namespace Bolt
 		GameObject* Object;
 		Vector2f ScreenPosition;
 		Vector2f ObjectRelPosition;
+
+		BLT_EVENT_ID_DEF(Events::ON_HOVER);
+	};
+
+	class BLT_API UIHoverEntryEvent : public Event
+	{
+	public:
+		GameObject* Object;
+		Vector2f ScreenPosition;
+		Vector2f ObjectRelPosition;
+
+		BLT_EVENT_ID_DEF(Events::ON_HOVER_ENTRY);
+	};
+
+	class BLT_API UIHoverExitEvent : public Event
+	{
+	public:
+		GameObject* Object;
+		Vector2f ScreenPosition;
+		Vector2f ObjectRelPosition;
+
+		BLT_EVENT_ID_DEF(Events::ON_HOVER_ENTRY);
 	};
 
 	class BLT_API UIEventHandler : public Component
@@ -30,9 +54,9 @@ namespace Bolt
 
 	public:
 		EventDispatcher<UIClickedEvent> OnClicked;
-		EventDispatcher<UIHoverEvent> OnHoverEntry;
+		EventDispatcher<UIHoverEntryEvent> OnHoverEntry;
 		EventDispatcher<UIHoverEvent> OnHover;
-		EventDispatcher<UIHoverEvent> OnHoverExit;
+		EventDispatcher<UIHoverExitEvent> OnHoverExit;
 
 	public:
 		UIEventHandler();

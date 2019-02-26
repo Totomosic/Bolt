@@ -29,7 +29,7 @@ namespace Bolt
 	void Engine::UpdateApplication()
 	{
 		Scene* scene = &SceneManager::CurrentScene();
-		Input::Update();
+		Input::Get().Update();
 		glfwPollEvents();
 		EventManager::FlushEvents(); // Flush #1 (likely input events)
 		m_CurrentApplication->Update();
@@ -96,7 +96,7 @@ namespace Bolt
 		BLT_ASSERT(m_CurrentApplication.get() != nullptr, "Must have a valid Application to run");
 		if (m_CreateInfo.UseGraphics)
 		{
-			m_CurrentApplication->AppWindow->OnClose().Subscribe([this](id_t listenerId, WindowClosedEvent& e)
+			m_CurrentApplication->AppWindow->OnClose().Subscribe([this](WindowClosedEvent& e)
 			{
 				m_ShouldExit = true;
 				ListenerResponse response;

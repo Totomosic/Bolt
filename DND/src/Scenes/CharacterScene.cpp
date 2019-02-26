@@ -10,7 +10,7 @@ namespace DND
 		Camera* camera = scene.CreateCamera(Projection::Orthographic(0, 1920, 0, 1080, 0, 100));
 		Layer& layer = scene.CreateLayer(camera);
 
-		scene.OnLoad.Subscribe([](id_t listenerId, SceneLoadedEvent& e)
+		scene.OnLoad.Subscribe([](SceneLoadedEvent& e)
 		{
 			SceneManager::SetCurrentSceneByName("Server");
 			ListenerResponse response;

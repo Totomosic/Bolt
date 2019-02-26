@@ -14,7 +14,7 @@ namespace Bolt
 
 		CreateCommands();
 
-		EventManager::Subscribe(Events::COMMAND_LINE_MESSAGE_RECEIVED, [](id_t eventId, Event& args)
+		EventManager::Subscribe(Events::COMMAND_LINE_MESSAGE_RECEIVED, [](Event& args)
 		{
 			CommandLineEvent& e = *(CommandLineEvent*)&args;
 			CommandProcessResult result = s_CommandLine.ProcessCommand(e.String);
@@ -35,7 +35,7 @@ namespace Bolt
 				std::cin.getline(buffer, 256 * sizeof(char));
 				CommandLineEvent e;
 				e.String = buffer;
-				EventManager::Post(Events::COMMAND_LINE_MESSAGE_RECEIVED, e);
+				EventManager::Post(e);
 			}
 		});
 		listenerThread.detach();

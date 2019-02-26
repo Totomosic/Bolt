@@ -26,6 +26,12 @@ namespace DND
 	
 	}
 
+	class ServerShutdownEvent : public Event
+	{
+	public:
+		BLT_EVENT_ID_DEF(SERVER_SHUTDOWN_EVENT);
+	};
+
 	class NetworkServer
 	{
 	public:

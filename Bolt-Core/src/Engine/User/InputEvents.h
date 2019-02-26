@@ -128,12 +128,16 @@ namespace Bolt
 	public:
 		Keycode KeyCode;
 		bool IsRepeat;
+
+		BLT_EVENT_ID_DEF(Events::KEY_PRESSED);
 	};
 
 	struct BLT_API KeyReleasedEvent : public Event
 	{
 	public:
 		Keycode KeyCode;
+
+		BLT_EVENT_ID_DEF(Events::KEY_RELEASED);
 	};
 
 	struct BLT_API MouseMovedEvent : public Event
@@ -143,6 +147,8 @@ namespace Bolt
 		float y;
 		float relX;
 		float relY;
+
+		BLT_EVENT_ID_DEF(Events::MOUSE_POSITION_MOVED);
 	};
 
 	struct BLT_API MousePressedEvent : public Event
@@ -152,6 +158,8 @@ namespace Bolt
 		bool IsRepeat;
 		float x;
 		float y;
+
+		BLT_EVENT_ID_DEF(Events::MOUSE_PRESSED);
 	};
 
 	struct BLT_API MouseReleasedEvent : public Event
@@ -160,6 +168,8 @@ namespace Bolt
 		MouseButton Button;
 		float x;
 		float y;
+
+		BLT_EVENT_ID_DEF(Events::MOUSE_RELEASED);
 	};
 
 	struct BLT_API MouseScrolledEvent : public Event
@@ -167,6 +177,8 @@ namespace Bolt
 	public:
 		float xOffset;
 		float yOffset;
+
+		BLT_EVENT_ID_DEF(Events::MOUSE_SCROLLED);
 	};
 
 }

@@ -19,7 +19,7 @@ namespace DND
 	NetworkManager::NetworkManager()
 		: m_Server(SocketAddress()), m_InitializedMutex(), m_Address(), m_IsInitialized(false)
 	{
-		s_Ec2Address = SocketAddress("ec2-18-219-148-3.us-east-2.compute.amazonaws.com", 12345);
+		s_Ec2Address = SocketAddress("ec2-18-218-83-100.us-east-2.compute.amazonaws.com", 12345);
 
 		uint16_t port = 10000;
 		std::vector<uint> addresses = SocketUtil::GetIP4Addresses();

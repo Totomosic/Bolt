@@ -26,14 +26,7 @@ namespace Bolt
 			id_t EventId;
 			id_t DispatcherId;
 			std::unique_ptr<Event> Args;
-		};
-
-		/*struct BLT_API ListenerInfo
-		{
-		public:
-			id_t EventId;
-			Listener ListenerPtr;
-		};*/		
+		};	
 
 	public:
 		// Max events that can be queued per frame
@@ -88,22 +81,30 @@ namespace Bolt
 
 		// Post a new event with given args from a specific dispatcher
 		template<typename EventType>
-		static void Post(id_t eventId, id_t dispatcherId, EventType args)
+		static void PostFromDispatcher(id_t dispatcherId, EventType args)
 		{
-			std::unique_ptr<EventType> e = std::make_unique<EventType>();
-			*e = std::move(args);
-			Post(eventId, dispatcherId, std::move(e));
+			std::unique_ptr<EventType> e = std::make_unique<EventType>(std::move(args));
+			PostFromDispatcher(EventType::BLT_EVENT_ID, dispatcherId, std::move(e));
 		}
 
 		// Post a new event with given args
 		template<typename EventType>
-		static void Post(id_t eventId, EventType args)
+		static void Post(EventType args)
 		{
-			Post(eventId, EventManager::IGNORE_DISPATCHER_ID, std::move(args));
+			PostFromDispatcher(EventManager::IGNORE_DISPATCHER_ID, std::move(args));
 		}
 
-		static void Post(id_t eventId, id_t dispatcherId);
-		static void Post(id_t eventId);
+		template<typename EventType>
+		static void PostFromDispatcher(id_t dispatcherId)
+		{
+			PostFromDispatcher<Event>(EventType::BLT_EVENT_ID, dispatcherId, std::unique_ptr<Event>());
+		}
+
+		template<typename EventType>
+		static void Post()
+		{
+			PostFromDispatcher<EventType>(EventManager::IGNORE_DISPATCHER_ID);
+		}
 
 		// Called automatically every frame before Application::Update() runs, processes all events from previous frame
 		static void FlushEvents();
@@ -119,7 +120,7 @@ namespace Bolt
 		static void UpdateListener(id_t listenerId, std::unique_ptr<EventListenerContainer<Event>> listener);
 		// Post a new event with given args from a specific dispatcher
 		template<typename EventType>
-		static void Post(id_t eventId, id_t dispatcherId, std::unique_ptr<EventType> args)
+		static void PostFromDispatcher(id_t eventId, id_t dispatcherId, std::unique_ptr<EventType> args)
 		{
 			std::scoped_lock<std::mutex> lock(s_EventQueueMutex);
 			s_EventQueue.AddEvent(EventInfo{ eventId, dispatcherId, std::move(args) });

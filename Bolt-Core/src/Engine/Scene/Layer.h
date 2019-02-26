@@ -49,6 +49,7 @@ namespace Bolt
 		bool IsEnabled() const;
 		void Enable();
 		void Disable();
+		void SetEnabled(bool isEnabled);
 		void SetActiveCamera(Camera* camera);
 
 		GameObject* AddGameObject(GameObject&& object);

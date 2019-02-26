@@ -28,7 +28,7 @@ namespace DND
 				{
 					UIsurface& joinButton = region.Rectangle(800, 150, Color::Black, Transform({ 0, yOffset, 1 }));
 					joinButton.Text(host.PublicEndpoint.ToString(), Color::White, Transform({ 0, 0, 1 }));
-					joinButton.EventHandler().OnClicked.Subscribe([myCharacter, host](id_t listenerId, UIClickedEvent& e)
+					joinButton.EventHandler().OnClicked.Subscribe([myCharacter, host](UIClickedEvent& e)
 					{
 						GameStartData data;
 						data.CharacterData = myCharacter;
@@ -65,7 +65,7 @@ namespace DND
 		UIelement& sceneElements = layer.UI().AddElement(std::make_unique<UIelement>());
 		UIsurface& joinableGamesBackground = layer.UI().Rectangle(camera->ViewWidth() * 0.75f, camera->ViewHeight() * 0.75f, Color(200, 200, 200, 230), Transform({ camera->ViewWidth() / 2, camera->ViewHeight() * 0.6f, -50 }));
 
-		scene.OnLoad.Subscribe([&sceneElements, &joinableGamesBackground, loadingIconId, camera](id_t listenerId, SceneLoadedEvent& e)
+		scene.OnLoad.Subscribe([&sceneElements, &joinableGamesBackground, loadingIconId, camera](SceneLoadedEvent& e)
 		{
 			EntityNetworkData myCharacter;
 			myCharacter.MapId = 0;
@@ -80,7 +80,7 @@ namespace DND
 
 			UIsurface& hostButton = sceneElements.Rectangle(600, 200, Color::Green, Transform({ camera->ViewWidth() / 2, 125, -40 }));
 			hostButton.Text("Host", Color::Black, Transform({ 0, 0, 1 }));
-			hostButton.EventHandler().OnClicked.Subscribe([myCharacter](id_t listenerId, UIClickedEvent& e)
+			hostButton.EventHandler().OnClicked.Subscribe([myCharacter](UIClickedEvent& e)
 			{
 				// START GAME
 				GameStartData data;
@@ -93,7 +93,7 @@ namespace DND
 			});
 
 			UIsurface& refreshButton = sceneElements.Rectangle(50, 50, Color::White, Transform({ camera->ViewWidth() / 2 + 335, 200, -40 }));
-			refreshButton.EventHandler().OnClicked.Subscribe([&joinableGamesBackground, loadingIconId, camera, myCharacter](id_t listenerId, UIClickedEvent& e)
+			refreshButton.EventHandler().OnClicked.Subscribe([&joinableGamesBackground, loadingIconId, camera, myCharacter](UIClickedEvent& e)
 			{
 				GetHostList(joinableGamesBackground, loadingIconId, std::move(myCharacter));
 				ListenerResponse response;
@@ -104,7 +104,7 @@ namespace DND
 			return response;
 		});
 
-		scene.OnUnload.Subscribe([&sceneElements](id_t listenerId, SceneUnloadedEvent& e)
+		scene.OnUnload.Subscribe([&sceneElements](SceneUnloadedEvent& e)
 		{
 			sceneElements.Clear();
 			ListenerResponse response;

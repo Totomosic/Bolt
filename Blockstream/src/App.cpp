@@ -241,11 +241,11 @@ namespace Blockstream
 	{
 		if (isTypingHost)
 		{
-			for (char c : Input::PressedCharacters())
+			for (char c : Input::Get().PressedCharacters())
 			{
 				hostString += c;
 			}
-			if (Input::KeyPressed(Keycode::Backspace) && hostString.size() > 0)
+			if (Input::Get().KeyPressed(Keycode::Backspace) && hostString.size() > 0)
 			{
 				hostString.pop_back();
 			}
@@ -254,16 +254,16 @@ namespace Blockstream
 		if (isPlaying)
 		{
 			fpsText->SetText("fps " + std::to_string((int)Time::FramesPerSecond()));
-			if (Input::MouseButtonDown(MouseButton::Middle))
+			if (Input::Get().MouseButtonDown(MouseButton::Middle))
 			{
-				float x = Input::RelMousePosition().x;
-				float y = Input::RelMousePosition().y;
+				float x = Input::Get().RelMousePosition().x;
+				float y = Input::Get().RelMousePosition().y;
 				mainCameraAnchor->transform().Rotate(-x * ROTATE_X_SENSE, Vector3f::Up(), Space::World);
 				mainCameraAnchor->transform().Rotate(y * ROTATE_Y_SENSE, Vector3f::Right(), Space::Local);
 			}
-			if (Input::MouseButtonPressed(MouseButton::Left))
+			if (Input::Get().MouseButtonPressed(MouseButton::Left))
 			{
-				Ray mouseRay = mainCamera->NDCToWorldRay(Input::NormalizedMousePosition());
+				Ray mouseRay = mainCamera->NDCToWorldRay(Input::Get().NormalizedMousePosition());
 				SGQRayCast raycast = SGQRayCast(mouseRay);
 				SGQueryResult result = mainLayer->GameObjects().Query(raycast);
 				if (result.MostRelevant != nullptr)
@@ -275,9 +275,9 @@ namespace Blockstream
 					}
 				}
 			}
-			if (Input::MouseButtonPressed(MouseButton::Right))
+			if (Input::Get().MouseButtonPressed(MouseButton::Right))
 			{
-				Ray mouseRay = mainCamera->NDCToWorldRay(Input::NormalizedMousePosition());
+				Ray mouseRay = mainCamera->NDCToWorldRay(Input::Get().NormalizedMousePosition());
 				SGQueryResult result = mainLayer->GameObjects().Query(SGQRayCast(mouseRay));
 				if (result.MostRelevant != nullptr)
 				{
@@ -288,7 +288,7 @@ namespace Blockstream
 					}
 				}
 			}
-			mainCamera->transform().Translate(0, 0, -Input::RelMouseScroll().y * CAMERA_ZOOM_SPEED);
+			mainCamera->transform().Translate(0, 0, -Input::Get().RelMouseScroll().y * CAMERA_ZOOM_SPEED);
 		}
 	}
 

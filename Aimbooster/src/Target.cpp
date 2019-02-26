@@ -32,14 +32,14 @@ namespace Aimbooster
 			}
 			else
 			{
-				if (Input::MouseButtonPressed(MouseButton::Left))
+				if (Input::Get().MouseButtonPressed(MouseButton::Left))
 				{
 					float width = camera()->ViewWidth();
 					float height = camera()->ViewHeight();
-					if (Vector2f::Distance(Input::MousePosition(width, height).xy(), gameObject()->transform().Position().xy()) <= CurrentSize)
+					if (Vector2f::Distance(Input::Get().MousePosition(width, height).xy(), gameObject()->transform().Position().xy()) <= CurrentSize)
 					{
 						Destroy(gameObject());
-						GameObject* hitLocation = Factory->Ellipse(5, 5, Color::White, Transform({ Input::MousePosition(width, height).x, Input::MousePosition(width, height).y, gameObject()->transform().Position().z + 1 }));
+						GameObject* hitLocation = Factory->Ellipse(5, 5, Color::White, Transform({ Input::Get().MousePosition(width, height).x, Input::Get().MousePosition(width, height).y, gameObject()->transform().Position().z + 1 }));
 						Destroy(hitLocation, 1.0f);
 						EventManager::Post(TARGET_HIT_EVENT);
 					}
