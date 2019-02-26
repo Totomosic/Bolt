@@ -56,27 +56,33 @@ namespace Bolt
 		static void ReleaseDispatcherId(id_t id);
 		
 		// Register a listener to a specific event from an dispatcher with given id, returns a Listener Id
-		template<typename FuncType>
-		static id_t Subscribe(id_t eventId, FuncType listener, id_t dispatcherId)
+		template<typename EventType, typename FuncType>
+		static id_t Subscribe(FuncType listener, id_t dispatcherId)
 		{
-			return Subscribe(eventId, (std::unique_ptr<EventListenerContainer<Event>>)std::make_unique<EventListener<FuncType, Event>>(std::move(listener)), dispatcherId);
+			return Subscribe(EventType::BLT_EVENT_ID, (std::unique_ptr<EventListenerContainer<Event>>)std::make_unique<EventListener<Event>>([listener{ std::move(listener) }](Event& e)
+			{
+				return listener((EventType&)e);
+			}), dispatcherId);
 		}
 
 		// Register a listener to a specific event from any dispatcher, returns a listener Id
-		template<typename FuncType>
-		static id_t Subscribe(id_t eventId, FuncType listener)
+		template<typename EventType, typename FuncType>
+		static id_t Subscribe(FuncType listener)
 		{
-			return Subscribe(eventId, std::move(listener), EventManager::IGNORE_DISPATCHER_ID);
+			return Subscribe<EventType, FuncType>(std::move(listener), EventManager::IGNORE_DISPATCHER_ID);
 		}
 
 		// Stop a listener from receiving events
 		static void Unsubscribe(id_t listenerId);
 
 		// Update a listener
-		template<typename FuncType>
+		template<typename EventType, typename FuncType>
 		static void UpdateListener(id_t listenerId, FuncType listener)
 		{
-			UpdateListener(listenerId, (std::unique_ptr<EventListenerContainer<Event>>)std::make_unique<EventListener<FuncType, Event>>(std::move(listener)));
+			UpdateListener(listenerId, (std::unique_ptr<EventListenerContainer<Event>>)std::make_unique<EventListener<FuncType, Event>>([listener{ std::move(listener) }](Event& e)
+			{
+				return listener((EventType&)e);
+			}));
 		}
 
 		// Post a new event with given args from a specific dispatcher

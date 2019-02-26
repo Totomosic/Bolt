@@ -14,9 +14,8 @@ namespace Bolt
 
 		CreateCommands();
 
-		EventManager::Subscribe(Events::COMMAND_LINE_MESSAGE_RECEIVED, [](Event& args)
+		EventManager::Subscribe<CommandLineEvent>([](CommandLineEvent& e)
 		{
-			CommandLineEvent& e = *(CommandLineEvent*)&args;
 			CommandProcessResult result = s_CommandLine.ProcessCommand(e.String);
 			if (!result.Success)
 			{
