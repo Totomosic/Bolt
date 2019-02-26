@@ -119,14 +119,21 @@ namespace Bolt
 			bool handled = false;
 			while (it != m_Listeners.end())
 			{
-				ListenerResponse response = (*it->second)(args);
+				ListenerResponse response = (*it->second)(args);				
+				if (response.UnsubscribeListener)
+				{
+					m_Listeners.erase(it);
+				}
+				else
+				{
+					it++;
+				}
 				if (response.HandledEvent)
 				{
 					// Event was handled and should not be propogated to other event listeners
 					handled = true;
 					break;
 				}
-				it++;
 			}
 			ListenerResponse response;
 			response.HandledEvent = handled;
