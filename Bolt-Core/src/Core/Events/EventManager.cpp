@@ -58,6 +58,10 @@ namespace Bolt
 				if (listener.DispatcherId == EventManager::IGNORE_DISPATCHER_ID || e.DispatcherId == listener.DispatcherId)
 				{
 					ListenerResponse response = (*listener.Callback)(*e.Args);
+					if (response.UnsubscribeListener)
+					{
+						Unsubscribe(listener.ListenerId);
+					}
 					if (response.HandledEvent)
 					{
 						// Event has already been handled and should not be propogated to other event listeners
