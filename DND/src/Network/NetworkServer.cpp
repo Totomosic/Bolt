@@ -84,7 +84,7 @@ namespace DND
 
 	void NetworkServer::Terminate(NetworkServer::ServerTerminatedCallback callback)
 	{
-		EventManager::Subscribe(SERVER_SHUTDOWN_EVENT, [callback = std::move(callback)](Event& e)
+		EventManager::Subscribe<ServerShutdownEvent>([callback = std::move(callback)](ServerShutdownEvent& e)
 		{
 			callback();
 			ListenerResponse response;

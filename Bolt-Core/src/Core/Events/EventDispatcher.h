@@ -19,7 +19,7 @@ namespace Bolt
 
 	public:
 		EventDispatcher()
-			: m_DispatcherId(EventManager::GetNextDispatcherId()), m_ListenerId(EventManager::Subscribe(EventId(), std::bind(&EventDispatcher::PrivateEventCallback, this, std::placeholders::_1), m_DispatcherId)), m_Listeners(), m_IdManager(0, EventManager::IGNORE_DISPATCHER_ID - 1)
+			: m_DispatcherId(EventManager::GetNextDispatcherId()), m_ListenerId(EventManager::Subscribe<T>(std::bind(&EventDispatcher::PrivateEventCallback, this, std::placeholders::_1), m_DispatcherId)), m_Listeners(), m_IdManager(0, EventManager::IGNORE_DISPATCHER_ID - 1)
 		{
 			
 		}
@@ -36,7 +36,7 @@ namespace Bolt
 			m_Listeners = std::move(other.m_Listeners);
 			m_IdManager = std::move(other.m_IdManager);
 
-			EventManager::UpdateListener(m_ListenerId, std::bind(&EventDispatcher::PrivateEventCallback, this, std::placeholders::_1));
+			EventManager::UpdateListener<T>(m_ListenerId, std::bind(&EventDispatcher::PrivateEventCallback, this, std::placeholders::_1));
 		}
 
 		EventDispatcher<T>& operator=(EventDispatcher<T>&& other)
@@ -50,7 +50,7 @@ namespace Bolt
 			m_Listeners = std::move(other.m_Listeners);
 			m_IdManager = std::move(other.m_IdManager);
 
-			EventManager::UpdateListener(m_ListenerId, std::bind(&EventDispatcher::PrivateEventCallback, this, std::placeholders::_1));
+			EventManager::UpdateListener<T>(m_ListenerId, std::bind(&EventDispatcher::PrivateEventCallback, this, std::placeholders::_1));
 
 			return *this;
 		}
@@ -74,7 +74,7 @@ namespace Bolt
 		id_t Subscribe(FuncType listener)
 		{
 			id_t id = m_IdManager.GetNextId();
-			m_Listeners[id] = std::make_unique<EventListener<FuncType, T>>(std::move(listener));
+			m_Listeners[id] = std::make_unique<EventListener<T, FuncType>>(std::move(listener));
 			return id;
 		}
 
@@ -113,13 +113,13 @@ namespace Bolt
 			m_IdManager.Reset();
 		}
 
-		ListenerResponse PrivateEventCallback(Event& args)
+		ListenerResponse PrivateEventCallback(T& args)
 		{
 			auto it = m_Listeners.begin();
 			bool handled = false;
 			while (it != m_Listeners.end())
 			{
-				ListenerResponse response = (*it->second)((T&)args);
+				ListenerResponse response = (*it->second)(args);
 				if (response.HandledEvent)
 				{
 					// Event was handled and should not be propogated to other event listeners

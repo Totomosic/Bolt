@@ -18,7 +18,7 @@ namespace Bolt
 		virtual ListenerResponse operator()(T& e) = 0;
 	};
 
-	template<typename FuncType, typename EventType>
+	template<typename EventType, typename FuncType = std::function<ListenerResponse(Event&)>>
 	class BLT_API EventListener : public EventListenerContainer<EventType>
 	{
 	private:

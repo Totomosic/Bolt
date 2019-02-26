@@ -80,9 +80,8 @@ namespace Bolt
 
 	void EventManager::Initialize()
 	{
-		Subscribe(Events::TASK_CONTINUE_ON_MAIN_THREAD, [](Event& eArgs)
+		Subscribe<TaskCompletedEvent>([](TaskCompletedEvent& e)
 		{
-			TaskCompletedEvent& e = *(TaskCompletedEvent*)&eArgs;
 			e.Execute();
 			ListenerResponse response;
 			return response;
