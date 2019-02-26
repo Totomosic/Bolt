@@ -78,7 +78,7 @@ namespace Bolt
 
 		int Width() const;
 		int Height() const;
-		id_t ID() const;
+		id_t Id() const;
 		TextureTarget Target() const;
 		TextureFormat Format() const;
 		Mipmaps MipmapMode() const;

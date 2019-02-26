@@ -18,7 +18,7 @@ namespace Bolt
 		BLT_CORE_INFO("Graphics Terminated");
 		ResourceManager::Terminate();
 		BLT_CORE_INFO("ResourceManager Terminated");
-		Input::Terminate();
+		Input::Get().Terminate();
 		BLT_CORE_INFO("Input Terminated");
 		{
 			std::unique_ptr<Window> windowPtr = std::move(window);

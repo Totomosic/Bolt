@@ -5,20 +5,17 @@
 namespace Bolt
 {
 
-	MouseInstance Input::s_Mouse = MouseInstance();
-	KeyboardInstance Input::s_Keyboard = KeyboardInstance();
-	Window* Input::s_Window = nullptr;
+	Input::Input()
+		: s_Mouse(), s_Keyboard(), s_Window(nullptr), s_PressedCharacters(), s_ChangedKeys(), s_ChangedButtons(), OnKeyPressed(), OnKeyReleased(), OnMousePressed(), OnMouseReleased(), OnMouseScrolled(), OnMouseMoved()
+	{
+	
+	}
 
-	std::vector<char> Input::s_PressedCharacters = std::vector<char>();
-	std::vector<KeyboardInstance::Key> Input::s_ChangedKeys = std::vector<KeyboardInstance::Key>();
-	std::vector<MouseInstance::Button> Input::s_ChangedButtons = std::vector<MouseInstance::Button>();
-
-	EventDispatcher<Bolt::KeyPressedEvent> Input::OnKeyPressed = EventDispatcher<Bolt::KeyPressedEvent>();
-	EventDispatcher<Bolt::KeyReleasedEvent> Input::OnKeyReleased = EventDispatcher<Bolt::KeyReleasedEvent>();
-	EventDispatcher<Bolt::MousePressedEvent> Input::OnMousePressed = EventDispatcher<Bolt::MousePressedEvent>();
-	EventDispatcher<Bolt::MouseReleasedEvent> Input::OnMouseReleased = EventDispatcher<Bolt::MouseReleasedEvent>();
-	EventDispatcher<Bolt::MouseScrolledEvent> Input::OnMouseScrolled = EventDispatcher<Bolt::MouseScrolledEvent>();
-	EventDispatcher<Bolt::MouseMovedEvent> Input::OnMouseMoved = EventDispatcher<Bolt::MouseMovedEvent>();
+	Input& Input::Get()
+	{
+		static Input instance;
+		return instance;
+	}
 
 	const MouseInstance& Input::Mouse()
 	{
@@ -137,13 +134,13 @@ namespace Bolt
 
 	void Input::HideCursor()
 	{
-		glfwSetInputMode(s_Window->WindowHandle(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		glfwSetInputMode((GLFWwindow*)s_Window->GetNativeWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		s_Mouse.IsVisible = false;
 	}
 
 	void Input::ShowCursor()
 	{
-		glfwSetInputMode(s_Window->WindowHandle(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		glfwSetInputMode((GLFWwindow*)s_Window->GetNativeWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		s_Mouse.IsVisible = true;
 	}
 
@@ -256,13 +253,6 @@ namespace Bolt
 		s_Mouse.RelXScroll = 0;
 		s_Mouse.RelYScroll = 0;
 		s_Mouse.IsVisible = true;
-
-		OnKeyPressed = EventDispatcher<Bolt::KeyPressedEvent>(Events::KEY_PRESSED);
-		OnKeyReleased = EventDispatcher<Bolt::KeyReleasedEvent>(Events::KEY_RELEASED);
-		OnMousePressed = EventDispatcher<Bolt::MousePressedEvent>(Events::MOUSE_PRESSED);
-		OnMouseReleased = EventDispatcher<Bolt::MouseReleasedEvent>(Events::MOUSE_RELEASED);
-		OnMouseScrolled = EventDispatcher<Bolt::MouseScrolledEvent>(Events::MOUSE_SCROLLED);
-		OnMouseMoved = EventDispatcher<Bolt::MouseMovedEvent>(Events::MOUSE_POSITION_MOVED);
 	}
 
 	void Input::Terminate()

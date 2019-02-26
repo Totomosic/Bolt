@@ -7,7 +7,7 @@ namespace Bolt
 {
 
 	Scene::Scene()
-		: OnLoad(Events::SCENE_LOADED), OnUnload(Events::SCENE_UNLOADED), m_Layers{}, m_Cameras(), m_Id(GameObject::InvalidID), m_PhysEngine(this)
+		: OnLoad(), OnUnload(), m_Layers{}, m_Cameras(), m_Id(GameObject::InvalidID), m_PhysEngine(this)
 	{
 		ClearCameras();
 	}
@@ -67,7 +67,7 @@ namespace Bolt
 		std::vector<const Layer*> result;
 		for (int i = 0; i < MAX_LAYERS; i++)
 		{
-			if (m_Layers[i].m_Id != GameObject::InvalidID)
+			if (m_Layers[i].m_Id != GameObject::InvalidID && m_Layers[i].IsEnabled())
 			{
 				result.push_back(&m_Layers[i]);
 			}
@@ -83,7 +83,11 @@ namespace Bolt
 		{
 			if (BLT_IS_BIT_SET(mask, i))
 			{
-				result.push_back(&GetLayer(i));
+				const Layer& layer = GetLayer(i);
+				if (layer.IsEnabled())
+				{
+					result.push_back(&layer);
+				}
 			}
 		}
 		return result;
@@ -94,7 +98,7 @@ namespace Bolt
 		std::vector<Layer*> result;
 		for (int i = 0; i < MAX_LAYERS; i++)
 		{
-			if (m_Layers[i].m_Id != GameObject::InvalidID)
+			if (m_Layers[i].m_Id != GameObject::InvalidID && m_Layers[i].IsEnabled())
 			{
 				result.push_back(&m_Layers[i]);
 			}
@@ -110,7 +114,11 @@ namespace Bolt
 		{
 			if (BLT_IS_BIT_SET(mask, i))
 			{
-				result.push_back(&GetLayer(i));
+				Layer& layer = GetLayer(i);
+				if (layer.IsEnabled())
+				{
+					result.push_back(&layer);
+				}
 			}
 		}
 		return result;

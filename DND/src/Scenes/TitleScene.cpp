@@ -16,7 +16,7 @@ namespace DND
 
 		UIsurface& playButton = titleBack.Rectangle(500, 200, Color::Green, Transform({ 0, 0, 1 }));
 		playButton.Text("Play", Color::Black);
-		playButton.EventHandler().OnClicked.Subscribe([](id_t listenerId, UIClickedEvent& e)
+		playButton.EventHandler().OnClicked.Subscribe([](UIClickedEvent& e)
 		{
 			SceneManager::SetCurrentSceneByName("Character");
 			ListenerResponse response;

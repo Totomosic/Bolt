@@ -69,7 +69,7 @@ namespace Bolt
 		{
 			ContinueWith([func{ std::move(func) }](TResult value)
 			{
-				EventManager::Post(Events::TASK_CONTINUE_ON_MAIN_THREAD, TaskCompleted<TResult>(std::move(value), std::move(func)));
+				EventManager::Post(TaskCompleted<TResult>(std::move(value), std::move(func)));
 			});			
 		}
 
@@ -138,8 +138,8 @@ namespace Bolt
 		void ContinueWithOnMainThread(DelegateT func)
 		{
 			ContinueWith([func{ std::move(func) }]()
-			{				
-				EventManager::Post(Events::TASK_CONTINUE_ON_MAIN_THREAD, TaskCompleted<int>(0, [func{ std::move(func) }](int ignore)
+			{
+				EventManager::Post(TaskCompleted<int>(0, [func{ std::move(func) }](int ignore)
 				{
 					func();
 				}));

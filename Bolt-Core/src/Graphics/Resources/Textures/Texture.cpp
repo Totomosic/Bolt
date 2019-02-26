@@ -48,7 +48,7 @@ namespace Bolt
 		return m_Height;
 	}
 
-	id_t Texture::ID() const
+	id_t Texture::Id() const
 	{
 		return m_Id;
 	}

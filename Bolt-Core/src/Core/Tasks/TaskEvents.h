@@ -8,6 +8,8 @@ namespace Bolt
 	{
 	public:
 		virtual void Execute() = 0;
+
+		BLT_EVENT_ID_DEF(Events::TASK_CONTINUE_ON_MAIN_THREAD);
 	};
 
 	template<typename T>
@@ -19,6 +21,8 @@ namespace Bolt
 	public:
 		T Value;
 		Func Callback;
+
+		BLT_EVENT_ID_DEF(Events::TASK_CONTINUE_ON_MAIN_THREAD);
 
 	public:
 		TaskCompleted()

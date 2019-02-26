@@ -101,7 +101,7 @@ namespace DND
 		if (m_TileSelector != nullptr)
 		{
 			Camera& c = *camera();
-			Vector3f mousePos = Input::MousePosition(c.ViewWidth(), c.ViewHeight());
+			Vector3f mousePos = Input::Get().MousePosition(c.ViewWidth(), c.ViewHeight());
 			Vector2f worldPos = mousePos.xy() + c.transform().Position().xy();
 			Tile selectedTile = m_MapManager->CurrentMap().TileFromWorldPosition(worldPos);
 			if (selectedTile.x >= 0 && selectedTile.y >= 0)

@@ -15,7 +15,7 @@ namespace Bolt
 	class BLT_API EventListenerContainer
 	{
 	public:
-		virtual ListenerResponse operator()(id_t listenerId, T& e) = 0;
+		virtual ListenerResponse operator()(T& e) = 0;
 	};
 
 	template<typename FuncType, typename EventType>
@@ -31,10 +31,9 @@ namespace Bolt
 			
 		}
 
-		ListenerResponse operator()(id_t listenerId, EventType& e) override
+		ListenerResponse operator()(EventType& e) override
 		{
-			static_assert(std::is_same<std::result_of<FuncType(id_t, EventType&)>::type, ListenerResponse>::value, "FuncObject must return ListenerResponse");
-			return m_FuncObject(listenerId, e);
+			return m_FuncObject(e);
 		}
 
 	};

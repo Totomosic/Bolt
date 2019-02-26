@@ -4,7 +4,7 @@
 #include "Textures\Texture2D.h"
 #include "Meshes\Model.h"
 #include "Textures\Fonts\Font.h"
-#include "Shaders\Shader.h"
+#include "Meshes\Materials\Shaders\Shader.h"
 
 namespace Bolt
 {

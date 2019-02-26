@@ -1,5 +1,6 @@
 #include "Types.h"
-#include "Framebuffer.h"
+
+#include "Framebuffer.h"
 
 namespace Bolt
 {
@@ -240,7 +241,7 @@ namespace Bolt
 		texture->SetMagFilter(MagFilter::Linear);
 		texture->SetMinFilter(MinFilter::Linear);
 		texture->SetWrapMode(WrapMode::Clamp);
-		GL_CALL(glFramebufferTexture2D(GL_FRAMEBUFFER, (GLenum)buffer, GL_TEXTURE_2D, texture->ID(), 0));
+		GL_CALL(glFramebufferTexture2D(GL_FRAMEBUFFER, (GLenum)buffer, GL_TEXTURE_2D, texture->Id(), 0));
 		GL_CALL(glDrawBuffer((GLenum)buffer));
 	}
 
@@ -254,7 +255,7 @@ namespace Bolt
 		texture->SetMagFilter(MagFilter::Nearest);
 		texture->SetMinFilter(MinFilter::Nearest);
 		texture->SetWrapMode(WrapMode::Clamp);
-		GL_CALL(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, texture->ID(), 0));
+		GL_CALL(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, texture->Id(), 0));
 	}
 
 }

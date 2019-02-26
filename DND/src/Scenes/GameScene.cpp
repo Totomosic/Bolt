@@ -19,7 +19,7 @@ namespace DND
 		GlobalState::MapManager.SetMapLayer(tilemapLayer);
 		GlobalState::Factory.SetCurrentLayer(entityLayer);
 
-		scene.OnLoad.Subscribe([](id_t listenerId, SceneLoadedEvent& e)
+		scene.OnLoad.Subscribe([](SceneLoadedEvent& e)
 		{
 			GameStartData& data = *(GameStartData*)e.LoadData.get();
 
@@ -42,7 +42,7 @@ namespace DND
 			return response;
 		});
 
-		scene.OnUnload.Subscribe([&entityLayer](id_t listenerId, SceneUnloadedEvent& e)
+		scene.OnUnload.Subscribe([&entityLayer](SceneUnloadedEvent& e)
 		{
 			entityLayer.Clear();
 			ListenerResponse response;

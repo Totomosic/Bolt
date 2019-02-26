@@ -5,9 +5,9 @@ namespace DND
 {
 
 	NetworkServer::NetworkServer(SocketAddress address)
-		: m_OnReceivedPacket(PACKET_RECEIVED_EVENT), m_BoundAddress(std::move(address)), m_Socket(AddressFamily::INET)
+		: m_OnReceivedPacket(), m_BoundAddress(std::move(address)), m_Socket(AddressFamily::INET)
 	{
-		m_OnReceivedPacket.Subscribe([this](id_t listenerId, ReceivedPacket& packet)
+		m_OnReceivedPacket.Subscribe([this](ReceivedPacket& packet)
 		{
 			std::vector<ListenerInfo>& callbacks = m_Callbacks[packet.Type];
 			for (int i = callbacks.size() - 1; i >= 0; i--)
@@ -77,18 +77,18 @@ namespace DND
 				}
 			}
 			BLT_INFO("STOPPED SERVER ON {}", m_BoundAddress);
-			EventManager::Post(SERVER_SHUTDOWN_EVENT);
+			EventManager::Post<ServerShutdownEvent>();
 		});
 		listenerThread.detach();
 	}
 
 	void NetworkServer::Terminate(NetworkServer::ServerTerminatedCallback callback)
 	{
-		EventManager::Subscribe(SERVER_SHUTDOWN_EVENT, [callback = std::move(callback)](id_t listenerId, Event& e)
+		EventManager::Subscribe(SERVER_SHUTDOWN_EVENT, [callback = std::move(callback)](Event& e)
 		{
 			callback();
-			EventManager::Unsubscribe(listenerId);
 			ListenerResponse response;
+			response.UnsubscribeListener = true;
 			return response;
 		});
 		TerminateServer();

@@ -7,7 +7,7 @@ namespace Bolt
 {
 
 	Window::Window(const WindowCreateInfo& info)
-		: m_Data{ Events::WINDOW_RESIZE, Events::WINDOW_MOVED, Events::WINDOW_FOCUSED, Events::WINDOW_LOST_FOCUS, Events::WINDOW_CLOSED, nullptr, Framebuffer(), info.Title, info.Decorated }
+		: m_Data{ {}, {}, {}, {}, {}, nullptr, Framebuffer(), info.Title, info.Decorated }
 	{
 		m_Data.m_Framebuffer.GetViewport().Width = info.Width;
 		m_Data.m_Framebuffer.GetViewport().Height = info.Height;
@@ -32,34 +32,34 @@ namespace Bolt
 		{
 			Maximize();
 		}
-		glfwSetWindowUserPointer(WindowHandle(), this);
+		glfwSetWindowUserPointer((GLFWwindow*)GetNativeWindow(), this);
 
-		glfwSetCursorPosCallback(WindowHandle(), [](GLFWwindow* window, double x, double y)
+		glfwSetCursorPosCallback((GLFWwindow*)GetNativeWindow(), [](GLFWwindow* window, double x, double y)
 		{
-			Input::MousePositionCallback(x, y);
+			Input::Get().MousePositionCallback(x, y);
 		});
-		glfwSetScrollCallback(WindowHandle(), [](GLFWwindow* window, double x, double y)
+		glfwSetScrollCallback((GLFWwindow*)GetNativeWindow(), [](GLFWwindow* window, double x, double y)
 		{
-			Input::MouseScrollCallback(x, y);
+			Input::Get().MouseScrollCallback(x, y);
 		});
-		glfwSetMouseButtonCallback(WindowHandle(), [](GLFWwindow* window, int button, int action, int mods)
+		glfwSetMouseButtonCallback((GLFWwindow*)GetNativeWindow(), [](GLFWwindow* window, int button, int action, int mods)
 		{
-			Input::MouseButtonCallback(button, action, mods);
+			Input::Get().MouseButtonCallback(button, action, mods);
 		});
-		glfwSetKeyCallback(WindowHandle(), [](GLFWwindow* window, int key, int scancode, int action, int mods)
+		glfwSetKeyCallback((GLFWwindow*)GetNativeWindow(), [](GLFWwindow* window, int key, int scancode, int action, int mods)
 		{
-			Input::KeyboardKeyCallback(key, scancode, action, mods);
+			Input::Get().KeyboardKeyCallback(key, scancode, action, mods);
 		});
-		glfwSetCharCallback(WindowHandle(), [](GLFWwindow* window, uint character)
+		glfwSetCharCallback((GLFWwindow*)GetNativeWindow(), [](GLFWwindow* window, uint character)
 		{
-			Input::CharPressedCallback(character);
+			Input::Get().CharPressedCallback(character);
 		});
-		glfwSetFramebufferSizeCallback(WindowHandle(), [](GLFWwindow* windowHandle, int width, int height)
+		glfwSetFramebufferSizeCallback((GLFWwindow*)GetNativeWindow(), [](GLFWwindow* windowHandle, int width, int height)
 		{
 			Window& window = *(Window*)glfwGetWindowUserPointer(windowHandle);
 			window.SetSize(width, height);
 		});
-		glfwSetWindowCloseCallback(WindowHandle(), [](GLFWwindow* windowHandle)
+		glfwSetWindowCloseCallback((GLFWwindow*)GetNativeWindow(), [](GLFWwindow* windowHandle)
 		{
 			Window& window = *(Window*)glfwGetWindowUserPointer(windowHandle);
 			window.OnClose().Post(WindowClosedEvent());
@@ -68,7 +68,7 @@ namespace Bolt
 
 	Window::~Window()
 	{
-		glfwDestroyWindow(WindowHandle());
+		glfwDestroyWindow((GLFWwindow*)GetNativeWindow());
 	}
 
 	const Framebuffer& Window::GetFramebuffer() const
@@ -111,19 +111,19 @@ namespace Bolt
 		return m_Data.m_Framebuffer.ClearColor();
 	}
 
-	GLFWwindow* Window::WindowHandle() const
+	void* Window::GetNativeWindow() const
 	{
 		return m_Data.m_WindowHandle;
 	}
 
 	bool Window::ShouldClose() const
 	{
-		return glfwWindowShouldClose(WindowHandle());
+		return glfwWindowShouldClose((GLFWwindow*)GetNativeWindow());
 	}
 
 	void Window::Close() const
 	{
- 		glfwSetWindowShouldClose(WindowHandle(), true);
+ 		glfwSetWindowShouldClose((GLFWwindow*)GetNativeWindow(), true);
 	}
 
 	void Window::Clear(ClearBuffer buffer) const
@@ -133,12 +133,12 @@ namespace Bolt
 
 	void Window::SwapBuffers() const
 	{
-		glfwSwapBuffers(WindowHandle());
+		glfwSwapBuffers((GLFWwindow*)GetNativeWindow());
 	}
 
 	void Window::MakeCurrent() const
 	{
-		glfwMakeContextCurrent(WindowHandle());
+		glfwMakeContextCurrent((GLFWwindow*)GetNativeWindow());
 	}
 
 	void Window::EnableVSync() const
@@ -158,12 +158,12 @@ namespace Bolt
 
 	void Window::Minimize() const
 	{
-		glfwIconifyWindow(WindowHandle());
+		glfwIconifyWindow((GLFWwindow*)GetNativeWindow());
 	}
 
 	void Window::Restore() const
 	{
-		glfwRestoreWindow(WindowHandle());
+		glfwRestoreWindow((GLFWwindow*)GetNativeWindow());
 	}
 
 	void Window::Maximize()
@@ -171,17 +171,17 @@ namespace Bolt
 		Monitor main = Monitor::Primary();
 		m_Data.m_Framebuffer.GetViewport().Width = main.Width;
 		m_Data.m_Framebuffer.GetViewport().Height = (m_Data.m_IsDecorated) ? main.Height - 63 : main.Height;
-		glfwMaximizeWindow(WindowHandle());
+		glfwMaximizeWindow((GLFWwindow*)GetNativeWindow());
 	}
 
 	void Window::Hide() const
 	{
-		glfwHideWindow(WindowHandle());
+		glfwHideWindow((GLFWwindow*)GetNativeWindow());
 	}
 
 	void Window::Show() const
 	{
-		glfwShowWindow(WindowHandle());
+		glfwShowWindow((GLFWwindow*)GetNativeWindow());
 	}
 
 	void Window::SetSize(const Vector2i& size)
@@ -198,7 +198,7 @@ namespace Bolt
 		args.NewHeight = height;
 		m_Data.m_Framebuffer.GetViewport().Width = width;
 		m_Data.m_Framebuffer.GetViewport().Height = height;
-		glfwSetWindowSize(WindowHandle(), Width(), Height());
+		glfwSetWindowSize((GLFWwindow*)GetNativeWindow(), Width(), Height());
 		OnResize().Post(std::move(args));
 	}
 
@@ -215,7 +215,7 @@ namespace Bolt
 	void Window::SetTitle(const blt::string& text)
 	{
 		m_Data.m_Title = text;
-		glfwSetWindowTitle(WindowHandle(), Title().c_str());
+		glfwSetWindowTitle((GLFWwindow*)GetNativeWindow(), Title().c_str());
 	}
 
 	void Window::SetClearColor(const Color& clearColor)
@@ -230,7 +230,7 @@ namespace Bolt
 
 	void Window::SetPosition(int x, int y)
 	{
-		glfwSetWindowPos(WindowHandle(), x, y);
+		glfwSetWindowPos((GLFWwindow*)GetNativeWindow(), x, y);
 	}
 
 }

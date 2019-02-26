@@ -55,12 +55,17 @@ namespace Bolt
 
 	void Layer::Enable()
 	{
-		m_Enabled = true;
+		SetEnabled(true);
 	}
 
 	void Layer::Disable()
 	{
-		m_Enabled = false;
+		SetEnabled(false);
+	}
+
+	void Layer::SetEnabled(bool isEnabled)
+	{
+		m_Enabled = isEnabled;
 	}
 
 	void Layer::SetActiveCamera(Camera* camera)
