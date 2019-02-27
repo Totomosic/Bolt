@@ -794,9 +794,12 @@
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\ShaderFactory.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\BuiltInContext.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\ShaderInstance.h" />
-    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\MaterialInterface.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\ShaderLinkContext.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\UniformLink.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\MaterialModule.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Modules\__Modules__.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\MaterialModules.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Modules\PositionOffsetModule.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\BoltTL\string.cpp">
@@ -1152,8 +1155,10 @@
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\ShaderFactory.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\BuiltInContext.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\ShaderInstance.cpp" />
-    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\MaterialInterface.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\ShaderLinkContext.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\UniformLink.cpp" />
+    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\MaterialModules.cpp" />
+    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Modules\PositionOffsetModule.cpp" />
+    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\MaterialModule.cpp" />
   </ItemGroup>
 </Project>

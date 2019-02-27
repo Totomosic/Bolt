@@ -75,7 +75,7 @@ namespace Bolt
 
 	ShaderValuePtr ShaderProgramFactory::Pass(ShaderValuePtr value)
 	{
-		BLT_ASSERT(value->Shader() == GetCurrentShader(), "Shader mismatch");
+		BLT_ASSERT(CheckShader(value->Shader()), "Shader mismatch");
 		ShaderValuePtr pass = std::make_shared<ShaderValue>(OutputValueType::PassValue, value->Type(), GetCurrentShader(), GetNextPassName());
 		m_PassValues.push_back({ pass, value });
 		return pass;
@@ -85,7 +85,7 @@ namespace Bolt
 	{
 		for (const auto& ptr : inputs)
 		{
-			BLT_ASSERT(ptr->Shader() == GetCurrentShader(), "Shader mismatch");
+			BLT_ASSERT(CheckShader(ptr->Shader()), "Shader mismatch");
 		}
 		ShaderValuePtr value = std::make_shared<ShaderValue>(OutputValueType::Value, declaration.OutputType(), GetCurrentShader(), GetNextValueName());
 		m_Values.push_back({ value, FunctionDef::GetAssignmentString(declaration, inputs) });
@@ -96,7 +96,7 @@ namespace Bolt
 	{
 		for (const auto& ptr : inputs)
 		{
-			BLT_ASSERT(ptr->Shader() == GetCurrentShader(), "Shader mismatch");
+			BLT_ASSERT(CheckShader(ptr->Shader()), "Shader mismatch");
 		}
 		BuiltInFunc::OverloadInstance instance = declaration.GetSource(inputs);
 		ShaderValuePtr value = std::make_shared<ShaderValue>(OutputValueType::Value, instance.Output, GetCurrentShader(), GetNextValueName());
@@ -191,6 +191,18 @@ namespace Bolt
 		return source;
 	}
 
+	void ShaderProgramFactory::Reset()
+	{
+		m_CurrentShader = ShaderType::Vertex;
+		m_Context.Reset();
+		m_StreamValues.clear();
+		m_Uniforms.clear();
+		m_PassValues.clear();
+		m_PassedToMe.clear();
+		m_Attributes.clear();
+		m_Values.clear();
+	}
+
 	blt::string ShaderProgramFactory::GetStreamName(ShaderStream stream)
 	{
 		switch (stream)
@@ -273,6 +285,15 @@ namespace Bolt
 		}
 		BLT_ASSERT(false, "Cannot find type of uniform");
 		return ValueType::Void;
+	}
+
+	bool ShaderProgramFactory::CheckShader(ShaderType type) const
+	{
+		if (type == ShaderType::Ignore)
+		{
+			return true;
+		}
+		return type == GetCurrentShader();
 	}
 
 	void ShaderProgramFactory::AddValuePassedToMe(ShaderValuePtr value)

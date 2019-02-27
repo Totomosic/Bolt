@@ -42,6 +42,11 @@ namespace Bolt
 		std::vector<UserUniformLocation> m_UserUniforms;
 
 	public:
+		blt::string VertexSource;
+		blt::string GeometrySource;
+		blt::string FragmentSource;
+
+	public:
 		ShaderInstance(const blt::string& vertexSource, const blt::string& fragmentSource, const std::vector<RendererUniformInfo>& rendererUniforms, const std::vector<UserUniformInfo>& userUniforms);
 		ShaderInstance(const blt::string& vertexSource, const blt::string& geometrySource, const blt::string& fragmentSource, const std::vector<RendererUniformInfo>& rendererUniforms, const std::vector<UserUniformInfo>& userUniforms);
 

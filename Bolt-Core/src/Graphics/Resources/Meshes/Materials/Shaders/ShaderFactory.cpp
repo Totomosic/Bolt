@@ -4,8 +4,8 @@
 namespace Bolt
 {
 
-	ShaderFactory::ShaderFactory(bool useGeometry)
-		: m_Context(), m_Vertex(ShaderType::Vertex), m_Geometry(ShaderType::Geometry), m_Fragment(ShaderType::Fragment), m_UseGeometry(useGeometry), m_Shader(ShaderType::Vertex), m_RendererUniforms(), m_UserUniforms()
+	ShaderFactory::ShaderFactory()
+		: m_Context(), m_Vertex(ShaderType::Vertex), m_Geometry(ShaderType::Geometry), m_Fragment(ShaderType::Fragment), m_UseGeometry(false), m_Shader(ShaderType::Vertex), m_RendererUniforms(), m_UserUniforms()
 	{
 		
 	}
@@ -17,7 +17,10 @@ namespace Bolt
 
 	void ShaderFactory::CurrentShader(ShaderType type)
 	{
-		BLT_ASSERT(!(!m_UseGeometry && type == ShaderType::Geometry), "Geometry shader was disabled");
+		if (type == ShaderType::Geometry)
+		{
+			EnableGeometry();
+		}
 		m_Shader = type;
 	}
 
@@ -119,6 +122,17 @@ namespace Bolt
 		return ShaderInstance(VertexSource(), FragmentSource(), m_RendererUniforms, m_UserUniforms);
 	}
 
+	void ShaderFactory::Reset()
+	{
+		m_Vertex.Reset();
+		m_Fragment.Reset();
+		m_Geometry.Reset();
+		m_UseGeometry = false;
+		m_Shader = ShaderType::Vertex;
+		m_RendererUniforms.clear();
+		m_UserUniforms.clear();
+	}
+
 	const ShaderProgramFactory& ShaderFactory::GetShaderProgram(ShaderType shader) const
 	{
 		switch (shader)
@@ -171,6 +185,11 @@ namespace Bolt
 			return ShaderType::Geometry;
 		}
 		return ShaderType::Fragment;
+	}
+
+	void ShaderFactory::EnableGeometry()
+	{
+		m_UseGeometry = true;
 	}
 
 }

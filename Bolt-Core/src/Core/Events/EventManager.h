@@ -56,8 +56,8 @@ namespace Bolt
 		static void ReleaseDispatcherId(id_t id);
 		
 		// Register a listener to a specific event from an dispatcher with given id, returns a Listener Id
-		template<typename EventType, typename FuncType>
-		static id_t Subscribe(FuncType listener, id_t dispatcherId)
+		template<typename EventType>
+		static id_t Subscribe(std::function<ListenerResponse(EventType&)> listener, id_t dispatcherId)
 		{
 			return Subscribe(EventType::BLT_EVENT_ID, (std::unique_ptr<EventListenerContainer<Event>>)std::make_unique<EventListener<Event>>([listener{ std::move(listener) }](Event& e)
 			{
@@ -66,20 +66,20 @@ namespace Bolt
 		}
 
 		// Register a listener to a specific event from any dispatcher, returns a listener Id
-		template<typename EventType, typename FuncType>
-		static id_t Subscribe(FuncType listener)
+		template<typename EventType>
+		static id_t Subscribe(std::function<ListenerResponse(EventType&)> listener)
 		{
-			return Subscribe<EventType, FuncType>(std::move(listener), EventManager::IGNORE_DISPATCHER_ID);
+			return Subscribe<EventType>(std::move(listener), EventManager::IGNORE_DISPATCHER_ID);
 		}
 
 		// Stop a listener from receiving events
 		static void Unsubscribe(id_t listenerId);
 
 		// Update a listener
-		template<typename EventType, typename FuncType>
-		static void UpdateListener(id_t listenerId, FuncType listener)
+		template<typename EventType>
+		static void UpdateListener(id_t listenerId, std::function<ListenerResponse(EventType&)> listener)
 		{
-			UpdateListener(listenerId, (std::unique_ptr<EventListenerContainer<Event>>)std::make_unique<EventListener<FuncType, Event>>([listener{ std::move(listener) }](Event& e)
+			UpdateListener(listenerId, (std::unique_ptr<EventListenerContainer<Event>>)std::make_unique<EventListener<Event>>([listener{ std::move(listener) }](Event& e)
 			{
 				return listener((EventType&)e);
 			}));

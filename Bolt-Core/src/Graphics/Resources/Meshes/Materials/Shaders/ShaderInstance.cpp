@@ -6,14 +6,14 @@ namespace Bolt
 {
 
 	ShaderInstance::ShaderInstance(const blt::string& vertexSource, const blt::string& fragmentSource, const std::vector<RendererUniformInfo>& rendererUniforms, const std::vector<UserUniformInfo>& userUniforms)
-		: m_Shader(vertexSource, fragmentSource)
+		: m_Shader(vertexSource, fragmentSource), VertexSource(vertexSource), GeometrySource(), FragmentSource(fragmentSource)
 	{
 		m_RendererUniforms = GetUniformLocations(m_Shader, rendererUniforms);
 		m_UserUniforms = GetUniformLocations(m_Shader, userUniforms);
 	}
 
 	ShaderInstance::ShaderInstance(const blt::string& vertexSource, const blt::string& geometrySource, const blt::string& fragmentSource, const std::vector<RendererUniformInfo>& rendererUniforms, const std::vector<UserUniformInfo>& userUniforms)
-		: m_Shader(vertexSource, geometrySource, fragmentSource)
+		: m_Shader(vertexSource, geometrySource, fragmentSource), VertexSource(vertexSource), GeometrySource(geometrySource), FragmentSource(fragmentSource)
 	{
 		m_RendererUniforms = GetUniformLocations(m_Shader, rendererUniforms);
 		m_UserUniforms = GetUniformLocations(m_Shader, userUniforms);

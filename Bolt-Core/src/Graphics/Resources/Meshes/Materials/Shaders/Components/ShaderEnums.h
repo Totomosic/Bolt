@@ -9,7 +9,8 @@ namespace Bolt
 		Vertex,
 		Geometry,
 		Fragment,
-		MAX_SHADER_TYPES
+		MAX_SHADER_TYPES,
+		Ignore
 	};
 
 	BLT_API enum class ValueType

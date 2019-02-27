@@ -324,7 +324,10 @@
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Animators\__Animators__.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\LightSettings.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Material.h" />
-    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\MaterialInterface.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\MaterialModules.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\MaterialModule.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Modules\PositionOffsetModule.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Modules\__Modules__.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\RenderSettings.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\BuiltInContext.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\BuiltInFunc.h" />
@@ -476,7 +479,9 @@
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Animators\ZoomAnimator.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\LightSettings.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Material.cpp" />
-    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\MaterialInterface.cpp" />
+    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\MaterialModule.cpp" />
+    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\MaterialModules.cpp" />
+    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Modules\PositionOffsetModule.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\RenderSettings.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\BuiltInContext.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\BuiltInFunc.cpp" />

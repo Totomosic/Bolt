@@ -82,6 +82,13 @@ namespace Bolt
 		return source;
 	}
 
+	void FunctionContext::Reset()
+	{
+		m_Shader = ShaderType::Vertex;
+		m_FunctionIndices.clear();
+		m_Functions.clear();
+	}
+
 	const FunctionContext::FunctionImpl& FunctionContext::GetFunctionImpl(const blt::string& name) const
 	{
 		return m_Functions.at(m_FunctionIndices.at(name));
