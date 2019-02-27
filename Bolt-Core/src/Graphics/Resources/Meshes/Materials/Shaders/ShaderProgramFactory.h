@@ -63,6 +63,7 @@ namespace Bolt
 		void SetAttribute(ShaderAttribute attrib, ShaderValuePtr value);		
 
 		blt::string CreateSource() const;
+		void Reset();
 
 		friend class ShaderFactory;
 		friend class ShaderInstance;
@@ -75,6 +76,7 @@ namespace Bolt
 		static blt::string GetRendererUniformName(Bolt::RendererUniform uniform);
 		static ValueType GetRendererUniformType(Bolt::RendererUniform uniform);
 
+		bool CheckShader(ShaderType type) const;
 		void AddValuePassedToMe(ShaderValuePtr value);
 
 		blt::string GetShaderName() const;

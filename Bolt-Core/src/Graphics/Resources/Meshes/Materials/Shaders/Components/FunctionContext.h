@@ -36,6 +36,7 @@ namespace Bolt
 		void AddFunctionDefinition(const FunctionDef& definition);
 
 		blt::string GetSource() const;
+		void Reset();
 
 	private:
 		const FunctionImpl& GetFunctionImpl(const blt::string& name) const;

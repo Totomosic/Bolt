@@ -44,7 +44,7 @@ namespace Bolt
 
 		const void* GetValuePtr() const override
 		{
-			return (void*)&m_Value;
+			return (const void*)&m_Value;
 		}
 
 		void* GetValuePtr() override
@@ -88,7 +88,7 @@ namespace Bolt
 
 		const void* GetValuePtr() const override
 		{
-			return (void*)&m_Value;
+			return (const void*)&m_Value;
 		}
 
 		void* GetValuePtr() override
@@ -133,7 +133,7 @@ namespace Bolt
 
 		const void* GetValuePtr() const override
 		{
-			return (void*)&m_Value;
+			return (const void*)&m_Value;
 		}
 
 		void* GetValuePtr() override
