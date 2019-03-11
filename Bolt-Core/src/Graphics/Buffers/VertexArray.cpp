@@ -1,5 +1,6 @@
 #include "Types.h"
-#include "VertexArray.h"
+
+#include "VertexArray.h"
 
 namespace Bolt
 {

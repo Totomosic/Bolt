@@ -1,5 +1,5 @@
 #pragma once
-#include "ShaderProgramFactory.h"
+#include "VertexShader.h"
 #include "ShaderInstance.h"
 
 namespace Bolt
@@ -9,9 +9,7 @@ namespace Bolt
 	{
 	private:
 		BuiltInContext m_Context;
-		ShaderProgramFactory m_Vertex;
-		ShaderProgramFactory m_Geometry;
-		ShaderProgramFactory m_Fragment;
+		VertexShader m_Vertex;
 		bool m_UseGeometry;
 		ShaderType m_Shader;
 
@@ -26,15 +24,10 @@ namespace Bolt
 		bool IsUsingGeometryShader() const;
 
 		const BuiltInContext& Operations() const;
-		FunctionContext& VertexContext();
-		FunctionContext& GeometryContext();
-		FunctionContext& FragmentContext();
-		FunctionContext& CurrentContext();
 
 		ShaderValuePtr GetStream(ShaderStream stream);
 		ShaderValuePtr RendererUniform(Bolt::RendererUniform uniform);
 		ShaderValuePtr Uniform(const blt::string& linkName, ValueType type);
-		ShaderValuePtr FuncResult(const FunctionDecl& declaration, const std::vector<ShaderValuePtr>& inputs);
 		ShaderValuePtr FuncResult(const BuiltInFunc& declaration, const std::vector<ShaderValuePtr>& inputs);
 		ShaderValuePtr Pass(ShaderValuePtr value);
 		void SetAttribute(ShaderAttribute attribute, ShaderValuePtr value);

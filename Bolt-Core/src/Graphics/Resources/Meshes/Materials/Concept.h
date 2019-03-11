@@ -19,6 +19,16 @@
 
 /*
 
+	ShaderFactory f;
+	VertexShader& vertex = f.Vertex();
+	ShaderFuncResultPtr worldPosition = ShaderOps::Mul().Result({ vertex.RendererUniform(RendererUniform::ModelMatrix), vertex.Position() });
+	vertex.SetVertexPosition(worldPosition);
+	ShaderPassValuePtr passedWorldPosition = vertex.Pass(worldPosition);
+
+*/
+
+/*
+
 	MaterialFactory m;
 	m.CurrentShader(ShaderType::Vertex);
 	std::shared_ptr<ShaderOperation> matMult = m.Operation<MatrixMultiplyOperation>();
