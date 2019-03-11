@@ -784,13 +784,7 @@
       <Filter>Graphics\Resources\Shaders</Filter>
     </ClInclude>
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\__Components__.h" />
-    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\ShaderValue.h" />
-    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\ShaderEnums.h" />
-    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\FunctionDecl.h" />
-    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\FunctionDef.h" />
-    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\FunctionContext.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\BuiltInFunc.h" />
-    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\ShaderProgramFactory.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\ShaderFactory.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\BuiltInContext.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\ShaderInstance.h" />
@@ -800,6 +794,20 @@
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Modules\__Modules__.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\MaterialModules.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Modules\PositionOffsetModule.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\Values\ShaderValue.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\Values\__Values__.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\Values\ShaderEnums.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\Values\ShaderStream.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\Values\ShaderFuncResult.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\Values\ShaderUniform.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\Values\ShaderRendererUniform.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\Values\ShaderAttribute.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\Values\ShaderPassValue.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\VertexShader.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\FragmentShader.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\GeometryShader.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\ShaderProgram.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\Values\ShaderLiteral.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\BoltTL\string.cpp">
@@ -1146,12 +1154,7 @@
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\UniformManager.cpp">
       <Filter>Graphics\Resources\Shaders</Filter>
     </ClCompile>
-    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\ShaderValue.cpp" />
-    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\FunctionDecl.cpp" />
-    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\FunctionDef.cpp" />
-    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\FunctionContext.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\BuiltInFunc.cpp" />
-    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\ShaderProgramFactory.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\ShaderFactory.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\BuiltInContext.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\ShaderInstance.cpp" />
@@ -1160,5 +1163,8 @@
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\MaterialModules.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Modules\PositionOffsetModule.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\MaterialModule.cpp" />
+    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\Values\ShaderValue.cpp" />
+    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\ShaderProgram.cpp" />
+    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\VertexShader.cpp" />
   </ItemGroup>
 </Project>
