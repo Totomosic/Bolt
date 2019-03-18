@@ -1,5 +1,6 @@
 #include "Types.h"
-#include "VertexBuffer.h"
+
+#include "VertexBuffer.h"
 
 namespace Bolt
 {
