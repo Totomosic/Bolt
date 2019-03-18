@@ -1,5 +1,5 @@
 #pragma once
-#include "ShaderValue.h"
+#include "ShaderVariable.h"
 
 namespace Bolt
 {
@@ -7,7 +7,7 @@ namespace Bolt
 	class ShaderUniform;
 	using ShaderUniformPtr = std::shared_ptr<ShaderUniform>;
 
-	class BLT_API ShaderUniform : public ShaderValue
+	class BLT_API ShaderUniform : public ShaderVariable
 	{
 	protected:
 		ShaderValuePtr m_DefaultValue;

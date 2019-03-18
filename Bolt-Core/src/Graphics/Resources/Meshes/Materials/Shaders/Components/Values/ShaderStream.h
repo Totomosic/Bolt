@@ -1,5 +1,5 @@
 #pragma once
-#include "ShaderValue.h"
+#include "ShaderVariable.h"
 
 namespace Bolt
 {
@@ -7,7 +7,7 @@ namespace Bolt
 	class ShaderStream;
 	using ShaderStreamPtr = std::shared_ptr<ShaderStream>;
 
-	class BLT_API ShaderStream : public ShaderValue
+	class BLT_API ShaderStream : public ShaderVariable
 	{
 	private:
 		int m_Stream;

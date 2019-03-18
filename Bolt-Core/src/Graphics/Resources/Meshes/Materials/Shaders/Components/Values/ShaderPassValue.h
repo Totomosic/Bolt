@@ -1,5 +1,5 @@
 #pragma once
-#include "ShaderValue.h"
+#include "ShaderVariable.h"
 
 namespace Bolt
 {
@@ -7,7 +7,7 @@ namespace Bolt
 	class ShaderPassValue;
 	using ShaderPassValuePtr = std::shared_ptr<ShaderPassValue>;
 
-	class BLT_API ShaderPassValue : public ShaderValue
+	class BLT_API ShaderPassValue : public ShaderVariable
 	{
 	public:
 		ShaderPassValue(ShaderValuePtr value);
