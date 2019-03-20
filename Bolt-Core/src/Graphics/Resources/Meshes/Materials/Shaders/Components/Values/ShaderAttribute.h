@@ -16,9 +16,13 @@ namespace Bolt
 	private:
 		int m_Attribute;
 
-	private:
+	public:
 		// Value can be nullptr for attributes that can be read
 		ShaderAttribute(int attribute, ShaderValuePtr value);
+
+		virtual void Build(ShaderBuilder& builder) const override;
+
+		blt::string GetName() const;
 
 	};
 

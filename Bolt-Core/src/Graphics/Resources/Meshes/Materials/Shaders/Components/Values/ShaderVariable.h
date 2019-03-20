@@ -9,9 +9,16 @@ namespace Bolt
 
 	class BLT_API ShaderVariable : public ShaderValue
 	{
+	protected:
+		mutable blt::string m_Name;
+		ShaderValuePtr m_Value;
+
 	public:
-		ShaderVariable();
 		ShaderVariable(ValueType type);
+		ShaderVariable(ShaderValuePtr value);
+
+		virtual void Build(ShaderBuilder& builder) const override;
+
 	};
 
 }

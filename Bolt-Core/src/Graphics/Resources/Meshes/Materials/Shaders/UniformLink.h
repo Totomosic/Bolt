@@ -1,5 +1,5 @@
 #pragma once
-#include "Components\ShaderEnums.h"
+#include "Components/Values/ShaderEnums.h"
 #include "Shader.h"
 #include "Graphics\Resources\Textures\Texture2D.h"
 

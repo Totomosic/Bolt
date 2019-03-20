@@ -20,9 +20,4 @@ namespace Bolt
 		return m_ValueType;
 	}
 
-	blt::string ShaderValue::GetDeclString(const ShaderValueNameFunc& getValueNameFunc) const
-	{
-		return getValueNameFunc(this);
-	}
-
 }

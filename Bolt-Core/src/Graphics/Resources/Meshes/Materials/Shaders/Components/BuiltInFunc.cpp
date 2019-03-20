@@ -40,10 +40,6 @@ namespace Bolt
 		const Overload& o = GetOverload(inputTypes);
 		const blt::string& templateSource = o.SourceTemplate;
 		blt::string source = templateSource;
-		for (int i = 0; i < inputs.size(); i++)
-		{
-			source.replace_all('p' + std::to_string(i), inputs.at(i)->VarName());
-		}
 		return { o.Output, source };
 	}
 
