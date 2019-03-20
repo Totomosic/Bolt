@@ -33,10 +33,12 @@ namespace DND
 
 			SceneManager::SetCurrentScene(titleScene);
 
-			MaterialModules material;
-			material.AddModule<PositionOffsetModule>();
-			ShaderLinkContext link = material.Compile();
-			BLT_INFO(link.GetShaderInstance().VertexSource);
+			VertexShader vertex;
+			ShaderStreamPtr pos = vertex.Position();
+			ShaderVariablePtr var = std::make_shared<ShaderVariable>(pos);
+			vertex.SetVertexPosition(var);
+			CompiledShaderProgram prog = vertex.Compile();
+			BLT_INFO(prog.Source);
 
 			NetworkManager::Get().Initialize([](bool initialized)
 			{

@@ -1,6 +1,5 @@
 #include "Types.h"
 #include "ShaderInstance.h"
-#include "ShaderProgramFactory.h"
 
 namespace Bolt
 {
@@ -39,9 +38,9 @@ namespace Bolt
 		std::vector<RendererUniformLocation> result;
 		for (const RendererUniformInfo& uniform : uniforms)
 		{
-			RendererUniformLocation loc = { shader.GetUniformLocation(ShaderProgramFactory::GetRendererUniformName(uniform.Uniform)), uniform.Uniform };
-			BLT_ASSERT(loc.Location != -1, "Unabled to find renderer uniform with name " + ShaderProgramFactory::GetRendererUniformName(uniform.Uniform));
-			result.push_back(std::move(loc));
+			//RendererUniformLocation loc = { shader.GetUniformLocation(ShaderProgramFactory::GetRendererUniformName(uniform.Uniform)), uniform.Uniform };
+			//BLT_ASSERT(loc.Location != -1, "Unabled to find renderer uniform with name " + ShaderProgramFactory::GetRendererUniformName(uniform.Uniform));
+			//result.push_back(std::move(loc));
 		}
 		return result;
 	}

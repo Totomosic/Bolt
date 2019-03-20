@@ -6,7 +6,7 @@ namespace Bolt
 
 	class ShaderValue;
 	using ShaderValuePtr = std::shared_ptr<ShaderValue>;
-	using ShaderValueNameFunc = std::function<blt::string(const ShaderValue*)>;
+	class ShaderBuilder;
 
 	class BLT_API ShaderValue
 	{
@@ -19,7 +19,7 @@ namespace Bolt
 
 		ValueType Type() const;
 
-		virtual blt::string GetDeclString(const ShaderValueNameFunc& getValueNameFunc) const;
+		virtual void Build(ShaderBuilder& builder) const = 0;
 
 		friend class ShaderProgramFactory;
 

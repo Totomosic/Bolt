@@ -19,6 +19,8 @@ namespace Bolt
 			
 		}
 
+		virtual void Build(ShaderBuilder& builder) const override;
+
 	};
 
 }

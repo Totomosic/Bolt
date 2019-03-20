@@ -8,6 +8,3 @@
 #include "RenderSettings.h"
 #include "TextureAnimator.h"
 #include "TextureGroup.h"
-
-#include "MaterialModule.h"
-#include "MaterialModules.h"

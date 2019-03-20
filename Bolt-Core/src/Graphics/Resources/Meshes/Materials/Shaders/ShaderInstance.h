@@ -1,6 +1,6 @@
 #pragma once
 #include "Shader.h"
-#include "Components/ShaderEnums.h"
+#include "Components/Values/ShaderEnums.h"
 
 namespace Bolt
 {

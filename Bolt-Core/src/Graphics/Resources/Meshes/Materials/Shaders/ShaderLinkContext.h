@@ -1,5 +1,5 @@
 #pragma once
-#include "ShaderFactory.h"
+#include "ShaderInstance.h"
 #include "UniformLink.h"
 
 namespace Bolt
@@ -22,7 +22,7 @@ namespace Bolt
 		std::unordered_map<blt::string, LinkId> m_UserUniformLinks;
 
 	public:
-		ShaderLinkContext(const ShaderFactory& factory);
+		ShaderLinkContext();
 
 		const ShaderInstance& GetShaderInstance() const;
 		id_t GetLinkId(const blt::string& linkName) const;
@@ -50,7 +50,7 @@ namespace Bolt
 		const UniformLink<T>& GetLink(id_t linkId) const
 		{
 			const UserUniformLocation& uniform = GetUniformLocation(linkName);
-			BLT_ASSERT(ValidateUniformType<T>(uniform), "Uniform with LinkId {0} does not have type {1} (Type = {2})", linkId, typeid(T).name(), FunctionDef::GetTypeString(uniform.Type));
+			BLT_ASSERT(ValidateUniformType<T>(uniform), "Uniform with LinkId {0} does not have type {1} (Type = {2})", linkId, typeid(T).name(), ValueTypeToGLSLString(uniform.Type));
 			return (const UniformLink<T>&)GetLink(linkId);
 		}
 
@@ -58,7 +58,7 @@ namespace Bolt
 		UniformLink<T>& GetLink(id_t linkId)
 		{
 			const UserUniformLocation& uniform = GetUniformLocation(linkName);
-			BLT_ASSERT(ValidateUniformType<T>(uniform), "Uniform with LinkId {0} does not have type {1} (Type = {2})", linkId, typeid(T).name(), FunctionDef::GetTypeString(uniform.Type));
+			BLT_ASSERT(ValidateUniformType<T>(uniform), "Uniform with LinkId {0} does not have type {1} (Type = {2})", linkId, typeid(T).name(), ValueTypeToGLSLString(uniform.Type));
 			return (UniformLink<T>&)GetLink(linkId);
 		}
 
@@ -73,7 +73,7 @@ namespace Bolt
 		UniformLink<int>& Link(const blt::string& linkName, const int& value)
 		{
 			const UserUniformLocation& uniform = GetUniformLocation(linkName);
-			BLT_ASSERT(ValidateUniformType<int>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(int).name(), FunctionDef::GetTypeString(uniform.Type));
+			BLT_ASSERT(ValidateUniformType<int>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(int).name(), ValueTypeToGLSLString(uniform.Type));
 			return (UniformLink<int>&)AddLink(linkName, std::make_unique<UniformLink<int>>(m_Shader.GetShader().Id(), GetUniformLocation(linkName).Location, value));
 		}
 
@@ -81,7 +81,7 @@ namespace Bolt
 		UniformLink<float>& Link(const blt::string& linkName, const float& value)
 		{
 			const UserUniformLocation& uniform = GetUniformLocation(linkName);
-			BLT_ASSERT(ValidateUniformType<float>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(float).name(), FunctionDef::GetTypeString(uniform.Type));
+			BLT_ASSERT(ValidateUniformType<float>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(float).name(), ValueTypeToGLSLString(uniform.Type));
 			return (UniformLink<float>&)AddLink(linkName, std::make_unique<UniformLink<float>>(m_Shader.GetShader().Id(), GetUniformLocation(linkName).Location, value));
 		}
 
@@ -89,7 +89,7 @@ namespace Bolt
 		UniformLink<Vector2i>& Link(const blt::string& linkName, const Vector2i& value)
 		{
 			const UserUniformLocation& uniform = GetUniformLocation(linkName);
-			BLT_ASSERT(ValidateUniformType<Vector2i>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(Vector2i).name(), FunctionDef::GetTypeString(uniform.Type));
+			BLT_ASSERT(ValidateUniformType<Vector2i>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(Vector2i).name(), ValueTypeToGLSLString(uniform.Type));
 			return (UniformLink<Vector2i>&)AddLink(linkName, std::make_unique<UniformLink<Vector2i>>(m_Shader.GetShader().Id(), GetUniformLocation(linkName).Location, value));
 		}
 
@@ -97,7 +97,7 @@ namespace Bolt
 		UniformLink<Vector3i>& Link(const blt::string& linkName, const Vector3i& value)
 		{
 			const UserUniformLocation& uniform = GetUniformLocation(linkName);
-			BLT_ASSERT(ValidateUniformType<Vector3i>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(Vector3i).name(), FunctionDef::GetTypeString(uniform.Type));
+			BLT_ASSERT(ValidateUniformType<Vector3i>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(Vector3i).name(), ValueTypeToGLSLString(uniform.Type));
 			return (UniformLink<Vector3i>&)AddLink(linkName, std::make_unique<UniformLink<Vector3i>>(m_Shader.GetShader().Id(), GetUniformLocation(linkName).Location, value));
 		}
 
@@ -105,7 +105,7 @@ namespace Bolt
 		UniformLink<Vector4i>& Link(const blt::string& linkName, const Vector4i& value)
 		{
 			const UserUniformLocation& uniform = GetUniformLocation(linkName);
-			BLT_ASSERT(ValidateUniformType<Vector4i>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(Vector4i).name(), FunctionDef::GetTypeString(uniform.Type));
+			BLT_ASSERT(ValidateUniformType<Vector4i>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(Vector4i).name(), ValueTypeToGLSLString(uniform.Type));
 			return (UniformLink<Vector4i>&)AddLink(linkName, std::make_unique<UniformLink<Vector4i>>(m_Shader.GetShader().Id(), GetUniformLocation(linkName).Location, value));
 		}
 
@@ -113,7 +113,7 @@ namespace Bolt
 		UniformLink<Vector2f>& Link(const blt::string& linkName, const Vector2f& value)
 		{
 			const UserUniformLocation& uniform = GetUniformLocation(linkName);
-			BLT_ASSERT(ValidateUniformType<Vector2f>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(Vector2f).name(), FunctionDef::GetTypeString(uniform.Type));
+			BLT_ASSERT(ValidateUniformType<Vector2f>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(Vector2f).name(), ValueTypeToGLSLString(uniform.Type));
 			return (UniformLink<Vector2f>&)AddLink(linkName, std::make_unique<UniformLink<Vector2f>>(m_Shader.GetShader().Id(), GetUniformLocation(linkName).Location, value));
 		}
 
@@ -121,7 +121,7 @@ namespace Bolt
 		UniformLink<Vector3f>& Link(const blt::string& linkName, const Vector3f& value)
 		{
 			const UserUniformLocation& uniform = GetUniformLocation(linkName);
-			BLT_ASSERT(ValidateUniformType<Vector3f>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(Vector3f).name(), FunctionDef::GetTypeString(uniform.Type));
+			BLT_ASSERT(ValidateUniformType<Vector3f>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(Vector3f).name(), ValueTypeToGLSLString(uniform.Type));
 			return (UniformLink<Vector3f>&)AddLink(linkName, std::make_unique<UniformLink<Vector3f>>(m_Shader.GetShader().Id(), GetUniformLocation(linkName).Location, value));
 		}
 
@@ -129,7 +129,7 @@ namespace Bolt
 		UniformLink<Vector4f>& Link(const blt::string& linkName, const Vector4f& value)
 		{
 			const UserUniformLocation& uniform = GetUniformLocation(linkName);
-			BLT_ASSERT(ValidateUniformType<Vector4f>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(Vector4f).name(), FunctionDef::GetTypeString(uniform.Type));
+			BLT_ASSERT(ValidateUniformType<Vector4f>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(Vector4f).name(), ValueTypeToGLSLString(uniform.Type));
 			return (UniformLink<Vector4f>&)AddLink(linkName, std::make_unique<UniformLink<Vector4f>>(m_Shader.GetShader().Id(), GetUniformLocation(linkName).Location, value));
 		}
 
@@ -137,7 +137,7 @@ namespace Bolt
 		UniformLink<Color>& Link(const blt::string& linkName, const Color& value)
 		{
 			const UserUniformLocation& uniform = GetUniformLocation(linkName);
-			BLT_ASSERT(ValidateUniformType<Color>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(Color).name(), FunctionDef::GetTypeString(uniform.Type));
+			BLT_ASSERT(ValidateUniformType<Color>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(Color).name(), ValueTypeToGLSLString(uniform.Type));
 			return (UniformLink<Color>&)AddLink(linkName, std::make_unique<UniformLink<Color>>(m_Shader.GetShader().Id(), GetUniformLocation(linkName).Location, value));
 		}
 
@@ -145,7 +145,7 @@ namespace Bolt
 		UniformLink<Matrix2f>& Link(const blt::string& linkName, const Matrix2f& value)
 		{
 			const UserUniformLocation& uniform = GetUniformLocation(linkName);
-			BLT_ASSERT(ValidateUniformType<Matrix2f>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(Matrix2f).name(), FunctionDef::GetTypeString(uniform.Type));
+			BLT_ASSERT(ValidateUniformType<Matrix2f>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(Matrix2f).name(), ValueTypeToGLSLString(uniform.Type));
 			return (UniformLink<Matrix2f>&)AddLink(linkName, std::make_unique<UniformLink<Matrix2f>>(m_Shader.GetShader().Id(), GetUniformLocation(linkName).Location, value));
 		}
 
@@ -153,7 +153,7 @@ namespace Bolt
 		UniformLink<Matrix3f>& Link(const blt::string& linkName, const Matrix3f& value)
 		{
 			const UserUniformLocation& uniform = GetUniformLocation(linkName);
-			BLT_ASSERT(ValidateUniformType<Matrix3f>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(Matrix3f).name(), FunctionDef::GetTypeString(uniform.Type));
+			BLT_ASSERT(ValidateUniformType<Matrix3f>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(Matrix3f).name(), ValueTypeToGLSLString(uniform.Type));
 			return (UniformLink<Matrix3f>&)AddLink(linkName, std::make_unique<UniformLink<Matrix3f>>(m_Shader.GetShader().Id(), GetUniformLocation(linkName).Location, value));
 		}
 
@@ -161,7 +161,7 @@ namespace Bolt
 		UniformLink<Matrix4f>& Link(const blt::string& linkName, const Matrix4f& value)
 		{
 			const UserUniformLocation& uniform = GetUniformLocation(linkName);
-			BLT_ASSERT(ValidateUniformType<Matrix4f>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(Matrix4f).name(), FunctionDef::GetTypeString(uniform.Type));
+			BLT_ASSERT(ValidateUniformType<Matrix4f>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(Matrix4f).name(), ValueTypeToGLSLString(uniform.Type));
 			return (UniformLink<Matrix4f>&)AddLink(linkName, std::make_unique<UniformLink<Matrix4f>>(m_Shader.GetShader().Id(), GetUniformLocation(linkName).Location, value));
 		}
 
@@ -169,7 +169,7 @@ namespace Bolt
 		UniformLink<ResourcePtr<const Texture2D>>& Link(const blt::string& linkName, const ResourcePtr<const Texture2D>& value)
 		{
 			const UserUniformLocation& uniform = GetUniformLocation(linkName);
-			BLT_ASSERT(ValidateUniformType<ResourcePtr<const Texture2D>>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(ResourcePtr<const Texture2D>).name(), FunctionDef::GetTypeString(uniform.Type));
+			BLT_ASSERT(ValidateUniformType<ResourcePtr<const Texture2D>>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(ResourcePtr<const Texture2D>).name(), ValueTypeToGLSLString(uniform.Type));
 			return (UniformLink<ResourcePtr<const Texture2D>>&)AddLink(linkName, std::make_unique<UniformLink<ResourcePtr<const Texture2D>>>(m_Shader.GetShader().Id(), GetUniformLocation(linkName).Location, value));
 		}
 
@@ -177,7 +177,7 @@ namespace Bolt
 		UniformLink<ResourcePtr<Texture2D>>& Link(const blt::string& linkName, const ResourcePtr<Texture2D>& value)
 		{
 			const UserUniformLocation& uniform = GetUniformLocation(linkName);
-			BLT_ASSERT(ValidateUniformType<ResourcePtr<Texture2D>>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(ResourcePtr<Texture2D>).name(), FunctionDef::GetTypeString(uniform.Type));
+			BLT_ASSERT(ValidateUniformType<ResourcePtr<Texture2D>>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(ResourcePtr<Texture2D>).name(), ValueTypeToGLSLString(uniform.Type));
 			return (UniformLink<ResourcePtr<Texture2D>>&)AddLink(linkName, std::make_unique<UniformLink<ResourcePtr<Texture2D>>>(m_Shader.GetShader().Id(), GetUniformLocation(linkName).Location, value));
 		}
 
