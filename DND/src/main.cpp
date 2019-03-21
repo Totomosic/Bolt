@@ -36,7 +36,9 @@ namespace DND
 			VertexShader vertex;
 			ShaderStreamPtr pos = vertex.Position();
 			ShaderVariablePtr var = std::make_shared<ShaderVariable>(pos);
+			ShaderVariablePtr var0 = std::make_shared<ShaderVariable>(std::make_shared<ShaderLiteral>("vec4(0.0)", ValueType::Vector4f));
 			vertex.SetVertexPosition(var);
+			vertex.Pass(var);
 			CompiledShaderProgram prog = vertex.Compile();
 			BLT_INFO(prog.Source);
 

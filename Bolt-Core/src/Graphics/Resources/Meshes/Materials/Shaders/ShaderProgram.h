@@ -14,12 +14,15 @@ namespace Bolt
 	{
 	protected:
 		ShaderType m_Type;
+		std::vector<ShaderPassValuePtr> m_PassValues;
 
 	protected:
 		ShaderProgram(ShaderType type);
 
 	public:
 		ShaderType Type() const;
+
+		ShaderPassValuePtr Pass(ShaderValuePtr value);
 
 		virtual CompiledShaderProgram Compile() const = 0;
 		virtual void Reset();

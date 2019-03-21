@@ -491,6 +491,7 @@
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\ShaderBuilder.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\Values\ShaderAttribute.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\Values\ShaderLiteral.cpp" />
+    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\Values\ShaderPassValue.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\Values\ShaderStream.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\Values\ShaderValue.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\Values\ShaderVariable.cpp" />

@@ -13,11 +13,7 @@ namespace Bolt
 		blt::string m_ValueString;
 
 	public:
-		template<typename T>
-		ShaderLiteral(const T& value)
-		{
-			
-		}
+		ShaderLiteral(const blt::string& valueString, ValueType type);
 
 		virtual void Build(ShaderBuilder& builder) const override;
 

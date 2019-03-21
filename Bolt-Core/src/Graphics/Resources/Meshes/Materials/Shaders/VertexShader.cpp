@@ -47,6 +47,12 @@ namespace Bolt
 		CompiledShaderProgram result;
 		ShaderBuilder builder;
 		m_VertexPosition->Build(builder);
+
+		for (const ShaderPassValuePtr& pass : m_PassValues)
+		{
+			pass->Build(builder);
+		}
+
 		result.Source = builder.GetSource();
 		return result;
 	}
