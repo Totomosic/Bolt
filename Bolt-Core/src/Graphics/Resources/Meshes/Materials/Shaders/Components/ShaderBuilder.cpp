@@ -6,7 +6,7 @@ namespace Bolt
 {
 
 	ShaderBuilder::ShaderBuilder()
-		: m_Source("#version 430 core\n\n"), m_DeclaredVariables(), m_UniformCount(0), m_PassCount(0), m_VarCount(0), m_StreamCursor(m_Source.size()), m_UniformCursor(m_Source.size()), m_CurrentCursor(0)
+		: m_Source("#version 430 core\n\n"), m_DeclaredVariables(), m_UniformCount(0), m_PassCount(0), m_VarCount(0), m_StreamCursor(m_Source.size()), m_UniformCursor(m_Source.size()), m_PassCursor(m_Source.size()), m_CurrentCursor(0)
 	{
 		m_Source += "void main()\n{\n";
 		m_CurrentCursor = m_Source.size();
@@ -73,6 +73,7 @@ namespace Bolt
 		m_Source.insert(m_StreamCursor, line);
 		m_StreamCursor += line.size();
 		m_UniformCursor += line.size();
+		m_PassCursor += line.size();
 		m_CurrentCursor += line.size();
 	}
 
@@ -81,12 +82,16 @@ namespace Bolt
 		blt::string line = uniform + ";\n";
 		m_Source.insert(m_UniformCursor, line);
 		m_UniformCursor += line.size();
+		m_PassCursor += line.size();
 		m_CurrentCursor += line.size();
 	}
 
 	void ShaderBuilder::WritePassLine(const blt::string& pass)
 	{
-	
+		blt::string line = pass + ";\n";
+		m_Source.insert(m_PassCursor, line);
+		m_PassCursor += line.size();
+		m_CurrentCursor += line.size();
 	}
 
 	void ShaderBuilder::Write(const blt::string& str)

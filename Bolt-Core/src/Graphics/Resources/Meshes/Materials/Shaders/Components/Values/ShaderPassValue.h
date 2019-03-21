@@ -12,6 +12,8 @@ namespace Bolt
 	public:
 		ShaderPassValue(ShaderValuePtr value);
 
+		virtual void Build(ShaderBuilder& builder) const override;
+
 	};
 
 }

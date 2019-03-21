@@ -1165,5 +1165,6 @@
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\Values\ShaderStream.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\Values\ShaderLiteral.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\Values\ShaderAttribute.cpp" />
+    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\Values\ShaderPassValue.cpp" />
   </ItemGroup>
 </Project>

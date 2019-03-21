@@ -15,6 +15,13 @@ namespace Bolt
 		return m_Type;
 	}
 
+	ShaderPassValuePtr ShaderProgram::Pass(ShaderValuePtr value)
+	{
+		ShaderPassValuePtr pass = std::make_shared<ShaderPassValue>(std::move(value));
+		m_PassValues.push_back(pass);
+		return std::move(pass);
+	}
+
 	void ShaderProgram::Reset()
 	{
 		
