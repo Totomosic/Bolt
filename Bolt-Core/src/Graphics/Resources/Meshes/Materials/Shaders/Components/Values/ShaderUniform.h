@@ -1,5 +1,6 @@
 #pragma once
 #include "ShaderVariable.h"
+#include "ShaderLiteral.h"
 
 namespace Bolt
 {
@@ -10,11 +11,13 @@ namespace Bolt
 	class BLT_API ShaderUniform : public ShaderVariable
 	{
 	protected:
-		ShaderValuePtr m_DefaultValue;
+		ShaderLiteralPtr m_DefaultValue;
 
 	public:
 		ShaderUniform(ValueType type);
-		ShaderUniform(ShaderValuePtr defaultValue);
+		ShaderUniform(ShaderLiteralPtr defaultValue);
+
+		virtual void Build(ShaderBuilder& builder) const override;
 
 	};
 

@@ -38,14 +38,14 @@ namespace Bolt
 
 	void VertexShader::SetVertexPosition(ShaderValuePtr value)
 	{
-		m_VertexPosition = std::make_shared<ShaderAttribute>(ShaderAttribute::VERTEX_POSITION, value);
+		m_VertexPosition = std::make_shared<ShaderAttribute>(ShaderAttribute::VERTEX_POSITION, std::move(value));
 	}
 
 	CompiledShaderProgram VertexShader::Compile() const
 	{
 		BLT_ASSERT(m_VertexPosition != nullptr, "VertexPosition attribute has not been set");
 		CompiledShaderProgram result;
-		ShaderBuilder builder;
+		ShaderBuilder builder(m_ShaderType);
 		m_VertexPosition->Build(builder);
 
 		for (const ShaderPassValuePtr& pass : m_PassValues)

@@ -11,6 +11,11 @@ namespace Bolt
 	
 	}
 
+	const blt::string& ShaderLiteral::GetValueString() const
+	{
+		return m_ValueString;
+	}
+
 	void ShaderLiteral::Build(ShaderBuilder& builder) const
 	{
 		builder.Write(m_ValueString);

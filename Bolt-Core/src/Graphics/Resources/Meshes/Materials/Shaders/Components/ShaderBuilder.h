@@ -7,6 +7,7 @@ namespace Bolt
 	class BLT_API ShaderBuilder
 	{
 	private:
+		ShaderType m_ShaderType;
 		blt::string m_Source;
 		std::vector<const ShaderVariable*> m_DeclaredVariables;
 
@@ -20,8 +21,9 @@ namespace Bolt
 		int m_CurrentCursor;
 
 	public:
-		ShaderBuilder();
+		ShaderBuilder(ShaderType shaderType);
 
+		ShaderType GetShaderType() const;
 		const blt::string& GetSource() const;
 
 		int SaveLineCursor() const;
@@ -40,6 +42,9 @@ namespace Bolt
 		void PreviousLine();
 		void NextLine();
 		void DeclareVariable(const ShaderVariable* variable);
+
+	private:
+		bool CanAccessVariable(const ShaderVariable* variable) const;
 
 	};
 

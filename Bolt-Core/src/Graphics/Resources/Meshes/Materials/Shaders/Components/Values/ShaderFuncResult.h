@@ -1,6 +1,5 @@
 #pragma once
 #include "ShaderValue.h"
-#include "../BuiltInFunc.h"
 
 namespace Bolt
 {
@@ -10,9 +9,17 @@ namespace Bolt
 
 	class BLT_API ShaderFuncResult : public ShaderValue
 	{
+	public:
+		static constexpr char INPUT_TEMPLATE = '@';
+
 	private:
 		std::vector<ShaderValuePtr> m_Inputs;
-		BuiltInFunc m_Function;
+		blt::string m_TemplateString;
+
+	public:
+		ShaderFuncResult(const blt::string& templateString, const std::vector<ShaderValuePtr>& inputs, ValueType resultType);
+
+		virtual void Build(ShaderBuilder& builder) const override;
 
 	};
 

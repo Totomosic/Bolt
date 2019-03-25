@@ -33,14 +33,22 @@ namespace DND
 
 			SceneManager::SetCurrentScene(titleScene);
 
-			VertexShader vertex;
-			ShaderStreamPtr pos = vertex.Position();
-			ShaderVariablePtr var = std::make_shared<ShaderVariable>(pos);
-			ShaderVariablePtr var0 = std::make_shared<ShaderVariable>(std::make_shared<ShaderLiteral>("vec4(0.0)", ValueType::Vector4f));
-			vertex.SetVertexPosition(var);
-			vertex.Pass(var);
+			VertexShader vertex;			
+			ShaderVariablePtr worldPosition = ShaderVariable::Create(ShaderFuncs::Mul(vertex.RendererUniform(RendererUniform::ModelMatrix), vertex.Position()));
+			ShaderVariablePtr viewPostition = ShaderVariable::Create(ShaderFuncs::Mul(vertex.RendererUniform(RendererUniform::ViewMatrix), worldPosition));
+			ShaderVariablePtr screenPosition = ShaderVariable::Create(ShaderFuncs::Mul(vertex.RendererUniform(RendererUniform::ProjectionMatrix), viewPostition));
+			vertex.SetVertexPosition(screenPosition);
+			ShaderVariablePtr worldNormal = ShaderVariable::Create(ShaderFuncs::Mul(vertex.Uniform<Matrix3f>(), vertex.Normal()));
+			vertex.Pass(worldNormal);
+
+			FragmentShader frag;
+			frag.SetFragColor(ShaderFuncs::Add(std::make_shared<ShaderLiteral>("vec4(1.0)", ValueType::Vector4f), frag.Uniform(std::make_shared<ShaderLiteral>("vec4(1.0)", ValueType::Vector4f))));
+
 			CompiledShaderProgram prog = vertex.Compile();
 			BLT_INFO(prog.Source);
+
+			CompiledShaderProgram fragProg = frag.Compile();
+			BLT_INFO(fragProg.Source);
 
 			NetworkManager::Get().Initialize([](bool initialized)
 			{
