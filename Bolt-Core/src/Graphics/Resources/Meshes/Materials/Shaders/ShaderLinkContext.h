@@ -205,24 +205,6 @@ namespace Bolt
 		}
 
 		template<>
-		bool ValidateUniformType<Vector2i>(const UserUniformLocation& uniform) const
-		{
-			return uniform.Type == ValueType::Vector2i;
-		}
-
-		template<>
-		bool ValidateUniformType<Vector3i>(const UserUniformLocation& uniform) const
-		{
-			return uniform.Type == ValueType::Vector3i;
-		}
-
-		template<>
-		bool ValidateUniformType<Vector4i>(const UserUniformLocation& uniform) const
-		{
-			return uniform.Type == ValueType::Vector4i;
-		}
-
-		template<>
 		bool ValidateUniformType<Vector2f>(const UserUniformLocation& uniform) const
 		{
 			return uniform.Type == ValueType::Vector2f;

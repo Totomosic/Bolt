@@ -1,4 +1,5 @@
 #pragma once
+#include "FragColorAttribute.h"
 #include "ShaderValue.h"
 #include "ShaderFuncResult.h"
 #include "ShaderStream.h"

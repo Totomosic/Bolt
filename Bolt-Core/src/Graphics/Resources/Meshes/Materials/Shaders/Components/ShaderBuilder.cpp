@@ -5,12 +5,18 @@
 namespace Bolt
 {
 
-	ShaderBuilder::ShaderBuilder()
-		: m_Source("#version 430 core\n\n"), m_DeclaredVariables(), m_UniformCount(0), m_PassCount(0), m_VarCount(0), m_StreamCursor(m_Source.size()), m_UniformCursor(m_Source.size()), m_PassCursor(m_Source.size()), m_CurrentCursor(0)
+	ShaderBuilder::ShaderBuilder(ShaderType shaderType)
+		: m_ShaderType(shaderType), m_Source("#version 430 core\n\n"), m_DeclaredVariables(), m_UniformCount(0), m_PassCount(0), m_VarCount(0), 
+		m_StreamCursor(m_Source.size()), m_UniformCursor(m_Source.size()), m_PassCursor(m_Source.size()), m_CurrentCursor(0)
 	{
-		m_Source += "void main()\n{\n";
+		m_Source += "\nvoid main()\n{\n";
 		m_CurrentCursor = m_Source.size();
 		m_Source += "\n}";
+	}
+
+	ShaderType ShaderBuilder::GetShaderType() const
+	{
+		return m_ShaderType;
 	}
 
 	const blt::string& ShaderBuilder::GetSource() const
@@ -64,6 +70,7 @@ namespace Bolt
 
 	bool ShaderBuilder::IsDeclared(const ShaderVariable* variable) const
 	{
+		BLT_ASSERT(CanAccessVariable(variable), "Variable already belongs to another shader");
 		return std::find(m_DeclaredVariables.begin(), m_DeclaredVariables.end(), variable) != m_DeclaredVariables.end();
 	}
 
@@ -112,7 +119,14 @@ namespace Bolt
 
 	void ShaderBuilder::DeclareVariable(const ShaderVariable* variable)
 	{
+		BLT_ASSERT(CanAccessVariable(variable), "Variable already belongs to another shader");
 		m_DeclaredVariables.push_back(variable);
+		variable->m_ShaderType = m_ShaderType;
+	}
+
+	bool ShaderBuilder::CanAccessVariable(const ShaderVariable* variable) const
+	{
+		return variable->GetShaderType() == ShaderType::Ignore || variable->GetShaderType() == GetShaderType();
 	}
 
 }

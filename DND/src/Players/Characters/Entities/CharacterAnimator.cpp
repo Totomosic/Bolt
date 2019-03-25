@@ -39,7 +39,7 @@ namespace DND
 			return m_Textures.RightTexture;
 		}
 		BLT_ASSERT(false, "Invalid Direction");
-		return nullptr;
+		return m_Textures.UpTexture;
 	}
 
 	void CharacterAnimator::Start()

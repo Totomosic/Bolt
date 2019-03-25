@@ -15,6 +15,8 @@ namespace Bolt
 	public:
 		ShaderLiteral(const blt::string& valueString, ValueType type);
 
+		const blt::string& GetValueString() const;
+
 		virtual void Build(ShaderBuilder& builder) const override;
 
 	};
