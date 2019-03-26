@@ -343,6 +343,7 @@
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\FragmentShader.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\GeometryShader.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\ShaderBuilder.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\ShaderFactory.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\ShaderInstance.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\ShaderLinkContext.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\ShaderProgram.h" />
@@ -499,6 +500,7 @@
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\Values\ShaderValue.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\Values\ShaderVariable.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\FragmentShader.cpp" />
+    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\ShaderFactory.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\ShaderInstance.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\ShaderLinkContext.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\ShaderProgram.cpp" />

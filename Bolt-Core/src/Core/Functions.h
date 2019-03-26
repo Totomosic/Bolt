@@ -30,6 +30,16 @@ namespace Bolt
 		return t.operator T();
 	}
 
+	template<typename T>
+	std::vector<T> ConcatVectors(const std::vector<T>& left, const std::vector<T>& right)
+	{
+		std::vector<T> result;
+		result.reserve(left.size() + right.size());
+		result.insert(result.end(), left.begin(), left.end());
+		result.insert(result.end(), right.begin(), right.end());
+		return result;
+	}
+
 	Image LoadTexture(const Filepath& file, bool flipVertically = true, bool flipHorizontally = false);
 
 }

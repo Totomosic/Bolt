@@ -22,7 +22,7 @@ namespace Bolt
 		std::unordered_map<blt::string, LinkId> m_UserUniformLinks;
 
 	public:
-		ShaderLinkContext();
+		ShaderLinkContext(ShaderInstance&& shaderInstance);
 
 		const ShaderInstance& GetShaderInstance() const;
 		id_t GetLinkId(const blt::string& linkName) const;
@@ -83,30 +83,6 @@ namespace Bolt
 			const UserUniformLocation& uniform = GetUniformLocation(linkName);
 			BLT_ASSERT(ValidateUniformType<float>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(float).name(), ValueTypeToGLSLString(uniform.Type));
 			return (UniformLink<float>&)AddLink(linkName, std::make_unique<UniformLink<float>>(m_Shader.GetShader().Id(), GetUniformLocation(linkName).Location, value));
-		}
-
-		template<>
-		UniformLink<Vector2i>& Link(const blt::string& linkName, const Vector2i& value)
-		{
-			const UserUniformLocation& uniform = GetUniformLocation(linkName);
-			BLT_ASSERT(ValidateUniformType<Vector2i>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(Vector2i).name(), ValueTypeToGLSLString(uniform.Type));
-			return (UniformLink<Vector2i>&)AddLink(linkName, std::make_unique<UniformLink<Vector2i>>(m_Shader.GetShader().Id(), GetUniformLocation(linkName).Location, value));
-		}
-
-		template<>
-		UniformLink<Vector3i>& Link(const blt::string& linkName, const Vector3i& value)
-		{
-			const UserUniformLocation& uniform = GetUniformLocation(linkName);
-			BLT_ASSERT(ValidateUniformType<Vector3i>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(Vector3i).name(), ValueTypeToGLSLString(uniform.Type));
-			return (UniformLink<Vector3i>&)AddLink(linkName, std::make_unique<UniformLink<Vector3i>>(m_Shader.GetShader().Id(), GetUniformLocation(linkName).Location, value));
-		}
-
-		template<>
-		UniformLink<Vector4i>& Link(const blt::string& linkName, const Vector4i& value)
-		{
-			const UserUniformLocation& uniform = GetUniformLocation(linkName);
-			BLT_ASSERT(ValidateUniformType<Vector4i>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(Vector4i).name(), ValueTypeToGLSLString(uniform.Type));
-			return (UniformLink<Vector4i>&)AddLink(linkName, std::make_unique<UniformLink<Vector4i>>(m_Shader.GetShader().Id(), GetUniformLocation(linkName).Location, value));
 		}
 
 		template<>

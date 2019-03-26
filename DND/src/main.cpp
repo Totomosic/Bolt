@@ -33,22 +33,22 @@ namespace DND
 
 			SceneManager::SetCurrentScene(titleScene);
 
-			VertexShader vertex;			
+			ShaderFactory factory;
+			VertexShader& vertex = factory.Vertex();
 			ShaderVariablePtr worldPosition = ShaderVariable::Create(ShaderFuncs::Mul(vertex.RendererUniform(RendererUniform::ModelMatrix), vertex.Position()));
-			ShaderVariablePtr viewPostition = ShaderVariable::Create(ShaderFuncs::Mul(vertex.RendererUniform(RendererUniform::ViewMatrix), worldPosition));
-			ShaderVariablePtr screenPosition = ShaderVariable::Create(ShaderFuncs::Mul(vertex.RendererUniform(RendererUniform::ProjectionMatrix), viewPostition));
-			vertex.SetVertexPosition(screenPosition);
-			ShaderVariablePtr worldNormal = ShaderVariable::Create(ShaderFuncs::Mul(vertex.Uniform<Matrix3f>(), vertex.Normal()));
-			vertex.Pass(worldNormal);
+			vertex.SetVertexPosition(ShaderFuncs::Mul(vertex.RendererUniform(RendererUniform::ProjectionMatrix), ShaderFuncs::Mul(vertex.RendererUniform(RendererUniform::ViewMatrix), worldPosition)));
+			ShaderPassValuePtr texCoord = vertex.Pass(vertex.TexCoord());
 
-			FragmentShader frag;
-			frag.SetFragColor(ShaderFuncs::Add(std::make_shared<ShaderLiteral>("vec4(1.0)", ValueType::Vector4f), frag.Uniform(std::make_shared<ShaderLiteral>("vec4(1.0)", ValueType::Vector4f))));
+			FragmentShader& fragment = factory.Fragment();
+			fragment.SetFragColor(fragment.Uniform("Color", ValueType::Vector4f));
 
-			CompiledShaderProgram prog = vertex.Compile();
-			BLT_INFO(prog.Source);
-
-			CompiledShaderProgram fragProg = frag.Compile();
-			BLT_INFO(fragProg.Source);
+			ShaderLinkContext shader = factory.BuildShader();
+			BLT_WARN("VERTEX SOURCE");
+			BLT_INFO(shader.GetShaderInstance().VertexSource);
+			BLT_WARN("FRAGMENT SOURCE");
+			BLT_INFO(shader.GetShaderInstance().FragmentSource);
+			shader.Link("Color", Color::White);
+			shader.ApplyLinks();
 
 			NetworkManager::Get().Initialize([](bool initialized)
 			{

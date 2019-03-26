@@ -44,6 +44,7 @@ namespace Bolt
 		void DeclareVariable(const ShaderVariable* variable);
 
 	private:
+		blt::string GetShaderTypeString() const;
 		bool CanAccessVariable(const ShaderVariable* variable) const;
 
 	};

@@ -16,7 +16,7 @@ namespace Bolt
 		EventManager::Initialize();
 		BLT_CORE_INFO("EventManager Initialized");
 		Filesystem::Initialize();
-		BLT_CORE_INFO("Filesystem Intialized");
+		BLT_CORE_INFO("Filesystem Initialized");
 		if (createInfo.UseGraphics)
 		{
 			int result = glfwInit();
@@ -34,7 +34,7 @@ namespace Bolt
 			WSADATA data;
 			if (WSAStartup(MAKEWORD(2, 2), &data) != 0)
 			{
-				BLT_ASSERT(false, "Failed to initialize WinSock2");
+				BLT_ASSERT(false, "Failed to Initialize WinSock2");
 			}
 			BLT_CORE_INFO("Socket Initialized");
 		}
@@ -51,7 +51,7 @@ namespace Bolt
 			int result = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 			if (result == 0)
 			{
-				BLT_ASSERT(false, "Failed to initialize Glad");
+				BLT_ASSERT(false, "Failed to Initialize Glad");
 			}
 			BLT_CORE_INFO("Glad Initialized");
 			Input::Get().Initialize(window);

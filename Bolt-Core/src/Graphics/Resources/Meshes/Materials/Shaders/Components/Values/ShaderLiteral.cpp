@@ -21,4 +21,29 @@ namespace Bolt
 		builder.Write(m_ValueString);
 	}
 
+	ShaderLiteralPtr ShaderLiteral::FromInt(int value)
+	{
+		return std::make_shared<ShaderLiteral>(std::to_string(value), ValueType::Int);
+	}
+
+	ShaderLiteralPtr ShaderLiteral::FromFloat(float value)
+	{
+		return std::make_shared<ShaderLiteral>(std::to_string(value), ValueType::Float);
+	}
+
+	ShaderLiteralPtr ShaderLiteral::FromVec2(const Vector2f& value)
+	{
+		return std::make_shared<ShaderLiteral>("vec4(" + std::to_string(value.x) + ", " + std::to_string(value.y) + ')', ValueType::Vector2f);
+	}
+
+	ShaderLiteralPtr ShaderLiteral::FromVec3(const Vector3f& value)
+	{
+		return std::make_shared<ShaderLiteral>("vec4(" + std::to_string(value.x) + ", " + std::to_string(value.y) + ", " + std::to_string(value.z) + ')', ValueType::Vector3f);
+	}
+
+	ShaderLiteralPtr ShaderLiteral::FromVec4(const Vector4f& value)
+	{
+		return std::make_shared<ShaderLiteral>("vec4(" + std::to_string(value.x) + ", " + std::to_string(value.y) + ", " + std::to_string(value.z) + ", " + std::to_string(value.w) + ')', ValueType::Vector4f);
+	}
+
 }

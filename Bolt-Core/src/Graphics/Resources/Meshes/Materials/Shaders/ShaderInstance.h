@@ -1,17 +1,9 @@
 #pragma once
 #include "Shader.h"
-#include "Components/Values/ShaderEnums.h"
+#include "ShaderProgram.h"
 
 namespace Bolt
 {
-
-	struct BLT_API UserUniformInfo
-	{
-	public:
-		blt::string LinkName;
-		blt::string UniformName;
-		ValueType Type;
-	};
 
 	struct BLT_API UserUniformLocation
 	{
@@ -19,12 +11,6 @@ namespace Bolt
 		blt::string LinkName;
 		int Location;
 		ValueType Type;
-	};
-
-	struct BLT_API RendererUniformInfo
-	{
-	public:
-		RendererUniform Uniform;
 	};
 
 	struct BLT_API RendererUniformLocation
@@ -47,8 +33,8 @@ namespace Bolt
 		blt::string FragmentSource;
 
 	public:
-		ShaderInstance(const blt::string& vertexSource, const blt::string& fragmentSource, const std::vector<RendererUniformInfo>& rendererUniforms, const std::vector<UserUniformInfo>& userUniforms);
-		ShaderInstance(const blt::string& vertexSource, const blt::string& geometrySource, const blt::string& fragmentSource, const std::vector<RendererUniformInfo>& rendererUniforms, const std::vector<UserUniformInfo>& userUniforms);
+		ShaderInstance(const CompiledShaderProgram& vertex, const CompiledShaderProgram& fragment);
+		ShaderInstance(const CompiledShaderProgram& vertex, const CompiledShaderProgram& geometry, const CompiledShaderProgram& fragment);
 
 		const Shader& GetShader() const;
 		const std::vector<RendererUniformLocation>& GetRendererUniforms() const;
