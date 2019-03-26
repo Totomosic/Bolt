@@ -17,7 +17,7 @@ namespace Bolt
 
 	ShaderPassValuePtr ShaderProgram::Pass(ShaderValuePtr value)
 	{
-		ShaderPassValuePtr pass = std::make_shared<ShaderPassValue>(std::move(value));
+		ShaderPassValuePtr pass = std::make_shared<ShaderPassValue>(std::move(value), ShaderType::Fragment);
 		m_PassValues.push_back(pass);
 		return std::move(pass);
 	}
@@ -29,17 +29,17 @@ namespace Bolt
 		return u;
 	}
 
-	ShaderUniformPtr ShaderProgram::Uniform(ValueType type)
+	ShaderUniformPtr ShaderProgram::Uniform(const blt::string& linkName, ValueType type)
 	{
 		ShaderUniformPtr u = std::make_shared<ShaderUniform>(type);
-		m_Uniforms.push_back(u);
+		m_Uniforms.push_back({ linkName, u });
 		return u;
 	}
 
-	ShaderUniformPtr ShaderProgram::Uniform(ShaderLiteralPtr defaultValue)
+	ShaderUniformPtr ShaderProgram::Uniform(const blt::string& linkName, ShaderLiteralPtr defaultValue)
 	{
 		ShaderUniformPtr u = std::make_shared<ShaderUniform>(std::move(defaultValue));
-		m_Uniforms.push_back(u);
+		m_Uniforms.push_back({ linkName, u });
 		return u;
 	}
 
@@ -48,6 +48,18 @@ namespace Bolt
 		m_PassValues.clear();
 		m_RendererUniforms.clear();
 		m_Uniforms.clear();
+	}
+
+	void ShaderProgram::CompileUniformVariables(CompiledShaderProgram& program) const
+	{
+		for (const UserUniformMapping& uniform : m_Uniforms)
+		{
+			program.UserUniforms.push_back({ uniform.LinkName, uniform.Uniform->GetVarName(), uniform.Uniform->Type() });
+		}
+		for (const ShaderRendererUniformPtr& uniform : m_RendererUniforms)
+		{
+			program.RendererUniforms.push_back({ uniform->GetVarName(), uniform->UniformType() });
+		}
 	}
 
 }

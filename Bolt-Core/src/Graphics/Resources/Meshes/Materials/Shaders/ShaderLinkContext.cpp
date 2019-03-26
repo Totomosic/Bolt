@@ -4,8 +4,8 @@
 namespace Bolt
 {
 
-	ShaderLinkContext::ShaderLinkContext()
-		: m_Shader("", "", {}, {}), m_Links(), m_UserUniformLinks()
+	ShaderLinkContext::ShaderLinkContext(ShaderInstance&& shaderInstance)
+		: m_Shader(std::move(shaderInstance)), m_Links(), m_UserUniformLinks()
 	{
 		const std::vector<UserUniformLocation>& uniforms = m_Shader.GetUserUniforms();
 		for (int i = 0; i < uniforms.size(); i++)

@@ -6,5 +6,6 @@
 #include "Uniform.h"
 #include "UniformManager.h"
 
+#include "ShaderFactory.h"
 #include "VertexShader.h"
 #include "FragmentShader.h"

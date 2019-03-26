@@ -21,6 +21,11 @@ namespace Bolt
 	{
 		return m_ShaderType;
 	}
+
+	const blt::string& ShaderVariable::GetVarName() const
+	{
+		return m_Name;
+	}
 	
 	void ShaderVariable::Build(ShaderBuilder& builder) const
 	{

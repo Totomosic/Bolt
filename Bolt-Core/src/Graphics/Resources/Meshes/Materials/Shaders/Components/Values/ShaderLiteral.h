@@ -19,6 +19,13 @@ namespace Bolt
 
 		virtual void Build(ShaderBuilder& builder) const override;
 
+	public:
+		static ShaderLiteralPtr FromInt(int value);
+		static ShaderLiteralPtr FromFloat(float value);
+		static ShaderLiteralPtr FromVec2(const Vector2f& value);
+		static ShaderLiteralPtr FromVec3(const Vector3f& value);
+		static ShaderLiteralPtr FromVec4(const Vector4f& value);
+
 	};
 
 }

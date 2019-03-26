@@ -11,7 +11,7 @@ namespace Bolt
 	{
 		m_Source += "\nvoid main()\n{\n";
 		m_CurrentCursor = m_Source.size();
-		m_Source += "\n}";
+		m_Source += "}";
 	}
 
 	ShaderType ShaderBuilder::GetShaderType() const
@@ -55,12 +55,12 @@ namespace Bolt
 
 	blt::string ShaderBuilder::GetUniformName() const
 	{
-		return "u_" + std::to_string(m_UniformCount++);
+		return "u_" + GetShaderTypeString() + '_' + std::to_string(m_UniformCount++);
 	}
 
 	blt::string ShaderBuilder::GetPassName() const
 	{
-		return "pass_" + std::to_string(m_PassCount++);
+		return "pass_" + GetShaderTypeString() + '_' + std::to_string(m_PassCount++);
 	}
 
 	blt::string ShaderBuilder::GetVariableName() const
@@ -122,6 +122,21 @@ namespace Bolt
 		BLT_ASSERT(CanAccessVariable(variable), "Variable already belongs to another shader");
 		m_DeclaredVariables.push_back(variable);
 		variable->m_ShaderType = m_ShaderType;
+	}
+
+	blt::string ShaderBuilder::GetShaderTypeString() const
+	{
+		switch (m_ShaderType)
+		{
+		case ShaderType::Vertex:
+			return "vertex";
+		case ShaderType::Geometry:
+			return "geometry";
+		case ShaderType::Fragment:
+			return "fragment";
+		}
+		BLT_ASSERT(false, "Unable to determine string for shader type");
+		return "";
 	}
 
 	bool ShaderBuilder::CanAccessVariable(const ShaderVariable* variable) const

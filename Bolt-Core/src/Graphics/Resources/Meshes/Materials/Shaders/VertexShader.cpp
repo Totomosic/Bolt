@@ -51,9 +51,11 @@ namespace Bolt
 		for (const ShaderPassValuePtr& pass : m_PassValues)
 		{
 			pass->Build(builder);
+			pass->m_ShaderType = ShaderType::Fragment;
 		}
 
 		result.Source = builder.GetSource();
+		CompileUniformVariables(result);
 		return result;
 	}
 

@@ -109,6 +109,31 @@ namespace Bolt
 		return (type == ValueType::Texture1D || type == ValueType::Texture2D || type == ValueType::Texture3D || type == ValueType::TextureCube);
 	}
 
+	inline int ValueTypeGetDimension(ValueType type)
+	{
+		switch (type)
+		{
+		case ValueType::Int:
+			return 1;
+		case ValueType::Float:
+			return 1;
+		case ValueType::Vector2f:
+			return 2;
+		case ValueType::Vector3f:
+			return 3;
+		case ValueType::Vector4f:
+			return 4;
+		case ValueType::Matrix2f:
+			return 4;
+		case ValueType::Matrix3f:
+			return 9;
+		case ValueType::Matrix4f:
+			return 16;
+		}
+		BLT_ASSERT(false, "Invalid ValueType");
+		return 0;
+	}
+
 	template<typename T>
 	inline ValueType GetValueType()
 	{

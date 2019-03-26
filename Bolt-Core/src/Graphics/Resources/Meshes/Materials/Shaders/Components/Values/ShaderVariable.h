@@ -19,6 +19,7 @@ namespace Bolt
 		ShaderVariable(ShaderValuePtr value);
 
 		ShaderType GetShaderType() const;
+		const blt::string& GetVarName() const;
 
 		virtual void Build(ShaderBuilder& builder) const override;
 

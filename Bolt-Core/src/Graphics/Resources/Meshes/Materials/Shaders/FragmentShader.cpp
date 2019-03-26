@@ -28,6 +28,7 @@ namespace Bolt
 		}
 
 		result.Source = builder.GetSource();
+		CompileUniformVariables(result);
 		return result;
 	}
 

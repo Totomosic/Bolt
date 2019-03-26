@@ -806,6 +806,7 @@
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\ShaderBuilder.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\ShaderFuncs.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\Values\FragColorAttribute.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\ShaderFactory.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\BoltTL\string.cpp">
@@ -1170,5 +1171,6 @@
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\Values\ShaderRendererUniform.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\FragmentShader.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\Values\FragColorAttribute.cpp" />
+    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\ShaderFactory.cpp" />
   </ItemGroup>
 </Project>
