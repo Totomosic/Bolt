@@ -58,6 +58,10 @@ namespace Bolt
 	{
 		BLT_ASSERT(std::find_if(m_UserUniformLinks.begin(), m_UserUniformLinks.end(), [](const auto& pair)
 		{
+			if (!pair.second.IsLinked)
+			{
+				BLT_ERROR(pair.first + " is not linked");
+			}
 			return pair.second.IsLinked == false;
 		}) == m_UserUniformLinks.end(), "Not all User uniforms were linked");
 		for (const auto& uniform : m_Links)

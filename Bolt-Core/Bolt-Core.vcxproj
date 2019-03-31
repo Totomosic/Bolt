@@ -324,6 +324,8 @@
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Animators\__Animators__.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\LightSettings.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Material.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\MaterialBuilder.h" />
+    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Modules\MaterialModule.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Modules\__Modules__.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\RenderSettings.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\Values\FragColorAttribute.h" />
@@ -486,6 +488,7 @@
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Animators\ZoomAnimator.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\LightSettings.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Material.cpp" />
+    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Modules\MaterialModule.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\RenderSettings.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\ShaderBuilder.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\ShaderFuncs.cpp" />
