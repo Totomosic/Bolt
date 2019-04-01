@@ -21,7 +21,17 @@ namespace Bolt
 
 	public:
 		std::vector<ModelGroup> Models;
-		Material Materials[MAX_MATERIALS];
+		std::unique_ptr<Material> Materials[MAX_MATERIALS];
+
+	public:
+		Mesh();
+		Mesh(const Mesh& other);
+		Mesh& operator=(const Mesh& other);
+		Mesh(Mesh&& other) = default;
+		Mesh& operator=(Mesh&& other) = default;
+		~Mesh() = default;
+
+		Mesh Clone() const;
 
 	};
 

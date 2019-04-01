@@ -4,6 +4,7 @@
 #include "ResourceFile.h"
 #include "ResourcePack.h"
 #include "ResourcePtr.h"
+#include "MaterialManager.h"
 
 namespace Bolt
 {
@@ -15,10 +16,13 @@ namespace Bolt
 	{
 	private:
 		static std::unordered_map<ResourceID, std::unique_ptr<Resource>> s_Resources;
+		static MaterialManager s_Materials;
 		static Font* s_DefaultFont;
 
 	public:
 		ResourceManager() = delete;
+
+		static const MaterialManager& Materials();
 
 		static ResourceFile Fetch(const Filepath& resourceFile);
 		static ResourcePack FetchPack(const Filepath& resourcePack);

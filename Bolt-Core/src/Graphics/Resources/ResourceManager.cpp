@@ -10,7 +10,13 @@ namespace Bolt
 {
 
 	std::unordered_map<ResourceID, std::unique_ptr<Resource>> ResourceManager::s_Resources = std::unordered_map<ResourceID, std::unique_ptr<Resource>>();
+	MaterialManager ResourceManager::s_Materials;
 	Font* ResourceManager::s_DefaultFont = nullptr;
+
+	const MaterialManager& ResourceManager::Materials()
+	{
+		return s_Materials;
+	}
 
 	ResourceFile ResourceManager::Fetch(const Filepath& resourceFile)
 	{

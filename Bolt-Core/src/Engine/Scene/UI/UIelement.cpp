@@ -93,16 +93,16 @@ namespace Bolt
 		return AddElement<UIsurface>(width, height, color, std::move(transform));
 	}
 
-	UIsurface& UIelement::Rectangle(float width, float height, const Material& material, Transform&& transform)
+	UIsurface& UIelement::Rectangle(float width, float height, std::unique_ptr<Material>&& material, Transform&& transform)
 	{
-		return AddElement<UIsurface>(width, height, material, std::move(transform));
+		return AddElement<UIsurface>(width, height, std::move(material), std::move(transform));
 	}
 
 	UIsurface& UIelement::Image(float width, float height, const ResourcePtr<const Texture2D>& texture, Transform&& transform)
 	{
-		Material material;
-		material.Shader = Shader::DefaultTexture();
-		material.Textures.Textures.push_back(texture);
+		std::unique_ptr<Material> material = ResourceManager::Materials().Default(Color::White);
+		//material.Shader = Shader::DefaultTexture();
+		//material.Textures.Textures.push_back(texture);
 		return AddElement<UIsurface>(width, height, std::move(material), std::move(transform));
 	}
 

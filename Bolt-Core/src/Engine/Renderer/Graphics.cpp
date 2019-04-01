@@ -26,7 +26,7 @@ namespace Bolt
 
 		Mesh mesh;
 		mesh.Models.push_back({ s_Rectangle, Matrix4f::Identity(), { 0 } });
-		mesh.Materials[0].BaseColor = color;
+		mesh.Materials[0] = ResourceManager::Materials().Default(color);
 		object->Components().AddComponent(std::make_unique<MeshRenderer>(mesh));
 	}
 
@@ -57,7 +57,7 @@ namespace Bolt
 
 		Mesh mesh;
 		mesh.Models.push_back({ s_Line, Matrix4f::Identity(),{ 0 } });
-		mesh.Materials[0].BaseColor = color;
+		mesh.Materials[0] = ResourceManager::Materials().Default(color);
 		object->Components().AddComponent(std::make_unique<MeshRenderer>(mesh));
 	}
 
@@ -68,10 +68,10 @@ namespace Bolt
 
 		Mesh mesh;
 		mesh.Models.push_back({ ResourcePtr<Model>(new Model(TextFactory(text, font, Color::White, horizontalAlign, verticalAlign)), true), Matrix4f::Identity(), { 0 } });
-		mesh.Materials[0].BaseColor = color;
-		mesh.Materials[0].Textures.Textures.push_back(font);
-		mesh.Materials[0].Shader = Shader::DefaultFont();
-		mesh.Materials[0].RenderOptions.DepthFunc = DepthFunction::Lequal;
+		//mesh.Materials[0].BaseColor = color;
+		//mesh.Materials[0].Textures.Textures.push_back(font);
+		//mesh.Materials[0].Shader = Shader::DefaultFont();
+		//mesh.Materials[0].RenderOptions.DepthFunc = DepthFunction::Lequal;
 		object->Components().AddComponent(std::make_unique<MeshRenderer>(mesh));
 	}
 
@@ -82,9 +82,9 @@ namespace Bolt
 
 		Mesh mesh;
 		mesh.Models.push_back({ s_Rectangle, Matrix4f::Scale(w, h, 1), { 0 } });
-		mesh.Materials[0].BaseColor = Color::White;
-		mesh.Materials[0].Textures.Textures.push_back(texture);
-		mesh.Materials[0].Shader = Shader::DefaultTexture();
+		//mesh.Materials[0].BaseColor = Color::White;
+		//mesh.Materials[0].Textures.Textures.push_back(texture);
+		//mesh.Materials[0].Shader = Shader::DefaultTexture();
 		object->Components().AddComponent(std::make_unique<MeshRenderer>(mesh));
 	}
 

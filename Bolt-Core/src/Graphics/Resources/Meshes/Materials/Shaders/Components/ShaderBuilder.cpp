@@ -121,7 +121,7 @@ namespace Bolt
 	{
 		BLT_ASSERT(CanAccessVariable(variable), "Variable already belongs to another shader");
 		m_DeclaredVariables.push_back(variable);
-		variable->m_ShaderType = m_ShaderType;
+		//variable->m_ShaderType = m_ShaderType;
 	}
 
 	blt::string ShaderBuilder::GetShaderTypeString() const

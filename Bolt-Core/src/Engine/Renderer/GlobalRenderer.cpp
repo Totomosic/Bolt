@@ -10,8 +10,7 @@ namespace Bolt
 
 	void DrawRenderGroup(RenderRoutine* routine, const RenderGroup& group, const RenderContext& context, const RenderCamera& camera)
 	{
-		context.Uniforms.UploadAll(group.Material->Shader.Get());
-		group.Material->Shader->SetLights(context.Lights);
+		group.Material->GetShader().ApplyLinks();
 		(*routine)(group, camera.ViewMatrix, camera.ProjectionMatrix);
 	}
 
