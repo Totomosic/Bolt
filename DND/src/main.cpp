@@ -33,23 +33,6 @@ namespace DND
 
 			SceneManager::SetCurrentScene(titleScene);
 
-			ShaderFactory factory;
-			VertexShader& vertex = factory.Vertex();
-			ShaderVariablePtr worldPosition = ShaderVariable::Create(ShaderFuncs::Mul(vertex.RendererUniform(RendererUniform::ModelMatrix), vertex.Position()));
-			vertex.SetVertexPosition(ShaderFuncs::Mul(vertex.RendererUniform(RendererUniform::ProjectionMatrix), ShaderFuncs::Mul(vertex.RendererUniform(RendererUniform::ViewMatrix), worldPosition)));
-			ShaderPassValuePtr texCoord = vertex.Pass(vertex.TexCoord());
-
-			FragmentShader& fragment = factory.Fragment();
-			fragment.SetFragColor(fragment.Uniform("Color", ValueType::Vector4f));
-
-			ShaderLinkContext shader = factory.BuildShader();
-			BLT_WARN("VERTEX SOURCE");
-			BLT_INFO(shader.GetShaderInstance().VertexSource);
-			BLT_WARN("FRAGMENT SOURCE");
-			BLT_INFO(shader.GetShaderInstance().FragmentSource);
-			shader.Link("Color", Color::White);
-			shader.ApplyLinks();
-
 			NetworkManager::Get().Initialize([](bool initialized)
 			{
 				

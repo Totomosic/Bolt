@@ -8,17 +8,8 @@
 namespace Bolt
 {
 
-	struct Material;
-	struct LightSource;
-
 	class BLT_API Shader : public Resource, public GLshared
 	{
-	public:
-		static blt::string MODEL_MATRIX_NAME;
-		static blt::string VIEW_MATRIX_NAME;
-		static blt::string PROJECTION_MATRIX_NAME;
-		static blt::string BASE_COLOR_NAME;
-
 	private:
 		static ResourcePtr<const Shader> s_DefaultColorShader;
 		static ResourcePtr<const Shader> s_DefaultTextureShader;
@@ -31,11 +22,6 @@ namespace Bolt
 
 	private:
 		id_t m_Id;
-
-		int m_ModelMatrixLocation;
-		int m_ViewMatrixLocation;
-		int m_ProjectionMatrixLocation;
-		int m_BaseColorLocation;
 
 	public:
 		Shader(const blt::string& vertexSource, const blt::string& fragmentSource);
@@ -50,13 +36,6 @@ namespace Bolt
 
 		void Bind() const;
 		void Unbind() const;
-
-		void SetModelMatrix(const Matrix4f& matrix) const;
-		void SetViewMatrix(const Matrix4f& matrix) const;
-		void SetProjectionMatrix(const Matrix4f& matrix) const;
-		void SetColor(const Color& color) const;
-		void SetMaterial(const Material& material) const;
-		void SetLights(const std::vector<LightSource>& lights) const;
 
 		void SetUniform(int location, bool value) const;
 		void SetUniform(int location, int value) const;

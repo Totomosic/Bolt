@@ -26,23 +26,13 @@ namespace Bolt
 			{
 				if (RequiresTransparency)
 				{
-					if (meshRenderer.Mesh.Materials[i].HasTransparency())
-					{
-						passed = true;
-						break;
-					}
+					passed = true;
+					break;
 				}
 				else
 				{
-					if (meshRenderer.Mesh.Materials[i].HasTransparency())
-					{
-						passed = false;
-						break;
-					}
-					else
-					{
-						passed = true;
-					}
+					passed = true;
+					break;
 				}
 			}
 			if (passed)

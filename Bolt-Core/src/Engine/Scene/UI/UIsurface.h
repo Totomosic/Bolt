@@ -10,11 +10,11 @@ namespace Bolt
 		float m_Width;
 		float m_Height;
 		Transform m_Transform;
-		Material m_Material;
+		std::unique_ptr<Material> m_Material;
 
 	public:
 		UIsurface(float width, float height, const Color& color = Color::White, Transform&& transform = Transform());
-		UIsurface(float width, float height, Material material, Transform&& transform = Transform());
+		UIsurface(float width, float height, std::unique_ptr<Material>&& material, Transform&& transform = Transform());
 
 		inline float Width() const { return m_Width; }
 		inline float Height() const { return m_Height; }

@@ -2,42 +2,40 @@
 #include "Bolt-Core.h"
 #include "Shaders\__Shaders__.h"
 
-#include "LightSettings.h"
 #include "RenderSettings.h"
-#include "TextureGroup.h"
 #include "..\..\ResourcePtr.h"
 
 namespace Bolt
 {
 
-	struct BLT_API Material
+	class MaterialBuilder;
+
+	class BLT_API Material
 	{
-	public:
-		ResourcePtr<const Shader> Shader = Shader::DefaultColor();
-		Color BaseColor = Color::White;
-		LightSettings LightingOptions = LightSettings();
-		RenderSettings RenderOptions = RenderSettings();
-		TextureGroup Textures = TextureGroup();
-		UniformManager Uniforms = UniformManager();
+	private:
+		const MaterialBuilder* m_Builder;
+		ShaderLinkContext m_Shader;
+
+	private:
+		Material(ShaderLinkContext&& shader);
 
 	public:
-		bool operator==(const Material& other) const;
-		bool operator!=(const Material& other) const;
+		Material(const Material& other) = delete;
+		Material& operator=(const Material& other) = delete;
+		Material(Material&& other) = default;
+		Material& operator=(Material&& other) = default;
+		~Material() = default;
 
-		bool HasTransparency() const;
+		const ShaderLinkContext& GetShader() const;
+		ShaderLinkContext& GetShader();
 
-	};
+		std::unique_ptr<Material> Clone() const;
 
-}
+		friend class MaterialBuilder;
 
-namespace std
-{
+	private:
+		void SetBuilder(const MaterialBuilder* builder);
 
-	template<>
-	struct BLT_API hash<Bolt::Material>
-	{
-	public:
-		inline size_t operator()(const Bolt::Material& material) const { return 42; };
 	};
 
 }

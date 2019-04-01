@@ -48,15 +48,15 @@ namespace Bolt
 		GameObject* Instantiate(Mesh mesh, Transform transform = Transform()) const;
 
 		GameObject* Rectangle(float width, float height, const Color& color = Color::White, Transform transform = Transform()) const;
-		GameObject* Rectangle(float width, float height, const Material& material, Transform transform = Transform()) const;
+		GameObject* Rectangle(float width, float height, std::unique_ptr<Material>&& material, Transform transform = Transform()) const;
 		GameObject* Image(float width, float height, const ResourcePtr<const Texture2D>& image, Transform transform = Transform()) const;
 		GameObject* Ellipse(float width, float height, const Color& color = Color::White, Transform transform = Transform()) const;
-		GameObject* Ellipse(float width, float height, const Material& material, Transform transform = Transform()) const;
+		GameObject* Ellipse(float width, float height, std::unique_ptr<Material>&& material, Transform transform = Transform()) const;
 
 		GameObject* Cuboid(float width, float height, float depth, const Color& color = Color::White, Transform transform = Transform()) const;
-		GameObject* Cuboid(float width, float height, float depth, const Material& material = Material(), Transform transform = Transform()) const;
+		GameObject* Cuboid(float width, float height, float depth, std::unique_ptr<Material>&& material, Transform transform = Transform()) const;
 		GameObject* Grid(float width, float depth, int xVertices = 2, int zVertices = 2, const Color& color = Color::White, Transform transform = Transform()) const;
-		GameObject* Grid(float width, float depth, int xVertices = 2, int zVertices = 2, const Material& material = Material(), Transform transform = Transform()) const;
+		GameObject* Grid(float width, float depth, int xVertices, int zVertices, std::unique_ptr<Material>&& material, Transform transform = Transform()) const;
 		GameObject* Line(const Vector3f& p0, const Vector3f& p1, const Color& color = Color::White) const;
 
 		friend class Initializer;

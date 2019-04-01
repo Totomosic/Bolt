@@ -15,12 +15,25 @@ namespace Bolt
 	public:
 		UniformLinkContainer(id_t shaderId, int location);
 
+		template<typename T>
+		UniformLinkContainer& operator=(const T& value)
+		{
+			SetValue(value);
+			return *this;
+		}
+
 		id_t ShaderId() const;
 		int UniformLocation() const;
 		virtual const void* GetValuePtr() const = 0;
 		virtual void* GetValuePtr() = 0;
 
 		virtual void UploadValue(const Shader& shader) const = 0;
+
+		template<typename T>
+		void SetValue(const T& value)
+		{
+			*(T*)GetValuePtr() = value;
+		}
 
 	};
 

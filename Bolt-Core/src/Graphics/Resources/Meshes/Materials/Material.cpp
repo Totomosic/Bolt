@@ -1,35 +1,34 @@
 #include "Types.h"
-
 #include "Material.h"
+#include "MaterialBuilder.h"
 
 namespace Bolt
 {
 
-	bool Material::operator==(const Material& other) const
+	Material::Material(ShaderLinkContext&& shader)
+		: m_Builder(nullptr), m_Shader(std::move(shader))
 	{
-		return (BaseColor == other.BaseColor && RenderOptions == other.RenderOptions && Textures == other.Textures && LightingOptions == other.LightingOptions && Shader.Get() == other.Shader.Get());
+		
 	}
 
-	bool Material::operator!=(const Material& other) const
+	const ShaderLinkContext& Material::GetShader() const
 	{
-		return !(*this == other);
+		return m_Shader;
 	}
 
-	bool Material::HasTransparency() const
+	ShaderLinkContext& Material::GetShader()
 	{
-		if (!RenderOptions.UseBlend)
-		{
-			return false;
-		}
-		if (BaseColor.a != 1.0f)
-		{
-			return true;
-		}
-		if (Textures.Textures.size() > 0)
-		{
-			return true;
-		}
-		return false;
+		return m_Shader;
+	}
+
+	std::unique_ptr<Material> Material::Clone() const
+	{
+		return m_Builder->BuildMaterial();
+	}
+
+	void Material::SetBuilder(const MaterialBuilder* builder)
+	{
+		m_Builder = builder;
 	}
 
 }

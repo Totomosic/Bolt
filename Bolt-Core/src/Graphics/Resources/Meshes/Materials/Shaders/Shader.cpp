@@ -23,11 +23,6 @@ namespace Bolt
 	#define BLT_SHADER_VALIDATE_VALUE(...)
 #endif
 
-	blt::string Shader::MODEL_MATRIX_NAME = "u_ModelMatrix";
-	blt::string Shader::VIEW_MATRIX_NAME = "u_ViewMatrix";
-	blt::string Shader::PROJECTION_MATRIX_NAME = "u_ProjectionMatrix";
-	blt::string Shader::BASE_COLOR_NAME = "Material.MeshColor";
-
 	ResourcePtr<const Shader> Shader::s_DefaultColorShader = nullptr;
 	ResourcePtr<const Shader> Shader::s_DefaultTextureShader = nullptr;
 	ResourcePtr<const Shader> Shader::s_DefaultFontShader = nullptr;
@@ -93,36 +88,6 @@ namespace Bolt
 	void Shader::Unbind() const
 	{
 		GL_CALL(glUseProgram(0));
-	}
-
-	void Shader::SetModelMatrix(const Matrix4f& matrix) const
-	{
-		SetUniform(m_ModelMatrixLocation, matrix);
-	}
-
-	void Shader::SetViewMatrix(const Matrix4f& matrix) const
-	{
-		SetUniform(m_ViewMatrixLocation, matrix);
-	}
-
-	void Shader::SetProjectionMatrix(const Matrix4f& matrix) const
-	{
-		SetUniform(m_ProjectionMatrixLocation, matrix);
-	}
-
-	void Shader::SetColor(const Color& color) const
-	{
-		SetUniform(m_BaseColorLocation, color);
-	}
-
-	void Shader::SetMaterial(const Material& material) const
-	{
-		SetColor(material.BaseColor);
-	}
-
-	void Shader::SetLights(const std::vector<LightSource>& lights) const
-	{
-		
 	}
 
 	void Shader::SetUniform(int location, bool value) const
@@ -363,10 +328,6 @@ namespace Bolt
 			GL_CALL(glDetachShader(m_Id, shaders[i]));
 			GL_CALL(glDeleteShader(shaders[i]));
 		}
-		m_ModelMatrixLocation = GetUniformLocation(Shader::MODEL_MATRIX_NAME);
-		m_ViewMatrixLocation = GetUniformLocation(Shader::VIEW_MATRIX_NAME);
-		m_ProjectionMatrixLocation = GetUniformLocation(Shader::PROJECTION_MATRIX_NAME);
-		m_BaseColorLocation = GetUniformLocation(Shader::BASE_COLOR_NAME);
 	}
 
 	id_t Shader::AddShader(const blt::string& source, GLenum shaderType)

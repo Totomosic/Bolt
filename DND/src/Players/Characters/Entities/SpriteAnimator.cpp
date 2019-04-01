@@ -42,11 +42,11 @@ namespace DND
 
 	void SpriteAnimator::Start()
 	{
-		m_Material = &gameObject()->Components().GetComponent<MeshRenderer>().Mesh.Materials[0];
-		m_Material->Shader = Shader::DefaultTexture();
-		m_Material->Textures.Animators.clear();
-		m_Material->Textures.Textures.clear();
-		m_Material->Textures.Textures.resize(1);
+		//m_Material = &gameObject()->Components().GetComponent<MeshRenderer>().Mesh.Materials[0];
+		//m_Material->Shader = Shader::DefaultTexture();
+		//m_Material->Textures.Animators.clear();
+		//m_Material->Textures.Textures.clear();
+		//m_Material->Textures.Textures.resize(1);
 		UseDefaultTexture();
 	}
 
@@ -98,14 +98,14 @@ namespace DND
 
 	void SpriteAnimator::UseDefaultTexture()
 	{
-		m_Material->Textures.Animators.clear();
-		m_Material->Textures.Textures[0] = m_DefaultTexture;
+		//m_Material->Textures.Animators.clear();
+		//m_Material->Textures.Textures[0] = m_DefaultTexture;
 	}
 
 	void SpriteAnimator::UseAnimation()
 	{
-		m_Material->Textures.Animators[0] = std::make_unique<SpriteSheetAnimator>(m_CurrentAnimation.Animation.Columns, m_CurrentAnimation.Animation.Rows, m_CurrentAnimation.RepeatTime);
-		m_Material->Textures.Textures[0] = m_CurrentAnimation.Animation.Texture;
+		//m_Material->Textures.Animators[0] = std::make_unique<SpriteSheetAnimator>(m_CurrentAnimation.Animation.Columns, m_CurrentAnimation.Animation.Rows, m_CurrentAnimation.RepeatTime);
+		//m_Material->Textures.Textures[0] = m_CurrentAnimation.Animation.Texture;
 	}
 
 }

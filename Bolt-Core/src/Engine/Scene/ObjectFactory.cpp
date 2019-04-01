@@ -109,81 +109,64 @@ namespace Bolt
 
 	GameObject* ObjectFactory::Rectangle(float width, float height, const Color& color, Transform transform) const
 	{
-		Mesh mesh;
-		mesh.Models.push_back({ s_RectangleModel, Matrix4f::Scale(width, height, 1), { 0 } });
-		mesh.Materials[0].BaseColor = color;
-		mesh.Materials[0].Shader = Shader::DefaultColor();
-		return Instantiate(mesh, std::move(transform));
+		return Rectangle(width, height, ResourceManager::Materials().Default(color), std::move(transform));
 	}
 
-	GameObject* ObjectFactory::Rectangle(float width, float height, const Material& material, Transform transform) const
+	GameObject* ObjectFactory::Rectangle(float width, float height, std::unique_ptr<Material>&& material, Transform transform) const
 	{
 		Mesh mesh;
 		mesh.Models.push_back({ s_RectangleModel, Matrix4f::Scale(width, height, 1),{ 0 } });
-		mesh.Materials[0] = material;
-		return Instantiate(mesh, std::move(transform));
+		mesh.Materials[0] = std::move(material);
+		return Instantiate(std::move(mesh), std::move(transform));
 	}
 
 	GameObject* ObjectFactory::Image(float width, float height, const ResourcePtr<const Texture2D>& image, Transform transform) const
 	{
 		GameObject* object = Rectangle(width, height, Color::White, std::move(transform));
 		Mesh& mesh = object->Components().GetComponent<MeshRenderer>().Mesh;
-		mesh.Materials[0].Shader = Shader::DefaultTexture();
-		mesh.Materials[0].Textures.Textures.push_back(image);
+		//mesh.Materials[0].Shader = Shader::DefaultTexture();
+		//mesh.Materials[0].Textures.Textures.push_back(image);
 		return object;
 	}
 
 	GameObject* ObjectFactory::Ellipse(float width, float height, const Color& color, Transform transform) const
 	{
-		Mesh mesh;
-		mesh.Models.push_back({ s_EllipseModel, Matrix4f::Scale(width / 2, height / 2, 1), { 0 } });
-		mesh.Materials[0].BaseColor = color;
-		mesh.Materials[0].Shader = Shader::DefaultColor();
-		return Instantiate(mesh, std::move(transform));
+		return Ellipse(width, height, ResourceManager::Materials().Default(color), std::move(transform));
 	}
 
-	GameObject* ObjectFactory::Ellipse(float width, float height, const Material& material, Transform transform) const
+	GameObject* ObjectFactory::Ellipse(float width, float height, std::unique_ptr<Material>&& material, Transform transform) const
 	{
 		Mesh mesh;
 		mesh.Models.push_back({ s_EllipseModel, Matrix4f::Scale(width / 2, height / 2, 1), { 0 } });
-		mesh.Materials[0] = material;
-		return Instantiate(mesh, std::move(transform));
+		mesh.Materials[0] = std::move(material);
+		return Instantiate(std::move(mesh), std::move(transform));
 	}
 
 	GameObject* ObjectFactory::Cuboid(float width, float height, float depth, const Color& color, Transform transform) const
 	{
-		Mesh mesh;
-		mesh.Models.push_back({ s_CuboidModel, Matrix4f::Scale(width, height, depth),{ 0 } });
-		mesh.Materials[0].BaseColor = color;
-		mesh.Materials[0].Shader = Shader::LightingColor();
-		return Instantiate(mesh, std::move(transform));
+		return Cuboid(width, height, depth, ResourceManager::Materials().Default(color), std::move(transform));
 	}
 
-	GameObject* ObjectFactory::Cuboid(float width, float height, float depth, const Material& material, Transform transform) const
+	GameObject* ObjectFactory::Cuboid(float width, float height, float depth, std::unique_ptr<Material>&& material, Transform transform) const
 	{
 		Mesh mesh;
 		mesh.Models.push_back({ s_CuboidModel, Matrix4f::Scale(width, height, depth),{ 0 } });
-		mesh.Materials[0] = material;
-		return Instantiate(mesh, std::move(transform));
+		mesh.Materials[0] = std::move(material);
+		return Instantiate(std::move(mesh), std::move(transform));
 	}
 
 	GameObject* ObjectFactory::Grid(float width, float depth, int xVertices, int zVertices, const Color& color, Transform transform) const
 	{
-		Mesh mesh;
-		// TODO: CHANGE
-		mesh.Models.push_back({ ResourcePtr<Model>(new Model(GridFactory(width, depth, xVertices, zVertices)), true), Matrix4f::Identity(), { 0 } });
-		mesh.Materials[0].BaseColor = color;
-		mesh.Materials[0].Shader = Shader::LightingColor();
-		return Instantiate(mesh, std::move(transform));
+		return Grid(width, depth, xVertices, zVertices, ResourceManager::Materials().Default(color), std::move(transform));
 	}
 
-	GameObject* ObjectFactory::Grid(float width, float depth, int xVertices, int zVertices, const Material& material, Transform transform) const
+	GameObject* ObjectFactory::Grid(float width, float depth, int xVertices, int zVertices, std::unique_ptr<Material>&& material, Transform transform) const
 	{
 		Mesh mesh;
 		// TODO: CHANGE
 		mesh.Models.push_back({ ResourcePtr<Model>(new Model(GridFactory(width, depth, xVertices, zVertices)), true), Matrix4f::Identity(), { 0 } });
-		mesh.Materials[0] = material;
-		return Instantiate(mesh, std::move(transform));
+		mesh.Materials[0] = std::move(material);
+		return Instantiate(std::move(mesh), std::move(transform));
 	}
 
 	GameObject* ObjectFactory::Line(const Vector3f& p0, const Vector3f& p1, const Color& color) const
@@ -207,9 +190,9 @@ namespace Bolt
 		Mesh mesh;
 		// TODO: CHANGE
 		mesh.Models.push_back({ ResourcePtr<Model>(new Model(LineFactory(Vector3f::Right(), distance)), true), Matrix4f::Identity(),{ 0 } });
-		mesh.Materials[0].BaseColor = color;
+		mesh.Materials[0] = ResourceManager::Materials().Default(color);
 
-		return Instantiate(mesh, std::move(t));
+		return Instantiate(std::move(mesh), std::move(t));
 	}
 
 	ResourcePtr<const Model> ObjectFactory::SquareModel()

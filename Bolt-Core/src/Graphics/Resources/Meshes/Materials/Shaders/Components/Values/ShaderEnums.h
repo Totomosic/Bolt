@@ -137,7 +137,7 @@ namespace Bolt
 	template<typename T>
 	inline ValueType GetValueType()
 	{
-		BLT_ASSERT(false, "Unable to determine type of " + typeid(T).name());
+		BLT_ASSERT(false, blt::string("Unable to determine type of ") + typeid(T).name());
 		return ValueType::Void;
 	}
 
@@ -167,6 +167,12 @@ namespace Bolt
 
 	template<>
 	inline ValueType GetValueType<Vector4f>()
+	{
+		return ValueType::Vector4f;
+	}
+
+	template<>
+	inline ValueType GetValueType<Color>()
 	{
 		return ValueType::Vector4f;
 	}

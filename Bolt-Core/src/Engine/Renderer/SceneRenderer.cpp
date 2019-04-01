@@ -20,7 +20,7 @@ namespace Bolt
 				for (int i = 0; i < modelData.Indices.IndexBufferCount(); i++)
 				{
 					const std::unique_ptr<IndexBuffer>& indexBuffer = modelData.Indices.GetIndexBuffer(i);
-					const Material& material = mesh.Materials[model.MaterialIndices[i]];
+					const std::unique_ptr<Material>& material = mesh.Materials[model.MaterialIndices[i]];
 					RenderData renderData;
 					renderData.Indices = indexBuffer.get();
 					renderData.Vertices = modelData.Vertices.get();
@@ -28,7 +28,7 @@ namespace Bolt
 					bool found = false;
 					for (auto& pair : materialMap)
 					{
-						if (*pair.first == material)
+						if (pair.first == material.get())
 						{
 							pair.second.push_back(std::move(renderData));
 							found = true;
@@ -37,7 +37,7 @@ namespace Bolt
 					if (!found)
 					{
 						std::vector<RenderData> data = { std::move(renderData) };
-						materialMap.push_back({ &material, std::move(data) });
+						materialMap.push_back({ material.get(), std::move(data) });
 					}
 				}
 			}
@@ -135,11 +135,6 @@ namespace Bolt
 		PopulateRenderPass(transparentPass, materialMap);
 
 		RenderContext context = passData.GlobalContext;
-		if (context.Lights.size() == 0)
-		{
-			context.Lights.push_back(LightSource{ Vector3f(0, 100, 0) });
-		}
-
 		RenderCamera camera;
 		camera.ViewMatrix = (passData.CameraOverride.ViewMatrix == nullptr) ? layer.ActiveCamera()->ViewMatrix() : *passData.CameraOverride.ViewMatrix;
 		camera.ProjectionMatrix = (passData.CameraOverride.ProjectionMatrix == nullptr) ? layer.ActiveCamera()->ProjectionMatrix() : *passData.CameraOverride.ProjectionMatrix;
