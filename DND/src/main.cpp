@@ -43,7 +43,7 @@ namespace DND
 
 		void Tick() override
 		{
-			AppWindow->SetTitle("DND " + std::to_string((int)Time::FramesPerSecond()));
+			AppWindow->SetTitle("RPG " + std::to_string((int)Time::FramesPerSecond()));
 		}
 
 		void Update() override
@@ -85,7 +85,7 @@ int main()
 	EngineCreateInfo info;
 	Engine e(info);
 	WindowCreateInfo window;
-	window.Title = "DND";
+	window.Title = "RPG";
 	window.Width = 1280;
 	window.Height = 720;
 	e.SetWindowCreateInfo(window);

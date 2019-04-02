@@ -18,15 +18,18 @@ project "Blockstream"
     {
         "../Bolt-Core/external/",
         "../Bolt-Core/src/",
-        "../Bolt-Core/external/spdlog/include/",
         "../%{IncludeDirs.GLFW}",
-        "../%{IncludeDirs.Glad}"
+        "../%{IncludeDirs.Glad}",
+		"../%{IncludeDirs.ImGui}",
+		"../%{IncludeDirs.spdlog}",
+		"src"
     }
 
     libdirs
     {
         "../Bolt-Core/external/**"
     }
+
 
     links
     {

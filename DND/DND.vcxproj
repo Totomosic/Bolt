@@ -85,14 +85,14 @@
       <PrecompiledHeaderFile>bltpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>BLT_BUILD_STATIC;BLT_PLATFORM_WINDOWS;BLT_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\Bolt-Core\external;..\Bolt-Core\src;..\Bolt-Core\external\spdlog\include;..\Bolt-Core\vendor\GLFW\include;..\Bolt-Core\vendor\Glad\include;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Bolt-Core\external;..\Bolt-Core\src;..\Bolt-Core\vendor\GLFW\include;..\Bolt-Core\vendor\Glad\include;..\Bolt-Core\vendor\ImGui;..\Bolt-Core\vendor\spdlog\include;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <AdditionalDependencies>opengl32.lib;FreeImage.lib;freetype26d.lib;freetype-gl.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\Bolt-Core\external\FreeImage;..\Bolt-Core\external\FreeType;..\Bolt-Core\external\FreeType-GL;..\Bolt-Core\external\spdlog;..\Bolt-Core\external\FreeImage\bin;..\Bolt-Core\external\FreeImage\include;..\Bolt-Core\external\FreeImage\lib;..\Bolt-Core\external\FreeImage\include\FreeImage;..\Bolt-Core\external\FreeType\include;..\Bolt-Core\external\FreeType\lib;..\Bolt-Core\external\FreeType\include\config;..\Bolt-Core\external\FreeType\include\internal;..\Bolt-Core\external\FreeType\include\internal\services;..\Bolt-Core\external\FreeType-GL\include;..\Bolt-Core\external\FreeType-GL\lib;..\Bolt-Core\external\spdlog\bench;..\Bolt-Core\external\spdlog\cmake;..\Bolt-Core\external\spdlog\example;..\Bolt-Core\external\spdlog\include;..\Bolt-Core\external\spdlog\tests;..\Bolt-Core\external\spdlog\bench\logs;..\Bolt-Core\external\spdlog\example\jni;..\Bolt-Core\external\spdlog\example\logs;..\Bolt-Core\external\spdlog\include\spdlog;..\Bolt-Core\external\spdlog\include\spdlog\details;..\Bolt-Core\external\spdlog\include\spdlog\fmt;..\Bolt-Core\external\spdlog\include\spdlog\sinks;..\Bolt-Core\external\spdlog\include\spdlog\fmt\bundled;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\Bolt-Core\external\FreeImage;..\Bolt-Core\external\FreeType;..\Bolt-Core\external\FreeType-GL;..\Bolt-Core\external\FreeImage\bin;..\Bolt-Core\external\FreeImage\include;..\Bolt-Core\external\FreeImage\lib;..\Bolt-Core\external\FreeImage\include\FreeImage;..\Bolt-Core\external\FreeType\include;..\Bolt-Core\external\FreeType\lib;..\Bolt-Core\external\FreeType\include\config;..\Bolt-Core\external\FreeType\include\internal;..\Bolt-Core\external\FreeType\include\internal\services;..\Bolt-Core\external\FreeType-GL\include;..\Bolt-Core\external\FreeType-GL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -101,7 +101,7 @@
       <PrecompiledHeaderFile>bltpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>BLT_BUILD_STATIC;BLT_PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\Bolt-Core\external;..\Bolt-Core\src;..\Bolt-Core\external\spdlog\include;..\Bolt-Core\vendor\GLFW\include;..\Bolt-Core\vendor\Glad\include;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Bolt-Core\external;..\Bolt-Core\src;..\Bolt-Core\vendor\GLFW\include;..\Bolt-Core\vendor\Glad\include;..\Bolt-Core\vendor\ImGui;..\Bolt-Core\vendor\spdlog\include;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -114,7 +114,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>opengl32.lib;FreeImage.lib;freetype26d.lib;freetype-gl.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\Bolt-Core\external\FreeImage;..\Bolt-Core\external\FreeType;..\Bolt-Core\external\FreeType-GL;..\Bolt-Core\external\spdlog;..\Bolt-Core\external\FreeImage\bin;..\Bolt-Core\external\FreeImage\include;..\Bolt-Core\external\FreeImage\lib;..\Bolt-Core\external\FreeImage\include\FreeImage;..\Bolt-Core\external\FreeType\include;..\Bolt-Core\external\FreeType\lib;..\Bolt-Core\external\FreeType\include\config;..\Bolt-Core\external\FreeType\include\internal;..\Bolt-Core\external\FreeType\include\internal\services;..\Bolt-Core\external\FreeType-GL\include;..\Bolt-Core\external\FreeType-GL\lib;..\Bolt-Core\external\spdlog\bench;..\Bolt-Core\external\spdlog\cmake;..\Bolt-Core\external\spdlog\example;..\Bolt-Core\external\spdlog\include;..\Bolt-Core\external\spdlog\tests;..\Bolt-Core\external\spdlog\bench\logs;..\Bolt-Core\external\spdlog\example\jni;..\Bolt-Core\external\spdlog\example\logs;..\Bolt-Core\external\spdlog\include\spdlog;..\Bolt-Core\external\spdlog\include\spdlog\details;..\Bolt-Core\external\spdlog\include\spdlog\fmt;..\Bolt-Core\external\spdlog\include\spdlog\sinks;..\Bolt-Core\external\spdlog\include\spdlog\fmt\bundled;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\Bolt-Core\external\FreeImage;..\Bolt-Core\external\FreeType;..\Bolt-Core\external\FreeType-GL;..\Bolt-Core\external\FreeImage\bin;..\Bolt-Core\external\FreeImage\include;..\Bolt-Core\external\FreeImage\lib;..\Bolt-Core\external\FreeImage\include\FreeImage;..\Bolt-Core\external\FreeType\include;..\Bolt-Core\external\FreeType\lib;..\Bolt-Core\external\FreeType\include\config;..\Bolt-Core\external\FreeType\include\internal;..\Bolt-Core\external\FreeType\include\internal\services;..\Bolt-Core\external\FreeType-GL\include;..\Bolt-Core\external\FreeType-GL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|Win32'">
@@ -122,13 +122,13 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>bltpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>..\Bolt-Core\external;..\Bolt-Core\src;..\Bolt-Core\external\spdlog\include;..\Bolt-Core\vendor\GLFW\include;..\Bolt-Core\vendor\Glad\include;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Bolt-Core\external;..\Bolt-Core\src;..\Bolt-Core\vendor\GLFW\include;..\Bolt-Core\vendor\Glad\include;..\Bolt-Core\vendor\ImGui;..\Bolt-Core\vendor\spdlog\include;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <AdditionalDependencies>opengl32.lib;FreeImage.lib;freetype26d.lib;freetype-gl.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\Bolt-Core\external\FreeImage;..\Bolt-Core\external\FreeType;..\Bolt-Core\external\FreeType-GL;..\Bolt-Core\external\spdlog;..\Bolt-Core\external\FreeImage\bin;..\Bolt-Core\external\FreeImage\include;..\Bolt-Core\external\FreeImage\lib;..\Bolt-Core\external\FreeImage\include\FreeImage;..\Bolt-Core\external\FreeType\include;..\Bolt-Core\external\FreeType\lib;..\Bolt-Core\external\FreeType\include\config;..\Bolt-Core\external\FreeType\include\internal;..\Bolt-Core\external\FreeType\include\internal\services;..\Bolt-Core\external\FreeType-GL\include;..\Bolt-Core\external\FreeType-GL\lib;..\Bolt-Core\external\spdlog\bench;..\Bolt-Core\external\spdlog\cmake;..\Bolt-Core\external\spdlog\example;..\Bolt-Core\external\spdlog\include;..\Bolt-Core\external\spdlog\tests;..\Bolt-Core\external\spdlog\bench\logs;..\Bolt-Core\external\spdlog\example\jni;..\Bolt-Core\external\spdlog\example\logs;..\Bolt-Core\external\spdlog\include\spdlog;..\Bolt-Core\external\spdlog\include\spdlog\details;..\Bolt-Core\external\spdlog\include\spdlog\fmt;..\Bolt-Core\external\spdlog\include\spdlog\sinks;..\Bolt-Core\external\spdlog\include\spdlog\fmt\bundled;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\Bolt-Core\external\FreeImage;..\Bolt-Core\external\FreeType;..\Bolt-Core\external\FreeType-GL;..\Bolt-Core\external\FreeImage\bin;..\Bolt-Core\external\FreeImage\include;..\Bolt-Core\external\FreeImage\lib;..\Bolt-Core\external\FreeImage\include\FreeImage;..\Bolt-Core\external\FreeType\include;..\Bolt-Core\external\FreeType\lib;..\Bolt-Core\external\FreeType\include\config;..\Bolt-Core\external\FreeType\include\internal;..\Bolt-Core\external\FreeType\include\internal\services;..\Bolt-Core\external\FreeType-GL\include;..\Bolt-Core\external\FreeType-GL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

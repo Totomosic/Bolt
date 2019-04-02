@@ -82,7 +82,7 @@
       <PrecompiledHeaderFile>Types.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>NOMINMAX;GLEW_STATIC;BLT_BUILD_STATIC;BLT_PLATFORM_WINDOWS;BLT_DEBUG;LAYERS_PER_SCENE=6;GAMEOBJECTS_PER_LAYER=1000;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>external;src;external\spdlog\include;vendor\GLFW\include;vendor\Glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>external;src;vendor\GLFW\include;vendor\Glad\include;vendor\ImGui;vendor\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
@@ -91,7 +91,7 @@
     </Link>
     <Lib>
       <AdditionalDependencies>opengl32.lib;FreeImage.lib;freetype26d.lib;freetype-gl.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>external\FreeImage;external\FreeType;external\FreeType-GL;external\spdlog;external\FreeImage\bin;external\FreeImage\include;external\FreeImage\lib;external\FreeImage\include\FreeImage;external\FreeType\include;external\FreeType\lib;external\FreeType\include\config;external\FreeType\include\internal;external\FreeType\include\internal\services;external\FreeType-GL\include;external\FreeType-GL\lib;external\spdlog\bench;external\spdlog\cmake;external\spdlog\example;external\spdlog\include;external\spdlog\tests;external\spdlog\bench\logs;external\spdlog\example\jni;external\spdlog\example\logs;external\spdlog\include\spdlog;external\spdlog\include\spdlog\details;external\spdlog\include\spdlog\fmt;external\spdlog\include\spdlog\sinks;external\spdlog\include\spdlog\fmt\bundled;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>external\FreeImage;external\FreeType;external\FreeType-GL;external\FreeImage\bin;external\FreeImage\include;external\FreeImage\lib;external\FreeImage\include\FreeImage;external\FreeType\include;external\FreeType\lib;external\FreeType\include\config;external\FreeType\include\internal;external\FreeType\include\internal\services;external\FreeType-GL\include;external\FreeType-GL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -100,7 +100,7 @@
       <PrecompiledHeaderFile>Types.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>NOMINMAX;GLEW_STATIC;BLT_BUILD_STATIC;BLT_PLATFORM_WINDOWS;LAYERS_PER_SCENE=6;GAMEOBJECTS_PER_LAYER=1000;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>external;src;external\spdlog\include;vendor\GLFW\include;vendor\Glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>external;src;vendor\GLFW\include;vendor\Glad\include;vendor\ImGui;vendor\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -115,7 +115,7 @@
     </Link>
     <Lib>
       <AdditionalDependencies>opengl32.lib;FreeImage.lib;freetype26d.lib;freetype-gl.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>external\FreeImage;external\FreeType;external\FreeType-GL;external\spdlog;external\FreeImage\bin;external\FreeImage\include;external\FreeImage\lib;external\FreeImage\include\FreeImage;external\FreeType\include;external\FreeType\lib;external\FreeType\include\config;external\FreeType\include\internal;external\FreeType\include\internal\services;external\FreeType-GL\include;external\FreeType-GL\lib;external\spdlog\bench;external\spdlog\cmake;external\spdlog\example;external\spdlog\include;external\spdlog\tests;external\spdlog\bench\logs;external\spdlog\example\jni;external\spdlog\example\logs;external\spdlog\include\spdlog;external\spdlog\include\spdlog\details;external\spdlog\include\spdlog\fmt;external\spdlog\include\spdlog\sinks;external\spdlog\include\spdlog\fmt\bundled;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>external\FreeImage;external\FreeType;external\FreeType-GL;external\FreeImage\bin;external\FreeImage\include;external\FreeImage\lib;external\FreeImage\include\FreeImage;external\FreeType\include;external\FreeType\lib;external\FreeType\include\config;external\FreeType\include\internal;external\FreeType\include\internal\services;external\FreeType-GL\include;external\FreeType-GL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|Win32'">
@@ -123,7 +123,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>Types.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>external;src;external\spdlog\include;vendor\GLFW\include;vendor\Glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>external;src;vendor\GLFW\include;vendor\Glad\include;vendor\ImGui;vendor\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
     </ClCompile>
     <Link>
@@ -131,7 +131,7 @@
     </Link>
     <Lib>
       <AdditionalDependencies>opengl32.lib;FreeImage.lib;freetype26d.lib;freetype-gl.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>external\FreeImage;external\FreeType;external\FreeType-GL;external\spdlog;external\FreeImage\bin;external\FreeImage\include;external\FreeImage\lib;external\FreeImage\include\FreeImage;external\FreeType\include;external\FreeType\lib;external\FreeType\include\config;external\FreeType\include\internal;external\FreeType\include\internal\services;external\FreeType-GL\include;external\FreeType-GL\lib;external\spdlog\bench;external\spdlog\cmake;external\spdlog\example;external\spdlog\include;external\spdlog\tests;external\spdlog\bench\logs;external\spdlog\example\jni;external\spdlog\example\logs;external\spdlog\include\spdlog;external\spdlog\include\spdlog\details;external\spdlog\include\spdlog\fmt;external\spdlog\include\spdlog\sinks;external\spdlog\include\spdlog\fmt\bundled;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>external\FreeImage;external\FreeType;external\FreeType-GL;external\FreeImage\bin;external\FreeImage\include;external\FreeImage\lib;external\FreeImage\include\FreeImage;external\FreeType\include;external\FreeType\lib;external\FreeType\include\config;external\FreeType\include\internal;external\FreeType\include\internal\services;external\FreeType-GL\include;external\FreeType-GL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -532,6 +532,9 @@
     </ProjectReference>
     <ProjectReference Include="vendor\Glad\Glad.vcxproj">
       <Project>{BDD6857C-A90D-870D-52FA-6C103E10030F}</Project>
+    </ProjectReference>
+    <ProjectReference Include="vendor\ImGui\ImGui.vcxproj">
+      <Project>{C0FF640D-2C14-8DBE-F595-301E616989EF}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

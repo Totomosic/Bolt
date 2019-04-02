@@ -654,6 +654,9 @@
     <ClInclude Include="src\Graphics\RenderBuffer.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="src\Graphics\Resources\MaterialManager.h">
+      <Filter>Graphics\Resources</Filter>
+    </ClInclude>
     <ClInclude Include="src\Graphics\Resources\Meshes\Face.h">
       <Filter>Graphics\Resources\Meshes</Filter>
     </ClInclude>
@@ -875,7 +878,6 @@
     </ClInclude>
     <ClInclude Include="src\Logging.h" />
     <ClInclude Include="src\Types.h" />
-    <ClInclude Include="src\Graphics\Resources\MaterialManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\BoltTL\string.cpp">
@@ -1142,6 +1144,9 @@
     <ClCompile Include="src\Graphics\Framebuffer.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="src\Graphics\Resources\MaterialManager.cpp">
+      <Filter>Graphics\Resources</Filter>
+    </ClCompile>
     <ClCompile Include="src\Graphics\Resources\Meshes\Factories\CuboidFactory.cpp">
       <Filter>Graphics\Resources\Meshes\Factories</Filter>
     </ClCompile>
@@ -1170,6 +1175,9 @@
       <Filter>Graphics\Resources\Meshes\Materials\Animators</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Material.cpp">
+      <Filter>Graphics\Resources\Meshes\Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\MaterialBuilder.cpp">
       <Filter>Graphics\Resources\Meshes\Materials</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Modules\MaterialModule.cpp">
@@ -1241,6 +1249,9 @@
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\VertexShader.cpp">
       <Filter>Graphics\Resources\Meshes\Materials\Shaders</Filter>
     </ClCompile>
+    <ClCompile Include="src\Graphics\Resources\Meshes\Mesh.cpp">
+      <Filter>Graphics\Resources\Meshes</Filter>
+    </ClCompile>
     <ClCompile Include="src\Graphics\Resources\Meshes\Model.cpp">
       <Filter>Graphics\Resources\Meshes</Filter>
     </ClCompile>
@@ -1273,8 +1284,5 @@
     </ClCompile>
     <ClCompile Include="src\Logging.cpp" />
     <ClCompile Include="src\Types.cpp" />
-    <ClCompile Include="src\Graphics\Resources\MaterialManager.cpp" />
-    <ClCompile Include="src\Graphics\Resources\Meshes\Mesh.cpp" />
-    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\MaterialBuilder.cpp" />
   </ItemGroup>
 </Project>
