@@ -109,7 +109,7 @@ namespace Bolt
 	int XMLnode::IndexOfName(const XMLnode& child) const
 	{
 		auto nodes = GetChildren(child.Name);
-		for (int i = 0; i < nodes.size(); i++)
+		for (int i = 0; i < (int)nodes.size(); i++)
 		{
 			if (nodes.at(i) == &child)
 			{

@@ -15,7 +15,7 @@ namespace Bolt
 
 	public:
 		static void Initialize();
-		static void SetSeed(int64 seed);
+		static void SetSeed(uint seed);
 
 		// Generates a random integer [low, high]
 		static int NextInt(int low, int high);

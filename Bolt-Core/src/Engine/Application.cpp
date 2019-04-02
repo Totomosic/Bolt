@@ -13,12 +13,12 @@ namespace Bolt
 
 	float Application::Width() const
 	{
-		return AppWindow->Width();
+		return (float)AppWindow->Width();
 	}
 
 	float Application::Height() const
 	{
-		return AppWindow->Height();
+		return (float)AppWindow->Height();
 	}
 
 	void Application::Start()

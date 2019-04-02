@@ -191,11 +191,11 @@ namespace Bolt
 
 	Color Color::FromHSV(float hue, float saturation, float value)
 	{
-		double hh;
-		double p;
-		double q;
-		double t;
-		double ff;
+		float hh;
+		float p;
+		float q;
+		float t;
+		float ff;
 		int i;
 		float r;
 		float g;
@@ -206,7 +206,7 @@ namespace Bolt
 			r = value;
 			g = value;
 			b = value;
-			return Color(r * 255, g * 255, b * 255, 255);
+			return Color((byte)(r * 255), (byte)(g * 255), (byte)(b * 255), 255);
 		}
 		hh = hue;
 		if (hh >= 360.0) hh = 0.0;
@@ -252,7 +252,7 @@ namespace Bolt
 			b = q;
 			break;
 		}
-		return Color(r * 255, g * 255, b * 255, 255);
+		return Color((byte)(r * 255), (byte)(g * 255), (byte)(b * 255), 255);
 	}
 
 	Color Color::Random()
