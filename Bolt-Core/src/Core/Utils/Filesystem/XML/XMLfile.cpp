@@ -22,7 +22,7 @@ namespace Bolt
 		{
 			m_CurrentString += '\n';
 		}
-		for (int i = 0; i < m_CurrentTags.size(); i++)
+		for (int i = 0; i < (int)m_CurrentTags.size(); i++)
 		{
 			m_CurrentString += '\t';
 		}
@@ -43,7 +43,7 @@ namespace Bolt
 		m_CurrentTags.pop_back();
 		if (m_WasLastEndTag)
 		{
-			for (int i = 0; i < m_CurrentTags.size(); i++)
+			for (int i = 0; i < (int)m_CurrentTags.size(); i++)
 			{
 				m_CurrentString += '\t';
 			}

@@ -1,5 +1,6 @@
 #include "Types.h"
-#include "File.h"
+
+#include "File.h"
 #include "Filesystem.h"
 
 namespace Bolt
@@ -47,7 +48,7 @@ namespace Bolt
 		std::streampos begin = m_Stream.tellg();
 		m_Stream.seekg(0, std::ios::end);
 		std::streampos end = m_Stream.tellg();
-		uint size = end - begin;
+		std::streampos size = end - begin;
 		m_Stream.seekg(begin);
 		return size;
 	}

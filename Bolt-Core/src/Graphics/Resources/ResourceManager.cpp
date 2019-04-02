@@ -11,11 +11,16 @@ namespace Bolt
 
 	std::unordered_map<ResourceID, std::unique_ptr<Resource>> ResourceManager::s_Resources = std::unordered_map<ResourceID, std::unique_ptr<Resource>>();
 	MaterialManager ResourceManager::s_Materials;
-	Font* ResourceManager::s_DefaultFont = nullptr;
+	FontManager ResourceManager::s_Fonts;
 
 	const MaterialManager& ResourceManager::Materials()
 	{
 		return s_Materials;
+	}
+
+	const FontManager& ResourceManager::Fonts()
+	{
+		return s_Fonts;
 	}
 
 	ResourceFile ResourceManager::Fetch(const Filepath& resourceFile)
@@ -93,21 +98,17 @@ namespace Bolt
 	void ResourceManager::FreeResource(const ResourceID& id)
 	{
 		Resource* resource = Get(id).Get();
-		if (resource == s_DefaultFont)
-		{
-			s_DefaultFont = nullptr;
-		}
 		s_Resources.erase(id);
 	}
 
-	ResourcePtr<Font> ResourceManager::DefaultFont()
+	ResourcePtr<const Font> ResourceManager::DefaultFont()
 	{
-		return ResourcePtr<Font>(s_DefaultFont, false);
+		return s_Fonts.Arial(48);
 	}
 
-	void ResourceManager::SetDefaultFont(id_t font)
+	void ResourceManager::Initialize()
 	{
-		s_DefaultFont = Get<Font>(font).Get();
+		s_Fonts.Initialize();
 	}
 
 	void ResourceManager::Terminate()

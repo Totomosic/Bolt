@@ -878,6 +878,8 @@
     </ClInclude>
     <ClInclude Include="src\Logging.h" />
     <ClInclude Include="src\Types.h" />
+    <ClInclude Include="src\Graphics\Resources\Textures\Fonts\FontFactory.h" />
+    <ClInclude Include="src\Graphics\Resources\FontManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\BoltTL\string.cpp">
@@ -1284,5 +1286,7 @@
     </ClCompile>
     <ClCompile Include="src\Logging.cpp" />
     <ClCompile Include="src\Types.cpp" />
+    <ClCompile Include="src\Graphics\Resources\Textures\Fonts\FontFactory.cpp" />
+    <ClCompile Include="src\Graphics\Resources\FontManager.cpp" />
   </ItemGroup>
 </Project>

@@ -25,6 +25,11 @@ namespace Bolt
 		File f(filepath);
 		f.SetOpenMode(mode);
 		f.m_Stream.open(filepath.Path().c_str(), f.FlagsToValue(mode));
+		if (f.m_Stream.fail())
+		{
+			BLT_CORE_ERROR("Failed to open file {}", filepath.Path());
+			BLT_CORE_ERROR(std::strerror(errno));
+		}
 		return f;
 	}
 

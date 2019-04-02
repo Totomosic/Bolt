@@ -70,14 +70,14 @@ namespace Bolt
 			}
 			cmdparts.erase(cmdparts.begin()); // Erase name from parts
 			const Command& c = m_Commands.at(cmdname);
-			if (cmdparts.size() < c.RequiredArgumentCount())
+			if ((int)cmdparts.size() < c.RequiredArgumentCount())
 			{
 				result.Success = false;
 				result.Error = CommandProcessError::InvalidArgumentCount;
 				result.ErrDesc = "Command contained invalid number of arguments. Required argument count: " + std::to_string(c.RequiredArgumentCount()) + ", supplied argument count: " + std::to_string(cmdparts.size());
 				return result;
 			}
-			if (cmdparts.size() > c.TotalArgumentCount())
+			if ((int)cmdparts.size() > c.TotalArgumentCount())
 			{
 				result.Success = false;
 				result.Error = CommandProcessError::InvalidArgumentCount;

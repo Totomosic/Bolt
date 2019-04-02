@@ -32,7 +32,7 @@ namespace Bolt
 
 	void TimerSet::RemoveTimer(Timer* timer)
 	{
-		for (int i = 0; i < Length(); i++)
+		for (int i = 0; i < (int)Length(); i++)
 		{
 			if (m_Queue[i].Timer.get() == timer)
 			{

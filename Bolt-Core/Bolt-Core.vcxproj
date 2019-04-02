@@ -309,6 +309,7 @@
     <ClInclude Include="src\Graphics\GLprivate.h" />
     <ClInclude Include="src\Graphics\GLshared.h" />
     <ClInclude Include="src\Graphics\RenderBuffer.h" />
+    <ClInclude Include="src\Graphics\Resources\FontManager.h" />
     <ClInclude Include="src\Graphics\Resources\MaterialManager.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Face.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Factories\CuboidFactory.h" />
@@ -368,6 +369,7 @@
     <ClInclude Include="src\Graphics\Resources\ResourcePack.h" />
     <ClInclude Include="src\Graphics\Resources\ResourcePtr.h" />
     <ClInclude Include="src\Graphics\Resources\Textures\Fonts\Font.h" />
+    <ClInclude Include="src\Graphics\Resources\Textures\Fonts\FontFactory.h" />
     <ClInclude Include="src\Graphics\Resources\Textures\Fonts\__Fonts__.h" />
     <ClInclude Include="src\Graphics\Resources\Textures\RenderTexture2D.h" />
     <ClInclude Include="src\Graphics\Resources\Textures\Texture.h" />
@@ -475,6 +477,7 @@
     <ClCompile Include="src\Graphics\Buffers\VertexArray.cpp" />
     <ClCompile Include="src\Graphics\Buffers\VertexBuffer.cpp" />
     <ClCompile Include="src\Graphics\Framebuffer.cpp" />
+    <ClCompile Include="src\Graphics\Resources\FontManager.cpp" />
     <ClCompile Include="src\Graphics\Resources\MaterialManager.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Factories\CuboidFactory.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Factories\EllipseFactory.cpp" />
@@ -515,6 +518,7 @@
     <ClCompile Include="src\Graphics\Resources\ResourceManager.cpp" />
     <ClCompile Include="src\Graphics\Resources\ResourcePack.cpp" />
     <ClCompile Include="src\Graphics\Resources\Textures\Fonts\Font.cpp" />
+    <ClCompile Include="src\Graphics\Resources\Textures\Fonts\FontFactory.cpp" />
     <ClCompile Include="src\Graphics\Resources\Textures\RenderTexture2D.cpp" />
     <ClCompile Include="src\Graphics\Resources\Textures\Texture.cpp" />
     <ClCompile Include="src\Graphics\Resources\Textures\Texture2D.cpp" />
