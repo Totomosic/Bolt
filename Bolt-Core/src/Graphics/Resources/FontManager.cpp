@@ -6,7 +6,7 @@ namespace Bolt
 {
 
 	FontManager::FontManager()
-		: m_ArialFactory(), m_ArialFonts()
+		: m_ArialFactory("C:/Windows/Fonts/arial.ttf"), m_ArialFonts()
 	{
 		
 	}
@@ -17,20 +17,10 @@ namespace Bolt
 		{
 			return m_ArialFonts.at(fontSize);
 		}
-		std::unique_ptr<Font> arial = m_ArialFactory->BuildFont(fontSize);
+		std::unique_ptr<Font> arial = m_ArialFactory.BuildFont(fontSize);
 		ResourcePtr<const Font> font = ResourceManager::Get<Font>(ResourceManager::Register(std::move(arial)));
 		m_ArialFonts[fontSize] = font;
 		return font;
-	}
-
-	void FontManager::Initialize()
-	{
-		CreateArialFont();
-	}
-
-	void FontManager::CreateArialFont()
-	{
-		m_ArialFactory = std::make_unique<FontFactory>("res/Arial.ttf");
 	}
 
 }
