@@ -10,6 +10,11 @@ namespace Bolt
 	
 	}
 
+	UniformLinkContainer::~UniformLinkContainer()
+	{
+	
+	}
+
 	id_t UniformLinkContainer::ShaderId() const
 	{
 		return m_ShaderId;

@@ -54,6 +54,11 @@ namespace Bolt
 		return m_UserUniformLinks.at(linkName).IsLinked;
 	}
 
+	bool ShaderLinkContext::HasLink(const blt::string& linkName) const
+	{
+		return m_UserUniformLinks.find(linkName) != m_UserUniformLinks.end();
+	}
+
 	void ShaderLinkContext::ApplyLinks() const
 	{
 		BLT_ASSERT(std::find_if(m_UserUniformLinks.begin(), m_UserUniformLinks.end(), [](const auto& pair)
@@ -84,6 +89,15 @@ namespace Bolt
 		id.IsLinked = true;
 		id.LinkIndex = linkIndex;
 		return *ptr;
+	}
+
+	void ShaderLinkContext::CopyLinksTo(ShaderLinkContext& other) const
+	{
+		other.m_Links.clear();
+		for (const auto& linkPair : m_UserUniformLinks)
+		{
+			other.AddLink(linkPair.first, m_Links.at(linkPair.second.LinkIndex)->Clone(other.GetShaderInstance().GetShader().Id(), other.GetUniformLocation(linkPair.first).Location));
+		}
 	}
 
 }

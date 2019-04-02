@@ -1,5 +1,7 @@
 #include "bltpch.h"
 
+#include "GlobalState.h"
+
 #include "Scenes/CharacterScene.h"
 #include "Scenes/GameData.h"
 #include "Scenes/GameScene.h"
@@ -69,6 +71,7 @@ namespace DND
 		{
 			NetworkManager::Get().Terminate([this]()
 			{
+				GlobalState::Factory.ClearPrefabs();
 				Application::Exit();
 			});
 		}

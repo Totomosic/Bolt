@@ -15,7 +15,7 @@ namespace DND
 		Text& title = titleBack.Text("Dungeons and Dragons", Color::White, Transform({ 0, 250, 1 }));
 
 		UIsurface& playButton = titleBack.Rectangle(500, 200, Color::Green, Transform({ 0, 0, 1 }));
-		playButton.Text("Play", Color::Black);
+		playButton.Text("Play", Color::Black, Transform({ 0, 0, 1 }));
 		playButton.EventHandler().OnClicked.Subscribe([](UIClickedEvent& e)
 		{
 			SceneManager::SetCurrentSceneByName("Character");

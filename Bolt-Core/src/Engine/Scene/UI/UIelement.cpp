@@ -100,9 +100,7 @@ namespace Bolt
 
 	UIsurface& UIelement::Image(float width, float height, const ResourcePtr<const Texture2D>& texture, Transform&& transform)
 	{
-		std::unique_ptr<Material> material = ResourceManager::Materials().Default(Color::White);
-		//material.Shader = Shader::DefaultTexture();
-		//material.Textures.Textures.push_back(texture);
+		std::unique_ptr<Material> material = ResourceManager::Materials().Texture(texture);
 		return AddElement<UIsurface>(width, height, std::move(material), std::move(transform));
 	}
 

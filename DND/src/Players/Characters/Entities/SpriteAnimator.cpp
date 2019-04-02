@@ -10,7 +10,7 @@ namespace DND
 	}
 
 	SpriteAnimator::SpriteAnimator(const ResourcePtr<const Texture2D>& defaultTexture) : Component(),
-		m_Material(nullptr), m_DefaultTexture(defaultTexture), m_CurrentAnimation({ {}, 0.0f })
+		m_Mesh(nullptr), m_DefaultTexture(defaultTexture), m_CurrentAnimation({ {}, 0.0f })
 	{
 
 	}
@@ -42,11 +42,7 @@ namespace DND
 
 	void SpriteAnimator::Start()
 	{
-		//m_Material = &gameObject()->Components().GetComponent<MeshRenderer>().Mesh.Materials[0];
-		//m_Material->Shader = Shader::DefaultTexture();
-		//m_Material->Textures.Animators.clear();
-		//m_Material->Textures.Textures.clear();
-		//m_Material->Textures.Textures.resize(1);
+		m_Mesh = &gameObject()->Components().GetComponent<MeshRenderer>().Mesh;
 		UseDefaultTexture();
 	}
 
@@ -98,8 +94,7 @@ namespace DND
 
 	void SpriteAnimator::UseDefaultTexture()
 	{
-		//m_Material->Textures.Animators.clear();
-		//m_Material->Textures.Textures[0] = m_DefaultTexture;
+		m_Mesh->Materials[0]->GetShader().GetLink("Texture") = m_DefaultTexture;
 	}
 
 	void SpriteAnimator::UseAnimation()

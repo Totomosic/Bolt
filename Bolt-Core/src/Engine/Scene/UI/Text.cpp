@@ -57,10 +57,7 @@ namespace Bolt
 		UIelement::SetUIroot(root);
 		Mesh mesh;
 		mesh.Models.push_back({ ResourcePtr<const Model>(new Model(TextFactory(m_String, m_Font, Color::White, m_AlignH, m_AlignV)), true), Matrix4f::Identity(), { 0 } });
-		mesh.Materials[0] = ResourceManager::Materials().Default(m_Color);
-		//mesh.Materials[0].Shader = Shader::DefaultFont();
-		//mesh.Materials[0].Textures.Textures.push_back(m_Font);
-		//mesh.Materials[0].RenderOptions.DepthFunc = DepthFunction::Lequal;
+		mesh.Materials[0] = ResourceManager::Materials().Font(m_Font, m_Color);
 		m_Object->Components().AddComponent(std::make_unique<MeshRenderer>(std::move(mesh)));
 		m_Object->transform() = std::move(m_Transform);
 	}

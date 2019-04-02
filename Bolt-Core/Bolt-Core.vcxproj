@@ -355,7 +355,6 @@
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\ShaderProgram.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Uniform.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\UniformLink.h" />
-    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\UniformManager.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\VertexShader.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\__Shaders__.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\TextureAnimator.h" />
@@ -510,7 +509,6 @@
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\ShaderLinkContext.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\ShaderProgram.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\UniformLink.cpp" />
-    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\UniformManager.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\VertexShader.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Mesh.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Model.cpp" />

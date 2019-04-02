@@ -15,6 +15,7 @@ namespace Bolt
 	private:
 		const MaterialBuilder* m_Builder;
 		ShaderLinkContext m_Shader;
+		RenderSettings m_RenderSettings;
 
 	private:
 		Material(ShaderLinkContext&& shader);
@@ -28,6 +29,8 @@ namespace Bolt
 
 		const ShaderLinkContext& GetShader() const;
 		ShaderLinkContext& GetShader();
+		const RenderSettings& GetRenderSettings() const;
+		RenderSettings& GetRenderSettings();
 
 		std::unique_ptr<Material> Clone() const;
 

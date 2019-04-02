@@ -71,8 +71,8 @@ namespace Bolt
 			return;
 		}
 		GameObject* obj = &m_GameObjects[id].Object;
-		RemoveAllTags(obj);
 		obj->OnDestroy();
+		RemoveAllTags(obj);		
 		m_GameObjects[id].Enabled = false;
 		ReleaseId(id);
 		auto it = std::find(m_ActiveGameObjects.begin(), m_ActiveGameObjects.end(), obj);

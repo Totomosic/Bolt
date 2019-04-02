@@ -8,7 +8,6 @@ namespace Bolt
 	{
 	public:
 		std::vector<RenderGroup> StaticMeshes;
-		UniformManager Uniforms;
 	};
 
 }
