@@ -10,12 +10,7 @@ namespace Bolt
 	{
 		BLT_ASSERT(Filesystem::FileExists(fontFile), "Unable to find font file " + fontFile.Path());
 		m_TextureAtlas = std::unique_ptr<texture_atlas_t, std::function<void(texture_atlas_t*)>>(texture_atlas_new(m_Width, m_Height, 1), [](texture_atlas_t* ptr) { texture_atlas_delete(ptr); });
-		File file = Filesystem::Open(fontFile);
-		uint fSize = file.GetSize();
-		byte* fileData = new byte[fSize];
-		file.Read(fileData, fSize);
-		ftgl::texture_font_t* f = texture_font_new_from_memory(m_TextureAtlas.get(), m_FontSize, fileData, fSize);
-		m_TextureFont = std::unique_ptr<texture_font_t, std::function<void(texture_font_t*)>>(f/*texture_font_new_from_file(m_TextureAtlas.get(), m_FontSize, fontFile.Path().c_str())*/, [](texture_font_t* ptr) { texture_font_delete(ptr); });
+		m_TextureFont = std::unique_ptr<texture_font_t, std::function<void(texture_font_t*)>>(texture_font_new_from_file(m_TextureAtlas.get(), m_FontSize, fontFile.Path().c_str()), [](texture_font_t* ptr) { texture_font_delete(ptr); });
 		GL_CALL(glDeleteTextures(1, &m_Id));
 		GL_CALL(glGenTextures(1, &m_TextureAtlas->id));
 		m_Id = m_TextureAtlas->id;

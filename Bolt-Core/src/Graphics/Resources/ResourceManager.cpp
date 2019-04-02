@@ -108,7 +108,7 @@ namespace Bolt
 
 	void ResourceManager::Initialize()
 	{
-		s_Fonts.Initialize();
+
 	}
 
 	void ResourceManager::Terminate()
