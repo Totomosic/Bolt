@@ -19,9 +19,10 @@ namespace DND
 		Mesh blueWizardMesh;
 		blueWizardMesh.Models.push_back({ ObjectFactory::SquareModel(), Matrix4f::Translation(0, GlobalState::MapManager.TileHeight() * 0.35f, 0) 
 			* Matrix4f::Scale(GlobalState::MapManager.TileWidth() * 0.9f, GlobalState::MapManager.TileHeight() * 1.5f, 1), { 0 } });
+		blueWizardMesh.Materials[0] = ResourceManager::Materials().Texture(blueWizardDown);
 
 		ObjectPrefab blueWizardPrefab;
-		blueWizardPrefab.Components().AddComponent<MeshRenderer>(blueWizardMesh);
+		blueWizardPrefab.Components().AddComponent<MeshRenderer>(std::move(blueWizardMesh));
 		blueWizardPrefab.Components().AddComponent<SpriteAnimator>();
 		blueWizardPrefab.Components().AddComponent<CharacterAnimator>(Direction::Down, CharacterTextureSet{ blueWizardUp, blueWizardDown, blueWizardLeft, blueWizardRight });
 

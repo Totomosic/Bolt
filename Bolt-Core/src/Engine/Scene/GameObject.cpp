@@ -217,10 +217,10 @@ namespace Bolt
 
 	void GameObject::OnDestroy()
 	{
+		MakeStandalone();
 		m_TemporaryComponents.clear();
 		m_Components.Clear();
 		m_Transform.Reset();
-		MakeStandalone();
 		SetLayer(nullptr);
 		SetId(GameObject::InvalidID);
 	}

@@ -37,6 +37,11 @@ namespace Bolt
 		return *this;
 	}
 
+	Mesh::~Mesh()
+	{
+		
+	}
+
 	Mesh Mesh::Clone() const
 	{
 		Mesh result;

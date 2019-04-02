@@ -1,7 +1,7 @@
 #pragma once
 #include "Materials\__Materials__.h"
 #include "Model.h"
-#include "..\ResourcePtr.h"
+#include "../ResourcePtr.h"
 
 namespace Bolt
 {
@@ -29,7 +29,7 @@ namespace Bolt
 		Mesh& operator=(const Mesh& other);
 		Mesh(Mesh&& other) = default;
 		Mesh& operator=(Mesh&& other) = default;
-		~Mesh() = default;
+		~Mesh();
 
 		Mesh Clone() const;
 

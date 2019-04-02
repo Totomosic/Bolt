@@ -24,12 +24,8 @@ namespace Bolt
 			bool passed = false;
 			for (int i = 0; i < Mesh::MAX_MATERIALS; i++)
 			{
+				const Material* material = meshRenderer.Mesh.Materials[i].get();
 				if (RequiresTransparency)
-				{
-					passed = true;
-					break;
-				}
-				else
 				{
 					passed = true;
 					break;

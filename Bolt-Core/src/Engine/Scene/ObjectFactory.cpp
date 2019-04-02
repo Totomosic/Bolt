@@ -64,6 +64,11 @@ namespace Bolt
 		return &m_Prefabs[index];
 	}
 
+	void ObjectFactory::ClearPrefabs()
+	{
+		m_Prefabs.clear();
+	}
+
 	GameObject* ObjectFactory::Instantiate(Transform transform) const
 	{
 		GameObject* object = GameObject::Instantiate(CurrentLayer(), std::move(transform));
@@ -124,8 +129,7 @@ namespace Bolt
 	{
 		GameObject* object = Rectangle(width, height, Color::White, std::move(transform));
 		Mesh& mesh = object->Components().GetComponent<MeshRenderer>().Mesh;
-		//mesh.Materials[0].Shader = Shader::DefaultTexture();
-		//mesh.Materials[0].Textures.Textures.push_back(image);
+		mesh.Materials[0] = ResourceManager::Materials().Texture(image);
 		return object;
 	}
 

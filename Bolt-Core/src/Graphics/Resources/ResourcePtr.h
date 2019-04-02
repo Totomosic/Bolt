@@ -33,7 +33,7 @@ namespace Bolt
 			{
 				m_Ptr = (pointer)other.m_Ptr->Clone().release();
 				m_OwnsPtr = true;
-				BLT_CORE_WARN("Copied resource ({}) when copying ResourcePtr (constructor)", typeid(T).name());
+				BLT_CORE_WARN("Copied resource ({0}, ptr={1}) when copying ResourcePtr (constructor)", typeid(T).name(), (int)m_Ptr);
 			}
 			else
 			{
@@ -48,7 +48,7 @@ namespace Bolt
 			{
 				m_Ptr = (pointer)other.m_Ptr->Clone().release();
 				m_OwnsPtr = true;
-				BLT_CORE_WARN("Copied resource ({}) when copying ResourcePtr (operator=)", typeid(T).name());
+				BLT_CORE_WARN("Copied resource ({0}, ptr={1}) when copying ResourcePtr (operator=)", typeid(T).name(), (int)m_Ptr);
 			}
 			else
 			{
@@ -132,7 +132,9 @@ namespace Bolt
 		pointer operator->() const { return m_Ptr; }
 
 		bool operator==(const ResourcePtr<T>& other) const { return m_Ptr == other.m_Ptr; }
+		bool operator==(nullptr_t ptr) const { return m_Ptr == ptr; }
 		bool operator!=(const ResourcePtr<T>& other) const { return !(*this == other); }
+		bool operator!=(nullptr_t ptr) const { return !(*this == ptr); }
 
 	};
 

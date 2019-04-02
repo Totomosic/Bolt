@@ -24,7 +24,7 @@ namespace DND
 		};
 
 	private:
-		Material* m_Material;
+		Mesh* m_Mesh;
 		ResourcePtr<const Texture2D> m_DefaultTexture;
 		AnimationData m_CurrentAnimation;
 

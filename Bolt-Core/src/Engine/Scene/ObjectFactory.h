@@ -38,6 +38,7 @@ namespace Bolt
 		id_t AddPrefab(ObjectPrefab&& prefab);
 		const ObjectPrefab* GetPrefab(id_t index) const;
 		ObjectPrefab* GetPrefab(id_t index);
+		void ClearPrefabs();
 
 		GameObject* Instantiate(Transform transform = Transform()) const;
 		GameObject* Instantiate(float x, float y, float z, const Quaternion& orientation = Quaternion::Identity(), const Vector3f& scale = Vector3f(1, 1, 1)) const;

@@ -31,6 +31,7 @@ namespace Bolt
 		const UniformLinkContainer& GetLink(id_t linkId) const;
 		UniformLinkContainer& GetLink(id_t linkId);
 		bool IsLinked(const blt::string& linkName) const;
+		bool HasLink(const blt::string& linkName) const;
 
 		void ApplyLinks() const;
 
@@ -49,23 +50,19 @@ namespace Bolt
 		template<typename T>
 		const UniformLink<T>& GetLink(id_t linkId) const
 		{
-			const UserUniformLocation& uniform = GetUniformLocation(linkName);
-			BLT_ASSERT(ValidateUniformType<T>(uniform), "Uniform with LinkId {0} does not have type {1} (Type = {2})", linkId, typeid(T).name(), ValueTypeToGLSLString(uniform.Type));
 			return (const UniformLink<T>&)GetLink(linkId);
 		}
 
 		template<typename T>
 		UniformLink<T>& GetLink(id_t linkId)
 		{
-			const UserUniformLocation& uniform = GetUniformLocation(linkName);
-			BLT_ASSERT(ValidateUniformType<T>(uniform), "Uniform with LinkId {0} does not have type {1} (Type = {2})", linkId, typeid(T).name(), ValueTypeToGLSLString(uniform.Type));
 			return (UniformLink<T>&)GetLink(linkId);
 		}
 
 		template<typename T>
 		UniformLink<T>& Link(const blt::string& linkName, const T& value)
 		{
-			BLT_ASSERT(false, "Unsupported uniform type " + typeid(T).name());
+			BLT_ASSERT(false, "Unsupported uniform type {}", typeid(T).name());
 			return UniformLink<T>();
 		}
 
@@ -157,9 +154,28 @@ namespace Bolt
 			return (UniformLink<ResourcePtr<Texture2D>>&)AddLink(linkName, std::make_unique<UniformLink<ResourcePtr<Texture2D>>>(m_Shader.GetShader().Id(), GetUniformLocation(linkName).Location, value));
 		}
 
+		template<>
+		UniformLink<ResourcePtr<const Font>>& Link(const blt::string& linkName, const ResourcePtr<const Font>& value)
+		{
+			const UserUniformLocation& uniform = GetUniformLocation(linkName);
+			BLT_ASSERT(ValidateUniformType<ResourcePtr<Texture2D>>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(ResourcePtr<const Font>).name(), ValueTypeToGLSLString(uniform.Type));
+			return (UniformLink<ResourcePtr<const Font>>&)AddLink(linkName, std::make_unique<UniformLink<ResourcePtr<const Font>>>(m_Shader.GetShader().Id(), GetUniformLocation(linkName).Location, value));
+		}
+
+		template<>
+		UniformLink<ResourcePtr<Font>>& Link(const blt::string& linkName, const ResourcePtr<Font>& value)
+		{
+			const UserUniformLocation& uniform = GetUniformLocation(linkName);
+			BLT_ASSERT(ValidateUniformType<ResourcePtr<Font>>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(ResourcePtr<Font>).name(), ValueTypeToGLSLString(uniform.Type));
+			return (UniformLink<ResourcePtr<Font>>&)AddLink(linkName, std::make_unique<UniformLink<ResourcePtr<Font>>>(m_Shader.GetShader().Id(), GetUniformLocation(linkName).Location, value));
+		}
+
+		friend class Material;
+
 	private:
 		const UserUniformLocation& GetUniformLocation(const blt::string& linkName) const;
 		UniformLinkContainer& AddLink(const blt::string& linkName, std::unique_ptr<UniformLinkContainer>&& link);
+		void CopyLinksTo(ShaderLinkContext& other) const;
 
 		template<typename T>
 		bool ValidateUniformType(const UserUniformLocation& uniform) const

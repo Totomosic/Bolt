@@ -1,5 +1,6 @@
 #include "Types.h"
-#include "Model.h"
+
+#include "Model.h"
 
 namespace Bolt
 {

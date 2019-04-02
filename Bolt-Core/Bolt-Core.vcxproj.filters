@@ -789,9 +789,6 @@
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\UniformLink.h">
       <Filter>Graphics\Resources\Meshes\Materials\Shaders</Filter>
     </ClInclude>
-    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\UniformManager.h">
-      <Filter>Graphics\Resources\Meshes\Materials\Shaders</Filter>
-    </ClInclude>
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\VertexShader.h">
       <Filter>Graphics\Resources\Meshes\Materials\Shaders</Filter>
     </ClInclude>
@@ -1239,9 +1236,6 @@
       <Filter>Graphics\Resources\Meshes\Materials\Shaders</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\UniformLink.cpp">
-      <Filter>Graphics\Resources\Meshes\Materials\Shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\UniformManager.cpp">
       <Filter>Graphics\Resources\Meshes\Materials\Shaders</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\VertexShader.cpp">
