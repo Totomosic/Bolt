@@ -12,18 +12,17 @@ project "Bolt-Core"
     files
     {
         "src/**.h",
-        "src/**.cpp",
-        "src/**.hpp",
-        "src/**.c"
+        "src/**.cpp"
     }
     
     includedirs
     {
         "../Bolt-Core/external/",
         "../Bolt-Core/src/",
-        "../Bolt-Core/external/spdlog/include/",
         "../%{IncludeDirs.GLFW}",
-        "../%{IncludeDirs.Glad}"
+        "../%{IncludeDirs.Glad}",
+		"../%{IncludeDirs.ImGui}",
+		"../%{IncludeDirs.spdlog}"
     }
 
     libdirs
@@ -39,7 +38,8 @@ project "Bolt-Core"
         "freetype-gl.lib",
         "ws2_32.lib",
         "GLFW",
-        "Glad"
+        "Glad",
+		"ImGui"
     }
 
     filter { "system:windows", "configurations:debug" }

@@ -1,4 +1,5 @@
 #include "Target.h"
+#include "TargetHitEvent.h"
 
 namespace Aimbooster
 {
@@ -26,9 +27,9 @@ namespace Aimbooster
 			if (CurrentTime >= Lifetime)
 			{
 				Destroy(gameObject());
-				std::unique_ptr<TargetFailedEvent> args = std::make_unique<TargetFailedEvent>();
-				args->Position = gameObject()->transform().Position();
-				EventManager::Post(TARGET_FAILED_EVENT, std::move(args));
+				TargetFailedEvent e;
+				e.Position = gameObject()->transform().Position();
+				EventManager::Post<TargetFailedEvent>(e);
 			}
 			else
 			{
@@ -41,7 +42,7 @@ namespace Aimbooster
 						Destroy(gameObject());
 						GameObject* hitLocation = Factory->Ellipse(5, 5, Color::White, Transform({ Input::Get().MousePosition(width, height).x, Input::Get().MousePosition(width, height).y, gameObject()->transform().Position().z + 1 }));
 						Destroy(hitLocation, 1.0f);
-						EventManager::Post(TARGET_HIT_EVENT);
+						EventManager::Post<TargetHitEvent>();
 					}
 				}
 			}

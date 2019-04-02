@@ -19,11 +19,14 @@ ProjectsDir = ""
 IncludeDirs = {}
 IncludeDirs["GLFW"] = "Bolt-Core\\vendor\\GLFW\\include"
 IncludeDirs["Glad"] = "Bolt-Core\\vendor\\Glad\\include"
+IncludeDirs["ImGui"] = "Bolt-Core\\vendor\\ImGui"
+IncludeDirs["spdlog"] = "Bolt-Core\\vendor\\spdlog\\include"
 
-include (ProjectsDir .. "Bolt-Core\\vendor\\GLFW\\premake5.lua")
+include (ProjectsDir .. "Bolt-Core\\vendor\\GLFW")
 include (ProjectsDir .. "Bolt-Core\\vendor\\Glad")
+include (ProjectsDir .. "Bolt-Core\\vendor\\ImGui")
+include (ProjectsDir .. "Bolt-Core\\vendor\\spdlog")
 include (ProjectsDir .. "Bolt-Core")
 include (ProjectsDir .. "DND")
 include (ProjectsDir .. "Aimbooster")
 include (ProjectsDir .. "Blockstream")
-include (ProjectsDir .. "NatureScene")

@@ -20,9 +20,10 @@ PREMAKE_FORMAT_STRING_TEMPLATE = """project "{0}"
     {{
         "../Bolt-Core/external/",
         "../Bolt-Core/src/",
-        "../Bolt-Core/external/spdlog/include/",
         "../%{{IncludeDirs.GLFW}}",
         "../%{{IncludeDirs.Glad}}",
+        "../%{IncludeDirs.ImGui}",
+        "../%{IncludeDirs.spdlog}",
         "src"
     }}
 

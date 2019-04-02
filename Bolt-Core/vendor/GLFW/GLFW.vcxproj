@@ -54,20 +54,20 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>..\bin\Debug-windows-x86\GLFW\</OutDir>
-    <IntDir>..\bin-int\Debug-windows-x86\GLFW\</IntDir>
+    <OutDir>..\..\..\bin\Debug-windows-x86\GLFW\</OutDir>
+    <IntDir>..\..\..\bin-int\Debug-windows-x86\GLFW\</IntDir>
     <TargetName>GLFW</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>..\bin\Release-windows-x86\GLFW\</OutDir>
-    <IntDir>..\bin-int\Release-windows-x86\GLFW\</IntDir>
+    <OutDir>..\..\..\bin\Release-windows-x86\GLFW\</OutDir>
+    <IntDir>..\..\..\bin-int\Release-windows-x86\GLFW\</IntDir>
     <TargetName>GLFW</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dist|Win32'">
-    <OutDir>..\bin\Dist-windows-x86\GLFW\</OutDir>
-    <IntDir>..\bin-int\Dist-windows-x86\GLFW\</IntDir>
+    <OutDir>..\..\..\bin\Dist-windows-x86\GLFW\</OutDir>
+    <IntDir>..\..\..\bin-int\Dist-windows-x86\GLFW\</IntDir>
     <TargetName>GLFW</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
