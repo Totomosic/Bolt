@@ -128,7 +128,7 @@ namespace Bolt
 			return m_Ptr; 
 		}
 
-		pointer operator*() const { return m_Ptr; }
+		T& operator*() const { return *m_Ptr; }
 		pointer operator->() const { return m_Ptr; }
 
 		bool operator==(const ResourcePtr<T>& other) const { return m_Ptr == other.m_Ptr; }

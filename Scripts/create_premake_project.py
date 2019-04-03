@@ -22,8 +22,8 @@ PREMAKE_FORMAT_STRING_TEMPLATE = """project "{0}"
         "../Bolt-Core/src/",
         "../%{{IncludeDirs.GLFW}}",
         "../%{{IncludeDirs.Glad}}",
-        "../%{IncludeDirs.ImGui}",
-        "../%{IncludeDirs.spdlog}",
+        "../%{{IncludeDirs.ImGui}}",
+        "../%{{IncludeDirs.spdlog}}",
         "src"
     }}
 
@@ -65,8 +65,8 @@ PREMAKE_FORMAT_STRING_TEMPLATE = """project "{0}"
             "BLT_PLATFORM_WINDOWS"
         }}"""
 
-SOLUTION_PREMAKE_FILE = "C:\\Users\\Jordan Morrison\\Desktop\\C++\\OpenGL\\Bolt\\premake5.lua"
-PROJECTS_DIR = "C:\\Users\\Jordan Morrison\\Desktop\\C++\\OpenGL\\Bolt-Projects\\"
+SOLUTION_PREMAKE_FILE = "..\\premake5.lua"
+PROJECTS_DIR = "..\\"
 
 def create_dir(name):
     if not os.path.exists(name):
