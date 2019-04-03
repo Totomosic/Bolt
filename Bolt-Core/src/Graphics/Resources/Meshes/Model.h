@@ -35,43 +35,29 @@ namespace Bolt
 		template<size_t VertexCount>
 		std::vector<Face<VertexCount>> GetFaces() const
 		{
-			std::vector<Face<VertexCount>> result;
-			if (m_Data.Vertices->GetRenderMode() == RenderMode::Triangles)
+			BLT_ASSERT(false, "Unable to get faces with " + std::to_string(VertexCount) + " vertices");
+			return std::vector<Face<VertexCount>>();
+		}
+
+		template<>
+		std::vector<Face<3>> GetFaces() const
+		{
+			std::vector<Face<3>> faces;
+			IndexIterator<> it = Data().Indices.Begin();
+			int indexCount = Data().Indices.IndexCount();
+			for (int i = 0; i < indexCount; i += 3)
 			{
-				constexpr int multiple = ((VertexCount + 3 - 1) / 3) * 3;
-				IndexIterator<> it = m_Data.Indices.Begin();
-				int indexCount = m_Data.Indices.Descriptor().IndexCount();
-				int currentIndex = 0;				
-				while (currentIndex < indexCount)
-				{
-					Face<VertexCount> currentFace;
-					int vCount = 0;
-					std::vector<VertexIterator*> addedIterators;
-					while (vCount < VertexCount)
-					{
-						VertexIterator v = m_Data.Vertices->GetVertex(*it);
-						it++;
-						currentIndex++;
-						bool found = false;
-						for (VertexIterator* i : addedIterators)
-						{
-							if (*i == v)
-							{
-								found = true;
-								break;
-							}
-						}
-						if (!found)
-						{
-							currentFace.Vertices[vCount] = std::move(v);
-							addedIterators.push_back(&currentFace.Vertices[vCount]);
-							vCount++;
-						}
-					}
-					result.push_back(std::move(currentFace));
-				}
+				Face<3> currentFace;
+				BLT_INFO(*it);
+				currentFace.Vertices[0] = Data().Vertices->GetVertex(*it);
+				it++;
+				currentFace.Vertices[1] = Data().Vertices->GetVertex(*it);
+				it++;
+				currentFace.Vertices[2] = Data().Vertices->GetVertex(*it);
+				it++;
+				faces.push_back(std::move(currentFace));
 			}
-			return result;
+			return faces;
 		}
 
 		template<size_t VertexCount>

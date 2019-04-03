@@ -137,7 +137,7 @@ namespace Bolt
 		}
 		else
 		{
-			ptr = currentPtr + (currentIndex - prevIndex) * sizeof(uint);
+			ptr = currentPtr + (incAmount) * sizeof(uint);
 		}
 		return ptr;
 	}
