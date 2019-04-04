@@ -38,9 +38,7 @@ namespace Bolt
 		size_t m_Size;
 		BufferUsage m_Usage;
 		BufferTarget m_Target;
-
-		mutable void* m_MappedPtr;
-		mutable Access m_MappedAccess;
+		mutable bool m_IsMapped;
 
 	public:
 		Buffer(size_t capacity, BufferTarget target, BufferUsage usage = BufferUsage::StaticDraw);
@@ -54,8 +52,7 @@ namespace Bolt
 		size_t Size() const;
 		BufferUsage Usage() const;
 		BufferTarget Target() const;
-		id_t ID() const;
-		bool IsCurrentlyMapped() const;
+		id_t Id() const;
 
 		void Bind() const;
 		void Unbind() const;
