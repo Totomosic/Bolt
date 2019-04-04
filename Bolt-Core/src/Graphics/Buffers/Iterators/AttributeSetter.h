@@ -281,7 +281,7 @@ namespace Bolt
 		template<typename T>
 		AttributeSetter& operator+=(const T& obj)
 		{
-			Read<T>() += obj;
+			Set(Read<T>() + obj);
 			return *this;
 		}
 

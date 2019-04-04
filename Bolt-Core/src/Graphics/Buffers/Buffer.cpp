@@ -11,13 +11,13 @@ namespace Bolt
 	}
 
 	Buffer::Buffer(const void* data, size_t size, BufferTarget target, BufferUsage usage) : GLshared(),
-		m_Id(0), m_Size(size), m_Usage(usage), m_Target(target), m_MappedPtr(nullptr), m_MappedAccess(Access::Read)
+		m_Id(0), m_Size(size), m_Usage(usage), m_Target(target), m_IsMapped(false)
 	{
 		Create(data);
 	}
 
 	Buffer::Buffer(Buffer&& other) noexcept
-		: m_Id(other.m_Id), m_Size(other.m_Size), m_Target(other.m_Target), m_Usage(other.m_Usage), m_MappedPtr(nullptr), m_MappedAccess(Access::Read)
+		: m_Id(other.m_Id), m_Size(other.m_Size), m_Target(other.m_Target), m_Usage(other.m_Usage), m_IsMapped(false)
 	{
 		other.m_Id = 0;
 	}
@@ -25,17 +25,12 @@ namespace Bolt
 	Buffer& Buffer::operator=(Buffer&& other) noexcept
 	{
 		id_t tempId = m_Id;
-		void* tempPtr = m_MappedPtr;
-		Access tempAccess = m_MappedAccess;
 		m_Id = other.m_Id;
 		m_Size = other.m_Size;
 		m_Target = other.m_Target;
 		m_Usage = other.m_Usage;
-		m_MappedPtr = other.m_MappedPtr;
-		m_MappedAccess = other.m_MappedAccess;
+		m_IsMapped = false;
 		other.m_Id = tempId;
-		other.m_MappedPtr = tempPtr;
-		other.m_MappedAccess = tempAccess;
 		return *this;
 	}
 
@@ -62,14 +57,9 @@ namespace Bolt
 		return m_Target;
 	}
 
-	id_t Buffer::ID() const
+	id_t Buffer::Id() const
 	{
 		return m_Id;
-	}
-
-	bool Buffer::IsCurrentlyMapped() const
-	{
-		return m_MappedPtr != nullptr;
 	}
 
 	void Buffer::Bind() const
@@ -84,37 +74,25 @@ namespace Bolt
 
 	void* Buffer::Map(Access access) const
 	{
-		if (m_MappedPtr != nullptr && m_MappedAccess == access)
-		{
-			return m_MappedPtr;
-		}
-		else if (m_MappedPtr != nullptr)
-		{
-			Unmap();
-		}
+		BLT_ASSERT(!m_IsMapped, "Cannot Map Mapped buffer");
 		Bind();
 		void* result = GL_CALL(glMapBuffer((GLenum)m_Target, (GLenum)access));
-		m_MappedPtr = result;
-		m_MappedAccess = access;
+		m_IsMapped = true;
 		return result;
 	}
 
 	bool Buffer::Unmap() const
 	{
-		if (m_MappedPtr != nullptr)
-		{
-			Bind();
-			bool result = GL_CALL(glUnmapBuffer((GLenum)m_Target));
-			m_MappedPtr = nullptr;
-			return result;
-		}
-		return true;
+		BLT_ASSERT(m_IsMapped, "Cannot Unmap Unmapped buffer");
+		Bind();
+		bool result = GL_CALL(glUnmapBuffer((GLenum)m_Target));
+		m_IsMapped = false;
+		return result;
 	}
 
 	void Buffer::Upload(const void* data, size_t size, size_t offset) const
 	{
 		BLT_ASSERT(size + offset <= Size(), "Could not upload: " + std::to_string(size) + " as buffer is not large enough");
-		BLT_ASSERT(!IsCurrentlyMapped(), "Buffer was mapped while trying to upload, ensure no active iterators are present.");
 		Bind();
 		GL_CALL(glBufferSubData((GLenum)m_Target, (GLintptr)offset, (GLsizeiptr)size, (const GLvoid*)data));
 	}
@@ -122,7 +100,6 @@ namespace Bolt
 	void Buffer::Download(void* data, size_t size, size_t offset) const
 	{
 		BLT_ASSERT(size + offset <= Size(), "Could not download: " + std::to_string(size) + " as buffer does not contain that many bytes");
-		BLT_ASSERT(!IsCurrentlyMapped(), "Buffer was mapped while trying to download, ensure no active iterators are present.");
 		Bind();
 		GL_CALL(glGetBufferSubData((GLenum)m_Target, (GLintptr)offset, (GLsizeiptr)size, (GLvoid*)data));
 	}
