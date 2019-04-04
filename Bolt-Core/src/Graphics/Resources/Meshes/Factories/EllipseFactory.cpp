@@ -18,7 +18,8 @@ namespace Bolt
 
 		ModelData result;
 		result.Vertices = std::make_unique<VertexArray>();
-		result.Indices.AddIndexBuffer(std::make_unique<IndexBuffer>(3 * VerticesPerRev));
+		result.Indices = std::make_unique<IndexArray>();
+		result.Indices->AddIndexBuffer(std::make_unique<IndexBuffer>(3 * VerticesPerRev));
 		result.Bounds.MinX = -w;
 		result.Bounds.MaxX = w;
 		result.Bounds.MinY = -h;
@@ -33,7 +34,7 @@ namespace Bolt
 
 		{
 			VertexMapping vMapping = result.Vertices->Map();
-			IndexMapping iMapping = result.Indices.Map();
+			IndexMapping iMapping = result.Indices->Map();
 			VertexIterator iterator = vMapping.Begin();
 			IndexIterator indices = iMapping.Begin();
 

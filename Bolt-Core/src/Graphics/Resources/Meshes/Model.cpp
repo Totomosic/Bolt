@@ -33,12 +33,12 @@ namespace Bolt
 
 	int Model::IndexCount() const
 	{
-		return m_Data.Indices.IndexCount();
+		return m_Data.Indices->IndexCount();
 	}
 
 	int Model::IndexBufferCount() const
 	{
-		return m_Data.Indices.IndexBufferCount();
+		return m_Data.Indices->IndexBufferCount();
 	}
 
 	int Model::TriangleCount() const
@@ -54,25 +54,25 @@ namespace Bolt
 
 	ModelMapping Model::Map() const
 	{
-		return { Data().Vertices->Map(), Data().Indices.Map() };
+		return { Data().Vertices->Map(), Data().Indices->Map() };
 	}
 
 	std::unique_ptr<Resource> Model::Clone() const
 	{
-		std::unique_ptr<Model> model = std::make_unique<Model>(ModelData{ m_Data.Vertices->Clone(), m_Data.Indices.Clone(), m_Data.Bounds });
+		std::unique_ptr<Model> model = std::make_unique<Model>(ModelData{ m_Data.Vertices->Clone(), m_Data.Indices->Clone(), m_Data.Bounds });
 		return model;
 	}
 
 	int Model::CalculateBufferIndex(int triangleIndex) const
 	{
 		int current = 0;
-		for (int i = 0; i < m_Data.Indices.IndexBufferCount(); i++)
+		for (int i = 0; i < m_Data.Indices->IndexBufferCount(); i++)
 		{
-			if (current + m_Data.Indices[0]->Size() > triangleIndex * 3)
+			if (current + (*m_Data.Indices)[0]->Size() > triangleIndex * 3)
 			{
 				return i;
 			}
-			current += m_Data.Indices[0]->Size();
+			current += (*m_Data.Indices)[0]->Size();
 		}
 		return -1;
 	}

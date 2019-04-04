@@ -33,6 +33,10 @@ namespace Bolt
 
 	public:
 		VertexMapping(const std::vector<MappingPtr>& mappedPtrs);
+		VertexMapping(const VertexMapping& other) = delete;
+		VertexMapping& operator=(const VertexMapping& other) = delete;
+		VertexMapping(VertexMapping&& other);
+		VertexMapping& operator=(VertexMapping&& other);
 		~VertexMapping();
 
 		VertexIterator Begin() const;

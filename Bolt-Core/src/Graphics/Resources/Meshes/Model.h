@@ -50,7 +50,7 @@ namespace Bolt
 		{
 			std::vector<Face<3>> faces;
 			IndexIterator it = mapping.IndexMap.Begin();
-			int indexCount = Data().Indices.IndexCount();
+			int indexCount = Data().Indices->IndexCount();
 			for (int i = 0; i < indexCount; i += 3)
 			{
 				Face<3> currentFace;

@@ -15,8 +15,9 @@ namespace Bolt
 	{
 		ModelData result;
 		result.Vertices = std::make_unique<VertexArray>(RenderMode::Triangles);
+		result.Indices = std::make_unique<IndexArray>();
 		int vertexCount = xVertices * zVertices;
-		result.Indices.AddIndexBuffer(std::make_unique<IndexBuffer>((xVertices - 1) * (zVertices - 1) * 6));		
+		result.Indices->AddIndexBuffer(std::make_unique<IndexBuffer>((xVertices - 1) * (zVertices - 1) * 6));		
 		result.Bounds.MinX = -Width / 2;
 		result.Bounds.MaxX = Width / 2;
 		result.Bounds.MinY = 0;
@@ -34,7 +35,7 @@ namespace Bolt
 
 		{
 			VertexMapping vMapping = result.Vertices->Map();
-			IndexMapping iMapping = result.Indices.Map();
+			IndexMapping iMapping = result.Indices->Map();
 			VertexIterator iterator = vMapping.Begin();
 			IndexIterator indices = iMapping.Begin();
 			for (int z = 0; z < zVertices; z++)

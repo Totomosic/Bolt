@@ -91,12 +91,12 @@ namespace Bolt
 		return mapping;
 	}
 
-	IndexArray IndexArray::Clone() const
+	std::unique_ptr<IndexArray> IndexArray::Clone() const
 	{
-		IndexArray result;
+		std::unique_ptr<IndexArray> result = std::make_unique<IndexArray>();
 		for (const auto& buffer : m_IndexBuffers)
 		{
-			result.AddIndexBuffer(buffer->Clone());
+			result->AddIndexBuffer(buffer->Clone());
 		}
 		return std::move(result);
 	}

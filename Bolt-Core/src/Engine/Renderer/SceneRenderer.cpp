@@ -17,9 +17,9 @@ namespace Bolt
 			for (Mesh::ModelGroup& model : mesh.Models)
 			{
 				const ModelData& modelData = model.Model->Data();
-				for (int i = 0; i < modelData.Indices.IndexBufferCount(); i++)
+				for (int i = 0; i < modelData.Indices->IndexBufferCount(); i++)
 				{
-					const std::unique_ptr<IndexBuffer>& indexBuffer = modelData.Indices.GetIndexBuffer(i);
+					const std::unique_ptr<IndexBuffer>& indexBuffer = modelData.Indices->GetIndexBuffer(i);
 					const std::unique_ptr<Material>& material = mesh.Materials[model.MaterialIndices[i]];
 					RenderData renderData;
 					renderData.Indices = indexBuffer.get();

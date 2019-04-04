@@ -19,11 +19,13 @@ namespace Bolt
 	Buffer::Buffer(Buffer&& other) noexcept
 		: m_Id(other.m_Id), m_Size(other.m_Size), m_Target(other.m_Target), m_Usage(other.m_Usage), m_IsMapped(false)
 	{
+		BLT_ASSERT(!other.m_IsMapped, "Cannot move mapped buffer");
 		other.m_Id = 0;
 	}
 
 	Buffer& Buffer::operator=(Buffer&& other) noexcept
 	{
+		BLT_ASSERT(!other.m_IsMapped, "Cannot move mapped buffer");
 		id_t tempId = m_Id;
 		m_Id = other.m_Id;
 		m_Size = other.m_Size;
