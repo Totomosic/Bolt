@@ -5,7 +5,7 @@ namespace Bolt
 {
 
 	IArrayDescriptor::IArrayDescriptor()
-		: m_IndexBuffers(), m_Ranges(), m_LastIndex(0)
+		: m_IndexBuffers(), m_LastIndex(0)
 	{
 	
 	}
@@ -20,36 +20,33 @@ namespace Bolt
 		return m_LastIndex;
 	}
 
-	IArrayDescriptor::QueryResult IArrayDescriptor::QueryIndex(int requestedIndex) const
-	{		
-		int currentSize = 0;
-		for (int i = 0; i < m_IndexBuffers.size(); i++)
+	IndexMapping IArrayDescriptor::GetMapping() const
+	{
+		std::vector<IndexMapping::MappingPtr> mappedPtrs;
+		for (const IndexBufferInfo& buffer : m_IndexBuffers)
 		{
-			if (m_Ranges[i].Within(requestedIndex))
-			{
-				return { m_IndexBuffers[i], requestedIndex - currentSize };
-			}
-			currentSize += m_IndexBuffers[i]->IndexCount();
+			IndexMapping::MappingPtr ptr;
+			ptr.MinIndex = buffer.Range.Min;
+			ptr.MaxIndex = buffer.Range.Max;
+			ptr.Ptr = buffer.Ptr->Map(Access::ReadWrite);
+			mappedPtrs.push_back(ptr);
 		}
-		return { nullptr, 0 };
-	}
-
-	IndexBuffer* IArrayDescriptor::GetIndexBuffer(int requestedIndex) const
-	{
-		return QueryIndex(requestedIndex).Buffer;
-	}
-
-	int IArrayDescriptor::CalculateBufferOffset(int requestedIndex) const
-	{
-		return QueryIndex(requestedIndex).IndexOffset;
+		return IndexMapping(mappedPtrs);
 	}
 
 	void IArrayDescriptor::AddIndexBuffer(IndexBuffer* buffer)
 	{
 		IndexRange range = { m_LastIndex, m_LastIndex + buffer->IndexCount() };
 		m_LastIndex += buffer->IndexCount();
-		m_IndexBuffers.push_back(buffer);
-		m_Ranges.push_back(range);
+		m_IndexBuffers.push_back({ range, buffer });
+	}
+
+	void IArrayDescriptor::UnmapAll() const
+	{
+		for (const IndexBufferInfo& buffer : m_IndexBuffers)
+		{
+			buffer.Ptr->Unmap();
+		}
 	}
 
 }

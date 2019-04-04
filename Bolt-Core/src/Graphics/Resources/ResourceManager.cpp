@@ -216,7 +216,8 @@ namespace Bolt
 		VertexBuffer& buffer = data.Vertices->CreateVertexBuffer(vertices.size() / vertexDimension * layout.Size(), layout);
 		
 		{
-			VertexIterator it = data.Vertices->Begin();
+			VertexMapping mapping = data.Vertices->Map();
+			VertexIterator it = mapping.Begin();
 			for (int vertex = 0; vertex < vertices.size() / vertexDimension; vertex++)
 			{
 				int vIndex = vertex * vertexDimension;

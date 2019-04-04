@@ -1,5 +1,6 @@
 #include "Types.h"
-#include "ArrayDescriptor.h"
+
+#include "ArrayDescriptor.h"
 
 namespace Bolt
 {
@@ -36,12 +37,42 @@ namespace Bolt
 		return m_Attributes.at(attributeIndex);
 	}
 
+	VertexMapping ArrayDescriptor::GetMapping() const
+	{
+		std::vector<VertexMapping::MappingPtr> mappedPtrs;
+		for (const auto& pair : m_Attributes)
+		{
+			VertexMapping::MappingPtr mappingPtr;
+			const BufferLayout& layout = pair.second->Layout();
+			mappingPtr.Ptr = pair.second->Map(Access::ReadWrite);
+			mappingPtr.Stride = layout.Stride();
+			for (const BufferLayout::VertexAttribute& attrib : layout.GetAttributes())
+			{
+				VertexMapping::MappingAttribute attribute;
+				attribute.Index = attrib.Index;
+				attribute.Offset = attrib.Offset;
+				attribute.Size = attrib.Count * 4; // TODO: Fix
+				mappingPtr.Attributes.push_back(attribute);
+			}
+			mappedPtrs.push_back(mappingPtr);
+		}
+		return VertexMapping(mappedPtrs);
+	}
+
 	void ArrayDescriptor::AddVertexBuffer(VertexBuffer* buffer)
 	{
 		const BufferLayout& layout = buffer->Layout();
 		for (const BufferLayout::VertexAttribute& attrib : layout.GetAttributes())
 		{
 			m_Attributes[attrib.Index] = buffer;
+		}
+	}
+
+	void ArrayDescriptor::UnmapAll() const
+	{
+		for (const auto& pair : m_Attributes)
+		{
+			pair.second->Unmap();
 		}
 	}
 

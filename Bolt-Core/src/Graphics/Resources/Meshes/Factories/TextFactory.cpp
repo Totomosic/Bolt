@@ -40,8 +40,10 @@ namespace Bolt
 		}
 
 		{
-			VertexIterator iterator = result.Vertices->Begin();
-			IndexIterator<uint> indices = result.Indices.Begin();
+			VertexMapping vMapping = result.Vertices->Map();
+			IndexMapping iMapping = result.Indices.Map();
+			VertexIterator iterator = vMapping.Begin();
+			IndexIterator indices = iMapping.Begin();
 			
 			float currentX = -w;
 			float currentY = h;

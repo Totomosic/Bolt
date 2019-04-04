@@ -6,28 +6,28 @@ namespace Bolt
 {
 
 	VertexArray::VertexArray(RenderMode mode) : GLprivate(),
-		m_Id(0), m_Vertices(), m_RenderMode(mode), m_Descriptor(), m_IteratorManager(this)
+		m_Id(0), m_Vertices(), m_RenderMode(mode), m_Descriptor(), m_IsMapped(false)
 	{
 		Create();
 	}
 
 	VertexArray::VertexArray(VertexArray&& other) noexcept
-		: m_Id(other.m_Id), m_Vertices(std::move(other.m_Vertices)), m_RenderMode(other.m_RenderMode), m_Descriptor(std::move(other.m_Descriptor)), m_IteratorManager(other.m_IteratorManager)
+		: m_Id(other.m_Id), m_Vertices(std::move(other.m_Vertices)), m_RenderMode(other.m_RenderMode), m_Descriptor(std::move(other.m_Descriptor)), m_IsMapped(false)
 	{
-		BLT_ASSERT(!other.m_IteratorManager.IsMapped(), "Unable to move VertexArray while iterators remain outstanding");
+		BLT_ASSERT(!other.m_IsMapped, "Cannot move mapped array");
 		other.m_Id = 0;
 	}
 
 	VertexArray& VertexArray::operator=(VertexArray&& other) noexcept
 	{
-		BLT_ASSERT(!other.m_IteratorManager.IsMapped(), "Unable to move VertexArray while iterators remain outstanding");
+		BLT_ASSERT(!other.m_IsMapped, "Cannot move mapped array");
 		std::vector<std::unique_ptr<VertexBuffer>> tempVector = std::move(m_Vertices);
 		id_t tempID = m_Id;
 		m_Id = other.m_Id;
 		m_RenderMode = other.m_RenderMode;
 		m_Vertices = std::move(other.m_Vertices);
 		m_Descriptor = other.m_Descriptor;
-		m_IteratorManager = other.m_IteratorManager;
+		m_IsMapped = false;
 		other.m_Id = tempID;
 		other.m_Vertices = std::move(tempVector);
 		return *this;
@@ -46,11 +46,6 @@ namespace Bolt
 		return m_Descriptor;
 	}
 
-	const IteratorManager& VertexArray::Iterators() const
-	{
-		return m_IteratorManager;
-	}
-
 	RenderMode VertexArray::GetRenderMode() const
 	{
 		return m_RenderMode;
@@ -67,7 +62,7 @@ namespace Bolt
 		return (*m_Vertices.begin())->VertexCount();
 	}
 
-	id_t VertexArray::ID() const
+	id_t VertexArray::Id() const
 	{
 		return m_Id;
 	}
@@ -123,24 +118,18 @@ namespace Bolt
 		return AddVertexBuffer(std::move(buffer));
 	}
 
-	VertexIterator VertexArray::GetVertex(int index)
-	{
-		return m_IteratorManager.CreateNewIterator(index);
-	}
-
-	VertexIterator VertexArray::Begin()
-	{
-		return GetVertex(0);
-	}
-
-	VertexIterator VertexArray::End()
-	{
-		return GetVertex(VertexCount());
-	}
-
 	void VertexArray::SetRenderMode(RenderMode mode)
 	{
 		m_RenderMode = mode;
+	}
+
+	VertexMapping VertexArray::Map() const
+	{
+		BLT_ASSERT(!m_IsMapped, "Cannot Map Mapped array");
+		SetMapped(true);
+		VertexMapping mapping = m_Descriptor.GetMapping();
+		mapping.SetVertexArray(this);
+		return mapping;
 	}
 
 	std::unique_ptr<VertexArray> VertexArray::Clone() const
@@ -162,6 +151,15 @@ namespace Bolt
 	{
 		const BufferLayout::VertexAttribute& attrib =  m_Descriptor.GetAttribute(attribIndex)->Layout().GetAttribute(attribIndex);
 		return attrib.Type == type && attrib.Count == count;
+	}
+
+	void VertexArray::SetMapped(bool isMapped) const
+	{
+		m_IsMapped = isMapped;
+		if (!isMapped)
+		{
+			m_Descriptor.UnmapAll();
+		}
 	}
 
 }
