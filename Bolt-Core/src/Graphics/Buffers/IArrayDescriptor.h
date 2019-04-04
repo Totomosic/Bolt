@@ -1,5 +1,6 @@
 #pragma once
 #include "IndexBuffer.h"
+#include "IndexMapping.h"
 
 namespace Bolt
 {
@@ -37,35 +38,30 @@ namespace Bolt
 	class BLT_API IArrayDescriptor
 	{
 	public:
-		struct BLT_API QueryResult
+		struct BLT_API IndexBufferInfo
 		{
-			IndexBuffer* Buffer;
-			int IndexOffset;
+		public:
+			IndexRange Range;
+			IndexBuffer* Ptr;
 		};
 
 	private:
-		std::vector<IndexBuffer*> m_IndexBuffers;
-		std::vector<IndexRange> m_Ranges;
+		std::vector<IndexBufferInfo> m_IndexBuffers;
 		int m_LastIndex;
 
 	public:
 		IArrayDescriptor();
-		IArrayDescriptor(const IArrayDescriptor& other) = default;
-		IArrayDescriptor& operator=(const IArrayDescriptor& other) = default;
-		IArrayDescriptor(IArrayDescriptor&& other) = default;
-		IArrayDescriptor& operator=(IArrayDescriptor&& other) = default;
-		~IArrayDescriptor() = default;
 
 		int IndexBufferCount() const;
 		int IndexCount() const;
-		QueryResult QueryIndex(int requestedIndex) const;
-		IndexBuffer* GetIndexBuffer(int requestedIndex) const;
-		int CalculateBufferOffset(int index) const;
+
+		IndexMapping GetMapping() const;
 
 		friend class IndexArray;
 		
 	private:
 		void AddIndexBuffer(IndexBuffer* buffer);
+		void UnmapAll() const;
 
 	};
 

@@ -1,5 +1,6 @@
 #include "Types.h"
-#include "GridFactory.h"
+
+#include "GridFactory.h"
 
 namespace Bolt
 {
@@ -32,8 +33,10 @@ namespace Bolt
 		Vector4<byte> color = Color.ToBytes();
 
 		{
-			VertexIterator iterator = result.Vertices->Begin();
-			IndexIterator<uint> indices = result.Indices.Begin();
+			VertexMapping vMapping = result.Vertices->Map();
+			IndexMapping iMapping = result.Indices.Map();
+			VertexIterator iterator = vMapping.Begin();
+			IndexIterator indices = iMapping.Begin();
 			for (int z = 0; z < zVertices; z++)
 			{
 				for (int x = 0; x < xVertices; x++)

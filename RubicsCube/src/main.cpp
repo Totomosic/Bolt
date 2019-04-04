@@ -21,7 +21,8 @@ namespace RubicsCube
 				});
 			const Model& model = *cuboid->Components().GetComponent<MeshRenderer>().Mesh.Models[0].Model;
 			{
-				model.GetFaces<3>()[0].Vertices[0][3] = Vector4<byte>(0, 0, 255, 255);
+				ModelMapping mapping = model.Map();
+				model.GetFaces<3>(mapping)[0].Vertices[0][0] += Vector3f(0, 0, 0.5f);
 			}
 
 			RenderSchedule s(scene);

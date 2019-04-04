@@ -1,29 +1,30 @@
 #include "Types.h"
-#include "IndexArray.h"
+
+#include "IndexArray.h"
 #include "Iterators\__Iterators__.h"
 
 namespace Bolt
 {
 
 	IndexArray::IndexArray()
-		: m_IndexBuffers(), m_Descriptor(), m_MappedIterators(0)
+		: m_IndexBuffers(), m_Descriptor(), m_IsMapped(false)
 	{
 	
 	}
 
-	IndexArray::IndexArray(IndexArray&& other)
-		: m_IndexBuffers(std::move(other.m_IndexBuffers)), m_Descriptor(std::move(other.m_Descriptor)), m_MappedIterators(0)
+	IndexArray::IndexArray(IndexArray&& other) noexcept
+		: m_IndexBuffers(std::move(other.m_IndexBuffers)), m_Descriptor(std::move(other.m_Descriptor)), m_IsMapped(false)
 	{
-		BLT_ASSERT(!other.IsMapped(), "Unable to move IndexArray while index iterators remain outstanding");
+		BLT_ASSERT(!other.IsMapped(), "Cannot move mapped array");
 	}
 
-	IndexArray& IndexArray::operator=(IndexArray&& other)
+	IndexArray& IndexArray::operator=(IndexArray&& other) noexcept
 	{
-		BLT_ASSERT(!other.IsMapped(), "Unable to move IndexArray while index iterators remain outstanding");
+		BLT_ASSERT(!other.IsMapped(), "Cannot move mapped array");
 		std::vector<std::unique_ptr<IndexBuffer>> tempIndexBuffers = std::move(m_IndexBuffers);
 		m_IndexBuffers = std::move(other.m_IndexBuffers);
 		m_Descriptor = other.m_Descriptor;
-		m_MappedIterators = 0;
+		m_IsMapped = false;
 		other.m_IndexBuffers = std::move(tempIndexBuffers);
 		return *this;
 	}
@@ -70,7 +71,7 @@ namespace Bolt
 
 	bool IndexArray::IsMapped() const
 	{
-		return m_MappedIterators != 0;
+		return m_IsMapped;
 	}
 
 	IndexBuffer& IndexArray::AddIndexBuffer(std::unique_ptr<IndexBuffer>&& buffer)
@@ -81,25 +82,13 @@ namespace Bolt
 		return *ptr;
 	}
 
-	IndexIterator<uint> IndexArray::GetIterator(int index) const
+	IndexMapping IndexArray::Map() const
 	{
-		IArrayDescriptor::QueryResult currentResult = m_Descriptor.QueryIndex(index);
-		if (currentResult.Buffer != nullptr)
-		{
-			m_MappedIterators++;
-			return IndexIterator<uint>((byte*)currentResult.Buffer->PrivateMap(Access::ReadWrite) + currentResult.IndexOffset * sizeof(uint), this, index);
-		}
-		return IndexIterator<uint>((byte*)nullptr, this, index);
-	}
-
-	IndexIterator<uint> IndexArray::Begin() const
-	{
-		return GetIterator(0);
-	}
-
-	IndexIterator<uint> IndexArray::End() const
-	{
-		return GetIterator(m_Descriptor.IndexCount());
+		BLT_ASSERT(!IsMapped(), "Cannot Map Mapped array");
+		SetMapped(true);
+		IndexMapping mapping = m_Descriptor.GetMapping();
+		mapping.SetIndexArray(this);
+		return mapping;
 	}
 
 	IndexArray IndexArray::Clone() const
@@ -112,34 +101,13 @@ namespace Bolt
 		return std::move(result);
 	}
 
-	byte* IndexArray::TestBufferPointer(int& currentIndex, int prevIndex, byte* currentPtr, int incAmount) const
+	void IndexArray::SetMapped(bool isMapped) const
 	{
-		IArrayDescriptor::QueryResult currentResult = m_Descriptor.QueryIndex(currentIndex);
-		IndexBuffer* currentBuffer = currentResult.Buffer;
-		IndexBuffer* prevBuffer = m_Descriptor.GetIndexBuffer(prevIndex);
-		byte* ptr = nullptr;
-		if (prevBuffer != currentBuffer)
+		m_IsMapped = isMapped;
+		if (!isMapped)
 		{
-			if (prevBuffer != nullptr && currentBuffer != nullptr)
-			{
-				prevBuffer->FreeIterator();
-			}
-			if (currentBuffer != nullptr)
-			{
-				currentBuffer->MapIterator();
-				ptr = (byte*)currentBuffer->PrivateMap(Access::ReadWrite) + currentResult.IndexOffset * sizeof(uint);
-			}		
-			else
-			{
-				ptr = currentPtr - sizeof(uint) * incAmount;
-				currentIndex -= incAmount;
-			}
+			m_Descriptor.UnmapAll();
 		}
-		else
-		{
-			ptr = currentPtr + (incAmount) * sizeof(uint);
-		}
-		return ptr;
 	}
 
 }

@@ -1,5 +1,6 @@
 #include "Types.h"
-#include "LineFactory.h"
+
+#include "LineFactory.h"
 
 namespace Bolt
 {
@@ -29,7 +30,8 @@ namespace Bolt
 
 		Vector4<byte> color = Color.ToBytes();
 
-		VertexIterator iterator = result.Vertices->Begin();
+		VertexMapping mapping = result.Vertices->Map();
+		VertexIterator iterator = mapping.Begin();
 		iterator[0] = -half;
 		iterator[1] = Vector3f(0, 0, 1);
 		iterator[2] = Vector2f(0, 1);

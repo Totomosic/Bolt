@@ -1,5 +1,6 @@
 #include "Types.h"
-#include "RectangleFactory.h"
+
+#include "RectangleFactory.h"
 
 namespace Bolt
 {
@@ -31,7 +32,8 @@ namespace Bolt
 
 		Vector4<byte> color = Color.ToBytes();
 
-		VertexIterator iterator = result.Vertices->Begin();
+		VertexMapping mapping = result.Vertices->Map();
+		VertexIterator iterator = mapping.Begin();
 		iterator[0] = Vector3f(-w, h, 0);
 		iterator[1] = Vector3f(0, 0, 1);
 		iterator[2] = Vector2f(0, 1);

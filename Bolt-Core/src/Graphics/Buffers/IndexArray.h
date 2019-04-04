@@ -1,25 +1,24 @@
 #pragma once
 #include "IndexBuffer.h"
 #include "IArrayDescriptor.h"
+#include "IndexMapping.h"
 
 namespace Bolt
 {
-
-	template<typename> class IndexIterator;
 
 	class BLT_API IndexArray
 	{
 	private:
 		std::vector<std::unique_ptr<IndexBuffer>> m_IndexBuffers;
 		IArrayDescriptor m_Descriptor;
-		mutable int m_MappedIterators;
+		mutable bool m_IsMapped;
 
 	public:
 		IndexArray();
 		IndexArray(const IndexArray& other) = delete;
 		IndexArray& operator=(const IndexArray& other) = delete;
-		IndexArray(IndexArray&& other);
-		IndexArray& operator=(IndexArray&& other);
+		IndexArray(IndexArray&& other) noexcept;
+		IndexArray& operator=(IndexArray&& other) noexcept;
 		~IndexArray() = default;
 
 		const std::vector<std::unique_ptr<IndexBuffer>>& GetIndexBuffers() const;
@@ -33,25 +32,14 @@ namespace Bolt
 		bool IsMapped() const;
 
 		IndexBuffer& AddIndexBuffer(std::unique_ptr<IndexBuffer>&& buffer);
-
-		IndexIterator<uint> GetIterator(int index) const;
-		IndexIterator<uint> Begin() const;
-		IndexIterator<uint> End() const;
+		IndexMapping Map() const;
 
 		IndexArray Clone() const;
 
-		template<typename> friend class IndexIterator;
+		friend class IndexMapping;
 
 	private:
-		byte* TestBufferPointer(int& currentIndex, int prevIndex, byte* currentPtr, int incAmount) const;
-		
-		template<typename T>
-		void FreeIterator(IndexIterator<T>& iterator) const
-		{
-			IndexBuffer* buffer = m_Descriptor.GetIndexBuffer(iterator.m_CurrentIndex);
-			buffer->PrivateUnmap();
-			m_MappedIterators--;
-		}
+		void SetMapped(bool isMapped) const;
 
 	};
 

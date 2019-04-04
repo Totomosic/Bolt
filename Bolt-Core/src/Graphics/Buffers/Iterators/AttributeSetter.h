@@ -8,19 +8,14 @@ namespace Bolt
 	class BLT_API AttributeSetter
 	{
 	private:
-		byte* m_Ptr;
+		void* m_Ptr;
 		int m_AttribIndex;
 
 	public:
-		AttributeSetter(byte* ptr, int attribIndex);
-		AttributeSetter(const AttributeSetter& other) = delete;
-		AttributeSetter& operator=(const AttributeSetter& other) = delete;
-		AttributeSetter(AttributeSetter&& other);
-		AttributeSetter& operator=(AttributeSetter&& other);
-		~AttributeSetter();
+		AttributeSetter(void* ptr, int attribIndex);
 
-		const byte* Get() const;
-		byte* Get();
+		const void* Get() const;
+		void* Get();
 		int AttributeIndex() const;
 
 		// When converting to T&, use explicit_cast<>

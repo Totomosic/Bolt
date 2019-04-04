@@ -1,27 +1,21 @@
 #pragma once
 #include "Bolt-Core.h"
-#include "..\BufferLayout.h"
 #include "AttributeSetter.h"
-#include "..\MappedVertexArray.h"
 
 namespace Bolt
 {
 
+	class VertexMapping;
+
 	class BLT_API VertexIterator
 	{
 	private:
-		MappedVertexArray m_VertexBuffers;
+		const VertexMapping* m_Mapping;
 		int m_VertexIndex;
 
 	public:
 		VertexIterator();
-		VertexIterator(MappedVertexArray&& vertexBuffers, int vertexIndex);
-		~VertexIterator() noexcept;
-
-		VertexIterator(const VertexIterator& other) = delete;
-		VertexIterator& operator=(const VertexIterator& other) = delete;
-		VertexIterator(VertexIterator&& other);
-		VertexIterator& operator=(VertexIterator&& other);
+		VertexIterator(const VertexMapping* mapping, int vertexIndex);
 
 		int VertexIndex() const;
 
@@ -43,8 +37,6 @@ namespace Bolt
 		bool operator>=(const VertexIterator& other) const;
 
 		friend class AttributeSetter;
-		friend class IteratorManager;
-
 	};
 
 }

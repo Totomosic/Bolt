@@ -1,5 +1,6 @@
 #include "Types.h"
-#include "AttributeSetter.h"
+
+#include "AttributeSetter.h"
 #include "VertexIterator.h"
 #include "../VertexArray.h"
 #include "../VertexBuffer.h"
@@ -7,37 +8,18 @@
 namespace Bolt
 {
 
-	AttributeSetter::AttributeSetter(byte* ptr, int attributeIndex)
+	AttributeSetter::AttributeSetter(void* ptr, int attributeIndex)
 		: m_Ptr(ptr), m_AttribIndex(attributeIndex)
 	{
 	
 	}
 
-	AttributeSetter::AttributeSetter(AttributeSetter&& other)
-		: m_Ptr(other.m_Ptr), m_AttribIndex(other.m_AttribIndex)
-	{
-		other.m_Ptr = nullptr;
-	}
-
-	AttributeSetter& AttributeSetter::operator=(AttributeSetter&& other)
-	{
-		m_Ptr = other.m_Ptr;
-		m_AttribIndex = other.m_AttribIndex;
-		other.m_Ptr = nullptr;
-		return *this;
-	}
-
-	AttributeSetter::~AttributeSetter()
-	{
-		
-	}
-
-	const byte* AttributeSetter::Get() const
+	const void* AttributeSetter::Get() const
 	{
 		return m_Ptr;
 	}
 
-	byte* AttributeSetter::Get()
+	void* AttributeSetter::Get()
 	{
 		return m_Ptr;
 	}

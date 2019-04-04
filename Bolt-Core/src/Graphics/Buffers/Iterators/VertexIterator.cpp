@@ -1,38 +1,20 @@
 #include "Types.h"
-#include "VertexIterator.h"
-#include "..\VertexArray.h"
+#include "VertexIterator.h"
+#include "../VertexMapping.h"
 
 namespace Bolt
 {
 
 	VertexIterator::VertexIterator()
-		: m_VertexBuffers(), m_VertexIndex(-1)
+		: m_Mapping(nullptr), m_VertexIndex(-1)
 	{
 	
 	}
 	
-	VertexIterator::VertexIterator(MappedVertexArray&& vertexBuffers, int vertexIndex)
-		: m_VertexBuffers(std::move(vertexBuffers)), m_VertexIndex(vertexIndex)
+	VertexIterator::VertexIterator(const VertexMapping* mapping, int vertexIndex)
+		: m_Mapping(mapping), m_VertexIndex(vertexIndex)
 	{
 	
-	}
-
-	VertexIterator::VertexIterator(VertexIterator&& other)
-		: m_VertexBuffers(std::move(other.m_VertexBuffers)), m_VertexIndex(other.m_VertexIndex)
-	{
-		
-	}
-
-	VertexIterator& VertexIterator::operator=(VertexIterator&& other)
-	{
-		m_VertexBuffers = std::move(other.m_VertexBuffers);
-		m_VertexIndex = other.m_VertexIndex;
-		return *this;
-	}
-
-	VertexIterator::~VertexIterator() noexcept
-	{
-		
 	}
 
 	int VertexIterator::VertexIndex() const
@@ -47,11 +29,7 @@ namespace Bolt
 
 	AttributeSetter VertexIterator::Seek(int attributeIndex)
 	{
-		MappedVertexArray::MappedPtr& mappedPtr = m_VertexBuffers.m_MappedPtrs.at(attributeIndex);
-		byte* ptr = mappedPtr.Ptr;
-		ptr += mappedPtr.Layout->OffsetOf(attributeIndex);
-		ptr += m_VertexIndex * mappedPtr.Layout->Stride();
-		return AttributeSetter(ptr, attributeIndex);
+		return AttributeSetter(m_Mapping->GetAttributePtr(attributeIndex, m_VertexIndex), attributeIndex);
 	}
 
 	VertexIterator& VertexIterator::operator++()

@@ -52,37 +52,15 @@ namespace Bolt
 		}
 	}
 
+	ModelMapping Model::Map() const
+	{
+		return { Data().Vertices->Map(), Data().Indices.Map() };
+	}
+
 	std::unique_ptr<Resource> Model::Clone() const
 	{
 		std::unique_ptr<Model> model = std::make_unique<Model>(ModelData{ m_Data.Vertices->Clone(), m_Data.Indices.Clone(), m_Data.Bounds });
 		return model;
-	}
-
-	std::vector<Triangle> Model::GetTriangles() const
-	{
-		std::vector<Triangle> result;
-		IndexIterator<> it = m_Data.Indices.Begin();
-		int indexCount = m_Data.Indices.Descriptor().IndexCount();
-		if (m_Data.Vertices->GetRenderMode() == RenderMode::Triangles)
-		{
-			for (int i = 0; i < indexCount; i += 3)
-			{
-				result.push_back({ m_Data.Vertices->GetVertex(*it), m_Data.Vertices->GetVertex(*it++), m_Data.Vertices->GetVertex(*it++) });
-				it++;
-			}
-		}
-		return result;
-	}
-
-	Triangle Model::GetTriangle(int index) const
-	{
-		if (m_Data.Vertices->GetRenderMode() == RenderMode::Triangles)
-		{
-			int	vertexIndex = index * 3;
-			IndexIterator<> it = m_Data.Indices.GetIterator(vertexIndex);
-			return { m_Data.Vertices->GetVertex(*it), m_Data.Vertices->GetVertex(*it++), m_Data.Vertices->GetVertex(*it++) };
-		}
-		return Triangle();
 	}
 
 	int Model::CalculateBufferIndex(int triangleIndex) const

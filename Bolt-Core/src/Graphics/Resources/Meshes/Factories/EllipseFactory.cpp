@@ -1,5 +1,6 @@
 #include "Types.h"
-#include "EllipseFactory.h"
+
+#include "EllipseFactory.h"
 
 namespace Bolt
 {
@@ -31,8 +32,10 @@ namespace Bolt
 		Vector4<byte> color = Color.ToBytes();
 
 		{
-			VertexIterator iterator = result.Vertices->Begin();
-			IndexIterator<> indices = result.Indices.Begin();
+			VertexMapping vMapping = result.Vertices->Map();
+			IndexMapping iMapping = result.Indices.Map();
+			VertexIterator iterator = vMapping.Begin();
+			IndexIterator indices = iMapping.Begin();
 
 			iterator[0] = Vector3f(0, 0, 0);
 			iterator[1] = Vector3f(0, 0, 1);
