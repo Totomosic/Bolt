@@ -11,6 +11,21 @@ namespace Bolt
 	
 	}
 
+	IndexMapping::IndexMapping(IndexMapping&& other)
+		: m_Array(other.m_Array), m_MappedPtrs(std::move(other.m_MappedPtrs))
+	{
+		other.m_Array = nullptr;
+	}
+
+	IndexMapping& IndexMapping::operator=(IndexMapping&& other)
+	{
+		const IndexArray* myArray = m_Array;
+		m_Array = other.m_Array;
+		m_MappedPtrs = std::move(m_MappedPtrs);
+		other.m_Array = myArray;
+		return *this;
+	}
+
 	IndexMapping::~IndexMapping()
 	{
 		m_Array->SetMapped(false);

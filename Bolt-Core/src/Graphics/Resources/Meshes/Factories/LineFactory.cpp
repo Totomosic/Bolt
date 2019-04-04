@@ -15,8 +15,9 @@ namespace Bolt
 	{
 		ModelData result;
 		result.Vertices = std::make_unique<VertexArray>(RenderMode::Lines);
+		result.Indices = std::make_unique<IndexArray>();
 		uint indices[2] = { 0, 1 };
-		result.Indices.AddIndexBuffer(std::make_unique<IndexBuffer>(indices, 2));
+		result.Indices->AddIndexBuffer(std::make_unique<IndexBuffer>(indices, 2));
 		Vector3f half = Direction * Length / 2.0f;
 		result.Bounds.MinX = -abs(half.x);
 		result.Bounds.MaxX = abs(half.x);
@@ -30,17 +31,19 @@ namespace Bolt
 
 		Vector4<byte> color = Color.ToBytes();
 
-		VertexMapping mapping = result.Vertices->Map();
-		VertexIterator iterator = mapping.Begin();
-		iterator[0] = -half;
-		iterator[1] = Vector3f(0, 0, 1);
-		iterator[2] = Vector2f(0, 1);
-		iterator[3] = color;
-		iterator++;
-		iterator[0] = half;
-		iterator[1] = Vector3f(0, 0, 1);
-		iterator[2] = Vector2f(0, 0);
-		iterator[3] = color;
+		{
+			VertexMapping mapping = result.Vertices->Map();
+			VertexIterator iterator = mapping.Begin();
+			iterator[0] = -half;
+			iterator[1] = Vector3f(0, 0, 1);
+			iterator[2] = Vector2f(0, 1);
+			iterator[3] = color;
+			iterator++;
+			iterator[0] = half;
+			iterator[1] = Vector3f(0, 0, 1);
+			iterator[2] = Vector2f(0, 0);
+			iterator[3] = color;
+		}
 
 		return result;
 	}

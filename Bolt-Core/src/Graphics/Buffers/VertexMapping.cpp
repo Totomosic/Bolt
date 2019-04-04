@@ -18,9 +18,28 @@ namespace Bolt
 		}
 	}
 
+	VertexMapping::VertexMapping(VertexMapping&& other)
+		: m_Array(other.m_Array), m_MappedPtrs(std::move(other.m_MappedPtrs)), m_AttributeMap(std::move(other.m_AttributeMap))
+	{
+		other.m_Array = nullptr;
+	}
+
+	VertexMapping& VertexMapping::operator=(VertexMapping&& other)
+	{
+		const VertexArray* myArray = m_Array;
+		m_Array = other.m_Array;
+		m_MappedPtrs = std::move(other.m_MappedPtrs);
+		m_AttributeMap = std::move(other.m_AttributeMap);
+		other.m_Array = myArray;
+		return *this;
+	}
+
 	VertexMapping::~VertexMapping()
 	{
-		m_Array->SetMapped(false);
+		if (m_Array != nullptr)
+		{
+			m_Array->SetMapped(false);
+		}
 	}
 
 	VertexIterator VertexMapping::Begin() const

@@ -40,11 +40,21 @@ namespace Bolt
 	VertexMapping ArrayDescriptor::GetMapping() const
 	{
 		std::vector<VertexMapping::MappingPtr> mappedPtrs;
+		std::unordered_map<const VertexBuffer*, void*> bufferPtrs;
 		for (const auto& pair : m_Attributes)
 		{
 			VertexMapping::MappingPtr mappingPtr;
 			const BufferLayout& layout = pair.second->Layout();
-			mappingPtr.Ptr = pair.second->Map(Access::ReadWrite);
+			void* dataPtr = nullptr;
+			if (bufferPtrs.find(pair.second) != bufferPtrs.end())
+			{
+				dataPtr = bufferPtrs.at(pair.second);
+			}
+			else
+			{
+				dataPtr = pair.second->Map(Access::ReadWrite);
+				bufferPtrs[pair.second] = dataPtr;
+			}
 			mappingPtr.Stride = layout.Stride();
 			for (const BufferLayout::VertexAttribute& attrib : layout.GetAttributes())
 			{
@@ -70,9 +80,14 @@ namespace Bolt
 
 	void ArrayDescriptor::UnmapAll() const
 	{
+		std::vector<const VertexBuffer*> unmappedBuffers;
 		for (const auto& pair : m_Attributes)
 		{
-			pair.second->Unmap();
+			if (std::find(unmappedBuffers.begin(), unmappedBuffers.end(), pair.second) == unmappedBuffers.end())
+			{
+				pair.second->Unmap();
+				unmappedBuffers.push_back(pair.second);
+			}			
 		}
 	}
 

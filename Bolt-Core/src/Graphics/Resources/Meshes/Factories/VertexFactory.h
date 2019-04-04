@@ -19,7 +19,7 @@ namespace Bolt
 	{
 	public:
 		std::unique_ptr<VertexArray> Vertices;
-		IndexArray Indices;
+		std::unique_ptr<IndexArray> Indices;
 		ModelBounds Bounds;
 	};
 

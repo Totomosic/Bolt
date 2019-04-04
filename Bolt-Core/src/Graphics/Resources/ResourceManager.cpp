@@ -210,7 +210,8 @@ namespace Bolt
 		});
 
 		ModelData data;
-		data.Indices.AddIndexBuffer(std::make_unique<IndexBuffer>(indices.data(), indices.size()));
+		data.Indices = std::make_unique<IndexArray>();
+		data.Indices->AddIndexBuffer(std::make_unique<IndexBuffer>(indices.data(), indices.size()));
 		data.Vertices = std::make_unique<VertexArray>();
 		BufferLayout layout = BufferLayout::Default();
 		VertexBuffer& buffer = data.Vertices->CreateVertexBuffer(vertices.size() / vertexDimension * layout.Size(), layout);

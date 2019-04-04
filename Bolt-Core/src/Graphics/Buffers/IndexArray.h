@@ -34,7 +34,7 @@ namespace Bolt
 		IndexBuffer& AddIndexBuffer(std::unique_ptr<IndexBuffer>&& buffer);
 		IndexMapping Map() const;
 
-		IndexArray Clone() const;
+		std::unique_ptr<IndexArray> Clone() const;
 
 		friend class IndexMapping;
 
