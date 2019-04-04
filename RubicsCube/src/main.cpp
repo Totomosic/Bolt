@@ -22,23 +22,8 @@ namespace RubicsCube
 			const Model& model = *cuboid->Components().GetComponent<MeshRenderer>().Mesh.Models[0].Model;
 			{
 				ModelMapping mapping = model.Map();
-				for (Face<3>& face : model.GetFaces<3>(mapping))
-				{
-					face.Vertices[0][0] += Vector3f(0.5f, 0.5f, 0.5f);
-					face.Vertices[1][0] += Vector3f(0.5f, 0.5f, 0.5f);
-					face.Vertices[2][0] += Vector3f(0.5f, 0.5f, 0.5f);					
-				}
+				model.GetFaces<3>(mapping)[1].Vertices[2][3] = Color::Blue.ToBytes();
 			}
-			{
-				ModelMapping mapping = model.Map();
-				for (Face<3>& face : model.GetFaces<3>(mapping))
-				{
-					BLT_INFO(face.Vertices[0][0].Read<Vector3f>());
-					BLT_INFO(face.Vertices[1][0].Read<Vector3f>());
-					BLT_INFO(face.Vertices[2][0].Read<Vector3f>());
-				}
-			}
-			
 
 			RenderSchedule s(scene);
 			s.AddRenderProcess({ });

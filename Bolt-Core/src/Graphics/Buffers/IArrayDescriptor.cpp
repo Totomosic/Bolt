@@ -1,5 +1,6 @@
 #include "Types.h"
-#include "IArrayDescriptor.h"
+
+#include "IArrayDescriptor.h"
 
 namespace Bolt
 {

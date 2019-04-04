@@ -55,7 +55,8 @@ namespace Bolt
 				dataPtr = pair.second->Map(Access::ReadWrite);
 				bufferPtrs[pair.second] = dataPtr;
 			}
-			mappingPtr.Stride = layout.Stride();
+			mappingPtr.Stride = (int)layout.Stride();
+			mappingPtr.Ptr = dataPtr;
 			for (const BufferLayout::VertexAttribute& attrib : layout.GetAttributes())
 			{
 				VertexMapping::MappingAttribute attribute;
