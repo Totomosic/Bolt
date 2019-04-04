@@ -12,11 +12,6 @@ namespace Bolt
 
 	public:
 		ArrayDescriptor() = default;
-		ArrayDescriptor(const ArrayDescriptor& other) = default;
-		ArrayDescriptor(ArrayDescriptor&& other) = default;
-		ArrayDescriptor& operator=(const ArrayDescriptor& other) = default;
-		ArrayDescriptor& operator=(ArrayDescriptor&& other) = default;
-		~ArrayDescriptor() = default;
 
 		int AttributeCount() const;
 		int LowestAttribute() const;

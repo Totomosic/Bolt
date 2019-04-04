@@ -15,12 +15,14 @@ namespace Bolt
 		: m_Id(other.m_Id), m_Vertices(std::move(other.m_Vertices)), m_RenderMode(other.m_RenderMode), m_Descriptor(std::move(other.m_Descriptor)), m_IsMapped(false)
 	{
 		BLT_ASSERT(!other.m_IsMapped, "Cannot move mapped array");
+		BLT_INFO("VA MOVED");
 		other.m_Id = 0;
 	}
 
 	VertexArray& VertexArray::operator=(VertexArray&& other) noexcept
 	{
 		BLT_ASSERT(!other.m_IsMapped, "Cannot move mapped array");
+		BLT_INFO("VA MOVED");
 		std::vector<std::unique_ptr<VertexBuffer>> tempVector = std::move(m_Vertices);
 		id_t tempID = m_Id;
 		m_Id = other.m_Id;
@@ -107,12 +109,12 @@ namespace Bolt
 		return thisBuffer;
 	}
 
-	VertexBuffer& VertexArray::CreateVertexBuffer(size_t size, BufferLayout layout, BufferUsage usage)
+	VertexBuffer& VertexArray::CreateVertexBuffer(size_t size, const BufferLayout& layout, BufferUsage usage)
 	{
 		return CreateVertexBuffer(nullptr, size, layout, usage);
 	}
 
-	VertexBuffer& VertexArray::CreateVertexBuffer(const void* data, size_t size, BufferLayout layout, BufferUsage usage)
+	VertexBuffer& VertexArray::CreateVertexBuffer(const void* data, size_t size, const BufferLayout& layout, BufferUsage usage)
 	{
 		std::unique_ptr<VertexBuffer> buffer = std::make_unique<VertexBuffer>(data, size, layout, usage);
 		return AddVertexBuffer(std::move(buffer));

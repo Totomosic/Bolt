@@ -28,7 +28,10 @@ namespace Bolt
 
 	IndexMapping::~IndexMapping()
 	{
-		m_Array->SetMapped(false);
+		if (m_Array != nullptr)
+		{
+			m_Array->SetMapped(false);
+		}
 	}
 
 	IndexIterator IndexMapping::Begin() const
