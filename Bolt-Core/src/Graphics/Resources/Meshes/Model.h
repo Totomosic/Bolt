@@ -54,21 +54,62 @@ namespace Bolt
 			for (int i = 0; i < indexCount; i += 3)
 			{
 				Face<3> currentFace;
-				currentFace.Vertices[0] = mapping.VertexMap.GetVertex(*it);
-				it++;
-				currentFace.Vertices[1] = mapping.VertexMap.GetVertex(*it);
-				it++;
-				currentFace.Vertices[2] = mapping.VertexMap.GetVertex(*it);
-				it++;
+				currentFace.Vertices[0] = mapping.VertexMap.GetVertex(*it++);
+				currentFace.Vertices[1] = mapping.VertexMap.GetVertex(*it++);
+				currentFace.Vertices[2] = mapping.VertexMap.GetVertex(*it++);
+				faces.push_back(std::move(currentFace));
+			}
+			return faces;
+		}
+
+		template<>
+		std::vector<Face<4>> GetFaces(ModelMapping& mapping) const
+		{
+			std::vector<Face<4>> faces;
+			IndexIterator it = mapping.IndexMap.Begin();
+			int indexCount = Data().Indices->IndexCount();
+			for (int i = 0; i < indexCount; i += 6)
+			{
+				Face<4> currentFace;
+				currentFace.Vertices[0] = mapping.VertexMap.GetVertex(*it++);
+				currentFace.Vertices[1] = mapping.VertexMap.GetVertex(*it++);
+				currentFace.Vertices[2] = mapping.VertexMap.GetVertex(*it++);
+				it += 2;
+				currentFace.Vertices[3] = mapping.VertexMap.GetVertex(*it++);
 				faces.push_back(std::move(currentFace));
 			}
 			return faces;
 		}
 
 		template<size_t VertexCount>
-		Face<VertexCount> GetFace(int index) const
+		Face<VertexCount> GetFace(ModelMapping& mapping, int index) const
 		{
+			BLT_ASSERT(false, "Unable to get faces with {} vertices", VertexCount);
 			return Face<VertexCount>();
+		}
+
+		template<>
+		Face<3> GetFace(ModelMapping& mapping, int index) const
+		{
+			IndexIterator it = mapping.IndexMap.Begin() + index * 3;
+			Face<3> result;
+			result.Vertices[0] = mapping.VertexMap.GetVertex(*it++);
+			result.Vertices[1] = mapping.VertexMap.GetVertex(*it++);
+			result.Vertices[2] = mapping.VertexMap.GetVertex(*it++);
+			return result;
+		}
+
+		template<>
+		Face<4> GetFace(ModelMapping& mapping, int index) const
+		{
+			IndexIterator it = mapping.IndexMap.Begin() + index * 6;
+			Face<4> result;
+			result.Vertices[0] = mapping.VertexMap.GetVertex(*it++);
+			result.Vertices[1] = mapping.VertexMap.GetVertex(*it++);
+			result.Vertices[2] = mapping.VertexMap.GetVertex(*it++);
+			it += 2;
+			result.Vertices[3] = mapping.VertexMap.GetVertex(*it++);
+			return result;
 		}
 
 	private:

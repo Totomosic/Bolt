@@ -28,8 +28,11 @@ namespace Bolt
 		IndexIterator& operator-=(int amount);
 		IndexIterator& operator++();
 		IndexIterator& operator--();
-		IndexIterator& operator++(int);
-		IndexIterator& operator--(int);
+		IndexIterator operator++(int);
+		IndexIterator operator--(int);
+
+		friend IndexIterator operator+(const IndexIterator& left, int right);
+		friend IndexIterator operator-(const IndexIterator& left, int right);
 
 		bool operator==(const IndexIterator& other) const;
 		bool operator!=(const IndexIterator& other) const;

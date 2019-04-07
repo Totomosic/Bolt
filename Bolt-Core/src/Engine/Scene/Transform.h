@@ -38,6 +38,7 @@ namespace Bolt
 		bool GetUpdateOnInvalidate() const;
 		void SetParent(const Transform* transform);
 		void SetUpdateOnInvalidate(bool update);
+		int ChildCount() const;
 
 		const Vector3f& LocalPosition() const;
 		const Quaternion& LocalOrientation() const;

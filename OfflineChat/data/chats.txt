@@ -1,0 +1,29 @@
+<Groups>
+	<Group name="Group0">
+		<OtherUsers>
+			<User ip="0.0.0.0:0" name="Cam"></User>
+		</OtherUsers>
+		<MessageHistory>
+			<Message>
+				<User ip="0.0.0.0:0" name="Totomosic"></User>
+				<Timestamp>05/04/19 14:24</Timestamp>
+				<Data>hello</Data>
+			</Message>
+			<Message>
+				<User ip="0.0.0.0:0" name="Totomosic"></User>
+				<Timestamp>05/04/19 14:25</Timestamp>
+				<Data>ward</Data>
+			</Message>
+			<Message>
+				<User ip="0.0.0.0:0" name="Totomosic"></User>
+				<Timestamp>05/04/19 14:25</Timestamp>
+				<Data>the whole town, yah yeet</Data>
+			</Message>
+			<Message>
+				<User ip="0.0.0.0:0" name="Totomosic"></User>
+				<Timestamp>05/04/19 14:30</Timestamp>
+				<Data>yah yeet yah yeet yah yeet</Data>
+			</Message>
+		</MessageHistory>
+	</Group>
+</Groups>

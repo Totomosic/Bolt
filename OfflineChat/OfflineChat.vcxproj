@@ -15,10 +15,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{ECDEFCB0-D896-3EFE-419E-175A2D75D9EE}</ProjectGuid>
+    <ProjectGuid>{68EF1A5F-D4A4-9354-5D99-8D2BC94D8A58}</ProjectGuid>
     <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>RubicsCube</RootNamespace>
+    <RootNamespace>OfflineChat</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Globals">
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
@@ -60,23 +60,23 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\bin\Debug-windows-x86\RubicsCube\</OutDir>
-    <IntDir>..\bin-int\Debug-windows-x86\RubicsCube\</IntDir>
-    <TargetName>RubicsCube</TargetName>
+    <OutDir>..\bin\Debug-windows-x86\OfflineChat\</OutDir>
+    <IntDir>..\bin-int\Debug-windows-x86\OfflineChat\</IntDir>
+    <TargetName>OfflineChat</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\bin\Release-windows-x86\RubicsCube\</OutDir>
-    <IntDir>..\bin-int\Release-windows-x86\RubicsCube\</IntDir>
-    <TargetName>RubicsCube</TargetName>
+    <OutDir>..\bin\Release-windows-x86\OfflineChat\</OutDir>
+    <IntDir>..\bin-int\Release-windows-x86\OfflineChat\</IntDir>
+    <TargetName>OfflineChat</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dist|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\bin\Dist-windows-x86\RubicsCube\</OutDir>
-    <IntDir>..\bin-int\Dist-windows-x86\RubicsCube\</IntDir>
-    <TargetName>RubicsCube</TargetName>
+    <OutDir>..\bin\Dist-windows-x86\OfflineChat\</OutDir>
+    <IntDir>..\bin-int\Dist-windows-x86\OfflineChat\</IntDir>
+    <TargetName>OfflineChat</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -129,16 +129,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\RubicsCube.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\RubicsCube.cpp" />
+    <ClCompile Include="src\ChatGroup.cpp" />
+    <ClCompile Include="src\ChatManager.cpp" />
+    <ClCompile Include="src\ChatMessage.cpp" />
+    <ClCompile Include="src\ChatUser.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\MessageData.cpp" />
+    <ClCompile Include="src\MessageLog.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bolt-Core\Bolt-Core.vcxproj">
       <Project>{2CF839F6-9862-EE6C-E1A0-9F124D4ACCC1}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\ChatGroup.h" />
+    <ClInclude Include="src\ChatManager.h" />
+    <ClInclude Include="src\ChatMessage.h" />
+    <ClInclude Include="src\ChatUser.h" />
+    <ClInclude Include="src\MessageData.h" />
+    <ClInclude Include="src\MessageLog.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

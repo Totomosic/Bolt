@@ -60,6 +60,18 @@ namespace Bolt
 		return *this;
 	}
 
+	IndexIterator IndexIterator::operator++(int)
+	{
+		(*this) += 1;
+		return (*this - 1);
+	}
+
+	IndexIterator IndexIterator::operator--(int)
+	{
+		(*this) -= 1;
+		return (*this + 1);
+	}
+
 	IndexIterator& IndexIterator::operator++()
 	{
 		return (*this += 1);
@@ -70,14 +82,14 @@ namespace Bolt
 		return (*this -= 1);
 	}
 
-	IndexIterator& IndexIterator::operator++(int)
+	IndexIterator operator+(const IndexIterator& left, int right)
 	{
-		return (*this += 1);
+		return IndexIterator(left.m_Mapping, left.m_CurrentIndex + right);
 	}
 
-	IndexIterator& IndexIterator::operator--(int)
+	IndexIterator operator-(const IndexIterator& left, int right)
 	{
-		return (*this -= 1);
+		return (left + (-right));
 	}
 
 	bool IndexIterator::operator==(const IndexIterator & other) const

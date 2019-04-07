@@ -97,6 +97,11 @@ namespace Bolt
 		m_UpdateOnInvalidate = update;
 	}
 
+	int Transform::ChildCount() const
+	{
+		return m_Children.size();
+	}
+
 	const Vector3f& Transform::LocalPosition() const
 	{
 		return m_LocalPosition;

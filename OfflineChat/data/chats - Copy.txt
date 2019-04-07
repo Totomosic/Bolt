@@ -1,0 +1,14 @@
+<Groups>
+    <Group name="Group0">
+        <OtherUsers>
+            <User name="Cam" ip="localhost"></User>
+        </OtherUsers>
+        <MessageHistory>
+            <Message>
+                <User name="Cam" ip="localhost"></User>
+                <Timestamp>5/4/19 12:00pm</Timestamp>
+                <Data>Hi</Data>
+            </Message>
+        </MessageHistory>
+    </Group>
+</Groups>
