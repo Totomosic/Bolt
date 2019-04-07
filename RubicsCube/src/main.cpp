@@ -1,29 +1,25 @@
 #include "Bolt.h"
 
+#include "RubicsCube.h"
+
 namespace RubicsCube
 {
 
 	class App : public Application
 	{
 	public:
+		RubicsCube cube;
+
+	public:
 		void Init() override
 		{
 			Scene& scene = SceneManager::CreateScene();
 			Camera* camera = scene.CreateCamera(Projection::Perspective(PI / 3.0f, AppWindow->Aspect(), 0.1f, 1000.0f));
-			camera->transform().Translate(0, 0, 15);
+			camera->transform().Translate(0, 0, 10);
 			Layer& layer = scene.CreateLayer(camera);
 
 			ObjectFactory factory(layer);
-			GameObject* cuboid = factory.Cuboid(5, 5, 5, Color::White);
-			cuboid->Components().AddComponent<TriggerComponent>(TriggerComponent::TriggerFunc(), [](GameObject* object)
-				{
-					//object->transform().Rotate(PI / 4 * Time::RenderingTimeline().DeltaTime(), Vector3f(-5, 1, 3).Normalize());
-				});
-			const Model& model = *cuboid->Components().GetComponent<MeshRenderer>().Mesh.Models[0].Model;
-			{
-				ModelMapping mapping = model.Map();
-				model.GetFaces<3>(mapping)[1].Vertices[2][3] = Color::Blue.ToBytes();
-			}
+			cube = RubicsCube(factory);
 
 			RenderSchedule s(scene);
 			s.AddRenderProcess({ });
@@ -32,7 +28,14 @@ namespace RubicsCube
 
 		void Update() override
 		{
-		
+			if (Input::Get().MouseButtonDown(MouseButton::Middle))
+			{
+				float x = Input::Get().RelMousePosition().x;
+				float y = Input::Get().RelMousePosition().y;
+				Transform& t = cube.Root()->transform();
+				t.Rotate(-y * 0.01f, Vector3f::Right(), Space::World);
+				t.Rotate(x * 0.01f, Vector3f::Up(), Space::World);
+			}
 		}
 
 		void Render() override

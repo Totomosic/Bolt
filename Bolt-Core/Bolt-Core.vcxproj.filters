@@ -612,6 +612,9 @@
     <ClInclude Include="src\Graphics\Buffers\IndexBuffer.h">
       <Filter>Graphics\Buffers</Filter>
     </ClInclude>
+    <ClInclude Include="src\Graphics\Buffers\IndexMapping.h">
+      <Filter>Graphics\Buffers</Filter>
+    </ClInclude>
     <ClInclude Include="src\Graphics\Buffers\Iterators\AttributeSetter.h">
       <Filter>Graphics\Buffers\Iterators</Filter>
     </ClInclude>
@@ -628,6 +631,9 @@
       <Filter>Graphics\Buffers</Filter>
     </ClInclude>
     <ClInclude Include="src\Graphics\Buffers\VertexBuffer.h">
+      <Filter>Graphics\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphics\Buffers\VertexMapping.h">
       <Filter>Graphics\Buffers</Filter>
     </ClInclude>
     <ClInclude Include="src\Graphics\Buffers\__Buffers__.h">
@@ -875,8 +881,6 @@
     </ClInclude>
     <ClInclude Include="src\Logging.h" />
     <ClInclude Include="src\Types.h" />
-    <ClInclude Include="src\Graphics\Buffers\VertexMapping.h" />
-    <ClInclude Include="src\Graphics\Buffers\IndexMapping.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\BoltTL\string.cpp">
@@ -1122,7 +1126,13 @@
     <ClCompile Include="src\Graphics\Buffers\IndexBuffer.cpp">
       <Filter>Graphics\Buffers</Filter>
     </ClCompile>
+    <ClCompile Include="src\Graphics\Buffers\IndexMapping.cpp">
+      <Filter>Graphics\Buffers</Filter>
+    </ClCompile>
     <ClCompile Include="src\Graphics\Buffers\Iterators\AttributeSetter.cpp">
+      <Filter>Graphics\Buffers\Iterators</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\Buffers\Iterators\IndexIterator.cpp">
       <Filter>Graphics\Buffers\Iterators</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics\Buffers\Iterators\VertexIterator.cpp">
@@ -1132,6 +1142,9 @@
       <Filter>Graphics\Buffers</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics\Buffers\VertexBuffer.cpp">
+      <Filter>Graphics\Buffers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\Buffers\VertexMapping.cpp">
       <Filter>Graphics\Buffers</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics\Framebuffer.cpp">
@@ -1283,8 +1296,5 @@
     </ClCompile>
     <ClCompile Include="src\Logging.cpp" />
     <ClCompile Include="src\Types.cpp" />
-    <ClCompile Include="src\Graphics\Buffers\VertexMapping.cpp" />
-    <ClCompile Include="src\Graphics\Buffers\IndexMapping.cpp" />
-    <ClCompile Include="src\Graphics\Buffers\Iterators\IndexIterator.cpp" />
   </ItemGroup>
 </Project>

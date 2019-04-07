@@ -36,7 +36,6 @@ namespace Bolt
 
 	VertexMapping::~VertexMapping()
 	{
-		BLT_INFO("ARRAY PTR AT DESTRUCTOR {}", (int)m_Array);
 		if (m_Array != nullptr)
 		{
 			m_Array->SetMapped(false);
@@ -81,7 +80,6 @@ namespace Bolt
 	void VertexMapping::SetVertexArray(const VertexArray* vertexArray)
 	{
 		m_Array = vertexArray;
-		BLT_INFO("ARRAY PTR {}", (int)m_Array);
 	}
 
 }

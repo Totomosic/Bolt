@@ -22,14 +22,34 @@ namespace Bolt
 		return m_VertexIndex;
 	}
 
-	AttributeSetter VertexIterator::operator[](int attributeIndex)
+	AttributeSetter VertexIterator::operator[](int attributeIndex) const
 	{
 		return Seek(attributeIndex);
 	}
 
-	AttributeSetter VertexIterator::Seek(int attributeIndex)
+	AttributeSetter VertexIterator::Seek(int attributeIndex) const
 	{
 		return AttributeSetter(m_Mapping->GetAttributePtr(attributeIndex, m_VertexIndex), attributeIndex);
+	}
+
+	Vector3f& VertexIterator::Position() const
+	{
+		return Seek(0).Read<Vector3f>();
+	}
+
+	Vector3f& VertexIterator::Normal() const
+	{
+		return Seek(1).Read<Vector3f>();
+	}
+
+	Vector2f& VertexIterator::TexCoord() const
+	{
+		return Seek(2).Read<Vector2f>();
+	}
+
+	Vector4<byte>& VertexIterator::Color() const
+	{
+		return Seek(3).Read<Vector4<byte>>();
 	}
 
 	VertexIterator& VertexIterator::operator++()
@@ -44,16 +64,16 @@ namespace Bolt
 		return *this;
 	}
 
-	VertexIterator& VertexIterator::operator++(int)
+	VertexIterator VertexIterator::operator++(int)
 	{
 		m_VertexIndex++;
-		return *this;
+		return (*this - 1);
 	}
 
-	VertexIterator& VertexIterator::operator--(int)
+	VertexIterator VertexIterator::operator--(int)
 	{
 		m_VertexIndex--;
-		return *this;
+		return (*this + 1);
 	}
 
 	VertexIterator& VertexIterator::operator+=(int amount)
@@ -66,6 +86,16 @@ namespace Bolt
 	{
 		m_VertexIndex -= amount;
 		return *this;
+	}
+
+	VertexIterator operator+(const VertexIterator& left, int right)
+	{
+		return VertexIterator(left.m_Mapping, left.m_VertexIndex + right);
+	}
+
+	VertexIterator operator-(const VertexIterator& left, int right)
+	{
+		return (left + (-right));
 	}
 
 	bool VertexIterator::operator==(const VertexIterator& other) const
