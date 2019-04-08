@@ -3,23 +3,12 @@
 #include "..\..\..\Resource.h"
 #include "..\..\..\ResourcePtr.h"
 #include "..\..\..\..\GLshared.h"
-#include "Compiler\__Compiler__.h"
 
 namespace Bolt
 {
 
 	class BLT_API Shader : public Resource, public GLshared
 	{
-	private:
-		static ResourcePtr<const Shader> s_DefaultColorShader;
-		static ResourcePtr<const Shader> s_DefaultTextureShader;
-		static ResourcePtr<const Shader> s_DefaultFontShader;
-		static ResourcePtr<const Shader> s_DefaultSkyboxShader;
-		static ResourcePtr<const Shader> s_SpriteTextureShader;
-
-		static ResourcePtr<const Shader> s_LightingColorShader;
-		static ResourcePtr<const Shader> s_LightingTextureShader;
-
 	private:
 		id_t m_Id;
 
@@ -28,8 +17,8 @@ namespace Bolt
 		Shader(const blt::string& vertexSource, const blt::string& geometrySource, const blt::string& fragmentSource);
 		Shader(const Shader& other) = delete;
 		Shader& operator=(const Shader& other) = delete;
-		Shader(Shader&& other);
-		Shader& operator=(Shader&& other);
+		Shader(Shader&& other) noexcept;
+		Shader& operator=(Shader&& other) noexcept;
 		~Shader() override;
 
 		id_t Id() const;
@@ -67,15 +56,6 @@ namespace Bolt
 		static std::unique_ptr<Shader> FromSource(const blt::string& vertexSource, const blt::string& fragmentSource);
 		static std::unique_ptr<Shader> FromSource(const blt::string& vertexSource, const blt::string& geometrySource, const blt::string& fragmentSource);
 
-		static ResourcePtr<const Shader> DefaultColor();
-		static ResourcePtr<const Shader> DefaultTexture();
-		static ResourcePtr<const Shader> DefaultFont();
-		static ResourcePtr<const Shader> DefaultSkybox();
-		static ResourcePtr<const Shader> SpriteTexture();
-
-		static ResourcePtr<const Shader> LightingColor();
-		static ResourcePtr<const Shader> LightingTexture();
-
 	private:
 		void Create();
 		void Finalise(id_t* shaders, int count);
@@ -84,14 +64,6 @@ namespace Bolt
 
 	private:	
 		static void Initialize();
-		static const Shader* CreateDefaultColorShader();
-		static const Shader* CreateDefaultTextureShader();
-		static const Shader* CreateDefaultFontShader();
-		static const Shader* CreateDefaultSkyboxShader();
-		static const Shader* CreateSpriteTextureShader();
-
-		static const Shader* CreateLightingColorShader();
-		static const Shader* CreateLightingTextureShader();
 
 	};
 

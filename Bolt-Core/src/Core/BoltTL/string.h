@@ -204,7 +204,7 @@ namespace std
 	{
 		size_t operator()(const blt::string& str) const noexcept
 		{
-			return 42;
+			return hash<std::string>()(str.cpp_str());
 		}
 	};
 

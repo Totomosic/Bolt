@@ -88,8 +88,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;FreeImage.lib;freetype26d.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>external\FreeImage;external\FreeType;external\FreeType-GL;external\FreeImage\bin;external\FreeImage\include;external\FreeImage\lib;external\FreeImage\include\FreeImage;external\FreeType\include;external\FreeType\lib;external\FreeType\include\config;external\FreeType\include\internal;external\FreeType\include\internal\services;external\FreeType-GL\include;external\FreeType-GL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;freetype26d.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>external\FreeType;external\FreeType\include;external\FreeType\lib;external\FreeType\include\config;external\FreeType\include\internal;external\FreeType\include\internal\services;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -113,8 +113,8 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;FreeImage.lib;freetype26d.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>external\FreeImage;external\FreeType;external\FreeType-GL;external\FreeImage\bin;external\FreeImage\include;external\FreeImage\lib;external\FreeImage\include\FreeImage;external\FreeType\include;external\FreeType\lib;external\FreeType\include\config;external\FreeType\include\internal;external\FreeType\include\internal\services;external\FreeType-GL\include;external\FreeType-GL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;freetype26d.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>external\FreeType;external\FreeType\include;external\FreeType\lib;external\FreeType\include\config;external\FreeType\include\internal;external\FreeType\include\internal\services;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|Win32'">
@@ -138,8 +138,8 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;FreeImage.lib;freetype26d.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>external\FreeImage;external\FreeType;external\FreeType-GL;external\FreeImage\bin;external\FreeImage\include;external\FreeImage\lib;external\FreeImage\include\FreeImage;external\FreeType\include;external\FreeType\lib;external\FreeType\include\config;external\FreeType\include\internal;external\FreeType\include\internal\services;external\FreeType-GL\include;external\FreeType-GL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;freetype26d.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>external\FreeType;external\FreeType\include;external\FreeType\lib;external\FreeType\include\config;external\FreeType\include\internal;external\FreeType\include\internal\services;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -336,9 +336,6 @@
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Modules\MaterialModule.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Modules\__Modules__.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\RenderSettings.h" />
-    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Compiler\ComShaderProgram.h" />
-    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Compiler\ShaderCompiler.h" />
-    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Compiler\__Compiler__.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\ShaderBuilder.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\ShaderFuncs.h" />
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\Values\FragColorAttribute.h" />
@@ -500,7 +497,6 @@
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\MaterialBuilder.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Modules\MaterialModule.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\RenderSettings.cpp" />
-    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\Compiler\ShaderCompiler.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\ShaderBuilder.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\ShaderFuncs.cpp" />
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\Values\FragColorAttribute.cpp" />

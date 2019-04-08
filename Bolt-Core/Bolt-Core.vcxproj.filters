@@ -711,15 +711,6 @@
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\RenderSettings.h">
       <Filter>Graphics\Resources\Meshes\Materials</Filter>
     </ClInclude>
-    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Compiler\ComShaderProgram.h">
-      <Filter>Graphics\Resources\Meshes\Materials\Shaders\Compiler</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Compiler\ShaderCompiler.h">
-      <Filter>Graphics\Resources\Meshes\Materials\Shaders\Compiler</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Compiler\__Compiler__.h">
-      <Filter>Graphics\Resources\Meshes\Materials\Shaders\Compiler</Filter>
-    </ClInclude>
     <ClInclude Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\ShaderBuilder.h">
       <Filter>Graphics\Resources\Meshes\Materials\Shaders\Components</Filter>
     </ClInclude>
@@ -1194,9 +1185,6 @@
     </ClCompile>
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\RenderSettings.cpp">
       <Filter>Graphics\Resources\Meshes\Materials</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\Compiler\ShaderCompiler.cpp">
-      <Filter>Graphics\Resources\Meshes\Materials\Shaders\Compiler</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics\Resources\Meshes\Materials\Shaders\Components\ShaderBuilder.cpp">
       <Filter>Graphics\Resources\Meshes\Materials\Shaders\Components</Filter>

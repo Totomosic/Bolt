@@ -38,9 +38,7 @@ PREMAKE_FORMAT_STRING_TEMPLATE = """project "{0}"
     {{
         "Bolt-Core",
         "opengl32.lib",
-        "FreeImage.lib",
         "freetype26d.lib",
-        "freetype-gl.lib",
         "ws2_32.lib"
     }}
 

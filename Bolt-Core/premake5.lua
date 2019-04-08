@@ -36,7 +36,6 @@ project "Bolt-Core"
     links
     {
         "opengl32.lib",
-        "FreeImage.lib",
         "freetype26d.lib",
         "ws2_32.lib",
         "GLFW",

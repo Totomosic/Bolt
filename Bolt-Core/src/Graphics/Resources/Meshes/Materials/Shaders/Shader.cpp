@@ -23,15 +23,6 @@ namespace Bolt
 	#define BLT_SHADER_VALIDATE_VALUE(...)
 #endif
 
-	ResourcePtr<const Shader> Shader::s_DefaultColorShader = nullptr;
-	ResourcePtr<const Shader> Shader::s_DefaultTextureShader = nullptr;
-	ResourcePtr<const Shader> Shader::s_DefaultFontShader = nullptr;
-	ResourcePtr<const Shader> Shader::s_DefaultSkyboxShader = nullptr;
-	ResourcePtr<const Shader> Shader::s_SpriteTextureShader = nullptr;
-
-	ResourcePtr<const Shader> Shader::s_LightingColorShader = nullptr;
-	ResourcePtr<const Shader> Shader::s_LightingTextureShader = nullptr;
-
 	Shader::Shader(const blt::string& vertexSource, const blt::string& fragmentSource) : Resource(), GLshared(),
 		m_Id(0)
 	{
@@ -53,13 +44,13 @@ namespace Bolt
 		Finalise(arr, 3);
 	}
 
-	Shader::Shader(Shader&& other)
+	Shader::Shader(Shader&& other) noexcept
 		: m_Id(other.m_Id)
 	{
 		other.m_Id = 0;
 	}
 
-	Shader& Shader::operator=(Shader&& other)
+	Shader& Shader::operator=(Shader&& other) noexcept
 	{
 		id_t id = m_Id;
 		m_Id = other.m_Id;
@@ -256,51 +247,12 @@ namespace Bolt
 
 	std::unique_ptr<Shader> Shader::FromSource(const blt::string& vertexSource, const blt::string& fragmentSource)
 	{
-		blt::string sources[3] = { vertexSource, "", fragmentSource };
-		ComShaderProgram program = ShaderCompiler::Compile(sources, "");
-		return std::make_unique<Shader>(program.Sources[0], program.Sources[2]);
+		return std::make_unique<Shader>(vertexSource, fragmentSource);
 	}
 
 	std::unique_ptr<Shader> Shader::FromSource(const blt::string& vertexSource, const blt::string& geometrySource, const blt::string& fragmentSource)
 	{
-		blt::string sources[3] = { vertexSource, geometrySource, fragmentSource };
-		ComShaderProgram program = ShaderCompiler::Compile(sources, "");
-		return std::make_unique<Shader>(program.Sources[0], program.Sources[1], program.Sources[2]);
-	}
-
-	ResourcePtr<const Shader> Shader::DefaultColor()
-	{
-		return s_DefaultColorShader;
-	}
-
-	ResourcePtr<const Shader> Shader::DefaultTexture()
-	{
-		return s_DefaultTextureShader;
-	}
-
-	ResourcePtr<const Shader> Shader::DefaultFont()
-	{
-		return s_DefaultFontShader;
-	}
-
-	ResourcePtr<const Shader> Shader::DefaultSkybox()
-	{
-		return s_DefaultSkyboxShader;
-	}
-
-	ResourcePtr<const Shader> Shader::SpriteTexture()
-	{
-		return s_SpriteTextureShader;
-	}
-
-	ResourcePtr<const Shader> Shader::LightingColor()
-	{
-		return s_LightingColorShader;
-	}
-
-	ResourcePtr<const Shader> Shader::LightingTexture()
-	{
-		return s_LightingTextureShader;
+		return std::make_unique<Shader>(vertexSource, geometrySource, fragmentSource);
 	}
 
 	void Shader::Create()
@@ -363,114 +315,7 @@ namespace Bolt
 
 	void Shader::Initialize()
 	{
-		blt::string materialHeaderSource =
-#include "Source\Headers\BoltMaterials.glh"
-			;
-		blt::string lightingHeaderSource =
-#include "Source\Headers\BoltLighting.glh"
-			;
-		ShaderCompiler::AddHeader("BoltMaterials.glh", materialHeaderSource);
-		ShaderCompiler::AddHeader("BoltLighting.glh", lightingHeaderSource);
 
-		s_DefaultColorShader = CreateDefaultColorShader();
-		s_DefaultTextureShader = CreateDefaultTextureShader();
-		s_DefaultFontShader = CreateDefaultFontShader();
-		s_DefaultSkyboxShader = CreateDefaultSkyboxShader();
-		s_SpriteTextureShader = CreateSpriteTextureShader();
-
-		s_LightingColorShader = CreateLightingColorShader();
-		s_LightingTextureShader = CreateLightingTextureShader();
-	}
-
-	const Shader* Shader::CreateDefaultColorShader()
-	{
-		blt::string vSource =
-#include "Source\DefaultColor_v.glsl"
-			;
-		blt::string fSource =
-#include "Source\DefaultColor_f.glsl"
-			;
-		std::unique_ptr<Shader> shader = Shader::FromSource(vSource, fSource);
-		Shader* ptr = ResourceManager::Get<Shader>(ResourceManager::Register(std::move(shader))).Get();
-		return ptr;
-	}
-
-	const Shader* Shader::CreateDefaultTextureShader()
-	{
-		blt::string vSource =
-#include "Source\DefaultTexture_v.glsl"
-			;
-		blt::string fSource =
-#include "Source\DefaultTexture_f.glsl"
-			;
-		std::unique_ptr<Shader> shader = Shader::FromSource(vSource, fSource);
-		Shader* ptr = ResourceManager::Get<Shader>(ResourceManager::Register(std::move(shader))).Get();
-		return ptr;
-	}
-
-	const Shader* Shader::CreateDefaultFontShader()
-	{
-		blt::string vSource =
-#include "Source\DefaultFont_v.glsl"
-			;
-		blt::string fSource =
-#include "Source\DefaultFont_f.glsl"
-			;
-		std::unique_ptr<Shader> shader = Shader::FromSource(vSource, fSource);
-		Shader* ptr = ResourceManager::Get<Shader>(ResourceManager::Register(std::move(shader))).Get();
-		return ptr;
-	}
-
-	const Shader* Shader::CreateDefaultSkyboxShader()
-	{
-		blt::string vSource =
-#include "Source\DefaultSkybox_v.glsl"
-			;
-		blt::string fSource =
-#include "Source\DefaultSkybox_f.glsl"
-			;
-		std::unique_ptr<Shader> shader = Shader::FromSource(vSource, fSource);
-		Shader* ptr = ResourceManager::Get<Shader>(ResourceManager::Register(std::move(shader))).Get();
-		return ptr;
-	}
-
-	const Shader* Shader::CreateSpriteTextureShader()
-	{
-		blt::string vSource =
-#include "Source\SpriteTexture_v.glsl"
-			;
-		blt::string fSource =
-#include "Source\SpriteTexture_f.glsl"
-			;
-		std::unique_ptr<Shader> shader = Shader::FromSource(vSource, fSource);
-		Shader* ptr = ResourceManager::Get<Shader>(ResourceManager::Register(std::move(shader))).Get();
-		return ptr;
-	}
-
-	const Shader* Shader::CreateLightingColorShader()
-	{
-		blt::string vSource =
-#include "Source\LightingColor_v.glsl"
-			;
-		blt::string fSource =
-#include "Source\LightingColor_f.glsl"
-			;
-		std::unique_ptr<Shader> shader = Shader::FromSource(vSource, fSource);
-		Shader* ptr = ResourceManager::Get<Shader>(ResourceManager::Register(std::move(shader))).Get();
-		return ptr;
-	}
-
-	const Shader* Shader::CreateLightingTextureShader()
-	{
-		blt::string vSource =
-#include "Source\LightingTexture_v.glsl"
-			;
-		blt::string fSource =
-#include "Source\LightingTexture_f.glsl"
-			;
-		std::unique_ptr<Shader> shader = Shader::FromSource(vSource, fSource);
-		Shader* ptr = ResourceManager::Get<Shader>(ResourceManager::Register(std::move(shader))).Get();
-		return ptr;
 	}
 
 }
