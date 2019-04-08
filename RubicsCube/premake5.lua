@@ -2,6 +2,8 @@ project "RubicsCube"
     location ""
     kind "ConsoleApp"
     language "C++"
+    cppdialect "C++17"
+    staticruntime "on"
     
     targetdir (SolutionDir .. "bin/" .. outputdir .. "/RubicsCube")
     objdir (SolutionDir .. "bin-int/" .. outputdir .. "/RubicsCube")
@@ -22,6 +24,7 @@ project "RubicsCube"
         "../%{IncludeDirs.Glad}",
         "../%{IncludeDirs.ImGui}",
         "../%{IncludeDirs.spdlog}",
+        "../%{IncludeDirs.FreeTypeGL}",
         "src"
     }
 
@@ -36,29 +39,29 @@ project "RubicsCube"
         "opengl32.lib",
         "FreeImage.lib",
         "freetype26d.lib",
-        "freetype-gl.lib",
         "ws2_32.lib"
     }
 
-    filter { "system:windows", "configurations:debug" }
-        cppdialect "C++17"
+    filter "system:windows"
         systemversion "latest"
-        optimize "Off"
 
         defines
         {
-            "BLT_BUILD_STATIC",
             "BLT_PLATFORM_WINDOWS",
-            "BLT_DEBUG"
+            "BLT_BUILD_STATIC"
         }
-    
-    filter { "system:windows", "configurations:release" }
-        cppdialect "C++17"
-        systemversion "latest"
-        optimize "On"
 
-        defines
-        {
-            "BLT_BUILD_STATIC",
-            "BLT_PLATFORM_WINDOWS"
-        }
+    filter "configurations:Debug"
+        defines "BLT_DEBUG"
+        runtime "Debug"
+        symbols "on"
+
+    filter "configurations:Release"
+        defines "BLT_RELEASE"
+        runtime "Release"
+        optimize "on"
+
+    filter "configurations:Dist"
+        defines "BLT_DIST"
+        runtime "Release"
+        optimize "on"

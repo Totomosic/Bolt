@@ -1,7 +1,6 @@
-project "ImGui"
+project "FreeType-GL"
     kind "StaticLib"
-    language "C++"
-    cppdialect "C++17"
+    language "C"
     staticruntime "on"
     
     targetdir (SolutionDir .. "../../bin/" .. outputdir .. "/%{prj.name}")
@@ -9,20 +8,18 @@ project "ImGui"
 
     files
     {
-        "imconfig.h",
-        "imgui.h",
-        "imgui.cpp",
-        "imgui_draw.cpp",
-        "imgui_internal.h",
-        "imgui_widgets.cpp",
-        "imstb_rectpack.h",
-        "imstb_textedit.h",
-        "imstb_truetype.h",
-        "imgui_demo.cpp"
+        "**.h",
+        "**.c"
+    }
+
+    includedirs
+    {
+        "../Glad/include",
+        "../../external/freetype/include/"
     }
     
     filter "system:windows"
-        systemversion "latest"        
+        systemversion "latest"
         
     filter "configurations:Debug"
         runtime "Debug"

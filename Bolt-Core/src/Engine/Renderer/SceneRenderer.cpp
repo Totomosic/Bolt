@@ -120,7 +120,7 @@ namespace Bolt
 		{
 			std::sort(objects.begin(), objects.end(), [](GameObject* left, GameObject* right)
 			{
-				return left->transform().Position().z <= right->transform().Position().z;
+				return left->transform().Position().z < right->transform().Position().z;
 			});
 		}
 		else if (projection == ProjectionType::Perspective)
@@ -128,7 +128,7 @@ namespace Bolt
 			Vector3f cameraPosition = layer.ActiveCamera()->transform().Position();
 			std::sort(objects.begin(), objects.end(), [&cameraPosition](GameObject* left, GameObject* right)
 			{
-				return (cameraPosition - left->transform().Position()).LengthSqrd() >= (cameraPosition - right->transform().Position()).LengthSqrd();
+				return (cameraPosition - right->transform().Position()).LengthSqrd() < (cameraPosition - left->transform().Position()).LengthSqrd();
 			});
 		}
 		PopulateMaterialMap(objects, materialMap);

@@ -15,10 +15,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{C0FF640D-2C14-8DBE-F595-301E616989EF}</ProjectGuid>
+    <ProjectGuid>{899108BF-F546-81B4-7E3B-7B8BEAEF77B8}</ProjectGuid>
     <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>ImGui</RootNamespace>
+    <RootNamespace>FreeType-GL</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -54,31 +54,31 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>..\..\..\bin\Debug-windows-x86\ImGui\</OutDir>
-    <IntDir>..\..\..\bin-int\Debug-windows-x86\ImGui\</IntDir>
-    <TargetName>ImGui</TargetName>
+    <OutDir>..\..\..\bin\Debug-windows-x86\FreeType-GL\</OutDir>
+    <IntDir>..\..\..\bin-int\Debug-windows-x86\FreeType-GL\</IntDir>
+    <TargetName>FreeType-GL</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>..\..\..\bin\Release-windows-x86\ImGui\</OutDir>
-    <IntDir>..\..\..\bin-int\Release-windows-x86\ImGui\</IntDir>
-    <TargetName>ImGui</TargetName>
+    <OutDir>..\..\..\bin\Release-windows-x86\FreeType-GL\</OutDir>
+    <IntDir>..\..\..\bin-int\Release-windows-x86\FreeType-GL\</IntDir>
+    <TargetName>FreeType-GL</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dist|Win32'">
-    <OutDir>..\..\..\bin\Dist-windows-x86\ImGui\</OutDir>
-    <IntDir>..\..\..\bin-int\Dist-windows-x86\ImGui\</IntDir>
-    <TargetName>ImGui</TargetName>
+    <OutDir>..\..\..\bin\Dist-windows-x86\FreeType-GL\</OutDir>
+    <IntDir>..\..\..\bin-int\Dist-windows-x86\FreeType-GL\</IntDir>
+    <TargetName>FreeType-GL</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>..\Glad\include;..\..\external\freetype\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -89,13 +89,13 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>..\Glad\include;..\..\external\freetype\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -107,27 +107,44 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>..\Glad\include;..\..\external\freetype\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="imconfig.h" />
-    <ClInclude Include="imgui.h" />
-    <ClInclude Include="imgui_internal.h" />
-    <ClInclude Include="imstb_rectpack.h" />
-    <ClInclude Include="imstb_textedit.h" />
-    <ClInclude Include="imstb_truetype.h" />
+    <ClInclude Include="distance-field.h" />
+    <ClInclude Include="edtaa3func.h" />
+    <ClInclude Include="font-manager.h" />
+    <ClInclude Include="freetype-gl.h" />
+    <ClInclude Include="markup.h" />
+    <ClInclude Include="opengl.h" />
+    <ClInclude Include="platform.h" />
+    <ClInclude Include="text-buffer.h" />
+    <ClInclude Include="texture-atlas.h" />
+    <ClInclude Include="texture-font.h" />
+    <ClInclude Include="utf8-utils.h" />
+    <ClInclude Include="vec234.h" />
+    <ClInclude Include="vector.h" />
+    <ClInclude Include="vertex-attribute.h" />
+    <ClInclude Include="vertex-buffer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="imgui.cpp" />
-    <ClCompile Include="imgui_demo.cpp" />
-    <ClCompile Include="imgui_draw.cpp" />
-    <ClCompile Include="imgui_widgets.cpp" />
+    <ClCompile Include="distance-field.c" />
+    <ClCompile Include="edtaa3func.c" />
+    <ClCompile Include="font-manager.c" />
+    <ClCompile Include="makefont.c" />
+    <ClCompile Include="platform.c" />
+    <ClCompile Include="text-buffer.c" />
+    <ClCompile Include="texture-atlas.c" />
+    <ClCompile Include="texture-font.c" />
+    <ClCompile Include="utf8-utils.c" />
+    <ClCompile Include="vector.c" />
+    <ClCompile Include="vertex-attribute.c" />
+    <ClCompile Include="vertex-buffer.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

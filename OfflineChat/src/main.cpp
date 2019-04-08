@@ -19,7 +19,8 @@ namespace Chat
 	public:
 		void Init() override
 		{
-			AppWindow->SetClearColor(Color(225, 225, 225));
+			//AppWindow->SetClearColor(Color(225, 225, 225));
+			AppWindow->SetClearColor(Color::Red);
 			AppWindow->EnableVSync();
 			Scene& scene = SceneManager::CreateScene();
 			Camera* camera = scene.CreateCamera(Projection::Orthographic(0, 1920, 0, 1080, 0, 200));
