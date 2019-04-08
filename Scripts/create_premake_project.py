@@ -4,6 +4,8 @@ PREMAKE_FORMAT_STRING_TEMPLATE = """project "{0}"
     location ""
     kind "ConsoleApp"
     language "C++"
+    cppdialect "C++17"
+    staticruntime "on"
     
     targetdir (SolutionDir .. "bin/" .. outputdir .. "/{0}")
     objdir (SolutionDir .. "bin-int/" .. outputdir .. "/{0}")
@@ -42,28 +44,29 @@ PREMAKE_FORMAT_STRING_TEMPLATE = """project "{0}"
         "ws2_32.lib"
     }}
 
-    filter {{ "system:windows", "configurations:debug" }}
-        cppdialect "C++17"
+    filter "system:windows"
         systemversion "latest"
-        optimize "Off"
 
         defines
         {{
-            "BLT_BUILD_STATIC",
             "BLT_PLATFORM_WINDOWS",
-            "BLT_DEBUG"
+            "BLT_BUILD_STATIC"
         }}
-    
-    filter {{ "system:windows", "configurations:release" }}
-        cppdialect "C++17"
-        systemversion "latest"
-        optimize "On"
 
-        defines
-        {{
-            "BLT_BUILD_STATIC",
-            "BLT_PLATFORM_WINDOWS"
-        }}"""
+    filter "configurations:Debug"
+        defines "BLT_DEBUG"
+        runtime "Debug"
+        symbols "on"
+
+    filter "configurations:Release"
+        defines "BLT_RELEASE"
+        runtime "Release"
+        optimize "on"
+
+    filter "configurations:Dist"
+        defines "BLT_DIST"
+        runtime "Release"
+        optimize "on""""
 
 SOLUTION_PREMAKE_FILE = "..\\premake5.lua"
 PROJECTS_DIR = "..\\"

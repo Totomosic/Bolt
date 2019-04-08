@@ -1,6 +1,8 @@
 project "spdlog"
     kind "StaticLib"
     language "C++"
+    cppdialect "C++17"
+    staticruntime "on"
     
     targetdir (SolutionDir .. "../../bin/" .. outputdir .. "/%{prj.name}")
     objdir (SolutionDir .. "../../bin-int/" .. outputdir .. "/%{prj.name}")
@@ -12,8 +14,11 @@ project "spdlog"
     
     filter "system:windows"
         systemversion "latest"
-        cppdialect "C++17"
-        staticruntime "On"
         
-    filter { "system:windows", "configurations:Release" }
-        buildoptions "/MT"
+    filter "configurations:Debug"
+        runtime "Debug"
+        symbols "on"
+
+    filter "configurations:Release"
+        runtime "Release"
+        optimize "on"
