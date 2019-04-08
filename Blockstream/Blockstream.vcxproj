@@ -88,8 +88,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;FreeImage.lib;freetype26d.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\Bolt-Core\external\FreeImage;..\Bolt-Core\external\FreeType;..\Bolt-Core\external\FreeType-GL;..\Bolt-Core\external\FreeImage\bin;..\Bolt-Core\external\FreeImage\include;..\Bolt-Core\external\FreeImage\lib;..\Bolt-Core\external\FreeImage\include\FreeImage;..\Bolt-Core\external\FreeType\include;..\Bolt-Core\external\FreeType\lib;..\Bolt-Core\external\FreeType\include\config;..\Bolt-Core\external\FreeType\include\internal;..\Bolt-Core\external\FreeType\include\internal\services;..\Bolt-Core\external\FreeType-GL\include;..\Bolt-Core\external\FreeType-GL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;freetype26d.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\Bolt-Core\external\FreeType;..\Bolt-Core\external\FreeType\include;..\Bolt-Core\external\FreeType\lib;..\Bolt-Core\external\FreeType\include\config;..\Bolt-Core\external\FreeType\include\internal;..\Bolt-Core\external\FreeType\include\internal\services;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -110,8 +110,8 @@
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;FreeImage.lib;freetype26d.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\Bolt-Core\external\FreeImage;..\Bolt-Core\external\FreeType;..\Bolt-Core\external\FreeType-GL;..\Bolt-Core\external\FreeImage\bin;..\Bolt-Core\external\FreeImage\include;..\Bolt-Core\external\FreeImage\lib;..\Bolt-Core\external\FreeImage\include\FreeImage;..\Bolt-Core\external\FreeType\include;..\Bolt-Core\external\FreeType\lib;..\Bolt-Core\external\FreeType\include\config;..\Bolt-Core\external\FreeType\include\internal;..\Bolt-Core\external\FreeType\include\internal\services;..\Bolt-Core\external\FreeType-GL\include;..\Bolt-Core\external\FreeType-GL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;freetype26d.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\Bolt-Core\external\FreeType;..\Bolt-Core\external\FreeType\include;..\Bolt-Core\external\FreeType\lib;..\Bolt-Core\external\FreeType\include\config;..\Bolt-Core\external\FreeType\include\internal;..\Bolt-Core\external\FreeType\include\internal\services;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|Win32'">
@@ -132,8 +132,8 @@
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;FreeImage.lib;freetype26d.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\Bolt-Core\external\FreeImage;..\Bolt-Core\external\FreeType;..\Bolt-Core\external\FreeType-GL;..\Bolt-Core\external\FreeImage\bin;..\Bolt-Core\external\FreeImage\include;..\Bolt-Core\external\FreeImage\lib;..\Bolt-Core\external\FreeImage\include\FreeImage;..\Bolt-Core\external\FreeType\include;..\Bolt-Core\external\FreeType\lib;..\Bolt-Core\external\FreeType\include\config;..\Bolt-Core\external\FreeType\include\internal;..\Bolt-Core\external\FreeType\include\internal\services;..\Bolt-Core\external\FreeType-GL\include;..\Bolt-Core\external\FreeType-GL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;freetype26d.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\Bolt-Core\external\FreeType;..\Bolt-Core\external\FreeType\include;..\Bolt-Core\external\FreeType\lib;..\Bolt-Core\external\FreeType\include\config;..\Bolt-Core\external\FreeType\include\internal;..\Bolt-Core\external\FreeType\include\internal\services;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

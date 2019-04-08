@@ -37,7 +37,6 @@ project "OfflineChat"
     {
         "Bolt-Core",
         "opengl32.lib",
-        "FreeImage.lib",
         "freetype26d.lib",
         "ws2_32.lib"
     }
