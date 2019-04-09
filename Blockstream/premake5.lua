@@ -25,6 +25,7 @@ project "Blockstream"
 		"../%{IncludeDirs.ImGui}",
         "../%{IncludeDirs.spdlog}",
         "../%{IncludeDirs.FreeTypeGL}",
+        "../%{IncludeDirs.Lua}",
 		"src"
     }
 

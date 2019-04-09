@@ -124,9 +124,6 @@
     <Filter Include="Graphics\Resources\Meshes\Materials\Shaders">
       <UniqueIdentifier>{DEDBB1D9-4A41-4560-D319-E7383F7E3ACF}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Graphics\Resources\Meshes\Materials\Shaders\Compiler">
-      <UniqueIdentifier>{08551E7B-F493-C8F6-9D16-A52889347E61}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Graphics\Resources\Meshes\Materials\Shaders\Components">
       <UniqueIdentifier>{33DA2ACA-1F84-60D9-0855-68F4F49D00C8}</UniqueIdentifier>
     </Filter>
@@ -872,6 +869,8 @@
     </ClInclude>
     <ClInclude Include="src\Logging.h" />
     <ClInclude Include="src\Types.h" />
+    <ClInclude Include="src\Engine\Scripting\__Scripting__.h" />
+    <ClInclude Include="src\Engine\Scripting\Lua\__Lua__.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\BoltTL\string.cpp">

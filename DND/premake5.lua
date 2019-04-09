@@ -28,6 +28,7 @@ project "DND"
 		"../%{IncludeDirs.ImGui}",
         "../%{IncludeDirs.spdlog}",
         "../%{IncludeDirs.FreeTypeGL}",
+        "../%{IncludeDirs.Lua}",
         "src"
     }
 

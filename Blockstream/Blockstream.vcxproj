@@ -79,7 +79,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>BLT_PLATFORM_WINDOWS;BLT_BUILD_STATIC;BLT_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\Bolt-Core\external;..\Bolt-Core\src;..\Bolt-Core\vendor\GLFW\include;..\Bolt-Core\vendor\Glad\include;..\Bolt-Core\vendor\ImGui;..\Bolt-Core\vendor\spdlog\include;..\Bolt-Core\vendor\FreeType-GL;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Bolt-Core\external;..\Bolt-Core\src;..\Bolt-Core\vendor\GLFW\include;..\Bolt-Core\vendor\Glad\include;..\Bolt-Core\vendor\ImGui;..\Bolt-Core\vendor\spdlog\include;..\Bolt-Core\vendor\FreeType-GL;..\Bolt-Core\vendor\Lua\src;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -97,7 +97,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>BLT_PLATFORM_WINDOWS;BLT_BUILD_STATIC;BLT_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\Bolt-Core\external;..\Bolt-Core\src;..\Bolt-Core\vendor\GLFW\include;..\Bolt-Core\vendor\Glad\include;..\Bolt-Core\vendor\ImGui;..\Bolt-Core\vendor\spdlog\include;..\Bolt-Core\vendor\FreeType-GL;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Bolt-Core\external;..\Bolt-Core\src;..\Bolt-Core\vendor\GLFW\include;..\Bolt-Core\vendor\Glad\include;..\Bolt-Core\vendor\ImGui;..\Bolt-Core\vendor\spdlog\include;..\Bolt-Core\vendor\FreeType-GL;..\Bolt-Core\vendor\Lua\src;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -119,7 +119,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>BLT_PLATFORM_WINDOWS;BLT_BUILD_STATIC;BLT_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\Bolt-Core\external;..\Bolt-Core\src;..\Bolt-Core\vendor\GLFW\include;..\Bolt-Core\vendor\Glad\include;..\Bolt-Core\vendor\ImGui;..\Bolt-Core\vendor\spdlog\include;..\Bolt-Core\vendor\FreeType-GL;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Bolt-Core\external;..\Bolt-Core\src;..\Bolt-Core\vendor\GLFW\include;..\Bolt-Core\vendor\Glad\include;..\Bolt-Core\vendor\ImGui;..\Bolt-Core\vendor\spdlog\include;..\Bolt-Core\vendor\FreeType-GL;..\Bolt-Core\vendor\Lua\src;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
