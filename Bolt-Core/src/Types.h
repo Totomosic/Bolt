@@ -30,10 +30,9 @@
 #include <typeinfo>
 #include <type_traits>
 
+#define SCK_VERSION 0x0202
 #include <WinSock2.h>
 #include <WS2tcpip.h>
-
-#define SCK_VERSION 0x0202
 
 #define _USE_MATH_DEFINES
 #include <math.h>
