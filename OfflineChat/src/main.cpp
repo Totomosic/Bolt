@@ -19,8 +19,7 @@ namespace Chat
 	public:
 		void Init() override
 		{
-			//AppWindow->SetClearColor(Color(225, 225, 225));
-			AppWindow->SetClearColor(Color::Red);
+			AppWindow->SetClearColor(Color(225, 225, 225));
 			AppWindow->EnableVSync();
 			Scene& scene = SceneManager::CreateScene();
 			Camera* camera = scene.CreateCamera(Projection::Orthographic(0, 1920, 0, 1080, 0, 200));
@@ -179,7 +178,7 @@ namespace Chat
 			for (int i = 0; i < chatManager.Groups().size(); i++)
 			{
 				const ChatGroup& group = chatManager.Groups().at(i);
-				UIsurface& groupButton = groupMenu->Rectangle(groupMenu->Width(), 150, Color(240, 240, 240), Transform({ 0, groupMenu->Height() / 2 - 180 - 155 * i, 1 }));
+				UIsurface& groupButton = groupMenu->Rectangle(groupMenu->Width(), 150, Color(240, 240, 240), Transform({ 0, groupMenu->Height() / 2 - 175 - 155 * i, 1 }));
 				groupButton.Text(group.Name(), ResourceManager::Fonts().Arial(28), Color::Black, Transform({ 0, 0, 1 }));
 				groupButton.EventHandler().OnClicked.Subscribe([this, i](UIClickedEvent& e)
 					{
