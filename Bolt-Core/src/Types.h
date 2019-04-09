@@ -3,6 +3,7 @@
 #include "glad\glad.h"
 #include "GLFW\glfw3.h"
 #include "imgui.h"
+#include "lua.hpp"
 
 #include "Core\BoltTL\__BoltTL__.h"
 #include "BoltDefines.h"

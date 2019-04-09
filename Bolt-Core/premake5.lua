@@ -25,6 +25,7 @@ project "Bolt-Core"
 		"../%{IncludeDirs.ImGui}",
         "../%{IncludeDirs.spdlog}",
         "../%{IncludeDirs.FreeTypeGL}",
+        "../%{IncludeDirs.Lua}",
         "src"
     }
 
@@ -41,7 +42,8 @@ project "Bolt-Core"
         "GLFW",
         "Glad",
         "ImGui",
-        "FreeType-GL"
+        "FreeType-GL",
+        "Lua"
     }
 
     filter "system:windows"

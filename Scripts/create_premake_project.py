@@ -26,6 +26,8 @@ PREMAKE_FORMAT_STRING_TEMPLATE = """project "{0}"
         "../%{{IncludeDirs.Glad}}",
         "../%{{IncludeDirs.ImGui}}",
         "../%{{IncludeDirs.spdlog}}",
+        "../%{{IncludeDirs.FreeTypeGL}}",
+        "../%{{IncludeDirs.Lua}}",
         "src"
     }}
 

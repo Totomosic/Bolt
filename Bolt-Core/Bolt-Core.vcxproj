@@ -77,7 +77,7 @@
       <PrecompiledHeaderFile>Types.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>BLT_PLATFORM_WINDOWS;BLT_BUILD_STATIC;NOMINMAX;GLEW_STATIC;LAYERS_PER_SCENE=6;GAMEOBJECTS_PER_LAYER=1000;BLT_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>external;vendor\GLFW\include;vendor\Glad\include;vendor\ImGui;vendor\spdlog\include;vendor\FreeType-GL;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>external;vendor\GLFW\include;vendor\Glad\include;vendor\ImGui;vendor\spdlog\include;vendor\FreeType-GL;vendor\Lua\src;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -98,7 +98,7 @@
       <PrecompiledHeaderFile>Types.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>BLT_PLATFORM_WINDOWS;BLT_BUILD_STATIC;NOMINMAX;GLEW_STATIC;LAYERS_PER_SCENE=6;GAMEOBJECTS_PER_LAYER=1000;BLT_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>external;vendor\GLFW\include;vendor\Glad\include;vendor\ImGui;vendor\spdlog\include;vendor\FreeType-GL;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>external;vendor\GLFW\include;vendor\Glad\include;vendor\ImGui;vendor\spdlog\include;vendor\FreeType-GL;vendor\Lua\src;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -123,7 +123,7 @@
       <PrecompiledHeaderFile>Types.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>BLT_PLATFORM_WINDOWS;BLT_BUILD_STATIC;NOMINMAX;GLEW_STATIC;LAYERS_PER_SCENE=6;GAMEOBJECTS_PER_LAYER=1000;BLT_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>external;vendor\GLFW\include;vendor\Glad\include;vendor\ImGui;vendor\spdlog\include;vendor\FreeType-GL;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>external;vendor\GLFW\include;vendor\Glad\include;vendor\ImGui;vendor\spdlog\include;vendor\FreeType-GL;vendor\Lua\src;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -290,6 +290,8 @@
     <ClInclude Include="src\Engine\Scene\UI\UIsurface.h" />
     <ClInclude Include="src\Engine\Scene\UI\__UI__.h" />
     <ClInclude Include="src\Engine\Scene\__Scene__.h" />
+    <ClInclude Include="src\Engine\Scripting\Lua\__Lua__.h" />
+    <ClInclude Include="src\Engine\Scripting\__Scripting__.h" />
     <ClInclude Include="src\Engine\Serialization\XMLReadTraits.h" />
     <ClInclude Include="src\Engine\Serialization\XMLWriteTraits.h" />
     <ClInclude Include="src\Engine\Serialization\XMLserializer.h" />
@@ -546,6 +548,9 @@
     </ProjectReference>
     <ProjectReference Include="vendor\FreeType-GL\FreeType-GL.vcxproj">
       <Project>{899108BF-F546-81B4-7E3B-7B8BEAEF77B8}</Project>
+    </ProjectReference>
+    <ProjectReference Include="vendor\Lua\Lua.vcxproj">
+      <Project>{A705880B-130F-887C-9C8A-9E7C0893937C}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
