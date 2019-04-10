@@ -12,10 +12,7 @@ namespace Bolt
 	class BLT_API Event
 	{
 	public:
-		inline virtual ~Event()
-		{
-		
-		}
+		inline virtual ~Event() {}
 	};
 
 }
