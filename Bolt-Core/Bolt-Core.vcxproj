@@ -212,11 +212,6 @@
     <ClInclude Include="src\Core\Utils\Filesystem\__Filesystem__.h" />
     <ClInclude Include="src\Core\Utils\__Utils__.h" />
     <ClInclude Include="src\Engine\Application.h" />
-    <ClInclude Include="src\Engine\Commands\CmdDebugger.h" />
-    <ClInclude Include="src\Engine\Commands\Command.h" />
-    <ClInclude Include="src\Engine\Commands\CommandArg.h" />
-    <ClInclude Include="src\Engine\Commands\CommandLine.h" />
-    <ClInclude Include="src\Engine\Commands\__Commands__.h" />
     <ClInclude Include="src\Engine\Engine.h" />
     <ClInclude Include="src\Engine\EngineCreateInfo.h" />
     <ClInclude Include="src\Engine\Initialization\Destructor.h" />
@@ -290,6 +285,8 @@
     <ClInclude Include="src\Engine\Scene\UI\UIsurface.h" />
     <ClInclude Include="src\Engine\Scene\UI\__UI__.h" />
     <ClInclude Include="src\Engine\Scene\__Scene__.h" />
+    <ClInclude Include="src\Engine\Scripting\Lua\LuaEnvironment.h" />
+    <ClInclude Include="src\Engine\Scripting\Lua\LuaState.h" />
     <ClInclude Include="src\Engine\Scripting\Lua\__Lua__.h" />
     <ClInclude Include="src\Engine\Scripting\__Scripting__.h" />
     <ClInclude Include="src\Engine\Serialization\XMLReadTraits.h" />
@@ -420,9 +417,6 @@
     <ClCompile Include="src\Core\Utils\Filesystem\XML\XMLfile.cpp" />
     <ClCompile Include="src\Core\Utils\Filesystem\XML\XMLnode.cpp" />
     <ClCompile Include="src\Engine\Application.cpp" />
-    <ClCompile Include="src\Engine\Commands\CmdDebugger.cpp" />
-    <ClCompile Include="src\Engine\Commands\Command.cpp" />
-    <ClCompile Include="src\Engine\Commands\CommandLine.cpp" />
     <ClCompile Include="src\Engine\Engine.cpp" />
     <ClCompile Include="src\Engine\Initialization\Destructor.cpp" />
     <ClCompile Include="src\Engine\Initialization\Initializer.cpp" />
@@ -468,6 +462,8 @@
     <ClCompile Include="src\Engine\Scene\UI\UIelement.cpp" />
     <ClCompile Include="src\Engine\Scene\UI\UIroot.cpp" />
     <ClCompile Include="src\Engine\Scene\UI\UIsurface.cpp" />
+    <ClCompile Include="src\Engine\Scripting\Lua\LuaEnvironment.cpp" />
+    <ClCompile Include="src\Engine\Scripting\Lua\LuaState.cpp" />
     <ClCompile Include="src\Engine\Serialization\XMLserializer.cpp" />
     <ClCompile Include="src\Engine\User\Input.cpp" />
     <ClCompile Include="src\Graphics\Buffers\ArrayDescriptor.cpp" />

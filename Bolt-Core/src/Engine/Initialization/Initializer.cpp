@@ -4,7 +4,6 @@
 #include "..\User\Input.h"
 #include "..\Renderer\Graphics.h"
 #include "..\Scene\ObjectFactory.h"
-#include "..\Commands\CmdDebugger.h"
 
 namespace Bolt
 {
@@ -75,8 +74,6 @@ namespace Bolt
 			ResourceManager::Initialize();
 			BLT_CORE_INFO("ResourceManager Initialized");
 		}
-		CmdDebugger::Initialize();
-		BLT_CORE_INFO("Command line Debugger Initialized");
 	}
 
 }

@@ -38,17 +38,8 @@ namespace Chat
 				Filesystem::Close(f);
 			}
 
-			blt::string cmd = "Log(9 + 10)";
-			lua_State* L = luaL_newstate();
-
-			lua_register(L, "Log", [](lua_State * L) -> int
-				{
-					BLT_INFO("[LUA] {}", lua_tonumber(L, -1));
-					return 0;
-				});
-			
-			luaL_dostring(L, cmd.c_str());
-			lua_close(L);
+			LuaEnvironment env;
+			env.ExecuteString("Log(\"Hello World!\")");
 
 			ChatUser me;
 			File userFile = Filesystem::Open("data/user.txt", OpenMode::Read);
