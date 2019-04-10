@@ -35,11 +35,8 @@ namespace Bolt
 		static constexpr id_t GAMEOBJECT_INSTANTIATED		= 18;
 		static constexpr id_t GAMEOBJECT_DESTROYED			= 19;
 
-		// Debugging Events
-		static constexpr id_t COMMAND_LINE_MESSAGE_RECEIVED	= 20;
-
 		// Task Events
-		static constexpr id_t TASK_CONTINUE_ON_MAIN_THREAD	= 21;
+		static constexpr id_t TASK_CONTINUE_ON_MAIN_THREAD	= 20;
 
 	};
 

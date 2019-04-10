@@ -336,21 +336,6 @@
     <ClInclude Include="src\Engine\Application.h">
       <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\Commands\CmdDebugger.h">
-      <Filter>Engine\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\Commands\Command.h">
-      <Filter>Engine\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\Commands\CommandArg.h">
-      <Filter>Engine\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\Commands\CommandLine.h">
-      <Filter>Engine\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine\Commands\__Commands__.h">
-      <Filter>Engine\Commands</Filter>
-    </ClInclude>
     <ClInclude Include="src\Engine\Engine.h">
       <Filter>Engine</Filter>
     </ClInclude>
@@ -871,6 +856,8 @@
     <ClInclude Include="src\Types.h" />
     <ClInclude Include="src\Engine\Scripting\__Scripting__.h" />
     <ClInclude Include="src\Engine\Scripting\Lua\__Lua__.h" />
+    <ClInclude Include="src\Engine\Scripting\Lua\LuaState.h" />
+    <ClInclude Include="src\Engine\Scripting\Lua\LuaEnvironment.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\BoltTL\string.cpp">
@@ -947,15 +934,6 @@
     </ClCompile>
     <ClCompile Include="src\Engine\Application.cpp">
       <Filter>Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Engine\Commands\CmdDebugger.cpp">
-      <Filter>Engine\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Engine\Commands\Command.cpp">
-      <Filter>Engine\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Engine\Commands\CommandLine.cpp">
-      <Filter>Engine\Commands</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Engine.cpp">
       <Filter>Engine</Filter>
@@ -1283,5 +1261,7 @@
     </ClCompile>
     <ClCompile Include="src\Logging.cpp" />
     <ClCompile Include="src\Types.cpp" />
+    <ClCompile Include="src\Engine\Scripting\Lua\LuaState.cpp" />
+    <ClCompile Include="src\Engine\Scripting\Lua\LuaEnvironment.cpp" />
   </ItemGroup>
 </Project>
