@@ -1,5 +1,6 @@
 #include "Types.h"
-#include "string.h"
+
+#include "string.h"
 
 #if BLT_USE_STRING
 

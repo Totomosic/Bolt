@@ -1,6 +1,5 @@
 #pragma once
 #include "Bolt-Core.h"
-#include "lua.hpp"
 
 namespace Bolt
 {
