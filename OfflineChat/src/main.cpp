@@ -39,7 +39,15 @@ namespace Chat
 			}
 
 			LuaEnvironment env;
-			env.ExecuteString("Log(\"Hello World!\")");
+			env.Register("Log", std::function([](blt::string msg)
+				{
+					BLT_INFO(msg);
+				}));
+			env.Register("Add", std::function([](int a, int b)
+				{
+					return a + b;
+				}));
+			env.ExecuteString("Log(Add(100, -25))");
 
 			ChatUser me;
 			File userFile = Filesystem::Open("data/user.txt", OpenMode::Read);

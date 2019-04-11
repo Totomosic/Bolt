@@ -1,28 +1,26 @@
 #pragma once
 #include "LuaState.h"
+#include "LuaFunRegistry.h"
 
 namespace Bolt
 {
 
 	class BLT_API LuaEnvironment : public LuaState
 	{
-	public:
-		using LuaRegisteredFunc = std::function<int(LuaEnvironment&)>;
-		using InternalLuaFunc = std::function<int(lua_State*)>;
+	private:
+		std::unique_ptr<LuaFunRegistry> m_Registry;
 
 	public:
 		LuaEnvironment();
 		// Environment owns the lua_State
 		LuaEnvironment(lua_State* state);
-		LuaEnvironment(const LuaEnvironment& other) = delete;
-		LuaEnvironment& operator=(const LuaEnvironment& other) = delete;
-		LuaEnvironment(LuaEnvironment&& other);
-		LuaEnvironment& operator=(LuaEnvironment&& other);
 		~LuaEnvironment() override;
 
-
-		// Implement design: https://www.jeremyong.com/lua/c++11/templates/metaprogramming/2014/01/15/interfacing-lua-with-templates-in-c-plus-plus-11-continued.html
-		void RegisterFunc(const blt::string& name, LuaRegisteredFunc func);
+		template<typename Ret, typename... Args>
+		void Register(const blt::string& name, std::function<Ret(Args...)> func)
+		{
+			m_Registry->Register(name, std::move(func));
+		}
 
 	};
 

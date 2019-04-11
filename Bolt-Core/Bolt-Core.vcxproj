@@ -286,7 +286,10 @@
     <ClInclude Include="src\Engine\Scene\UI\__UI__.h" />
     <ClInclude Include="src\Engine\Scene\__Scene__.h" />
     <ClInclude Include="src\Engine\Scripting\Lua\LuaEnvironment.h" />
+    <ClInclude Include="src\Engine\Scripting\Lua\LuaFun.h" />
+    <ClInclude Include="src\Engine\Scripting\Lua\LuaFunRegistry.h" />
     <ClInclude Include="src\Engine\Scripting\Lua\LuaState.h" />
+    <ClInclude Include="src\Engine\Scripting\Lua\LuaUtil.h" />
     <ClInclude Include="src\Engine\Scripting\Lua\__Lua__.h" />
     <ClInclude Include="src\Engine\Scripting\__Scripting__.h" />
     <ClInclude Include="src\Engine\Serialization\XMLReadTraits.h" />
@@ -463,6 +466,7 @@
     <ClCompile Include="src\Engine\Scene\UI\UIroot.cpp" />
     <ClCompile Include="src\Engine\Scene\UI\UIsurface.cpp" />
     <ClCompile Include="src\Engine\Scripting\Lua\LuaEnvironment.cpp" />
+    <ClCompile Include="src\Engine\Scripting\Lua\LuaFunRegistry.cpp" />
     <ClCompile Include="src\Engine\Scripting\Lua\LuaState.cpp" />
     <ClCompile Include="src\Engine\Serialization\XMLserializer.cpp" />
     <ClCompile Include="src\Engine\User\Input.cpp" />
