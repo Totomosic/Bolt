@@ -1,5 +1,4 @@
 #pragma once
-#include "..\GLprivate.h"
 #include "Iterators\__Iterators__.h"
 #include "VertexBuffer.h"
 #include "ArrayDescriptor.h"
@@ -18,7 +17,7 @@ namespace Bolt
 		Points = GL_POINTS
 	};
 
-	class BLT_API VertexArray : GLprivate
+	class BLT_API VertexArray
 	{
 	private:
 		id_t m_Id;
@@ -33,7 +32,7 @@ namespace Bolt
 		VertexArray& operator=(const VertexArray& other) = delete;
 		VertexArray(VertexArray&& other) noexcept;
 		VertexArray& operator=(VertexArray&& other) noexcept;
-		~VertexArray() override;
+		~VertexArray();
 
 		const ArrayDescriptor& Descriptor() const;
 		RenderMode GetRenderMode() const;

@@ -2,12 +2,11 @@
 #include "Bolt-Core.h"
 #include "..\..\..\Resource.h"
 #include "..\..\..\ResourcePtr.h"
-#include "..\..\..\..\GLshared.h"
 
 namespace Bolt
 {
 
-	class BLT_API Shader : public Resource, public GLshared
+	class BLT_API Shader : public Resource
 	{
 	private:
 		id_t m_Id;

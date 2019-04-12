@@ -11,7 +11,7 @@ namespace Bolt
 		virtual int Execute(lua_State* state) = 0;
 	};
 
-	template<int N, typename Ret, typename ...Args>
+	template<size_t N, typename Ret, typename... Args>
 	class BLT_API LuaFun : public LuaFunBase
 	{
 	public:
@@ -51,17 +51,17 @@ namespace Bolt
 		int ExecuteAs(lua_State* state)
 		{
 			std::tuple<Args...> args = lua_help::_get_args<Args...>(state);
-			Ret value = lua_help::_lift(m_Function, args);
+			Ret value = lua_help::_lift(m_Function, std::move(args));
 			lua_help::_push(state, std::forward<Ret>(value));
-			return N;
+			return (int)N;
 		}
 
 		template<>
 		int ExecuteAs<void>(lua_State* state)
 		{
 			std::tuple<Args...> args = lua_help::_get_args<Args...>(state);
-			lua_help::_lift(m_Function, args);
-			return N;
+			lua_help::_lift(m_Function, std::move(args));
+			return (int)N;
 		}
 
 	};

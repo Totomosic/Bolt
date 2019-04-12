@@ -5,7 +5,7 @@
 namespace Bolt
 {
 
-	Texture::Texture(int width, int height, TextureTarget target, TextureFormat format, Mipmaps mipmap) : GLshared(), Resource(),
+	Texture::Texture(int width, int height, TextureTarget target, TextureFormat format, Mipmaps mipmap) : Resource(),
 		m_Id(0), m_Width(width), m_Height(height), m_Target(target), m_Format(format), m_Mipmaps(mipmap)
 	{
 		Create();

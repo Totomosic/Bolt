@@ -1,6 +1,5 @@
 #pragma once
 #include "Bolt-Core.h"
-#include "..\..\GLshared.h"
 #include "..\Resource.h"
 
 namespace Bolt
@@ -58,7 +57,7 @@ namespace Bolt
 		ClampToEdge = GL_CLAMP_TO_EDGE
 	};
 
-	class BLT_API Texture : public GLshared, public Resource
+	class BLT_API Texture : public Resource
 	{
 	protected:
 		id_t m_Id;

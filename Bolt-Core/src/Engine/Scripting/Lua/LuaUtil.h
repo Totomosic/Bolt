@@ -15,6 +15,12 @@ namespace Bolt
 		}
 
 		template<>
+		inline void _check_get(lua_State* l, int index)
+		{
+			
+		}
+
+		template<>
 		inline int _check_get(lua_State* l, int index)
 		{
 			if (!lua_isinteger(l, index))
@@ -47,28 +53,45 @@ namespace Bolt
 			return blt::string(lua_tostring(l, index));
 		}
 
+		template<>
+		inline const char* _check_get(lua_State* l, int index)
+		{
+			if (!lua_isstring(l, index))
+			{
+				BLT_ASSERT(false, "Value at index {} was not a string", index);
+				return "";
+			}
+			return lua_tostring(l, index);
+		}
+
 		template<typename T>
-		inline void _push(lua_State* l, const T& value)
+		inline void _push(lua_State* l, T value)
 		{
 			BLT_ASSERT(false, "Unable to push type {}", typeid(T).name());
 		}
 
 		template<>
-		inline void _push(lua_State* l, const int& value)
+		inline void _push(lua_State* l, int value)
 		{
 			lua_pushinteger(l, value);
 		}
 
 		template<>
-		inline void _push(lua_State* l, const float& value)
+		inline void _push(lua_State* l, float value)
 		{
 			lua_pushnumber(l, value);
 		}
 
 		template<>
-		inline void _push(lua_State* l, const blt::string& value)
+		inline void _push(lua_State* l, const char* value)
 		{
-			lua_pushstring(l, value.c_str());
+			lua_pushstring(l, value);
+		}
+
+		template<>
+		inline void _push(lua_State* l, blt::string value)
+		{
+			_push(l, value.c_str());
 		}
 
 		template<size_t... Is>
@@ -92,8 +115,7 @@ namespace Bolt
 		template<typename... T>
 		inline std::tuple<T...> _get_args(lua_State * l)
 		{
-			constexpr size_t argCount = sizeof...(T);
-			return _get_args<T...>(l, typename _indices_builder<argCount>::type());
+			return _get_args<T...>(l, typename _indices_builder<sizeof...(T)>::type());
 		}
 
 		template<typename Ret, typename... Args, size_t... N>

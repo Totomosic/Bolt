@@ -1,6 +1,5 @@
 #pragma once
 #include "Bolt-Core.h"
-#include "GLprivate.h"
 #include "Structs\Viewport.h"
 
 #include "Resources\Textures\Texture2D.h"
@@ -26,7 +25,7 @@ namespace Bolt
 		Nearest = GL_NEAREST
 	};
 	
-	class BLT_API Framebuffer : public GLprivate
+	class BLT_API Framebuffer
 	{
 	protected:
 		id_t m_Id;
@@ -42,7 +41,7 @@ namespace Bolt
 
 	public:
 		Framebuffer(int width, int height, int samples = 0, bool createOnLoad = true, const Color& clearColor = Color::Black);
-		~Framebuffer() override;
+		~Framebuffer();
 
 		const Viewport& GetViewport() const;
 		Viewport& GetViewport();

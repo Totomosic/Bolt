@@ -10,8 +10,8 @@ namespace Bolt
 		
 	}
 
-	Buffer::Buffer(const void* data, size_t size, BufferTarget target, BufferUsage usage) : GLshared(),
-		m_Id(0), m_Size(size), m_Usage(usage), m_Target(target), m_IsMapped(false)
+	Buffer::Buffer(const void* data, size_t size, BufferTarget target, BufferUsage usage)
+		: m_Id(0), m_Size(size), m_Usage(usage), m_Target(target), m_IsMapped(false)
 	{
 		Create(data);
 	}
