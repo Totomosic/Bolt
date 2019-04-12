@@ -10,14 +10,14 @@ namespace Bolt
 		return (ClearBuffer)((int)left | (int)right);
 	}
 
-	Framebuffer::Framebuffer() : GLprivate(),
-		m_Id(0), m_Viewport({ 0, 0, 0, 0 }), m_ClearColor(Color::Black)
+	Framebuffer::Framebuffer()
+		: m_Id(0), m_Viewport({ 0, 0, 0, 0 }), m_ClearColor(Color::Black)
 	{
 
 	}
 
-	Framebuffer::Framebuffer(int width, int height, int samples, bool createOnLoad, const Color& clearColor) : GLprivate(),
-		m_Id(0), m_Viewport({ 0, 0, width, height }), m_Samples(samples), m_ClearColor(clearColor)
+	Framebuffer::Framebuffer(int width, int height, int samples, bool createOnLoad, const Color& clearColor)
+		: m_Id(0), m_Viewport({ 0, 0, width, height }), m_Samples(samples), m_ClearColor(clearColor)
 	{
 		BLT_ASSERT(samples < GL_MAX_SAMPLES, "Value of samples must be less than " + std::to_string(GL_MAX_SAMPLES));
 		Create();

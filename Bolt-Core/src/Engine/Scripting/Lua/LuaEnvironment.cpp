@@ -12,7 +12,7 @@ namespace Bolt
 	LuaEnvironment::LuaEnvironment(lua_State* state) : LuaState(state),
 		m_Registry(std::make_unique<LuaFunRegistry>(state))
 	{
-	
+		RegisterDefaultFuncs();
 	}
 
 	LuaEnvironment::~LuaEnvironment()
@@ -22,6 +22,22 @@ namespace Bolt
 		{
 			lua_close(GetNativeState());
 		}
+	}
+
+	void LuaEnvironment::Reset()
+	{
+		this->~LuaEnvironment();
+		m_State = luaL_newstate();
+		m_Registry = std::make_unique<LuaFunRegistry>(m_State);
+		RegisterDefaultFuncs();
+	}
+
+	void LuaEnvironment::RegisterDefaultFuncs()
+	{
+		Register("Log", [](blt::string msg)
+			{
+				BLT_LUA_TRACE(msg);
+			});
 	}
 
 }

@@ -40,7 +40,7 @@ namespace Bolt
 		if (result != LUA_OK)
 		{
 			blt::string errorMsg = lua_tostring(GetNativeState(), -1);
-			BLT_ERROR("[LUA Error] {}", errorMsg);
+			BLT_LUA_ERROR(errorMsg);
 			return false;
 		}
 		return true;

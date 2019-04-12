@@ -23,7 +23,7 @@ namespace Bolt
 	#define BLT_SHADER_VALIDATE_VALUE(...)
 #endif
 
-	Shader::Shader(const blt::string& vertexSource, const blt::string& fragmentSource) : Resource(), GLshared(),
+	Shader::Shader(const blt::string& vertexSource, const blt::string& fragmentSource) : Resource(),
 		m_Id(0)
 	{
 		Create();
@@ -33,7 +33,7 @@ namespace Bolt
 		Finalise(arr, 2);
 	}
 
-	Shader::Shader(const blt::string& vertexSource, const blt::string& geometrySource, const blt::string& fragmentSource) : Resource(), GLshared(),
+	Shader::Shader(const blt::string& vertexSource, const blt::string& geometrySource, const blt::string& fragmentSource) : Resource(),
 		m_Id(0)
 	{
 		Create();

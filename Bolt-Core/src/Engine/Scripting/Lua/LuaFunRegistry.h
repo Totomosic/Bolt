@@ -32,6 +32,22 @@ namespace Bolt
 			m_Funcs.push_back(std::move(ptr));
 		}
 
+		template<typename Ret, typename... Args>
+		Ret Invoke(const blt::string& name, Args... args)
+		{
+			lua_getglobal(m_State, name.c_str());
+			if (!lua_isfunction(m_State, -1))
+			{
+				BLT_ERROR("Unable to call function {} as it is not a function", name);
+				BLT_ASSERT(false, "Unable to call function {} as it is not a function", name);
+				return Ret();
+			}
+			// C++17 fold expression https://en.cppreference.com/w/cpp/language/fold
+			(lua_help::_push<Args>(m_State, std::forward<Args>(args)), ...);
+			lua_call(m_State, sizeof...(Args), 1);
+			return lua_help::_check_get<Ret>(m_State, -1);
+		}
+
 	public:
 		static int LuaDispatcher(lua_State* state);
 

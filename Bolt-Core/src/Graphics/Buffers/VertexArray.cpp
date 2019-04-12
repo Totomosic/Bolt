@@ -5,8 +5,8 @@
 namespace Bolt
 {
 
-	VertexArray::VertexArray(RenderMode mode) : GLprivate(),
-		m_Id(0), m_Vertices(), m_RenderMode(mode), m_Descriptor(), m_IsMapped(false)
+	VertexArray::VertexArray(RenderMode mode)
+		: m_Id(0), m_Vertices(), m_RenderMode(mode), m_Descriptor(), m_IsMapped(false)
 	{
 		Create();
 	}

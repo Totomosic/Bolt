@@ -288,6 +288,7 @@
     <ClInclude Include="src\Engine\Scripting\Lua\LuaEnvironment.h" />
     <ClInclude Include="src\Engine\Scripting\Lua\LuaFun.h" />
     <ClInclude Include="src\Engine\Scripting\Lua\LuaFunRegistry.h" />
+    <ClInclude Include="src\Engine\Scripting\Lua\LuaInterpreter.h" />
     <ClInclude Include="src\Engine\Scripting\Lua\LuaState.h" />
     <ClInclude Include="src\Engine\Scripting\Lua\LuaUtil.h" />
     <ClInclude Include="src\Engine\Scripting\Lua\__Lua__.h" />
@@ -315,8 +316,6 @@
     <ClInclude Include="src\Graphics\Buffers\VertexMapping.h" />
     <ClInclude Include="src\Graphics\Buffers\__Buffers__.h" />
     <ClInclude Include="src\Graphics\Framebuffer.h" />
-    <ClInclude Include="src\Graphics\GLprivate.h" />
-    <ClInclude Include="src\Graphics\GLshared.h" />
     <ClInclude Include="src\Graphics\RenderBuffer.h" />
     <ClInclude Include="src\Graphics\Resources\FontManager.h" />
     <ClInclude Include="src\Graphics\Resources\MaterialManager.h" />
@@ -467,6 +466,7 @@
     <ClCompile Include="src\Engine\Scene\UI\UIsurface.cpp" />
     <ClCompile Include="src\Engine\Scripting\Lua\LuaEnvironment.cpp" />
     <ClCompile Include="src\Engine\Scripting\Lua\LuaFunRegistry.cpp" />
+    <ClCompile Include="src\Engine\Scripting\Lua\LuaInterpreter.cpp" />
     <ClCompile Include="src\Engine\Scripting\Lua\LuaState.cpp" />
     <ClCompile Include="src\Engine\Serialization\XMLserializer.cpp" />
     <ClCompile Include="src\Engine\User\Input.cpp" />

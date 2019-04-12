@@ -1,6 +1,5 @@
 #pragma once
 #include "Bolt-Core.h"
-#include "../GLshared.h"
 
 namespace Bolt
 {
@@ -31,7 +30,7 @@ namespace Bolt
 		ReadWrite = GL_READ_WRITE
 	};
 
-	class BLT_API Buffer : GLshared
+	class BLT_API Buffer
 	{
 	protected:
 		id_t m_Id;
@@ -45,7 +44,7 @@ namespace Bolt
 		Buffer(const void* data, size_t capacity, BufferTarget target, BufferUsage usage = BufferUsage::StaticDraw);		
 		Buffer(Buffer&& other) noexcept;		
 		Buffer& operator=(Buffer&& other) noexcept;
-		virtual ~Buffer() override;
+		virtual ~Buffer();
 		Buffer(const Buffer& other) = delete;
 		Buffer& operator=(const Buffer& other) = delete;
 

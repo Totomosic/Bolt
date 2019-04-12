@@ -624,12 +624,6 @@
     <ClInclude Include="src\Graphics\Framebuffer.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="src\Graphics\GLprivate.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Graphics\GLshared.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="src\Graphics\RenderBuffer.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -861,6 +855,7 @@
     <ClInclude Include="src\Engine\Scripting\Lua\LuaFun.h" />
     <ClInclude Include="src\Engine\Scripting\Lua\LuaFunRegistry.h" />
     <ClInclude Include="src\Engine\Scripting\Lua\LuaUtil.h" />
+    <ClInclude Include="src\Engine\Scripting\Lua\LuaInterpreter.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\BoltTL\string.cpp">
@@ -1267,5 +1262,6 @@
     <ClCompile Include="src\Engine\Scripting\Lua\LuaState.cpp" />
     <ClCompile Include="src\Engine\Scripting\Lua\LuaEnvironment.cpp" />
     <ClCompile Include="src\Engine\Scripting\Lua\LuaFunRegistry.cpp" />
+    <ClCompile Include="src\Engine\Scripting\Lua\LuaInterpreter.cpp" />
   </ItemGroup>
 </Project>
