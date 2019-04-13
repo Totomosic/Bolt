@@ -2,7 +2,7 @@
 
 #include "GlobalRenderer.h"
 #include "..\Scene\Lighting\LightSource.h"
-#include "GLState.h"
+#include "Graphics.h"
 
 namespace Bolt
 {
@@ -11,7 +11,7 @@ namespace Bolt
 
 	void DrawRenderGroup(RenderRoutine* routine, const RenderGroup& group, const RenderContext& context, const RenderCamera& camera)
 	{
-		GLState::ApplySettings(group.Material->GetRenderSettings());
+		Graphics::Get().GetState().ApplySettings(group.Material->GetRenderSettings());
 		group.Material->GetShader().ApplyLinks();
 		(*routine)(group, camera.ViewMatrix, camera.ProjectionMatrix);
 	}

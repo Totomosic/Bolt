@@ -16,46 +16,47 @@ namespace Bolt
 	class BLT_API ResourceManager
 	{
 	private:
-		static std::unordered_map<ResourceID, std::unique_ptr<Resource>> s_Resources;
-		static MaterialManager s_Materials;
-		static FontManager s_Fonts;
+		static std::unique_ptr<ResourceManager> s_Instance;
+
+	private:
+		std::unordered_map<ResourceID, std::unique_ptr<Resource>> m_Resources;
+		MaterialManager m_Materials;
+		FontManager m_Fonts;
 
 	public:
-		ResourceManager() = delete;
+		ResourceManager();
+		static ResourceManager& Get();
+		static void Terminate();
 
-		static const MaterialManager& Materials();
-		static const FontManager& Fonts();
+	public:
+		const MaterialManager& Materials();
+		const FontManager& Fonts();
 
-		static ResourceFile Fetch(const Filepath& resourceFile);
-		static ResourcePack FetchPack(const Filepath& resourcePack);
-		static ResourceFile& LoadFile(ResourceFile& resourceFile);
-		static ResourcePack& LoadPack(ResourcePack& resourcePack);
+		ResourceFile Fetch(const Filepath& resourceFile);
+		ResourcePack FetchPack(const Filepath& resourcePack);
+		ResourceFile& LoadFile(ResourceFile& resourceFile);
+		ResourcePack& LoadPack(ResourcePack& resourcePack);
 
-		static bool ResourceExists(const ResourceID& id);
+		bool ResourceExists(const ResourceID& id);
 
-		static id_t Register(std::unique_ptr<Resource>&& resource);
-		static ResourcePtr<Resource> Get(const ResourceID& id);
-		static void FreeResource(const ResourceID& id);
-		static ResourcePtr<const Font> DefaultFont();
+		id_t Register(std::unique_ptr<Resource>&& resource);
+		ResourcePtr<Resource> Get(const ResourceID& id);
+		void FreeResource(const ResourceID& id);
+		ResourcePtr<const Font> DefaultFont();
 
 		template<typename T>
-		static ResourcePtr<T> Get(const ResourceID& id)
+		ResourcePtr<T> Get(const ResourceID& id)
 		{
 			return (ResourcePtr<T>)Get(id);
 		}
 
-		friend class Initializer;
-		friend class Destructor;
-
 	private:
-		static void Initialize();
-		static void Terminate();
-		static id_t FindNextId();
+		id_t FindNextId();
 
-		static ResourceType StringToType(const blt::string& str);
-		static ResourceFile& LoadTexture2DFile(ResourceFile& resourceFile);
-		static ResourceFile& LoadModelFile(ResourceFile& resourceFile);
-		static ResourceFile& LoadShaderFile(ResourceFile& resourceFile);
+		ResourceType StringToType(const blt::string& str);
+		ResourceFile& LoadTexture2DFile(ResourceFile& resourceFile);
+		ResourceFile& LoadModelFile(ResourceFile& resourceFile);
+		ResourceFile& LoadShaderFile(ResourceFile& resourceFile);
 
 	};
 

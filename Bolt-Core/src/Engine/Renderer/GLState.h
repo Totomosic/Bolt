@@ -7,35 +7,35 @@ namespace Bolt
 	class BLT_API GLState
 	{
 	private:
-		static bool s_DepthEnabled;
-		static bool s_BlendEnabled;
-		static bool s_CullFaceEnabled;
-		static DepthFunction s_DepthFunction;
-		static BlendSrc s_BlendSrc;
-		static BlendDst s_BlendDst;
-		static CullFace s_CullFace;
-		static PolygonMode s_PolygonMode;
-		static bool s_RenderToDepthBuffer;
+		bool s_DepthEnabled;
+		bool s_BlendEnabled;
+		bool s_CullFaceEnabled;
+		DepthFunction s_DepthFunction;
+		BlendSrc s_BlendSrc;
+		BlendDst s_BlendDst;
+		CullFace s_CullFace;
+		PolygonMode s_PolygonMode;
+		bool s_RenderToDepthBuffer;
 
 	public:
-		GLState() = delete;
+		GLState();
 
-		static void Reset();
+		void Reset();
 
-		static void SetDepthTest(bool enabled);
-		static void SetBlending(bool enabled);
-		static void SetFaceCulling(bool enabled);
-		static void SetClippingPlane(id_t planeId, bool enabled);
+		void SetDepthTest(bool enabled);
+		void SetBlending(bool enabled);
+		void SetFaceCulling(bool enabled);
+		void SetClippingPlane(id_t planeId, bool enabled);
 
-		static void SetDepthFunc(DepthFunction func);
-		static void SetBlendFunc(BlendSrc src, BlendDst dst);
-		static void SetBlendSrc(BlendSrc src);
-		static void SetBlendDst(BlendDst dst);
-		static void SetCullFace(CullFace face);
-		static void SetPolygonMode(PolygonMode mode);
-		static void SetRenderToDepthBuffer(bool renderToDepth);
+		void SetDepthFunc(DepthFunction func);
+		void SetBlendFunc(BlendSrc src, BlendDst dst);
+		void SetBlendSrc(BlendSrc src);
+		void SetBlendDst(BlendDst dst);
+		void SetCullFace(CullFace face);
+		void SetPolygonMode(PolygonMode mode);
+		void SetRenderToDepthBuffer(bool renderToDepth);
 
-		static void ApplySettings(const RenderSettings& settings);
+		void ApplySettings(const RenderSettings& settings);
 
 	};
 

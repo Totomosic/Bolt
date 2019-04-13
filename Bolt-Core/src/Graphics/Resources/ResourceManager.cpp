@@ -9,18 +9,36 @@
 namespace Bolt
 {
 
-	std::unordered_map<ResourceID, std::unique_ptr<Resource>> ResourceManager::s_Resources = std::unordered_map<ResourceID, std::unique_ptr<Resource>>();
-	MaterialManager ResourceManager::s_Materials;
-	FontManager ResourceManager::s_Fonts;
+	std::unique_ptr<ResourceManager> ResourceManager::s_Instance;
+
+	ResourceManager& ResourceManager::Get()
+	{
+		if (!s_Instance)
+		{
+			s_Instance = std::make_unique<ResourceManager>();
+		}
+		return *s_Instance;
+	}
+
+	void ResourceManager::Terminate()
+	{
+		s_Instance.reset(nullptr);
+	}
+
+	ResourceManager::ResourceManager()
+		: m_Resources(), m_Materials(), m_Fonts()
+	{
+	
+	}
 
 	const MaterialManager& ResourceManager::Materials()
 	{
-		return s_Materials;
+		return m_Materials;
 	}
 
 	const FontManager& ResourceManager::Fonts()
 	{
-		return s_Fonts;
+		return m_Fonts;
 	}
 
 	ResourceFile ResourceManager::Fetch(const Filepath& resourceFile)
@@ -76,13 +94,13 @@ namespace Bolt
 
 	bool ResourceManager::ResourceExists(const ResourceID& id)
 	{
-		return s_Resources.find(id) != s_Resources.end();
+		return m_Resources.find(id) != m_Resources.end();
 	}
 
 	id_t ResourceManager::Register(std::unique_ptr<Resource>&& resource)
 	{
 		id_t id = FindNextId();
-		s_Resources[id] = std::move(resource);
+		m_Resources[id] = std::move(resource);
 		return id;
 	}
 
@@ -90,7 +108,7 @@ namespace Bolt
 	{
 		if (ResourceExists(id))
 		{
-			return ResourcePtr<Resource>(s_Resources.at(id).get(), false);
+			return ResourcePtr<Resource>(m_Resources.at(id).get(), false);
 		}
 		return nullptr;
 	}
@@ -98,25 +116,12 @@ namespace Bolt
 	void ResourceManager::FreeResource(const ResourceID& id)
 	{
 		Resource* resource = Get(id).Get();
-		s_Resources.erase(id);
+		m_Resources.erase(id);
 	}
 
 	ResourcePtr<const Font> ResourceManager::DefaultFont()
 	{
-		return s_Fonts.Arial(48);
-	}
-
-	void ResourceManager::Initialize()
-	{
-
-	}
-
-	void ResourceManager::Terminate()
-	{
-		for (auto& pair : s_Resources)
-		{
-			pair.second.reset();
-		}
+		return m_Fonts.Arial(48);
 	}
 
 	id_t ResourceManager::FindNextId()

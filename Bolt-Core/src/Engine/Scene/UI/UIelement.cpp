@@ -100,7 +100,7 @@ namespace Bolt
 
 	UIsurface& UIelement::Image(float width, float height, const ResourcePtr<const Texture2D>& texture, Transform&& transform)
 	{
-		std::unique_ptr<Material> material = ResourceManager::Materials().Texture(texture);
+		std::unique_ptr<Material> material = ResourceManager::Get().Materials().Texture(texture);
 		return AddElement<UIsurface>(width, height, std::move(material), std::move(transform));
 	}
 
@@ -111,7 +111,7 @@ namespace Bolt
 
 	Bolt::Text& UIelement::Text(const blt::string& text, const Color& color, Transform&& transform, AlignH horizontal, AlignV vertical)
 	{
-		return AddElement<Bolt::Text>(text, ResourceManager::DefaultFont(), color, std::move(transform), horizontal, vertical);
+		return AddElement<Bolt::Text>(text, ResourceManager::Get().DefaultFont(), color, std::move(transform), horizontal, vertical);
 	}
 
 	void UIelement::SetUIroot(UIroot* root)

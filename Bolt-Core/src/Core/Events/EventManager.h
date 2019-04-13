@@ -36,28 +36,38 @@ namespace Bolt
 		// Use to receive events from all instances posting an event
 		static constexpr id_t IGNORE_DISPATCHER_ID = (id_t)-1;
 
+	public:
+		static std::unique_ptr<EventManager> s_Instance;
+
+		static EventManager& Get();
+
 	private:
-		static std::mutex s_EventQueueMutex;
-		static std::mutex s_ListenersMutex;
+		std::mutex m_EventQueueMutex;
+		std::mutex m_ListenersMutex;
 
-		static EventQueue<EventInfo> s_EventQueue;
-		static std::unordered_map<id_t, std::vector<EventListenerInfo>> s_Listeners;
-		static std::unordered_map<id_t, id_t> s_ListenerMap;
+		EventQueue<EventInfo> m_EventQueue;
+		std::unordered_map<id_t, std::vector<EventListenerInfo>> m_Listeners;
+		std::unordered_map<id_t, id_t> m_ListenerMap;
 
-		static IdManager<id_t> s_ListenerIdManager;
-		static IdManager<id_t> s_DispatcherIdManager;
+		IdManager<id_t> m_ListenerIdManager;
+		IdManager<id_t> m_DispatcherIdManager;
 
 	public:
-		EventManager() = delete;
+		EventManager();
+		EventManager(const EventManager& other) = delete;
+		EventManager& operator=(const EventManager& other) = delete;
+		EventManager(EventManager&& other) = delete;
+		EventManager& operator=(EventManager&& other) = delete;
+		~EventManager() = default;
 
 		// Get a new Id for an instance
-		static id_t GetNextDispatcherId();
+		id_t GetNextDispatcherId();
 		// Release instance Id
-		static void ReleaseDispatcherId(id_t id);
+		void ReleaseDispatcherId(id_t id);
 		
 		// Register a listener to a specific event from an dispatcher with given id, returns a Listener Id
 		template<typename EventType>
-		static id_t Subscribe(std::function<ListenerResponse(EventType&)> listener, id_t dispatcherId)
+		id_t Subscribe(std::function<ListenerResponse(EventType&)> listener, id_t dispatcherId)
 		{
 			return Subscribe(EventType::BLT_EVENT_ID, (std::unique_ptr<EventListenerContainer<Event>>)std::make_unique<EventListener<Event>>([listener{ std::move(listener) }](Event& e)
 			{
@@ -67,17 +77,17 @@ namespace Bolt
 
 		// Register a listener to a specific event from any dispatcher, returns a listener Id
 		template<typename EventType>
-		static id_t Subscribe(std::function<ListenerResponse(EventType&)> listener)
+		id_t Subscribe(std::function<ListenerResponse(EventType&)> listener)
 		{
 			return Subscribe<EventType>(std::move(listener), EventManager::IGNORE_DISPATCHER_ID);
 		}
 
 		// Stop a listener from receiving events
-		static void Unsubscribe(id_t listenerId);
+		void Unsubscribe(id_t listenerId);
 
 		// Update a listener
 		template<typename EventType>
-		static void UpdateListener(id_t listenerId, std::function<ListenerResponse(EventType&)> listener)
+		void UpdateListener(id_t listenerId, std::function<ListenerResponse(EventType&)> listener)
 		{
 			UpdateListener(listenerId, (std::unique_ptr<EventListenerContainer<Event>>)std::make_unique<EventListener<Event>>([listener{ std::move(listener) }](Event& e)
 			{
@@ -87,7 +97,7 @@ namespace Bolt
 
 		// Post a new event with given args from a specific dispatcher
 		template<typename EventType>
-		static void PostFromDispatcher(id_t dispatcherId, EventType args)
+		void PostFromDispatcher(id_t dispatcherId, EventType args)
 		{
 			std::unique_ptr<EventType> e = std::make_unique<EventType>(std::move(args));
 			PostFromDispatcher(EventType::BLT_EVENT_ID, dispatcherId, std::move(e));
@@ -95,41 +105,37 @@ namespace Bolt
 
 		// Post a new event with given args
 		template<typename EventType>
-		static void Post(EventType args)
+		void Post(EventType args)
 		{
 			PostFromDispatcher(EventManager::IGNORE_DISPATCHER_ID, std::move(args));
 		}
 
 		template<typename EventType>
-		static void PostFromDispatcher(id_t dispatcherId)
+		void PostFromDispatcher(id_t dispatcherId)
 		{
 			PostFromDispatcher<Event>(EventType::BLT_EVENT_ID, dispatcherId, std::unique_ptr<Event>());
 		}
 
 		template<typename EventType>
-		static void Post()
+		void Post()
 		{
 			PostFromDispatcher<EventType>(EventManager::IGNORE_DISPATCHER_ID);
 		}
 
 		// Called automatically every frame before Application::Update() runs, processes all events from previous frame
-		static void FlushEvents();
-		static id_t FindNextListenerId();
-		static void ReleaseListenerId(id_t id);
-
-		friend class Initializer;
+		void FlushEvents();
+		id_t FindNextListenerId();
+		void ReleaseListenerId(id_t id);
 
 	private:
-		static void Initialize();
-
-		static id_t Subscribe(id_t eventId, std::unique_ptr<EventListenerContainer<Event>> listener, id_t dispatcherId);
-		static void UpdateListener(id_t listenerId, std::unique_ptr<EventListenerContainer<Event>> listener);
+		id_t Subscribe(id_t eventId, std::unique_ptr<EventListenerContainer<Event>> listener, id_t dispatcherId);
+		void UpdateListener(id_t listenerId, std::unique_ptr<EventListenerContainer<Event>> listener);
 		// Post a new event with given args from a specific dispatcher
 		template<typename EventType>
-		static void PostFromDispatcher(id_t eventId, id_t dispatcherId, std::unique_ptr<EventType> args)
+		void PostFromDispatcher(id_t eventId, id_t dispatcherId, std::unique_ptr<EventType> args)
 		{
-			std::scoped_lock<std::mutex> lock(s_EventQueueMutex);
-			s_EventQueue.AddEvent(EventInfo{ eventId, dispatcherId, std::move(args) });
+			std::scoped_lock<std::mutex> lock(m_EventQueueMutex);
+			m_EventQueue.AddEvent(EventInfo{ eventId, dispatcherId, std::move(args) });
 		}
 
 	};

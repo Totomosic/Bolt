@@ -856,6 +856,7 @@
     <ClInclude Include="src\Engine\Scripting\Lua\LuaFunRegistry.h" />
     <ClInclude Include="src\Engine\Scripting\Lua\LuaUtil.h" />
     <ClInclude Include="src\Engine\Scripting\Lua\LuaInterpreter.h" />
+    <ClInclude Include="src\Engine\RenderContext.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\BoltTL\string.cpp">
@@ -1263,5 +1264,6 @@
     <ClCompile Include="src\Engine\Scripting\Lua\LuaEnvironment.cpp" />
     <ClCompile Include="src\Engine\Scripting\Lua\LuaFunRegistry.cpp" />
     <ClCompile Include="src\Engine\Scripting\Lua\LuaInterpreter.cpp" />
+    <ClCompile Include="src\Engine\AppContext.cpp" />
   </ItemGroup>
 </Project>

@@ -10,7 +10,7 @@ namespace DND
 	void GetHostList(UIsurface& region, id_t loadingIconId, EntityNetworkData myCharacter)
 	{
 		region.Clear();
-		UIsurface& loadingIcon = region.Image(100, 100, ResourceManager::Get<Texture2D>(loadingIconId), Transform({ 0, 300, 1 }));
+		UIsurface& loadingIcon = region.Image(100, 100, ResourceManager::Get().Get<Texture2D>(loadingIconId), Transform({ 0, 300, 1 }));
 		loadingIcon.Object()->Components().AddComponent<TriggerComponent>([](GameObject* object)
 		{
 		
