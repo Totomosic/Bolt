@@ -2,19 +2,14 @@
 #include "EventManager.h"
 
 #include "../Tasks/TaskEvents.h"
+#include "Engine/Engine.h"
 
 namespace Bolt
 {
 
-	std::unique_ptr<EventManager> EventManager::s_Instance;
-
 	EventManager& EventManager::Get()
 	{
-		if (!s_Instance)
-		{
-			s_Instance = std::make_unique<EventManager>();
-		}
-		return *s_Instance;
+		return Engine::Instance().CurrentContext().GetRenderContext().GetEventManager();
 	}
 
 	EventManager::EventManager()

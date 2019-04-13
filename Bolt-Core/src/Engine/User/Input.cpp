@@ -1,80 +1,101 @@
 #include "Types.h"
 
 #include "Input.h"
+#include "Engine/Engine.h"
 
 namespace Bolt
 {
 
-	Input::Input()
-		: s_Mouse(), s_Keyboard(), s_Window(nullptr), s_PressedCharacters(), s_ChangedKeys(), s_ChangedButtons(), OnKeyPressed(), OnKeyReleased(), OnMousePressed(), OnMouseReleased(), OnMouseScrolled(), OnMouseMoved()
+	Input::Input(Window* window)
+		: m_Mouse(), m_Keyboard(), m_Window(window), m_PressedCharacters(), m_ChangedKeys(), m_ChangedButtons(), OnKeyPressed(), OnKeyReleased(), OnMousePressed(), OnMouseReleased(), OnMouseScrolled(), OnMouseMoved()
 	{
-	
+		for (int i = 0; i < BLT_MAX_KEYS; i++)
+		{
+			m_Keyboard.Keys[i].KeyID = i;
+			m_Keyboard.Keys[i].State = (int)ButtonState::Released;
+		}
+		for (int i = 0; i < BLT_MAX_MOUSE_BUTTONS; i++)
+		{
+			m_Mouse.Buttons[i].ButtonID = i;
+			m_Mouse.Buttons[i].State = (int)ButtonState::Released;
+		}
+		m_Mouse.Left = ButtonState::Released;
+		m_Mouse.Middle = ButtonState::Released;
+		m_Mouse.Right = ButtonState::Released;
+		m_Mouse.X = 0;
+		m_Mouse.Y = 0;
+		m_Mouse.RelX = 0;
+		m_Mouse.RelY = 0;
+		m_Mouse.XScroll = 0;
+		m_Mouse.YScroll = 0;
+		m_Mouse.RelXScroll = 0;
+		m_Mouse.RelYScroll = 0;
+		m_Mouse.IsVisible = true;
 	}
 
 	Input& Input::Get()
 	{
-		static Input instance;
-		return instance;
+		return Engine::Instance().CurrentContext().GetRenderContext().GetInput();
 	}
 
 	const MouseInstance& Input::Mouse()
 	{
-		return s_Mouse;
+		return m_Mouse;
 	}
 
 	const KeyboardInstance& Input::Keyboard()
 	{
-		return s_Keyboard;
+		return m_Keyboard;
 	}
 
 	const std::vector<char>& Input::PressedCharacters()
 	{
-		return s_PressedCharacters;
+		return m_PressedCharacters;
 	}
 
 	Vector3f Input::MousePosition()
 	{
-		return Vector3f(s_Mouse.X, s_Mouse.Y, 0);
+		return Vector3f(m_Mouse.X, m_Mouse.Y, 0);
 	}
 
 	Vector3f Input::MousePosition(float width, float height)
 	{
-		return Vector3f(Map<float>(s_Mouse.X, 0, s_Window->Width(), 0, width), Map<float>(s_Mouse.Y, 0, s_Window->Height(), 0, height), 0);
+		return Vector3f(Map<float>(m_Mouse.X, 0, m_Window->Width(), 0, width), Map<float>(m_Mouse.Y, 0, m_Window->Height(), 0, height), 0);
 	}
 
 	Vector3f Input::RelMousePosition()
 	{
-		return Vector3f(s_Mouse.RelX, s_Mouse.RelY, 0);
+		return Vector3f(m_Mouse.RelX, m_Mouse.RelY, 0);
 	}
 
 	Vector3f Input::RelMousePosition(float width, float height)
 	{
-		return Vector3f(Map<float>(s_Mouse.RelX, -s_Window->Width(), s_Window->Width(), -width, width), Map<float>(s_Mouse.RelY, -s_Window->Height(), s_Window->Height(), -height, height), 0);
+		return Vector3f(Map<float>(m_Mouse.RelX, -m_Window->Width(), m_Window->Width(), -width, width), Map<float>(m_Mouse.RelY, -m_Window->Height(), m_Window->Height(), -height, height), 0);
 	}
 
 	Vector3f Input::NormalizedMousePosition()
 	{
-		return Vector3f(Map<float>((float)s_Mouse.X, 0, (float)s_Window->Width(), -1, 1), Map<float>((float)s_Mouse.Y, 0, (float)s_Window->Height(), -1, 1), 0);
+		return Vector3f(Map<float>((float)m_Mouse.X, 0, (float)m_Window->Width(), -1, 1), Map<float>((float)m_Mouse.Y, 0, (float)m_Window->Height(), -1, 1), 0);
 	}
 
 	Vector3f Input::RelNormalizedMousePosition()
 	{
-		return Vector3f(Map<float>((float)s_Mouse.RelX, 0, (float)s_Window->Width(), -1, 1), Map<float>((float)s_Mouse.RelY, 0, (float)s_Window->Height(), -1, 1), 0);
+		return Vector3f(Map<float>((float)m_Mouse.RelX, 0, (float)m_Window->Width(), -1, 1), Map<float>((float)m_Mouse.RelY, 0, (float)m_Window->Height(), -1, 1), 0);
 	}
 
 	Vector2f Input::MouseScroll()
 	{
-		return Vector2f(s_Mouse.XScroll, s_Mouse.YScroll);
+		return Vector2f(m_Mouse.XScroll, m_Mouse.YScroll);
 	}
 
 	Vector2f Input::RelMouseScroll()
 	{
-		return Vector2f(s_Mouse.RelXScroll, s_Mouse.RelYScroll);
+		return Vector2f(m_Mouse.RelXScroll, m_Mouse.RelYScroll);
 	}
 
 	bool Input::MouseButtonDown(MouseButton mouseButton, KeyMod mods)
 	{
-		return s_Mouse.Buttons[(int)mouseButton].State == (int)ButtonState::Pressed && TestKeyMods(mods);
+		return m_Mouse.Buttons[(int)mouseButton].State == (int)ButtonState::Pressed && TestKeyMods(mods);
 	}
 
 	bool Input::MouseButtonPressed(MouseButton mouseButton, KeyMod mods)
@@ -104,7 +125,7 @@ namespace Bolt
 
 	bool Input::KeyDown(Keycode key, KeyMod mods)
 	{
-		return s_Keyboard.Keys[(int)key].State == (int)ButtonState::Pressed && TestKeyMods(mods);
+		return m_Keyboard.Keys[(int)key].State == (int)ButtonState::Pressed && TestKeyMods(mods);
 	}
 
 	bool Input::KeyPressed(Keycode key, KeyMod mods)
@@ -134,19 +155,19 @@ namespace Bolt
 
 	void Input::HideCursor()
 	{
-		glfwSetInputMode((GLFWwindow*)s_Window->GetNativeWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-		s_Mouse.IsVisible = false;
+		glfwSetInputMode((GLFWwindow*)m_Window->GetNativeWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		m_Mouse.IsVisible = false;
 	}
 
 	void Input::ShowCursor()
 	{
-		glfwSetInputMode((GLFWwindow*)s_Window->GetNativeWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-		s_Mouse.IsVisible = true;
+		glfwSetInputMode((GLFWwindow*)m_Window->GetNativeWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		m_Mouse.IsVisible = true;
 	}
 
 	KeyboardInstance::Key* Input::GetKey(Keycode keycode)
 	{
-		for (KeyboardInstance::Key& button : s_ChangedKeys)
+		for (KeyboardInstance::Key& button : m_ChangedKeys)
 		{
 			if (button.KeyID == (int)keycode)
 			{
@@ -158,7 +179,7 @@ namespace Bolt
 
 	MouseInstance::Button* Input::GetMouseButton(MouseButton mouseButton)
 	{
-		for (MouseInstance::Button& button : s_ChangedButtons)
+		for (MouseInstance::Button& button : m_ChangedButtons)
 		{
 			if (button.ButtonID == (int)mouseButton)
 			{
@@ -227,139 +248,116 @@ namespace Bolt
 		}
 		return value;
 	}
-	
-	void Input::Initialize(Window* window)
-	{
-		s_Window = window;
-		for (int i = 0; i < BLT_MAX_KEYS; i++)
-		{
-			s_Keyboard.Keys[i].KeyID = i;
-			s_Keyboard.Keys[i].State = (int)ButtonState::Released;
-		}
-		for (int i = 0; i < BLT_MAX_MOUSE_BUTTONS; i++)
-		{
-			s_Mouse.Buttons[i].ButtonID = i;
-			s_Mouse.Buttons[i].State = (int)ButtonState::Released;
-		}
-		s_Mouse.Left = ButtonState::Released;
-		s_Mouse.Middle = ButtonState::Released;
-		s_Mouse.Right = ButtonState::Released;
-		s_Mouse.X = 0;
-		s_Mouse.Y = 0;
-		s_Mouse.RelX = 0;
-		s_Mouse.RelY = 0;
-		s_Mouse.XScroll = 0;
-		s_Mouse.YScroll = 0;
-		s_Mouse.RelXScroll = 0;
-		s_Mouse.RelYScroll = 0;
-		s_Mouse.IsVisible = true;
-	}
-
-	void Input::Terminate()
-	{
-		s_Mouse = MouseInstance();
-		s_Keyboard = KeyboardInstance();
-		s_ChangedButtons.clear();
-		s_ChangedKeys.clear();
-		s_Window = nullptr;
-
-		OnKeyPressed.Destroy();
-		OnKeyReleased.Destroy();
-		OnMousePressed.Destroy();
-		OnMouseReleased.Destroy();
-		OnMouseScrolled.Destroy();
-		OnMouseMoved.Destroy();
-	}
 
 	void Input::Update()
 	{
-		s_PressedCharacters.clear();
-		s_ChangedButtons.clear();
-		s_ChangedKeys.clear();
-		s_Mouse.RelX = 0;
-		s_Mouse.RelY = 0;
-		s_Mouse.RelXScroll = 0;
-		s_Mouse.RelYScroll = 0;
+		m_PressedCharacters.clear();
+		m_ChangedButtons.clear();
+		m_ChangedKeys.clear();
+		m_Mouse.RelX = 0;
+		m_Mouse.RelY = 0;
+		m_Mouse.RelXScroll = 0;
+		m_Mouse.RelYScroll = 0;
+	}
+
+	bool Input::IsCurrentlySelected() const
+	{
+		return true;
 	}
 
 	void Input::MousePositionCallback(double mouseX, double mouseY)
 	{
-		mouseY = (double)s_Window->Height() - mouseY;
-		s_Mouse.RelX = (float)mouseX - s_Mouse.X;
-		s_Mouse.RelY = (float)mouseY - s_Mouse.Y;
-		s_Mouse.X = (float)mouseX;
-		s_Mouse.Y = (float)mouseY;
-		MouseMovedEvent args;
-		args.x = (float)mouseX;
-		args.y = (float)mouseY;
-		args.relX = s_Mouse.RelX;
-		args.relY = s_Mouse.RelY;
-		OnMouseMoved.Post(std::move(args));
+		if (IsCurrentlySelected())
+		{
+			mouseY = (double)m_Window->Height() - mouseY;
+			m_Mouse.RelX = (float)mouseX - m_Mouse.X;
+			m_Mouse.RelY = (float)mouseY - m_Mouse.Y;
+			m_Mouse.X = (float)mouseX;
+			m_Mouse.Y = (float)mouseY;
+			MouseMovedEvent args;
+			args.x = (float)mouseX;
+			args.y = (float)mouseY;
+			args.relX = m_Mouse.RelX;
+			args.relY = m_Mouse.RelY;
+			OnMouseMoved.Post(std::move(args));
+		}
 	}
 
 	void Input::MouseScrollCallback(double xScroll, double yScroll)
 	{
-		s_Mouse.RelXScroll = (float)xScroll;
-		s_Mouse.RelYScroll = (float)yScroll;
-		s_Mouse.XScroll += (float)xScroll;
-		s_Mouse.YScroll += (float)yScroll;
-		MouseScrolledEvent args;
-		args.xOffset = (float)xScroll;
-		args.yOffset = (float)yScroll;
-		OnMouseScrolled.Post(std::move(args));
+		if (IsCurrentlySelected())
+		{
+			m_Mouse.RelXScroll = (float)xScroll;
+			m_Mouse.RelYScroll = (float)yScroll;
+			m_Mouse.XScroll += (float)xScroll;
+			m_Mouse.YScroll += (float)yScroll;
+			MouseScrolledEvent args;
+			args.xOffset = (float)xScroll;
+			args.yOffset = (float)yScroll;
+			OnMouseScrolled.Post(std::move(args));
+		}
 	}
 
 	void Input::MouseButtonCallback(int button, int action, int mods)
 	{
-		if (action != GLFW_REPEAT)
+		if (IsCurrentlySelected())
 		{
-			s_Mouse.Buttons[button].State = action;
-			s_ChangedButtons.push_back({ button, action });
-		}
-		if (action == (int)ButtonState::Pressed || action == GLFW_REPEAT)
-		{
-			MousePressedEvent args;
-			args.Button = (MouseButton)button;
-			args.IsRepeat = action == GLFW_REPEAT;
-			args.x = s_Mouse.X;
-			args.y = s_Mouse.Y;
-			OnMousePressed.Post(std::move(args));
-		}
-		else
-		{
-			MouseReleasedEvent args;
-			args.Button = (MouseButton)button;
-			args.x = s_Mouse.X;
-			args.y = s_Mouse.Y;
-			OnMouseReleased.Post(std::move(args));
+			if (action != GLFW_REPEAT)
+			{
+				m_Mouse.Buttons[button].State = action;
+				m_ChangedButtons.push_back({ button, action });
+			}
+			if (action == (int)ButtonState::Pressed || action == GLFW_REPEAT)
+			{
+				MousePressedEvent args;
+				args.Button = (MouseButton)button;
+				args.IsRepeat = action == GLFW_REPEAT;
+				args.x = m_Mouse.X;
+				args.y = m_Mouse.Y;
+				OnMousePressed.Post(std::move(args));
+			}
+			else
+			{
+				MouseReleasedEvent args;
+				args.Button = (MouseButton)button;
+				args.x = m_Mouse.X;
+				args.y = m_Mouse.Y;
+				OnMouseReleased.Post(std::move(args));
+			}
 		}
 	}
 
 	void Input::KeyboardKeyCallback(int key, int scancode, int action, int mods)
 	{
-		if (action != GLFW_REPEAT)
+		if (IsCurrentlySelected())
 		{
-			s_Keyboard.Keys[key].State = action;
-			s_ChangedKeys.push_back(KeyboardInstance::Key{ key, action });
-		}
-		if (action == (int)ButtonState::Pressed || action == GLFW_REPEAT)
-		{
-			KeyPressedEvent args;
-			args.KeyCode = (Keycode)key;
-			args.IsRepeat = action == GLFW_REPEAT;
-			OnKeyPressed.Post(std::move(args));
-		}
-		else
-		{
-			KeyReleasedEvent args;
-			args.KeyCode = (Keycode)key;
-			OnKeyReleased.Post(std::move(args));
+			if (action != GLFW_REPEAT)
+			{
+				m_Keyboard.Keys[key].State = action;
+				m_ChangedKeys.push_back(KeyboardInstance::Key{ key, action });
+			}
+			if (action == (int)ButtonState::Pressed || action == GLFW_REPEAT)
+			{
+				KeyPressedEvent args;
+				args.KeyCode = (Keycode)key;
+				args.IsRepeat = action == GLFW_REPEAT;
+				OnKeyPressed.Post(std::move(args));
+			}
+			else
+			{
+				KeyReleasedEvent args;
+				args.KeyCode = (Keycode)key;
+				OnKeyReleased.Post(std::move(args));
+			}
 		}
 	}
 
 	void Input::CharPressedCallback(uint code)
 	{
-		s_PressedCharacters.push_back((char)code);
+		if (IsCurrentlySelected())
+		{
+			m_PressedCharacters.push_back((char)code);
+		}
 	}
 
 }

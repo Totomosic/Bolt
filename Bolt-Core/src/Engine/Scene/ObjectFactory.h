@@ -1,7 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include "Components\__Components__.h"
-#include "..\..\Graphics\Resources\ResourcePtr.h"
+#include "BasicModels.h"
 
 namespace Bolt
 {
@@ -10,11 +10,6 @@ namespace Bolt
 
 	class BLT_API ObjectFactory
 	{
-	private:
-		static ResourcePtr<Model> s_RectangleModel;
-		static ResourcePtr<Model> s_EllipseModel;
-		static ResourcePtr<Model> s_CuboidModel;
-
 	private:
 		Layer* m_CurrentLayer;
 		GameObject* m_CurrentParent;
@@ -59,18 +54,6 @@ namespace Bolt
 		GameObject* Grid(float width, float depth, int xVertices = 2, int zVertices = 2, const Color& color = Color::White, Transform transform = Transform()) const;
 		GameObject* Grid(float width, float depth, int xVertices, int zVertices, std::unique_ptr<Material>&& material, Transform transform = Transform()) const;
 		GameObject* Line(const Vector3f& p0, const Vector3f& p1, const Color& color = Color::White) const;
-
-		friend class Initializer;
-		friend class Destructor;
-
-	public:
-		static ResourcePtr<const Model> SquareModel();
-		static ResourcePtr<const Model> CircleModel();
-		static ResourcePtr<const Model> CubeModel();
-
-	private:
-		static void Initialize();
-		static void Terminate();
 
 	};
 

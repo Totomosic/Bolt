@@ -11,9 +11,6 @@ namespace Bolt
 	public:
 		static constexpr id_t ALL_LAYERS = (id_t)-1;
 
-	private:
-		static std::unique_ptr<SceneRenderer> s_Instance;
-
 	public:
 		static SceneRenderer& Get();
 

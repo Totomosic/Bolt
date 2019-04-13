@@ -7,9 +7,6 @@ namespace Bolt
 
 	class BLT_API Graphics
 	{
-	private:
-		static std::unique_ptr<Graphics> s_Instance;
-
 	public:
 		static Graphics& Get();
 
@@ -18,7 +15,7 @@ namespace Bolt
 		GLState m_State;
 
 	public:
-		Graphics();
+		Graphics(Window* window);
 
 		const Framebuffer* DefaultFramebuffer();
 		const GLState& GetState() const;

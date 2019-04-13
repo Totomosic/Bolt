@@ -4,7 +4,7 @@
 namespace Bolt
 {
 
-	struct BLT_API RenderContext
+	struct BLT_API RenderingContext
 	{
 	public:
 		std::vector<RenderGroup> StaticMeshes;

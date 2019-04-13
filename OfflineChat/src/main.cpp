@@ -4,6 +4,34 @@
 namespace Chat
 {
 
+	class TestApp : public Application
+	{
+	public:
+		void Init() override
+		{
+			GetWindow().SetClearColor(Color::Red);
+			Scene& scene = SceneManager::Get().CreateScene();
+			Camera* camera = scene.CreateCamera(Projection::Orthographic(0, 1920, 0, 1080, 0, 200));
+			camera->transform().Translate(0, 0, 100);
+			Layer& layer = scene.CreateLayer(camera);
+
+			RenderSchedule s(scene);
+			s.AddRenderProcess({ });
+			SceneRenderer::Get().AddRenderSchedule(s);
+		}
+
+		void Update() override
+		{
+		
+		}
+
+		void Render() override
+		{
+			Graphics::Get().RenderScene();
+		}
+
+	};
+
 	class App : public Application
 	{
 	public:
@@ -19,8 +47,8 @@ namespace Chat
 	public:
 		void Init() override
 		{
-			AppWindow->SetClearColor(Color(225, 225, 225));
-			AppWindow->EnableVSync();
+			GetContext().GetRenderContext().GetWindow().SetClearColor(Color(225, 225, 225));
+			GetContext().GetRenderContext().GetWindow().EnableVSync();
 			Scene& scene = SceneManager::Get().CreateScene();
 			Camera* camera = scene.CreateCamera(Projection::Orthographic(0, 1920, 0, 1080, 0, 200));
 			camera->transform().Translate(0, 0, 100);
@@ -81,6 +109,14 @@ namespace Chat
 
 		void Update() override
 		{
+			if (Input::Get().KeyPressed(Keycode::N))
+			{
+				WindowCreateInfo w;
+				w.Width = 600;
+				w.Height = 600;
+				w.Title = "Test";
+				PushApp<TestApp>(w);
+			}
 			if (currentTextBox != nullptr)
 			{
 				Text& t = (Text&)currentTextBox->GetElement(0);
@@ -227,8 +263,8 @@ int main()
 	wInfo.Title = "Chat";
 	wInfo.Width = 1280;
 	wInfo.Height = 720;
+	eInfo.WindowInfo = wInfo;
 	Engine e(eInfo);
-	e.SetWindowCreateInfo(wInfo);
 	e.SetApplication<Chat::App>();
 	e.Run();
 	return 0;
