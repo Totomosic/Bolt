@@ -21,7 +21,7 @@ namespace Chat
 		{
 			AppWindow->SetClearColor(Color(225, 225, 225));
 			AppWindow->EnableVSync();
-			Scene& scene = SceneManager::CreateScene();
+			Scene& scene = SceneManager::Get().CreateScene();
 			Camera* camera = scene.CreateCamera(Projection::Orthographic(0, 1920, 0, 1080, 0, 200));
 			camera->transform().Translate(0, 0, 100);
 			Layer& layer = scene.CreateLayer(camera);
@@ -55,7 +55,7 @@ namespace Chat
 			groupMenu = &layer.UI().Rectangle(600, camera->ViewHeight() - 30, Color::White, Transform({ 300, camera->ViewHeight() / 2 - 15, -90 }));
 			contentPanel = &layer.UI().Rectangle(camera->ViewWidth() - 600, camera->ViewHeight() - 30, Color(225, 225, 225), Transform({ camera->ViewWidth() / 2 + 300, camera->ViewHeight() / 2 - 15, -90 }));
 
-			createGroupMenu->Text("Chats", ResourceManager::Fonts().Arial(32), Color::Black, Transform({ 0, 0, 1 }));
+			createGroupMenu->Text("Chats", ResourceManager::Get().Fonts().Arial(32), Color::Black, Transform({ 0, 0, 1 }));
 			UIsurface& createGroupButton = createGroupMenu->Rectangle(30, 30, Color::Green, Transform({ 200, 0, 1 }));
 			createGroupButton.EventHandler().OnClicked.Subscribe([this](UIClickedEvent & e)
 				{
@@ -76,7 +76,7 @@ namespace Chat
 
 			RenderSchedule s(scene);
 			s.AddRenderProcess({ });
-			SceneRenderer::AddRenderSchedule(s);
+			SceneRenderer::Get().AddRenderSchedule(s);
 		}
 
 		void Update() override
@@ -103,7 +103,7 @@ namespace Chat
 
 		void Render() override
 		{
-			Graphics::RenderScene();
+			Graphics::Get().RenderScene();
 		}
 
 		void Exit() override
@@ -129,18 +129,18 @@ namespace Chat
 		void LoadDefaultContentPanel()
 		{
 			ClearContentPanel();
-			contentPanel->Text("No content to display.", ResourceManager::Fonts().Arial(24), Color::Black, Transform({ 0, 0, 1 }));
-			contentPanel->Text("Open a chat from the left menu to view content.", ResourceManager::Fonts().Arial(24), Color::Black, Transform({ 0, -24, 1 }));
+			contentPanel->Text("No content to display.", ResourceManager::Get().Fonts().Arial(24), Color::Black, Transform({ 0, 0, 1 }));
+			contentPanel->Text("Open a chat from the left menu to view content.", ResourceManager::Get().Fonts().Arial(24), Color::Black, Transform({ 0, -24, 1 }));
 		}
 
 		void LoadCreateGroupPanel()
 		{
 			ClearContentPanel();
 			UIsurface& titleMenu = contentPanel->Rectangle(contentPanel->Width(), 100, Color::White, Transform({ 0, contentPanel->Height() / 2 - 50, 1 }));
-			titleMenu.Text("Create new chat", ResourceManager::Fonts().Arial(32), Color::Black, Transform({ 0, 0, 1 }));
+			titleMenu.Text("Create new chat", ResourceManager::Get().Fonts().Arial(32), Color::Black, Transform({ 0, 0, 1 }));
 			UIsurface& menu = contentPanel->Rectangle(600, 800, Color::White, Transform({ 0, -50, 1 }));
-			menu.Text("Name: ", ResourceManager::Fonts().Arial(28), Color::Black, Transform({ -150, 300, 1 }), AlignH::Right);
-			menu.Text("IP: ", ResourceManager::Fonts().Arial(28), Color::Black, Transform({ -150, 200, 1 }), AlignH::Right);
+			menu.Text("Name: ", ResourceManager::Get().Fonts().Arial(28), Color::Black, Transform({ -150, 300, 1 }), AlignH::Right);
+			menu.Text("IP: ", ResourceManager::Get().Fonts().Arial(28), Color::Black, Transform({ -150, 200, 1 }), AlignH::Right);
 		}
 
 		void LoadGroup(int groupIndex)
@@ -149,10 +149,10 @@ namespace Chat
 			chatManager.SetActiveGroupIndex(groupIndex);
 			const ChatGroup& group = chatManager.ActiveGroup();			
 			UIsurface& titleMenu = contentPanel->Rectangle(contentPanel->Width(), 100, Color::White, Transform({ 0, contentPanel->Height() / 2 - 50, 1 }));
-			titleMenu.Text(group.Name(), ResourceManager::Fonts().Arial(32), Color::Black, Transform({ 0, 0, 1 }));
+			titleMenu.Text(group.Name(), ResourceManager::Get().Fonts().Arial(32), Color::Black, Transform({ 0, 0, 1 }));
 			UIsurface& chatRegion = contentPanel->Rectangle(contentPanel->Width() - 50, 50, Color::White, Transform({ 0, -contentPanel->Height() / 2 + 25, 1 }));
 			UIsurface& chatBox = chatRegion.Rectangle(chatRegion.Width() - 20, chatRegion.Height() - 10, Color(220, 220, 220), Transform({ 0, 0, 1 }));
-			chatBox.Text("", ResourceManager::Fonts().Arial(24), Color::Black, Transform({ -chatBox.Width() / 2 + 5, 0, 1 }), AlignH::Left);
+			chatBox.Text("", ResourceManager::Get().Fonts().Arial(24), Color::Black, Transform({ -chatBox.Width() / 2 + 5, 0, 1 }), AlignH::Left);
 			chatBox.EventHandler().OnClicked.Subscribe([this, &chatBox](UIClickedEvent & e)
 				{
 					currentTextBox = &chatBox;
@@ -170,8 +170,8 @@ namespace Chat
 					c = Color(150, 150, 255);
 				}
 				UIsurface& messageRect = contentPanel->Rectangle(contentPanel->Width() - 100, 70, c, Transform({ xOff, contentPanel->Height() / 2 - 110 - 35 - 80 * i, 1 }));
-				messageRect.Text(message.From.Username + " (" + message.Message.Timestamp() + ")", ResourceManager::Fonts().Arial(28), Color::Black, Transform({ -messageRect.Width() / 2 + 10, messageRect.Height() / 2 - 15, 1 }), AlignH::Left);
-				messageRect.Text(message.Message.Message(), ResourceManager::Fonts().Arial(24), Color::Black, Transform({ -messageRect.Width() / 2 + 10, messageRect.Height() / 2 - 15 - 28, 1 }), AlignH::Left);
+				messageRect.Text(message.From.Username + " (" + message.Message.Timestamp() + ")", ResourceManager::Get().Fonts().Arial(28), Color::Black, Transform({ -messageRect.Width() / 2 + 10, messageRect.Height() / 2 - 15, 1 }), AlignH::Left);
+				messageRect.Text(message.Message.Message(), ResourceManager::Get().Fonts().Arial(24), Color::Black, Transform({ -messageRect.Width() / 2 + 10, messageRect.Height() / 2 - 15 - 28, 1 }), AlignH::Left);
 			}
 		}
 
@@ -182,7 +182,7 @@ namespace Chat
 			{
 				const ChatGroup& group = chatManager.Groups().at(i);
 				UIsurface& groupButton = groupMenu->Rectangle(groupMenu->Width(), 150, Color(240, 240, 240), Transform({ 0, groupMenu->Height() / 2 - 175 - 155 * i, 1 }));
-				groupButton.Text(group.Name(), ResourceManager::Fonts().Arial(28), Color::Black, Transform({ 0, 0, 1 }));
+				groupButton.Text(group.Name(), ResourceManager::Get().Fonts().Arial(28), Color::Black, Transform({ 0, 0, 1 }));
 				groupButton.EventHandler().OnClicked.Subscribe([this, i](UIClickedEvent& e)
 					{
 						LoadGroup(i);

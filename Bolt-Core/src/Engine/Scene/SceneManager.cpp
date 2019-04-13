@@ -5,25 +5,37 @@
 namespace Bolt
 {
 
-	std::vector<std::unique_ptr<Scene>> SceneManager::s_Scenes = std::vector<std::unique_ptr<Scene>>();
-	std::unordered_map<blt::string, Scene*> SceneManager::s_SceneMap = std::unordered_map<blt::string, Scene*>();
-	Scene* SceneManager::s_CurrentScene = nullptr;
-	Window* SceneManager::s_Window = nullptr;
+	std::unique_ptr<SceneManager> SceneManager::s_Instance;
+
+	SceneManager& SceneManager::Get()
+	{
+		if (!s_Instance)
+		{
+			s_Instance = std::make_unique<SceneManager>();
+		}
+		return *s_Instance;
+	}
+
+	SceneManager::SceneManager()
+		: m_Scenes(), m_SceneMap(), m_CurrentScene(nullptr)
+	{
+		
+	}
 
 	Scene& SceneManager::CurrentScene()
 	{
-		return *s_CurrentScene;
+		return *m_CurrentScene;
 	}
 
 	Scene& SceneManager::GetSceneById(id_t id)
 	{
-		return *s_Scenes[id].get();
+		return *m_Scenes[id].get();
 	}
 
 	Scene& SceneManager::GetSceneByName(const blt::string& name)
 	{
-		auto it = s_SceneMap.find(name);
-		if (it != s_SceneMap.end())
+		auto it = m_SceneMap.find(name);
+		if (it != m_SceneMap.end())
 		{
 			return *(*it).second;
 		}
@@ -33,37 +45,37 @@ namespace Bolt
 
 	Scene& SceneManager::CreateScene(const blt::string& name)
 	{
-		id_t index = s_Scenes.size();
+		id_t index = m_Scenes.size();
 		std::unique_ptr<Scene> s = std::make_unique<Scene>();
 		Scene* ptr = s.get();
-		s_Scenes.push_back(std::move(s));
+		m_Scenes.push_back(std::move(s));
 		ptr->m_Id = index;
 		if (!name.empty())
 		{
-			s_SceneMap[name] = ptr;
+			m_SceneMap[name] = ptr;
 		}
-		if (s_CurrentScene == nullptr)
+		if (m_CurrentScene == nullptr)
 		{
-			s_CurrentScene = ptr;
+			m_CurrentScene = ptr;
 		}
 		return *ptr;
 	}
 
 	void SceneManager::SetCurrentScene(Scene& scene)
 	{
-		if (s_CurrentScene != nullptr)
+		if (m_CurrentScene != nullptr)
 		{
 			SceneUnloadedEvent e;
-			e.UnloadedScene = s_CurrentScene;
-			s_CurrentScene->OnUnload.Post(std::move(e));
+			e.UnloadedScene = m_CurrentScene;
+			m_CurrentScene->OnUnload.Post(std::move(e));
 		}
-		s_CurrentScene = &scene;
-		if (s_CurrentScene != nullptr)
+		m_CurrentScene = &scene;
+		if (m_CurrentScene != nullptr)
 		{
 			SceneLoadedEvent e;
-			e.LoadedScene = s_CurrentScene;
+			e.LoadedScene = m_CurrentScene;
 			e.LoadData = nullptr;
-			s_CurrentScene->OnLoad.Post(std::move(e));
+			m_CurrentScene->OnLoad.Post(std::move(e));
 		}
 	}
 
@@ -79,9 +91,8 @@ namespace Bolt
 
 	void SceneManager::Terminate()
 	{
-		s_Scenes.clear();
-		s_CurrentScene = nullptr;
-		s_Window = nullptr;
+		Get().m_Scenes.clear();
+		Get().m_CurrentScene = nullptr;
 	}
 
 }

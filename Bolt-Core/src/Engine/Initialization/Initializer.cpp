@@ -12,8 +12,6 @@ namespace Bolt
 	{
 		Log::Initialize();
 		BLT_CORE_INFO("Logger Initialized");
-		EventManager::Initialize();
-		BLT_CORE_INFO("EventManager Initialized");
 		Filesystem::Initialize();
 		BLT_CORE_INFO("Filesystem Initialized");
 		if (createInfo.UseGraphics)
@@ -53,8 +51,6 @@ namespace Bolt
 				BLT_ASSERT(false, "Failed to Initialize Glad");
 			}
 			BLT_CORE_INFO("Glad Initialized");
-			ResourceManager::Initialize();
-			BLT_CORE_INFO("ResourceManager Initialized");
 			Input::Get().Initialize(window);
 			BLT_CORE_INFO("Input Initialized");
 			Shader::Initialize();
@@ -71,8 +67,6 @@ namespace Bolt
 			BLT_CORE_WARN("Skipped Initializing Shader");
 			BLT_CORE_WARN("Skipped Initializing Graphics");
 			BLT_CORE_WARN("Skipped Initializing ObjectFactory");
-			ResourceManager::Initialize();
-			BLT_CORE_INFO("ResourceManager Initialized");
 		}
 	}
 

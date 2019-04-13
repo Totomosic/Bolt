@@ -12,6 +12,7 @@ namespace Bolt
 		using Listener = EventListenerContainer<T>;
 
 	private:
+		EventManager* m_Manager;
 		id_t m_DispatcherId;
 		id_t m_ListenerId;
 		std::unordered_map<id_t, std::unique_ptr<Listener>> m_Listeners;
@@ -19,7 +20,7 @@ namespace Bolt
 
 	public:
 		EventDispatcher()
-			: m_DispatcherId(EventManager::GetNextDispatcherId()), m_ListenerId(EventManager::Subscribe<T>(std::bind(&EventDispatcher::PrivateEventCallback, this, std::placeholders::_1), m_DispatcherId)), m_Listeners(), m_IdManager(0, EventManager::IGNORE_DISPATCHER_ID - 1)
+			: m_Manager(&EventManager::Get()), m_DispatcherId(m_Manager->GetNextDispatcherId()), m_ListenerId(m_Manager->Subscribe<T>(std::bind(&EventDispatcher::PrivateEventCallback, this, std::placeholders::_1), m_DispatcherId)), m_Listeners(), m_IdManager(0, EventManager::IGNORE_DISPATCHER_ID - 1)
 		{
 			
 		}
@@ -29,6 +30,7 @@ namespace Bolt
 
 		EventDispatcher(EventDispatcher<T>&& other)
 		{
+			m_Manager = other.m_Manager;
 			m_ListenerId = other.m_ListenerId;
 			other.m_ListenerId = EventManager::IGNORE_DISPATCHER_ID;
 			m_DispatcherId = other.m_DispatcherId;
@@ -36,11 +38,12 @@ namespace Bolt
 			m_Listeners = std::move(other.m_Listeners);
 			m_IdManager = std::move(other.m_IdManager);
 
-			EventManager::UpdateListener<T>(m_ListenerId, std::bind(&EventDispatcher::PrivateEventCallback, this, std::placeholders::_1));
+			m_Manager->UpdateListener<T>(m_ListenerId, std::bind(&EventDispatcher::PrivateEventCallback, this, std::placeholders::_1));
 		}
 
 		EventDispatcher<T>& operator=(EventDispatcher<T>&& other)
 		{
+			BLT_ASSERT(m_Manager == other.m_Manager, "Cannot move EventDispatcher between Event Managers");
 			id_t listenerId = m_ListenerId;
 			m_ListenerId = other.m_ListenerId;
 			other.m_ListenerId = listenerId;
@@ -50,7 +53,7 @@ namespace Bolt
 			m_Listeners = std::move(other.m_Listeners);
 			m_IdManager = std::move(other.m_IdManager);
 
-			EventManager::UpdateListener<T>(m_ListenerId, std::bind(&EventDispatcher::PrivateEventCallback, this, std::placeholders::_1));
+			m_Manager->UpdateListener<T>(m_ListenerId, std::bind(&EventDispatcher::PrivateEventCallback, this, std::placeholders::_1));
 
 			return *this;
 		}
@@ -87,21 +90,21 @@ namespace Bolt
 		// Post a new event with no args from thsi specific dispatcher
 		void Post()
 		{
-			EventManager::PostFromDispatcher<T>(m_DispatcherId);
+			m_Manager->PostFromDispatcher<T>(m_DispatcherId);
 		}
 
 		// Post a new event with given args from this specific dispatcher
 		void Post(T args)
 		{
-			EventManager::PostFromDispatcher(m_DispatcherId, std::move(args));
+			m_Manager->PostFromDispatcher(m_DispatcherId, std::move(args));
 		}
 
 		void Destroy()
 		{
 			if (m_ListenerId != EventManager::IGNORE_DISPATCHER_ID && m_DispatcherId != EventManager::IGNORE_DISPATCHER_ID)
 			{
-				EventManager::Unsubscribe(m_ListenerId);
-				EventManager::ReleaseDispatcherId(m_DispatcherId);
+				m_Manager->Unsubscribe(m_ListenerId);
+				m_Manager->ReleaseDispatcherId(m_DispatcherId);
 			}
 			m_ListenerId = EventManager::IGNORE_DISPATCHER_ID;
 			m_DispatcherId = EventManager::IGNORE_DISPATCHER_ID;

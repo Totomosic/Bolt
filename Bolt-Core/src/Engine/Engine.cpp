@@ -28,10 +28,10 @@ namespace Bolt
 
 	void Engine::UpdateApplication()
 	{
-		Scene* scene = &SceneManager::CurrentScene();
+		Scene* scene = &SceneManager::Get().CurrentScene();
 		Input::Get().Update();
 		glfwPollEvents();
-		EventManager::FlushEvents(); // Flush #1 (likely input events)
+		EventManager::Get().FlushEvents(); // Flush #1 (likely input events)
 		m_CurrentApplication->Update();
 		if (scene != nullptr)
 		{
@@ -40,7 +40,7 @@ namespace Bolt
 		m_CurrentApplication->Render();
 		m_CurrentApplication->AppWindow->SwapBuffers();
 		Time::Update();
-		EventManager::FlushEvents(); // Flush #2 (likely other scene/app events)
+		EventManager::Get().FlushEvents(); // Flush #2 (likely other scene/app events)
 		if (scene != nullptr)
 		{
 			scene->UpdateTemporaryObjects();
@@ -53,14 +53,14 @@ namespace Bolt
 
 	void Engine::UpdateApplicationNoGraphics()
 	{
-		Scene* scene = &SceneManager::CurrentScene();
+		Scene* scene = &SceneManager::Get().CurrentScene();
 		m_CurrentApplication->Update();
 		if (scene != nullptr)
 		{
 			scene->Update();
 		}
 		Time::Update();
-		EventManager::FlushEvents();
+		EventManager::Get().FlushEvents();
 		if (scene != nullptr)
 		{
 			scene->UpdateTemporaryObjects();

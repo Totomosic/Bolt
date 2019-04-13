@@ -7,7 +7,7 @@ namespace Bolt
 {
 
 	UIsurface::UIsurface(float width, float height, const Color& color, Transform&& transform) : UIelement(),
-		m_Width(width), m_Height(height), m_Transform(std::move(transform)), m_Material(ResourceManager::Materials().Default(color))
+		m_Width(width), m_Height(height), m_Transform(std::move(transform)), m_Material(ResourceManager::Get().Materials().Default(color))
 	{
 		
 	}

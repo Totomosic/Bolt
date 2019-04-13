@@ -20,9 +20,9 @@ namespace DND
 		void Init() override
 		{
 			AppWindow->CentreOnMonitor(Monitor::Primary());
-			ResourcePack resources = ResourceManager::FetchPack("res/resources.pack");
-			ResourceManager::LoadPack(resources);
-			ResourceManager::Register(std::make_unique<Font>("res/arial.ttf", 42));
+			ResourcePack resources = ResourceManager::Get().FetchPack("res/resources.pack");
+			ResourceManager::Get().LoadPack(resources);
+			ResourceManager::Get().Register(std::make_unique<Font>("res/arial.ttf", 42));
 
 			CreateTilemaps(resources);
 			CreateCharacterPrefabs(resources);

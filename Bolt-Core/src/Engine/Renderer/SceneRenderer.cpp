@@ -58,18 +58,33 @@ namespace Bolt
 		}
 	}
 
-	std::unordered_map<const Scene*, RenderSchedule> SceneRenderer::s_Schedules = std::unordered_map<const Scene*, RenderSchedule>();
+	std::unique_ptr<SceneRenderer> SceneRenderer::s_Instance;
+
+	SceneRenderer& SceneRenderer::Get()
+	{
+		if (!s_Instance)
+		{
+			s_Instance = std::make_unique<SceneRenderer>();
+		}
+		return *s_Instance;
+	}
+
+	SceneRenderer::SceneRenderer()
+		: m_Schedules()
+	{
+	
+	}
 
 	void SceneRenderer::AddRenderSchedule(const RenderSchedule& schedule)
 	{
-		BLT_ASSERT(s_Schedules.find(&schedule.GetScene()) == s_Schedules.end(), "Schedule already exists for this scene");
-		s_Schedules[&schedule.GetScene()] = schedule;
+		BLT_ASSERT(m_Schedules.find(&schedule.GetScene()) == m_Schedules.end(), "Schedule already exists for this scene");
+		m_Schedules[&schedule.GetScene()] = schedule;
 	}
 
 	void SceneRenderer::Render(const Scene& scene)
 	{
-		BLT_ASSERT(s_Schedules.find(&scene) != s_Schedules.end(), "No schedule found for given scene");
-		RenderSchedule& schedule = s_Schedules[&scene];
+		BLT_ASSERT(m_Schedules.find(&scene) != m_Schedules.end(), "No schedule found for given scene");
+		RenderSchedule& schedule = m_Schedules[&scene];
 		for (const RenderProcess& process : schedule.Processes())
 		{
 			std::vector<const Layer*> layers = (process.LayerMask == SceneRenderer::ALL_LAYERS) ? scene.GetAllLayers() : scene.GetLayers(process.LayerMask);
@@ -81,7 +96,11 @@ namespace Bolt
 					options.CameraOverride = process.Cameras.at(layer->Id());
 				}
 				// Always clear the depth buffer between layers
-				process.Options.RenderTarget->Clear(ClearBuffer::Depth);
+				if (options.RenderTarget == nullptr)
+				{
+					options.RenderTarget = Graphics::Get().DefaultFramebuffer();
+				}
+				options.RenderTarget->Clear(ClearBuffer::Depth);
 				RenderLayer(options, *layer);
 			}
 		}

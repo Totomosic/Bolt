@@ -5,16 +5,10 @@
 namespace Bolt
 {
 
-	bool GLState::s_DepthEnabled = false;
-	bool GLState::s_BlendEnabled = false;
-	bool GLState::s_CullFaceEnabled = false;
-
-	DepthFunction GLState::s_DepthFunction = DepthFunction::Less;
-	BlendSrc GLState::s_BlendSrc = BlendSrc::SrcAlpha;
-	BlendDst GLState::s_BlendDst = BlendDst::OneMinusSrcAlpha;
-	CullFace GLState::s_CullFace = CullFace::Back;
-	PolygonMode GLState::s_PolygonMode = PolygonMode::Fill;
-	bool GLState::s_RenderToDepthBuffer = true;
+	GLState::GLState()
+	{
+		Reset();
+	}
 
 	void GLState::Reset()
 	{

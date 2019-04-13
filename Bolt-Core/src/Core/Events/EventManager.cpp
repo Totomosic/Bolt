@@ -6,32 +6,44 @@
 namespace Bolt
 {
 
-	std::mutex EventManager::s_EventQueueMutex = std::mutex();
-	std::mutex EventManager::s_ListenersMutex = std::mutex();
+	std::unique_ptr<EventManager> EventManager::s_Instance;
 
-	EventQueue<EventManager::EventInfo> EventManager::s_EventQueue = EventQueue<EventManager::EventInfo>(EventManager::MAX_EVENTS);
-	std::unordered_map<id_t, std::vector<EventManager::EventListenerInfo>> EventManager::s_Listeners = std::unordered_map<id_t, std::vector<EventManager::EventListenerInfo>>();
-	std::unordered_map<id_t, id_t> EventManager::s_ListenerMap = std::unordered_map<id_t, id_t>();
+	EventManager& EventManager::Get()
+	{
+		if (!s_Instance)
+		{
+			s_Instance = std::make_unique<EventManager>();
+		}
+		return *s_Instance;
+	}
 
-	IdManager<id_t> EventManager::s_ListenerIdManager = IdManager<id_t>(0, EventManager::IGNORE_DISPATCHER_ID - 1);
-	IdManager<id_t> EventManager::s_DispatcherIdManager = IdManager<id_t>(0, EventManager::IGNORE_DISPATCHER_ID - 1);
+	EventManager::EventManager()
+		: m_EventQueueMutex(), m_ListenersMutex(), m_EventQueue(EventManager::MAX_EVENTS), m_Listeners(), m_ListenerMap(), m_ListenerIdManager(0, EventManager::IGNORE_DISPATCHER_ID - 1), m_DispatcherIdManager(0, EventManager::IGNORE_DISPATCHER_ID - 1)
+	{
+		Subscribe<TaskCompletedEvent>([](TaskCompletedEvent & e)
+			{
+				e.Execute();
+				ListenerResponse response;
+				return response;
+			});
+	}
 
 	id_t EventManager::GetNextDispatcherId()
 	{
-		return s_DispatcherIdManager.GetNextId();
+		return m_DispatcherIdManager.GetNextId();
 	}
 
 	void EventManager::ReleaseDispatcherId(id_t id)
 	{
-		s_DispatcherIdManager.ReleaseId(id);
+		m_DispatcherIdManager.ReleaseId(id);
 	}
 
 	void EventManager::Unsubscribe(id_t listenerId)
 	{
-		std::scoped_lock<std::mutex> lock(s_ListenersMutex);
-		BLT_ASSERT(s_ListenerMap.find(listenerId) != s_ListenerMap.end(), "Unable to find listener with Id " + std::to_string(listenerId));
-		id_t eventId = s_ListenerMap.at(listenerId);
-		std::vector<EventListenerInfo>& listenersVector = s_Listeners.at(eventId);
+		std::scoped_lock<std::mutex> lock(m_ListenersMutex);
+		BLT_ASSERT(m_ListenerMap.find(listenerId) != m_ListenerMap.end(), "Unable to find listener with Id " + std::to_string(listenerId));
+		id_t eventId = m_ListenerMap.at(listenerId);
+		std::vector<EventListenerInfo>& listenersVector = m_Listeners.at(eventId);
 		auto it = std::find_if(listenersVector.begin(), listenersVector.end(), [listenerId](EventListenerInfo& eListener)
 		{	
 			return eListener.ListenerId == listenerId;
@@ -45,15 +57,15 @@ namespace Bolt
 		EventInfo* eventQueue;
 		id_t eventQueueLength;
 		{
-			std::scoped_lock<std::mutex, std::mutex> lock(s_EventQueueMutex, s_ListenersMutex);
-			eventQueue = s_EventQueue.GetQueuePtr();
-			eventQueueLength = s_EventQueue.EventCount();
-			s_EventQueue.SwapQueues();
+			std::scoped_lock<std::mutex, std::mutex> lock(m_EventQueueMutex, m_ListenersMutex);
+			eventQueue = m_EventQueue.GetQueuePtr();
+			eventQueueLength = m_EventQueue.EventCount();
+			m_EventQueue.SwapQueues();
 		}
 		for (id_t i = 0; i < eventQueueLength; i++)
 		{
 			EventInfo& e = eventQueue[i];
-			for (auto& listener : s_Listeners[e.EventId])
+			for (auto& listener : m_Listeners[e.EventId])
 			{
 				if (listener.DispatcherId == EventManager::IGNORE_DISPATCHER_ID || e.DispatcherId == listener.DispatcherId)
 				{
@@ -74,40 +86,30 @@ namespace Bolt
 
 	id_t EventManager::FindNextListenerId()
 	{
-		return s_ListenerIdManager.GetNextId();
+		return m_ListenerIdManager.GetNextId();
 	}
 
 	void EventManager::ReleaseListenerId(id_t id)
 	{
-		s_ListenerIdManager.ReleaseId(id);
-	}
-
-	void EventManager::Initialize()
-	{
-		Subscribe<TaskCompletedEvent>([](TaskCompletedEvent& e)
-		{
-			e.Execute();
-			ListenerResponse response;
-			return response;
-		});
+		m_ListenerIdManager.ReleaseId(id);
 	}
 
 	id_t EventManager::Subscribe(id_t eventId, std::unique_ptr<EventListenerContainer<Event>> listener, id_t dispatcherId)
 	{
-		std::scoped_lock<std::mutex> lock(s_ListenersMutex);
+		std::scoped_lock<std::mutex> lock(m_ListenersMutex);
 		id_t listenerId = FindNextListenerId();
-		id_t listenerIndex = s_Listeners[eventId].size();
-		s_Listeners.at(eventId).push_back({ std::move(listener), dispatcherId, listenerId });
-		s_ListenerMap[listenerId] = eventId;
+		id_t listenerIndex = m_Listeners[eventId].size();
+		m_Listeners.at(eventId).push_back({ std::move(listener), dispatcherId, listenerId });
+		m_ListenerMap[listenerId] = eventId;
 		return listenerId;
 	}
 
 	void EventManager::UpdateListener(id_t listenerId, std::unique_ptr<EventListenerContainer<Event>> listener)
 	{
-		std::scoped_lock<std::mutex> lock(s_ListenersMutex);
-		BLT_ASSERT(s_ListenerMap.find(listenerId) != s_ListenerMap.end(), "Unable to find listener with Id " + std::to_string(listenerId));
-		id_t eventId = s_ListenerMap.at(listenerId);
-		std::vector<EventListenerInfo>& listenersVector = s_Listeners.at(eventId);
+		std::scoped_lock<std::mutex> lock(m_ListenersMutex);
+		BLT_ASSERT(m_ListenerMap.find(listenerId) != m_ListenerMap.end(), "Unable to find listener with Id " + std::to_string(listenerId));
+		id_t eventId = m_ListenerMap.at(listenerId);
+		std::vector<EventListenerInfo>& listenersVector = m_Listeners.at(eventId);
 		for (EventListenerInfo& l : listenersVector)
 		{
 			if (l.ListenerId == listenerId)

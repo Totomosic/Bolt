@@ -114,7 +114,7 @@ namespace Bolt
 
 	GameObject* ObjectFactory::Rectangle(float width, float height, const Color& color, Transform transform) const
 	{
-		return Rectangle(width, height, ResourceManager::Materials().Default(color), std::move(transform));
+		return Rectangle(width, height, ResourceManager::Get().Materials().Default(color), std::move(transform));
 	}
 
 	GameObject* ObjectFactory::Rectangle(float width, float height, std::unique_ptr<Material>&& material, Transform transform) const
@@ -129,13 +129,13 @@ namespace Bolt
 	{
 		GameObject* object = Rectangle(width, height, Color::White, std::move(transform));
 		Mesh& mesh = object->Components().GetComponent<MeshRenderer>().Mesh;
-		mesh.Materials[0] = ResourceManager::Materials().Texture(image);
+		mesh.Materials[0] = ResourceManager::Get().Materials().Texture(image);
 		return object;
 	}
 
 	GameObject* ObjectFactory::Ellipse(float width, float height, const Color& color, Transform transform) const
 	{
-		return Ellipse(width, height, ResourceManager::Materials().Default(color), std::move(transform));
+		return Ellipse(width, height, ResourceManager::Get().Materials().Default(color), std::move(transform));
 	}
 
 	GameObject* ObjectFactory::Ellipse(float width, float height, std::unique_ptr<Material>&& material, Transform transform) const
@@ -148,7 +148,7 @@ namespace Bolt
 
 	GameObject* ObjectFactory::Cuboid(float width, float height, float depth, const Color& color, Transform transform) const
 	{
-		return Cuboid(width, height, depth, ResourceManager::Materials().Default(color), std::move(transform));
+		return Cuboid(width, height, depth, ResourceManager::Get().Materials().Default(color), std::move(transform));
 	}
 
 	GameObject* ObjectFactory::Cuboid(float width, float height, float depth, std::unique_ptr<Material>&& material, Transform transform) const
@@ -161,7 +161,7 @@ namespace Bolt
 
 	GameObject* ObjectFactory::Grid(float width, float depth, int xVertices, int zVertices, const Color& color, Transform transform) const
 	{
-		return Grid(width, depth, xVertices, zVertices, ResourceManager::Materials().Default(color), std::move(transform));
+		return Grid(width, depth, xVertices, zVertices, ResourceManager::Get().Materials().Default(color), std::move(transform));
 	}
 
 	GameObject* ObjectFactory::Grid(float width, float depth, int xVertices, int zVertices, std::unique_ptr<Material>&& material, Transform transform) const
@@ -194,7 +194,7 @@ namespace Bolt
 		Mesh mesh;
 		// TODO: CHANGE
 		mesh.Models.push_back({ ResourcePtr<Model>(new Model(LineFactory(Vector3f::Right(), distance)), true), Matrix4f::Identity(),{ 0 } });
-		mesh.Materials[0] = ResourceManager::Materials().Default(color);
+		mesh.Materials[0] = ResourceManager::Get().Materials().Default(color);
 
 		return Instantiate(std::move(mesh), std::move(t));
 	}

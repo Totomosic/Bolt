@@ -16,7 +16,7 @@ namespace Bolt
 		BLT_CORE_INFO("ObjectFactory Terminated");
 		Graphics::Terminate();
 		BLT_CORE_INFO("Graphics Terminated");
-		ResourceManager::Terminate();
+		ResourceManager::Get().Terminate();
 		BLT_CORE_INFO("ResourceManager Terminated");
 		Input::Get().Terminate();
 		BLT_CORE_INFO("Input Terminated");

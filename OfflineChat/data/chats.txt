@@ -29,6 +29,11 @@
 				<Timestamp>08/04/19 17:21</Timestamp>
 				<Data>message</Data>
 			</Message>
+			<Message>
+				<User name="Totomosic" ip="0.0.0.0:0"></User>
+				<Timestamp>13/04/19 13:07</Timestamp>
+				<Data>hello brotehr</Data>
+			</Message>
 		</MessageHistory>
 	</Group>
 </Groups>
