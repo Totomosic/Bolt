@@ -25,6 +25,9 @@ namespace Bolt
 	class BLT_API Window
 	{
 	private:
+		static bool s_IsGLADInitialized;
+
+	private:
 		WindowData m_Data;
 
 	public:
@@ -51,6 +54,7 @@ namespace Bolt
 		Color& ClearColor();
 		void* GetNativeWindow() const;
 
+		bool IsFocused() const;
 		bool ShouldClose() const;
 		void Close() const;
 		void Clear(ClearBuffer clearBuffer = ClearBuffer::Color | ClearBuffer::Depth) const;
@@ -74,10 +78,6 @@ namespace Bolt
 		void SetPosition(const Vector2i& position);
 		void SetPosition(int x, int y);
 
-		friend class Application;
-		friend class WindowManager;
-
-	private:
 		void MakeCurrent() const;
 
 	};

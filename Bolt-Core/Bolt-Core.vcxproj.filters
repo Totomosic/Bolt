@@ -387,9 +387,6 @@
     <ClInclude Include="src\Engine\Renderer\RenderCamera.h">
       <Filter>Engine\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\Renderer\RenderContext.h">
-      <Filter>Engine\Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="src\Engine\Renderer\RenderData.h">
       <Filter>Engine\Renderer</Filter>
     </ClInclude>
@@ -857,6 +854,11 @@
     <ClInclude Include="src\Engine\Scripting\Lua\LuaUtil.h" />
     <ClInclude Include="src\Engine\Scripting\Lua\LuaInterpreter.h" />
     <ClInclude Include="src\Engine\RenderContext.h" />
+    <ClInclude Include="src\Engine\Renderer\RenderingContext.h">
+      <Filter>Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\AppContext.h" />
+    <ClInclude Include="src\Engine\Scene\BasicModels.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\BoltTL\string.cpp">
@@ -1265,5 +1267,7 @@
     <ClCompile Include="src\Engine\Scripting\Lua\LuaFunRegistry.cpp" />
     <ClCompile Include="src\Engine\Scripting\Lua\LuaInterpreter.cpp" />
     <ClCompile Include="src\Engine\AppContext.cpp" />
+    <ClCompile Include="src\Engine\RenderContext.cpp" />
+    <ClCompile Include="src\Engine\Scene\BasicModels.cpp" />
   </ItemGroup>
 </Project>

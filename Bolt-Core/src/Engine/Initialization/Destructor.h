@@ -9,7 +9,7 @@ namespace Bolt
 	public:
 		Destructor() = delete;
 
-		static void Run(std::unique_ptr<Window>&& window);
+		static void Run();
 
 	};
 

@@ -6,9 +6,6 @@ namespace Bolt
 
 	class BLT_API SceneManager
 	{
-	private:
-		static std::unique_ptr<SceneManager> s_Instance;
-
 	public:
 		static SceneManager& Get();
 
@@ -63,10 +60,6 @@ namespace Bolt
 		}
 
 		friend class Application;
-		friend class Destructor;
-
-	private:
-		static void Terminate();
 
 	};
 

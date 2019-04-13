@@ -6,6 +6,8 @@
 namespace Bolt
 {
 
+	bool Window::s_IsGLADInitialized = false;
+
 	Window::Window(const WindowCreateInfo& info)
 		: m_Data{ {}, {}, {}, {}, {}, nullptr, Framebuffer(), info.Title, info.Decorated }
 	{
@@ -28,6 +30,16 @@ namespace Bolt
 
 		m_Data.m_WindowHandle = glfwCreateWindow(Width(), Height(), Title().c_str(), nullptr, nullptr);
 		MakeCurrent();
+		if (!s_IsGLADInitialized)
+		{
+			int result = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+			if (result == 0)
+			{
+				BLT_ASSERT(false, "Failed to Initialize Glad");
+			}
+			BLT_CORE_INFO("Glad Initialized");
+			s_IsGLADInitialized = true;
+		}
 		if (info.Maximised)
 		{
 			Maximize();

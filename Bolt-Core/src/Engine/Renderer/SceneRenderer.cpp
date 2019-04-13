@@ -1,6 +1,7 @@
 #include "Types.h"
 
 #include "SceneRenderer.h"
+#include "Engine/Engine.h"
 
 namespace Bolt
 {
@@ -58,15 +59,9 @@ namespace Bolt
 		}
 	}
 
-	std::unique_ptr<SceneRenderer> SceneRenderer::s_Instance;
-
 	SceneRenderer& SceneRenderer::Get()
 	{
-		if (!s_Instance)
-		{
-			s_Instance = std::make_unique<SceneRenderer>();
-		}
-		return *s_Instance;
+		return Engine::Instance().CurrentContext().GetRenderContext().GetSceneRenderer();
 	}
 
 	SceneRenderer::SceneRenderer()
@@ -153,7 +148,7 @@ namespace Bolt
 		PopulateMaterialMap(objects, materialMap);
 		PopulateRenderPass(transparentPass, materialMap);
 
-		RenderContext context = passData.GlobalContext;
+		RenderingContext context = passData.GlobalContext;
 		RenderCamera camera;
 		camera.ViewMatrix = (passData.CameraOverride.ViewMatrix == nullptr) ? layer.ActiveCamera()->ViewMatrix() : *passData.CameraOverride.ViewMatrix;
 		camera.ProjectionMatrix = (passData.CameraOverride.ProjectionMatrix == nullptr) ? layer.ActiveCamera()->ProjectionMatrix() : *passData.CameraOverride.ProjectionMatrix;

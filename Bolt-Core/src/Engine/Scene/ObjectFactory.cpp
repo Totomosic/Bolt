@@ -6,10 +6,6 @@
 namespace Bolt
 {
 
-	ResourcePtr<Model> ObjectFactory::s_RectangleModel = nullptr;
-	ResourcePtr<Model> ObjectFactory::s_EllipseModel = nullptr;
-	ResourcePtr<Model> ObjectFactory::s_CuboidModel = nullptr;
-
 	ObjectFactory::ObjectFactory() : ObjectFactory(*(Layer*)nullptr)
 	{
 	
@@ -120,7 +116,7 @@ namespace Bolt
 	GameObject* ObjectFactory::Rectangle(float width, float height, std::unique_ptr<Material>&& material, Transform transform) const
 	{
 		Mesh mesh;
-		mesh.Models.push_back({ s_RectangleModel, Matrix4f::Scale(width, height, 1),{ 0 } });
+		mesh.Models.push_back({ BasicModels::Get().Square(), Matrix4f::Scale(width, height, 1),{ 0 } });
 		mesh.Materials[0] = std::move(material);
 		return Instantiate(std::move(mesh), std::move(transform));
 	}
@@ -141,7 +137,7 @@ namespace Bolt
 	GameObject* ObjectFactory::Ellipse(float width, float height, std::unique_ptr<Material>&& material, Transform transform) const
 	{
 		Mesh mesh;
-		mesh.Models.push_back({ s_EllipseModel, Matrix4f::Scale(width / 2, height / 2, 1), { 0 } });
+		mesh.Models.push_back({ BasicModels::Get().Circle(), Matrix4f::Scale(width / 2, height / 2, 1), { 0 } });
 		mesh.Materials[0] = std::move(material);
 		return Instantiate(std::move(mesh), std::move(transform));
 	}
@@ -154,7 +150,7 @@ namespace Bolt
 	GameObject* ObjectFactory::Cuboid(float width, float height, float depth, std::unique_ptr<Material>&& material, Transform transform) const
 	{
 		Mesh mesh;
-		mesh.Models.push_back({ s_CuboidModel, Matrix4f::Scale(width, height, depth),{ 0 } });
+		mesh.Models.push_back({ BasicModels::Get().Cube(), Matrix4f::Scale(width, height, depth),{ 0 } });
 		mesh.Materials[0] = std::move(material);
 		return Instantiate(std::move(mesh), std::move(transform));
 	}
@@ -197,35 +193,6 @@ namespace Bolt
 		mesh.Materials[0] = ResourceManager::Get().Materials().Default(color);
 
 		return Instantiate(std::move(mesh), std::move(t));
-	}
-
-	ResourcePtr<const Model> ObjectFactory::SquareModel()
-	{
-		return s_RectangleModel;
-	}
-
-	ResourcePtr<const Model> ObjectFactory::CircleModel()
-	{
-		return s_EllipseModel;
-	}
-
-	ResourcePtr<const Model> ObjectFactory::CubeModel()
-	{
-		return s_CuboidModel;
-	}
-
-	void ObjectFactory::Initialize()
-	{
-		s_RectangleModel = ResourcePtr<Model>(new Model(RectangleFactory(1, 1)), false);
-		s_EllipseModel = ResourcePtr<Model>(new Model(EllipseFactory(2, 2)), false);
-		s_CuboidModel = ResourcePtr<Model>(new Model(CuboidFactory(1, 1)), false);
-	}
-
-	void ObjectFactory::Terminate()
-	{
-		delete s_RectangleModel.Release();
-		delete s_EllipseModel.Release();
-		delete s_CuboidModel.Release();
 	}
 
 }

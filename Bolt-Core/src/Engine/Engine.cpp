@@ -6,125 +6,78 @@
 #include "Renderer\Graphics.h"
 #include "Renderer\GLState.h"
 #include "Scene\SceneManager.h"
+#include "Engine/Initialization/Destructor.h"
 
 namespace Bolt
 {
 
-	Engine::Engine(EngineCreateInfo createInfo)
-		: m_CurrentApplication(), m_CreateInfo(createInfo), m_WindowCreateInfo(), m_ShouldExit(false)
+	Engine* Engine::s_EngineInstance = nullptr;
+
+	Engine& Engine::Instance()
 	{
+		BLT_ASSERT(s_EngineInstance != nullptr, "Engine has not been created yet");
+		return *s_EngineInstance;
+	}
+
+	Engine::Engine(EngineCreateInfo createInfo)
+		: m_RootApplication(), m_CreateInfo(createInfo), m_ShouldExit(false), m_CurrentContext(nullptr)
+	{
+		s_EngineInstance = this;
 		Initializer::PreOpenGL(m_CreateInfo);
 	}
 
 	Engine::~Engine()
 	{
-		
+		m_RootApplication.reset(nullptr);
+		Destructor::Run();
+	}
+
+	AppContext& Engine::CurrentContext() const
+	{
+		return *m_CurrentContext;
 	}
 
 	bool Engine::ShouldClose() const
 	{
-		return m_CurrentApplication->AppWindow->ShouldClose();
+		return m_RootApplication->GetContext().GetRenderContext().GetWindow().ShouldClose();
 	}
 
 	void Engine::UpdateApplication()
 	{
-		Scene* scene = &SceneManager::Get().CurrentScene();
-		Input::Get().Update();
-		glfwPollEvents();
-		EventManager::Get().FlushEvents(); // Flush #1 (likely input events)
-		m_CurrentApplication->Update();
-		if (scene != nullptr)
-		{
-			scene->Update();
-		}
-		m_CurrentApplication->Render();
-		m_CurrentApplication->AppWindow->SwapBuffers();
-		Time::Update();
-		EventManager::Get().FlushEvents(); // Flush #2 (likely other scene/app events)
-		if (scene != nullptr)
-		{
-			scene->UpdateTemporaryObjects();
-		}
-		if (m_CurrentApplication->m_ShouldExit)
-		{
-			m_CurrentApplication->ExitPrivate();
-		}
-	}
-
-	void Engine::UpdateApplicationNoGraphics()
-	{
-		Scene* scene = &SceneManager::Get().CurrentScene();
-		m_CurrentApplication->Update();
-		if (scene != nullptr)
-		{
-			scene->Update();
-		}
-		Time::Update();
-		EventManager::Get().FlushEvents();
-		if (scene != nullptr)
-		{
-			scene->UpdateTemporaryObjects();
-		}
-		if (m_CurrentApplication->m_ShouldExit)
-		{
-			m_CurrentApplication->ExitPrivate();
-		}
+		m_RootApplication->UpdatePrivate();
 	}
 
 	void Engine::SetApplication(std::unique_ptr<Application>&& app)
 	{
-		m_CurrentApplication = std::move(app);
-		if (m_CreateInfo.UseGraphics)
-		{
-			m_CurrentApplication->CreateWindowPtr(m_WindowCreateInfo);
-		}
-		else
-		{
-			BLT_CORE_WARN("Skipped Creating Window");
-		}
-		Initializer::PostOpenGL(m_CreateInfo, m_CurrentApplication->AppWindow.get());
-		m_CurrentApplication->Start();
-	}
-
-	void Engine::SetWindowCreateInfo(const WindowCreateInfo& createInfo)
-	{
-		m_WindowCreateInfo = createInfo;
+		m_RootApplication = std::move(app);
+		m_RootApplication->CreateContext(m_CreateInfo.WindowInfo);
+		m_RootApplication->Start();
 	}
 
 	void Engine::Run()
 	{
-		BLT_ASSERT(m_CurrentApplication.get() != nullptr, "Must have a valid Application to run");
-		if (m_CreateInfo.UseGraphics)
+		BLT_ASSERT(m_RootApplication.get() != nullptr, "Must have a valid Application to run");
+		m_RootApplication->GetWindow().OnClose().Subscribe([this](WindowClosedEvent& e)
 		{
-			m_CurrentApplication->AppWindow->OnClose().Subscribe([this](WindowClosedEvent& e)
+			m_ShouldExit = true;
+			ListenerResponse response;
+			response.HandledEvent = false;
+			return response;
+		});
+		while (m_RootApplication->m_IsRunning)
+		{
+			UpdateApplication();
+			if (m_ShouldExit)
 			{
-				m_ShouldExit = true;
-				ListenerResponse response;
-				response.HandledEvent = false;
-				return response;
-			});
-			while (m_CurrentApplication->m_IsRunning)
-			{
-				UpdateApplication();
-				if (m_ShouldExit)
-				{
-					m_CurrentApplication->Exit();
-					m_ShouldExit = false;
-				}
+				m_RootApplication->Exit();
+				m_ShouldExit = false;
 			}
 		}
-		else
-		{
-			while (m_CurrentApplication->m_IsRunning)
-			{
-				UpdateApplicationNoGraphics();
-				if (m_ShouldExit)
-				{
-					m_CurrentApplication->Exit();
-					m_ShouldExit = false;
-				}
-			}
-		}
+	}
+
+	void Engine::SetCurrentContext(AppContext* context)
+	{
+		m_CurrentContext = context;
 	}
 
 }

@@ -1,19 +1,14 @@
 #include "Types.h"
 
 #include "SceneManager.h"
+#include "Engine/Engine.h"
 
 namespace Bolt
 {
 
-	std::unique_ptr<SceneManager> SceneManager::s_Instance;
-
 	SceneManager& SceneManager::Get()
 	{
-		if (!s_Instance)
-		{
-			s_Instance = std::make_unique<SceneManager>();
-		}
-		return *s_Instance;
+		return Engine::Instance().CurrentContext().GetRenderContext().GetSceneManager();
 	}
 
 	SceneManager::SceneManager()
@@ -87,12 +82,6 @@ namespace Bolt
 	void SceneManager::SetCurrentSceneByName(const blt::string& name)
 	{
 		SetCurrentScene(GetSceneByName(name));
-	}
-
-	void SceneManager::Terminate()
-	{
-		Get().m_Scenes.clear();
-		Get().m_CurrentScene = nullptr;
 	}
 
 }

@@ -52,13 +52,13 @@ namespace Bolt
 	class BLT_API Input
 	{
 	private:
-		MouseInstance s_Mouse;
-		KeyboardInstance s_Keyboard;
-		Window* s_Window;
+		MouseInstance m_Mouse;
+		KeyboardInstance m_Keyboard;
+		Window* m_Window;
 
-		std::vector<char> s_PressedCharacters;
-		std::vector<KeyboardInstance::Key> s_ChangedKeys;
-		std::vector<MouseInstance::Button> s_ChangedButtons;
+		std::vector<char> m_PressedCharacters;
+		std::vector<KeyboardInstance::Key> m_ChangedKeys;
+		std::vector<MouseInstance::Button> m_ChangedButtons;
 
 	public:
 		EventDispatcher<Bolt::KeyPressedEvent> OnKeyPressed;
@@ -68,13 +68,12 @@ namespace Bolt
 		EventDispatcher<Bolt::MouseScrolledEvent> OnMouseScrolled;
 		EventDispatcher<Bolt::MouseMovedEvent> OnMouseMoved;
 
-	private:
-		Input();
-
 	public:
 		static Input& Get();
 
 	public:
+		Input(Window* window);
+
 		const MouseInstance& Mouse();
 		const KeyboardInstance& Keyboard();
 
@@ -118,19 +117,16 @@ namespace Bolt
 		void HideCursor();
 		void ShowCursor();
 
-		friend class Initializer;
-		friend class Destructor;
 		friend class Window;
-		friend class Engine;
+		friend class Application;
 
 	private:
 		void Update();
-		void Initialize(Window* window);
-		void Terminate();
 		KeyboardInstance::Key* GetKey(Keycode keycode);
 		MouseInstance::Button* GetMouseButton(MouseButton button);
 		bool TestKeyMods(KeyMod mods);
 
+		bool IsCurrentlySelected() const;
 		void MousePositionCallback(double mouseX, double mouseY);
 		void MouseScrollCallback(double relX, double relY);
 		void MouseButtonCallback(int button, int action, int mods);

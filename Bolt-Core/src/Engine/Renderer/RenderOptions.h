@@ -1,5 +1,5 @@
 #pragma once
-#include "RenderContext.h"
+#include "RenderingContext.h"
 #include "RenderCamera.h"
 #include "Graphics.h"
 
@@ -10,7 +10,7 @@ namespace Bolt
 	{
 	public:
 		const Framebuffer* RenderTarget = nullptr;
-		RenderContext GlobalContext;
+		RenderingContext GlobalContext;
 		RenderCameraRef CameraOverride;
 	};
 

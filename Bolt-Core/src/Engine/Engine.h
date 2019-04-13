@@ -9,21 +9,30 @@ namespace Bolt
 	class BLT_API Engine
 	{
 	private:
-		std::unique_ptr<Application> m_CurrentApplication;
+		static Engine* s_EngineInstance;
+
+	private:
+		std::unique_ptr<Application> m_RootApplication;
 		EngineCreateInfo m_CreateInfo;
-		WindowCreateInfo m_WindowCreateInfo;
 		bool m_ShouldExit;
+
+		AppContext* m_CurrentContext;
+
+	public:
+		static Engine& Instance();
 
 	public:
 		Engine(EngineCreateInfo createInfo = EngineCreateInfo());
+		Engine(Engine&& other) = delete;
+		Engine& operator=(Engine&& other) = delete;
 		~Engine();
+
+		AppContext& CurrentContext() const;
 
 		bool ShouldClose() const;
 
 		void UpdateApplication();
-		void UpdateApplicationNoGraphics();
 		void SetApplication(std::unique_ptr<Application>&& app);
-		void SetWindowCreateInfo(const WindowCreateInfo& createInfo);
 		void Run();
 
 		template<typename T>
@@ -31,6 +40,12 @@ namespace Bolt
 		{
 			SetApplication(std::make_unique<T>());
 		}
+
+		friend class Application;
+		friend class ContextManager;
+
+	private:
+		void SetCurrentContext(AppContext* context);
 
 	};
 

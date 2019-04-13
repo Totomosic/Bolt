@@ -41,33 +41,4 @@ namespace Bolt
 		}
 	}
 
-	void Initializer::PostOpenGL(const EngineCreateInfo& createInfo, Window* window)
-	{
-		if (createInfo.UseGraphics)
-		{
-			int result = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-			if (result == 0)
-			{
-				BLT_ASSERT(false, "Failed to Initialize Glad");
-			}
-			BLT_CORE_INFO("Glad Initialized");
-			Input::Get().Initialize(window);
-			BLT_CORE_INFO("Input Initialized");
-			Shader::Initialize();
-			BLT_CORE_INFO("Shader Initialized");
-			Graphics::Initialize(window);
-			BLT_CORE_INFO("Graphics Initialized");
-			ObjectFactory::Initialize();
-			BLT_CORE_INFO("ObjectFactory Initialized");
-		}
-		else
-		{
-			BLT_CORE_WARN("Skipped Initializing Glad");
-			BLT_CORE_WARN("Skipped Initializing Input");
-			BLT_CORE_WARN("Skipped Initializing Shader");
-			BLT_CORE_WARN("Skipped Initializing Graphics");
-			BLT_CORE_WARN("Skipped Initializing ObjectFactory");
-		}
-	}
-
 }

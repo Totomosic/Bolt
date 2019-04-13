@@ -16,19 +16,16 @@ namespace Bolt
 	class BLT_API ResourceManager
 	{
 	private:
-		static std::unique_ptr<ResourceManager> s_Instance;
-
-	private:
 		std::unordered_map<ResourceID, std::unique_ptr<Resource>> m_Resources;
 		MaterialManager m_Materials;
 		FontManager m_Fonts;
 
 	public:
-		ResourceManager();
 		static ResourceManager& Get();
-		static void Terminate();
 
 	public:
+		ResourceManager();
+
 		const MaterialManager& Materials();
 		const FontManager& Fonts();
 

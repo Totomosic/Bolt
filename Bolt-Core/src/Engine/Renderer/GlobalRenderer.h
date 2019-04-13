@@ -1,6 +1,6 @@
 #pragma once
 #include "RenderPass.h"
-#include "RenderContext.h"
+#include "RenderingContext.h"
 #include "RenderCamera.h"
 #include "RenderRoutine.h"
 
@@ -13,7 +13,7 @@ namespace Bolt
 		static std::unique_ptr<RenderRoutine> s_RenderRoutine;
 
 	public:
-		static void Render(const RenderPass& renderPass, const RenderContext& context, const RenderCamera& camera);
+		static void Render(const RenderPass& renderPass, const RenderingContext& context, const RenderCamera& camera);
 
 	};
 

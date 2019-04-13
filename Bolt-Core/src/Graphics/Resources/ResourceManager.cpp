@@ -1,5 +1,6 @@
 #include "Types.h"
 
+#include "Engine/Engine.h"
 #include "ResourceManager.h"
 #include "Textures\Texture2D.h"
 #include "Meshes\Model.h"
@@ -9,20 +10,9 @@
 namespace Bolt
 {
 
-	std::unique_ptr<ResourceManager> ResourceManager::s_Instance;
-
 	ResourceManager& ResourceManager::Get()
 	{
-		if (!s_Instance)
-		{
-			s_Instance = std::make_unique<ResourceManager>();
-		}
-		return *s_Instance;
-	}
-
-	void ResourceManager::Terminate()
-	{
-		s_Instance.reset(nullptr);
+		return Engine::Instance().CurrentContext().GetRenderContext().GetResourceManager();
 	}
 
 	ResourceManager::ResourceManager()

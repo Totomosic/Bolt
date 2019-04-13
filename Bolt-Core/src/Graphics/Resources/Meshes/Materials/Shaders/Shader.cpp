@@ -313,9 +313,4 @@ namespace Bolt
 		return loc;
 	}
 
-	void Shader::Initialize()
-	{
-
-	}
-
 }

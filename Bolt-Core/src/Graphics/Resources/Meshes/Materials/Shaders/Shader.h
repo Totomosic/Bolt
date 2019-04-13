@@ -44,7 +44,6 @@ namespace Bolt
 
 		std::unique_ptr<Resource> Clone() const override;
 
-		friend class Initializer;
 		friend class ShaderInstance;
 
 	public:
@@ -60,9 +59,6 @@ namespace Bolt
 		void Finalise(id_t* shaders, int count);
 		id_t AddShader(const blt::string& shaderSource, GLenum shaderType);
 		int GetUniformLocation(const blt::string& location) const;
-
-	private:	
-		static void Initialize();
 
 	};
 

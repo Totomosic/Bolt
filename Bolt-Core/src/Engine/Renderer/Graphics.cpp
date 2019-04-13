@@ -2,23 +2,18 @@
 
 #include "Graphics.h"
 #include "SceneRenderer.h"
+#include "Engine/Engine.h"
 
 namespace Bolt
 {
 
-	std::unique_ptr<Graphics> Graphics::s_Instance;
-
 	Graphics& Graphics::Get()
 	{
-		if (!s_Instance)
-		{
-			s_Instance = std::make_unique<Graphics>();
-		}
-		return *s_Instance;
+		return Engine::Instance().CurrentContext().GetRenderContext().GetGraphics();
 	}
 
-	Graphics::Graphics()
-		: m_Window(nullptr), m_State()
+	Graphics::Graphics(Window* window)
+		: m_Window(window), m_State()
 	{
 	
 	}

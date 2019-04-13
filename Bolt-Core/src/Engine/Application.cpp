@@ -1,5 +1,6 @@
 #include "Types.h"
 
+#include "Engine.h"
 #include "Application.h"
 #include "Initialization\Initializer.h"
 #include "Initialization\Destructor.h"
@@ -11,14 +12,29 @@
 namespace Bolt
 {
 
+	const AppContext& Application::GetContext() const
+	{
+		return *m_Context;
+	}
+
+	AppContext& Application::GetContext()
+	{
+		return *m_Context;
+	}
+
+	Window& Application::GetWindow()
+	{
+		return GetContext().GetRenderContext().GetWindow();
+	}
+
 	float Application::Width() const
 	{
-		return (float)AppWindow->Width();
+		return (float)m_Context->GetRenderContext().GetWindow().Width();
 	}
 
 	float Application::Height() const
 	{
-		return (float)AppWindow->Height();
+		return (float)m_Context->GetRenderContext().GetWindow().Height();
 	}
 
 	void Application::Start()
@@ -57,15 +73,74 @@ namespace Bolt
 		m_ShouldExit = true;
 	}
 
-	void Application::CreateWindowPtr(const WindowCreateInfo& createInfo)
+	void Application::CreateContext(const WindowCreateInfo& createInfo)
 	{
-		AppWindow = std::make_unique<Window>(createInfo);
+		m_Context = std::make_unique<AppContext>(createInfo);
+		Engine::Instance().SetCurrentContext(m_Context.get());
 	}
 
 	void Application::ExitPrivate()
 	{
-		Destructor::Run(std::move(AppWindow));
 		m_IsRunning = false;
+	}
+
+	bool Application::UpdatePrivate()
+	{
+		PushNewApps();
+		UpdateInput();
+		for (std::unique_ptr<Application>& child : m_ChildApps)
+		{
+			child->UpdatePrivate();
+		}
+		Engine::Instance().SetCurrentContext(m_Context.get());
+		GetWindow().MakeCurrent();
+		Scene* scene = &SceneManager::Get().CurrentScene();
+		EventManager::Get().FlushEvents(); // Flush #1 (likely input events)
+		Update();
+		if (scene != nullptr)
+		{
+			scene->Update();
+		}
+		Render();
+		GetWindow().SwapBuffers();
+		Time::Update();
+		EventManager::Get().FlushEvents(); // Flush #2 (likely other scene/app events)
+		if (scene != nullptr)
+		{
+			scene->UpdateTemporaryObjects();
+		}
+		if (m_ShouldExit)
+		{
+			ExitPrivate();
+		}
+		return true;
+	}
+
+	void Application::UpdateInput()
+	{
+		GetContext().GetRenderContext().GetInput().Update();
+		for (std::unique_ptr<Application>& child : m_ChildApps)
+		{
+			child->GetContext().GetRenderContext().GetInput().Update();
+		}
+		glfwPollEvents();
+	}
+
+	void Application::PushNewApps()
+	{
+		for (NewAppInfo& app : m_NewApps)
+		{
+			PushNewApp(app);
+		}
+		m_NewApps.clear();
+	}
+
+	void Application::PushNewApp(Application::NewAppInfo& app)
+	{
+		Application* ptr = app.App.get();
+		m_ChildApps.push_back(std::move(app.App));
+		ptr->CreateContext(app.Info);
+		ptr->Start();
 	}
 
 }

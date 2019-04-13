@@ -7,6 +7,8 @@
 namespace Bolt
 {
 
+	class AppContext;
+
 	class BLT_API EventManager
 	{
 	public:
@@ -37,8 +39,6 @@ namespace Bolt
 		static constexpr id_t IGNORE_DISPATCHER_ID = (id_t)-1;
 
 	public:
-		static std::unique_ptr<EventManager> s_Instance;
-
 		static EventManager& Get();
 
 	private:

@@ -11,7 +11,6 @@ namespace Bolt
 		Initializer() = delete;
 
 		static void PreOpenGL(const EngineCreateInfo& createInfo);
-		static void PostOpenGL(const EngineCreateInfo& createInfo, Window* window);
 
 	};
 
