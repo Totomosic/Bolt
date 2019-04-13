@@ -128,6 +128,11 @@ namespace Bolt
 		return m_Data.m_WindowHandle;
 	}
 
+	bool Window::IsFocused() const
+	{
+		return true;
+	}
+
 	bool Window::ShouldClose() const
 	{
 		return glfwWindowShouldClose((GLFWwindow*)GetNativeWindow());

@@ -80,4 +80,10 @@ namespace Bolt
 		m_CurrentContext = context;
 	}
 
+	void Engine::ApplyCurrentContext(AppContext* context)
+	{
+		SetCurrentContext(context);
+		context->GetRenderContext().GetWindow().MakeCurrent();
+	}
+
 }

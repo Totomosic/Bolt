@@ -12,6 +12,21 @@
 namespace Bolt
 {
 
+	Application::Application()
+		: m_TickTimer(nullptr), m_IsRunning(false), m_ShouldExit(false), m_Context(), m_ChildApps(), m_NewApps()
+	{
+		
+	}
+
+	Application::~Application()
+	{
+		for (int i = m_ChildApps.size() - 1; i >= 0; i--)
+		{
+			CloseChild(i);
+		}
+		Engine::Instance().ApplyCurrentContext(m_Context.get());
+	}
+
 	const AppContext& Application::GetContext() const
 	{
 		return *m_Context;
@@ -92,8 +107,7 @@ namespace Bolt
 		{
 			child->UpdatePrivate();
 		}
-		Engine::Instance().SetCurrentContext(m_Context.get());
-		GetWindow().MakeCurrent();
+		Engine::Instance().ApplyCurrentContext(m_Context.get());
 		Scene* scene = &SceneManager::Get().CurrentScene();
 		EventManager::Get().FlushEvents(); // Flush #1 (likely input events)
 		Update();
@@ -114,6 +128,13 @@ namespace Bolt
 			ExitPrivate();
 		}
 		return true;
+	}
+
+	void Application::CloseChild(int index)
+	{
+		Application* ptr = m_ChildApps.at(index).get();
+		Engine::Instance().ApplyCurrentContext(&ptr->GetContext());
+		m_ChildApps.erase(m_ChildApps.begin() + index);
 	}
 
 	void Application::UpdateInput()

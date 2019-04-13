@@ -15,6 +15,9 @@ namespace Chat
 			camera->transform().Translate(0, 0, 100);
 			Layer& layer = scene.CreateLayer(camera);
 
+			ObjectFactory factory(layer);
+			factory.Rectangle(400, 400, Color::Green, Transform({ 400, 400, 0 }));
+
 			RenderSchedule s(scene);
 			s.AddRenderProcess({ });
 			SceneRenderer::Get().AddRenderSchedule(s);
@@ -66,9 +69,6 @@ namespace Chat
 				Filesystem::Close(f);
 			}
 
-			LuaInterpreter l;
-			l.ExecuteString("a = 5");
-
 			ChatUser me;
 			File userFile = Filesystem::Open("data/user.txt", OpenMode::Read);
 			me.Username = userFile.ReadText();
@@ -112,10 +112,10 @@ namespace Chat
 			if (Input::Get().KeyPressed(Keycode::N))
 			{
 				WindowCreateInfo w;
-				w.Width = 600;
-				w.Height = 600;
+				w.Width = 1280;
+				w.Height = 720;
 				w.Title = "Test";
-				PushApp<TestApp>(w);
+				PushApp<App>(w);
 			}
 			if (currentTextBox != nullptr)
 			{
