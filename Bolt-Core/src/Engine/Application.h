@@ -25,6 +25,9 @@ namespace Bolt
 		std::vector<NewAppInfo> m_NewApps;
 
 	public:
+		Application();
+		virtual ~Application();
+
 		const AppContext& GetContext() const;
 		AppContext& GetContext();
 		//const Window& GetWindow() const;
@@ -53,6 +56,7 @@ namespace Bolt
 		void CreateContext(const WindowCreateInfo& createInfo);
 		void ExitPrivate();
 		bool UpdatePrivate();
+		void CloseChild(int index);
 
 		void UpdateInput();
 

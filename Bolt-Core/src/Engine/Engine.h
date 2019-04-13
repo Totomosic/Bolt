@@ -46,6 +46,7 @@ namespace Bolt
 
 	private:
 		void SetCurrentContext(AppContext* context);
+		void ApplyCurrentContext(AppContext* context);
 
 	};
 
