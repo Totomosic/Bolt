@@ -164,7 +164,7 @@ namespace Bolt
 		for (int i = m_TemporaryComponents.size() - 1; i >= 0; i--)
 		{
 			TempComponent& c = m_TemporaryComponents[i];
-			c.TimeToDelete -= Time::RenderingTimeline().DeltaTime();
+			c.TimeToDelete -= Time::Get().RenderingTimeline().DeltaTime();
 			if (c.TimeToDelete <= 0)
 			{
 				m_Components.RemoveComponentById(c.component->Id());

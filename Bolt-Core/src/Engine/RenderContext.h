@@ -19,6 +19,7 @@ namespace Bolt
 	{
 	private:
 		ContextManager m_Context;
+		Time m_Time;
 		EventManager m_Events;
 		Input m_Input;
 		Window m_Window;
@@ -33,6 +34,7 @@ namespace Bolt
 		~RenderContext();
 
 		EventManager& GetEventManager();
+		Time& GetTime();
 		Window& GetWindow();
 		BasicModels& GetBasicModels();
 		Graphics& GetGraphics();

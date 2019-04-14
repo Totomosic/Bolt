@@ -20,7 +20,7 @@ namespace Bolt
 				shader.SetUniform(uniform.Location, projectionMatrix);
 				break;
 			case RendererUniform::Time:
-				shader.SetUniform(uniform.Location, Time::RenderingTimeline().CurrentTime());
+				shader.SetUniform(uniform.Location, Time::Get().RenderingTimeline().CurrentTime());
 				break;
 			}
 		}

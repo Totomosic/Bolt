@@ -8,24 +8,26 @@ namespace Bolt
 	class BLT_API Time
 	{
 	private:
-		static std::chrono::time_point<std::chrono::high_resolution_clock, std::chrono::duration<double>> s_StartTime;
-		static Timeline s_RenderingTimeline;
+		std::chrono::time_point<std::chrono::high_resolution_clock, std::chrono::duration<double>> s_StartTime;
+		Timeline s_RenderingTimeline;
 
 	public:
-		Time() = delete;
+		static Time& Get();
 
 	public:
-		static Timeline& RenderingTimeline();
+		Time();
 
-		static double FramesPerSecond();
+		Timeline& RenderingTimeline();
 
-		static void Reset();
+		double FramesPerSecond();
+
+		void Reset();
 
 		friend class Engine;
 		friend class Application;
 
 	private:
-		static void Update();
+		void Update();
 
 	};
 

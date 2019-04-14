@@ -12,7 +12,7 @@ namespace Bolt
 	}
 
 	RenderContext::RenderContext(AppContext* context, const WindowCreateInfo& createInfo)
-		: m_Context(context), m_Events(), m_Input(&m_Window), m_Window(context, createInfo), m_Resources(), m_Models(), m_Graphics(&m_Window), m_SceneManager(), m_SceneRenderer()
+		: m_Context(context), m_Events(), m_Time(), m_Input(&m_Window), m_Window(context, createInfo), m_Resources(), m_Models(), m_Graphics(&m_Window), m_SceneManager(), m_SceneRenderer()
 	{
 
 	}
@@ -25,6 +25,11 @@ namespace Bolt
 	EventManager& RenderContext::GetEventManager()
 	{
 		return m_Events;
+	}
+
+	Time& RenderContext::GetTime()
+	{
+		return m_Time;
 	}
 
 	Window& RenderContext::GetWindow()

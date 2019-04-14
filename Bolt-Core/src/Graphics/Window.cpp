@@ -231,7 +231,7 @@ namespace Bolt
 		args.NewHeight = height;
 		m_Data.m_Framebuffer.GetViewport().Width = width;
 		m_Data.m_Framebuffer.GetViewport().Height = height;
-		glfwSetWindowSize((GLFWwindow*)GetNativeWindow(), Width(), Height());
+		glfwSetWindowSize((GLFWwindow*)GetNativeWindow(), width, height);
 		OnResize().Post(std::move(args));
 	}
 

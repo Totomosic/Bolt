@@ -14,7 +14,6 @@ namespace Bolt
 	private:
 		std::unique_ptr<Application> m_RootApplication;
 		EngineCreateInfo m_CreateInfo;
-		bool m_ShouldExit;
 
 		AppContext* m_CurrentContext;
 
@@ -28,8 +27,6 @@ namespace Bolt
 		~Engine();
 
 		AppContext& CurrentContext() const;
-
-		bool ShouldClose() const;
 
 		void UpdateApplication();
 		void SetApplication(std::unique_ptr<Application>&& app);

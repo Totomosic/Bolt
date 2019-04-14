@@ -20,7 +20,7 @@ namespace Bolt
 	}
 
 	Engine::Engine(EngineCreateInfo createInfo)
-		: m_RootApplication(), m_CreateInfo(createInfo), m_ShouldExit(false), m_CurrentContext(nullptr)
+		: m_RootApplication(), m_CreateInfo(createInfo), m_CurrentContext(nullptr)
 	{
 		s_EngineInstance = this;
 		Initializer::PreOpenGL(m_CreateInfo);
@@ -35,11 +35,6 @@ namespace Bolt
 	AppContext& Engine::CurrentContext() const
 	{
 		return *m_CurrentContext;
-	}
-
-	bool Engine::ShouldClose() const
-	{
-		return m_RootApplication->GetContext().GetRenderContext().GetWindow().ShouldClose();
 	}
 
 	void Engine::UpdateApplication()
@@ -58,21 +53,9 @@ namespace Bolt
 	void Engine::Run()
 	{
 		BLT_ASSERT(m_RootApplication.get() != nullptr, "Must have a valid Application to run");
-		m_RootApplication->GetWindow().OnClose().Subscribe([this](WindowClosedEvent& e)
-		{
-			m_ShouldExit = true;
-			ListenerResponse response;
-			response.HandledEvent = false;
-			return response;
-		});
-		while (m_RootApplication->m_IsRunning)
+		while (!m_RootApplication->ShouldExit())
 		{
 			UpdateApplication();
-			if (m_ShouldExit)
-			{
-				m_RootApplication->Exit();
-				m_ShouldExit = false;
-			}
 		}
 	}
 
