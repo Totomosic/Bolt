@@ -102,7 +102,6 @@ namespace Bolt
 	bool Application::UpdatePrivate()
 	{
 		PushNewApps();
-		UpdateInput();
 		for (std::unique_ptr<Application>& child : m_ChildApps)
 		{
 			child->UpdatePrivate();

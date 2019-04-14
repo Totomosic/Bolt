@@ -44,6 +44,7 @@ namespace Bolt
 
 	void Engine::UpdateApplication()
 	{
+		m_RootApplication->UpdateInput();
 		m_RootApplication->UpdatePrivate();
 	}
 
