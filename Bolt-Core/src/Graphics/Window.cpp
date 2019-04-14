@@ -2,14 +2,15 @@
 
 #include "Window.h"
 #include "Engine\User\Input.h"
+#include "Engine/AppContext.h"
 
 namespace Bolt
 {
 
 	bool Window::s_IsGLADInitialized = false;
 
-	Window::Window(const WindowCreateInfo& info)
-		: m_Data{ {}, {}, {}, {}, {}, nullptr, Framebuffer(), info.Title, info.Decorated }
+	Window::Window(AppContext* context, const WindowCreateInfo& info)
+		: m_Data{ {}, {}, {}, {}, {}, context, nullptr, Framebuffer(), info.Title, info.Decorated, true }
 	{
 		m_Data.m_Framebuffer.GetViewport().Width = info.Width;
 		m_Data.m_Framebuffer.GetViewport().Height = info.Height;
@@ -46,41 +47,56 @@ namespace Bolt
 		}
 		glfwSetWindowUserPointer((GLFWwindow*)GetNativeWindow(), this);
 
-		glfwSetCursorPosCallback((GLFWwindow*)GetNativeWindow(), [](GLFWwindow* window, double x, double y)
-		{
-			Input::Get().MousePositionCallback(x, y);
-		});
-		glfwSetScrollCallback((GLFWwindow*)GetNativeWindow(), [](GLFWwindow* window, double x, double y)
-		{
-			Input::Get().MouseScrollCallback(x, y);
-		});
-		glfwSetMouseButtonCallback((GLFWwindow*)GetNativeWindow(), [](GLFWwindow* window, int button, int action, int mods)
-		{
-			Input::Get().MouseButtonCallback(button, action, mods);
-		});
-		glfwSetKeyCallback((GLFWwindow*)GetNativeWindow(), [](GLFWwindow* window, int key, int scancode, int action, int mods)
-		{
-			Input::Get().KeyboardKeyCallback(key, scancode, action, mods);
-		});
-		glfwSetCharCallback((GLFWwindow*)GetNativeWindow(), [](GLFWwindow* window, uint character)
-		{
-			Input::Get().CharPressedCallback(character);
-		});
-		glfwSetFramebufferSizeCallback((GLFWwindow*)GetNativeWindow(), [](GLFWwindow* windowHandle, int width, int height)
-		{
-			Window& window = *(Window*)glfwGetWindowUserPointer(windowHandle);
-			window.SetSize(width, height);
-		});
-		glfwSetWindowCloseCallback((GLFWwindow*)GetNativeWindow(), [](GLFWwindow* windowHandle)
-		{
-			Window& window = *(Window*)glfwGetWindowUserPointer(windowHandle);
-			window.OnClose().Post(WindowClosedEvent());
-		});
+		glfwSetCursorPosCallback((GLFWwindow*)GetNativeWindow(), [](GLFWwindow * windowHandle, double x, double y)
+			{
+				Window& window = *(Window*)glfwGetWindowUserPointer(windowHandle);
+				window.GetContext().GetRenderContext().GetInput().MousePositionCallback(x, y);
+			});
+		glfwSetScrollCallback((GLFWwindow*)GetNativeWindow(), [](GLFWwindow * windowHandle, double x, double y)
+			{
+				Window& window = *(Window*)glfwGetWindowUserPointer(windowHandle);
+				window.GetContext().GetRenderContext().GetInput().MouseScrollCallback(x, y);
+			});
+		glfwSetMouseButtonCallback((GLFWwindow*)GetNativeWindow(), [](GLFWwindow * windowHandle, int button, int action, int mods)
+			{
+				Window& window = *(Window*)glfwGetWindowUserPointer(windowHandle);
+				window.GetContext().GetRenderContext().GetInput().MouseButtonCallback(button, action, mods);
+			});
+		glfwSetKeyCallback((GLFWwindow*)GetNativeWindow(), [](GLFWwindow * windowHandle, int key, int scancode, int action, int mods)
+			{
+				Window& window = *(Window*)glfwGetWindowUserPointer(windowHandle);
+				window.GetContext().GetRenderContext().GetInput().KeyboardKeyCallback(key, scancode, action, mods);
+			});
+		glfwSetCharCallback((GLFWwindow*)GetNativeWindow(), [](GLFWwindow * windowHandle, uint character)
+			{
+				Window& window = *(Window*)glfwGetWindowUserPointer(windowHandle);
+				window.GetContext().GetRenderContext().GetInput().CharPressedCallback(character);
+			});
+		glfwSetFramebufferSizeCallback((GLFWwindow*)GetNativeWindow(), [](GLFWwindow * windowHandle, int width, int height)
+			{
+				Window& window = *(Window*)glfwGetWindowUserPointer(windowHandle);
+				window.SetSize(width, height);
+			});
+		glfwSetWindowCloseCallback((GLFWwindow*)GetNativeWindow(), [](GLFWwindow * windowHandle)
+			{
+				Window& window = *(Window*)glfwGetWindowUserPointer(windowHandle);
+				window.OnClose().Post(WindowClosedEvent());
+			});
+		glfwSetWindowFocusCallback((GLFWwindow*)GetNativeWindow(), [](GLFWwindow* windowHandle, int focus)
+			{
+				Window& window = *(Window*)glfwGetWindowUserPointer(windowHandle);
+				window.SetIsFocused(focus == GLFW_TRUE);
+			});
 	}
 
 	Window::~Window()
 	{
 		glfwDestroyWindow((GLFWwindow*)GetNativeWindow());
+	}
+
+	AppContext& Window::GetContext() const
+	{
+		return *m_Data.m_Context;
 	}
 
 	const Framebuffer& Window::GetFramebuffer() const
@@ -123,14 +139,14 @@ namespace Bolt
 		return m_Data.m_Framebuffer.ClearColor();
 	}
 
+	bool Window::IsFocused() const
+	{
+		return m_Data.m_IsFocused;
+	}
+
 	void* Window::GetNativeWindow() const
 	{
 		return m_Data.m_WindowHandle;
-	}
-
-	bool Window::IsFocused() const
-	{
-		return true;
 	}
 
 	bool Window::ShouldClose() const
@@ -248,6 +264,11 @@ namespace Bolt
 	void Window::SetPosition(int x, int y)
 	{
 		glfwSetWindowPos((GLFWwindow*)GetNativeWindow(), x, y);
+	}
+
+	void Window::SetIsFocused(bool isFocused)
+	{
+		m_Data.m_IsFocused = isFocused;
 	}
 
 }

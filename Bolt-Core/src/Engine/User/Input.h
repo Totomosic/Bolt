@@ -119,6 +119,7 @@ namespace Bolt
 
 		friend class Window;
 		friend class Application;
+		friend class Engine;
 
 	private:
 		void Update();

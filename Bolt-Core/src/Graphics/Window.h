@@ -7,6 +7,8 @@
 namespace Bolt
 {
 
+	class AppContext;
+
 	struct BLT_API WindowData
 	{
 	public:
@@ -16,10 +18,12 @@ namespace Bolt
 		EventDispatcher<WindowFocusedEvent> m_OnFocusLost;
 		EventDispatcher<WindowClosedEvent> m_OnClose;
 
+		AppContext* m_Context;
 		GLFWwindow* m_WindowHandle;
 		Framebuffer m_Framebuffer;
 		blt::string m_Title;
 		bool m_IsDecorated;
+		bool m_IsFocused;
 	};
 
 	class BLT_API Window
@@ -31,7 +35,7 @@ namespace Bolt
 		WindowData m_Data;
 
 	public:
-		Window(const WindowCreateInfo& info = WindowCreateInfo());
+		Window(AppContext* context, const WindowCreateInfo& info = WindowCreateInfo());
 		Window(const Window& other) = delete;
 		Window(Window&& other) = delete;
 		Window& operator=(const Window& other) = delete;
@@ -44,6 +48,7 @@ namespace Bolt
 		inline EventDispatcher<WindowFocusedEvent>& OnFocusLost() { return m_Data.m_OnFocusLost; }
 		inline EventDispatcher<WindowClosedEvent>& OnClose() { return m_Data.m_OnClose; }
 
+		AppContext& GetContext() const;
 		const Framebuffer& GetFramebuffer() const;
 		int Width() const;
 		int Height() const;
@@ -52,9 +57,9 @@ namespace Bolt
 		const blt::string& Title() const;
 		const Color& ClearColor() const;
 		Color& ClearColor();
+		bool IsFocused() const;
 		void* GetNativeWindow() const;
 
-		bool IsFocused() const;
 		bool ShouldClose() const;
 		void Close() const;
 		void Clear(ClearBuffer clearBuffer = ClearBuffer::Color | ClearBuffer::Depth) const;
@@ -77,6 +82,7 @@ namespace Bolt
 		void SetClearColor(const Color& clearColor);
 		void SetPosition(const Vector2i& position);
 		void SetPosition(int x, int y);
+		void SetIsFocused(bool isFocused);
 
 		void MakeCurrent() const;
 
