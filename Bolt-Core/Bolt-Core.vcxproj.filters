@@ -859,6 +859,8 @@
     </ClInclude>
     <ClInclude Include="src\Engine\AppContext.h" />
     <ClInclude Include="src\Engine\Scene\BasicModels.h" />
+    <ClInclude Include="src\Apps\__Apps__.h" />
+    <ClInclude Include="src\Apps\DebugConsole.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\BoltTL\string.cpp">
@@ -1269,5 +1271,6 @@
     <ClCompile Include="src\Engine\AppContext.cpp" />
     <ClCompile Include="src\Engine\RenderContext.cpp" />
     <ClCompile Include="src\Engine\Scene\BasicModels.cpp" />
+    <ClCompile Include="src\Apps\DebugConsole.cpp" />
   </ItemGroup>
 </Project>

@@ -8,6 +8,8 @@ namespace Bolt
 	FontManager::FontManager()
 		: m_ArialFactory("C:/Windows/Fonts/arial.ttf"), m_ArialFonts(),
 		m_CalibriFactory("C:/Windows/Fonts/calibri.ttf"), m_CalibriFonts(),
+		m_ConsolasFactory("C:/Windows/Fonts/consola.ttf"), m_ConsolasFonts(),
+		m_LucidaFactory("C:/Windows/Fonts/ltype.ttf"), m_LucidaFonts(),
 		m_TimesFactory("C:/Windows/Fonts/times.ttf"), m_TimesFonts(),
 		m_VerdanaFactory("C:/Windows/Fonts/verdana.ttf"), m_VerdanaFonts()
 	{
@@ -35,6 +37,30 @@ namespace Bolt
 		std::unique_ptr<Font> f = m_CalibriFactory.BuildFont(fontSize);
 		ResourcePtr<const Font> font = ResourceManager::Get().Get<Font>(ResourceManager::Get().Register(std::move(f)));
 		m_CalibriFonts[fontSize] = font;
+		return font;
+	}
+
+	ResourcePtr<const Font> FontManager::Consolas(float fontSize) const
+	{
+		if (m_ConsolasFonts.find(fontSize) != m_ConsolasFonts.end())
+		{
+			return m_ConsolasFonts.at(fontSize);
+		}
+		std::unique_ptr<Font> f = m_ConsolasFactory.BuildFont(fontSize);
+		ResourcePtr<const Font> font = ResourceManager::Get().Get<Font>(ResourceManager::Get().Register(std::move(f)));
+		m_ConsolasFonts[fontSize] = font;
+		return font;
+	}
+
+	ResourcePtr<const Font> FontManager::Lucida(float fontSize) const
+	{
+		if (m_LucidaFonts.find(fontSize) != m_LucidaFonts.end())
+		{
+			return m_LucidaFonts.at(fontSize);
+		}
+		std::unique_ptr<Font> f = m_LucidaFactory.BuildFont(fontSize);
+		ResourcePtr<const Font> font = ResourceManager::Get().Get<Font>(ResourceManager::Get().Register(std::move(f)));
+		m_LucidaFonts[fontSize] = font;
 		return font;
 	}
 

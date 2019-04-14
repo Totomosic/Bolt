@@ -1,12 +1,21 @@
 #include "Types.h"
 
 #include "Time.h"
+#include "Engine/Engine.h"
 
 namespace Bolt
 {
+
+	Time& Time::Get()
+	{
+		return Engine::Instance().CurrentContext().GetRenderContext().GetTime();
+	}
+
+	Time::Time()
+		: s_StartTime(std::chrono::high_resolution_clock::now()), s_RenderingTimeline(1.0)
+	{
 	
-	std::chrono::time_point<std::chrono::high_resolution_clock, std::chrono::duration<double>> Time::s_StartTime = std::chrono::high_resolution_clock::now();
-	Timeline Time::s_RenderingTimeline = Timeline(1.0);
+	}
 
 	Timeline& Time::RenderingTimeline()
 	{

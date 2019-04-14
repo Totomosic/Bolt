@@ -128,7 +128,7 @@ namespace Bolt
 		for (int i = m_TemporaryObjects.size() - 1; i >= 0; i--)
 		{
 			TempGameObject& tObj = m_TemporaryObjects[i];
-			tObj.TimeToDelete -= Time::RenderingTimeline().DeltaTime();
+			tObj.TimeToDelete -= Time::Get().RenderingTimeline().DeltaTime();
 			if (tObj.TimeToDelete <= 0.0f)
 			{
 				RemoveGameObject(tObj.Object);

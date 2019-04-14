@@ -13,7 +13,6 @@ namespace Bolt
 		public:
 			std::unique_ptr<Application> App;
 			WindowCreateInfo Info;
-
 		};
 
 	private:
@@ -32,16 +31,25 @@ namespace Bolt
 		AppContext& GetContext();
 		//const Window& GetWindow() const;
 		Window& GetWindow();
+		Application& GetChildApp(int index) const;
+		int ChildCount() const;
 
 		float Width() const;
 		float Height() const;
+		bool ShouldExit() const;
 
 		void Start();
 
 		template<typename T>
 		void PushApp(const WindowCreateInfo& info = WindowCreateInfo())
 		{
-			m_NewApps.push_back({ std::make_unique<T>(), info });
+			m_NewApps.push_back(NewAppInfo{ std::make_unique<T>(), info });
+		}
+
+		template<typename T>
+		T& GetChildApp(int index) const
+		{
+			return (T&)GetChildApp(index);
 		}
 
 		virtual void Init();
@@ -54,7 +62,6 @@ namespace Bolt
 
 	private:
 		void CreateContext(const WindowCreateInfo& createInfo);
-		void ExitPrivate();
 		bool UpdatePrivate();
 		void CloseChild(int index);
 

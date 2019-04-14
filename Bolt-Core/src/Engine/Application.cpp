@@ -42,6 +42,16 @@ namespace Bolt
 		return GetContext().GetRenderContext().GetWindow();
 	}
 
+	Application& Application::GetChildApp(int index) const
+	{
+		return *m_ChildApps.at(index);
+	}
+
+	int Application::ChildCount() const
+	{
+		return m_ChildApps.size();
+	}
+
 	float Application::Width() const
 	{
 		return (float)m_Context->GetRenderContext().GetWindow().Width();
@@ -52,15 +62,20 @@ namespace Bolt
 		return (float)m_Context->GetRenderContext().GetWindow().Height();
 	}
 
+	bool Application::ShouldExit() const
+	{
+		return m_ShouldExit;
+	}
+
 	void Application::Start()
 	{
 		m_IsRunning = true;
 		m_ShouldExit = false;
 		Init();
-		Time::Update();
-		BLT_CORE_INFO("Init took " + std::to_string(Time::RenderingTimeline().CurrentRealTime()) + " seconds");
-		Time::Reset();
-		m_TickTimer = &Time::RenderingTimeline().AddTimer(1.0, std::bind(&Application::Tick, this));
+		Time::Get().Update();
+		BLT_CORE_INFO("Init took " + std::to_string(Time::Get().RenderingTimeline().CurrentRealTime()) + " seconds");
+		Time::Get().Reset();
+		m_TickTimer = &Time::Get().RenderingTimeline().AddTimer(1.0, std::bind(&Application::Tick, this));
 	}
 
 	void Application::Init()
@@ -92,19 +107,25 @@ namespace Bolt
 	{
 		m_Context = std::make_unique<AppContext>(createInfo);
 		Engine::Instance().SetCurrentContext(m_Context.get());
-	}
-
-	void Application::ExitPrivate()
-	{
-		m_IsRunning = false;
+		m_Context->GetRenderContext().GetWindow().OnClose().Subscribe([this](WindowClosedEvent & e)
+			{
+				Exit();
+				ListenerResponse response;
+				return response;
+			});
 	}
 
 	bool Application::UpdatePrivate()
 	{
 		PushNewApps();
-		for (std::unique_ptr<Application>& child : m_ChildApps)
+		for (int i = m_ChildApps.size() - 1; i >=0; i--)
 		{
+			std::unique_ptr<Application>& child = m_ChildApps.at(i);
 			child->UpdatePrivate();
+			if (child->ShouldExit())
+			{
+				CloseChild(i);
+			}
 		}
 		Engine::Instance().ApplyCurrentContext(m_Context.get());
 		Scene* scene = &SceneManager::Get().CurrentScene();
@@ -116,15 +137,11 @@ namespace Bolt
 		}
 		Render();
 		GetWindow().SwapBuffers();
-		Time::Update();
+		Time::Get().Update();
 		EventManager::Get().FlushEvents(); // Flush #2 (likely other scene/app events)
 		if (scene != nullptr)
 		{
 			scene->UpdateTemporaryObjects();
-		}
-		if (m_ShouldExit)
-		{
-			ExitPrivate();
 		}
 		return true;
 	}

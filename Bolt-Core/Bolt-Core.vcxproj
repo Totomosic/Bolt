@@ -143,6 +143,8 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Apps\DebugConsole.h" />
+    <ClInclude Include="src\Apps\__Apps__.h" />
     <ClInclude Include="src\Bolt-Core.h" />
     <ClInclude Include="src\Bolt-Engine.h" />
     <ClInclude Include="src\Bolt-Graphics.h" />
@@ -396,6 +398,7 @@
     <ClInclude Include="src\Types.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Apps\DebugConsole.cpp" />
     <ClCompile Include="src\Core\BoltTL\string.cpp" />
     <ClCompile Include="src\Core\Color.cpp" />
     <ClCompile Include="src\Core\Events\EventManager.cpp" />
