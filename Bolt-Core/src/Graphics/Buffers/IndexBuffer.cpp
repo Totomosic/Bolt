@@ -27,7 +27,7 @@ namespace Bolt
 		Download(data, Size(), 0);
 		indexBuffer->Upload(data, Size(), 0);
 		delete[] data;
-		return std::move(indexBuffer);
+		return indexBuffer;
 	}
 
 	void IndexBuffer::MapIterator() const

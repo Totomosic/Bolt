@@ -1,5 +1,6 @@
 #include "Types.h"
-#include "Functions.h"
+
+#include "Functions.h"
 #include "Utils\Filesystem\Filesystem.h"
 #define STB_IMAGE_IMPLEMENTATION 
 #include "..\external\stb_image.h"
@@ -38,7 +39,7 @@ namespace Bolt
 				}
 			}
 		}
-		return std::move(result);
+		return result;
 	}
 
 }

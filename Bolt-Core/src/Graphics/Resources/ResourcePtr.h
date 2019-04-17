@@ -97,7 +97,7 @@ namespace Bolt
 				// TEST? either return a copy of m_Ptr or return a ResourcePtr that doesnt own m_Ptr
 				m_Ptr = nullptr;
 			}
-			return std::move(result);
+			return result;
 		}
 
 		template<typename Other>
@@ -109,7 +109,7 @@ namespace Bolt
 				result.Set((Other*)m_Ptr->Clone().release());
 				BLT_CORE_WARN("Copied resource ({0}) when converting ResourcePtr to ({1})", typeid(T).name(), typeid(Other).name());
 			}
-			return std::move(result);
+			return result;
 		}
 
 		ResourcePtr<T> Clone() const

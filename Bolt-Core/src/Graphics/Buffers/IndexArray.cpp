@@ -98,7 +98,7 @@ namespace Bolt
 		{
 			result->AddIndexBuffer(buffer->Clone());
 		}
-		return std::move(result);
+		return result;
 	}
 
 	void IndexArray::SetMapped(bool isMapped) const

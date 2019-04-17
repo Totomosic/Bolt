@@ -33,7 +33,7 @@ namespace Bolt
 			std::unique_ptr<UniformInstance<T>> result = std::make_unique<UniformInstance<T>>();
 			result->UniformName = UniformName;
 			result->Value = Value;
-			return std::move(result);
+			return result;
 		}
 
 	};

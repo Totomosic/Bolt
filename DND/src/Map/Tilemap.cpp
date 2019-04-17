@@ -198,7 +198,7 @@ namespace DND
 				}
 			}
 		}
-		return std::move(image);
+		return image);
 	}
 
 	Task<std::vector<Image>> Tilemap::CreateImagesAsync(const std::vector<Tilemap::LayerInfo>& layers, const std::unordered_map<id_t, Image>& tiles)
@@ -214,7 +214,7 @@ namespace DND
 					images.push_back(std::move(image));
 				}
 			}
-			return std::move(images);
+			return images);
 		});
 	}
 

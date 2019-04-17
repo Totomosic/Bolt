@@ -19,7 +19,7 @@ namespace Bolt
 	{
 		ShaderPassValuePtr pass = std::make_shared<ShaderPassValue>(std::move(value), ShaderType::Fragment);
 		m_PassValues.push_back(pass);
-		return std::move(pass);
+		return pass;
 	}
 
 	ShaderRendererUniformPtr ShaderProgram::RendererUniform(Bolt::RendererUniform uniform)

@@ -23,10 +23,11 @@ namespace Chat
 			i.Width = 1920 / 2;
 			i.Height = 1080 / 2;
 			i.Title = "Console";
+			i.Resizable = false;
 			PushApp<DebugConsole>(i);
 
-			GetContext().GetRenderContext().GetWindow().SetClearColor(Color(225, 225, 225));
-			GetContext().GetRenderContext().GetWindow().EnableVSync();
+			GetWindow().SetClearColor(Color(225, 225, 225));
+			GetWindow().EnableVSync();
 			Scene& scene = SceneManager::Get().CreateScene();
 			Camera* camera = scene.CreateCamera(Projection::Orthographic(0, 1920, 0, 1080, 0, 200));
 			camera->transform().Translate(0, 0, 100);

@@ -52,7 +52,7 @@ namespace Bolt
 		case ResizeFilter::Nearest:
 			return ResizeNearest(width, height);
 		default:
-			return std::move(*(Image*)nullptr);
+			return ResizeNearest(width, height);
 		}
 	}
 

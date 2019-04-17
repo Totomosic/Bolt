@@ -84,7 +84,7 @@ namespace Bolt
 		image.Pixels = new byte[image.Width * image.Height * image.Components];
 		Bind();
 		GL_CALL(glGetTexImage((GLenum)m_Target, 0, GL_RGBA, GL_UNSIGNED_BYTE, image.Pixels));
-		return std::move(image);
+		return image;
 	}
 
 	Image Texture2D::GetImage(int x, int y, int w, int h) const
@@ -99,7 +99,7 @@ namespace Bolt
 		{
 			memcpy(result.Pixels + (i - y) * result.Width * 4, image.Pixels + x * 4 + i * image.Width * 4, w * 4);
 		}
-		return std::move(result);
+		return result;
 	}
 
 	void Texture2D::SetPixel(int x, int y, const Color& color)
