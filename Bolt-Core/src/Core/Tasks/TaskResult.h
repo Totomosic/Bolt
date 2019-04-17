@@ -31,7 +31,7 @@ namespace Bolt
 			{
 				std::this_thread::yield();
 			}
-			return std::move(m_State->Data);
+			return m_State->Data;
 		}
 
 	};
@@ -46,7 +46,7 @@ namespace Bolt
 			statePtr->IsFinished = true;
 		});
 		t.detach();
-		return std::move(result);
+		return result;
 	}
 
 }

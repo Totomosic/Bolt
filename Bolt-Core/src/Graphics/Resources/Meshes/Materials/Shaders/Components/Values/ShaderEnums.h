@@ -40,7 +40,13 @@ namespace Bolt
 		ModelMatrix,
 		ViewMatrix,
 		ProjectionMatrix,
-		Time
+		Time,
+		LightCount,
+		LightPositions,
+		LightTypes,
+		LightColors,
+		LightDirections,
+		LightAmbients
 	};
 
 	inline ValueType GetTypeOfRendererUniform(RendererUniform uniform)

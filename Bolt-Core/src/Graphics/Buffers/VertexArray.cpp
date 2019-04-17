@@ -141,7 +141,7 @@ namespace Bolt
 		{
 			vertexArray->AddVertexBuffer(buffer->Clone());
 		}
-		return std::move(vertexArray);
+		return vertexArray;
 	}
 
 	void VertexArray::Create()

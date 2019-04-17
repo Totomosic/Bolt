@@ -54,7 +54,7 @@ namespace Bolt
 				result.Materials[i] = material->Clone();
 			}
 		}
-		return std::move(result);
+		return result;
 	}
 
 }

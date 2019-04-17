@@ -183,7 +183,7 @@ namespace Bolt
 		{
 			prefab.Components().AddComponent(c.type_hash, c.component->Clone());
 		}
-		return std::move(prefab);
+		return prefab;
 	}
 
 	void GameObject::Transfer(XMLserializer& backend, bool isWriting)

@@ -140,7 +140,7 @@ namespace Bolt
 			texture->GenerateMipmaps();
 		}
 		delete[] imageData;
-		return std::move(texture);
+		return texture;
 	}
 	
 	void Texture::Create()

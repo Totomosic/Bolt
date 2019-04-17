@@ -11,7 +11,7 @@ namespace Bolt
 		static Task<TResult> Run(DelegateT func)
 		{
 			Task<TResult> task(std::move(func));
-			return std::move(task);
+			return task;
 		}
 
 	};

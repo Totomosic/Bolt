@@ -39,7 +39,7 @@ namespace Bolt
 	{
 		std::unique_ptr<SpriteSheetAnimator> animator = std::make_unique<SpriteSheetAnimator>(m_Rows, m_Columns, m_TotalTime);
 		animator->m_CurrentTime = m_CurrentTime;
-		return std::move(animator);
+		return animator;
 	}
 
 }

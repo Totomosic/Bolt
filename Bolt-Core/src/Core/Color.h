@@ -100,7 +100,7 @@ namespace Bolt
 
 	public:
 		static Color FromFloats(float r, float g, float b, float a = 1.0f);
-		// Hue (0, 360), Saturation (0, 1), Value(0, 1)
+		// Hue [0, 360], Saturation [0, 1], Value [0, 1]
 		static Color FromHSV(float hue, float saturation, float value);
 		static Color Random();
 
