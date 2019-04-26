@@ -7,12 +7,12 @@ namespace Bolt
 
 	class BLT_API ShaderScope
 	{
-	private:
-		std::vector<ShaderScope> m_ChildScopes;
+	protected:
+		std::vector<std::unique_ptr<ShaderScope>> m_ChildScopes;
 		ShaderScope* m_ParentScope;
 		int m_ScopeIndex;
 
-		std::vector<const ShaderVariable*> m_DefinedVariables;
+		std::vector<const ShaderVariable*> m_DeclaredVariables;
 		std::vector<std::unique_ptr<ShaderOp>> m_Operations;
 
 	public:
@@ -24,11 +24,21 @@ namespace Bolt
 		bool IsDefinedInThisScope(const ShaderVariable* var) const;
 		bool IsDefined(const ShaderVariable* var) const;
 
-		void DefineVariable(const ShaderVariablePtr& var);
+		ShaderVariablePtr DefineVariable(const ShaderValuePtr& value);
+		ShaderVariablePtr DeclareVariable(ValueType type);
 		void AddOperation(std::unique_ptr<ShaderOp>&& op);
+		virtual void Build(ShaderBuilder& builder) const = 0;
 
-	private:
-		void DefineVarPrivate(const ShaderVariablePtr& var);
+		ShaderScope& AddMainScope();
+
+	protected:
+		void BuildOperations(ShaderBuilder& builder) const;
+
+		void AddDeclaredVar(const ShaderVariable* var);
+		void AddChildScope(std::unique_ptr<ShaderScope>&& scope);
+
+		ShaderVariablePtr DefineVarPrivate(const ShaderValuePtr& value, const blt::string& meta);
+		ShaderVariablePtr DeclareVarPrivate(ValueType type, const blt::string& meta);
 
 	};
 

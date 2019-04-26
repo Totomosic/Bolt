@@ -7,22 +7,22 @@ namespace Bolt
 	class BLT_API VertexShader : public ShaderProgram
 	{
 	private:
-		ShaderStreamPtr m_PositionStream;
-		ShaderStreamPtr m_NormalStream;
-		ShaderStreamPtr m_TexCoordStream;
-		ShaderStreamPtr m_ColorStream;
-		ShaderStreamPtr m_TangentStream;
+		ShaderVariablePtr m_PositionStream;
+		ShaderVariablePtr m_NormalStream;
+		ShaderVariablePtr m_TexCoordStream;
+		ShaderVariablePtr m_ColorStream;
+		ShaderVariablePtr m_TangentStream;
 
-		ShaderAttributePtr m_VertexPosition;
+		ShaderVariablePtr m_VertexPosition;
 
 	public:
 		VertexShader();
 
-		const ShaderStreamPtr& Position() const;
-		const ShaderStreamPtr& Normal() const;
-		const ShaderStreamPtr& TexCoord() const;
-		const ShaderStreamPtr& Color() const;
-		const ShaderStreamPtr& Tangent() const;
+		const ShaderVariablePtr& Position() const;
+		const ShaderVariablePtr& Normal() const;
+		const ShaderVariablePtr& TexCoord() const;
+		const ShaderVariablePtr& Color() const;
+		const ShaderVariablePtr& Tangent() const;
 
 		// Set gl_Position, requires vec4
 		void SetVertexPosition(ShaderValuePtr value);

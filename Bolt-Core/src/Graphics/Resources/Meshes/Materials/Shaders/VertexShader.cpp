@@ -11,44 +11,43 @@ namespace Bolt
 	
 	}
 
-	const ShaderStreamPtr& VertexShader::Position() const
+	const ShaderVariablePtr& VertexShader::Position() const
 	{
 		return m_PositionStream;
 	}
 
-	const ShaderStreamPtr& VertexShader::Normal() const
+	const ShaderVariablePtr& VertexShader::Normal() const
 	{
 		return m_NormalStream;
 	}
 
-	const ShaderStreamPtr& VertexShader::TexCoord() const
+	const ShaderVariablePtr& VertexShader::TexCoord() const
 	{
 		return m_TexCoordStream;
 	}
 
-	const ShaderStreamPtr& VertexShader::Color() const
+	const ShaderVariablePtr& VertexShader::Color() const
 	{
 		return m_ColorStream;
 	}
 
-	const ShaderStreamPtr& VertexShader::Tangent() const
+	const ShaderVariablePtr& VertexShader::Tangent() const
 	{
 		return m_TangentStream;
 	}
 
 	void VertexShader::SetVertexPosition(ShaderValuePtr value)
 	{
-		m_VertexPosition = std::make_shared<ShaderAttribute>(ShaderAttribute::VERTEX_POSITION, std::move(value));
+		m_VertexPosition = std::make_shared<ShaderVariablePtr>(ShaderAttribute::VERTEX_POSITION, std::move(value));
 	}
 
 	CompiledShaderProgram VertexShader::Compile() const
 	{
 		BLT_ASSERT(m_VertexPosition != nullptr, "VertexPosition attribute has not been set");
 		CompiledShaderProgram result;
-		ShaderBuilder builder(m_ShaderType);
 		m_VertexPosition->Build(builder);
 
-		for (const ShaderPassValuePtr& pass : m_PassValues)
+		for (const ShaderVariablePtr& pass : m_PassValues)
 		{
 			pass->Build(builder);
 			pass->m_ShaderType = ShaderType::Ignore;
