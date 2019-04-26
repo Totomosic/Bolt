@@ -43,6 +43,17 @@ namespace Bolt
 		}
 
 		template<>
+		inline double _check_get(lua_State* l, int index)
+		{
+			if (!lua_isnumber(l, index))
+			{
+				BLT_ASSERT(false, "Value at index {} was not a float", index);
+				return 0;
+			}
+			return (double)lua_tonumber(l, index);
+		}
+
+		template<>
 		inline blt::string _check_get(lua_State* l, int index)
 		{
 			if (!lua_isstring(l, index))
@@ -78,6 +89,12 @@ namespace Bolt
 
 		template<>
 		inline void _push(lua_State* l, float value)
+		{
+			lua_pushnumber(l, value);
+		}
+
+		template<>
+		inline void _push(lua_State* l, double value)
 		{
 			lua_pushnumber(l, value);
 		}

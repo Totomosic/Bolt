@@ -25,6 +25,9 @@ namespace Bolt
 		static void Close(File& file);
 		static XMLfile OpenXML(const Filepath& filepath, OpenMode mode = OpenMode::Read);
 
+		// Watches for change in filename or updated file data, callback returns true if should keep watching the file
+		static void WatchFile(const Filepath& filepath, std::function<bool(const Filepath&)> callback);
+
 		friend class Initializer;
 
 	private:

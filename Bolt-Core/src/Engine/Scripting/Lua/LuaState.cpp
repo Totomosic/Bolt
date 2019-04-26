@@ -12,7 +12,7 @@ namespace Bolt
 	LuaState::LuaState(lua_State* state)
 		: m_State(state)
 	{
-	
+		
 	}
 
 	LuaState::~LuaState()

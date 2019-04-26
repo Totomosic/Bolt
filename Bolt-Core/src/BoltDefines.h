@@ -1,7 +1,7 @@
 #pragma once
 #include "Logging.h"
 
-inline blt::string ConvertError(GLenum error)
+inline const char* ConvertError(GLenum error)
 {
 	switch (error)
 	{
@@ -19,7 +19,7 @@ inline blt::string ConvertError(GLenum error)
 }
 
 #ifdef BLT_DEBUG
-	#define GL_CALL(call) call; { int result = glGetError(); if (result != GL_NO_ERROR) { BLT_ASSERT(false, "OPENGL ERROR : " + ConvertError(result) + " (" + std::to_string(result) + ")"); } }
+	#define GL_CALL(call) call; { int result = glGetError(); if (result != GL_NO_ERROR) { BLT_ASSERT(false, "OPENGL ERROR : {0} ({1})", ConvertError(result), result); } }
 #else
 	#define GL_CALL(call) call;
 #endif

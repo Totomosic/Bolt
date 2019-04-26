@@ -1,6 +1,8 @@
 #include "Types.h"
 #include "LuaEnvironment.h"
 
+#include "LuaBoltMethods.h"
+
 namespace Bolt
 {
 
@@ -12,7 +14,7 @@ namespace Bolt
 	LuaEnvironment::LuaEnvironment(lua_State* state) : LuaState(state),
 		m_Registry(std::make_unique<LuaFunRegistry>(state))
 	{
-		RegisterDefaultFuncs();
+		RegisterAllMethods(*this);
 	}
 
 	LuaEnvironment::~LuaEnvironment()
@@ -29,15 +31,15 @@ namespace Bolt
 		this->~LuaEnvironment();
 		m_State = luaL_newstate();
 		m_Registry = std::make_unique<LuaFunRegistry>(m_State);
-		RegisterDefaultFuncs();
+		RegisterAllMethods(*this);
 	}
 
-	void LuaEnvironment::RegisterDefaultFuncs()
+	bool LuaEnvironment::HasGlobal(const blt::string& name) const
 	{
-		Register("Log", [](blt::string msg)
-			{
-				BLT_LUA_TRACE(msg);
-			});
+		lua_getglobal(GetNativeState(), name.c_str());
+		bool result = !lua_isnil(GetNativeState(), -1);
+		lua_pop(GetNativeState(), 1);
+		return result;
 	}
 
 }

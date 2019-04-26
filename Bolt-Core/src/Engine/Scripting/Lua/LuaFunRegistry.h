@@ -38,7 +38,6 @@ namespace Bolt
 			lua_getglobal(m_State, name.c_str());
 			if (!lua_isfunction(m_State, -1))
 			{
-				BLT_ERROR("Unable to call function {} as it is not a function", name);
 				BLT_ASSERT(false, "Unable to call function {} as it is not a function", name);
 				return Ret();
 			}
