@@ -1,5 +1,6 @@
 #pragma once
 #include "Values/ShaderVariable.h"
+#include "GlobalScope.h"
 
 namespace Bolt
 {
@@ -9,15 +10,11 @@ namespace Bolt
 	private:
 		ShaderType m_ShaderType;
 		blt::string m_Source;
-		std::vector<const ShaderVariable*> m_DeclaredVariables;
+		GlobalScope m_GlobalScope;
 
-		mutable int m_UniformCount;
-		mutable int m_PassCount;
 		mutable int m_VarCount;
+		int m_CurrentScopeIndex;
 
-		int m_StreamCursor;
-		int m_UniformCursor;
-		int m_PassCursor;
 		int m_CurrentCursor;
 
 	public:
@@ -25,27 +22,20 @@ namespace Bolt
 
 		ShaderType GetShaderType() const;
 		const blt::string& GetSource() const;
+		const GlobalScope& GetGlobalScope() const;
+		GlobalScope& GetGlobalScope();
 
 		int SaveLineCursor() const;
 		void LoadLineCursor(int cursor);
+		void SetScopeIndex(int index);
 
-		blt::string GetStreamName(int stream) const;
-		blt::string GetUniformName() const;
-		blt::string GetPassName() const;
 		blt::string GetVariableName() const;
 
-		bool IsDeclared(const ShaderVariable* variable) const;
-		void WriteStreamLine(const blt::string& stream);
-		void WriteUniformLine(const blt::string& uniform);
-		void WritePassLine(const blt::string& pass);
 		void Write(const blt::string& str);
-		void PreviousLine();
-		void NextLine();
-		void DeclareVariable(const ShaderVariable* variable);
+		void Indent();
 
 	private:
 		blt::string GetShaderTypeString() const;
-		bool CanAccessVariable(const ShaderVariable* variable) const;
 
 	};
 

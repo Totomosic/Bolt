@@ -5,7 +5,7 @@ namespace Bolt
 {
 
 	ShaderProgram::ShaderProgram(ShaderType type)
-		: m_ShaderType(type), m_PassValues(), m_RendererUniforms(), m_Uniforms()
+		: m_Builder(type), m_ShaderType(type), m_PassValues(), m_RendererUniforms(), m_Uniforms()
 	{
 	
 	}
@@ -15,30 +15,30 @@ namespace Bolt
 		return m_ShaderType;
 	}
 
-	ShaderPassValuePtr ShaderProgram::Pass(ShaderValuePtr value)
+	ShaderVariablePtr ShaderProgram::Pass(ShaderValuePtr value)
 	{
-		ShaderPassValuePtr pass = std::make_shared<ShaderPassValue>(std::move(value), ShaderType::Fragment);
+		ShaderVariablePtr pass = std::make_shared<ShaderVariable>(std::move(value), ShaderType::Fragment);
 		m_PassValues.push_back(pass);
 		return pass;
 	}
 
-	ShaderRendererUniformPtr ShaderProgram::RendererUniform(Bolt::RendererUniform uniform)
+	ShaderVariablePtr ShaderProgram::RendererUniform(Bolt::RendererUniform uniform)
 	{
-		ShaderRendererUniformPtr u = std::make_shared<ShaderRendererUniform>(uniform);
+		ShaderVariablePtr u = std::make_shared<ShaderVariable>(uniform);
 		m_RendererUniforms.push_back(u);
 		return u;
 	}
 
-	ShaderUniformPtr ShaderProgram::Uniform(const blt::string& linkName, ValueType type)
+	ShaderVariablePtr ShaderProgram::Uniform(const blt::string& linkName, ValueType type)
 	{
-		ShaderUniformPtr u = std::make_shared<ShaderUniform>(type);
+		ShaderVariablePtr u = std::make_shared<ShaderVariable>(type);
 		m_Uniforms.push_back({ linkName, u });
 		return u;
 	}
 
-	ShaderUniformPtr ShaderProgram::Uniform(const blt::string& linkName, ShaderLiteralPtr defaultValue)
+	ShaderVariablePtr ShaderProgram::Uniform(const blt::string& linkName, ShaderLiteralPtr defaultValue)
 	{
-		ShaderUniformPtr u = std::make_shared<ShaderUniform>(std::move(defaultValue));
+		ShaderVariablePtr u = std::make_shared<ShaderVariable>(std::move(defaultValue));
 		m_Uniforms.push_back({ linkName, u });
 		return u;
 	}
@@ -56,7 +56,7 @@ namespace Bolt
 		{
 			program.UserUniforms.push_back({ uniform.LinkName, uniform.Uniform->GetVarName(), uniform.Uniform->Type() });
 		}
-		for (const ShaderRendererUniformPtr& uniform : m_RendererUniforms)
+		for (const ShaderVariablePtr& uniform : m_RendererUniforms)
 		{
 			program.RendererUniforms.push_back({ uniform->GetVarName(), uniform->UniformType() });
 		}

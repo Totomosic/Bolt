@@ -4,3 +4,6 @@
 
 #include "ShaderBuilder.h"
 #include "ShaderFuncs.h"
+#include "ShaderScope.h"
+#include "GlobalScope.h"
+#include "MainScope.h"

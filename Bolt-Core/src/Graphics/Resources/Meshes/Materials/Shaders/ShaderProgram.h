@@ -8,7 +8,7 @@ namespace Bolt
 	{
 	public:
 		blt::string LinkName;
-		ShaderUniformPtr Uniform;
+		ShaderVariablePtr Uniform;
 	};
 
 	struct BLT_API UserUniformInfo
@@ -37,27 +37,14 @@ namespace Bolt
 	class BLT_API ShaderProgram
 	{
 	protected:
+		ShaderBuilder m_Builder;
 		ShaderType m_ShaderType;
-		std::vector<ShaderPassValuePtr> m_PassValues;
-		std::vector<ShaderRendererUniformPtr> m_RendererUniforms;
-		std::vector<UserUniformMapping> m_Uniforms;
 
 	protected:
 		ShaderProgram(ShaderType type);
 
 	public:
 		ShaderType Type() const;
-
-		virtual ShaderPassValuePtr Pass(ShaderValuePtr value);
-		ShaderRendererUniformPtr RendererUniform(Bolt::RendererUniform uniform);
-		ShaderUniformPtr Uniform(const blt::string& linkName, ValueType type);
-		ShaderUniformPtr Uniform(const blt::string& linkName, ShaderLiteralPtr defaultValue);
-
-		template<typename T>
-		ShaderUniformPtr Uniform(const blt::string& linkName)
-		{
-			return Uniform(linkName, GetValueType<T>());
-		}
 
 		virtual CompiledShaderProgram Compile() const = 0;
 		virtual void Reset();
