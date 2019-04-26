@@ -19,13 +19,6 @@ namespace Chat
 	public:
 		void Init() override
 		{
-			WindowCreateInfo i;
-			i.Width = 1920 / 2;
-			i.Height = 1080 / 2;
-			i.Title = "Console";
-			i.Resizable = false;
-			PushApp<DebugConsole>(i);
-
 			GetWindow().SetClearColor(Color(225, 225, 225));
 			GetWindow().EnableVSync();
 			Scene& scene = SceneManager::Get().CreateScene();
@@ -58,6 +51,10 @@ namespace Chat
 			createGroupMenu = &layer.UI().Rectangle(600, 100, Color(210, 210, 210), Transform({ 300, camera->ViewHeight() - 80, -90 }));
 			groupMenu = &layer.UI().Rectangle(600, camera->ViewHeight() - 30, Color::White, Transform({ 300, camera->ViewHeight() / 2 - 15, -90 }));
 			contentPanel = &layer.UI().Rectangle(camera->ViewWidth() - 600, camera->ViewHeight() - 30, Color(225, 225, 225), Transform({ camera->ViewWidth() / 2 + 300, camera->ViewHeight() / 2 - 15, -90 }));
+
+			File script = Filesystem::Open("script.txt");
+			contentPanel->Object()->Components().AddComponent<LuaScript>(script.ReadText());
+			Filesystem::Close(script);
 
 			createGroupMenu->Text("Chats", ResourceManager::Get().Fonts().Arial(32), Color::Black, Transform({ 0, 0, 1 }));
 			UIsurface& createGroupButton = createGroupMenu->Rectangle(30, 30, Color::Green, Transform({ 200, 0, 1 }));

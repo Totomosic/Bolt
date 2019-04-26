@@ -73,10 +73,10 @@ namespace blt
 	public:
 		using value_t = _Ty;
 		using const_value_t = const value_t;
-		using pointer_t = value_t * ;
-		using const_pointer_t = const pointer_t;
-		using ref_t = value_t & ;
-		using const_ref_t = const ref_t;
+		using pointer_t = value_t*;
+		using const_pointer_t = const value_t*;
+		using ref_t = value_t&;
+		using const_ref_t = const value_t&;
 
 		using str_iterator = blt::iterator<value_t>;
 		using const_str_iterator = blt::iterator<const_value_t>;
@@ -93,7 +93,7 @@ namespace blt
 		size_t m_CharCount;
 
 	public:
-		string_template() : string_template(1)
+		string_template() : string_template((size_t)1)
 		{
 
 		}
@@ -113,12 +113,6 @@ namespace blt
 		string_template(const_pointer_t str) : string_template(calc_string_length(str) + 1)
 		{
 			append(str);
-		}
-
-		string_template(const char* str) : string_template()
-		{
-			size_t length = strlen(str);
-			append(char_conversion<char, value_t>()(str, length + 1), length);
 		}
 
 		string_template(const std::string& str) : string_template(str.c_str())
@@ -189,6 +183,8 @@ namespace blt
 		inline size_t size() const { return m_CharCount; }
 		// Return number of characters in string
 		inline size_t length() const { return size(); }
+		// Return number of bytes represented by characters of string
+		inline size_t byte_length() const { return length() * type_size; }
 		// Return maximum number of characters that can be stored in buffer
 		inline size_t capacity() const { return m_BufferCapacityCount; }
 		// Return number of bytes used in string buffer
@@ -201,6 +197,8 @@ namespace blt
 		inline const_pointer_t c_str() const { return buffer_ptr(); }
 		// Return pointer to beginning of string buffer
 		inline const_pointer_t data() const { return buffer_ptr(); }
+		// Return std c++ string
+		inline std::string cpp_str() const { return std::string(c_str()); }
 		// Return whether the string is empty (size() == 0)
 		inline bool empty() const { return size() == 0; }
 
@@ -316,6 +314,22 @@ namespace blt
 			move_backward(index, chrCount);
 			memcpy(buffer_ptr() + index, buffer, (chrCount)* type_size);
 			return *this;
+		}
+
+		// Reserves capacity if larger than current capacity
+		void reserve(size_t newCapacity)
+		{
+			if (newCapacity > m_BufferCapacityCount)
+			{
+				realloc_buffer(newCapacity);
+			}
+		}
+
+		// Clears string contents
+		void clear()
+		{
+			m_CharCount = 0;
+			null_terminate();
 		}
 
 		// Returns new string with right string appended to end of left string
@@ -480,23 +494,23 @@ namespace blt
 		}
 
 		// Returns index of first occurrence of given string after start
-		size_t find(const this_t& str, size_t start = 0)
+		size_t find(const this_t& str, size_t start = 0) const
 		{
 			return find(str.data(), str.size(), start);
 		}
 
 		// Returns index of first occurrence of given string after start
-		size_t find(const_pointer_t str, size_t start = 0)
+		size_t find(const_pointer_t str, size_t start = 0) const
 		{
 			return find(str, calc_string_length(str), start);
 		}
 
 		// Returns index of first occurrence of characters from buffer after start
-		size_t find(const_pointer_t str, size_t chrCount, size_t start = 0)
+		size_t find(const_pointer_t str, size_t chrCount, size_t start = 0) const
 		{
 			BLT_ASSERT(chrCount < size(), "string is shorter than finding string");
 			BLT_ASSERT(start < size() - chrCount, "cannot start past end of string");
-			for (size_t i = 0; i < size() - chrCount; i++)
+			for (size_t i = start; i <= size() - chrCount; i++)
 			{
 				bool found = true;
 				for (size_t j = 0; j < chrCount; j++)
@@ -513,6 +527,388 @@ namespace blt
 				}
 			}
 			return npos;
+		}
+
+		// Returns index of first occurrence of character from buffer after start
+		size_t find(value_t chr, size_t start = 0) const
+		{
+			return find(&chr, 1, start);
+		}
+
+		// Returns index of last occurrence of given string from start
+		size_t rfind(const this_t& str, size_t start = this_t::npos) const
+		{
+			return rfind(str.data(), start);
+		}
+
+		// Returns index of last occurrence of given string from start
+		size_t rfind(const_pointer_t str, size_t start = this_t::npos) const
+		{
+			return rfind(str, calc_string_length(str), start);
+		}
+
+		// Returns index of last occurrence of given string from start
+		size_t rfind(const_pointer_t str, size_t chrCount, size_t start = this_t::npos) const
+		{
+			BLT_ASSERT(chrCount < size(), "string is shorter than finding string");
+			if (start == this_t::npos)
+			{
+				start = length() - chrCount;
+			}
+			BLT_ASSERT(start < size() - chrCount, "cannot start past end of string");
+			for (size_t i = start; i >= 0; i--)
+			{
+				bool found = true;
+				for (size_t j = 0; j < chrCount; j++)
+				{
+					if (at(i + j) != str[j])
+					{
+						found = false;
+						break;
+					}
+				}
+				if (found)
+				{
+					return i;
+				}
+			}
+			return npos;
+		}
+
+		// Returns index of last occurrence of given character from start
+		size_t rfind(value_t chr, size_t start = this_t::npos) const
+		{
+			return rfind(&chr, 1, start);
+		}
+
+		// Returns index of first occurrence of any character in given string
+		size_t find_first_of(const this_t& str, size_t start = 0) const
+		{
+			return find_first_of(str.data(), start);
+		}
+
+		// Returns index of first occurrence of any character in given string
+		size_t find_first_of(const_pointer_t str, size_t start = 0) const
+		{
+			return find_first_of(str, calc_string_length(str), start);
+		}
+
+		// Returns index of first occurrence of any character in given string
+		size_t find_first_of(const_pointer_t str, size_t chrCount, size_t start = 0) const
+		{
+			BLT_ASSERT(start < size(), "cannot begin past end of string");
+			for (size_t i = start; i < size(); i++)
+			{
+				for (int j = 0; j < chrCount; i++)
+				{
+					if (at(i) == str[j])
+					{
+						return i;
+					}
+				}
+			}
+			return npos;
+		}
+
+		// Returns index of first occurrence of the character in given string
+		size_t find_first_of(value_t chr, size_t start = 0) const
+		{
+			return find_first_of(&chr, 1, start);
+		}
+
+		// Returns index of last occurrence of any character in given string
+		size_t find_last_of(const this_t& str, size_t start = this_t::npos) const
+		{
+			return find_last_of(str.data(), start);
+		}
+
+		// Returns index of last occurrence of any character in given string
+		size_t find_last_of(const_pointer_t str, size_t start = this_t::npos) const
+		{
+			return find_last_of(str, calc_string_length(str), start);
+		}
+
+		// Returns index of last occurrence of any character in given string
+		size_t find_last_of(const_pointer_t str, size_t chrCount, size_t start = this_t::npos) const
+		{
+			if (start == npos)
+			{
+				start = size() - 1;
+			}
+			BLT_ASSERT(start < size(), "cannot begin past end of string");
+			for (size_t i = start; i >= 0; i--)
+			{
+				for (int j = 0; j < chrCount; i++)
+				{
+					if (at(i) == str[j])
+					{
+						return i;
+					}
+				}
+			}
+			return npos;
+		}
+
+		// Returns index of last occurrence of the character in given string
+		size_t find_last_of(value_t chr, size_t start = this_t::npos) const
+		{
+			return find_last_of(&chr, 1, start);
+		}
+
+		// Returns substring
+		this_t substr(size_t start, size_t count = this_t::npos) const
+		{
+			this_t result;
+			if (count == npos)
+			{
+				count = size() - start;
+			}
+			result.reserve(count + 1);
+			memcpy(result.buffer_ptr(), buffer_ptr() + start * type_size, count * type_size);
+			result.m_CharCount = count;
+			result.null_terminate();
+			return result;
+		}
+
+		// Replaces characters from start with str
+		this_t& replace(size_t start, const this_t& str)
+		{
+			return replace(start, str.data());
+		}
+
+		// Replaces characters from start with str
+		this_t& replace(size_t start, const_pointer_t str)
+		{
+			return replace(start, str, calc_string_length(str));
+		}
+
+		// Replaces characters from start with str
+		this_t& replace(size_t start, const pointer_t str, size_t count)
+		{
+			memcpy(buffer_ptr() + start * type_size, str, count * type_size);
+			return *this;
+		}
+
+		// Replaces characters from start with character
+		this_t& replace(size_t start, value_t chr)
+		{
+			return replace(start, &chr, 1);
+		}
+
+		this_t& replace_all(const this_t& replace, const this_t& with)
+		{
+			size_t index = find(replace);
+			while (index != npos)
+			{
+				this->replace(index, with);
+				index = find(replace, index + 1 + with.size());
+			}
+			return *this;
+		}
+
+		this_t& replace_all(const this_t& replace, char with)
+		{
+			size_t index = find(replace);
+			while (index != npos)
+			{
+				this->replace(index, with);
+				index = find(replace, index + 1);
+			}
+			return *this;
+		}
+
+		this_t& replace_all(char replace, const this_t& with)
+		{
+			size_t index = find(replace);
+			while (index != npos)
+			{
+				this->replace(index, with);
+				index = find(replace, index + 1 + with.size());
+			}
+			return *this;
+		}
+
+		this_t& replace_all(char replace, char with)
+		{
+			size_t index = find(replace);
+			while (index != npos)
+			{
+				this->replace(index, with);
+				index = find(replace, index + 1);
+			}
+			return *this;
+		}
+
+		// Removes all characters in string that are in chars
+		this_t& remove_all(const this_t& chars)
+		{
+			return remove_all(chars.data());
+		}
+
+		// Removes all characters in string that are in chars
+		this_t& remove_all(const_pointer_t chars)
+		{
+			return remove_all(chars, calc_string_length(chars));
+		}
+
+		// Removes all characters in string that are in buffer
+		this_t& remove_all(const_pointer_t chars, size_t count)
+		{
+			size_t index = find_first_of(chars, count);
+			while (index != npos)
+			{
+				erase(begin() + index);
+				index = find_first_of(chars, count);
+			}
+			return *this;
+		}
+
+		// Removes every chr from string
+		this_t& remove_all(value_t chr)
+		{
+			return remove_all(&chr, 1);
+		}
+
+		// Returns whether str is a substring of string
+		bool contains(const this_t& str, size_t start = 0) const
+		{
+			return contains(str.data(), start);
+		}
+
+		// Returns whether str is a substring of string
+		bool contains(const_pointer_t str, size_t start = 0) const
+		{
+			return contains(str, calc_string_length(str), start);
+		}
+
+		// Returns whether str is a substring of string
+		bool contains(const_pointer_t str, size_t count, size_t start = 0) const
+		{
+			for (int i = 0; i <= size() - count; i++)
+			{
+				bool found = true;
+				for (int j = 0; j < count; j++)
+				{
+					if (at(i + j) != str[j])
+					{
+						found = false;
+						break;
+					}
+				}
+				if (found)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		// Returns whether str contains c
+		bool contains(value_t c, size_t start = 0) const
+		{
+			return contains(&c, 1, start);
+		}
+
+		// Returns whether string starts with str
+		bool begins_with(const this_t& str) const
+		{
+			return begins_with(str.data());
+		}
+
+		// Returns whether string starts with str
+		bool begins_with(const_pointer_t str) const
+		{
+			return begins_with(str, calc_string_length(str));
+		}
+
+		// Returns whether string starts with str
+		bool begins_with(const_pointer_t str, size_t count) const
+		{
+			BLT_ASSERT(count < size(), "str is longer than string");
+			for (size_t i = 0; i < count; i++)
+			{
+				if (at(i) != str[i])
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		// Returns whether string starts with chr
+		bool begins_with(value_t chr) const
+		{
+			return begins_with(&chr, 1);
+		}
+
+		// Returns whether string ends with str
+		bool ends_with(const this_t& str) const
+		{
+			return ends_with(str.data());
+		}
+
+		// Returns whether string ends with str
+		bool ends_with(const_pointer_t str) const
+		{
+			return ends_with(str, calc_string_length(str));
+		}
+
+		// Returns whether string ends with str
+		bool ends_with(const_pointer_t str, size_t count) const
+		{
+			BLT_ASSERT(count < size(), "str is longer than string");
+			for (size_t i = size() - count; i < size(); i++)
+			{
+				if (at(i) != str[i - size() + count])
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		// Returns whether string ends with chr
+		bool ends_with(value_t chr) const
+		{
+			return ends_with(&chr, 1);
+		}
+
+		// Splits string into parts separated by delimeter
+		std::vector<this_t> split(const this_t& delimeter) const
+		{
+			return split(delimeter.data());
+		}
+
+		// Splits string into parts separated by delimeter
+		std::vector<this_t> split(const_pointer_t delimeter) const
+		{
+			return split(delimeter, calc_string_length(delimeter));
+		}
+
+		// Splits string into parts separated by delimeter
+		std::vector<this_t> split(const_pointer_t delimeter, size_t count) const
+		{
+			std::vector<this_t> result;
+			size_t start = 0;
+			size_t end = find(delimeter, count);
+			while (end != npos)
+			{
+				result.push_back(substr(start, end - start));
+				start = end + count;
+				end = find(delimeter, count, start);
+			}
+			if (end == npos)
+			{
+				end = size();
+			}
+			result.push_back(substr(start, end - start));
+			return result;
+		}
+
+		// Splits string into parts separated by delimeter
+		std::vector<this_t> split(value_t delimeter) const
+		{
+			return split(&delimeter, 1);
 		}
 
 		// Puts string into stream
@@ -607,6 +1003,21 @@ namespace blt
 
 	};
 
+	using string = string_template<char>;
 	using wstring = string_template<wchar_t>;
+
+}
+
+namespace std
+{
+
+	template<>
+	struct hash<blt::string>
+	{
+		size_t operator()(const blt::string& str) const noexcept
+		{
+			return hash<std::string>()(str.cpp_str());
+		}
+	};
 
 }

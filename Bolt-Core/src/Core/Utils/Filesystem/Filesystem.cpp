@@ -48,6 +48,11 @@ namespace Bolt
 		return f;
 	}
 
+	void Filesystem::WatchFile(const Filepath& filepath, std::function<bool(const Filepath&)> callback)
+	{
+		
+	}
+
 	void Filesystem::Initialize()
 	{
 		char buff[FILENAME_MAX];

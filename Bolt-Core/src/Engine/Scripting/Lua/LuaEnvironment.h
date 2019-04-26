@@ -17,6 +17,7 @@ namespace Bolt
 		~LuaEnvironment() override;
 
 		void Reset();
+		bool HasGlobal(const blt::string& name) const;
 
 		template<typename Ret, typename... Args>
 		void Register(const blt::string& name, std::function<Ret(Args...)> func)
@@ -47,11 +48,8 @@ namespace Bolt
 		void SetGlobal(const blt::string& name, const T& value)
 		{
 			lua_help::_push(m_State, value);
-			CheckLuaError(lua_setglobal(m_State, name.c_str()));
+			lua_setglobal(m_State, name.c_str());
 		}
-
-	protected:
-		void RegisterDefaultFuncs();
 
 	};
 

@@ -5,11 +5,6 @@
 
 #if !BLT_USE_STRING
 
-namespace blt
-{
-	typedef std::string string;
-}
-
 #else
 
 #include <iostream>
