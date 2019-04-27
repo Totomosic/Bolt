@@ -7,27 +7,18 @@ namespace Bolt
 	FragmentShader::FragmentShader() : ShaderProgram(ShaderType::Fragment),
 		m_FragColor(nullptr)
 	{
-		
+		m_FragColor = GetCurrentScope().DeclareVariable(ValueType::Vector4f, "layout(location = 0) out");
 	}
 
-	void FragmentShader::SetFragColor(ShaderValuePtr value)
+	void FragmentShader::SetFragColor(const ShaderValuePtr& value)
 	{
-		m_FragColor = std::make_shared<FragColorAttribute>(std::move(value));
+		AddOperation<SetValueOp>(m_FragColor, value);
 	}
 
 	CompiledShaderProgram FragmentShader::Compile() const
 	{
-		BLT_ASSERT(m_FragColor != nullptr, "FragColor attribute has not been set");
 		CompiledShaderProgram result;
-		ShaderBuilder builder(m_ShaderType);
-		m_FragColor->Build(builder);
-
-		for (const ShaderPassValuePtr& pass : m_PassValues)
-		{
-			pass->Build(builder);
-		}
-
-		result.Source = builder.GetSource();
+		result.Source = m_Builder.Build();
 		CompileUniformVariables(result);
 		return result;
 	}
@@ -35,7 +26,6 @@ namespace Bolt
 	void FragmentShader::Reset()
 	{
 		ShaderProgram::Reset();
-		m_FragColor = nullptr;
 	}
 
 }

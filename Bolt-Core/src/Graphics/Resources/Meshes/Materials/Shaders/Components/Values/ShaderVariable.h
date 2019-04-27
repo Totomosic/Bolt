@@ -23,6 +23,9 @@ namespace Bolt
 
 		friend class ShaderDefineOp;
 		friend class ShaderDeclareOp;
+		friend class VertexShader;
+		friend class DeclarePassInOp;
+		friend class DeclarePassOutOp;
 
 	};
 

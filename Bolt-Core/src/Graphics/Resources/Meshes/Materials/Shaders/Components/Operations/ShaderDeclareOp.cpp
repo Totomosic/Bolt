@@ -13,13 +13,12 @@ namespace Bolt
 
 	void ShaderDeclareOp::Build(ShaderBuilder& builder) const
 	{
-		builder.Indent();
 		if (!m_MetaData.empty())
 		{
 			builder.Write(m_MetaData + ' ');
 		}
 		m_Variable->m_Name = builder.GetVariableName();
-		builder.Write(ValueTypeToGLSLString(m_Variable->Type()) + ' ' + m_Variable->GetVarName() + ";\n");
+		builder.Write(ValueTypeToGLSLString(m_Variable->Type()) + ' ' + m_Variable->GetVarName() + ';');
 	}
 
 }

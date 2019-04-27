@@ -49,6 +49,15 @@ namespace Bolt
 		LightAmbients
 	};
 
+	BLT_API enum class ShaderStream
+	{
+		Position,
+		Normal,
+		TexCoord,
+		Color,
+		Tangent
+	};
+
 	inline ValueType GetTypeOfRendererUniform(RendererUniform uniform)
 	{
 		switch (uniform)
@@ -63,6 +72,25 @@ namespace Bolt
 			return ValueType::Float;
 		}
 		BLT_ASSERT(false, "Unable to determine uniform type");
+		return ValueType::Void;
+	}
+
+	inline ValueType GetTypeOfShaderStream(ShaderStream stream)
+	{
+		switch (stream)
+		{
+		case ShaderStream::Position:
+			return ValueType::Vector4f;
+		case ShaderStream::Normal:
+			return ValueType::Vector3f;
+		case ShaderStream::TexCoord:
+			return ValueType::Vector2f;
+		case ShaderStream::Color:
+			return ValueType::Vector4f;
+		case ShaderStream::Tangent:
+			return ValueType::Vector3f;
+		}
+		BLT_ASSERT(false, "Unable to determine stream type");
 		return ValueType::Void;
 	}
 

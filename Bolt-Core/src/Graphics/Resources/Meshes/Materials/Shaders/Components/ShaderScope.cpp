@@ -38,14 +38,36 @@ namespace Bolt
 		return true;
 	}
 
-	ShaderVariablePtr ShaderScope::DefineVariable(const ShaderValuePtr& value)
+	ShaderVariablePtr ShaderScope::DefineVariable(const ShaderValuePtr& value, const blt::string& meta)
 	{
-		return DefineVarPrivate(value, "");
+		ShaderVariablePtr var = std::make_shared<ShaderVariable>(value->Type());
+		AddOperation(std::make_unique<ShaderDefineOp>(var, value, meta));
+		AddDeclaredVar(var.get());
+		return var;
 	}
 
-	ShaderVariablePtr ShaderScope::DeclareVariable(ValueType type)
+	ShaderVariablePtr ShaderScope::DeclareVariable(ValueType type, const blt::string& meta)
 	{
-		return DeclareVarPrivate(type, "");
+		ShaderVariablePtr var = std::make_shared<ShaderVariable>(type);
+		AddOperation(std::make_unique<ShaderDeclareOp>(var, meta));
+		AddDeclaredVar(var.get());
+		return var;
+	}
+
+	ShaderVariablePtr ShaderScope::DeclarePassIn(const ShaderVariablePtr& outVar, const blt::string& meta)
+	{
+		ShaderVariablePtr var = std::make_shared<ShaderVariable>(outVar->Type());
+		AddOperation(std::make_unique<DeclarePassInOp>(var, outVar, meta));
+		AddDeclaredVar(var.get());
+		return var;
+	}
+
+	ShaderVariablePtr ShaderScope::DeclarePassOut(ValueType type, const blt::string& meta)
+	{
+		ShaderVariablePtr var = std::make_shared<ShaderVariable>(type);
+		AddOperation(std::make_unique<DeclarePassOutOp>(var, meta));
+		AddDeclaredVar(var.get());
+		return var;
 	}
 
 	void ShaderScope::AddOperation(std::unique_ptr<ShaderOp>&& op)
@@ -57,9 +79,14 @@ namespace Bolt
 	{
 		std::unique_ptr<MainScope> main = std::make_unique<MainScope>(m_ScopeIndex + 1, this);
 		MainScope* ptr = main.get();
-		AddChildScope(std::move(main));
-		AddOperation(std::make_unique<CreateScopeOp>(ptr));
+		AddChildScope(std::move(main));		
 		return *ptr;
+	}
+
+	void ShaderScope::AddChildScope(std::unique_ptr<ShaderScope>&& scope)
+	{
+		AddOperation(std::make_unique<CreateScopeOp>(scope.get()));
+		m_ChildScopes.push_back(std::move(scope));		
 	}
 
 	void ShaderScope::BuildOperations(ShaderBuilder& builder) const
@@ -67,33 +94,13 @@ namespace Bolt
 		for (const auto& op : m_Operations)
 		{
 			op->Build(builder);
+			builder.NextLine();
 		}
 	}
 
 	void ShaderScope::AddDeclaredVar(const ShaderVariable* var)
 	{
 		m_DeclaredVariables.push_back(var);
-	}
-
-	void ShaderScope::AddChildScope(std::unique_ptr<ShaderScope>&& scope)
-	{
-		m_ChildScopes.push_back(std::move(scope));
-	}
-
-	ShaderVariablePtr ShaderScope::DefineVarPrivate(const ShaderValuePtr& value, const blt::string& meta)
-	{
-		ShaderVariablePtr var = std::make_shared<ShaderVariable>(value->Type());
-		AddOperation(std::make_unique<ShaderDefineOp>(var, value, meta));
-		AddDeclaredVar(var.get());
-		return var;
-	}
-
-	ShaderVariablePtr ShaderScope::DeclareVarPrivate(ValueType type, const blt::string& meta)
-	{
-		ShaderVariablePtr var = std::make_shared<ShaderVariable>(type);
-		AddOperation(std::make_unique<ShaderDeclareOp>(var, meta));
-		AddDeclaredVar(var.get());
-		return var;
 	}
 
 }
