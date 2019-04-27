@@ -13,7 +13,6 @@ namespace Bolt
 
 	void ShaderDefineOp::Build(ShaderBuilder& builder) const
 	{
-		builder.Indent();
 		if (!m_MetaData.empty())
 		{
 			builder.Write(m_MetaData + ' ');
@@ -21,7 +20,7 @@ namespace Bolt
 		m_Variable->m_Name = builder.GetVariableName();
 		builder.Write(ValueTypeToGLSLString(m_Variable->Type()) + ' ' + m_Variable->GetVarName() + " = ");
 		m_Value->Build(builder);
-		builder.Write(";\n");
+		builder.Write(';');
 	}
 
 }

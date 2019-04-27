@@ -24,8 +24,8 @@ namespace Bolt
 		const ShaderVariablePtr& Color() const;
 		const ShaderVariablePtr& Tangent() const;
 
-		// Set gl_Position, requires vec4
-		void SetVertexPosition(ShaderValuePtr value);
+		void SetVertexPosition(const ShaderValuePtr& value);
+
 		CompiledShaderProgram Compile() const override;
 		void Reset() override;
 

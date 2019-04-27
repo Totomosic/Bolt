@@ -39,7 +39,7 @@ namespace Bolt
 		for (const RendererUniformInfo& uniform : uniforms)
 		{
 			RendererUniformLocation loc = { shader.GetUniformLocation(uniform.VarName), uniform.Uniform };
-			BLT_ASSERT(loc.Location != -1, "Unabled to find renderer uniform with name " + uniform.VarName);
+			BLT_ASSERT(loc.Location != -1, "Unable to find renderer uniform with name " + uniform.VarName);
 			result.push_back(std::move(loc));
 		}
 		return result;
@@ -51,7 +51,7 @@ namespace Bolt
 		for (const UserUniformInfo& uniform : uniforms)
 		{
 			UserUniformLocation loc = { uniform.LinkName, shader.GetUniformLocation(uniform.VarName), uniform.Type };
-			BLT_ASSERT(loc.Location != -1, "Unabled to find user uniform with name " + uniform.VarName);
+			BLT_ASSERT(loc.Location != -1, "Unable to find user uniform with name " + uniform.VarName);
 			result.push_back(std::move(loc));
 		}
 		return result;

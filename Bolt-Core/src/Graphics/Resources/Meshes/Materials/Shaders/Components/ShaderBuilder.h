@@ -13,6 +13,7 @@ namespace Bolt
 		GlobalScope m_GlobalScope;
 
 		mutable int m_VarCount;
+		mutable int m_PassCount;
 		int m_CurrentScopeIndex;
 
 		int m_CurrentCursor;
@@ -28,14 +29,19 @@ namespace Bolt
 		int SaveLineCursor() const;
 		void LoadLineCursor(int cursor);
 		void SetScopeIndex(int index);
+		void NextLine();
 
 		blt::string GetVariableName() const;
+		blt::string GetPassName() const;
 
 		void Write(const blt::string& str);
 		void Indent();
 
+		blt::string Build();
+
 	private:
 		blt::string GetShaderTypeString() const;
+		void Reset();
 
 	};
 

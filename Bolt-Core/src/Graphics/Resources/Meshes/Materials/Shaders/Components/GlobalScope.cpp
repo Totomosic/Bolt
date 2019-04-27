@@ -12,8 +12,8 @@ namespace Bolt
 
 	void GlobalScope::Build(ShaderBuilder& builder) const
 	{
-		builder.Indent();
 		builder.SetScopeIndex(m_ScopeIndex);
+		builder.NextLine();
 		BuildOperations(builder);
 		builder.SetScopeIndex(m_ScopeIndex);
 	}

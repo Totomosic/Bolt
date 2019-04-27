@@ -5,7 +5,7 @@ namespace Bolt
 {
 
 	ShaderBuilder::ShaderBuilder(ShaderType shaderType)
-		: m_ShaderType(shaderType), m_Source("#version 430 core\n\n"), m_GlobalScope(), m_VarCount(0), m_CurrentScopeIndex(0), m_CurrentCursor(m_Source.size())
+		: m_ShaderType(shaderType), m_Source("#version 430 core\n\n"), m_GlobalScope(), m_VarCount(0), m_PassCount(0), m_CurrentScopeIndex(0), m_CurrentCursor(m_Source.size())
 	{
 
 	}
@@ -45,9 +45,20 @@ namespace Bolt
 		m_CurrentScopeIndex = index;
 	}
 
+	void ShaderBuilder::NextLine()
+	{
+		Write("\n");
+		Indent();
+	}
+
 	blt::string ShaderBuilder::GetVariableName() const
 	{
-		return "var_" + std::to_string(m_VarCount++);
+		return "var_" + GetShaderTypeString() + '_' + std::to_string(m_VarCount++);
+	}
+
+	blt::string ShaderBuilder::GetPassName() const
+	{
+		return "pass_" + GetShaderTypeString() + '_' + std::to_string(m_PassCount++);
 	}
 
 	void ShaderBuilder::Write(const blt::string& str)
@@ -66,6 +77,14 @@ namespace Bolt
 		Write(tabs);
 	}
 
+	blt::string ShaderBuilder::Build()
+	{
+		GetGlobalScope().Build(*this);
+		blt::string source = GetSource();
+		Reset();
+		return source;
+	}
+
 	blt::string ShaderBuilder::GetShaderTypeString() const
 	{
 		switch (m_ShaderType)
@@ -79,6 +98,14 @@ namespace Bolt
 		}
 		BLT_ASSERT(false, "Unable to determine string for shader type");
 		return "";
+	}
+
+	void ShaderBuilder::Reset()
+	{
+		m_Source = "#version 430 core\n\n";
+		m_CurrentCursor = m_Source.size();
+		m_VarCount = 0;
+		m_PassCount = 0;
 	}
 
 }

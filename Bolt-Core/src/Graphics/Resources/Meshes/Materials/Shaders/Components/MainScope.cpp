@@ -12,14 +12,15 @@ namespace Bolt
 
 	void MainScope::Build(ShaderBuilder& builder) const
 	{
-		builder.Indent();
-		builder.Write("{\n");
+		builder.Write("void main()");
+		builder.NextLine();
+		builder.Write('{');
 		builder.SetScopeIndex(m_ScopeIndex);
-		builder.Indent();
+		builder.NextLine();
 		BuildOperations(builder);
 		builder.SetScopeIndex((ParentScope() == nullptr) ? 0 : ParentScope()->GetScopeIndex());
-		builder.Indent();
-		builder.Write("}\n");
+		builder.NextLine();
+		builder.Write('}');
 	}
 
 }

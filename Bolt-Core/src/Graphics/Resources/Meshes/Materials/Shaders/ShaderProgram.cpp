@@ -5,7 +5,7 @@ namespace Bolt
 {
 
 	ShaderProgram::ShaderProgram(ShaderType type)
-		: m_Builder(type), m_ShaderType(type), m_PassValues(), m_RendererUniforms(), m_Uniforms()
+		: m_Builder(type), m_ShaderType(type), m_CurrentScope(&m_Builder.GetGlobalScope()), m_UserUniforms(), m_RendererUniforms()
 	{
 	
 	}
@@ -15,50 +15,75 @@ namespace Bolt
 		return m_ShaderType;
 	}
 
-	ShaderVariablePtr ShaderProgram::Pass(ShaderValuePtr value)
+	ShaderScope& ShaderProgram::GetCurrentScope() const
 	{
-		ShaderVariablePtr pass = std::make_shared<ShaderVariable>(std::move(value), ShaderType::Fragment);
-		m_PassValues.push_back(pass);
-		return pass;
+		return *m_CurrentScope;
 	}
 
-	ShaderVariablePtr ShaderProgram::RendererUniform(Bolt::RendererUniform uniform)
+	ShaderVariablePtr ShaderProgram::Stream(ShaderStream stream)
 	{
-		ShaderVariablePtr u = std::make_shared<ShaderVariable>(uniform);
-		m_RendererUniforms.push_back(u);
-		return u;
+		return GetCurrentScope().DeclareVariable(GetTypeOfShaderStream(stream), "layout(location = " + std::to_string((int)stream) + ") in");
 	}
 
 	ShaderVariablePtr ShaderProgram::Uniform(const blt::string& linkName, ValueType type)
 	{
-		ShaderVariablePtr u = std::make_shared<ShaderVariable>(type);
-		m_Uniforms.push_back({ linkName, u });
-		return u;
+		ShaderVariablePtr var = GetCurrentScope().DeclareVariable(type, "uniform");
+		m_UserUniforms.push_back({ linkName, var.get() });
+		return var;
 	}
 
-	ShaderVariablePtr ShaderProgram::Uniform(const blt::string& linkName, ShaderLiteralPtr defaultValue)
+	ShaderVariablePtr ShaderProgram::RendererUniform(Bolt::RendererUniform uniform)
 	{
-		ShaderVariablePtr u = std::make_shared<ShaderVariable>(std::move(defaultValue));
-		m_Uniforms.push_back({ linkName, u });
-		return u;
+		ShaderVariablePtr var = GetCurrentScope().DeclareVariable(GetTypeOfRendererUniform(uniform), "uniform");
+		m_RendererUniforms.push_back({ uniform, var.get() });
+		return var;
+	}
+
+	ShaderVariablePtr ShaderProgram::DeclareVar(ValueType type)
+	{
+		return GetCurrentScope().DeclareVariable(type, "");
+	}
+
+	ShaderVariablePtr ShaderProgram::DefineVar(const ShaderValuePtr& value)
+	{
+		return GetCurrentScope().DefineVariable(value, "");
+	}
+
+	ShaderVariablePtr ShaderProgram::DeclarePassOut(ValueType type)
+	{
+		return GetCurrentScope().DeclarePassOut(type);
+	}
+
+	ShaderVariablePtr ShaderProgram::DeclarePassIn(const ShaderVariablePtr& passOut)
+	{
+		return GetCurrentScope().DeclarePassIn(passOut);
+	}
+
+	void ShaderProgram::AddMainScope()
+	{
+		AddScope<MainScope>(m_Builder.GetGlobalScope().GetScopeIndex() + 1, &m_Builder.GetGlobalScope());
+	}
+
+	void ShaderProgram::SetCurrentScope(ShaderScope* scope)
+	{
+		m_CurrentScope = scope;
 	}
 
 	void ShaderProgram::Reset()
 	{
-		m_PassValues.clear();
+		m_UserUniforms.clear();
 		m_RendererUniforms.clear();
-		m_Uniforms.clear();
 	}
 
 	void ShaderProgram::CompileUniformVariables(CompiledShaderProgram& program) const
 	{
-		for (const UserUniformMapping& uniform : m_Uniforms)
+		for (const auto& user : m_UserUniforms)
 		{
-			program.UserUniforms.push_back({ uniform.LinkName, uniform.Uniform->GetVarName(), uniform.Uniform->Type() });
+			program.UserUniforms.push_back({ user.LinkName, user.Var->GetVarName(), user.Var->Type() });
 		}
-		for (const ShaderVariablePtr& uniform : m_RendererUniforms)
+		for (const auto& renderer : m_RendererUniforms)
 		{
-			program.RendererUniforms.push_back({ uniform->GetVarName(), uniform->UniformType() });
+			program.RendererUniforms.push_back({ renderer.Var->GetVarName(), renderer.Uniform });
 		}
 	}
 

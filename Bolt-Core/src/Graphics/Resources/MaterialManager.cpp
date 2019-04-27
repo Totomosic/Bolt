@@ -38,42 +38,72 @@ namespace Bolt
 	void MaterialManager::CreateDefaultMaterial(MaterialBuilder& builder) const
 	{
 		VertexShader& vertex = builder.Factory().Vertex();
-		ShaderVariablePtr worldPosition = ShaderVariable::Create(ShaderFuncs::Mul(vertex.RendererUniform(RendererUniform::ModelMatrix), vertex.Position()));
-		ShaderVariablePtr viewPosition = ShaderVariable::Create(ShaderFuncs::Mul(vertex.RendererUniform(RendererUniform::ViewMatrix), worldPosition));
-		ShaderVariablePtr screenPosition = ShaderVariable::Create(ShaderFuncs::Mul(vertex.RendererUniform(RendererUniform::ProjectionMatrix), viewPosition));
-		vertex.SetVertexPosition(screenPosition);
-		ShaderPassValuePtr outColor = vertex.Pass(vertex.Color());
+		ShaderVariablePtr modelMatrix = vertex.RendererUniform(RendererUniform::ModelMatrix);
+		ShaderVariablePtr viewMatrix = vertex.RendererUniform(RendererUniform::ViewMatrix);
+		ShaderVariablePtr projectionMatrix = vertex.RendererUniform(RendererUniform::ProjectionMatrix);
+		ShaderVariablePtr outColor = vertex.DeclarePassOut(ValueType::Vector4f);
+		vertex.AddMainScope();
+		ShaderVariablePtr worldPos = vertex.DefineVar(ShaderFuncs::Mul(modelMatrix, vertex.Position()));
+		ShaderVariablePtr viewPos = vertex.DefineVar(ShaderFuncs::Mul(viewMatrix, worldPos));
+		ShaderVariablePtr screenPos = vertex.DefineVar(ShaderFuncs::Mul(projectionMatrix, viewPos));
+		vertex.SetVertexPosition(screenPos);
+		vertex.AddOperation<SetValueOp>(outColor, vertex.Color());
+
 		FragmentShader& fragment = builder.Factory().Fragment();
-		fragment.SetFragColor(ShaderFuncs::Mul(outColor, fragment.Uniform<Color>("Color")));
+		ShaderVariablePtr inColor = fragment.DeclarePassIn(outColor);
+		ShaderVariablePtr color = fragment.Uniform<Color>("Color");
+		fragment.AddMainScope();
+		fragment.SetFragColor(ShaderFuncs::Mul(outColor, color));
 	}
 
 	void MaterialManager::CreateTextureMaterial(MaterialBuilder& builder) const
 	{
 		VertexShader& vertex = builder.Factory().Vertex();
-		ShaderVariablePtr worldPosition = ShaderVariable::Create(ShaderFuncs::Mul(vertex.RendererUniform(RendererUniform::ModelMatrix), vertex.Position()));
-		ShaderVariablePtr viewPosition = ShaderVariable::Create(ShaderFuncs::Mul(vertex.RendererUniform(RendererUniform::ViewMatrix), worldPosition));
-		ShaderVariablePtr screenPosition = ShaderVariable::Create(ShaderFuncs::Mul(vertex.RendererUniform(RendererUniform::ProjectionMatrix), viewPosition));
-		vertex.SetVertexPosition(screenPosition);
-		ShaderPassValuePtr outColor = vertex.Pass(vertex.Color());
-		ShaderPassValuePtr outTexCoord = vertex.Pass(vertex.TexCoord());
+		ShaderVariablePtr modelMatrix = vertex.RendererUniform(RendererUniform::ModelMatrix);
+		ShaderVariablePtr viewMatrix = vertex.RendererUniform(RendererUniform::ViewMatrix);
+		ShaderVariablePtr projectionMatrix = vertex.RendererUniform(RendererUniform::ProjectionMatrix);
+		ShaderVariablePtr outColor = vertex.DeclarePassOut(ValueType::Vector4f);
+		ShaderVariablePtr outTexCoord = vertex.DeclarePassOut(ValueType::Vector2f);
+		vertex.AddMainScope();
+		ShaderVariablePtr worldPos = vertex.DefineVar(ShaderFuncs::Mul(modelMatrix, vertex.Position()));
+		ShaderVariablePtr viewPos = vertex.DefineVar(ShaderFuncs::Mul(viewMatrix, worldPos));
+		ShaderVariablePtr screenPos = vertex.DefineVar(ShaderFuncs::Mul(projectionMatrix, viewPos));
+		vertex.SetVertexPosition(screenPos);
+		vertex.AddOperation<SetValueOp>(outColor, vertex.Color());
+		vertex.AddOperation<SetValueOp>(outTexCoord, vertex.TexCoord());
+
 		FragmentShader& fragment = builder.Factory().Fragment();
-		ShaderUniformPtr texture = fragment.Uniform<Texture2D>("Texture");
-		fragment.SetFragColor(ShaderFuncs::Mul(ShaderFuncs::Mul(outColor, fragment.Uniform<Color>("Color")), ShaderFuncs::SampleTexture(texture, outTexCoord)));
+		ShaderVariablePtr inColor = fragment.DeclarePassIn(outColor);
+		ShaderVariablePtr inTexCoord = fragment.DeclarePassIn(outTexCoord);
+		ShaderVariablePtr color = fragment.Uniform<Color>("Color");
+		ShaderVariablePtr texture = fragment.Uniform<Texture2D>("Texture");
+		fragment.AddMainScope();
+		fragment.SetFragColor(ShaderFuncs::Mul(outColor, ShaderFuncs::Mul(ShaderFuncs::SampleTexture(texture, inTexCoord), color)));
 	}
 
 	void MaterialManager::CreateFontMaterial(MaterialBuilder& builder) const
 	{
 		VertexShader& vertex = builder.Factory().Vertex();
-		ShaderVariablePtr worldPosition = ShaderVariable::Create(ShaderFuncs::Mul(vertex.RendererUniform(RendererUniform::ModelMatrix), vertex.Position()));
-		ShaderVariablePtr viewPosition = ShaderVariable::Create(ShaderFuncs::Mul(vertex.RendererUniform(RendererUniform::ViewMatrix), worldPosition));
-		ShaderVariablePtr screenPosition = ShaderVariable::Create(ShaderFuncs::Mul(vertex.RendererUniform(RendererUniform::ProjectionMatrix), viewPosition));
-		vertex.SetVertexPosition(screenPosition);
-		ShaderPassValuePtr outColor = vertex.Pass(vertex.Color());
-		ShaderPassValuePtr outTexCoord = vertex.Pass(vertex.TexCoord());
+		ShaderVariablePtr modelMatrix = vertex.RendererUniform(RendererUniform::ModelMatrix);
+		ShaderVariablePtr viewMatrix = vertex.RendererUniform(RendererUniform::ViewMatrix);
+		ShaderVariablePtr projectionMatrix = vertex.RendererUniform(RendererUniform::ProjectionMatrix);
+		ShaderVariablePtr outColor = vertex.DeclarePassOut(ValueType::Vector4f);
+		ShaderVariablePtr outTexCoord = vertex.DeclarePassOut(ValueType::Vector2f);
+		vertex.AddMainScope();
+		ShaderVariablePtr worldPos = vertex.DefineVar(ShaderFuncs::Mul(modelMatrix, vertex.Position()));
+		ShaderVariablePtr viewPos = vertex.DefineVar(ShaderFuncs::Mul(viewMatrix, worldPos));
+		ShaderVariablePtr screenPos = vertex.DefineVar(ShaderFuncs::Mul(projectionMatrix, viewPos));
+		vertex.SetVertexPosition(screenPos);
+		vertex.AddOperation<SetValueOp>(outColor, vertex.Color());
+		vertex.AddOperation<SetValueOp>(outTexCoord, vertex.TexCoord());
+
 		FragmentShader& fragment = builder.Factory().Fragment();
-		ShaderUniformPtr texture = fragment.Uniform<Texture2D>("Font");
-		ShaderVariablePtr color = ShaderVariable::Create(ShaderFuncs::Mul(fragment.Uniform<Color>("Color"), outColor));
-		fragment.SetFragColor(ShaderFuncs::Vec4(ShaderFuncs::x(color), ShaderFuncs::y(color), ShaderFuncs::z(color), ShaderFuncs::x(ShaderFuncs::SampleTexture(texture, outTexCoord))));
+		ShaderVariablePtr inColor = fragment.DeclarePassIn(outColor);
+		ShaderVariablePtr inTexCoord = fragment.DeclarePassIn(outTexCoord);
+		ShaderVariablePtr color = fragment.Uniform<Color>("Color");
+		ShaderVariablePtr font = fragment.Uniform<Texture2D>("Font");
+		fragment.AddMainScope();
+		fragment.SetFragColor(ShaderFuncs::Vec4(ShaderFuncs::x(color), ShaderFuncs::y(color), ShaderFuncs::z(color), ShaderFuncs::x(ShaderFuncs::SampleTexture(font, outTexCoord))));
 	}
 
 }

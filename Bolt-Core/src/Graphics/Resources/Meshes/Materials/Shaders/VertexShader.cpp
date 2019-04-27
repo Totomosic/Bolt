@@ -6,9 +6,15 @@ namespace Bolt
 {
 
 	VertexShader::VertexShader() : ShaderProgram(ShaderType::Vertex),
-		m_VertexPosition(nullptr), m_PositionStream(ShaderStream::Position()), m_NormalStream(ShaderStream::Normal()), m_TexCoordStream(ShaderStream::TexCoord()), m_ColorStream(ShaderStream::Color()), m_TangentStream(ShaderStream::Tangent())
+		m_PositionStream(nullptr), m_NormalStream(nullptr), m_TexCoordStream(nullptr), m_ColorStream(nullptr), m_TangentStream(nullptr), m_VertexPosition(nullptr)
 	{
-	
+		m_VertexPosition = std::make_shared<ShaderVariable>(ValueType::Vector4f);
+		m_VertexPosition->m_Name = "gl_Position";
+		m_PositionStream = Stream(ShaderStream::Position);
+		m_NormalStream = Stream(ShaderStream::Normal);
+		m_TexCoordStream = Stream(ShaderStream::TexCoord);
+		m_ColorStream = Stream(ShaderStream::Color);
+		m_TangentStream = Stream(ShaderStream::Tangent);
 	}
 
 	const ShaderVariablePtr& VertexShader::Position() const
@@ -36,24 +42,15 @@ namespace Bolt
 		return m_TangentStream;
 	}
 
-	void VertexShader::SetVertexPosition(ShaderValuePtr value)
+	void VertexShader::SetVertexPosition(const ShaderValuePtr& value)
 	{
-		m_VertexPosition = std::make_shared<ShaderVariablePtr>(ShaderAttribute::VERTEX_POSITION, std::move(value));
+		AddOperation<SetValueOp>(m_VertexPosition, value);
 	}
 
 	CompiledShaderProgram VertexShader::Compile() const
 	{
-		BLT_ASSERT(m_VertexPosition != nullptr, "VertexPosition attribute has not been set");
 		CompiledShaderProgram result;
-		m_VertexPosition->Build(builder);
-
-		for (const ShaderVariablePtr& pass : m_PassValues)
-		{
-			pass->Build(builder);
-			pass->m_ShaderType = ShaderType::Ignore;
-		}
-
-		result.Source = builder.GetSource();
+		result.Source = m_Builder.Build();
 		CompileUniformVariables(result);
 		return result;
 	}
@@ -61,7 +58,6 @@ namespace Bolt
 	void VertexShader::Reset()
 	{
 		ShaderProgram::Reset();
-		m_VertexPosition = nullptr;
 	}
 
 }

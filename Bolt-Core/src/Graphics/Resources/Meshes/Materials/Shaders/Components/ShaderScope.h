@@ -24,22 +24,21 @@ namespace Bolt
 		bool IsDefinedInThisScope(const ShaderVariable* var) const;
 		bool IsDefined(const ShaderVariable* var) const;
 
-		ShaderVariablePtr DefineVariable(const ShaderValuePtr& value);
-		ShaderVariablePtr DeclareVariable(ValueType type);
+		ShaderVariablePtr DefineVariable(const ShaderValuePtr& value, const blt::string& meta = "");
+		ShaderVariablePtr DeclareVariable(ValueType type, const blt::string& meta = "");
+		ShaderVariablePtr DeclarePassIn(const ShaderVariablePtr& outVar, const blt::string& meta = "");
+		ShaderVariablePtr DeclarePassOut(ValueType type, const blt::string& meta = "");
 		void AddOperation(std::unique_ptr<ShaderOp>&& op);
 		virtual void Build(ShaderBuilder& builder) const = 0;
+		void AddChildScope(std::unique_ptr<ShaderScope>&& scope);
 
 		ShaderScope& AddMainScope();
 
+		friend class ShaderProgram;
+
 	protected:
 		void BuildOperations(ShaderBuilder& builder) const;
-
 		void AddDeclaredVar(const ShaderVariable* var);
-		void AddChildScope(std::unique_ptr<ShaderScope>&& scope);
-
-		ShaderVariablePtr DefineVarPrivate(const ShaderValuePtr& value, const blt::string& meta);
-		ShaderVariablePtr DeclareVarPrivate(ValueType type, const blt::string& meta);
-
 	};
 
 }
