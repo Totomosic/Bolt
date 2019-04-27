@@ -17,7 +17,7 @@ namespace Bolt
 		blt::string m_TemplateString;
 
 	public:
-		ShaderFuncResult(const blt::string& templateString, const std::vector<ShaderValuePtr>& inputs, ValueType resultType);
+		ShaderFuncResult(const blt::string& templateString, const std::vector<ShaderValuePtr>& inputs, ValueType resultType, ValueTypeDim dim = ValueTypeDim::Single);
 
 		virtual void Build(ShaderBuilder& builder) const override;
 

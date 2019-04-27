@@ -12,12 +12,14 @@ namespace Bolt
 	{
 	protected:
 		ValueType m_ValueType;
+		ValueTypeDim m_Dimension;
 
 	public:
 		ShaderValue();
-		ShaderValue(ValueType type);
+		ShaderValue(ValueType type, ValueTypeDim dim);
 
 		ValueType Type() const;
+		ValueTypeDim TypeDimension() const;
 
 		virtual void Build(ShaderBuilder& builder) const = 0;
 

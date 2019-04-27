@@ -28,6 +28,7 @@ namespace Bolt
 		ShaderVariablePtr DeclareVariable(ValueType type, const blt::string& meta = "");
 		ShaderVariablePtr DeclarePassIn(const ShaderVariablePtr& outVar, const blt::string& meta = "");
 		ShaderVariablePtr DeclarePassOut(ValueType type, const blt::string& meta = "");
+		ShaderVariablePtr DeclareArray(ValueType type, const ShaderLiteralPtr& length, const blt::string& meta = "");
 		void AddOperation(std::unique_ptr<ShaderOp>&& op);
 		virtual void Build(ShaderBuilder& builder) const = 0;
 		void AddChildScope(std::unique_ptr<ShaderScope>&& scope);

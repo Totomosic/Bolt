@@ -47,7 +47,7 @@ namespace Bolt
 		ShaderVariablePtr viewPos = vertex.DefineVar(ShaderFuncs::Mul(viewMatrix, worldPos));
 		ShaderVariablePtr screenPos = vertex.DefineVar(ShaderFuncs::Mul(projectionMatrix, viewPos));
 		vertex.SetVertexPosition(screenPos);
-		vertex.AddOperation<SetValueOp>(outColor, vertex.Color());
+		vertex.SetVariable(outColor, vertex.Color());
 
 		FragmentShader& fragment = builder.Factory().Fragment();
 		ShaderVariablePtr inColor = fragment.DeclarePassIn(outColor);
@@ -69,8 +69,8 @@ namespace Bolt
 		ShaderVariablePtr viewPos = vertex.DefineVar(ShaderFuncs::Mul(viewMatrix, worldPos));
 		ShaderVariablePtr screenPos = vertex.DefineVar(ShaderFuncs::Mul(projectionMatrix, viewPos));
 		vertex.SetVertexPosition(screenPos);
-		vertex.AddOperation<SetValueOp>(outColor, vertex.Color());
-		vertex.AddOperation<SetValueOp>(outTexCoord, vertex.TexCoord());
+		vertex.SetVariable(outColor, vertex.Color());
+		vertex.SetVariable(outTexCoord, vertex.TexCoord());
 
 		FragmentShader& fragment = builder.Factory().Fragment();
 		ShaderVariablePtr inColor = fragment.DeclarePassIn(outColor);
@@ -94,8 +94,8 @@ namespace Bolt
 		ShaderVariablePtr viewPos = vertex.DefineVar(ShaderFuncs::Mul(viewMatrix, worldPos));
 		ShaderVariablePtr screenPos = vertex.DefineVar(ShaderFuncs::Mul(projectionMatrix, viewPos));
 		vertex.SetVertexPosition(screenPos);
-		vertex.AddOperation<SetValueOp>(outColor, vertex.Color());
-		vertex.AddOperation<SetValueOp>(outTexCoord, vertex.TexCoord());
+		vertex.SetVariable(outColor, vertex.Color());
+		vertex.SetVariable(outTexCoord, vertex.TexCoord());
 
 		FragmentShader& fragment = builder.Factory().Fragment();
 		ShaderVariablePtr inColor = fragment.DeclarePassIn(outColor);

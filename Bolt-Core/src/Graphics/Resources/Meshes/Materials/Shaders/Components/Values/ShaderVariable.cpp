@@ -5,7 +5,7 @@
 namespace Bolt
 {
 
-	ShaderVariable::ShaderVariable(ValueType type) : ShaderValue(type),
+	ShaderVariable::ShaderVariable(ValueType type, ValueTypeDim dim) : ShaderValue(type, dim),
 		m_ShaderType(ShaderType::Ignore)
 	{
 	

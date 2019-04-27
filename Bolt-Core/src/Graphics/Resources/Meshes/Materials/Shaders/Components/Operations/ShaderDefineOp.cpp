@@ -8,7 +8,7 @@ namespace Bolt
 	ShaderDefineOp::ShaderDefineOp(const ShaderVariablePtr& var, const ShaderValuePtr& value, const blt::string& meta) : ShaderOp(),
 		m_Variable(var), m_Value(value), m_MetaData(meta)
 	{
-	
+		BLT_ASSERT(m_Variable->Type() == m_Value->Type(), "Type of value must match variable");
 	}
 
 	void ShaderDefineOp::Build(ShaderBuilder& builder) const
@@ -20,7 +20,6 @@ namespace Bolt
 		m_Variable->m_Name = builder.GetVariableName();
 		builder.Write(ValueTypeToGLSLString(m_Variable->Type()) + ' ' + m_Variable->GetVarName() + " = ");
 		m_Value->Build(builder);
-		builder.Write(';');
 	}
 
 }

@@ -42,9 +42,14 @@ namespace Bolt
 		return m_TangentStream;
 	}
 
+	const ShaderVariablePtr& VertexShader::VertexPosition() const
+	{
+		return m_VertexPosition;
+	}
+
 	void VertexShader::SetVertexPosition(const ShaderValuePtr& value)
 	{
-		AddOperation<SetValueOp>(m_VertexPosition, value);
+		SetVariable(m_VertexPosition, value);
 	}
 
 	CompiledShaderProgram VertexShader::Compile() const

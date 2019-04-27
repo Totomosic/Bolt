@@ -19,7 +19,7 @@ namespace Bolt
 		}
 		builder.Write("out ");
 		m_OutVar->m_Name = builder.GetPassName();
-		builder.Write(ValueTypeToGLSLString(m_OutVar->Type()) + ' ' + m_OutVar->GetVarName() + ';');
+		builder.Write(ValueTypeToGLSLString(m_OutVar->Type()) + ' ' + m_OutVar->GetVarName());
 	}
 
 }

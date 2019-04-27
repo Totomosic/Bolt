@@ -10,6 +10,8 @@ namespace Bolt
 		blt::string LinkName;
 		blt::string VarName;
 		ValueType Type;
+		ValueTypeDim Dimension;
+		int Length;
 	};
 
 	struct BLT_API UserUniformPtr
@@ -17,6 +19,7 @@ namespace Bolt
 	public:
 		blt::string LinkName;
 		const ShaderVariable* Var;
+		int Length;
 	};
 
 	struct BLT_API RendererUniformInfo
@@ -24,6 +27,7 @@ namespace Bolt
 	public:
 		blt::string VarName;
 		RendererUniform Uniform;
+		int Length;
 	};
 
 	struct BLT_API RendererUniformPtr
@@ -31,6 +35,7 @@ namespace Bolt
 	public:
 		RendererUniform Uniform;
 		const ShaderVariable* Var;
+		int Length;
 	};
 
 	struct BLT_API CompiledShaderProgram
@@ -60,11 +65,13 @@ namespace Bolt
 
 		ShaderVariablePtr Stream(ShaderStream stream);
 		ShaderVariablePtr Uniform(const blt::string& linkName, ValueType type);
+		ShaderVariablePtr UniformArray(const blt::string& linkName, ValueType type, size_t length);
 		ShaderVariablePtr RendererUniform(Bolt::RendererUniform uniform);
 		ShaderVariablePtr DeclareVar(ValueType type);
 		ShaderVariablePtr DefineVar(const ShaderValuePtr& value);
 		ShaderVariablePtr DeclarePassOut(ValueType type);
 		ShaderVariablePtr DeclarePassIn(const ShaderVariablePtr& passOut);
+		ShaderVariablePtr DeclareArray(ValueType type, size_t length);
 
 		template<typename T>
 		ShaderVariablePtr Uniform(const blt::string& linkName)
@@ -72,7 +79,9 @@ namespace Bolt
 			return Uniform(linkName, GetValueType<T>());
 		}
 
-		void AddMainScope();
+		void SetVariable(const ShaderVariablePtr& var, const ShaderValuePtr& value);
+
+		MainScope* AddMainScope();
 		void SetCurrentScope(ShaderScope* scope);
 		virtual CompiledShaderProgram Compile() const = 0;
 		virtual void Reset();
@@ -80,7 +89,7 @@ namespace Bolt
 		template<typename T, typename... Args>
 		T* AddScope(Args&& ... args)
 		{
-			std::unique_ptr<T> scope = std::make_unique<T>(std::forward<Args>(args)...);
+			std::unique_ptr<T> scope = std::make_unique<T>(GetCurrentScope().GetScopeIndex() + 1, &GetCurrentScope(), std::forward<Args>(args)...);
 			T* ptr = scope.get();
 			GetCurrentScope().AddChildScope(std::move(scope));
 			SetCurrentScope((ShaderScope*)ptr);

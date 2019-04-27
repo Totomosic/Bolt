@@ -10,9 +10,14 @@ namespace Bolt
 		m_FragColor = GetCurrentScope().DeclareVariable(ValueType::Vector4f, "layout(location = 0) out");
 	}
 
+	const ShaderVariablePtr& FragmentShader::FragColor() const
+	{
+		return m_FragColor;
+	}
+
 	void FragmentShader::SetFragColor(const ShaderValuePtr& value)
 	{
-		AddOperation<SetValueOp>(m_FragColor, value);
+		SetVariable(m_FragColor, value);
 	}
 
 	CompiledShaderProgram FragmentShader::Compile() const

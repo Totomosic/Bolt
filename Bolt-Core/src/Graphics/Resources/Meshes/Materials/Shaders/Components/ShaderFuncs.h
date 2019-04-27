@@ -17,6 +17,14 @@ namespace Bolt
 		static ShaderFuncResultPtr Dot(ShaderValuePtr left, ShaderValuePtr right);
 		static ShaderFuncResultPtr Cross(ShaderValuePtr left, ShaderValuePtr right);
 
+		static ShaderFuncResultPtr LessThan(ShaderValuePtr left, ShaderValuePtr right);
+		static ShaderFuncResultPtr LequalThan(ShaderValuePtr left, ShaderValuePtr right);
+		static ShaderFuncResultPtr EqualTo(ShaderValuePtr left, ShaderValuePtr right);
+		static ShaderFuncResultPtr GequalThan(ShaderValuePtr left, ShaderValuePtr right);
+		static ShaderFuncResultPtr GreaterThan(ShaderValuePtr left, ShaderValuePtr right);
+		static ShaderFuncResultPtr NotEqualTo(ShaderValuePtr left, ShaderValuePtr right);
+		static ShaderFuncResultPtr Not(ShaderValuePtr value);
+
 		static ShaderFuncResultPtr x(ShaderValuePtr value);
 		static ShaderFuncResultPtr y(ShaderValuePtr value);
 		static ShaderFuncResultPtr z(ShaderValuePtr value);
@@ -35,6 +43,8 @@ namespace Bolt
 		static ShaderFuncResultPtr Vec4(ShaderValuePtr xwyz);
 
 		static ShaderFuncResultPtr SampleTexture(ShaderValuePtr texture, ShaderValuePtr texCoords);
+
+		static ShaderFuncResultPtr Index(ShaderValuePtr arr, ShaderValuePtr index);
 
 	private:
 		static ValueType DeduceOutputTypeNumeric(const ShaderValuePtr& left, const ShaderValuePtr& right);

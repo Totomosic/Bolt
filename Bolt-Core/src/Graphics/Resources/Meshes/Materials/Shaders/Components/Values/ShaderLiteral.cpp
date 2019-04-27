@@ -5,7 +5,7 @@
 namespace Bolt
 {
 
-	ShaderLiteral::ShaderLiteral(const blt::string& valueString, ValueType type) : ShaderValue(type),
+	ShaderLiteral::ShaderLiteral(const blt::string& valueString, ValueType type, ValueTypeDim dim) : ShaderValue(type, dim),
 		m_ValueString(valueString)
 	{
 	
@@ -19,6 +19,21 @@ namespace Bolt
 	void ShaderLiteral::Build(ShaderBuilder& builder) const
 	{
 		builder.Write(m_ValueString);
+	}
+
+	ShaderLiteralPtr ShaderLiteral::True()
+	{
+		return FromBool(true);
+	}
+
+	ShaderLiteralPtr ShaderLiteral::False()
+	{
+		return FromBool(false);
+	}
+
+	ShaderLiteralPtr ShaderLiteral::FromBool(bool value)
+	{
+		return std::make_shared<ShaderLiteral>((value) ? "true" : "false", ValueType::Bool);
 	}
 
 	ShaderLiteralPtr ShaderLiteral::FromInt(int value)
