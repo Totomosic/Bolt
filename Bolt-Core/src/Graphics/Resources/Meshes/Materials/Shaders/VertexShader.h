@@ -23,6 +23,7 @@ namespace Bolt
 		const ShaderVariablePtr& TexCoord() const;
 		const ShaderVariablePtr& Color() const;
 		const ShaderVariablePtr& Tangent() const;
+		const ShaderVariablePtr& VertexPosition() const;
 
 		void SetVertexPosition(const ShaderValuePtr& value);
 

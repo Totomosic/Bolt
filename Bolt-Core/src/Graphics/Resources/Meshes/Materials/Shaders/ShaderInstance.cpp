@@ -38,9 +38,22 @@ namespace Bolt
 		std::vector<RendererUniformLocation> result;
 		for (const RendererUniformInfo& uniform : uniforms)
 		{
-			RendererUniformLocation loc = { shader.GetUniformLocation(uniform.VarName), uniform.Uniform };
-			BLT_ASSERT(loc.Location != -1, "Unable to find renderer uniform with name " + uniform.VarName);
-			result.push_back(std::move(loc));
+			if (GetTypeDimOfRendererUniform(uniform.Uniform) == ValueTypeDim::Array)
+			{
+				for (int i = 0; i < uniform.Length; i++)
+				{
+					blt::string arrPart = '[' + std::to_string(i) + ']';
+					RendererUniformLocation loc = { shader.GetUniformLocation(uniform.VarName + arrPart), uniform.Uniform, false };
+					BLT_ASSERT(loc.Location != -1, "Unable to find renderer uniform with name " + uniform.VarName + arrPart);
+					result.push_back(std::move(loc));
+				}
+			}
+			else
+			{
+				RendererUniformLocation loc = { shader.GetUniformLocation(uniform.VarName), uniform.Uniform, true };
+				BLT_ASSERT(loc.Location != -1, "Unable to find renderer uniform with name " + uniform.VarName);
+				result.push_back(std::move(loc));
+			}
 		}
 		return result;
 	}
@@ -50,9 +63,22 @@ namespace Bolt
 		std::vector<UserUniformLocation> result;
 		for (const UserUniformInfo& uniform : uniforms)
 		{
-			UserUniformLocation loc = { uniform.LinkName, shader.GetUniformLocation(uniform.VarName), uniform.Type };
-			BLT_ASSERT(loc.Location != -1, "Unable to find user uniform with name " + uniform.VarName);
-			result.push_back(std::move(loc));
+			if (uniform.Dimension == ValueTypeDim::Array)
+			{
+				for (int i = 0; i < uniform.Length; i++)
+				{
+					blt::string arrPart = '[' + std::to_string(i) + ']';
+					UserUniformLocation loc = { uniform.LinkName + arrPart, shader.GetUniformLocation(uniform.VarName + arrPart), uniform.Type, false };
+					BLT_ASSERT(loc.Location != -1, "Unable to find user uniform with name " + uniform.VarName + arrPart);
+					result.push_back(std::move(loc));
+				}
+			}
+			else
+			{
+				UserUniformLocation loc = { uniform.LinkName, shader.GetUniformLocation(uniform.VarName), uniform.Type, true };
+				BLT_ASSERT(loc.Location != -1, "Unable to find user uniform with name " + uniform.VarName);
+				result.push_back(std::move(loc));
+			}
 		}
 		return result;
 	}

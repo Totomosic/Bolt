@@ -11,6 +11,8 @@ namespace Bolt
 	private:
 		VertexShader m_Vertex;
 		FragmentShader m_Fragment;
+		mutable std::shared_ptr<ShaderInstance> m_CurrentShaderInstance;
+		mutable bool m_IsValid;
 
 	public:
 		ShaderFactory();
@@ -18,6 +20,7 @@ namespace Bolt
 		VertexShader& Vertex();
 		FragmentShader& Fragment();
 
+		void ForceRecompile();
 		ShaderLinkContext BuildShader() const;
 
 	};

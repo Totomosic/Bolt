@@ -18,7 +18,7 @@ namespace Bolt
 			builder.Write(m_MetaData + ' ');
 		}
 		m_Variable->m_Name = builder.GetVariableName();
-		builder.Write(ValueTypeToGLSLString(m_Variable->Type()) + ' ' + m_Variable->GetVarName() + ';');
+		builder.Write(ValueTypeToGLSLString(m_Variable->Type()) + ' ' + m_Variable->GetVarName());
 	}
 
 }

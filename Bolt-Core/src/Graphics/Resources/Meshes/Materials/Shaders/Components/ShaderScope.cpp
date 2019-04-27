@@ -70,6 +70,14 @@ namespace Bolt
 		return var;
 	}
 
+	ShaderVariablePtr ShaderScope::DeclareArray(ValueType type, const ShaderLiteralPtr& length, const blt::string& meta)
+	{
+		ShaderVariablePtr var = std::make_shared<ShaderVariable>(type, ValueTypeDim::Array);
+		AddOperation(std::make_unique<DeclareArrayOp>(var, length, meta));
+		AddDeclaredVar(var.get());
+		return var;
+	}
+
 	void ShaderScope::AddOperation(std::unique_ptr<ShaderOp>&& op)
 	{
 		m_Operations.push_back(std::move(op));
@@ -94,6 +102,7 @@ namespace Bolt
 		for (const auto& op : m_Operations)
 		{
 			op->Build(builder);
+			builder.Write(';');
 			builder.NextLine();
 		}
 	}

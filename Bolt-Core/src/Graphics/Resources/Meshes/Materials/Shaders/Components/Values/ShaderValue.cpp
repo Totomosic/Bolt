@@ -9,8 +9,8 @@ namespace Bolt
 	
 	}
 
-	ShaderValue::ShaderValue(ValueType type)
-		: m_ValueType(type)
+	ShaderValue::ShaderValue(ValueType type, ValueTypeDim dim)
+		: m_ValueType(type), m_Dimension(dim)
 	{
 	
 	}
@@ -18,6 +18,11 @@ namespace Bolt
 	ValueType ShaderValue::Type() const
 	{
 		return m_ValueType;
+	}
+
+	ValueTypeDim ShaderValue::TypeDimension() const
+	{
+		return m_Dimension;
 	}
 
 }

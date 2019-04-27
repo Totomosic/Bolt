@@ -22,20 +22,31 @@ namespace Bolt
 
 	ShaderVariablePtr ShaderProgram::Stream(ShaderStream stream)
 	{
+		BLT_ASSERT(&GetCurrentScope() == &m_Builder.GetGlobalScope(), "Stream should be declared in global scope, before main() scope");
 		return GetCurrentScope().DeclareVariable(GetTypeOfShaderStream(stream), "layout(location = " + std::to_string((int)stream) + ") in");
 	}
 
 	ShaderVariablePtr ShaderProgram::Uniform(const blt::string& linkName, ValueType type)
 	{
+		BLT_ASSERT(&GetCurrentScope() == &m_Builder.GetGlobalScope(), "Uniforms should be declared in global scope, before main() scope");
 		ShaderVariablePtr var = GetCurrentScope().DeclareVariable(type, "uniform");
-		m_UserUniforms.push_back({ linkName, var.get() });
+		m_UserUniforms.push_back({ linkName, var.get(), 0 });
+		return var;
+	}
+
+	ShaderVariablePtr ShaderProgram::UniformArray(const blt::string& linkName, ValueType type, size_t length)
+	{
+		BLT_ASSERT(&GetCurrentScope() == &m_Builder.GetGlobalScope(), "Uniforms should be declared in global scope, before main() scope");
+		ShaderVariablePtr var = GetCurrentScope().DeclareArray(type, ShaderLiteral::FromInt((int)length), "uniform");
+		m_UserUniforms.push_back({ linkName, var.get(), (int)length });
 		return var;
 	}
 
 	ShaderVariablePtr ShaderProgram::RendererUniform(Bolt::RendererUniform uniform)
 	{
+		BLT_ASSERT(&GetCurrentScope() == &m_Builder.GetGlobalScope(), "Uniforms should be declared in global scope, before main() scope");
 		ShaderVariablePtr var = GetCurrentScope().DeclareVariable(GetTypeOfRendererUniform(uniform), "uniform");
-		m_RendererUniforms.push_back({ uniform, var.get() });
+		m_RendererUniforms.push_back({ uniform, var.get(), 0 });
 		return var;
 	}
 
@@ -51,17 +62,29 @@ namespace Bolt
 
 	ShaderVariablePtr ShaderProgram::DeclarePassOut(ValueType type)
 	{
+		BLT_ASSERT(&GetCurrentScope() == &m_Builder.GetGlobalScope(), "Pass values should be declared in global scope, before main() scope");
 		return GetCurrentScope().DeclarePassOut(type);
 	}
 
 	ShaderVariablePtr ShaderProgram::DeclarePassIn(const ShaderVariablePtr& passOut)
 	{
+		BLT_ASSERT(&GetCurrentScope() == &m_Builder.GetGlobalScope(), "Pass values should be declared in global scope, before main() scope");
 		return GetCurrentScope().DeclarePassIn(passOut);
 	}
 
-	void ShaderProgram::AddMainScope()
+	ShaderVariablePtr ShaderProgram::DeclareArray(ValueType type, size_t length)
 	{
-		AddScope<MainScope>(m_Builder.GetGlobalScope().GetScopeIndex() + 1, &m_Builder.GetGlobalScope());
+		return GetCurrentScope().DeclareArray(type, ShaderLiteral::FromInt((int)length));
+	}
+
+	void ShaderProgram::SetVariable(const ShaderVariablePtr& var, const ShaderValuePtr& value)
+	{
+		AddOperation<SetValueOp>(var, value);
+	}
+
+	MainScope* ShaderProgram::AddMainScope()
+	{
+		return AddScope<MainScope>();
 	}
 
 	void ShaderProgram::SetCurrentScope(ShaderScope* scope)
@@ -79,11 +102,11 @@ namespace Bolt
 	{
 		for (const auto& user : m_UserUniforms)
 		{
-			program.UserUniforms.push_back({ user.LinkName, user.Var->GetVarName(), user.Var->Type() });
+			program.UserUniforms.push_back({ user.LinkName, user.Var->GetVarName(), user.Var->Type(), user.Var->TypeDimension(), user.Length });
 		}
 		for (const auto& renderer : m_RendererUniforms)
 		{
-			program.RendererUniforms.push_back({ renderer.Var->GetVarName(), renderer.Uniform });
+			program.RendererUniforms.push_back({ renderer.Var->GetVarName(), renderer.Uniform, renderer.Length });
 		}
 	}
 

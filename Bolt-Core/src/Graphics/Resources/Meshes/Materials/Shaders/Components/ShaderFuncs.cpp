@@ -6,6 +6,7 @@ namespace Bolt
 
 	ShaderFuncResultPtr ShaderFuncs::Add(ShaderValuePtr left, ShaderValuePtr right)
 	{
+		BLT_ASSERT(left->TypeDimension() == ValueTypeDim::Single && right->TypeDimension() == ValueTypeDim::Single, "Cannot operate on arrays");
 		BLT_ASSERT(TestDimensionEquality(left, right), "Inputs must be of the same dimension to be added");
 		ValueType resultType = DeduceOutputTypeNumeric(left, right);
 		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("(@0 + @1)", std::vector<ShaderValuePtr>{ std::move(left), std::move(right) }, resultType);
@@ -14,6 +15,7 @@ namespace Bolt
 
 	ShaderFuncResultPtr ShaderFuncs::Sub(ShaderValuePtr left, ShaderValuePtr right)
 	{
+		BLT_ASSERT(left->TypeDimension() == ValueTypeDim::Single && right->TypeDimension() == ValueTypeDim::Single, "Cannot operate on arrays");
 		BLT_ASSERT(TestDimensionEquality(left, right), "Inputs must be of the same dimension to be subtracted");
 		ValueType resultType = DeduceOutputTypeNumeric(left, right);
 		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("(@0 - @1)", std::vector<ShaderValuePtr>{ std::move(left), std::move(right) }, resultType);
@@ -22,6 +24,7 @@ namespace Bolt
 
 	ShaderFuncResultPtr ShaderFuncs::Mul(ShaderValuePtr left, ShaderValuePtr right)
 	{
+		BLT_ASSERT(left->TypeDimension() == ValueTypeDim::Single && right->TypeDimension() == ValueTypeDim::Single, "Cannot operate on arrays");
 		BLT_ASSERT(TestDimensionEquality(left, right) || TestLegalMultiply(left, right), "Inputs must be of the same dimension to be multiplied");
 		ValueType resultType = DeduceOutputTypeNumeric(left, right);
 		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("(@0 * @1)", std::vector<ShaderValuePtr>{ std::move(left), std::move(right) }, resultType);
@@ -30,6 +33,7 @@ namespace Bolt
 
 	ShaderFuncResultPtr ShaderFuncs::Div(ShaderValuePtr left, ShaderValuePtr right)
 	{
+		BLT_ASSERT(left->TypeDimension() == ValueTypeDim::Single && right->TypeDimension() == ValueTypeDim::Single, "Cannot operate on arrays");
 		BLT_ASSERT(TestDimensionEquality(left, right), "Inputs must be of the same dimension to be divided");
 		BLT_ASSERT(TestNotMatrix(left, right), "Matrices cannot be divided");
 		ValueType resultType = DeduceOutputTypeNumeric(left, right);
@@ -39,12 +43,14 @@ namespace Bolt
 
 	ShaderFuncResultPtr ShaderFuncs::Neg(ShaderValuePtr value)
 	{
+		BLT_ASSERT(value->TypeDimension() == ValueTypeDim::Single, "Cannot operate on arrays");
 		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("-(@0)", std::vector<ShaderValuePtr>{ std::move(value) }, value->Type());
 		return result;
 	}
 
 	ShaderFuncResultPtr ShaderFuncs::Dot(ShaderValuePtr left, ShaderValuePtr right)
 	{
+		BLT_ASSERT(left->TypeDimension() == ValueTypeDim::Single && right->TypeDimension() == ValueTypeDim::Single, "Cannot operate on arrays");
 		BLT_ASSERT(TestDimensionEquality(left, right), "Inputs must be of the same dimension to be dotted");
 		BLT_ASSERT(ValueTypeIsVector(left->Type()), "Inputs must be vectors to be dotted");
 		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("dot(@0, @1)", std::vector<ShaderValuePtr>{ std::move(left), std::move(right) }, ValueType::Float);
@@ -53,14 +59,72 @@ namespace Bolt
 
 	ShaderFuncResultPtr ShaderFuncs::Cross(ShaderValuePtr left, ShaderValuePtr right)
 	{
+		BLT_ASSERT(left->TypeDimension() == ValueTypeDim::Single && right->TypeDimension() == ValueTypeDim::Single, "Cannot operate on arrays");
 		BLT_ASSERT(TestDimensionEquality(left, right), "Inputs must be of the same dimension to be dotted");
-		BLT_ASSERT(left->Type() == ValueType::Vector3f, "Inputs must be Vec3 to be dotted");
+		BLT_ASSERT(left->Type() == ValueType::Vector3f, "Inputs must be Vec3 to be crossed");
 		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("cross(@0, @1)", std::vector<ShaderValuePtr>{ std::move(left), std::move(right) }, ValueType::Vector3f);
+		return result;
+	}
+
+	ShaderFuncResultPtr ShaderFuncs::LessThan(ShaderValuePtr left, ShaderValuePtr right)
+	{
+		BLT_ASSERT(left->TypeDimension() == ValueTypeDim::Single && right->TypeDimension() == ValueTypeDim::Single, "Cannot operate on arrays");
+		BLT_ASSERT(ValueTypeIsNumeric(left->Type()) && ValueTypeIsNumeric(right->Type()), "Inputs must be numeric to be compared");
+		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("(@0 < @1)", std::vector<ShaderValuePtr>{ std::move(left), std::move(right) }, ValueType::Bool);
+		return result;
+	}
+
+	ShaderFuncResultPtr ShaderFuncs::LequalThan(ShaderValuePtr left, ShaderValuePtr right)
+	{
+		BLT_ASSERT(left->TypeDimension() == ValueTypeDim::Single && right->TypeDimension() == ValueTypeDim::Single, "Cannot operate on arrays");
+		BLT_ASSERT(ValueTypeIsNumeric(left->Type()) && ValueTypeIsNumeric(right->Type()), "Inputs must be numeric to be compared");
+		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("(@0 <= @1)", std::vector<ShaderValuePtr>{ std::move(left), std::move(right) }, ValueType::Bool);
+		return result;
+	}
+
+	ShaderFuncResultPtr ShaderFuncs::EqualTo(ShaderValuePtr left, ShaderValuePtr right)
+	{
+		BLT_ASSERT(left->TypeDimension() == ValueTypeDim::Single && right->TypeDimension() == ValueTypeDim::Single, "Cannot operate on arrays");
+		BLT_ASSERT(ValueTypeIsNumeric(left->Type()) && ValueTypeIsNumeric(right->Type()), "Inputs must be numeric to be compared");
+		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("(@0 == @1)", std::vector<ShaderValuePtr>{ std::move(left), std::move(right) }, ValueType::Bool);
+		return result;
+	}
+
+	ShaderFuncResultPtr ShaderFuncs::GequalThan(ShaderValuePtr left, ShaderValuePtr right)
+	{
+		BLT_ASSERT(left->TypeDimension() == ValueTypeDim::Single && right->TypeDimension() == ValueTypeDim::Single, "Cannot operate on arrays");
+		BLT_ASSERT(ValueTypeIsNumeric(left->Type()) && ValueTypeIsNumeric(right->Type()), "Inputs must be numeric to be compared");
+		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("(@0 >= @1)", std::vector<ShaderValuePtr>{ std::move(left), std::move(right) }, ValueType::Bool);
+		return result;
+	}
+
+	ShaderFuncResultPtr ShaderFuncs::GreaterThan(ShaderValuePtr left, ShaderValuePtr right)
+	{
+		BLT_ASSERT(left->TypeDimension() == ValueTypeDim::Single && right->TypeDimension() == ValueTypeDim::Single, "Cannot operate on arrays");
+		BLT_ASSERT(ValueTypeIsNumeric(left->Type()) && ValueTypeIsNumeric(right->Type()), "Inputs must be numeric to be compared");
+		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("(@0 > @1)", std::vector<ShaderValuePtr>{ std::move(left), std::move(right) }, ValueType::Bool);
+		return result;
+	}
+
+	ShaderFuncResultPtr ShaderFuncs::NotEqualTo(ShaderValuePtr left, ShaderValuePtr right)
+	{
+		BLT_ASSERT(left->TypeDimension() == ValueTypeDim::Single && right->TypeDimension() == ValueTypeDim::Single, "Cannot operate on arrays");
+		BLT_ASSERT(TestDimensionEquality(left, right), "Inputs must be same dimension");
+		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("(@0 != @1)", std::vector<ShaderValuePtr>{ std::move(left), std::move(right) }, ValueType::Bool);
+		return result;
+	}
+
+	ShaderFuncResultPtr ShaderFuncs::Not(ShaderValuePtr value)
+	{
+		BLT_ASSERT(value->TypeDimension() == ValueTypeDim::Single, "Cannot operate on arrays");
+		BLT_ASSERT(value->Type() == ValueType::Bool, "Input must be boolean");
+		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("!(@0)", std::vector<ShaderValuePtr>{ std::move(value) }, ValueType::Bool);
 		return result;
 	}
 
 	ShaderFuncResultPtr ShaderFuncs::x(ShaderValuePtr value)
 	{
+		BLT_ASSERT(value->TypeDimension() == ValueTypeDim::Single, "Cannot operate on arrays");
 		BLT_ASSERT(ValueTypeIsVector(value->Type()), "Inputs must be vectors to be swizzelled");
 		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("(@0).x", std::vector<ShaderValuePtr>{ std::move(value) }, ValueType::Float);
 		return result;
@@ -68,6 +132,7 @@ namespace Bolt
 
 	ShaderFuncResultPtr ShaderFuncs::y(ShaderValuePtr value)
 	{
+		BLT_ASSERT(value->TypeDimension() == ValueTypeDim::Single, "Cannot operate on arrays");
 		BLT_ASSERT(ValueTypeIsVector(value->Type()), "Inputs must be vectors to be swizzelled");
 		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("(@0).y", std::vector<ShaderValuePtr>{ std::move(value) }, ValueType::Float);
 		return result;
@@ -75,6 +140,7 @@ namespace Bolt
 
 	ShaderFuncResultPtr ShaderFuncs::z(ShaderValuePtr value)
 	{
+		BLT_ASSERT(value->TypeDimension() == ValueTypeDim::Single, "Cannot operate on arrays");
 		BLT_ASSERT(ValueTypeIsVector(value->Type()), "Inputs must be vectors to be swizzelled");
 		BLT_ASSERT(ValueTypeGetDimension(value->Type()) > 2, "Input must be greater than 2D");
 		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("(@0).z", std::vector<ShaderValuePtr>{ std::move(value) }, ValueType::Float);
@@ -83,6 +149,7 @@ namespace Bolt
 
 	ShaderFuncResultPtr ShaderFuncs::xy(ShaderValuePtr value)
 	{
+		BLT_ASSERT(value->TypeDimension() == ValueTypeDim::Single, "Cannot operate on arrays");
 		BLT_ASSERT(ValueTypeIsVector(value->Type()), "Inputs must be vectors to be swizzelled");
 		BLT_ASSERT(ValueTypeGetDimension(value->Type()) > 2, "Input must be greater than 2D");
 		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("(@0).xy", std::vector<ShaderValuePtr>{ std::move(value) }, ValueType::Vector2f);
@@ -91,6 +158,7 @@ namespace Bolt
 
 	ShaderFuncResultPtr ShaderFuncs::xz(ShaderValuePtr value)
 	{
+		BLT_ASSERT(value->TypeDimension() == ValueTypeDim::Single, "Cannot operate on arrays");
 		BLT_ASSERT(ValueTypeIsVector(value->Type()), "Inputs must be vectors to be swizzelled");
 		BLT_ASSERT(ValueTypeGetDimension(value->Type()) > 2, "Input must be greater than 2D");
 		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("(@0).xz", std::vector<ShaderValuePtr>{ std::move(value) }, ValueType::Vector2f);
@@ -99,6 +167,7 @@ namespace Bolt
 
 	ShaderFuncResultPtr ShaderFuncs::xyz(ShaderValuePtr value)
 	{
+		BLT_ASSERT(value->TypeDimension() == ValueTypeDim::Single, "Cannot operate on arrays");
 		BLT_ASSERT(ValueTypeIsVector(value->Type()), "Inputs must be vectors to be swizzelled");
 		BLT_ASSERT(ValueTypeGetDimension(value->Type()) > 3, "Input must be greater than 3D");
 		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("(@0).xyz", std::vector<ShaderValuePtr>{ std::move(value) }, ValueType::Vector3f);
@@ -175,6 +244,15 @@ namespace Bolt
 	{
 		BLT_ASSERT(texture->Type() == ValueType::Texture2D && texCoords->Type() == ValueType::Vector2f, "Only 2D textures supported");
 		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("texture(@0, @1)", std::vector<ShaderValuePtr>{ std::move(texture), std::move(texCoords) }, ValueType::Vector4f);
+		return result;
+	}
+
+	ShaderFuncResultPtr ShaderFuncs::Index(ShaderValuePtr arr, ShaderValuePtr index)
+	{
+		BLT_ASSERT(arr->TypeDimension() == ValueTypeDim::Array, "Can only operate on arrays");
+		BLT_ASSERT(index->TypeDimension() == ValueTypeDim::Single, "Index cannot be an array");
+		BLT_ASSERT(index->Type() == ValueType::Int, "Index must be an int");
+		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("(@0)[@1]", std::vector<ShaderValuePtr>{ std::move(arr), std::move(index) }, arr->Type(), ValueTypeDim::Single);
 		return result;
 	}
 

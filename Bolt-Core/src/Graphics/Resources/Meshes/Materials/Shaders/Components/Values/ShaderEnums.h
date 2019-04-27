@@ -18,6 +18,7 @@ namespace Bolt
 	BLT_API enum class ValueType
 	{
 		Void,
+		Bool,
 		Int,
 		Float,
 
@@ -33,6 +34,12 @@ namespace Bolt
 		Texture2D,
 		Texture3D,
 		TextureCube
+	};
+
+	BLT_API enum class ValueTypeDim
+	{
+		Single,
+		Array
 	};
 
 	BLT_API enum class RendererUniform
@@ -75,6 +82,23 @@ namespace Bolt
 		return ValueType::Void;
 	}
 
+	inline ValueTypeDim GetTypeDimOfRendererUniform(RendererUniform uniform)
+	{
+		switch (uniform)
+		{
+		case RendererUniform::ModelMatrix:
+			return ValueTypeDim::Single;
+		case RendererUniform::ViewMatrix:
+			return ValueTypeDim::Single;
+		case RendererUniform::ProjectionMatrix:
+			return ValueTypeDim::Single;
+		case RendererUniform::Time:
+			return ValueTypeDim::Single;
+		}
+		BLT_ASSERT(false, "Unable to determine uniform dimension");
+		return ValueTypeDim::Single;
+	}
+
 	inline ValueType GetTypeOfShaderStream(ShaderStream stream)
 	{
 		switch (stream)
@@ -103,6 +127,7 @@ namespace Bolt
 		switch (type)
 		{
 			BLT_VALUE_TYPE_TO_GLSL_STRING_HELPER(Void, "void")
+			BLT_VALUE_TYPE_TO_GLSL_STRING_HELPER(Bool, "bool")
 			BLT_VALUE_TYPE_TO_GLSL_STRING_HELPER(Int, "int")
 			BLT_VALUE_TYPE_TO_GLSL_STRING_HELPER(Float, "float")
 			
@@ -147,6 +172,8 @@ namespace Bolt
 	{
 		switch (type)
 		{
+		case ValueType::Bool:
+			return 1;
 		case ValueType::Int:
 			return 1;
 		case ValueType::Float:
@@ -173,6 +200,12 @@ namespace Bolt
 	{
 		BLT_ASSERT(false, blt::string("Unable to determine type of ") + typeid(T).name());
 		return ValueType::Void;
+	}
+
+	template<>
+	inline ValueType GetValueType<bool>()
+	{
+		return ValueType::Bool;
 	}
 
 	template<>

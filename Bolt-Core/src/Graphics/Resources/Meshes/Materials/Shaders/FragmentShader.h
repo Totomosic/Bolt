@@ -12,6 +12,8 @@ namespace Bolt
 	public:
 		FragmentShader();
 
+		const ShaderVariablePtr& FragColor() const;
+
 		void SetFragColor(const ShaderValuePtr& value);
 		CompiledShaderProgram Compile() const override;
 		void Reset() override;

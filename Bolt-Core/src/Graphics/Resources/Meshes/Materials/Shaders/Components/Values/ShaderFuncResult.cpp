@@ -5,7 +5,7 @@
 namespace Bolt
 {
 	
-	ShaderFuncResult::ShaderFuncResult(const blt::string& templateString, const std::vector<ShaderValuePtr>& inputs, ValueType resultType) : ShaderValue(resultType),
+	ShaderFuncResult::ShaderFuncResult(const blt::string& templateString, const std::vector<ShaderValuePtr>& inputs, ValueType resultType, ValueTypeDim dim) : ShaderValue(resultType, dim),
 		m_TemplateString(templateString), m_Inputs(inputs)
 	{
 		

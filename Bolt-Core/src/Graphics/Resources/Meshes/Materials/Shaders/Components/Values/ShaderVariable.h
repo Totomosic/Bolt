@@ -14,7 +14,7 @@ namespace Bolt
 		mutable ShaderType m_ShaderType;
 
 	public:
-		ShaderVariable(ValueType type);
+		ShaderVariable(ValueType type, ValueTypeDim dim = ValueTypeDim::Single);
 
 		ShaderType GetShaderType() const;
 		const blt::string& GetVarName() const;
@@ -26,6 +26,7 @@ namespace Bolt
 		friend class VertexShader;
 		friend class DeclarePassInOp;
 		friend class DeclarePassOutOp;
+		friend class DeclareArrayOp;
 
 	};
 

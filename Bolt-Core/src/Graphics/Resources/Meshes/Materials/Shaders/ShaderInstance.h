@@ -11,6 +11,7 @@ namespace Bolt
 		blt::string LinkName;
 		int Location;
 		ValueType Type;
+		bool RequiresLink;
 	};
 
 	struct BLT_API RendererUniformLocation
@@ -18,6 +19,7 @@ namespace Bolt
 	public:
 		int Location;
 		RendererUniform Uniform;
+		bool RequiresLink;
 	};
 
 	class BLT_API ShaderInstance
