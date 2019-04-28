@@ -1,5 +1,5 @@
 #pragma once
-#include "ShaderValue.h"
+#include "ShaderLValue.h"
 
 namespace Bolt
 {
@@ -7,26 +7,18 @@ namespace Bolt
 	class ShaderVariable;
 	using ShaderVariablePtr = std::shared_ptr<ShaderVariable>;
 
-	class BLT_API ShaderVariable : public ShaderValue
+	class BLT_API ShaderVariable : public ShaderLValue
 	{
 	protected:
 		mutable blt::string m_Name;
-		mutable ShaderType m_ShaderType;
 
 	public:
 		ShaderVariable(ValueType type, ValueTypeDim dim = ValueTypeDim::Single);
 
-		ShaderType GetShaderType() const;
 		const blt::string& GetVarName() const;
+		void SetVarName(const blt::string& varName);
 
 		virtual void Build(ShaderBuilder& builder) const override;
-
-		friend class ShaderDefineOp;
-		friend class ShaderDeclareOp;
-		friend class VertexShader;
-		friend class DeclarePassInOp;
-		friend class DeclarePassOutOp;
-		friend class DeclareArrayOp;
 
 	};
 

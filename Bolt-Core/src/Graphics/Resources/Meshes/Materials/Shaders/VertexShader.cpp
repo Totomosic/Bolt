@@ -9,7 +9,7 @@ namespace Bolt
 		m_PositionStream(nullptr), m_NormalStream(nullptr), m_TexCoordStream(nullptr), m_ColorStream(nullptr), m_TangentStream(nullptr), m_VertexPosition(nullptr)
 	{
 		m_VertexPosition = std::make_shared<ShaderVariable>(ValueType::Vector4f);
-		m_VertexPosition->m_Name = "gl_Position";
+		m_VertexPosition->SetVarName("gl_Position");
 		m_PositionStream = Stream(ShaderStream::Position);
 		m_NormalStream = Stream(ShaderStream::Normal);
 		m_TexCoordStream = Stream(ShaderStream::TexCoord);

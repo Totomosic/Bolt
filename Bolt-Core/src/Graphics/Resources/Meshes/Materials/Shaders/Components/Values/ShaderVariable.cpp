@@ -5,20 +5,19 @@
 namespace Bolt
 {
 
-	ShaderVariable::ShaderVariable(ValueType type, ValueTypeDim dim) : ShaderValue(type, dim),
-		m_ShaderType(ShaderType::Ignore)
+	ShaderVariable::ShaderVariable(ValueType type, ValueTypeDim dim) : ShaderLValue(type, dim)
 	{
 	
-	}
-	
-	ShaderType ShaderVariable::GetShaderType() const
-	{
-		return m_ShaderType;
 	}
 
 	const blt::string& ShaderVariable::GetVarName() const
 	{
 		return m_Name;
+	}
+
+	void ShaderVariable::SetVarName(const blt::string& varName)
+	{ 
+		m_Name = varName;
 	}
 	
 	void ShaderVariable::Build(ShaderBuilder& builder) const

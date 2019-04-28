@@ -12,6 +12,10 @@ namespace Bolt
 		{
 			const UserUniformLocation& uniform = uniforms[i];
 			m_UserUniformLinks[uniform.LinkName] = { false, (id_t)i, 0, uniform.RequiresLink };
+			if (uniform.DefaultValue != nullptr)
+			{
+				AddLink(uniform.LinkName, uniform.DefaultValue->CreateLinkContainer(m_Shader->GetShader().Id(), uniform.Location));
+			}
 		}
 	}
 
@@ -77,7 +81,7 @@ namespace Bolt
 		{
 			if (!pair.second.IsLinked && pair.second.RequiresLink)
 			{
-				BLT_ERROR(pair.first + " is not linked");
+				BLT_CORE_ERROR(pair.first + " is not linked");
 			}
 			return pair.second.IsLinked == false && pair.second.RequiresLink;
 		}) == m_UserUniformLinks.end(), "Not all User uniforms were linked");
