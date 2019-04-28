@@ -12,6 +12,7 @@ namespace Bolt
 		int Location;
 		ValueType Type;
 		bool RequiresLink;
+		std::shared_ptr<UniformValueContainer> DefaultValue;
 	};
 
 	struct BLT_API RendererUniformLocation

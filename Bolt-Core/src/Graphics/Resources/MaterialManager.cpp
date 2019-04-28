@@ -41,7 +41,7 @@ namespace Bolt
 		ShaderVariablePtr modelMatrix = vertex.RendererUniform(RendererUniform::ModelMatrix);
 		ShaderVariablePtr viewMatrix = vertex.RendererUniform(RendererUniform::ViewMatrix);
 		ShaderVariablePtr projectionMatrix = vertex.RendererUniform(RendererUniform::ProjectionMatrix);
-		ShaderVariablePtr outColor = vertex.DeclarePassOut(ValueType::Vector4f);
+		ShaderVariablePtr outColor = vertex.DeclarePassOut<Color>();
 		vertex.AddMainScope();
 		ShaderVariablePtr worldPos = vertex.DefineVar(ShaderFuncs::Mul(modelMatrix, vertex.Position()));
 		ShaderVariablePtr viewPos = vertex.DefineVar(ShaderFuncs::Mul(viewMatrix, worldPos));
@@ -62,8 +62,8 @@ namespace Bolt
 		ShaderVariablePtr modelMatrix = vertex.RendererUniform(RendererUniform::ModelMatrix);
 		ShaderVariablePtr viewMatrix = vertex.RendererUniform(RendererUniform::ViewMatrix);
 		ShaderVariablePtr projectionMatrix = vertex.RendererUniform(RendererUniform::ProjectionMatrix);
-		ShaderVariablePtr outColor = vertex.DeclarePassOut(ValueType::Vector4f);
-		ShaderVariablePtr outTexCoord = vertex.DeclarePassOut(ValueType::Vector2f);
+		ShaderVariablePtr outColor = vertex.DeclarePassOut<Color>();
+		ShaderVariablePtr outTexCoord = vertex.DeclarePassOut<Vector2f>();
 		vertex.AddMainScope();
 		ShaderVariablePtr worldPos = vertex.DefineVar(ShaderFuncs::Mul(modelMatrix, vertex.Position()));
 		ShaderVariablePtr viewPos = vertex.DefineVar(ShaderFuncs::Mul(viewMatrix, worldPos));
@@ -87,8 +87,8 @@ namespace Bolt
 		ShaderVariablePtr modelMatrix = vertex.RendererUniform(RendererUniform::ModelMatrix);
 		ShaderVariablePtr viewMatrix = vertex.RendererUniform(RendererUniform::ViewMatrix);
 		ShaderVariablePtr projectionMatrix = vertex.RendererUniform(RendererUniform::ProjectionMatrix);
-		ShaderVariablePtr outColor = vertex.DeclarePassOut(ValueType::Vector4f);
-		ShaderVariablePtr outTexCoord = vertex.DeclarePassOut(ValueType::Vector2f);
+		ShaderVariablePtr outColor = vertex.DeclarePassOut<Color>();
+		ShaderVariablePtr outTexCoord = vertex.DeclarePassOut<Vector2f>();
 		vertex.AddMainScope();
 		ShaderVariablePtr worldPos = vertex.DefineVar(ShaderFuncs::Mul(modelMatrix, vertex.Position()));
 		ShaderVariablePtr viewPos = vertex.DefineVar(ShaderFuncs::Mul(viewMatrix, worldPos));

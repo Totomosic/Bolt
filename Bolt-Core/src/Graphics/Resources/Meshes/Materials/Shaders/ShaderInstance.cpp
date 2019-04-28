@@ -44,7 +44,10 @@ namespace Bolt
 				{
 					blt::string arrPart = '[' + std::to_string(i) + ']';
 					RendererUniformLocation loc = { shader.GetUniformLocation(uniform.VarName + arrPart), uniform.Uniform, false };
-					BLT_ASSERT(loc.Location != -1, "Unable to find renderer uniform with name " + uniform.VarName + arrPart);
+					if (loc.Location == -1)
+					{
+						BLT_CORE_WARN("Unable to find renderer uniform with name {}, it may not exist or may not be in use", uniform.VarName + arrPart);
+					}
 					result.push_back(std::move(loc));
 				}
 			}
@@ -68,14 +71,14 @@ namespace Bolt
 				for (int i = 0; i < uniform.Length; i++)
 				{
 					blt::string arrPart = '[' + std::to_string(i) + ']';
-					UserUniformLocation loc = { uniform.LinkName + arrPart, shader.GetUniformLocation(uniform.VarName + arrPart), uniform.Type, false };
+					UserUniformLocation loc = { uniform.LinkName + arrPart, shader.GetUniformLocation(uniform.VarName + arrPart), uniform.Type, false, uniform.DefaultValue };
 					BLT_ASSERT(loc.Location != -1, "Unable to find user uniform with name " + uniform.VarName + arrPart);
 					result.push_back(std::move(loc));
 				}
 			}
 			else
 			{
-				UserUniformLocation loc = { uniform.LinkName, shader.GetUniformLocation(uniform.VarName), uniform.Type, true };
+				UserUniformLocation loc = { uniform.LinkName, shader.GetUniformLocation(uniform.VarName), uniform.Type, true, uniform.DefaultValue };
 				BLT_ASSERT(loc.Location != -1, "Unable to find user uniform with name " + uniform.VarName);
 				result.push_back(std::move(loc));
 			}

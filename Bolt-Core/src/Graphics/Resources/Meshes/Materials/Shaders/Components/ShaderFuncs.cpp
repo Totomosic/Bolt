@@ -122,6 +122,20 @@ namespace Bolt
 		return result;
 	}
 
+	ShaderFuncResultPtr ShaderFuncs::And(ShaderValuePtr left, ShaderValuePtr right)
+	{
+		BLT_ASSERT(left->Type() == ValueType::Bool && right->Type() == ValueType::Bool, "Input must be boolean");
+		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("((@0) && (@1))", std::vector<ShaderValuePtr>{ std::move(left), std::move(right) }, ValueType::Bool);
+		return result;
+	}
+
+	ShaderFuncResultPtr ShaderFuncs::Or(ShaderValuePtr left, ShaderValuePtr right)
+	{
+		BLT_ASSERT(left->Type() == ValueType::Bool && right->Type() == ValueType::Bool, "Input must be boolean");
+		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("((@0) || (@1))", std::vector<ShaderValuePtr>{ std::move(left), std::move(right) }, ValueType::Bool);
+		return result;
+	}
+
 	ShaderFuncResultPtr ShaderFuncs::x(ShaderValuePtr value)
 	{
 		BLT_ASSERT(value->TypeDimension() == ValueTypeDim::Single, "Cannot operate on arrays");
@@ -247,12 +261,12 @@ namespace Bolt
 		return result;
 	}
 
-	ShaderFuncResultPtr ShaderFuncs::Index(ShaderValuePtr arr, ShaderValuePtr index)
+	ShaderArrayValuePtr ShaderFuncs::Index(ShaderLValuePtr arr, ShaderValuePtr index)
 	{
 		BLT_ASSERT(arr->TypeDimension() == ValueTypeDim::Array, "Can only operate on arrays");
 		BLT_ASSERT(index->TypeDimension() == ValueTypeDim::Single, "Index cannot be an array");
 		BLT_ASSERT(index->Type() == ValueType::Int, "Index must be an int");
-		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("(@0)[@1]", std::vector<ShaderValuePtr>{ std::move(arr), std::move(index) }, arr->Type(), ValueTypeDim::Single);
+		ShaderArrayValuePtr result = std::make_shared<ShaderArrayValue>(arr, index);
 		return result;
 	}
 

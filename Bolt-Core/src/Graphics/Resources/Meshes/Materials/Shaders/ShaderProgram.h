@@ -1,5 +1,6 @@
 #pragma once
 #include "Components/__Components__.h"
+#include "UniformValue.h"
 
 namespace Bolt
 {
@@ -12,6 +13,7 @@ namespace Bolt
 		ValueType Type;
 		ValueTypeDim Dimension;
 		int Length;
+		std::shared_ptr<UniformValueContainer> DefaultValue;
 	};
 
 	struct BLT_API UserUniformPtr
@@ -20,6 +22,7 @@ namespace Bolt
 		blt::string LinkName;
 		const ShaderVariable* Var;
 		int Length;
+		std::shared_ptr<UniformValueContainer> DefaultValue = nullptr;
 	};
 
 	struct BLT_API RendererUniformInfo
@@ -64,7 +67,7 @@ namespace Bolt
 		ShaderScope& GetCurrentScope() const;
 
 		ShaderVariablePtr Stream(ShaderStream stream);
-		ShaderVariablePtr Uniform(const blt::string& linkName, ValueType type);
+		ShaderVariablePtr Uniform(const blt::string& linkName, ValueType type, std::shared_ptr<UniformValueContainer> defaultValue = nullptr);
 		ShaderVariablePtr UniformArray(const blt::string& linkName, ValueType type, size_t length);
 		ShaderVariablePtr RendererUniform(Bolt::RendererUniform uniform);
 		ShaderVariablePtr DeclareVar(ValueType type);
@@ -74,9 +77,39 @@ namespace Bolt
 		ShaderVariablePtr DeclareArray(ValueType type, size_t length);
 
 		template<typename T>
+		ShaderVariablePtr DeclareVar()
+		{
+			return DeclareVar(GetValueType<T>());
+		}
+
+		template<typename T>
 		ShaderVariablePtr Uniform(const blt::string& linkName)
 		{
 			return Uniform(linkName, GetValueType<T>());
+		}
+
+		template<typename T>
+		ShaderVariablePtr Uniform(const blt::string& linkName, const T& defaultValue)
+		{
+			return Uniform(linkName, GetValueType<T>(), std::make_shared<UniformValue<T>>(defaultValue));
+		}
+
+		template<typename T>
+		ShaderVariablePtr UniformArray(const blt::string& linkName, size_t length)
+		{
+			return UniformArray(linkName, GetValueType<T>(), length);
+		}
+
+		template<typename T>
+		ShaderVariablePtr DeclarePassOut()
+		{
+			return DeclarePassOut(GetValueType<T>());
+		}
+
+		template<typename T>
+		ShaderVariablePtr DeclareArray(size_t length)
+		{
+			return DeclareArray(GetValueType<T>(), length);
 		}
 
 		void SetVariable(const ShaderVariablePtr& var, const ShaderValuePtr& value);

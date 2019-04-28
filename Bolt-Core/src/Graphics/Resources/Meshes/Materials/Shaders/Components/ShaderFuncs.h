@@ -25,6 +25,9 @@ namespace Bolt
 		static ShaderFuncResultPtr NotEqualTo(ShaderValuePtr left, ShaderValuePtr right);
 		static ShaderFuncResultPtr Not(ShaderValuePtr value);
 
+		static ShaderFuncResultPtr And(ShaderValuePtr left, ShaderValuePtr right);
+		static ShaderFuncResultPtr Or(ShaderValuePtr left, ShaderValuePtr right);
+
 		static ShaderFuncResultPtr x(ShaderValuePtr value);
 		static ShaderFuncResultPtr y(ShaderValuePtr value);
 		static ShaderFuncResultPtr z(ShaderValuePtr value);
@@ -44,7 +47,7 @@ namespace Bolt
 
 		static ShaderFuncResultPtr SampleTexture(ShaderValuePtr texture, ShaderValuePtr texCoords);
 
-		static ShaderFuncResultPtr Index(ShaderValuePtr arr, ShaderValuePtr index);
+		static ShaderArrayValuePtr Index(ShaderLValuePtr arr, ShaderValuePtr index);
 
 	private:
 		static ValueType DeduceOutputTypeNumeric(const ShaderValuePtr& left, const ShaderValuePtr& right);

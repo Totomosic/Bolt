@@ -7,11 +7,11 @@ namespace Bolt
 	class BLT_API SetValueOp : public ShaderOp
 	{
 	private:
-		ShaderVariablePtr m_Variable;
+		ShaderLValuePtr m_Variable;
 		ShaderValuePtr m_Value;
 
 	public:
-		SetValueOp(const ShaderVariablePtr& var, const ShaderValuePtr& value);
+		SetValueOp(const ShaderLValuePtr& var, const ShaderValuePtr& value);
 
 		void Build(ShaderBuilder& builder) const override;
 

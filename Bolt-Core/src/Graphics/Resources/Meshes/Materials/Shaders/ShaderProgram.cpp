@@ -26,11 +26,11 @@ namespace Bolt
 		return GetCurrentScope().DeclareVariable(GetTypeOfShaderStream(stream), "layout(location = " + std::to_string((int)stream) + ") in");
 	}
 
-	ShaderVariablePtr ShaderProgram::Uniform(const blt::string& linkName, ValueType type)
+	ShaderVariablePtr ShaderProgram::Uniform(const blt::string& linkName, ValueType type, std::shared_ptr<UniformValueContainer> defaultValue)
 	{
 		BLT_ASSERT(&GetCurrentScope() == &m_Builder.GetGlobalScope(), "Uniforms should be declared in global scope, before main() scope");
 		ShaderVariablePtr var = GetCurrentScope().DeclareVariable(type, "uniform");
-		m_UserUniforms.push_back({ linkName, var.get(), 0 });
+		m_UserUniforms.push_back({ linkName, var.get(), 0, std::move(defaultValue) });
 		return var;
 	}
 
@@ -45,9 +45,19 @@ namespace Bolt
 	ShaderVariablePtr ShaderProgram::RendererUniform(Bolt::RendererUniform uniform)
 	{
 		BLT_ASSERT(&GetCurrentScope() == &m_Builder.GetGlobalScope(), "Uniforms should be declared in global scope, before main() scope");
-		ShaderVariablePtr var = GetCurrentScope().DeclareVariable(GetTypeOfRendererUniform(uniform), "uniform");
-		m_RendererUniforms.push_back({ uniform, var.get(), 0 });
-		return var;
+		if (GetTypeDimOfRendererUniform(uniform) == ValueTypeDim::Single)
+		{
+			ShaderVariablePtr var = GetCurrentScope().DeclareVariable(GetTypeOfRendererUniform(uniform), "uniform");
+			m_RendererUniforms.push_back({ uniform, var.get(), 0 });
+			return var;
+		}
+		else
+		{
+			int length = GetArrayLengthOfRendererUniform(uniform);
+			ShaderVariablePtr var = GetCurrentScope().DeclareArray(GetTypeOfRendererUniform(uniform), ShaderLiteral::FromInt(length), "uniform");
+			m_RendererUniforms.push_back({ uniform, var.get(), length });
+			return var;
+		}
 	}
 
 	ShaderVariablePtr ShaderProgram::DeclareVar(ValueType type)
@@ -102,7 +112,7 @@ namespace Bolt
 	{
 		for (const auto& user : m_UserUniforms)
 		{
-			program.UserUniforms.push_back({ user.LinkName, user.Var->GetVarName(), user.Var->Type(), user.Var->TypeDimension(), user.Length });
+			program.UserUniforms.push_back({ user.LinkName, user.Var->GetVarName(), user.Var->Type(), user.Var->TypeDimension(), user.Length, user.DefaultValue });
 		}
 		for (const auto& renderer : m_RendererUniforms)
 		{

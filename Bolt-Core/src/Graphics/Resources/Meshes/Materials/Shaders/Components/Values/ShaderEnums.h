@@ -77,6 +77,18 @@ namespace Bolt
 			return ValueType::Matrix4f;
 		case RendererUniform::Time:
 			return ValueType::Float;
+		case RendererUniform::LightCount:
+			return ValueType::Int;
+		case RendererUniform::LightPositions:
+			return ValueType::Vector3f;
+		case RendererUniform::LightTypes:
+			return ValueType::Int;
+		case RendererUniform::LightColors:
+			return ValueType::Vector4f;
+		case RendererUniform::LightDirections:
+			return ValueType::Vector3f;
+		case RendererUniform::LightAmbients:
+			return ValueType::Float;
 		}
 		BLT_ASSERT(false, "Unable to determine uniform type");
 		return ValueType::Void;
@@ -94,9 +106,40 @@ namespace Bolt
 			return ValueTypeDim::Single;
 		case RendererUniform::Time:
 			return ValueTypeDim::Single;
+		case RendererUniform::LightCount:
+			return ValueTypeDim::Single;
+		case RendererUniform::LightPositions:
+			return ValueTypeDim::Array;
+		case RendererUniform::LightTypes:
+			return ValueTypeDim::Array;
+		case RendererUniform::LightColors:
+			return ValueTypeDim::Array;
+		case RendererUniform::LightDirections:
+			return ValueTypeDim::Array;
+		case RendererUniform::LightAmbients:
+			return ValueTypeDim::Array;
 		}
 		BLT_ASSERT(false, "Unable to determine uniform dimension");
 		return ValueTypeDim::Single;
+	}
+
+	inline int GetArrayLengthOfRendererUniform(RendererUniform uniform)
+	{
+		switch (uniform)
+		{
+		case RendererUniform::LightPositions:
+			return 10;
+		case RendererUniform::LightTypes:
+			return 10;
+		case RendererUniform::LightColors:
+			return 10;
+		case RendererUniform::LightDirections:
+			return 10;
+		case RendererUniform::LightAmbients:
+			return 10;
+		}
+		BLT_ASSERT(false, "Unable to determine uniform length");
+		return 0;
 	}
 
 	inline ValueType GetTypeOfShaderStream(ShaderStream stream)
