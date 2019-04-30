@@ -123,9 +123,7 @@ namespace Bolt
 
 	GameObject* ObjectFactory::Image(float width, float height, const ResourcePtr<const Texture2D>& image, Transform transform) const
 	{
-		GameObject* object = Rectangle(width, height, Color::White, std::move(transform));
-		Mesh& mesh = object->Components().GetComponent<MeshRenderer>().Mesh;
-		mesh.Materials[0] = ResourceManager::Get().Materials().Texture(image);
+		GameObject* object = Rectangle(width, height, ResourceManager::Get().Materials().Texture(image), std::move(transform));
 		return object;
 	}
 

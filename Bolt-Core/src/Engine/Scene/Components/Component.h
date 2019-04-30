@@ -4,6 +4,9 @@
 namespace Bolt
 {
 
+#define BLT_DEFAULT_COMPONENT_CLONE(CType) inline virtual std::unique_ptr<Component> Clone() const override { return std::make_unique<CType>(*this); }
+#define BLT_CANNOT_CLONE_COMPONENT(CType) inline virtual std::unique_ptr<Component> Clone() const override { BLT_ASSERT(false, "Unable to clone component"); return nullptr; }
+
 	class ObjectPrefab;
 	class GameObject;
 	class Camera;

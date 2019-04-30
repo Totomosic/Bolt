@@ -27,8 +27,8 @@ namespace Bolt
 		Mesh();
 		Mesh(const Mesh& other);
 		Mesh& operator=(const Mesh& other);
-		Mesh(Mesh&& other) = default;
-		Mesh& operator=(Mesh&& other) = default;
+		Mesh(Mesh&& other);
+		Mesh& operator=(Mesh&& other);
 		~Mesh();
 
 		Mesh Clone() const;
