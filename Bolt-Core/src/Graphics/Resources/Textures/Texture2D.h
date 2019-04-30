@@ -21,7 +21,7 @@ namespace Bolt
 		virtual ~Texture2D() override;
 
 		void LoadPixels() const;
-		void UpdatePixels() const;
+		void UpdatePixels(bool deletePixels = true) const;
 		Image GetImage() const;
 		Image GetImage(int x, int y, int w, int h) const;
 

@@ -62,6 +62,7 @@ namespace Bolt
 		ShaderVariablePtr modelMatrix = vertex.RendererUniform(RendererUniform::ModelMatrix);
 		ShaderVariablePtr viewMatrix = vertex.RendererUniform(RendererUniform::ViewMatrix);
 		ShaderVariablePtr projectionMatrix = vertex.RendererUniform(RendererUniform::ProjectionMatrix);
+		ShaderVariablePtr texCoordScaling = vertex.Uniform<Vector2f>("TexCoordScaling", { 1.0f, 1.0f });
 		ShaderVariablePtr outColor = vertex.DeclarePassOut<Color>();
 		ShaderVariablePtr outTexCoord = vertex.DeclarePassOut<Vector2f>();
 		vertex.AddMainScope();
@@ -70,7 +71,7 @@ namespace Bolt
 		ShaderVariablePtr screenPos = vertex.DefineVar(ShaderFuncs::Mul(projectionMatrix, viewPos));
 		vertex.SetVertexPosition(screenPos);
 		vertex.SetVariable(outColor, vertex.Color());
-		vertex.SetVariable(outTexCoord, vertex.TexCoord());
+		vertex.SetVariable(outTexCoord, ShaderFuncs::Mul(vertex.TexCoord(), texCoordScaling));
 
 		FragmentShader& fragment = builder.Factory().Fragment();
 		ShaderVariablePtr inColor = fragment.DeclarePassIn(outColor);

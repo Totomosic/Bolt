@@ -99,17 +99,27 @@ namespace Bolt
 	UniformLinkContainer& ShaderLinkContext::AddLink(const blt::string& linkName, std::unique_ptr<UniformLinkContainer>&& linkValue)
 	{
 		UniformLinkContainer* ptr = linkValue.get();
-		id_t linkIndex = m_Links.size();
-		m_Links.push_back(std::move(linkValue));
 		LinkId& id = m_UserUniformLinks.at(linkName);
+		if (id.IsLinked)
+		{
+			// This link already exists
+			m_Links[id.LinkIndex] = std::move(linkValue);
+			return *ptr;
+		}
 		id.IsLinked = true;
+		id_t linkIndex = m_Links.size();
 		id.LinkIndex = linkIndex;
+		m_Links.push_back(std::move(linkValue));		
 		return *ptr;
 	}
 
 	void ShaderLinkContext::CopyLinksTo(ShaderLinkContext& other) const
 	{
 		other.m_Links.clear();
+		for (auto& pair : other.m_UserUniformLinks)
+		{
+			pair.second.IsLinked = false;
+		}
 		for (const auto& linkPair : m_UserUniformLinks)
 		{
 			other.AddLink(linkPair.first, m_Links.at(linkPair.second.LinkIndex)->Clone(other.GetShaderInstance().GetShader().Id(), other.GetUniformLocation(linkPair.first).Location));

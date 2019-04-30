@@ -16,7 +16,7 @@ namespace Bolt
 	}
 
 	Texture2D::Texture2D(const Image& image, TextureFormat format, TextureCreateOptions options) : Texture(image.Width, image.Height, TextureTarget::Texture2D, format, options.MipmapMode),
-		Pixels(new Color[m_Width * m_Height])
+		Pixels(nullptr)
 	{
 		SetImage(image);
 		SetMinFilter(options.Minification);
@@ -61,17 +61,27 @@ namespace Bolt
 
 	void Texture2D::LoadPixels() const
 	{
+		if (Pixels == nullptr)
+		{
+			Pixels = new Color[m_Width * m_Height];
+		}
 		Bind();
 		GL_CALL(glGetTexImage((GLenum)m_Target, 0, GL_RGBA, GL_FLOAT, Pixels));
 	}
 
-	void Texture2D::UpdatePixels() const
+	void Texture2D::UpdatePixels(bool deletePixels) const
 	{
+		BLT_ASSERT(Pixels != nullptr, "Cnanot update pixels as they have not been loaded, Use LoadPixels()");
 		Bind();
 		GL_CALL(glTexSubImage2D((GLenum)m_Target, 0, 0, 0, m_Width, m_Height, GL_RGBA, GL_FLOAT, Pixels));
 		if (HasMipmaps())
 		{
 			GenerateMipmaps();
+		}
+		if (deletePixels)
+		{
+			delete[] Pixels;
+			Pixels = nullptr;
 		}
 	}
 
@@ -157,8 +167,8 @@ namespace Bolt
 
 	void Texture2D::SetRegion(int x, int y, int w, int h, const Image& image, int ix, int iy, int iw, int ih, ResizeFilter filter)
 	{
-		BLT_ASSERT(ix >= 0 && iy >= 0 && ix < image.Width && iy < image.Height, "Pixels do not exists, image dimensions: (", image.Width, ", ", image.Height, ")");
-		BLT_ASSERT(iw > 0 && ih > 0 && ix + iw <= image.Width && iy + ih <= image.Height, "Pixels do not exists, image dimensions: (", image.Width, ", ", image.Height, ")");
+		BLT_ASSERT(ix >= 0 && iy >= 0 && ix < image.Width && iy < image.Height, "Pixels do not exist, image dimensions: (", image.Width, ", ", image.Height, ")");
+		BLT_ASSERT(iw > 0 && ih > 0 && ix + iw <= image.Width && iy + ih <= image.Height, "Pixels do not exist, image dimensions: (", image.Width, ", ", image.Height, ")");
 		Image im;
 		im.Width = iw;
 		im.Height = ih;

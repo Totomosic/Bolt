@@ -37,6 +37,25 @@ namespace Bolt
 		return *this;
 	}
 
+	Mesh::Mesh(Mesh&& other)
+		: Models(std::move(other.Models)), Materials()
+	{
+		for (int i = 0; i < MAX_MATERIALS; i++)
+		{
+			Materials[i] = std::move(other.Materials[i]);
+		}
+	}
+
+	Mesh& Mesh::operator=(Mesh&& other)
+	{
+		Models = std::move(other.Models);
+		for (int i = 0; i < MAX_MATERIALS; i++)
+		{
+			Materials[i] = std::move(other.Materials[i]);
+		}
+		return *this;
+	}
+
 	Mesh::~Mesh()
 	{
 		

@@ -1,7 +1,0 @@
-function Start()
-	Bolt_Log("Hello")
-	Bolt_Log(GameObject)
-end
-
-function Update()
-end
