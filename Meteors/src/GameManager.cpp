@@ -23,7 +23,7 @@ namespace Meteors
 			float tx = Random::NextFloat(0, ViewWidth);
 			float vx = (tx - x) / (sqrt(2 * (y - FloorHeight) / g));
 			float vy = 0;
-			GameObject* meteor = Factory.Ellipse(radius * 2, radius * 2, ResourceManager::Get().Materials().Texture(ResourceManager::Get().Get<Texture2D>(RegularMeteorTexture)), Transform({ x, y, 0 }));
+			GameObject* meteor = Factory.Ellipse(radius * 2, radius * 2, ResourceManager::Get().Materials().Texture(ResourceManager::Get().GetResource<Texture2D>(RegularMeteorTexture)), Transform({ x, y, 0 }));
 			meteor->Components().AddComponent<MeteorController>(radius, g, Vector2f{ vx, vy }, [](GameObject * object, const Vector3f & position)
 				{
 					

@@ -50,7 +50,7 @@ namespace Blockstream
 		ClearScreen();
 		uiLayer->UI().Text("Blockstream", Color::Black, Transform({ uiCamera->ViewWidth() / 2, uiCamera->ViewHeight() / 2 + 100, -5 }));
 
-		UIsurface* background = uiLayer->UI().Image(uiCamera->ViewWidth(), uiCamera->ViewHeight(), ResourceManager::Get().Get<Texture2D>(backgroundTitleTexture), Transform({ uiCamera->ViewWidth() / 2, uiCamera->ViewHeight() / 2, -50 }));
+		UIsurface* background = uiLayer->UI().Image(uiCamera->ViewWidth(), uiCamera->ViewHeight(), ResourceManager::Get().GetResource<Texture2D>(backgroundTitleTexture), Transform({ uiCamera->ViewWidth() / 2, uiCamera->ViewHeight() / 2, -50 }));
 		UIsurface* title = background->Rectangle(400, 600, Color(150, 150, 150, 200), Transform({ 0, 0, 1 }));
 
 		UIsurface* hostGameButton = title->Rectangle(300, 50, Color(0, 200, 0), Transform({ 0, 0, 1 }));
@@ -204,7 +204,7 @@ namespace Blockstream
 		isPlaying = true;
 		ClearScreen();
 
-		UIsurface* background = uiLayer->UI().Image(uiCamera->ViewWidth(), uiCamera->ViewHeight(), ResourceManager::Get().Get<Texture2D>(backgroundSpaceTexture), Transform({ uiCamera->ViewWidth() / 2, uiCamera->ViewHeight() / 2, -9999 }));
+		UIsurface* background = uiLayer->UI().Image(uiCamera->ViewWidth(), uiCamera->ViewHeight(), ResourceManager::Get().GetResource<Texture2D>(backgroundSpaceTexture), Transform({ uiCamera->ViewWidth() / 2, uiCamera->ViewHeight() / 2, -9999 }));
 
 		mainCameraAnchor = factory.Instantiate(Transform());
 		mainCamera->MakeChildOf(mainCameraAnchor);

@@ -112,7 +112,11 @@ namespace Bolt
 			return DeclareArray(GetValueType<T>(), length);
 		}
 
-		void SetVariable(const ShaderVariablePtr& var, const ShaderValuePtr& value);
+		void SetVariable(const ShaderLValuePtr& var, const ShaderValuePtr& value);
+		void AddAssign(const ShaderLValuePtr& var, const ShaderValuePtr& value);
+		void SubAssign(const ShaderLValuePtr& var, const ShaderValuePtr& value);
+		void MulAssign(const ShaderLValuePtr& var, const ShaderValuePtr& value);
+		void DivAssign(const ShaderLValuePtr& var, const ShaderValuePtr& value);
 
 		MainScope* AddMainScope();
 		void SetCurrentScope(ShaderScope* scope);

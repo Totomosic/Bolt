@@ -75,10 +75,10 @@ namespace Meteors
 			GameManager& manager = gameManager->Components().AddComponent<GameManager>();
 			ObjectFactory& factory = manager.Factory;
 			factory.SetCurrentLayer(layer);
-			factory.Image(ViewWidth, ViewHeight, ResourceManager::Get().Get<Texture2D>(RollingHillsTexture), Transform({ ViewWidth / 2, ViewHeight / 2, -99 }));
-			GameObject * ground = factory.Image(ViewWidth, FloorHeight, ResourceManager::Get().Get<Texture2D>(GroundTexture), Transform({ ViewWidth / 2, FloorHeight / 2, -98 }));
+			factory.Image(ViewWidth, ViewHeight, ResourceManager::Get().GetResource<Texture2D>(RollingHillsTexture), Transform({ ViewWidth / 2, ViewHeight / 2, -99 }));
+			GameObject * ground = factory.Image(ViewWidth, FloorHeight, ResourceManager::Get().GetResource<Texture2D>(GroundTexture), Transform({ ViewWidth / 2, FloorHeight / 2, -98 }));
 			ground->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetShader().Link("TexCoordMatrix", Matrix3f::Scale(19.2f, 1.0f, 1.0f));
-			GameObject * player = factory.Image(CharacterWidth, CharacterHeight, ResourceManager::Get().Get<Texture2D>(RightFacingCharacterTexture), Transform({ ViewWidth / 2, FloorHeight + CharacterHeight / 2, 0 }));
+			GameObject * player = factory.Image(CharacterWidth, CharacterHeight, ResourceManager::Get().GetResource<Texture2D>(RightFacingCharacterTexture), Transform({ ViewWidth / 2, FloorHeight + CharacterHeight / 2, 0 }));
 			player->Components().AddComponent<PlayerMovement>(PlayerSpeed, 2400, Gravity, 3);
 
 			manager.Player = player;

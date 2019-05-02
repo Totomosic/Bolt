@@ -54,7 +54,7 @@ namespace Aimbooster
 
 			Mesh targetMesh;
 			targetMesh.Models.push_back({ ResourcePtr<Model>(ObjectFactory::CircleModel()), Matrix4f::Identity(), { 0 } });
-			targetMesh.Materials[0] = ResourceManager::Get().Materials().Texture(ResourceManager::Get().Get<Texture2D>(resources.GetResourceId("target")));
+			targetMesh.Materials[0] = ResourceManager::Get().Materials().Texture(ResourceManager::Get().GetResource<Texture2D>(resources.GetResourceId("target")));
 			ObjectPrefab titleTargetPrefab;
 			titleTargetPrefab.Components().AddComponent<MeshRenderer>(targetMesh);
 			ObjectPrefab targetPrefab;
@@ -122,7 +122,7 @@ namespace Aimbooster
 			targetTimer->Reset();
 			
 			mainLayer->UI().Rectangle(600, mainCamera->ViewHeight(), Color(10, 10, 10), Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() / 2, -10 }));
-			mainLayer->UI().Text("Aim Booster", ResourceManager::Get().Get<Font>(titleArial), Color::White, Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() - 300, -5 }), AlignH::Center);
+			mainLayer->UI().Text("Aim Booster", ResourceManager::Get().GetResource<Font>(titleArial), Color::White, Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() - 300, -5 }), AlignH::Center);
 			UIsurface& playButton = mainLayer->UI().Rectangle(300, 50, Color(0, 200, 0), Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() / 2 - 150, -5 }));
 			playButton.Text("Play", Color::White, Transform({ 0, 0, 1 }));
 
@@ -217,7 +217,7 @@ namespace Aimbooster
 			targetTimer->Reset();
 
 			mainLayer->UI().Rectangle(600, mainCamera->ViewHeight(), Color(10, 10, 10), Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() / 2, -10 }));
-			mainLayer->UI().Text("Game Over", ResourceManager::Get().Get<Font>(titleArial), Color::White, Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() / 2 + 100, -5 }));
+			mainLayer->UI().Text("Game Over", ResourceManager::Get().GetResource<Font>(titleArial), Color::White, Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() / 2 + 100, -5 }));
 			mainLayer->UI().Text("Play time: " + TimeToString(), Color::White, Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() / 2 + 0, -5 }));
 			mainLayer->UI().Text("Score: " + std::to_string(score), Color::White, Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() / 2 - 50, -5 }));
 			UIsurface& retryButton = mainLayer->UI().Rectangle(300, 50, Color(0, 200, 0), Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() / 2 - 150, -5 }));
