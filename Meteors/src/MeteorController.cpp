@@ -14,6 +14,7 @@ namespace Meteors
 		Transform& t = gameObject()->transform();
 		m_Velocity.y -= m_Gravity * Time::Get().RenderingTimeline().DeltaTime();
 		t.Translate({ m_Velocity * Time::Get().RenderingTimeline().DeltaTime(), 0 });
+		t.Rotate(-m_Velocity.x / (PI * m_Radius) * Time::Get().RenderingTimeline().DeltaTime() * 3, Vector3f::Forward());
 
 		if (t.Position().y - m_Radius < FloorHeight)
 		{

@@ -34,6 +34,7 @@ namespace Meteors
 		void Init() override
 		{
 			GetWindow().SetClearColor(Color::White);
+			GetWindow().EnableVSync();
 			m_GameScene = &SceneManager::Get().CreateScene();
 			Camera* gameCamera = m_GameScene->CreateCamera(Projection::Orthographic(0, ViewWidth, 0, ViewHeight, -100, 100));
 			m_GameScene->CreateLayer(gameCamera);
@@ -76,7 +77,7 @@ namespace Meteors
 			factory.SetCurrentLayer(layer);
 			factory.Image(ViewWidth, ViewHeight, ResourceManager::Get().Get<Texture2D>(RollingHillsTexture), Transform({ ViewWidth / 2, ViewHeight / 2, -99 }));
 			GameObject * ground = factory.Image(ViewWidth, FloorHeight, ResourceManager::Get().Get<Texture2D>(GroundTexture), Transform({ ViewWidth / 2, FloorHeight / 2, -98 }));
-			ground->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetShader().Link("TexCoordScaling", Vector2f{ 19.2f, 1.0f });
+			ground->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetShader().Link("TexCoordMatrix", Matrix3f::Scale(19.2f, 1.0f, 1.0f));
 			GameObject * player = factory.Image(CharacterWidth, CharacterHeight, ResourceManager::Get().Get<Texture2D>(RightFacingCharacterTexture), Transform({ ViewWidth / 2, FloorHeight + CharacterHeight / 2, 0 }));
 			player->Components().AddComponent<PlayerMovement>(PlayerSpeed, 2400, Gravity, 3);
 
