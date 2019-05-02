@@ -12,7 +12,7 @@ namespace DND
 
 		id_t loadingIconId = resources.GetResourceId("loadingSymbol");
 		UIsurface& background = layer.UI().Rectangle(camera->ViewWidth(), camera->ViewHeight(), Color::White, Transform({ camera->ViewWidth() / 2, camera->ViewHeight() / 2, -50 }));
-		UIsurface& loadingIcon = background.Image(300, 300, ResourceManager::Get().Get<Texture2D>(loadingIconId), Transform({ 0, 0, 1 }));
+		UIsurface& loadingIcon = background.Image(300, 300, ResourceManager::Get().GetResource<Texture2D>(loadingIconId), Transform({ 0, 0, 1 }));
 		loadingIcon.Object()->Components().AddComponent<TriggerComponent>([](GameObject* object)
 		{
 

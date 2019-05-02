@@ -37,14 +37,14 @@ namespace Bolt
 		bool ResourceExists(const ResourceID& id);
 
 		id_t Register(std::unique_ptr<Resource>&& resource);
-		ResourcePtr<Resource> Get(const ResourceID& id);
+		ResourcePtr<Resource> GetResource(const ResourceID& id);
 		void FreeResource(const ResourceID& id);
 		ResourcePtr<const Font> DefaultFont();
 
 		template<typename T>
-		ResourcePtr<T> Get(const ResourceID& id)
+		ResourcePtr<T> GetResource(const ResourceID& id)
 		{
-			return (ResourcePtr<T>)Get(id);
+			return (ResourcePtr<T>)GetResource(id);
 		}
 
 	private:

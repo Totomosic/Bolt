@@ -11,10 +11,10 @@ namespace DND
 
 	void CreateCharacterPrefabs(const ResourcePack& resources)
 	{
-		ResourcePtr<Texture2D> blueWizardUp = ResourceManager::Get().Get<Texture2D>(resources.GetResourceId("WizardStaticBackward"));
-		ResourcePtr<Texture2D> blueWizardDown = ResourceManager::Get().Get<Texture2D>(resources.GetResourceId("WizardStaticForward"));
-		ResourcePtr<Texture2D> blueWizardLeft = ResourceManager::Get().Get<Texture2D>(resources.GetResourceId("WizardStaticLeft"));
-		ResourcePtr<Texture2D> blueWizardRight = ResourceManager::Get().Get<Texture2D>(resources.GetResourceId("WizardStaticRight"));
+		ResourcePtr<Texture2D> blueWizardUp = ResourceManager::Get().GetResource<Texture2D>(resources.GetResourceId("WizardStaticBackward"));
+		ResourcePtr<Texture2D> blueWizardDown = ResourceManager::Get().GetResource<Texture2D>(resources.GetResourceId("WizardStaticForward"));
+		ResourcePtr<Texture2D> blueWizardLeft = ResourceManager::Get().GetResource<Texture2D>(resources.GetResourceId("WizardStaticLeft"));
+		ResourcePtr<Texture2D> blueWizardRight = ResourceManager::Get().GetResource<Texture2D>(resources.GetResourceId("WizardStaticRight"));
 
 		Mesh blueWizardMesh;
 		blueWizardMesh.Models.push_back({ ObjectFactory::SquareModel(), Matrix4f::Translation(0, GlobalState::MapManager.TileHeight() * 0.35f, 0) 
@@ -31,7 +31,7 @@ namespace DND
 
 	void CreateTilemaps(const ResourcePack& resources)
 	{
-		ResourcePtr<Texture2D> tileset = ResourceManager::Get().Get<Texture2D>(resources.GetResourceId("Tileset"));
+		ResourcePtr<Texture2D> tileset = ResourceManager::Get().GetResource<Texture2D>(resources.GetResourceId("Tileset"));
 
 		TilemapManager& mapManager = GlobalState::MapManager;
 		id_t grassTileId = mapManager.TileImages().AddTile(tileset->GetImage(0, 0, 32, 32));

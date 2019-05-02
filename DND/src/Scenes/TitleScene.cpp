@@ -10,7 +10,7 @@ namespace DND
 		Camera* camera = scene.CreateCamera(Projection::Orthographic(0, 1920, 0, 1080, 0, 100));
 		Layer& layer = scene.CreateLayer(camera);
 
-		UIsurface& background = layer.UI().Image(camera->ViewWidth(), camera->ViewHeight(), ResourceManager::Get().Get<Texture2D>(resources.GetResourceId("dndBackground")), Transform({ camera->ViewWidth() / 2, camera->ViewHeight() / 2, -50 }));
+		UIsurface& background = layer.UI().Image(camera->ViewWidth(), camera->ViewHeight(), ResourceManager::Get().GetResource<Texture2D>(resources.GetResourceId("dndBackground")), Transform({ camera->ViewWidth() / 2, camera->ViewHeight() / 2, -50 }));
 		UIsurface& titleBack = background.Rectangle(600, 800, Color(30, 30, 30, 240), Transform({ 0, 0, 1 }));
 		Text& title = titleBack.Text("RPG", Color::White, Transform({ 0, 250, 1 }));
 

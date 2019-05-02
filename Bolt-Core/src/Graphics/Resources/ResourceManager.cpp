@@ -94,7 +94,7 @@ namespace Bolt
 		return id;
 	}
 
-	ResourcePtr<Resource> ResourceManager::Get(const ResourceID& id)
+	ResourcePtr<Resource> ResourceManager::GetResource(const ResourceID& id)
 	{
 		if (ResourceExists(id))
 		{
@@ -105,7 +105,7 @@ namespace Bolt
 
 	void ResourceManager::FreeResource(const ResourceID& id)
 	{
-		Resource* resource = Get(id).Get();
+		Resource* resource = GetResource(id).Get();
 		m_Resources.erase(id);
 	}
 

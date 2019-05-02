@@ -87,9 +87,29 @@ namespace Bolt
 		return GetCurrentScope().DeclareArray(type, ShaderLiteral::FromInt((int)length));
 	}
 
-	void ShaderProgram::SetVariable(const ShaderVariablePtr& var, const ShaderValuePtr& value)
+	void ShaderProgram::SetVariable(const ShaderLValuePtr& var, const ShaderValuePtr& value)
 	{
 		AddOperation<SetValueOp>(var, value);
+	}
+
+	void ShaderProgram::AddAssign(const ShaderLValuePtr& var, const ShaderValuePtr& value)
+	{
+		AddOperation<AddAssignOp>(var, value);
+	}
+
+	void ShaderProgram::SubAssign(const ShaderLValuePtr& var, const ShaderValuePtr& value)
+	{
+		AddOperation<SubAssignOp>(var, value);
+	}
+
+	void ShaderProgram::MulAssign(const ShaderLValuePtr& var, const ShaderValuePtr& value)
+	{
+		AddOperation<MulAssignOp>(var, value);
+	}
+
+	void ShaderProgram::DivAssign(const ShaderLValuePtr& var, const ShaderValuePtr& value)
+	{
+		AddOperation<DivAssignOp>(var, value);
 	}
 
 	MainScope* ShaderProgram::AddMainScope()
