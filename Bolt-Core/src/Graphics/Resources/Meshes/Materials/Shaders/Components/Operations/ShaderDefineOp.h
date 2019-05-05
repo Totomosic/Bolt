@@ -15,6 +15,7 @@ namespace Bolt
 		ShaderDefineOp(const ShaderVariablePtr& var, const ShaderValuePtr& value, const blt::string& meta = "");
 
 		void Build(ShaderBuilder& builder) const override;
+		BLT_DEFAULT_SHADEROP_CLONE(ShaderDefineOp);
 
 	};
 

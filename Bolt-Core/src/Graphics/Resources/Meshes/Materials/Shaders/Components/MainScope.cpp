@@ -5,7 +5,7 @@
 namespace Bolt
 {
 
-	MainScope::MainScope(int index, ShaderScope* parent) : ShaderScope(index, parent)
+	MainScope::MainScope(int index) : ShaderScope(index)
 	{
 	
 	}
@@ -18,7 +18,7 @@ namespace Bolt
 		builder.SetScopeIndex(m_ScopeIndex);
 		builder.NextLine();
 		BuildOperations(builder);
-		builder.SetScopeIndex((ParentScope() == nullptr) ? 0 : ParentScope()->GetScopeIndex());
+		builder.SetScopeIndex(m_ScopeIndex - 1);
 		builder.NextLine();
 		builder.Write('}');
 	}

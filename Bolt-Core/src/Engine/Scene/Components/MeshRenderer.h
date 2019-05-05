@@ -15,7 +15,6 @@ namespace Bolt
 
 		std::vector<Cuboid> GetMeshBounds() const;
 		Cuboid GetOverallMeshBounds() const;
-		void Update() override;
 
 		std::unique_ptr<Component> Clone() const override;
 

@@ -51,20 +51,6 @@ namespace Bolt
 		return result;
 	}
 
-	void MeshRenderer::Update()
-	{
-		for (int i = 0; i < Mesh::MAX_MATERIALS; i++)
-		{
-			/*for (auto& pair : Mesh.Materials[i].Textures.Animators)
-			{
-				if (!pair.second->IsPaused())
-				{
-					pair.second->Update(Time::RenderingTimeline().DeltaTime());
-				}
-			}*/
-		}
-	}
-
 	std::unique_ptr<Component> MeshRenderer::Clone() const
 	{
 		return std::make_unique<MeshRenderer>(Mesh.Clone());

@@ -4,21 +4,20 @@
 
 #include "RenderSettings.h"
 #include "..\..\ResourcePtr.h"
+#include "MaterialBuilder.h"
 
 namespace Bolt
 {
 
-	class MaterialBuilder;
-
 	class BLT_API Material
 	{
 	private:
-		const MaterialBuilder* m_Builder;
+		MaterialBuilder m_Builder;
 		ShaderLinkContext m_Shader;
 		RenderSettings m_RenderSettings;
 
 	private:
-		Material(ShaderLinkContext&& shader);
+		Material(const MaterialBuilder& builder, ShaderLinkContext&& shader);
 
 	public:
 		Material(const Material& other) = delete;
@@ -32,12 +31,12 @@ namespace Bolt
 		const RenderSettings& GetRenderSettings() const;
 		RenderSettings& GetRenderSettings();
 
+		MaterialBuilder& GetBuilder();
+		void Rebuild();
+
 		std::unique_ptr<Material> Clone() const;
 
 		friend class MaterialBuilder;
-
-	private:
-		void SetBuilder(const MaterialBuilder* builder);
 
 	};
 

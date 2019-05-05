@@ -1,6 +1,7 @@
 #include "Types.h"
 
 #include "ObjectPrefab.h"
+#include "Components/MeshRenderer.h"
 
 namespace Bolt
 {
@@ -33,6 +34,12 @@ namespace Bolt
 	Transform& ObjectPrefab::transform()
 	{
 		return m_Transform;
+	}
+
+	MeshRenderer& ObjectPrefab::mesh() const
+	{
+		BLT_ASSERT(Components().HasComponent<MeshRenderer>(), "Object does not have MeshRenderer Component");
+		return Components().GetComponent<MeshRenderer>();
 	}
 
 	const ComponentManager& ObjectPrefab::Components() const

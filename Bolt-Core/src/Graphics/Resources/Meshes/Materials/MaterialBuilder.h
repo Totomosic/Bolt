@@ -1,9 +1,10 @@
 #pragma once
 #include "Modules/__Modules__.h"
-#include "Material.h"
 
 namespace Bolt
 {
+
+	class Material;
 
 	class BLT_API MaterialBuilder : public Resource
 	{
