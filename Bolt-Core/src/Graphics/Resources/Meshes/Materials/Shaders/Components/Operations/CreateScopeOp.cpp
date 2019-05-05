@@ -6,8 +6,8 @@
 namespace Bolt
 {
 
-	CreateScopeOp::CreateScopeOp(ShaderScope* scope) : ShaderOp(),
-		m_Scope(scope)
+	CreateScopeOp::CreateScopeOp(std::unique_ptr<ShaderScope>&& scope) : ShaderOp(),
+		m_Scope(std::move(scope))
 	{
 	
 	}
@@ -15,6 +15,11 @@ namespace Bolt
 	void CreateScopeOp::Build(ShaderBuilder& builder) const
 	{
 		m_Scope->Build(builder);
+	}
+
+	std::unique_ptr<ShaderOp> CreateScopeOp::Clone() const
+	{
+		return std::make_unique<CreateScopeOp>(m_Scope->Clone());
 	}
 
 }

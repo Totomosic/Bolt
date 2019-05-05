@@ -10,6 +10,8 @@ namespace Bolt
 		GlobalScope();
 
 		void Build(ShaderBuilder& builder) const override;
+		BLT_DEFAULT_SHADERSCOPE_CLONE(GlobalScope);
+
 	};
 
 }

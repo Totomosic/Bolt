@@ -9,12 +9,13 @@ namespace Bolt
 	class BLT_API CreateScopeOp : public ShaderOp
 	{
 	private:
-		ShaderScope* m_Scope;
+		std::unique_ptr<ShaderScope> m_Scope;
 
 	public:
-		CreateScopeOp(ShaderScope* scope);
+		CreateScopeOp(std::unique_ptr<ShaderScope>&& scope);
 
 		void Build(ShaderBuilder& builder) const override;
+		virtual std::unique_ptr<ShaderOp> Clone() const override;
 
 	};
 

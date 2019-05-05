@@ -14,6 +14,7 @@ namespace Bolt
 		DeclarePassOutOp(const ShaderVariablePtr& outVar, const blt::string& meta = "");
 
 		void Build(ShaderBuilder& builder) const override;
+		BLT_DEFAULT_SHADEROP_CLONE(DeclarePassOutOp);
 
 	};
 

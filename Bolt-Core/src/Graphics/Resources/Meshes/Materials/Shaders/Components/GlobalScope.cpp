@@ -5,7 +5,7 @@
 namespace Bolt
 {
 
-	GlobalScope::GlobalScope() : ShaderScope()
+	GlobalScope::GlobalScope() : ShaderScope(0)
 	{
 	
 	}

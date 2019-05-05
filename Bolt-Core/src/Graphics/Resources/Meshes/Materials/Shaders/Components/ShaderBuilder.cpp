@@ -5,7 +5,7 @@ namespace Bolt
 {
 
 	ShaderBuilder::ShaderBuilder(ShaderType shaderType)
-		: m_ShaderType(shaderType), m_Source("#version 430 core\n"), m_GlobalScope(), m_VarCount(0), m_PassCount(0), m_CurrentScopeIndex(0), m_CurrentCursor(m_Source.size())
+		: m_ShaderType(shaderType), m_Source("#version 430 core\n"), m_GlobalScope(), m_MainScope(1), m_VarCount(0), m_PassCount(0), m_CurrentScopeIndex(0), m_CurrentCursor(m_Source.size())
 	{
 
 	}
@@ -28,6 +28,16 @@ namespace Bolt
 	GlobalScope& ShaderBuilder::GetGlobalScope()
 	{
 		return m_GlobalScope;
+	}
+
+	const MainScope& ShaderBuilder::GetMainScope() const
+	{
+		return m_MainScope;
+	}
+
+	MainScope& ShaderBuilder::GetMainScope()
+	{
+		return m_MainScope;
 	}
 
 	int ShaderBuilder::SaveLineCursor() const
@@ -80,6 +90,7 @@ namespace Bolt
 	blt::string ShaderBuilder::Build()
 	{
 		GetGlobalScope().Build(*this);
+		GetMainScope().Build(*this);
 		blt::string source = GetSource();
 		Reset();
 		return source;

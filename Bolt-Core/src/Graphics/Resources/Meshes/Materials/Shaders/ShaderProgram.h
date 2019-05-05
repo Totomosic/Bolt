@@ -54,7 +54,6 @@ namespace Bolt
 	protected:
 		mutable ShaderBuilder m_Builder;
 		ShaderType m_ShaderType;
-		ShaderScope* m_CurrentScope;
 
 		std::vector<UserUniformPtr> m_UserUniforms;
 		std::vector<RendererUniformPtr> m_RendererUniforms;
@@ -64,7 +63,11 @@ namespace Bolt
 
 	public:
 		ShaderType Type() const;
-		ShaderScope& GetCurrentScope() const;
+
+		const GlobalScope& GetGlobalScope() const;
+		GlobalScope& GetGlobalScope();
+		const MainScope& GetMainScope() const;
+		MainScope& GetMainScope();
 
 		ShaderVariablePtr Stream(ShaderStream stream);
 		ShaderVariablePtr Uniform(const blt::string& linkName, ValueType type, std::shared_ptr<UniformValueContainer> defaultValue = nullptr);
@@ -118,26 +121,20 @@ namespace Bolt
 		void MulAssign(const ShaderLValuePtr& var, const ShaderValuePtr& value);
 		void DivAssign(const ShaderLValuePtr& var, const ShaderValuePtr& value);
 
-		MainScope* AddMainScope();
-		void SetCurrentScope(ShaderScope* scope);
 		virtual CompiledShaderProgram Compile() const = 0;
 		virtual void Reset();
 
 		template<typename T, typename... Args>
-		T* AddScope(Args&& ... args)
+		T& AddScope(Args&& ... args)
 		{
-			std::unique_ptr<T> scope = std::make_unique<T>(GetCurrentScope().GetScopeIndex() + 1, &GetCurrentScope(), std::forward<Args>(args)...);
-			T* ptr = scope.get();
-			GetCurrentScope().AddChildScope(std::move(scope));
-			SetCurrentScope((ShaderScope*)ptr);
-			return ptr;
+			return GetMainScope().AddScope<T>(GetMainScope().GetScopeIndex() + 1, std::forward<Args>(args)...);
 		}
 
 		template<typename T, typename... Args>
 		void AddOperation(Args&& ... args)
 		{
 			std::unique_ptr<T> op = std::make_unique<T>(std::forward<Args>(args)...);
-			GetCurrentScope().AddOperation(std::move(op));
+			GetMainScope().AddOperation(std::move(op));
 		}
 
 	protected:

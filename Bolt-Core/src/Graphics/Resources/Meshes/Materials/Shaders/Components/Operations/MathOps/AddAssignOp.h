@@ -14,6 +14,7 @@ namespace Bolt
 		AddAssignOp(const ShaderLValuePtr& var, const ShaderValuePtr& value);
 
 		void Build(ShaderBuilder& builder) const override;
+		BLT_DEFAULT_SHADEROP_CLONE(AddAssignOp);
 
 	};
 

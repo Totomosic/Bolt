@@ -5,8 +5,8 @@
 namespace Bolt
 {
 
-	Material::Material(ShaderLinkContext&& shader)
-		: m_Builder(nullptr), m_Shader(std::move(shader)), m_RenderSettings()
+	Material::Material(const MaterialBuilder& builder, ShaderLinkContext&& shader)
+		: m_Builder(builder), m_Shader(std::move(shader)), m_RenderSettings()
 	{
 		
 	}
@@ -31,16 +31,24 @@ namespace Bolt
 		return m_RenderSettings;
 	}
 
-	std::unique_ptr<Material> Material::Clone() const
+	MaterialBuilder& Material::GetBuilder()
 	{
-		std::unique_ptr<Material> material = m_Builder->BuildMaterial();
-		GetShader().CopyLinksTo(material->GetShader());
-		return material;
+		return m_Builder;
 	}
 
-	void Material::SetBuilder(const MaterialBuilder* builder)
+	void Material::Rebuild()
 	{
-		m_Builder = builder;
+		std::unique_ptr<Material> newMaterial = m_Builder.BuildMaterial();
+		ShaderLinkContext& links = newMaterial->GetShader();
+		GetShader().CopyLinksTo(links);
+		m_Shader = std::move(links);
+	}
+
+	std::unique_ptr<Material> Material::Clone() const
+	{
+		std::unique_ptr<Material> material = m_Builder.BuildMaterial();
+		GetShader().CopyLinksTo(material->GetShader());
+		return material;
 	}
 
 }

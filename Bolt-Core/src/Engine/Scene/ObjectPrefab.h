@@ -6,6 +6,8 @@
 namespace Bolt
 {
 
+	class MeshRenderer;
+
 	// Base Class for GameObject, that contains components but is not associated with a layer
 	class BLT_API ObjectPrefab
 	{
@@ -23,6 +25,7 @@ namespace Bolt
 
 		const Transform& transform() const;
 		Transform& transform();
+		MeshRenderer& mesh() const;
 		const ComponentManager& Components() const;
 		ComponentManager& Components();
 

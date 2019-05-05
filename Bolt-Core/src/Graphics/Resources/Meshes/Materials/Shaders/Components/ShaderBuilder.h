@@ -1,6 +1,7 @@
 #pragma once
 #include "Values/ShaderVariable.h"
 #include "GlobalScope.h"
+#include "MainScope.h"
 
 namespace Bolt
 {
@@ -10,7 +11,9 @@ namespace Bolt
 	private:
 		ShaderType m_ShaderType;
 		blt::string m_Source;
+
 		GlobalScope m_GlobalScope;
+		MainScope m_MainScope;
 
 		mutable int m_VarCount;
 		mutable int m_PassCount;
@@ -23,8 +26,11 @@ namespace Bolt
 
 		ShaderType GetShaderType() const;
 		const blt::string& GetSource() const;
+
 		const GlobalScope& GetGlobalScope() const;
 		GlobalScope& GetGlobalScope();
+		const MainScope& GetMainScope() const;
+		MainScope& GetMainScope();
 
 		int SaveLineCursor() const;
 		void LoadLineCursor(int cursor);

@@ -1,5 +1,6 @@
 #include "Types.h"
 #include "MaterialBuilder.h"
+#include "Material.h"
 
 namespace Bolt
 {
@@ -22,8 +23,7 @@ namespace Bolt
 
 	std::unique_ptr<Material> MaterialBuilder::BuildMaterial() const
 	{
-		std::unique_ptr<Material> material = std::unique_ptr<Material>(new Material(m_Factory.BuildShader()));
-		material->SetBuilder(this);
+		std::unique_ptr<Material> material = std::unique_ptr<Material>(new Material(*this, m_Factory.BuildShader()));
 		return material;
 	}
 

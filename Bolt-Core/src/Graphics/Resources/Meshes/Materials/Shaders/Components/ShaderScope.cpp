@@ -7,20 +7,38 @@
 namespace Bolt
 {
 
-	ShaderScope::ShaderScope() : ShaderScope(0, nullptr)
+	ShaderScope::ShaderScope() : ShaderScope(0)
 	{
 	
 	}
 
-	ShaderScope::ShaderScope(int index, ShaderScope* parent)
-		: m_ChildScopes(), m_ParentScope(parent), m_ScopeIndex(index), m_DeclaredVariables(), m_Operations()
+	ShaderScope::ShaderScope(int index)
+		: m_ScopeIndex(index), m_DeclaredVariables(), m_Operations()
 	{
-	
+		
 	}
 
-	ShaderScope* ShaderScope::ParentScope() const
+	ShaderScope::ShaderScope(const ShaderScope& other)
+		: m_ScopeIndex(other.m_ScopeIndex), m_DeclaredVariables(other.m_DeclaredVariables), m_Operations()
 	{
-		return m_ParentScope;
+		m_Operations.reserve(other.m_Operations.size());
+		for (const auto& op : other.m_Operations)
+		{
+			m_Operations.push_back(op->Clone());
+		}
+	}
+
+	ShaderScope& ShaderScope::operator=(const ShaderScope& other)
+	{
+		m_Operations.clear();
+		m_Operations.reserve(other.m_Operations.size());		
+		for (const auto& op : other.m_Operations)
+		{
+			m_Operations.push_back(op->Clone());
+		}
+		m_DeclaredVariables = other.m_DeclaredVariables;
+		m_ScopeIndex = other.m_ScopeIndex;
+		return *this;
 	}
 
 	int ShaderScope::GetScopeIndex() const
@@ -29,11 +47,6 @@ namespace Bolt
 	}
 
 	bool ShaderScope::IsDefinedInThisScope(const ShaderVariable* var) const
-	{
-		return true;
-	}
-
-	bool ShaderScope::IsDefined(const ShaderVariable* var) const
 	{
 		return true;
 	}
@@ -83,18 +96,16 @@ namespace Bolt
 		m_Operations.push_back(std::move(op));
 	}
 
-	ShaderScope& ShaderScope::AddMainScope()
+	void ShaderScope::InsertOperation(int index, std::unique_ptr<ShaderOp>&& op)
 	{
-		std::unique_ptr<MainScope> main = std::make_unique<MainScope>(m_ScopeIndex + 1, this);
-		MainScope* ptr = main.get();
-		AddChildScope(std::move(main));		
-		return *ptr;
+		m_Operations.insert(m_Operations.begin() + index, std::move(op));
 	}
 
-	void ShaderScope::AddChildScope(std::unique_ptr<ShaderScope>&& scope)
+	ShaderScope& ShaderScope::AddScope(std::unique_ptr<ShaderScope>&& scope)
 	{
-		AddOperation(std::make_unique<CreateScopeOp>(scope.get()));
-		m_ChildScopes.push_back(std::move(scope));		
+		ShaderScope* ptr = scope.get();
+		AddOperation(std::make_unique<CreateScopeOp>(std::move(scope)));
+		return *ptr;
 	}
 
 	void ShaderScope::BuildOperations(ShaderBuilder& builder) const

@@ -16,6 +16,7 @@ namespace Bolt
 		DeclareArrayOp(const ShaderVariablePtr& arr, const ShaderLiteralPtr& length, const blt::string& meta = "");
 
 		void Build(ShaderBuilder& builder) const override;
+		BLT_DEFAULT_SHADEROP_CLONE(DeclareArrayOp);
 
 	};
 
