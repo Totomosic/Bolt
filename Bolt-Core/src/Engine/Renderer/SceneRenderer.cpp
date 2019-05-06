@@ -2,6 +2,7 @@
 
 #include "SceneRenderer.h"
 #include "Engine/Engine.h"
+#include "Engine/Scene/Query/SGQTransparency.h"
 
 namespace Bolt
 {

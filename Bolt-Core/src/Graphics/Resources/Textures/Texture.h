@@ -1,6 +1,6 @@
 #pragma once
-#include "Bolt-Core.h"
-#include "..\Resource.h"
+#include "Core/Image.h"
+#include "../Resource.h"
 
 namespace Bolt
 {

@@ -1,7 +1,8 @@
 #pragma once
-#include "Bolt-Core.h"
-#include "..\..\..\Resource.h"
-#include "..\..\..\ResourcePtr.h"
+#include "Core/Math/Maths.h"
+#include "Core/Color.h"
+#include "Graphics/Resources/Resource.h"
+#include "Graphics/Resources/ResourcePtr.h"
 
 namespace Bolt
 {

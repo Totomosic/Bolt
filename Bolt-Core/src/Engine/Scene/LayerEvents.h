@@ -1,5 +1,6 @@
 #pragma once
-#include "Bolt-Core.h"
+#include "GameObject.h"
+#include "Core/Events/Event.h"
 
 namespace Bolt
 {

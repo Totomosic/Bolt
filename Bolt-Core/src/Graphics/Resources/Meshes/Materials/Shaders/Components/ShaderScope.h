@@ -1,6 +1,7 @@
 #pragma once
 #include "Values/ShaderVariable.h"
-#include "Operations/__Operations__.h"
+#include "Values/ShaderLiteral.h"
+#include "Operations/ShaderOp.h"
 
 namespace Bolt
 {

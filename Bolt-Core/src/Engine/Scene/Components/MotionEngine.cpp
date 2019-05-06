@@ -1,7 +1,8 @@
 #include "Types.h"
 
 #include "MotionEngine.h"
-#include "..\GameObject.h"
+#include "../GameObject.h"
+#include "Core/Time/Time.h"
 
 namespace Bolt
 {

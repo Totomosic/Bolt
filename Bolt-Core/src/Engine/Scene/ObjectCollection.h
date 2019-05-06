@@ -1,7 +1,8 @@
 #pragma once
 #include "GameObject.h"
 #include "Camera.h"
-#include "Query\__Query__.h"
+#include "Query/SGQuery.h"
+#include "Query/SGQueryResult.h"
 
 #ifndef GAMEOBJECTS_PER_LAYER
 #define GAMEOBJECTS_PER_LAYER 20000

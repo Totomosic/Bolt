@@ -2,7 +2,10 @@
 #include "BasicModels.h"
 #include "Engine/Engine.h"
 #include "Graphics/Resources/ResourceManager.h"
-#include "Graphics/Resources/Meshes/Factories/__Factories__.h"
+
+#include "Graphics/Resources/Meshes/Factories/RectangleFactory.h"
+#include "Graphics/Resources/Meshes/Factories/CuboidFactory.h"
+#include "Graphics/Resources/Meshes/Factories/EllipseFactory.h"
 
 namespace Bolt
 {

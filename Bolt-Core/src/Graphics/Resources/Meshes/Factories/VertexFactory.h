@@ -1,5 +1,6 @@
 #pragma once
-#include "..\..\..\Buffers\__Buffers__.h"
+#include "Graphics/Buffers/VertexArray.h"
+#include "Graphics/Buffers/IndexArray.h"
 
 namespace Bolt
 {

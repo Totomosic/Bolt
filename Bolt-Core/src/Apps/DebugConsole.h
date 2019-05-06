@@ -1,5 +1,5 @@
 #pragma once
-#include "Bolt-Engine.h"
+#include "Engine/Application.h"
 
 namespace Bolt
 {

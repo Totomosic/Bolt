@@ -1,6 +1,12 @@
 #include "Types.h"
 #include "ShaderProgram.h"
 
+#include "Components/Operations/SetValueOp.h"
+#include "Components/Operations/MathOps/AddAssignOp.h"
+#include "Components/Operations/MathOps/SubAssignOp.h"
+#include "Components/Operations/MathOps/MulAssignOp.h"
+#include "Components/Operations/MathOps/DivAssignOp.h"
+
 namespace Bolt
 {
 

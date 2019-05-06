@@ -1,7 +1,8 @@
 #pragma once
 #include "GameObject.h"
-#include "Components\__Components__.h"
 #include "BasicModels.h"
+
+#include "Components/MeshRenderer.h"
 
 namespace Bolt
 {

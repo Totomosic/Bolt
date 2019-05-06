@@ -1,5 +1,6 @@
 #pragma once
 #include "UIelement.h"
+#include "Graphics/Resources/Meshes/Materials/Material.h"
 
 namespace Bolt
 {

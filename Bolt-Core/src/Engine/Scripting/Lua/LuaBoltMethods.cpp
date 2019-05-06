@@ -1,6 +1,9 @@
 #include "Types.h"
 #include "LuaBoltMethods.h"
 
+#include "Core/Time/Time.h"
+#include "Core/Utils/Filesystem/Filesystem.h"
+
 namespace Bolt
 {
 	

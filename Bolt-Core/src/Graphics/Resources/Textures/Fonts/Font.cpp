@@ -1,5 +1,4 @@
 #include "Types.h"
-
 #include "Font.h"
 
 namespace Bolt

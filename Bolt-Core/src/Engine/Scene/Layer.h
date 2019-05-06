@@ -1,9 +1,8 @@
 #pragma once
-#include "Bolt-Graphics.h"
 #include "ObjectCollection.h"
-#include "Query\__Query__.h"
+#include "Query/SGQuery.h"
 
-#include "UI\UIroot.h"
+#include "UI/UIroot.h"
 #include "LayerEvents.h"
 
 namespace Bolt

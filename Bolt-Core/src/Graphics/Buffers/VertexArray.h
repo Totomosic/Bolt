@@ -1,5 +1,5 @@
 #pragma once
-#include "Iterators\__Iterators__.h"
+#include "Iterators/VertexIterator.h"
 #include "VertexBuffer.h"
 #include "ArrayDescriptor.h"
 

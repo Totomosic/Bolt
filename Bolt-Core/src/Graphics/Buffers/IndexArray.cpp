@@ -1,7 +1,7 @@
 #include "Types.h"
 
 #include "IndexArray.h"
-#include "Iterators\__Iterators__.h"
+#include "Iterators/IndexIterator.h"
 
 namespace Bolt
 {

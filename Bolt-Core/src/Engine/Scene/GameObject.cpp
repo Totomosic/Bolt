@@ -1,7 +1,7 @@
 #include "Types.h"
-
 #include "GameObject.h"
 #include "Layer.h"
+#include "Core/Time/Time.h"
 
 namespace Bolt
 {

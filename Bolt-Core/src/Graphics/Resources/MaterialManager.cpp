@@ -1,5 +1,6 @@
 #include "Types.h"
 #include "MaterialManager.h"
+#include "Graphics/Resources/Meshes/Materials/Shaders/Components/ShaderFuncs.h"
 
 namespace Bolt
 {

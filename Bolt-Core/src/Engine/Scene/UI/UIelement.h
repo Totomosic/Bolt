@@ -1,7 +1,11 @@
 #pragma once
-#include "..\GameObject.h"
-#include "..\Components\UI\UIEventHandler.h"
-#include "..\..\..\Graphics\Resources\__Resources__.h"
+#include "Core/Color.h"
+#include "../GameObject.h"
+#include "../Components/UI/UIEventHandler.h"
+#include "Graphics/Resources/Textures/Texture2D.h"
+#include "Graphics/Resources/Textures/Fonts/Font.h"
+#include "Graphics/Resources/Meshes/Factories/TextFactory.h"
+#include "Graphics/Resources/Meshes/Materials/Material.h"
 
 namespace Bolt
 {

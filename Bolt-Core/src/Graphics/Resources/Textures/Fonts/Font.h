@@ -1,5 +1,7 @@
 #pragma once
-#include "..\Texture2D.h"
+#include "../Texture2D.h"
+#include "Core/Utils/Filesystem/Filesystem.h"
+#include "Core/Math/Maths.h"
 
 namespace Bolt
 {

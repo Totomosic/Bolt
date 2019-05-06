@@ -1,5 +1,5 @@
 #pragma once
-#include "Bolt-Core.h"
+#include "Core/Utils/Filesystem/XML/XMLnode.h"
 
 namespace Bolt
 {

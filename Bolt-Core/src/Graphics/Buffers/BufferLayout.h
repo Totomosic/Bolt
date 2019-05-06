@@ -1,5 +1,7 @@
 #pragma once
-#include "Bolt-Core.h"
+#include "Types.h"
+#include "Core/Math/Maths.h"
+#include "Core/Color.h"
 
 namespace Bolt
 {

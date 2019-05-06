@@ -1,5 +1,5 @@
 #pragma once
-#include "Bolt-Core.h"
+#include "Core/Utils/Filesystem/Filepath.h"
 
 namespace Bolt
 {

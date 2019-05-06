@@ -1,7 +1,7 @@
 #include "Types.h"
-
 #include "Layer.h"
 #include "ObjectCollection.h"
+#include "Core/Time/Time.h"
 
 namespace Bolt
 {

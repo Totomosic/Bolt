@@ -1,5 +1,8 @@
 #pragma once
-#include "Components/__Components__.h"
+#include "Components/Values/ShaderVariable.h"
+#include "Components/GlobalScope.h"
+#include "Components/MainScope.h"
+#include "Components/ShaderBuilder.h"
 #include "UniformValue.h"
 
 namespace Bolt

@@ -1,6 +1,7 @@
 #pragma once
-#include "Bolt-Graphics.h"
 #include "InputEvents.h"
+#include "Core/Math/Maths.h"
+#include "Graphics/Window.h"
 
 #define BLT_MAX_KEYS 512
 #define BLT_MAX_MOUSE_BUTTONS 32

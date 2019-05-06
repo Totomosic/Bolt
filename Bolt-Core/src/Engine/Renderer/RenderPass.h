@@ -1,5 +1,6 @@
 #pragma once
 #include "RenderGroup.h"
+#include "Graphics/Framebuffer.h"
 
 namespace Bolt
 {

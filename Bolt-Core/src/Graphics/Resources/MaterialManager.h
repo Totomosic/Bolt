@@ -1,5 +1,6 @@
 #pragma once
-#include "Meshes/Materials/__Materials__.h"
+#include "Meshes/Materials/MaterialBuilder.h"
+#include "Meshes/Materials/Material.h"
 #include "Textures/Fonts/Font.h"
 
 namespace Bolt

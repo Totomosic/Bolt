@@ -1,6 +1,6 @@
 #pragma once
-#include "Bolt-Graphics.h"
 #include "GLState.h"
+#include "Graphics/Window.h"
 
 namespace Bolt
 {

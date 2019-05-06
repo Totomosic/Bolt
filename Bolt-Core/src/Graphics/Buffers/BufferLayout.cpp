@@ -1,5 +1,4 @@
 #include "Types.h"
-
 #include "BufferLayout.h"
 
 namespace Bolt

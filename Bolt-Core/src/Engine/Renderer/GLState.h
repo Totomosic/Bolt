@@ -1,5 +1,5 @@
 #pragma once
-#include "Bolt-Graphics.h"
+#include "Graphics/Resources/Meshes/Materials/RenderSettings.h"
 
 namespace Bolt
 {

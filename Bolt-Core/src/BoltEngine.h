@@ -1,6 +1,14 @@
 #pragma once
-#include "Bolt-Core.h"
-#include "Bolt-Graphics.h"
-#include "Bolt-Engine.h"
+#include "Core/Functions.h"
+#include "Core/Time/Time.h"
+#include "Core/Memory/Allocator.h"
+#include "Core/Tasks/TaskManager.h"
+#include "Core/Utils/Filesystem/Filesystem.h"
 
-#include "Apps/__Apps__.h"
+#include "Graphics/Window.h"
+#include "Graphics/Resources/ResourceManager.h"
+
+#include "Engine/Application.h"
+#include "Engine/Engine.h"
+#include "Engine/Scene/UI/Text.h"
+#include "Engine/Scene/UI/UIsurface.h"
