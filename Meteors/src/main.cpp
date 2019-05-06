@@ -25,7 +25,6 @@ namespace Meteors
 		Scene* m_GameScene;
 		Scene* m_EndScene;
 
-		float m_Time;
 		Text* m_TimerText;
 
 		Text* m_FinalScoreText;
@@ -44,6 +43,14 @@ namespace Meteors
 			Layer& endLayer = m_EndScene->CreateLayer(endCamera);
 			endLayer.UI().Text("Game Over", ResourceManager::Get().Fonts().Verdana(48), Color::Black, Transform({ ViewWidth / 2, ViewHeight / 2, 0 }));
 			m_FinalScoreText = &endLayer.UI().Text("Your final survival time was: ", ResourceManager::Get().Fonts().Verdana(30), Color::Black, Transform({ ViewWidth / 2, ViewHeight / 2 - 24 - 15, 0 }));
+
+			UIsurface& retryButton = endLayer.UI().Rectangle(300, 50, Color::Green, Transform({ ViewWidth / 2, ViewHeight / 2 - 100, 0 }));
+			retryButton.Text("Play Again", ResourceManager::Get().Fonts().Verdana(24), Color::Black, Transform({ 0, 0, 1 }));
+			retryButton.EventHandler().OnClicked.Subscribe([this](UIClickedEvent & e)
+				{
+					LoadGameScene();
+					return ListenerResponse();
+				});
 
 			ResourcePack resources = ResourceManager::Get().FetchPack("res/resources.pack");
 			ResourceManager::Get().LoadPack(resources);
@@ -67,7 +74,7 @@ namespace Meteors
 
 		void LoadGameScene()
 		{
-			m_Time = 0;
+			Time::Get().RenderingTimeline().Reset();
 			SceneManager::Get().SetCurrentScene(*m_GameScene);
 			Layer& layer = m_GameScene->GetLayer(0);
 			layer.Clear();
@@ -77,6 +84,7 @@ namespace Meteors
 			factory.SetCurrentLayer(layer);
 			factory.Image(ViewWidth, ViewHeight, ResourceManager::Get().GetResource<Texture2D>(RollingHillsTexture), Transform({ ViewWidth / 2, ViewHeight / 2, -99 }));
 			GameObject * player = factory.Image(CharacterWidth, CharacterHeight, ResourceManager::Get().GetResource<Texture2D>(RightFacingCharacterTexture), Transform({ ViewWidth / 2, FloorHeight + CharacterHeight / 2, 0 }));
+			player->AddTag("Player");
 			player->Components().AddComponent<PlayerMovement>(PlayerSpeed, 2400, Gravity, 3);
 
 			GameObject* ground = factory.Image(ViewWidth, FloorHeight, ResourceManager::Get().GetResource<Texture2D>(GroundTexture), Transform({ ViewWidth / 2, FloorHeight / 2, -98 }));
@@ -95,16 +103,34 @@ namespace Meteors
 
 		void Update() override
 		{
-			m_Time += Time::Get().RenderingTimeline().DeltaTime();
 			m_TimerText->SetText(GetTimeString());
 
-			if (Input::Get().KeyPressed(Keycode::R))
+			if (&SceneManager::Get().CurrentScene() == m_GameScene)
 			{
-				LoadGameScene();
+				Vector3f playerPosition = m_GameScene->GetLayer(0).GameObjects().GetGameObjectByTag("Player").transform().Position();
+				for (GameObject* meteor : m_GameScene->GetLayer(0).GameObjects().GetGameObjectsByTag("Meteor"))
+				{
+					MeteorController& c = meteor->Components().GetComponent<MeteorController>();
+					float radius = c.GetRadius();
+					Vector3f pos = meteor->transform().Position();
+					float dx = abs(pos.x - playerPosition.x);
+					float dy = abs(pos.y - playerPosition.y);
+					if (dx <= radius + CharacterWidth / 2 && dy <= radius + CharacterHeight / 2)
+					{
+						c.Destroy();
+						Time::Get().RenderingTimeline().AddFunction(0.25, [this]()
+							{
+								LoadEndScene();
+							});
+					}
+				}
 			}
-			if (Input::Get().KeyPressed(Keycode::E))
+			else
 			{
-				LoadEndScene();
+				if (Input::Get().KeyPressed(Keycode::Space))
+				{
+					LoadGameScene();
+				}
 			}
 		}
 
@@ -120,10 +146,11 @@ namespace Meteors
 
 		blt::string GetTimeString() const
 		{
+			float time = Time::Get().RenderingTimeline().CurrentTime();
 			blt::string result = "";
-			result += std::to_string((int)(m_Time / 60)) + ':';
-			result += std::to_string((int)(m_Time) % 60 / 10);
-			result += std::to_string((int)(m_Time) % 10);
+			result += std::to_string((int)(time / 60)) + ':';
+			result += std::to_string((int)(time) % 60 / 10);
+			result += std::to_string((int)(time) % 10);
 			return result;
 		}
 

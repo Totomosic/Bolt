@@ -27,6 +27,8 @@ _ReSharper*/
 .vs/
 *.sln
 *.vcxproj*
+bin/
+bin-int/
 #Nuget packages folder
 packages/
 *.pem

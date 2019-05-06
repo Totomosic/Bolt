@@ -8,8 +8,9 @@ namespace Bolt
 	class BLT_API Time
 	{
 	private:
-		std::chrono::time_point<std::chrono::high_resolution_clock, std::chrono::duration<double>> s_StartTime;
-		Timeline s_RenderingTimeline;
+		std::chrono::time_point<std::chrono::high_resolution_clock, std::chrono::duration<double>> m_StartTime;
+		double m_PrevTime;
+		Timeline m_RenderingTimeline;
 
 	public:
 		static Time& Get();
