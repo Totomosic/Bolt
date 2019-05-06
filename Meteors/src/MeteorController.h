@@ -19,6 +19,7 @@ namespace Meteors
 	public:
 		MeteorController(float radius, float gravity, const Vector2f& velocity, MeteorDestroyFunc onDestroy);
 
+		float GetRadius() const;
 		void Update() override;
 		void Destroy();
 

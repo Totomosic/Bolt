@@ -12,33 +12,35 @@ namespace Bolt
 	}
 
 	Time::Time()
-		: s_StartTime(std::chrono::high_resolution_clock::now()), s_RenderingTimeline(1.0)
+		: m_StartTime(std::chrono::high_resolution_clock::now()), m_PrevTime(0.0), m_RenderingTimeline(1.0)
 	{
 	
 	}
 
 	Timeline& Time::RenderingTimeline()
 	{
-		return s_RenderingTimeline;
+		return m_RenderingTimeline;
 	}
 
 	double Time::FramesPerSecond()
 	{
-		return 1.0 / s_RenderingTimeline.ElapsedTime();
+		return 1.0 / m_RenderingTimeline.ElapsedTime();
 	}
 
 	void Time::Reset()
 	{
 		glfwSetTime(0.0);
-		s_StartTime = std::chrono::high_resolution_clock::now();
-		s_RenderingTimeline.Reset();
+		m_StartTime = std::chrono::high_resolution_clock::now();
+		m_RenderingTimeline.Reset();
+		m_PrevTime = 0.0;
 	}
 
 	void Time::Update()
 	{
-		double prev = s_RenderingTimeline.CurrentRealTime();
-		double current = (std::chrono::high_resolution_clock::now() - s_StartTime).count();
-		s_RenderingTimeline.Update(current / 1e9 - prev);
+		double current = (std::chrono::high_resolution_clock::now() - m_StartTime).count();
+		double currentSeconds = current / 1e9;
+		m_RenderingTimeline.Update(currentSeconds - m_PrevTime);
+		m_PrevTime = currentSeconds;
 	}
 
 }

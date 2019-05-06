@@ -9,6 +9,11 @@ namespace Meteors
 		
 	}
 
+	float MeteorController::GetRadius() const
+	{
+		return m_Radius;
+	}
+
 	void MeteorController::Update()
 	{
 		Transform& t = gameObject()->transform();
@@ -16,7 +21,7 @@ namespace Meteors
 		t.Translate({ m_Velocity * Time::Get().RenderingTimeline().DeltaTime(), 0 });
 		t.Rotate(-m_Velocity.x / (PI * m_Radius) * Time::Get().RenderingTimeline().DeltaTime() * 3, Vector3f::Forward());
 
-		if (t.Position().y - m_Radius < FloorHeight)
+		if (t.Position().y - m_Radius < FloorHeight || (t.Position().x + m_Radius <= 0 && m_Velocity.x < 0) || (t.Position().x - m_Radius >= ViewWidth && m_Velocity.x > 0))
 		{
 			Destroy();
 		}
