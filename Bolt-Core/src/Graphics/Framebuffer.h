@@ -1,11 +1,9 @@
 #pragma once
-#include "Bolt-Core.h"
-#include "Structs\Viewport.h"
-
-#include "Resources\Textures\Texture2D.h"
+#include "Core/Color.h"
+#include "Structs/Viewport.h"
+#include "Resources/Textures/Texture2D.h"
 #include "RenderBuffer.h"
-
-#include "Resources\ResourcePtr.h"
+#include "Resources/ResourcePtr.h"
 
 namespace Bolt
 {

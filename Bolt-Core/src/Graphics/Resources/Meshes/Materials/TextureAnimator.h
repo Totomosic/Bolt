@@ -1,5 +1,5 @@
 #pragma once
-#include "..\..\Textures\__Textures__.h"
+#include "Graphics/Resources/Textures/Texture2D.h"
 
 namespace Bolt
 {

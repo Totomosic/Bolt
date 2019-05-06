@@ -1,5 +1,5 @@
 #pragma once
-#include "Bolt-Graphics.h"
+#include "Core/Math/Maths.h"
 
 namespace Bolt
 {

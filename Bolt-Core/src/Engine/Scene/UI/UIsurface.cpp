@@ -2,6 +2,7 @@
 
 #include "UIsurface.h"
 #include "UIroot.h"
+#include "Graphics/Resources/ResourceManager.h"
 
 namespace Bolt
 {

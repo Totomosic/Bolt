@@ -1,5 +1,4 @@
 #pragma once
-#include "Bolt-Core.h"
 #include "Resource.h"
 #include "ResourceFile.h"
 #include "ResourcePack.h"

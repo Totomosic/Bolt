@@ -1,7 +1,6 @@
 #include "Types.h"
-
 #include "ComponentManager.h"
-#include "..\GameObject.h"
+#include "../GameObject.h"
 
 namespace Bolt
 {

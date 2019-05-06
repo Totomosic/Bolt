@@ -1,5 +1,7 @@
 #pragma once
-#include "Bolt-Graphics.h"
+#include "Core/Math/Matrices/Matrix4.h"
+#include "Graphics/Buffers/VertexArray.h"
+#include "Graphics/Buffers/IndexBuffer.h"
 
 namespace Bolt
 {

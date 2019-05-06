@@ -1,8 +1,13 @@
 #pragma once
-#include "Bolt-Graphics.h"
-#include "Scene/__Scene__.h"
-#include "Renderer/__Renderer__.h"
-#include "User/__User__.h"
+#include "Core/Time/Time.h"
+#include "Core/Events/EventManager.h"
+#include "Engine/User/Input.h"
+#include "Graphics/Window.h"
+#include "Graphics/Resources/ResourceManager.h"
+#include "Engine/Scene/BasicModels.h"
+#include "Engine/Renderer/Graphics.h"
+#include "Engine/Scene/SceneManager.h"
+#include "Engine/Renderer/SceneRenderer.h"
 
 namespace Bolt
 {

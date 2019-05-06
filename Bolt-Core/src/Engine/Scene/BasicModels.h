@@ -1,5 +1,6 @@
 #pragma once
-#include "Graphics/Resources/Meshes/__Meshes__.h"
+#include "Graphics/Resources/Meshes/Model.h"
+#include "Graphics/Resources/ResourcePtr.h"
 
 namespace Bolt
 {

@@ -1,5 +1,6 @@
 #pragma once
 #include "RenderData.h"
+#include "Graphics/Resources/Meshes/Materials/Material.h"
 
 namespace Bolt
 {

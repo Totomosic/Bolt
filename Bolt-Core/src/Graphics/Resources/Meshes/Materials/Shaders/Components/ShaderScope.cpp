@@ -3,6 +3,13 @@
 #include "ShaderBuilder.h"
 
 #include "MainScope.h"
+#include "Operations/CreateScopeOp.h"
+#include "Operations/DeclareArrayOp.h"
+#include "Operations/DeclarePassInOp.h"
+#include "Operations/DeclarePassOutOp.h"
+#include "Operations/SetValueOp.h"
+#include "Operations/ShaderDeclareOp.h"
+#include "Operations/ShaderDefineOp.h"
 
 namespace Bolt
 {

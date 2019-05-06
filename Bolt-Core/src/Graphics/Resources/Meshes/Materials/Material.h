@@ -1,9 +1,7 @@
 #pragma once
-#include "Bolt-Core.h"
-#include "Shaders\__Shaders__.h"
-
+#include "Shaders/ShaderLinkContext.h"
 #include "RenderSettings.h"
-#include "..\..\ResourcePtr.h"
+#include "Graphics/Resources/ResourcePtr.h"
 #include "MaterialBuilder.h"
 
 namespace Bolt

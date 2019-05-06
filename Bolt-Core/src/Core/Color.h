@@ -1,6 +1,5 @@
 #pragma once
-#include "Types.h"
-#include "Math\__Math__.h"
+#include "Math/Maths.h"
 
 namespace Bolt
 {

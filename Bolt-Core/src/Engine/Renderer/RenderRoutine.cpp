@@ -1,6 +1,8 @@
 #include "Types.h"
 
 #include "RenderRoutine.h"
+#include "Graphics/Resources/Meshes/Materials/Material.h"
+#include "Core/Time/Time.h"
 
 namespace Bolt
 {

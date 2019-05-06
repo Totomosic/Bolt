@@ -1,5 +1,6 @@
 #pragma once
 #include "Component.h"
+#include "Core/Events/IdManager.h"
 
 namespace Bolt
 {

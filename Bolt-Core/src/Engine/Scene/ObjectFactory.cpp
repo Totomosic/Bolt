@@ -1,7 +1,9 @@
 #include "Types.h"
-
 #include "ObjectFactory.h"
 #include "Layer.h"
+#include "Graphics/Resources/ResourceManager.h"
+#include "Graphics/Resources/Meshes/Factories/GridFactory.h"
+#include "Graphics/Resources/Meshes/Factories/LineFactory.h"
 
 namespace Bolt
 {

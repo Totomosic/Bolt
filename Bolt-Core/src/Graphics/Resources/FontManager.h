@@ -1,5 +1,6 @@
 #pragma once
-#include "Textures/Fonts/__Fonts__.h"
+#include "Textures/Fonts/Font.h"
+#include "Textures/Fonts/FontFactory.h"
 #include "ResourcePtr.h"
 
 namespace Bolt

@@ -1,5 +1,5 @@
 #pragma once
-#include "../../Buffers/__Buffers__.h"
+#include "Graphics/Buffers/Iterators/VertexIterator.h"
 
 namespace Bolt
 {

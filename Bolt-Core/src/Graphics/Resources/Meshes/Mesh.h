@@ -1,5 +1,5 @@
 #pragma once
-#include "Materials\__Materials__.h"
+#include "Materials/Material.h"
 #include "Model.h"
 #include "../ResourcePtr.h"
 

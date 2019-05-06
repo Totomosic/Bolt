@@ -1,7 +1,7 @@
 #pragma once
-#include "Bolt-Graphics.h"
+#include "Engine/Serialization/XMLserializer.h"
 #include "Transform.h"
-#include "Components\ComponentManager.h"
+#include "Components/ComponentManager.h"
 
 namespace Bolt
 {

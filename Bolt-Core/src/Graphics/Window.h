@@ -1,8 +1,9 @@
 #pragma once
 #include "Framebuffer.h"
-#include "Structs\Monitor.h"
-#include "Structs\WindowCreateInfo.h"
+#include "Structs/Monitor.h"
+#include "Structs/WindowCreateInfo.h"
 #include "WindowEvents.h"
+#include "Core/Events/EventDispatcher.h"
 
 namespace Bolt
 {

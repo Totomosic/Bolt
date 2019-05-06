@@ -1,7 +1,7 @@
 #pragma once
-#include "Bolt-Graphics.h"
 #include "Application.h"
 #include "EngineCreateInfo.h"
+#include "AppContext.h"
 
 namespace Bolt
 {

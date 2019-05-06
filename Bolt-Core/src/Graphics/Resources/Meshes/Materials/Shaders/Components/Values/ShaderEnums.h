@@ -1,7 +1,6 @@
 #pragma once
-#include "Bolt-Core.h"
 #include "Graphics/Resources/ResourcePtr.h"
-#include "Graphics/Resources/Textures/__Textures__.h"
+#include "Graphics/Resources/Textures/Texture2D.h"
 
 namespace Bolt
 {

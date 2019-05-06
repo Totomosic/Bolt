@@ -2,6 +2,10 @@
 #include "ShaderInstance.h"
 #include "UniformLink.h"
 
+#include "Core/Math/Maths.h"
+#include "Graphics/Resources/Textures/Texture2D.h"
+#include "Graphics/Resources/Textures/Fonts/Font.h"
+
 namespace Bolt
 {
 

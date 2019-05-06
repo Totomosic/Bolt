@@ -1,7 +1,8 @@
 #pragma once
 #include "Components/Values/ShaderEnums.h"
-#include "Shader.h"
 #include "Graphics/Resources/Textures/Texture2D.h"
+#include "Graphics/Resources/Textures/Fonts/Font.h"
+#include "Shader.h"
 
 namespace Bolt
 {

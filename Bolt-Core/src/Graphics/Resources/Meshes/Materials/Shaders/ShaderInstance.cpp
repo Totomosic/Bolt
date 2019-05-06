@@ -1,5 +1,6 @@
 #include "Types.h"
 #include "ShaderInstance.h"
+#include "Core/Functions.h"
 
 namespace Bolt
 {

@@ -1,5 +1,6 @@
 #pragma once
-#include "Values/__Values__.h"
+#include "Values/ShaderFuncResult.h"
+#include "Values/ShaderArrayValue.h"
 
 namespace Bolt
 {

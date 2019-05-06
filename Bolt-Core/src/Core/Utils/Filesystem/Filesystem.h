@@ -2,7 +2,7 @@
 #include "Directorypath.h"
 #include "File.h"
 #include "Filepath.h"
-#include "XML\__XML__.h"
+#include "XML/XMLfile.h"
 
 #define BLT_GET_CURRENT_DIRECTORY _getcwd
 

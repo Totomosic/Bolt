@@ -1,7 +1,7 @@
 #pragma once
 #include "RenderCamera.h"
 #include "RenderOptions.h"
-#include "..\Scene\__Scene__.h"
+#include "Engine/Scene/Scene.h"
 
 namespace Bolt
 {

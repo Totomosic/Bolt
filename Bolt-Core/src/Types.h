@@ -5,7 +5,8 @@
 #include "imgui.h"
 #include "lua.hpp"
 
-#include "Core\BoltTL\__BoltTL__.h"
+#include "Core/BoltTL/string.h"
+#include "Core/BoltTL/array2d.h"
 #include "BoltDefines.h"
 
 #include <algorithm>

@@ -1,5 +1,6 @@
 #pragma once
-#include "Modules/__Modules__.h"
+#include "Shaders/ShaderFactory.h"
+#include "Graphics/Resources/Resource.h"
 
 namespace Bolt
 {

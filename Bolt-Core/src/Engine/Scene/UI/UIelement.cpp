@@ -2,10 +2,11 @@
 
 #include "UIelement.h"
 #include "UIroot.h"
-#include "..\Layer.h"
+#include "../Layer.h"
 
 #include "UIsurface.h"
 #include "Text.h"
+#include "Graphics/Resources/ResourceManager.h"
 
 namespace Bolt
 {

@@ -1,6 +1,5 @@
 #pragma once
-#include "Bolt-Core.h"
-#include "..\PhysObjCollection.h"
+#include "../PhysObjCollection.h"
 
 namespace Bolt
 {

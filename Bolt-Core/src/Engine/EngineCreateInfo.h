@@ -1,5 +1,5 @@
 #pragma once
-#include "Types.h"
+#include "Graphics/Structs/WindowCreateInfo.h"
 
 namespace Bolt
 {
