@@ -1,7 +1,7 @@
 #pragma once
 #include "Component.h"
-#include "..\GameObject.h"
-#include "..\Lighting\LightSource.h"
+#include "../GameObject.h"
+#include "../Lighting/LightSource.h"
 
 namespace Bolt
 {

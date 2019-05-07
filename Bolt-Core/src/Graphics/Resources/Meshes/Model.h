@@ -1,6 +1,6 @@
 #pragma once
-#include "Factories\VertexFactory.h"
-#include "..\Resource.h"
+#include "Factories/VertexFactory.h"
+#include "../Resource.h"
 #include "Face.h"
 
 namespace Bolt

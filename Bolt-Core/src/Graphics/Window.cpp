@@ -1,7 +1,7 @@
 #include "Types.h"
 
 #include "Window.h"
-#include "Engine\User\Input.h"
+#include "Engine/User/Input.h"
 #include "Engine/AppContext.h"
 
 namespace Bolt

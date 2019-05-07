@@ -1,6 +1,6 @@
 #include "Types.h"
 #include "PhysicsManager.h"
-#include "..\Scene.h"
+#include "../Scene.h"
 
 namespace Bolt
 {

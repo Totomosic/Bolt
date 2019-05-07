@@ -1,5 +1,5 @@
 #pragma once
-#include "..\..\Framebuffer.h"
+#include "../../Framebuffer.h"
 #include "Texture2D.h"
 
 namespace Bolt

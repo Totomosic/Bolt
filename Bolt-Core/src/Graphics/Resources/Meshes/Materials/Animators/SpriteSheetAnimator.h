@@ -1,5 +1,5 @@
 #pragma once
-#include "..\TextureAnimator.h"
+#include "../TextureAnimator.h"
 
 namespace Bolt
 {

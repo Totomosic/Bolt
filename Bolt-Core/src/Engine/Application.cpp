@@ -2,12 +2,12 @@
 
 #include "Engine.h"
 #include "Application.h"
-#include "Initialization\Initializer.h"
-#include "Initialization\Destructor.h"
-#include "User\Input.h"
-#include "Renderer\Graphics.h"
-#include "Renderer\GLState.h"
-#include "Scene\SceneManager.h"
+#include "Initialization/Initializer.h"
+#include "Initialization/Destructor.h"
+#include "User/Input.h"
+#include "Renderer/Graphics.h"
+#include "Renderer/GLState.h"
+#include "Scene/SceneManager.h"
 
 namespace Bolt
 {

@@ -1,7 +1,7 @@
 #pragma once
-#include "..\Vectors\Vector4.h"
+#include "../Vectors/Vector4.h"
 #include "Matrix3.h"
-#include "..\Frustum.h"
+#include "../Frustum.h"
 
 namespace Bolt
 {

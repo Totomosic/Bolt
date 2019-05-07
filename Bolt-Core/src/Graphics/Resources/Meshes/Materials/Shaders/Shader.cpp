@@ -1,10 +1,10 @@
 #include "Types.h"
 
 #include "Shader.h"
-#include "Graphics\Resources\ResourceManager.h"
-#include "..\Material.h"
-#include "Engine\Scene\Lighting\LightSource.h"
-#include "Engine\Renderer\GLState.h"
+#include "Graphics/Resources/ResourceManager.h"
+#include "../Material.h"
+#include "Engine/Scene/Lighting/LightSource.h"
+#include "Engine/Renderer/GLState.h"
 
 namespace Bolt
 {

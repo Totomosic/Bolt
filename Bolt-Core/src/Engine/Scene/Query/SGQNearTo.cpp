@@ -1,7 +1,7 @@
 #include "Types.h"
 
 #include "SGQNearTo.h"
-#include "..\ObjectCollection.h"
+#include "../ObjectCollection.h"
 
 namespace Bolt
 {

@@ -1,10 +1,10 @@
 #include "Types.h"
 
 #include "Component.h"
-#include "..\ObjectPrefab.h"
-#include "..\GameObject.h"
-#include "..\Camera.h"
-#include "..\Layer.h"
+#include "../ObjectPrefab.h"
+#include "../GameObject.h"
+#include "../Camera.h"
+#include "../Layer.h"
 
 namespace Bolt
 {

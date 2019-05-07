@@ -104,27 +104,27 @@ namespace Bolt
 
 	void ShaderProgram::SetVariable(const ShaderLValuePtr& var, const ShaderValuePtr& value)
 	{
-		AddOperation<SetValueOp>(var, value);
+		GetMainScope().SetVariable(var, value);
 	}
 
 	void ShaderProgram::AddAssign(const ShaderLValuePtr& var, const ShaderValuePtr& value)
 	{
-		AddOperation<AddAssignOp>(var, value);
+		GetMainScope().AddAssign(var, value);
 	}
 
 	void ShaderProgram::SubAssign(const ShaderLValuePtr& var, const ShaderValuePtr& value)
 	{
-		AddOperation<SubAssignOp>(var, value);
+		GetMainScope().SubAssign(var, value);
 	}
 
 	void ShaderProgram::MulAssign(const ShaderLValuePtr& var, const ShaderValuePtr& value)
 	{
-		AddOperation<MulAssignOp>(var, value);
+		GetMainScope().MulAssign(var, value);
 	}
 
 	void ShaderProgram::DivAssign(const ShaderLValuePtr& var, const ShaderValuePtr& value)
 	{
-		AddOperation<DivAssignOp>(var, value);
+		GetMainScope().DivAssign(var, value);
 	}
 
 	void ShaderProgram::Reset()

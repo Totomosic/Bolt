@@ -1,7 +1,7 @@
 #pragma once
 #include "VertexFactory.h"
-#include "..\..\Textures\Fonts\Font.h"
-#include "..\..\ResourcePtr.h"
+#include "Graphics/Resources/Textures/Fonts/Font.h"
+#include "Graphics/Resources/ResourcePtr.h"
 
 namespace Bolt
 {

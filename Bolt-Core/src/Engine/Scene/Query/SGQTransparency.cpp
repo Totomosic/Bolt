@@ -2,8 +2,8 @@
 
 #include "SGQTransparency.h"
 #include "SGQComponents.h"
-#include "..\ObjectCollection.h"
-#include "..\Components\MeshRenderer.h"
+#include "../ObjectCollection.h"
+#include "../Components/MeshRenderer.h"
 
 namespace Bolt
 {
