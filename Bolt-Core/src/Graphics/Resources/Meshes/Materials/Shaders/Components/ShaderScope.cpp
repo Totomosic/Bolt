@@ -11,6 +11,11 @@
 #include "Operations/ShaderDeclareOp.h"
 #include "Operations/ShaderDefineOp.h"
 
+#include "Operations/MathOps/AddAssignOp.h"
+#include "Operations/MathOps/SubAssignOp.h"
+#include "Operations/MathOps/MulAssignOp.h"
+#include "Operations/MathOps/DivAssignOp.h"
+
 namespace Bolt
 {
 
@@ -113,6 +118,31 @@ namespace Bolt
 		ShaderScope* ptr = scope.get();
 		AddOperation(std::make_unique<CreateScopeOp>(std::move(scope)));
 		return *ptr;
+	}
+
+	void ShaderScope::SetVariable(const ShaderLValuePtr& var, const ShaderValuePtr& value)
+	{
+		AddOperation<SetValueOp>(var, value);
+	}
+
+	void ShaderScope::AddAssign(const ShaderLValuePtr& var, const ShaderValuePtr& value)
+	{
+		AddOperation<AddAssignOp>(var, value);
+	}
+
+	void ShaderScope::SubAssign(const ShaderLValuePtr& var, const ShaderValuePtr& value)
+	{
+		AddOperation<SubAssignOp>(var, value);
+	}
+
+	void ShaderScope::MulAssign(const ShaderLValuePtr& var, const ShaderValuePtr& value)
+	{
+		AddOperation<MulAssignOp>(var, value);
+	}
+
+	void ShaderScope::DivAssign(const ShaderLValuePtr& var, const ShaderValuePtr& value)
+	{
+		AddOperation<DivAssignOp>(var, value);
 	}
 
 	void ShaderScope::BuildOperations(ShaderBuilder& builder) const

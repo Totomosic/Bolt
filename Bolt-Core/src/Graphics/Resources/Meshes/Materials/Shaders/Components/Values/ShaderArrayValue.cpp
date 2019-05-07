@@ -5,7 +5,7 @@
 namespace Bolt
 {
 
-	ShaderArrayValue::ShaderArrayValue(const ShaderLValuePtr& arr, const ShaderValuePtr& index) : ShaderLValue(arr->Type(), ValueTypeDim::Single),
+	ShaderArrayValue::ShaderArrayValue(const ShaderLValuePtr& arr, const ShaderValuePtr& index, ValueType overrideType) : ShaderLValue((overrideType == ValueType::Void) ? arr->Type() : overrideType, ValueTypeDim::Single),
 		m_Array(arr), m_Index(index)
 	{
 	

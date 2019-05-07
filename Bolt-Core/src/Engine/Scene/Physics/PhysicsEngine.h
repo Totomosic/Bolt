@@ -1,6 +1,6 @@
 #pragma once
 #include "PhysObjCollection.h"
-#include "CollisionEngine\CollisionEngine.h"
+#include "CollisionEngine/CollisionEngine.h"
 
 namespace Bolt
 {

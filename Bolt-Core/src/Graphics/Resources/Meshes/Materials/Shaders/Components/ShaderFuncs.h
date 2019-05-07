@@ -17,6 +17,7 @@ namespace Bolt
 		static ShaderFuncResultPtr Neg(ShaderValuePtr value);
 		static ShaderFuncResultPtr Dot(ShaderValuePtr left, ShaderValuePtr right);
 		static ShaderFuncResultPtr Cross(ShaderValuePtr left, ShaderValuePtr right);
+		static ShaderFuncResultPtr Inverse(ShaderValuePtr value);
 
 		static ShaderFuncResultPtr LessThan(ShaderValuePtr left, ShaderValuePtr right);
 		static ShaderFuncResultPtr LequalThan(ShaderValuePtr left, ShaderValuePtr right);

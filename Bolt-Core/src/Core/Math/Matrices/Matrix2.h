@@ -1,5 +1,5 @@
 #pragma once
-#include "..\Vectors\Vector2.h"
+#include "../Vectors/Vector2.h"
 
 namespace Bolt
 {

@@ -1,9 +1,9 @@
 #include "Types.h"
 
 #include "Initializer.h"
-#include "..\User\Input.h"
-#include "..\Renderer\Graphics.h"
-#include "..\Scene\ObjectFactory.h"
+#include "../User/Input.h"
+#include "../Renderer/Graphics.h"
+#include "../Scene/ObjectFactory.h"
 
 namespace Bolt
 {

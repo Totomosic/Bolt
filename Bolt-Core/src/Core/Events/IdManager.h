@@ -1,6 +1,6 @@
 #pragma once
 #include "Types.h"
-#include "..\Functions.h"
+#include "../Functions.h"
 
 namespace Bolt
 {

@@ -66,6 +66,13 @@ namespace Bolt
 		return result;
 	}
 
+	ShaderFuncResultPtr ShaderFuncs::Inverse(ShaderValuePtr value)
+	{
+		BLT_ASSERT(ValueTypeIsMatrix(value->Type()), "Can only inverse matrices");
+		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("inverse(@0)", std::vector<ShaderValuePtr>{ std::move(value) }, value->Type());
+		return result;
+	}
+
 	ShaderFuncResultPtr ShaderFuncs::LessThan(ShaderValuePtr left, ShaderValuePtr right)
 	{
 		BLT_ASSERT(left->TypeDimension() == ValueTypeDim::Single && right->TypeDimension() == ValueTypeDim::Single, "Cannot operate on arrays");
@@ -263,9 +270,27 @@ namespace Bolt
 
 	ShaderArrayValuePtr ShaderFuncs::Index(ShaderLValuePtr arr, ShaderValuePtr index)
 	{
-		BLT_ASSERT(arr->TypeDimension() == ValueTypeDim::Array, "Can only operate on arrays");
-		BLT_ASSERT(index->TypeDimension() == ValueTypeDim::Single, "Index cannot be an array");
 		BLT_ASSERT(index->Type() == ValueType::Int, "Index must be an int");
+		BLT_ASSERT(index->TypeDimension() == ValueTypeDim::Single, "Index cannot be an array");
+		if (ValueTypeIsMatrix(arr->Type()) && arr->TypeDimension() == ValueTypeDim::Single)
+		{
+			ValueType resultType = ValueType::Void;
+			switch (arr->Type())
+			{
+			case ValueType::Matrix4f:
+				resultType = ValueType::Vector4f;
+				break;
+			case ValueType::Matrix3f:
+				resultType = ValueType::Vector3f;
+				break;
+			case ValueType::Matrix2f:
+				resultType = ValueType::Vector2f;
+				break;
+			}
+			ShaderArrayValuePtr result = std::make_shared<ShaderArrayValue>(arr, index, resultType);
+			return result;
+		}
+		BLT_ASSERT(arr->TypeDimension() == ValueTypeDim::Array, "Can only operate on arrays");
 		ShaderArrayValuePtr result = std::make_shared<ShaderArrayValue>(arr, index);
 		return result;
 	}

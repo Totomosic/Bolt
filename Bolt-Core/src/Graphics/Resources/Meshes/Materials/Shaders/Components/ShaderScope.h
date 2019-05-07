@@ -36,6 +36,24 @@ namespace Bolt
 		void InsertOperation(int index, std::unique_ptr<ShaderOp>&& op);
 		ShaderScope& AddScope(std::unique_ptr<ShaderScope>&& scope);
 
+		template<typename T>
+		ShaderVariablePtr DeclareVar()
+		{
+			return DeclareVar(GetValueType<T>());
+		}
+
+		template<typename T>
+		ShaderVariablePtr DeclareArray(size_t length)
+		{
+			return DeclareArray(GetValueType<T>(), length);
+		}
+
+		void SetVariable(const ShaderLValuePtr& var, const ShaderValuePtr& value);
+		void AddAssign(const ShaderLValuePtr& var, const ShaderValuePtr& value);
+		void SubAssign(const ShaderLValuePtr& var, const ShaderValuePtr& value);
+		void MulAssign(const ShaderLValuePtr& var, const ShaderValuePtr& value);
+		void DivAssign(const ShaderLValuePtr& var, const ShaderValuePtr& value);
+
 		virtual void Build(ShaderBuilder& builder) const = 0;
 		virtual std::unique_ptr<ShaderScope> Clone() const = 0;
 
@@ -43,6 +61,12 @@ namespace Bolt
 		T& AddScope(Args&& ... args)
 		{
 			return (T&)AddScope(std::make_unique<T>(std::forward<Args>(args)...));
+		}
+
+		template<typename T, typename... Args>
+		void AddOperation(Args&& ... args)
+		{
+			AddOperation(std::make_unique<T>(std::forward<Args>(args)...));
 		}
 
 		friend class ShaderProgram;

@@ -1,7 +1,7 @@
 #pragma once
 #include "Types.h"
 #include "Image.h"
-#include "Utils\Filesystem\Filepath.h"
+#include "Utils/Filesystem/Filepath.h"
 
 namespace Bolt
 {

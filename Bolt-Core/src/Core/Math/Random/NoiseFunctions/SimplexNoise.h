@@ -1,5 +1,5 @@
 #pragma once
-#include "..\RandomDistribution.h"
+#include "../RandomDistribution.h"
 
 namespace Bolt
 {

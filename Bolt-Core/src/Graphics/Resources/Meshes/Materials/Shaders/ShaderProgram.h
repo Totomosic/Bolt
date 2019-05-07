@@ -2,6 +2,7 @@
 #include "Components/Values/ShaderVariable.h"
 #include "Components/GlobalScope.h"
 #include "Components/MainScope.h"
+#include "Components/ForLoopScope.h"
 #include "Components/ShaderBuilder.h"
 #include "UniformValue.h"
 

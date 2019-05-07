@@ -14,7 +14,7 @@ namespace Bolt
 		ShaderValuePtr m_Index;
 
 	public:
-		ShaderArrayValue(const ShaderLValuePtr& arr, const ShaderValuePtr& index);
+		ShaderArrayValue(const ShaderLValuePtr& arr, const ShaderValuePtr& index, ValueType overrideType = ValueType::Void);
 
 		void Build(ShaderBuilder& builder) const override;
 
