@@ -6,8 +6,8 @@
 namespace Bolt
 {
 
-	Scene::Scene()
-		: OnLoad(), OnUnload(), m_Layers{}, m_Cameras(), m_Id(GameObject::InvalidID), m_PhysEngine(this)
+	Scene::Scene(int layerCount)
+		: OnLoad(), OnUnload(), m_Layers(std::make_unique<Layer[]>(layerCount)), m_LayerCapacity(layerCount), m_Cameras(), m_Id(GameObject::InvalidID), m_PhysEngine(this)
 	{
 		ClearCameras();
 	}

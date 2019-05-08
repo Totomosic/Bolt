@@ -19,14 +19,15 @@ namespace Bolt
 		EventDispatcher<SceneUnloadedEvent> OnUnload;
 
 	private:
-		Layer m_Layers[MAX_LAYERS];
+		std::unique_ptr<Layer[]> m_Layers;
+		int m_LayerCapacity;
 		Camera m_Cameras[MAX_CAMERAS];
 		id_t m_Id;
 
 		PhysicsManager m_PhysEngine;
 
 	public:
-		Scene();
+		Scene(int layerCount = MAX_LAYERS);
 		Scene(const Scene& other) = delete;
 		Scene& operator=(const Scene& other) = delete;
 		Scene(Scene&& other) = delete;

@@ -46,8 +46,8 @@ namespace Bolt
 		int Width() const;
 		int Height() const;
 		float Aspect() const;
-		id_t ID() const;
-		int Samples() const;
+		id_t Id() const;
+		int GetSamples() const;
 		bool IsMultisampled() const;
 		const Color& ClearColor() const;
 		Color& ClearColor();
@@ -57,12 +57,12 @@ namespace Bolt
 		bool HasTextureBuffer(ColorBuffer buffer) const;
 		RenderBuffer GetRenderBuffer(ColorBuffer buffer) const;
 		bool HasRenderBuffer(ColorBuffer buffer) const;
-		virtual const Texture2D* CreateColorBuffer(ColorBuffer buffer = ColorBuffer::Color0);
-		virtual const Texture2D* CreateDepthBuffer();
-		virtual const Texture2D* CreateColorBuffer(const ResourcePtr<Texture2D>& texture, ColorBuffer buffer = ColorBuffer::Color0);
-		virtual const Texture2D* CreateDepthBuffer(const ResourcePtr<Texture2D>&  texture);
-		virtual RenderBuffer CreateColorRenderBuffer(ColorBuffer buffer = ColorBuffer::Color0);
-		virtual RenderBuffer CreateDepthRenderBuffer();
+		const Texture2D* CreateColorBuffer(ColorBuffer buffer = ColorBuffer::Color0);
+		const Texture2D* CreateDepthBuffer();
+		const Texture2D* CreateColorBuffer(const ResourcePtr<Texture2D>& texture, ColorBuffer buffer = ColorBuffer::Color0);
+		const Texture2D* CreateDepthBuffer(const ResourcePtr<Texture2D>&  texture);
+		RenderBuffer CreateColorRenderBuffer(ColorBuffer buffer = ColorBuffer::Color0);
+		RenderBuffer CreateDepthRenderBuffer();
 
 		void CopyToFramebuffer(const Framebuffer* frameBuffer, ClearBuffer buffer = ClearBuffer::Color | ClearBuffer::Depth, Filter filter = Filter::Nearest, ColorBuffer readBuffer = ColorBuffer::Color0, ColorBuffer drawBuffer = ColorBuffer::Color0) const;
 

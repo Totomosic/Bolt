@@ -23,13 +23,6 @@ namespace Bolt
 
 		void RenderScene();
 
-		friend class Initializer;
-		friend class Destructor;
-
-	private:
-		static void Initialize(Window* window);
-		static void Terminate();
-
 	};
 
 }

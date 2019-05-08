@@ -69,12 +69,12 @@ namespace Bolt
 		return (float)Width() / Height();
 	}
 
-	id_t Framebuffer::ID() const
+	id_t Framebuffer::Id() const
 	{
 		return m_Id;
 	}
 
-	int Framebuffer::Samples() const
+	int Framebuffer::GetSamples() const
 	{
 		return m_Samples;
 	}
@@ -150,7 +150,7 @@ namespace Bolt
 		BLT_ASSERT(!HasRenderBuffer(buffer), "RenderBuffer is already attached at buffer " + std::to_string((int)buffer));
 		id_t rBufferID;
 		GL_CALL(glGenRenderbuffers(1, &rBufferID));
-		RenderBuffer rBuffer = { rBufferID, Width(), Height(), Samples(), buffer };
+		RenderBuffer rBuffer = { rBufferID, Width(), Height(), GetSamples(), buffer };
 		GL_CALL(glBindRenderbuffer(GL_RENDERBUFFER, rBufferID));
 		Bind();
 		if (IsMultisampled())
@@ -171,7 +171,7 @@ namespace Bolt
 		BLT_ASSERT(!HasRenderBuffer(ColorBuffer::Depth), "RenderBuffer is already attached at buffer " + std::to_string((int)ColorBuffer::Depth));
 		id_t rBufferID;
 		GL_CALL(glGenRenderbuffers(1, &rBufferID));
-		RenderBuffer rBuffer = { rBufferID, Width(), Height(), Samples(), ColorBuffer::Depth };
+		RenderBuffer rBuffer = { rBufferID, Width(), Height(), GetSamples(), ColorBuffer::Depth };
 		GL_CALL(glBindRenderbuffer(GL_RENDERBUFFER, rBufferID));
 		Bind();
 		if (IsMultisampled())
@@ -189,13 +189,13 @@ namespace Bolt
 
 	void Framebuffer::CopyToFramebuffer(const Framebuffer* frameBuffer, ClearBuffer buffer, Filter filter, ColorBuffer readBuffer, ColorBuffer drawBuffer) const
 	{
-		BLT_ASSERT(Samples() >= frameBuffer->Samples(), "The value of Samples must be greater than or equal than the destination Framebuffer when copying between Framebuffers");
+		BLT_ASSERT(GetSamples() >= frameBuffer->GetSamples(), "The value of Samples must be greater than or equal than the destination Framebuffer when copying between Framebuffers");
 		BLT_ASSERT(readBuffer != ColorBuffer::Depth, "Cannot copy depth buffer of Framebuffer");
 		BLT_ASSERT(!(IsMultisampled() && !(frameBuffer->Width() == Width() && frameBuffer->Height() == Height())), "Cannot copy multisampled Framebuffers with different dimensions");
-		GL_CALL(glBindFramebuffer(GL_DRAW_FRAMEBUFFER, frameBuffer->ID()));
+		GL_CALL(glBindFramebuffer(GL_DRAW_FRAMEBUFFER, frameBuffer->Id()));
 		GL_CALL(glBindFramebuffer(GL_READ_FRAMEBUFFER, m_Id));
 		GL_CALL(glReadBuffer((GLenum)readBuffer));
-		if (frameBuffer->ID() == 0)
+		if (frameBuffer->Id() == 0)
 		{
 			GL_CALL(glDrawBuffer(GL_FRONT_AND_BACK));
 		}

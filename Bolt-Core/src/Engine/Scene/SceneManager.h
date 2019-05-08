@@ -21,7 +21,7 @@ namespace Bolt
 		Scene& GetSceneById(id_t id);
 		Scene& GetSceneByName(const blt::string& name);
 
-		Scene& CreateScene(const blt::string& name = "");
+		Scene& CreateScene(int layerCount = Scene::MAX_LAYERS, const blt::string& name = "");
 		void SetCurrentScene(Scene& scene);
 		void SetCurrentSceneById(id_t id);
 		void SetCurrentSceneByName(const blt::string& name);

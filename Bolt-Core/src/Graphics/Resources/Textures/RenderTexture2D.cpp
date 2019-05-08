@@ -1,5 +1,5 @@
 #include "Types.h"
-#include "RenderTexture2D.h"
+#include "RenderTexture2D.h"
 
 namespace Bolt
 {
