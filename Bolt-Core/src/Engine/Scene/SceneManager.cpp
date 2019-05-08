@@ -38,10 +38,10 @@ namespace Bolt
 		return *(Scene*)nullptr;
 	}
 
-	Scene& SceneManager::CreateScene(const blt::string& name)
+	Scene& SceneManager::CreateScene(int layerCount, const blt::string& name)
 	{
 		id_t index = m_Scenes.size();
-		std::unique_ptr<Scene> s = std::make_unique<Scene>();
+		std::unique_ptr<Scene> s = std::make_unique<Scene>(layerCount);
 		Scene* ptr = s.get();
 		m_Scenes.push_back(std::move(s));
 		ptr->m_Id = index;

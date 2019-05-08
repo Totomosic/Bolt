@@ -44,15 +44,4 @@ namespace Bolt
 		SceneRenderer::Get().Render(SceneManager::Get().CurrentScene());
 	}
 
-	void Graphics::Initialize(Window* window)
-	{
-		Get().m_Window = window;
-		Get().GetState().Reset();
-	}
-
-	void Graphics::Terminate()
-	{
-		Get().m_Window = nullptr;
-	}
-
 }
