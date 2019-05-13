@@ -124,6 +124,7 @@ namespace Bolt
 		void SubAssign(const ShaderLValuePtr& var, const ShaderValuePtr& value);
 		void MulAssign(const ShaderLValuePtr& var, const ShaderValuePtr& value);
 		void DivAssign(const ShaderLValuePtr& var, const ShaderValuePtr& value);
+		ForLoopScope& For(const ShaderVariablePtr& counter, const ShaderValuePtr& initial, const ShaderValuePtr& condition, std::unique_ptr<ShaderOp>&& iteration);
 
 		virtual CompiledShaderProgram Compile() const = 0;
 		virtual void Reset();

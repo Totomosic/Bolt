@@ -41,6 +41,15 @@ namespace Bolt
 		return result;
 	}
 
+	ShaderFuncResultPtr ShaderFuncs::Pow(ShaderValuePtr left, ShaderValuePtr right)
+	{
+		BLT_ASSERT(left->TypeDimension() == ValueTypeDim::Single && right->TypeDimension() == ValueTypeDim::Single, "Cannot operate on arrays");
+		BLT_ASSERT(left->Type() == right->Type(), "Inputs must be of same type");
+		BLT_ASSERT(TestNotMatrix(left, right), "Matrices cannot be pow");
+		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("pow(@0, @1)", std::vector<ShaderValuePtr>{ std::move(left), std::move(right) }, left->Type());
+		return result;
+	}
+
 	ShaderFuncResultPtr ShaderFuncs::Neg(ShaderValuePtr value)
 	{
 		BLT_ASSERT(value->TypeDimension() == ValueTypeDim::Single, "Cannot operate on arrays");
@@ -63,6 +72,22 @@ namespace Bolt
 		BLT_ASSERT(TestDimensionEquality(left, right), "Inputs must be of the same dimension to be dotted");
 		BLT_ASSERT(left->Type() == ValueType::Vector3f, "Inputs must be Vec3 to be crossed");
 		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("cross(@0, @1)", std::vector<ShaderValuePtr>{ std::move(left), std::move(right) }, ValueType::Vector3f);
+		return result;
+	}
+
+	ShaderFuncResultPtr ShaderFuncs::Normalize(ShaderValuePtr value)
+	{
+		BLT_ASSERT(value->TypeDimension() == ValueTypeDim::Single, "Cannot operate on arrays");
+		BLT_ASSERT(ValueTypeIsVector(value->Type()), "Can only normalize vectors");
+		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("normalize(@0)", std::vector<ShaderValuePtr>{ std::move(value) }, value->Type());
+		return result;
+	}
+
+	ShaderFuncResultPtr ShaderFuncs::Reflect(ShaderValuePtr vector, ShaderValuePtr normal)
+	{
+		BLT_ASSERT(vector->TypeDimension() == ValueTypeDim::Single && normal->TypeDimension() == ValueTypeDim::Single, "Cannot operate on arrays");
+		BLT_ASSERT(vector->Type() == ValueType::Vector3f && normal->Type() == ValueType::Vector3f, "Inputs must be Vec3 to be reflected");
+		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("reflect(@0, @1)", std::vector<ShaderValuePtr>{ std::move(vector), std::move(normal) }, ValueType::Vector3f);
 		return result;
 	}
 
@@ -131,6 +156,7 @@ namespace Bolt
 
 	ShaderFuncResultPtr ShaderFuncs::And(ShaderValuePtr left, ShaderValuePtr right)
 	{
+		BLT_ASSERT(left->TypeDimension() == ValueTypeDim::Single && right->TypeDimension() == ValueTypeDim::Single, "Cannot operate on arrays");
 		BLT_ASSERT(left->Type() == ValueType::Bool && right->Type() == ValueType::Bool, "Input must be boolean");
 		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("((@0) && (@1))", std::vector<ShaderValuePtr>{ std::move(left), std::move(right) }, ValueType::Bool);
 		return result;
@@ -138,8 +164,27 @@ namespace Bolt
 
 	ShaderFuncResultPtr ShaderFuncs::Or(ShaderValuePtr left, ShaderValuePtr right)
 	{
+		BLT_ASSERT(left->TypeDimension() == ValueTypeDim::Single && right->TypeDimension() == ValueTypeDim::Single, "Cannot operate on arrays");
 		BLT_ASSERT(left->Type() == ValueType::Bool && right->Type() == ValueType::Bool, "Input must be boolean");
 		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("((@0) || (@1))", std::vector<ShaderValuePtr>{ std::move(left), std::move(right) }, ValueType::Bool);
+		return result;
+	}
+
+	ShaderFuncResultPtr ShaderFuncs::Max(ShaderValuePtr left, ShaderValuePtr right)
+	{
+		BLT_ASSERT(left->TypeDimension() == ValueTypeDim::Single && right->TypeDimension() == ValueTypeDim::Single, "Cannot operate on arrays");
+		BLT_ASSERT(ValueTypeIsNumeric(left->Type()), "Input must be numeric");
+		BLT_ASSERT(left->Type() == right->Type(), "Types must match");
+		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("max(@0, @1)", std::vector<ShaderValuePtr>{ std::move(left), std::move(right) }, left->Type());
+		return result;
+	}
+
+	ShaderFuncResultPtr ShaderFuncs::Min(ShaderValuePtr left, ShaderValuePtr right)
+	{
+		BLT_ASSERT(left->TypeDimension() == ValueTypeDim::Single && right->TypeDimension() == ValueTypeDim::Single, "Cannot operate on arrays");;
+		BLT_ASSERT(ValueTypeIsNumeric(left->Type()), "Input must be numeric");
+		BLT_ASSERT(left->Type() == right->Type(), "Types must match");
+		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("min(@0, @1)", std::vector<ShaderValuePtr>{ std::move(left), std::move(right) }, left->Type());
 		return result;
 	}
 

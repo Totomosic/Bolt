@@ -13,7 +13,7 @@ namespace Bolt
 	{
 		Graphics::Get().GetState().ApplySettings(group.Material->GetRenderSettings());
 		group.Material->GetShader().ApplyLinks();
-		(*routine)(group, camera.ViewMatrix, camera.ProjectionMatrix);
+		(*routine)(group, camera.ViewMatrix, camera.ProjectionMatrix, context);
 	}
 
 	void GlobalRenderer::Render(const RenderPass& renderPass, const RenderingContext& context, const RenderCamera& camera)

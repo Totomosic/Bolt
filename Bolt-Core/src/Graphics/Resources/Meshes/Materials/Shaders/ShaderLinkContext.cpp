@@ -93,6 +93,7 @@ namespace Bolt
 
 	const UserUniformLocation& ShaderLinkContext::GetUniformLocation(const blt::string& linkName) const
 	{
+		BLT_ASSERT(m_UserUniformLinks.find(linkName) != m_UserUniformLinks.end(), "No link exists with name {}", linkName);
 		return m_Shader->GetUserUniforms().at(m_UserUniformLinks.at(linkName).UniformIndex);
 	}
 

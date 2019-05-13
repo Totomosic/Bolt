@@ -1,5 +1,6 @@
 #pragma once
 #include "RenderGroup.h"
+#include "Engine/Scene/Lighting/LightSource.h"
 
 namespace Bolt
 {
@@ -8,6 +9,7 @@ namespace Bolt
 	{
 	public:
 		std::vector<RenderGroup> StaticMeshes;
+		std::vector<LightSource> Lights;
 	};
 
 }
