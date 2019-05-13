@@ -13,8 +13,8 @@ namespace Bolt
 		{
 		public:
 			TextureBounds Bounds;
-			size_t Width;
-			size_t Height;
+			uint32_t Width;
+			uint32_t Height;
 			float AdvanceX;
 			float AdvanceY;
 			float OffsetX;

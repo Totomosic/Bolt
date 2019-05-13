@@ -22,8 +22,8 @@ namespace Bolt
 		bool IsValid() const;
 
 		int Bind(const SocketAddress& address);
-		int SendTo(const SocketAddress& address, const void* data, uint length);
-		int RecvFrom(void* buffer, uint length, SocketAddress* outAddress);
+		int SendTo(const SocketAddress& address, const void* data, uint32_t length);
+		int RecvFrom(void* buffer, uint32_t length, SocketAddress* outAddress);
 		int Shutdown();
 		int Close();
 

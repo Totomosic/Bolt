@@ -41,7 +41,7 @@ namespace Bolt
 		XMLnode& SeekRoot();
 		XMLnode& AddChild(const blt::string& name, const std::unordered_map<blt::string, blt::string>& attributes = std::unordered_map<blt::string, blt::string>());
 		void AddData(const blt::string& data);
-		void AddData(const void* data, uint length);
+		void AddData(const void* data, uint32_t length);
 
 	};
 

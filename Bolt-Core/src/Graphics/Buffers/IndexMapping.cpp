@@ -54,7 +54,7 @@ namespace Bolt
 		{
 			if (index >= ptr.MinIndex && index <= ptr.MaxIndex)
 			{
-				return (void*)((byte*)ptr.Ptr + index * sizeof(uint));
+				return (void*)((byte*)ptr.Ptr + index * sizeof(uint32_t));
 			}
 		}
 		return nullptr;

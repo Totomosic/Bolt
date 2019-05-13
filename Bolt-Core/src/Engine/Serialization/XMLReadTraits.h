@@ -67,10 +67,10 @@ namespace Bolt
 	};
 
 	template<typename Backend>
-	struct BLT_API XMLReadTraits<int64, Backend>
+	struct BLT_API XMLReadTraits<int64_t, Backend>
 	{
 	public:
-		static void Transfer(const blt::string& name, int64* value, XMLnode& xmlNode, Backend& backend)
+		static void Transfer(const blt::string& name, int64_t* value, XMLnode& xmlNode, Backend& backend)
 		{
 			BLT_ASSERT(xmlNode.HasChild(name), "Unable to find node with name " + name);
 			blt::string data = xmlNode.GetChild(name).Data;

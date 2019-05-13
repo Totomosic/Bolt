@@ -31,27 +31,27 @@ namespace Bolt
 
 	Directorypath Filepath::Directory() const
 	{
-		size_t index = m_Path.find_last_of('\\');
+		uint32_t index = m_Path.find_last_of('\\');
 		Directorypath directory = Path().substr(0, index);
 		return directory;
 	}
 
 	blt::string Filepath::Filename() const
 	{
-		size_t index = m_Path.find_last_of('\\');
+		uint32_t index = m_Path.find_last_of('\\');
 		return m_Path.substr(index + 1, m_Path.length() - index - 1);
 	}
 
 	blt::string Filepath::SimpleFilename() const
 	{
-		size_t index = m_Path.find_last_of('\\');
-		size_t extIndex = m_Path.find_last_of('.');
+		uint32_t index = m_Path.find_last_of('\\');
+		uint32_t extIndex = m_Path.find_last_of('.');
 		return m_Path.substr(index + 1, index - extIndex - 1);
 	}
 	
 	blt::string Filepath::Extension() const
 	{
-		size_t index = m_Path.find_last_of('.');
+		uint32_t index = m_Path.find_last_of('.');
 		return m_Path.substr(index + 1, m_Path.length() - index - 1);
 	}
 

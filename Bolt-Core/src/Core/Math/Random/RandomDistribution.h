@@ -11,9 +11,9 @@ namespace Bolt
 
 	public:
 		RandomDistribution();
-		RandomDistribution(size_t seed);
+		RandomDistribution(uint32_t seed);
 
-		void SetSeed(size_t seed);
+		void SetSeed(uint32_t seed);
 
 		// Generates random integer [min, max]
 		int NextInt(int min, int max) const;

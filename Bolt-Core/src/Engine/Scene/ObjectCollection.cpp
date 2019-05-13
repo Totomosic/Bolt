@@ -115,9 +115,9 @@ namespace Bolt
 		object->m_Tags.clear();
 	}
 
-	void ObjectCollection::RemoveTags(GameObject* object, size_t count) const
+	void ObjectCollection::RemoveTags(GameObject* object, uint32_t count) const
 	{
-		for (size_t i = 0; i < count; i++)
+		for (uint32_t i = 0; i < count; i++)
 		{
 			const blt::string& tag = object->Tags().at(i);
 			std::vector<GameObject*>& vector = m_Tags.at(tag);

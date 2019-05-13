@@ -28,7 +28,7 @@ namespace Bolt
 
 		void SetUniform(int location, bool value) const;
 		void SetUniform(int location, int value) const;
-		void SetUniform(int location, uint value) const;
+		void SetUniform(int location, uint32_t value) const;
 		void SetUniform(int location, float value) const;
 		void SetUniform(int location, double value) const;
 		void SetUniform(int location, const Vector2f& value) const;

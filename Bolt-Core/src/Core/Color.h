@@ -82,7 +82,7 @@ namespace Bolt
 		Vector2fr gb();
 		Vector2fr rb();
 
-		size_t ToInt() const;
+		uint32_t ToInt() const;
 		Vector4<byte> ToBytes() const;
 
 		bool operator==(const Color& other) const;

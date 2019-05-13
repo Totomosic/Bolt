@@ -133,7 +133,7 @@ namespace Bolt
 		void MouseScrollCallback(double relX, double relY);
 		void MouseButtonCallback(int button, int action, int mods);
 		void KeyboardKeyCallback(int key, int scancode, int action, int mods);
-		void CharPressedCallback(uint code);
+		void CharPressedCallback(uint32_t code);
 
 	};
 

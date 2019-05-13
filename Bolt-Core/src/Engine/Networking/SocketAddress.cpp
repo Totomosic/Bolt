@@ -58,14 +58,14 @@ namespace Bolt
 
 	}
 
-	size_t SocketAddress::GetSize()
+	uint32_t SocketAddress::GetSize()
 	{
 		return sizeof(sockaddr);
 	}
 
-	size_t SocketAddress::GetHash() const
+	uint32_t SocketAddress::GetHash() const
 	{
-		return (GetIP4Ref()) | ((static_cast<uint>(GetAsSockAddrIn()->sin_port)) << 13) | m_SockAddr.sa_family;
+		return (GetIP4Ref()) | ((static_cast<uint32_t>(GetAsSockAddrIn()->sin_port)) << 13) | m_SockAddr.sa_family;
 	}
 
 	blt::string SocketAddress::ToString() const
@@ -103,14 +103,14 @@ namespace Bolt
 		return reinterpret_cast<sockaddr_in*>(&m_SockAddr);
 	}
 
-	const uint& SocketAddress::GetIP4Ref() const
+	const uint32_t& SocketAddress::GetIP4Ref() const
 	{
-		return *reinterpret_cast<const uint*>(&GetAsSockAddrIn()->sin_addr.S_un.S_addr);
+		return *reinterpret_cast<const uint32_t*>(&GetAsSockAddrIn()->sin_addr.S_un.S_addr);
 	}
 
-	uint& SocketAddress::GetIP4Ref()
+	uint32_t& SocketAddress::GetIP4Ref()
 	{
-		return *reinterpret_cast<uint*>(&GetAsSockAddrIn()->sin_addr.S_un.S_addr);
+		return *reinterpret_cast<uint32_t*>(&GetAsSockAddrIn()->sin_addr.S_un.S_addr);
 	}
 
 }

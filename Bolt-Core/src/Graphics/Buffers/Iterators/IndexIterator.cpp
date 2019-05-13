@@ -16,32 +16,32 @@ namespace Bolt
 
 	}
 
-	const uint* IndexIterator::Get() const
+	const uint32_t* IndexIterator::Get() const
 	{ 
-		return (uint*)m_Ptr;
+		return (uint32_t*)m_Ptr;
 	}
 
-	uint* IndexIterator::Get()
+	uint32_t* IndexIterator::Get()
 	{ 
-		return (uint*)m_Ptr; 
+		return (uint32_t*)m_Ptr; 
 	}
 
-	const uint* IndexIterator::operator->() const
-	{ 
-		return Get(); 
-	}
-
-	uint* IndexIterator::operator->()
+	const uint32_t* IndexIterator::operator->() const
 	{ 
 		return Get(); 
 	}
 
-	const uint& IndexIterator::operator*() const
+	uint32_t* IndexIterator::operator->()
+	{ 
+		return Get(); 
+	}
+
+	const uint32_t& IndexIterator::operator*() const
 	{ 
 		return *Get(); 
 	}
 
-	uint& IndexIterator::operator*()
+	uint32_t& IndexIterator::operator*()
 	{ 
 		return *Get();
 	}

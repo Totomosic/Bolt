@@ -20,7 +20,7 @@ namespace Bolt
 		void BeginXML(const blt::string& name, const std::unordered_map<blt::string, blt::string>& attributes = std::unordered_map<blt::string, blt::string>()) const;
 		void EndXML() const;
 		void WriteXMLData(const blt::string& text) const;
-		void WriteXMLData(const void* data, uint length) const;
+		void WriteXMLData(const void* data, uint32_t length) const;
 		void WriteXMLFile() const;
 
 		void WriteXML(const XMLnode& node) const;

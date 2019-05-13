@@ -53,7 +53,7 @@ namespace Bolt
 		return var;
 	}
 
-	ShaderVariablePtr ShaderProgram::UniformArray(const blt::string& linkName, ValueType type, size_t length)
+	ShaderVariablePtr ShaderProgram::UniformArray(const blt::string& linkName, ValueType type, uint32_t length)
 	{
 		ShaderVariablePtr var = GetGlobalScope().DeclareArray(type, ShaderLiteral::FromInt((int)length), "uniform");
 		m_UserUniforms.push_back({ linkName, var.get(), (int)length });
@@ -97,7 +97,7 @@ namespace Bolt
 		return GetGlobalScope().DeclarePassIn(passOut);
 	}
 
-	ShaderVariablePtr ShaderProgram::DeclareArray(ValueType type, size_t length)
+	ShaderVariablePtr ShaderProgram::DeclareArray(ValueType type, uint32_t length)
 	{
 		return GetMainScope().DeclareArray(type, ShaderLiteral::FromInt((int)length));
 	}

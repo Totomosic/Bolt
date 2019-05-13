@@ -38,7 +38,7 @@ namespace Bolt
 
 		std::unique_ptr<Resource> Clone() const override;
 
-		template<size_t VertexCount>
+		template<uint32_t VertexCount>
 		std::vector<Face<VertexCount>> GetFaces(ModelMapping& mapping) const
 		{
 			BLT_ASSERT(false, "Unable to get faces with " + std::to_string(VertexCount) + " vertices");
@@ -81,7 +81,7 @@ namespace Bolt
 			return faces;
 		}
 
-		template<size_t VertexCount>
+		template<uint32_t VertexCount>
 		Face<VertexCount> GetFace(ModelMapping& mapping, int index) const
 		{
 			BLT_ASSERT(false, "Unable to get faces with {} vertices", VertexCount);

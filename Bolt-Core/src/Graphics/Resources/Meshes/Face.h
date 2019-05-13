@@ -4,7 +4,7 @@
 namespace Bolt
 {
 
-	template<size_t VCount>
+	template<uint32_t VCount>
 	struct BLT_API Face
 	{
 	public:

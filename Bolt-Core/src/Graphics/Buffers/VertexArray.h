@@ -45,8 +45,8 @@ namespace Bolt
 
 		// VertexBuffer must have same VertexCount() as all other VertexBuffers, if this is the first then no constraint
 		VertexBuffer& AddVertexBuffer(std::unique_ptr<VertexBuffer>&& buffer);
-		VertexBuffer& CreateVertexBuffer(size_t size, const BufferLayout& layout, BufferUsage usage = BufferUsage::StaticDraw);
-		VertexBuffer& CreateVertexBuffer(const void* data, size_t size, const BufferLayout& layout, BufferUsage usage = BufferUsage::StaticDraw);
+		VertexBuffer& CreateVertexBuffer(uint32_t size, const BufferLayout& layout, BufferUsage usage = BufferUsage::StaticDraw);
+		VertexBuffer& CreateVertexBuffer(const void* data, uint32_t size, const BufferLayout& layout, BufferUsage usage = BufferUsage::StaticDraw);
 		void SetRenderMode(RenderMode mode);
 
 		VertexMapping Map() const;

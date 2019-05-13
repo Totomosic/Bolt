@@ -10,7 +10,7 @@ import src.res_handlers.resource_handlers as res
 
 IMAGE_SETTINGS_FILE = {
     "Name" : settings.SettingsAttribute(settings.TYPE_STRING, ["*"], "__FILENAME__"),
-    "Wrap Mode" : settings.SettingsAttribute(settings.TYPE_STRING, ["Repeat", "Clamp", "ClampToEdge"], "Repeat"),
+    "Wrap Mode" : settings.SettingsAttribute(settings.TYPE_STRING, ["Repeat", "ClampToEdge"], "Repeat"),
     "Min Filter" : settings.SettingsAttribute(settings.TYPE_STRING, ["Linear", "Nearest"], "Linear"),
     "Mag Filter" : settings.SettingsAttribute(settings.TYPE_STRING, ["Linear", "Nearest"], "Linear"),
     "Mipmaps" : settings.SettingsAttribute(settings.TYPE_STRING, ["Enabled", "Disabled"], "Enabled")

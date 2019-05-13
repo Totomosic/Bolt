@@ -23,9 +23,9 @@ namespace Bolt
 		return result;
 	}
 
-	std::vector<uint> SocketUtil::GetIP4Addresses()
+	std::vector<uint32_t> SocketUtil::GetIP4Addresses()
 	{
-		std::vector<uint> result;
+		std::vector<uint32_t> result;
 		char name[255];
 		if (gethostname(name, sizeof(name)) == 0)
 		{
@@ -36,7 +36,7 @@ namespace Bolt
 				while (hostinfo->h_addr_list[nCount])
 				{
 					in_addr addr = *(struct in_addr*)hostinfo->h_addr_list[nCount++];
-					uint a = ntohl(addr.S_un.S_addr);
+					uint32_t a = ntohl(addr.S_un.S_addr);
 					result.push_back(a);
 				}
 			}

@@ -24,9 +24,9 @@ namespace std
 	template<>
 	struct BLT_API hash<Bolt::IndexRange>
 	{
-		size_t operator()(const Bolt::IndexRange& range) const
+		uint32_t operator()(const Bolt::IndexRange& range) const
 		{
-			return (size_t)range.Min;
+			return (uint32_t)range.Min;
 		}
 	};
 

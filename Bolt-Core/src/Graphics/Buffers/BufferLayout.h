@@ -29,13 +29,13 @@ namespace Bolt
 
 	private:
 		std::unordered_map<int, VertexAttribute> m_Attributes;
-		size_t m_Stride;
+		uint32_t m_Stride;
 
 	public:
 		BufferLayout();
 
-		size_t Stride() const;
-		size_t Size() const;
+		uint32_t Stride() const;
+		uint32_t Size() const;
 		int OffsetOf(int index) const;
 		int AttributeCount() const;
 		bool HasAttribute(int index) const;

@@ -13,8 +13,8 @@ namespace Bolt
 		struct BLT_API MappingPtr
 		{
 		public:
-			uint MinIndex;
-			uint MaxIndex;
+			uint32_t MinIndex;
+			uint32_t MaxIndex;
 			void* Ptr;
 		};
 

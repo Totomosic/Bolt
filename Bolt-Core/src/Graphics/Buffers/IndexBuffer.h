@@ -10,8 +10,8 @@ namespace Bolt
 		mutable int m_MappedIterators;
 
 	public:
-		IndexBuffer(size_t indexCount, BufferUsage usage = BufferUsage::StaticDraw);
-		IndexBuffer(const uint* indices, size_t indexCount, BufferUsage usage = BufferUsage::StaticDraw);
+		IndexBuffer(uint32_t indexCount, BufferUsage usage = BufferUsage::StaticDraw);
+		IndexBuffer(const uint32_t* indices, uint32_t indexCount, BufferUsage usage = BufferUsage::StaticDraw);
 
 		constexpr GLenum IndexType() const { return GL_UNSIGNED_INT; }
 		int IndexCount() const;

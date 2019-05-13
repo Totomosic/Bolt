@@ -12,7 +12,7 @@ namespace Bolt
 		int m_Head;
 
 	public:
-		OutputMemoryStream(uint capacity = 1);
+		OutputMemoryStream(uint32_t capacity = 1);
 		OutputMemoryStream(const OutputMemoryStream& other) = delete;
 		OutputMemoryStream& operator=(const OutputMemoryStream& other) = delete;
 		OutputMemoryStream(OutputMemoryStream&& other);
@@ -23,7 +23,7 @@ namespace Bolt
 		int GetRemainingDataSize() const;
 		void Reset(int to = 0);
 
-		void Write(const void* data, uint length);
+		void Write(const void* data, uint32_t length);
 
 		template<typename T>
 		void Write(const T& value)
@@ -32,7 +32,7 @@ namespace Bolt
 		}
 
 	private:
-		void ReallocBuffer(uint capacity);
+		void ReallocBuffer(uint32_t capacity);
 
 	};
 

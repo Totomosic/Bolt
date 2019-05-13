@@ -10,11 +10,11 @@ namespace Bolt
 	private:
 		T* m_Queue;
 		T* m_QueueBackBuffer;
-		size_t m_Capacity;
-		size_t m_QueueTail;
+		uint32_t m_Capacity;
+		uint32_t m_QueueTail;
 
 	public:
-		EventQueue(size_t maxEvents)
+		EventQueue(uint32_t maxEvents)
 			: m_Queue(new T[maxEvents]{}), m_QueueBackBuffer(new T[maxEvents]{}), m_Capacity(maxEvents), m_QueueTail(0)
 		{
 			
@@ -31,13 +31,13 @@ namespace Bolt
 			delete[] m_QueueBackBuffer;
 		}
 
-		inline size_t MaxEvents() const { return m_Capacity; }
-		inline size_t EventCount() const { return m_QueueTail; }
+		inline uint32_t MaxEvents() const { return m_Capacity; }
+		inline uint32_t EventCount() const { return m_QueueTail; }
 		inline T* GetQueuePtr() const { return m_Queue; }
 
 		T& AddEvent(T e)
 		{
-			size_t currentIndex = m_QueueTail;
+			uint32_t currentIndex = m_QueueTail;
 			if (currentIndex == MaxEvents())
 			{
 				currentIndex--;

@@ -32,7 +32,7 @@ namespace Bolt
 
 	public:
 		// Max events that can be queued per frame
-		static constexpr uint MAX_EVENTS = 500;
+		static constexpr uint32_t MAX_EVENTS = 500;
 		// Create user events with this Id, eg. USER_EVENT = EventManager::USER_EVENT_ID + 0
 		static constexpr id_t USER_EVENT_ID = 100000;
 		// Use to receive events from all instances posting an event

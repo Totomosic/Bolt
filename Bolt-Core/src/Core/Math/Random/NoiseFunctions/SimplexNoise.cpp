@@ -1,5 +1,6 @@
 #include "Types.h"
-#include "SimplexNoise.h"
+
+#include "SimplexNoise.h"
 
 namespace Bolt
 {
@@ -279,14 +280,14 @@ namespace Bolt
 		return 32.0f*(n0 + n1 + n2 + n3);
 	}
 
-	float SimplexNoise::Generate(size_t octaves, float x) const
+	float SimplexNoise::Generate(uint32_t octaves, float x) const
 	{
 		float output = 0.f;
 		float denom = 0.f;
 		float frequency = m_Frequency;
 		float amplitude = m_Amplitude;
 
-		for (size_t i = 0; i < octaves; i++) {
+		for (uint32_t i = 0; i < octaves; i++) {
 			output += (amplitude * Noise(x * frequency));
 			denom += amplitude;
 
@@ -297,14 +298,14 @@ namespace Bolt
 		return (output / denom);
 	}
 
-	float SimplexNoise::Generate(size_t octaves, float x, float y) const
+	float SimplexNoise::Generate(uint32_t octaves, float x, float y) const
 	{
 		float output = 0.f;
 		float denom = 0.f;
 		float frequency = m_Frequency;
 		float amplitude = m_Amplitude;
 
-		for (size_t i = 0; i < octaves; i++) {
+		for (uint32_t i = 0; i < octaves; i++) {
 			output += (amplitude * Noise(x * frequency, y * frequency));
 			denom += amplitude;
 
@@ -315,14 +316,14 @@ namespace Bolt
 		return (output / denom);
 	}
 
-	float SimplexNoise::Generate(size_t octaves, float x, float y, float z) const
+	float SimplexNoise::Generate(uint32_t octaves, float x, float y, float z) const
 	{
 		float output = 0.f;
 		float denom = 0.f;
 		float frequency = m_Frequency;
 		float amplitude = m_Amplitude;
 
-		for (size_t i = 0; i < octaves; i++) {
+		for (uint32_t i = 0; i < octaves; i++) {
 			output += (amplitude * Noise(x * frequency, y * frequency, z * frequency));
 			denom += amplitude;
 

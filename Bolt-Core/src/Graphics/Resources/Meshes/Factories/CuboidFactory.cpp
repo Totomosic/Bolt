@@ -20,7 +20,7 @@ namespace Bolt
 		ModelData result;
 		result.Vertices = std::make_unique<VertexArray>();
 		result.Indices = std::make_unique<IndexArray>();
-		uint indices[6 * 6] = { 0, 1, 2, 0, 2, 3,  11, 10, 13, 11, 13, 12,  4, 5, 6, 4, 6, 7,  15, 14, 9, 15, 9, 8,  23, 16, 19, 23, 19, 20,  17, 22, 21, 17, 21, 18 };
+		uint32_t indices[6 * 6] = { 0, 1, 2, 0, 2, 3,  11, 10, 13, 11, 13, 12,  4, 5, 6, 4, 6, 7,  15, 14, 9, 15, 9, 8,  23, 16, 19, 23, 19, 20,  17, 22, 21, 17, 21, 18 };
 		result.Indices->AddIndexBuffer(std::make_unique<IndexBuffer>(indices, 6 * 6));
 		result.Bounds.MinX = -w;
 		result.Bounds.MaxX = w;

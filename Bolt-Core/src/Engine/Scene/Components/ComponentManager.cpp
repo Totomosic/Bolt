@@ -47,13 +47,13 @@ namespace Bolt
 		return *m_ComponentArray[id].component;
 	}
 
-	Component& ComponentManager::GetComponent(size_t componentTypeHash) const
+	Component& ComponentManager::GetComponent(uint32_t componentTypeHash) const
 	{
 		BLT_ASSERT(HasComponentPrivate(componentTypeHash), "Does not have given component type");
 		return *m_ComponentArray[m_TypeHashMap.at(componentTypeHash)].component;
 	}
 
-	bool ComponentManager::GetComponent(size_t componentTypeHash, Component** outComponent) const
+	bool ComponentManager::GetComponent(uint32_t componentTypeHash, Component** outComponent) const
 	{
 		auto it = m_TypeHashMap.find(componentTypeHash);
 		if (it == m_TypeHashMap.end())
@@ -71,7 +71,7 @@ namespace Bolt
 		return (!m_ComponentIdManager.IsIdAvailable(id)) && (m_ComponentArray[id].component->IsEnabled());
 	}
 
-	bool ComponentManager::HasComponent(size_t componentTypeHash) const
+	bool ComponentManager::HasComponent(uint32_t componentTypeHash) const
 	{
 		if (m_TypeHashMap.empty())
 		{
@@ -101,7 +101,7 @@ namespace Bolt
 		return result;
 	}
 
-	Component* ComponentManager::AddComponent(size_t componentTypeHash, std::unique_ptr<Component>&& component)
+	Component* ComponentManager::AddComponent(uint32_t componentTypeHash, std::unique_ptr<Component>&& component)
 	{
 		if (HasComponentPrivate(componentTypeHash))
 		{
@@ -135,7 +135,7 @@ namespace Bolt
 		m_ComponentIdManager.ReleaseId(id);
 	}
 
-	void ComponentManager::RemoveComponent(size_t componentTypeHash)
+	void ComponentManager::RemoveComponent(uint32_t componentTypeHash)
 	{
 		BLT_ASSERT(HasComponentPrivate(componentTypeHash), "Does not have given component type");
 		id_t id = m_TypeHashMap.at(componentTypeHash);
@@ -173,7 +173,7 @@ namespace Bolt
 		}
 	}
 
-	bool ComponentManager::HasComponentPrivate(size_t componentTypeHash) const
+	bool ComponentManager::HasComponentPrivate(uint32_t componentTypeHash) const
 	{
 		if (m_TypeHashMap.empty())
 		{

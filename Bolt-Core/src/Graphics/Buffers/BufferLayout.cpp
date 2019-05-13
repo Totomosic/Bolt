@@ -10,12 +10,12 @@ namespace Bolt
 	
 	}
 
-	size_t BufferLayout::Stride() const
+	uint32_t BufferLayout::Stride() const
 	{
 		return m_Stride;
 	}
 
-	size_t BufferLayout::Size() const
+	uint32_t BufferLayout::Size() const
 	{
 		return Stride();
 	}

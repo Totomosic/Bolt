@@ -10,7 +10,7 @@ namespace Bolt
 	
 	}
 
-	size_t TimerSet::Length() const
+	uint32_t TimerSet::Length() const
 	{
 		return m_Queue.size();
 	}

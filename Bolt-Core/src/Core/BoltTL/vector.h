@@ -21,8 +21,8 @@ namespace blt
 
 	private:
 		pointer m_Buffer;
-		size_t m_Size;
-		size_t m_Capacity;
+		uint32_t m_Size;
+		uint32_t m_Capacity;
 
 	public:
 		vector() : vector(1)
@@ -30,7 +30,7 @@ namespace blt
 
 		}
 
-		vector(size_t capacity)
+		vector(uint32_t capacity)
 			: m_Buffer(nullptr), m_Size(0), m_Capacity(capacity)
 		{
 			realloc_buffer(capacity);
@@ -88,9 +88,9 @@ namespace blt
 			return *this;
 		}
 
-		inline size_t size() const { return m_Size; }
-		inline size_t length() const { return size(); }
-		inline size_t capacity() const { return m_Capacity; }
+		inline uint32_t size() const { return m_Size; }
+		inline uint32_t length() const { return size(); }
+		inline uint32_t capacity() const { return m_Capacity; }
 		inline const_pointer data() const { return buffer_ptr(); }
 		inline bool empty() const { return size() == 0; }
 
@@ -109,7 +109,7 @@ namespace blt
 		inline const_reference operator[](int index) const { return at(index); }
 		inline reference operator[](int index) { return at(index); }
 
-		void reserve(size_t capacity)
+		void reserve(uint32_t capacity)
 		{
 			test_size(capacity);
 		}
@@ -144,7 +144,7 @@ namespace blt
 			move_elements(1, -1);
 		}
 
-		void insert(size_t pos, const_reference value)
+		void insert(uint32_t pos, const_reference value)
 		{
 			test_size(size() + 1);
 			move_elements(pos, 1);
@@ -154,24 +154,24 @@ namespace blt
 
 		void insert(iterator pos, const_reference value)
 		{
-			size_t position = (size_t)(pos.get() - begin().get());
+			uint32_t position = (uint32_t)(pos.get() - begin().get());
 			insert(position, value);
 		}
 
-		void erase(size_t pos, size_t len)
+		void erase(uint32_t pos, uint32_t len)
 		{
 			move_elements(pos + len, -((int)len));
 			m_Size -= len;
 		}
 
-		void erase(size_t pos)
+		void erase(uint32_t pos)
 		{
 			return erase(pos, 1);
 		}
 
 		void erase(iterator start, iterator finish)
 		{
-			return erase((size_t)(start.get() - begin().get()), (size_t)(finish.get() - start.get()));
+			return erase((uint32_t)(start.get() - begin().get()), (uint32_t)(finish.get() - start.get()));
 		}
 
 		void erase(iterator it)
@@ -180,7 +180,7 @@ namespace blt
 		}
 
 	private:
-		void move_elements(size_t pos, int amount)
+		void move_elements(uint32_t pos, int amount)
 		{
 			if (std::is_trivially_copyable<value_type>::value)
 			{
@@ -196,48 +196,48 @@ namespace blt
 			}
 		}
 
-		void move_elements_copy(size_t pos, int amount)
+		void move_elements_copy(uint32_t pos, int amount)
 		{
 			if (amount < 0)
 			{
-				for (size_t i = pos; i < size() - pos; i++)
+				for (uint32_t i = pos; i < size() - pos; i++)
 				{
 					buffer_ptr()[i + amount] = buffer_ptr()[i];
 				}
 			}
 			else
 			{
-				for (size_t i = size() - 1; i >= pos; i--)
+				for (uint32_t i = size() - 1; i >= pos; i--)
 				{
 					buffer_ptr()[i + amount] = buffer_ptr()[i];
 				}
 			}
 		}
 
-		void move_elements_move(size_t pos, int amount)
+		void move_elements_move(uint32_t pos, int amount)
 		{
 			if (amount < 0)
 			{
-				for (size_t i = pos; i < size() - pos; i++)
+				for (uint32_t i = pos; i < size() - pos; i++)
 				{
 					buffer_ptr()[i + amount] = std::move(buffer_ptr()[i]);
 				}
 			}
 			else
 			{
-				for (size_t i = size() - 1; i >= pos; i--)
+				for (uint32_t i = size() - 1; i >= pos; i--)
 				{
 					buffer_ptr()[i + amount] = std::move(buffer_ptr()[i]);
 				}
 			}
 		}
 
-		void move_elements_trivial(size_t pos, int amount)
+		void move_elements_trivial(uint32_t pos, int amount)
 		{
 			memmove(buffer_ptr() + pos + amount, buffer_ptr() + pos, (size() - pos) * sizeof(value_type));
 		}
 
-		void test_size(size_t required_size)
+		void test_size(uint32_t required_size)
 		{
 			if (required_size > capacity())
 			{
@@ -245,7 +245,7 @@ namespace blt
 			}
 		}
 
-		void realloc_buffer(size_t new_capacity)
+		void realloc_buffer(uint32_t new_capacity)
 		{
 			if (std::is_trivially_copyable<value_type>::value)
 			{
@@ -261,12 +261,12 @@ namespace blt
 			}
 		}
 
-		void realloc_buffer_copy(size_t new_capacity)
+		void realloc_buffer_copy(uint32_t new_capacity)
 		{
 			pointer newBuffer = new value_type[new_capacity];
 			if (m_Buffer != nullptr)
 			{
-				for (size_t i = 0; i < size(); i++)
+				for (uint32_t i = 0; i < size(); i++)
 				{
 					newBuffer[i] = buffer_ptr()[i];
 				}
@@ -276,12 +276,12 @@ namespace blt
 			m_Capacity = new_capacity;
 		}
 
-		void realloc_buffer_move(size_t new_capacity)
+		void realloc_buffer_move(uint32_t new_capacity)
 		{
 			pointer newBuffer = new value_type[new_capacity];
 			if (m_Buffer != nullptr)
 			{
-				for (size_t i = 0; i < size(); i++)
+				for (uint32_t i = 0; i < size(); i++)
 				{
 					newBuffer[i] = std::move(buffer_ptr()[i]);
 				}
@@ -291,7 +291,7 @@ namespace blt
 			m_Capacity = new_capacity;
 		}
 
-		void realloc_buffer_trivial(size_t new_capacity)
+		void realloc_buffer_trivial(uint32_t new_capacity)
 		{
 			pointer newBuffer = new value_type[new_capacity];
 			if (m_Buffer != nullptr)

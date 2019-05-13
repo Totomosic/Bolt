@@ -17,7 +17,7 @@ namespace Bolt
 		static bool IsBigEndian();
 		static bool IsOnSameSubnet(const SocketAddress& a, const SocketAddress& b, int sigBits);
 
-		static std::vector<uint> GetIP4Addresses();
+		static std::vector<uint32_t> GetIP4Addresses();
 
 		static int Select(const UDPsocketSet* inReadSet, UDPsocketSet* outReadSet,
 			const UDPsocketSet* inWriteSet, UDPsocketSet* outWriteSet,

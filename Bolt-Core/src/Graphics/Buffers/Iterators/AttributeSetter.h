@@ -267,7 +267,7 @@ namespace Bolt
 		template<>
 		void Set<unsigned int>(const unsigned int& obj)
 		{
-			BLT_ASSERT(ValidateAttribute(m_AttribIndex, DataType::UInt, 1), "Attribute with index " + std::to_string(m_AttribIndex) + " was incompatible with uint type");
+			BLT_ASSERT(ValidateAttribute(m_AttribIndex, DataType::UInt, 1), "Attribute with index " + std::to_string(m_AttribIndex) + " was incompatible with uint32_t type");
 			unsigned int* ptr = (unsigned int*)m_Ptr;
 			*ptr = obj;
 		}

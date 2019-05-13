@@ -13,8 +13,8 @@ namespace Bolt
 
 	void ShaderFuncResult::Build(ShaderBuilder& builder) const
 	{
-		size_t lastIndex = 0;
-		size_t index = m_TemplateString.find_first_of(INPUT_TEMPLATE);
+		uint32_t lastIndex = 0;
+		uint32_t index = m_TemplateString.find_first_of(INPUT_TEMPLATE);
 		while (index != blt::string::npos)
 		{
 			int paramIndex = std::stoi(m_TemplateString.substr(index + 1, 1).cpp_str());

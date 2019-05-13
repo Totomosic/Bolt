@@ -43,7 +43,7 @@ namespace Bolt
 		}
 
 		template<typename T>
-		ShaderVariablePtr DeclareArray(size_t length)
+		ShaderVariablePtr DeclareArray(uint32_t length)
 		{
 			return DeclareArray(GetValueType<T>(), length);
 		}

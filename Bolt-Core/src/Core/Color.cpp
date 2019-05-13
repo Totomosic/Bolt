@@ -135,10 +135,10 @@ namespace Bolt
 		return !(*this == other);
 	}
 
-	size_t Color::ToInt() const
+	uint32_t Color::ToInt() const
 	{
 		byte values[4] = { (byte)(r * 255), (byte)(g * 255), (byte)(b * 255), (byte)(a * 255) };
-		size_t value = *(size_t*)values;
+		uint32_t value = *(uint32_t*)values;
 		return value;
 	}
 

@@ -13,7 +13,7 @@ namespace Bolt
 
 	public:
 		InputMemoryStream();
-		InputMemoryStream(uint capacity);
+		InputMemoryStream(uint32_t capacity);
 		InputMemoryStream(const InputMemoryStream& other) = delete;
 		InputMemoryStream& operator=(const InputMemoryStream& other) = delete;
 		InputMemoryStream(InputMemoryStream&& other);
@@ -24,7 +24,7 @@ namespace Bolt
 		int GetRemainingDataSize() const;
 		void Reset(int to = 0);
 
-		void Read(void* buffer, uint length);
+		void Read(void* buffer, uint32_t length);
 		
 		template<typename T>
 		void Read(T* outValue)

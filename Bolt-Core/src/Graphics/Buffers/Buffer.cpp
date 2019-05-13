@@ -5,12 +5,12 @@
 namespace Bolt
 {
 
-	Buffer::Buffer(size_t capacity, BufferTarget target, BufferUsage usage) : Buffer(nullptr, capacity, target, usage)
+	Buffer::Buffer(uint32_t capacity, BufferTarget target, BufferUsage usage) : Buffer(nullptr, capacity, target, usage)
 	{
 		
 	}
 
-	Buffer::Buffer(const void* data, size_t size, BufferTarget target, BufferUsage usage)
+	Buffer::Buffer(const void* data, uint32_t size, BufferTarget target, BufferUsage usage)
 		: m_Id(0), m_Size(size), m_Usage(usage), m_Target(target), m_IsMapped(false)
 	{
 		Create(data);
@@ -44,7 +44,7 @@ namespace Bolt
 		}
 	}
 
-	size_t Buffer::Size() const
+	uint32_t Buffer::Size() const
 	{
 		return m_Size;
 	}
@@ -92,14 +92,14 @@ namespace Bolt
 		return result;
 	}
 
-	void Buffer::Upload(const void* data, size_t size, size_t offset) const
+	void Buffer::Upload(const void* data, uint32_t size, uint32_t offset) const
 	{
 		BLT_ASSERT(size + offset <= Size(), "Could not upload: " + std::to_string(size) + " as buffer is not large enough");
 		Bind();
 		GL_CALL(glBufferSubData((GLenum)m_Target, (GLintptr)offset, (GLsizeiptr)size, (const GLvoid*)data));
 	}
 
-	void Buffer::Download(void* data, size_t size, size_t offset) const
+	void Buffer::Download(void* data, uint32_t size, uint32_t offset) const
 	{
 		BLT_ASSERT(size + offset <= Size(), "Could not download: " + std::to_string(size) + " as buffer does not contain that many bytes");
 		Bind();
@@ -111,15 +111,15 @@ namespace Bolt
 		Download(data, Size(), 0);
 	}
 
-	void Buffer::Resize(size_t newSize)
+	void Buffer::Resize(uint32_t newSize)
 	{
 		m_Size = newSize;
 		GL_CALL(glBufferData((GLenum)m_Target, (GLsizeiptr)Size(), (const GLvoid*)nullptr, (GLenum)Usage()));
 	}
 
-	void Buffer::ResizePreserve(size_t newSize)
+	void Buffer::ResizePreserve(uint32_t newSize)
 	{
-		size_t oldSize = (newSize < Size()) ? newSize : Size();
+		uint32_t oldSize = (newSize < Size()) ? newSize : Size();
 		byte* oldData = new byte[oldSize];
 		Download(oldData, oldSize, 0);
 		Resize(newSize);
@@ -127,7 +127,7 @@ namespace Bolt
 		delete[] oldData;
 	}
 
-	void Buffer::TestResize(size_t newSize)
+	void Buffer::TestResize(uint32_t newSize)
 	{
 		if (newSize >= Size())
 		{
@@ -135,7 +135,7 @@ namespace Bolt
 		}
 	}
 
-	void Buffer::TestResizePreserve(size_t newSize)
+	void Buffer::TestResizePreserve(uint32_t newSize)
 	{
 		if (newSize >= Size())
 		{
@@ -143,18 +143,18 @@ namespace Bolt
 		}
 	}
 
-	void Buffer::Append(const void* data, size_t size)
+	void Buffer::Append(const void* data, uint32_t size)
 	{
-		size_t oldSize = Size();
+		uint32_t oldSize = Size();
 		TestResizePreserve(oldSize + size);
 		Upload(data, size, oldSize);
 		m_Size = oldSize + size;
 	}
 
-	void Buffer::Insert(size_t position, const void* data, size_t size)
+	void Buffer::Insert(uint32_t position, const void* data, uint32_t size)
 	{
-		size_t oldSize = Size();
-		size_t rightDataSize = oldSize - position;
+		uint32_t oldSize = Size();
+		uint32_t rightDataSize = oldSize - position;
 		byte* rightData = new byte[rightDataSize];
 		Download(rightData, rightDataSize, position);
 		TestResizePreserve(oldSize + size);
@@ -164,10 +164,10 @@ namespace Bolt
 		m_Size = oldSize + size;
 	}
 
-	void Buffer::Erase(size_t position, size_t count)
+	void Buffer::Erase(uint32_t position, uint32_t count)
 	{
-		size_t oldSize = Size();
-		size_t dataSize = oldSize - position - count;
+		uint32_t oldSize = Size();
+		uint32_t dataSize = oldSize - position - count;
 		byte* data = new byte[dataSize];
 		Download(data, dataSize, position + count);
 		Upload(data, dataSize, position);

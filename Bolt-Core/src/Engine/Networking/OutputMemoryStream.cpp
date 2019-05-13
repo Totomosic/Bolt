@@ -4,7 +4,7 @@
 namespace Bolt
 {
 
-	OutputMemoryStream::OutputMemoryStream(uint capacity)
+	OutputMemoryStream::OutputMemoryStream(uint32_t capacity)
 		: m_Buffer(nullptr), m_Capacity(capacity), m_Head(0)
 	{
 		ReallocBuffer(m_Capacity);
@@ -49,7 +49,7 @@ namespace Bolt
 		m_Head = to;
 	}
 
-	void OutputMemoryStream::Write(const void* data, uint length)
+	void OutputMemoryStream::Write(const void* data, uint32_t length)
 	{
 		if (m_Capacity < m_Head + length)
 		{
@@ -59,7 +59,7 @@ namespace Bolt
 		m_Head += length;
 	}
 
-	void OutputMemoryStream::ReallocBuffer(uint capacity)
+	void OutputMemoryStream::ReallocBuffer(uint32_t capacity)
 	{
 		m_Buffer = (byte*)std::realloc(m_Buffer, capacity);
 	}

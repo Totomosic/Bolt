@@ -1,21 +1,22 @@
 #include "Types.h"
-#include "RandomDistribution.h"
+
+#include "RandomDistribution.h"
 
 namespace Bolt
 {
 
-	RandomDistribution::RandomDistribution() : RandomDistribution((size_t)time(nullptr))
+	RandomDistribution::RandomDistribution() : RandomDistribution((uint32_t)time(nullptr))
 	{
 	
 	}
 
-	RandomDistribution::RandomDistribution(size_t seed)
+	RandomDistribution::RandomDistribution(uint32_t seed)
 		: m_Generator(seed)
 	{
 		
 	}
 
-	void RandomDistribution::SetSeed(size_t seed)
+	void RandomDistribution::SetSeed(uint32_t seed)
 	{
 		m_Generator.seed(seed);
 	}

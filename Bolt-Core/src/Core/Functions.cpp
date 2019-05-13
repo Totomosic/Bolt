@@ -3,7 +3,7 @@
 #include "Functions.h"
 #include "Utils/Filesystem/Filesystem.h"
 #define STB_IMAGE_IMPLEMENTATION 
-#include "../external/stb_image.h"
+#include "../vendor/stb_image.h"
 
 namespace Bolt
 {

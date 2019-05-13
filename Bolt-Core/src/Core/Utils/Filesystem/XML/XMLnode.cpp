@@ -258,7 +258,7 @@ namespace Bolt
 		Data += data;
 	}
 
-	void XMLnode::AddData(const void* data, uint length)
+	void XMLnode::AddData(const void* data, uint32_t length)
 	{
 		blt::string s((const char*)data, length);
 		AddData(s);

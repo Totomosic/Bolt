@@ -240,7 +240,7 @@ namespace Bolt
 		GL_CALL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, texture->Width(), texture->Height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr));
 		texture->SetMagFilter(MagFilter::Linear);
 		texture->SetMinFilter(MinFilter::Linear);
-		texture->SetWrapMode(WrapMode::Clamp);
+		texture->SetWrapMode(WrapMode::ClampToEdge);
 		GL_CALL(glFramebufferTexture2D(GL_FRAMEBUFFER, (GLenum)buffer, GL_TEXTURE_2D, texture->Id(), 0));
 		GL_CALL(glDrawBuffer((GLenum)buffer));
 	}
@@ -254,7 +254,7 @@ namespace Bolt
 		GL_CALL(glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, texture->Width(), texture->Height(), 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr));
 		texture->SetMagFilter(MagFilter::Nearest);
 		texture->SetMinFilter(MinFilter::Nearest);
-		texture->SetWrapMode(WrapMode::Clamp);
+		texture->SetWrapMode(WrapMode::ClampToEdge);
 		GL_CALL(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, texture->Id(), 0));
 	}
 

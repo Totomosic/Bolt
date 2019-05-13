@@ -352,7 +352,7 @@ namespace Bolt
 		}
 	}
 
-	void Input::CharPressedCallback(uint code)
+	void Input::CharPressedCallback(uint32_t code)
 	{
 		if (IsCurrentlySelected())
 		{

@@ -27,21 +27,16 @@ project "DND"
         "../%{IncludeDirs.Glad}",
 		"../%{IncludeDirs.ImGui}",
         "../%{IncludeDirs.spdlog}",
+        "../%{IncludeDirs.FreeType}",
         "../%{IncludeDirs.FreeTypeGL}",
         "../%{IncludeDirs.Lua}",
         "src"
-    }
-
-    libdirs
-    {
-        "../Bolt-Core/external/**"
     }
 
     links
     {
         "Bolt-Core",
         "opengl32.lib",
-        "freetype26d.lib",
         "ws2_32.lib"
     }
 

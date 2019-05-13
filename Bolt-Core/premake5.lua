@@ -25,23 +25,19 @@ project "Bolt-Core"
 		"../%{IncludeDirs.ImGui}",
         "../%{IncludeDirs.spdlog}",
         "../%{IncludeDirs.FreeTypeGL}",
+        "../%{IncludeDirs.FreeType}",
         "../%{IncludeDirs.Lua}",
         "src"
-    }
-
-    libdirs
-    {
-        "../Bolt-Core/external/**"
     }
 
     links
     {
         "opengl32.lib",
-        "freetype26d.lib",
         "ws2_32.lib",
         "GLFW",
         "Glad",
         "ImGui",
+        "FreeType",
         "FreeType-GL",
         "Lua"
     }
