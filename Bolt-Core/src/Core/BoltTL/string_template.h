@@ -10,7 +10,7 @@ namespace blt
 	struct BLT_API char_conversion
 	{
 	public:
-		To* operator()(const From* str, size_t chrCount)
+		To* operator()(const From* str, uint32_t chrCount)
 		{
 			BLT_ASSERT(false, "unsupported character conversion");
 			return nullptr;
@@ -21,7 +21,7 @@ namespace blt
 	struct BLT_API char_conversion<char, wchar_t>
 	{
 	public:
-		wchar_t* operator()(const char* str, size_t chrCount)
+		wchar_t* operator()(const char* str, uint32_t chrCount)
 		{
 			wchar_t* buffer = (wchar_t*)std::realloc(nullptr, chrCount * sizeof(wchar_t));
 			mbstowcs(buffer, str, chrCount);
@@ -33,7 +33,7 @@ namespace blt
 	struct BLT_API char_conversion<wchar_t, char>
 	{
 	public:
-		char* operator()(const wchar_t* str, size_t chrCount)
+		char* operator()(const wchar_t* str, uint32_t chrCount)
 		{
 			char* buffer = (char*)std::realloc(nullptr, chrCount * sizeof(char));
 			wcstombs(buffer, str, chrCount);
@@ -45,7 +45,7 @@ namespace blt
 	struct BLT_API char_conversion<char, char>
 	{
 	public:
-		char* operator()(const char* str, size_t chrCount)
+		char* operator()(const char* str, uint32_t chrCount)
 		{
 			char* buffer = (char*)std::realloc(nullptr, chrCount * sizeof(char));
 			memcpy(buffer, str, chrCount * sizeof(char));
@@ -57,7 +57,7 @@ namespace blt
 	struct BLT_API char_conversion<wchar_t, wchar_t>
 	{
 	public:
-		wchar_t* operator()(const wchar_t* str, size_t chrCount)
+		wchar_t* operator()(const wchar_t* str, uint32_t chrCount)
 		{
 			wchar_t* buffer = (wchar_t*)std::realloc(nullptr, chrCount * sizeof(wchar_t));
 			memcpy(buffer, str, chrCount * sizeof(wchar_t));
@@ -84,28 +84,28 @@ namespace blt
 		using this_t = string_template<value_t>;
 
 	public:
-		static constexpr size_t type_size = sizeof(value_t);
-		static constexpr size_t npos = (size_t)-1;
+		static constexpr uint32_t type_size = sizeof(value_t);
+		static constexpr uint32_t npos = (uint32_t)-1;
 
 	private:
 		pointer_t m_Buffer;
-		size_t m_BufferCapacityCount;
-		size_t m_CharCount;
+		uint32_t m_BufferCapacityCount;
+		uint32_t m_CharCount;
 
 	public:
-		string_template() : string_template((size_t)1)
+		string_template() : string_template((uint32_t)1)
 		{
 
 		}
 
-		string_template(size_t charCapacity)
+		string_template(uint32_t charCapacity)
 			: m_Buffer(nullptr), m_BufferCapacityCount(0), m_CharCount(0)
 		{
 			realloc_buffer(charCapacity);
 			null_terminate();
 		}
 
-		string_template(const_ref_t chr) : string_template((size_t)2)
+		string_template(const_ref_t chr) : string_template((uint32_t)2)
 		{
 			push_back(chr);
 		}
@@ -120,7 +120,7 @@ namespace blt
 			
 		}
 
-		string_template(const_pointer_t str, size_t count) : string_template(count)
+		string_template(const_pointer_t str, uint32_t count) : string_template(count)
 		{
 			append(str, count);
 		}
@@ -180,19 +180,19 @@ namespace blt
 		}
 
 		// Return number of characters in string
-		inline size_t size() const { return m_CharCount; }
+		inline uint32_t size() const { return m_CharCount; }
 		// Return number of characters in string
-		inline size_t length() const { return size(); }
+		inline uint32_t length() const { return size(); }
 		// Return number of bytes represented by characters of string
-		inline size_t byte_length() const { return length() * type_size; }
+		inline uint32_t byte_length() const { return length() * type_size; }
 		// Return maximum number of characters that can be stored in buffer
-		inline size_t capacity() const { return m_BufferCapacityCount; }
+		inline uint32_t capacity() const { return m_BufferCapacityCount; }
 		// Return number of bytes used in string buffer
-		inline size_t buffer_size() const { return m_CharCount * type_size; }
+		inline uint32_t buffer_size() const { return m_CharCount * type_size; }
 		// Return number of bytes used in string buffer
-		inline size_t buffer_length() const { return buffer_size(); }
+		inline uint32_t buffer_length() const { return buffer_size(); }
 		// Return maximum number of bytes that can be stored in buffer
-		inline size_t buffer_capacity() const { return capacity() * type_size; }
+		inline uint32_t buffer_capacity() const { return capacity() * type_size; }
 		// Return c style representation of string
 		inline const_pointer_t c_str() const { return buffer_ptr(); }
 		// Return pointer to beginning of string buffer
@@ -221,13 +221,13 @@ namespace blt
 		inline ref_t back() { return *(end() - 1); }
 
 		// Returns reference to character at given index
-		inline const_ref_t at(size_t index) const { return *(begin() + index); }
+		inline const_ref_t at(uint32_t index) const { return *(begin() + index); }
 		// Returns reference to character at given index
-		inline ref_t at(size_t index) { return *(begin() + index); }
+		inline ref_t at(uint32_t index) { return *(begin() + index); }
 		// Returns reference to character at given index
-		inline const_ref_t operator[](size_t index) const { return at(index); }
+		inline const_ref_t operator[](uint32_t index) const { return at(index); }
 		// Returns reference to character at given index
-		inline ref_t operator[](size_t index) { return at(index); }
+		inline ref_t operator[](uint32_t index) { return at(index); }
 
 		// Adds a new character to the end of the string
 		void push_back(const_ref_t chr)
@@ -263,7 +263,7 @@ namespace blt
 		// Appends given null-terminated string to end of string
 		this_t& append(const_pointer_t str)
 		{
-			size_t length = calc_string_length(str);
+			uint32_t length = calc_string_length(str);
 			return append(str, length);
 		}
 
@@ -274,7 +274,7 @@ namespace blt
 		}
 
 		// Appends characters from buffer to end of string
-		this_t& append(const_pointer_t buffer, size_t chrCount)
+		this_t& append(const_pointer_t buffer, uint32_t chrCount)
 		{
 			test_realloc_buffer(size() + chrCount);
 			memcpy(buffer_ptr() + size(), buffer, chrCount * type_size);
@@ -284,7 +284,7 @@ namespace blt
 		}
 		
 		// Inserts character at given index in string
-		this_t& insert(size_t index, const_ref_t chr)
+		this_t& insert(uint32_t index, const_ref_t chr)
 		{
 			BLT_ASSERT(index < size() + 1, "cannot insert past end of string");
 			test_realloc_buffer(size() + 1);
@@ -294,20 +294,20 @@ namespace blt
 		}
 
 		// Inserts given null-terminated string at given index in string
-		this_t& insert(size_t index, const_pointer_t str)
+		this_t& insert(uint32_t index, const_pointer_t str)
 		{
-			size_t length = calc_string_length(str);
+			uint32_t length = calc_string_length(str);
 			return insert(index, str, length);
 		}
 
 		// Inserts given string at given index in string
-		this_t& insert(size_t index, const this_t& str)
+		this_t& insert(uint32_t index, const this_t& str)
 		{
 			return insert(index, str.data(), str.size());
 		}
 
 		// Inserts characters from buffer at given index in string
-		this_t& insert(size_t index, const_pointer_t buffer, size_t chrCount)
+		this_t& insert(uint32_t index, const_pointer_t buffer, uint32_t chrCount)
 		{
 			BLT_ASSERT(index < size() + 1, "cannot insert past end of string");
 			test_realloc_buffer(size() + chrCount);
@@ -317,7 +317,7 @@ namespace blt
 		}
 
 		// Reserves capacity if larger than current capacity
-		void reserve(size_t newCapacity)
+		void reserve(uint32_t newCapacity)
 		{
 			if (newCapacity > m_BufferCapacityCount)
 			{
@@ -397,7 +397,7 @@ namespace blt
 			{
 				return false;
 			}
-			for (size_t i = 0; i < left.size(); i++)
+			for (uint32_t i = 0; i < left.size(); i++)
 			{
 				if (left.at(i) != right.at(i))
 				{
@@ -466,7 +466,7 @@ namespace blt
 		}
 
 		// Erase characters from string, if count == npos, erases to end of string
-		this_t& erase(size_t index, size_t count)
+		this_t& erase(uint32_t index, uint32_t count)
 		{
 			if (count == this_t::npos)
 			{
@@ -480,40 +480,40 @@ namespace blt
 		// Erase character at iterator
 		this_t& erase(str_iterator chr)
 		{
-			size_t index = index_of_iterator(chr);
+			uint32_t index = index_of_iterator(chr);
 			return erase(index, 1);
 		}
 
 		// Erase character range [beginChr, lastChr] (do not use string::end())
 		this_t& erase(str_iterator beginChr, str_iterator lastChr)
 		{
-			size_t beginIndex = index_of_iterator(beginChr);
-			size_t lastIndex = index_of_iterator(lastChr);
+			uint32_t beginIndex = index_of_iterator(beginChr);
+			uint32_t lastIndex = index_of_iterator(lastChr);
 			BLT_ASSERT(lastIndex > beginIndex, "begin iterator was after last iterator");
 			return erase(beginIndex, lastIndex - beginIndex + 1);
 		}
 
 		// Returns index of first occurrence of given string after start
-		size_t find(const this_t& str, size_t start = 0) const
+		uint32_t find(const this_t& str, uint32_t start = 0) const
 		{
 			return find(str.data(), str.size(), start);
 		}
 
 		// Returns index of first occurrence of given string after start
-		size_t find(const_pointer_t str, size_t start = 0) const
+		uint32_t find(const_pointer_t str, uint32_t start = 0) const
 		{
 			return find(str, calc_string_length(str), start);
 		}
 
 		// Returns index of first occurrence of characters from buffer after start
-		size_t find(const_pointer_t str, size_t chrCount, size_t start = 0) const
+		uint32_t find(const_pointer_t str, uint32_t chrCount, uint32_t start = 0) const
 		{
 			BLT_ASSERT(chrCount < size(), "string is shorter than finding string");
 			BLT_ASSERT(start < size() - chrCount, "cannot start past end of string");
-			for (size_t i = start; i <= size() - chrCount; i++)
+			for (uint32_t i = start; i <= size() - chrCount; i++)
 			{
 				bool found = true;
-				for (size_t j = 0; j < chrCount; j++)
+				for (uint32_t j = 0; j < chrCount; j++)
 				{
 					if (at(i + j) != str[j])
 					{
@@ -530,25 +530,25 @@ namespace blt
 		}
 
 		// Returns index of first occurrence of character from buffer after start
-		size_t find(value_t chr, size_t start = 0) const
+		uint32_t find(value_t chr, uint32_t start = 0) const
 		{
 			return find(&chr, 1, start);
 		}
 
 		// Returns index of last occurrence of given string from start
-		size_t rfind(const this_t& str, size_t start = this_t::npos) const
+		uint32_t rfind(const this_t& str, uint32_t start = this_t::npos) const
 		{
 			return rfind(str.data(), start);
 		}
 
 		// Returns index of last occurrence of given string from start
-		size_t rfind(const_pointer_t str, size_t start = this_t::npos) const
+		uint32_t rfind(const_pointer_t str, uint32_t start = this_t::npos) const
 		{
 			return rfind(str, calc_string_length(str), start);
 		}
 
 		// Returns index of last occurrence of given string from start
-		size_t rfind(const_pointer_t str, size_t chrCount, size_t start = this_t::npos) const
+		uint32_t rfind(const_pointer_t str, uint32_t chrCount, uint32_t start = this_t::npos) const
 		{
 			BLT_ASSERT(chrCount < size(), "string is shorter than finding string");
 			if (start == this_t::npos)
@@ -556,10 +556,10 @@ namespace blt
 				start = length() - chrCount;
 			}
 			BLT_ASSERT(start < size() - chrCount, "cannot start past end of string");
-			for (size_t i = start; i >= 0; i--)
+			for (uint32_t i = start; i >= 0; i--)
 			{
 				bool found = true;
-				for (size_t j = 0; j < chrCount; j++)
+				for (uint32_t j = 0; j < chrCount; j++)
 				{
 					if (at(i + j) != str[j])
 					{
@@ -576,28 +576,28 @@ namespace blt
 		}
 
 		// Returns index of last occurrence of given character from start
-		size_t rfind(value_t chr, size_t start = this_t::npos) const
+		uint32_t rfind(value_t chr, uint32_t start = this_t::npos) const
 		{
 			return rfind(&chr, 1, start);
 		}
 
 		// Returns index of first occurrence of any character in given string
-		size_t find_first_of(const this_t& str, size_t start = 0) const
+		uint32_t find_first_of(const this_t& str, uint32_t start = 0) const
 		{
 			return find_first_of(str.data(), start);
 		}
 
 		// Returns index of first occurrence of any character in given string
-		size_t find_first_of(const_pointer_t str, size_t start = 0) const
+		uint32_t find_first_of(const_pointer_t str, uint32_t start = 0) const
 		{
 			return find_first_of(str, calc_string_length(str), start);
 		}
 
 		// Returns index of first occurrence of any character in given string
-		size_t find_first_of(const_pointer_t str, size_t chrCount, size_t start = 0) const
+		uint32_t find_first_of(const_pointer_t str, uint32_t chrCount, uint32_t start = 0) const
 		{
 			BLT_ASSERT(start < size(), "cannot begin past end of string");
-			for (size_t i = start; i < size(); i++)
+			for (uint32_t i = start; i < size(); i++)
 			{
 				for (int j = 0; j < chrCount; i++)
 				{
@@ -611,32 +611,32 @@ namespace blt
 		}
 
 		// Returns index of first occurrence of the character in given string
-		size_t find_first_of(value_t chr, size_t start = 0) const
+		uint32_t find_first_of(value_t chr, uint32_t start = 0) const
 		{
 			return find_first_of(&chr, 1, start);
 		}
 
 		// Returns index of last occurrence of any character in given string
-		size_t find_last_of(const this_t& str, size_t start = this_t::npos) const
+		uint32_t find_last_of(const this_t& str, uint32_t start = this_t::npos) const
 		{
 			return find_last_of(str.data(), start);
 		}
 
 		// Returns index of last occurrence of any character in given string
-		size_t find_last_of(const_pointer_t str, size_t start = this_t::npos) const
+		uint32_t find_last_of(const_pointer_t str, uint32_t start = this_t::npos) const
 		{
 			return find_last_of(str, calc_string_length(str), start);
 		}
 
 		// Returns index of last occurrence of any character in given string
-		size_t find_last_of(const_pointer_t str, size_t chrCount, size_t start = this_t::npos) const
+		uint32_t find_last_of(const_pointer_t str, uint32_t chrCount, uint32_t start = this_t::npos) const
 		{
 			if (start == npos)
 			{
 				start = size() - 1;
 			}
 			BLT_ASSERT(start < size(), "cannot begin past end of string");
-			for (size_t i = start; i >= 0; i--)
+			for (uint32_t i = start; i >= 0; i--)
 			{
 				for (int j = 0; j < chrCount; i++)
 				{
@@ -650,13 +650,13 @@ namespace blt
 		}
 
 		// Returns index of last occurrence of the character in given string
-		size_t find_last_of(value_t chr, size_t start = this_t::npos) const
+		uint32_t find_last_of(value_t chr, uint32_t start = this_t::npos) const
 		{
 			return find_last_of(&chr, 1, start);
 		}
 
 		// Returns substring
-		this_t substr(size_t start, size_t count = this_t::npos) const
+		this_t substr(uint32_t start, uint32_t count = this_t::npos) const
 		{
 			this_t result;
 			if (count == npos)
@@ -671,33 +671,33 @@ namespace blt
 		}
 
 		// Replaces characters from start with str
-		this_t& replace(size_t start, const this_t& str)
+		this_t& replace(uint32_t start, const this_t& str)
 		{
 			return replace(start, str.data());
 		}
 
 		// Replaces characters from start with str
-		this_t& replace(size_t start, const_pointer_t str)
+		this_t& replace(uint32_t start, const_pointer_t str)
 		{
 			return replace(start, str, calc_string_length(str));
 		}
 
 		// Replaces characters from start with str
-		this_t& replace(size_t start, const pointer_t str, size_t count)
+		this_t& replace(uint32_t start, const pointer_t str, uint32_t count)
 		{
 			memcpy(buffer_ptr() + start * type_size, str, count * type_size);
 			return *this;
 		}
 
 		// Replaces characters from start with character
-		this_t& replace(size_t start, value_t chr)
+		this_t& replace(uint32_t start, value_t chr)
 		{
 			return replace(start, &chr, 1);
 		}
 
 		this_t& replace_all(const this_t& replace, const this_t& with)
 		{
-			size_t index = find(replace);
+			uint32_t index = find(replace);
 			while (index != npos)
 			{
 				this->replace(index, with);
@@ -708,7 +708,7 @@ namespace blt
 
 		this_t& replace_all(const this_t& replace, char with)
 		{
-			size_t index = find(replace);
+			uint32_t index = find(replace);
 			while (index != npos)
 			{
 				this->replace(index, with);
@@ -719,7 +719,7 @@ namespace blt
 
 		this_t& replace_all(char replace, const this_t& with)
 		{
-			size_t index = find(replace);
+			uint32_t index = find(replace);
 			while (index != npos)
 			{
 				this->replace(index, with);
@@ -730,7 +730,7 @@ namespace blt
 
 		this_t& replace_all(char replace, char with)
 		{
-			size_t index = find(replace);
+			uint32_t index = find(replace);
 			while (index != npos)
 			{
 				this->replace(index, with);
@@ -752,9 +752,9 @@ namespace blt
 		}
 
 		// Removes all characters in string that are in buffer
-		this_t& remove_all(const_pointer_t chars, size_t count)
+		this_t& remove_all(const_pointer_t chars, uint32_t count)
 		{
-			size_t index = find_first_of(chars, count);
+			uint32_t index = find_first_of(chars, count);
 			while (index != npos)
 			{
 				erase(begin() + index);
@@ -770,19 +770,19 @@ namespace blt
 		}
 
 		// Returns whether str is a substring of string
-		bool contains(const this_t& str, size_t start = 0) const
+		bool contains(const this_t& str, uint32_t start = 0) const
 		{
 			return contains(str.data(), start);
 		}
 
 		// Returns whether str is a substring of string
-		bool contains(const_pointer_t str, size_t start = 0) const
+		bool contains(const_pointer_t str, uint32_t start = 0) const
 		{
 			return contains(str, calc_string_length(str), start);
 		}
 
 		// Returns whether str is a substring of string
-		bool contains(const_pointer_t str, size_t count, size_t start = 0) const
+		bool contains(const_pointer_t str, uint32_t count, uint32_t start = 0) const
 		{
 			for (int i = 0; i <= size() - count; i++)
 			{
@@ -804,7 +804,7 @@ namespace blt
 		}
 
 		// Returns whether str contains c
-		bool contains(value_t c, size_t start = 0) const
+		bool contains(value_t c, uint32_t start = 0) const
 		{
 			return contains(&c, 1, start);
 		}
@@ -822,10 +822,10 @@ namespace blt
 		}
 
 		// Returns whether string starts with str
-		bool begins_with(const_pointer_t str, size_t count) const
+		bool begins_with(const_pointer_t str, uint32_t count) const
 		{
 			BLT_ASSERT(count < size(), "str is longer than string");
-			for (size_t i = 0; i < count; i++)
+			for (uint32_t i = 0; i < count; i++)
 			{
 				if (at(i) != str[i])
 				{
@@ -854,10 +854,10 @@ namespace blt
 		}
 
 		// Returns whether string ends with str
-		bool ends_with(const_pointer_t str, size_t count) const
+		bool ends_with(const_pointer_t str, uint32_t count) const
 		{
 			BLT_ASSERT(count < size(), "str is longer than string");
-			for (size_t i = size() - count; i < size(); i++)
+			for (uint32_t i = size() - count; i < size(); i++)
 			{
 				if (at(i) != str[i - size() + count])
 				{
@@ -886,11 +886,11 @@ namespace blt
 		}
 
 		// Splits string into parts separated by delimeter
-		std::vector<this_t> split(const_pointer_t delimeter, size_t count) const
+		std::vector<this_t> split(const_pointer_t delimeter, uint32_t count) const
 		{
 			std::vector<this_t> result;
-			size_t start = 0;
-			size_t end = find(delimeter, count);
+			uint32_t start = 0;
+			uint32_t end = find(delimeter, count);
 			while (end != npos)
 			{
 				result.push_back(substr(start, end - start));
@@ -931,9 +931,9 @@ namespace blt
 		// Returns pointer to start of string buffer
 		inline pointer_t buffer_ptr() const { return m_Buffer; }
 		// Calculates the character count of a given string
-		inline size_t calc_string_length(const_pointer_t str) const
+		inline uint32_t calc_string_length(const_pointer_t str) const
 		{
-			size_t length = 0;
+			uint32_t length = 0;
 			while (str[length] != (value_t)'\0')
 			{
 				length++;
@@ -942,7 +942,7 @@ namespace blt
 		}
 
 		// Reallocates the string buffer is the given number of characters will not fit (characterCount should not include the null terminator)
-		bool test_realloc_buffer(size_t characterCount)
+		bool test_realloc_buffer(uint32_t characterCount)
 		{
 			if ((characterCount + 1) * type_size > buffer_capacity())
 			{
@@ -953,7 +953,7 @@ namespace blt
 		}
 
 		// Reallocates the string buffer to a given capacity (char count)
-		void realloc_buffer(size_t newCapacity)
+		void realloc_buffer(uint32_t newCapacity)
 		{
 			m_Buffer = (pointer_t)std::realloc(m_Buffer, newCapacity * type_size);
 			m_BufferCapacityCount = newCapacity;
@@ -966,7 +966,7 @@ namespace blt
 		}
 
 		// Moves all characters after index forward by count positions (and null terminates)
-		void move_forward(size_t index, size_t count)
+		void move_forward(uint32_t index, uint32_t count)
 		{
 			BLT_ASSERT(index - count > 0, "cannot move forward past the front of buffer");
 			memmove(buffer_ptr() + (index - count), buffer_ptr() + index, (size() - index) * type_size);
@@ -975,7 +975,7 @@ namespace blt
 		}
 
 		// Moves all characters after index backward by count positions (and null terminates)
-		void move_backward(size_t index, size_t count)
+		void move_backward(uint32_t index, uint32_t count)
 		{
 			test_realloc_buffer(size() + count);
 			memmove(buffer_ptr() + index + count, buffer_ptr() + index, (size() - index) * type_size);
@@ -984,19 +984,19 @@ namespace blt
 		}
 
 		// Returns index that iterator corresponds to
-		size_t index_of_iterator(const_str_iterator iterator) const
+		uint32_t index_of_iterator(const_str_iterator iterator) const
 		{
-			size_t iptr = (size_t)iterator.get();
-			size_t bptr = (size_t)begin().get();
+			uint32_t iptr = (uint32_t)iterator.get();
+			uint32_t bptr = (uint32_t)begin().get();
 			BLT_ASSERT(iptr > bptr, "iterator is before beginning of string");
 			return (iptr - bptr) / type_size;
 		}
 
 		// Returns index that iterator corresponds to
-		size_t index_of_iterator(str_iterator iterator)
+		uint32_t index_of_iterator(str_iterator iterator)
 		{
-			size_t iptr = (size_t)iterator.get();
-			size_t bptr = (size_t)begin().get();
+			uint32_t iptr = (uint32_t)iterator.get();
+			uint32_t bptr = (uint32_t)begin().get();
 			BLT_ASSERT(iptr > bptr, "iterator is before beginning of string");
 			return (iptr - bptr) / type_size;
 		}
@@ -1014,7 +1014,7 @@ namespace std
 	template<>
 	struct hash<blt::string>
 	{
-		size_t operator()(const blt::string& str) const noexcept
+		uint32_t operator()(const blt::string& str) const noexcept
 		{
 			return hash<std::string>()(str.cpp_str());
 		}

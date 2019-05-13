@@ -16,8 +16,8 @@ namespace Bolt
 		SocketAddress(const sockaddr& inSockAddr);
 		SocketAddress();
 
-		static size_t GetSize();
-		size_t GetHash() const;
+		static uint32_t GetSize();
+		uint32_t GetHash() const;
 		blt::string ToString() const;
 
 		bool operator==(const SocketAddress& other) const;
@@ -30,8 +30,8 @@ namespace Bolt
 	private:
 		const sockaddr_in* GetAsSockAddrIn() const;
 		sockaddr_in* GetAsSockAddrIn();
-		const uint& GetIP4Ref() const;
-		uint& GetIP4Ref();
+		const uint32_t& GetIP4Ref() const;
+		uint32_t& GetIP4Ref();
 
 	};
 
@@ -43,7 +43,7 @@ namespace std
 	template<>
 	struct hash<Bolt::SocketAddress>
 	{
-		size_t operator()(const Bolt::SocketAddress& value) const
+		uint32_t operator()(const Bolt::SocketAddress& value) const
 		{
 			return value.GetHash();
 		}

@@ -26,21 +26,16 @@ PREMAKE_FORMAT_STRING_TEMPLATE = """project "{0}"
         "../%{{IncludeDirs.Glad}}",
         "../%{{IncludeDirs.ImGui}}",
         "../%{{IncludeDirs.spdlog}}",
+        "../%{{IncludeDirs.FreeType}}",
         "../%{{IncludeDirs.FreeTypeGL}}",
         "../%{{IncludeDirs.Lua}}",
         "src"
-    }}
-
-    libdirs
-    {{
-        "../Bolt-Core/external/**"
     }}
 
     links
     {{
         "Bolt-Core",
         "opengl32.lib",
-        "freetype26d.lib",
         "ws2_32.lib"
     }}
 

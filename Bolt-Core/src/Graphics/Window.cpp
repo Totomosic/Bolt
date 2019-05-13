@@ -16,6 +16,7 @@ namespace Bolt
 		m_Data.m_Framebuffer.GetViewport().Height = info.Height;
 		m_Data.m_Framebuffer.ClearColor() = info.ClearColor;
 		
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_ANY_PROFILE);
 		glfwWindowHint(GLFW_DECORATED, info.Decorated);
 		glfwWindowHint(GLFW_RESIZABLE, info.Resizable);
 		glfwWindowHint(GLFW_VISIBLE, info.Visible);
@@ -39,6 +40,10 @@ namespace Bolt
 				BLT_ASSERT(false, "Failed to Initialize Glad");
 			}
 			BLT_CORE_INFO("Glad Initialized");
+			BLT_CORE_INFO("OpenGL Info:");
+			BLT_CORE_INFO("Graphics Vendor: {0}", glGetString(GL_VENDOR));
+			BLT_CORE_INFO("Graphics Card: {0}", glGetString(GL_RENDERER));
+			BLT_CORE_INFO("OpenGL Version: {0}", glGetString(GL_VERSION));
 			s_IsGLADInitialized = true;
 		}
 		if (info.Maximised)
@@ -67,7 +72,7 @@ namespace Bolt
 				Window& window = *(Window*)glfwGetWindowUserPointer(windowHandle);
 				window.GetContext().GetRenderContext().GetInput().KeyboardKeyCallback(key, scancode, action, mods);
 			});
-		glfwSetCharCallback((GLFWwindow*)GetNativeWindow(), [](GLFWwindow * windowHandle, uint character)
+		glfwSetCharCallback((GLFWwindow*)GetNativeWindow(), [](GLFWwindow * windowHandle, uint32_t character)
 			{
 				Window& window = *(Window*)glfwGetWindowUserPointer(windowHandle);
 				window.GetContext().GetRenderContext().GetInput().CharPressedCallback(character);

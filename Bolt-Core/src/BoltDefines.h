@@ -24,7 +24,7 @@ inline const char* ConvertError(GLenum error)
 	#define GL_CALL(call) call;
 #endif
 
-#define BLT_OFFSET_OF(object, field) ((size_t)(&(((object*)(nullptr))->field)))
+#define BLT_OFFSET_OF(object, field) ((uint32_t)(&(((object*)(nullptr))->field)))
 #define BLT_BIT(x) (1 << x)
 #define BLT_IS_BIT_SET(var, num) (!!((var) & BLT_BIT(num)))
 #define BLT_CONTAINS_BIT(var, bitvalue) (!!(((int)var) & ((int)bitvalue)))

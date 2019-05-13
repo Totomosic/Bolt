@@ -11,7 +11,7 @@ namespace Bolt
 		virtual int Execute(lua_State* state) = 0;
 	};
 
-	template<size_t N, typename Ret, typename... Args>
+	template<uint32_t N, typename Ret, typename... Args>
 	class BLT_API LuaFun : public LuaFunBase
 	{
 	public:

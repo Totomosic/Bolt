@@ -93,7 +93,7 @@ namespace Bolt
 		GL_CALL(glUniform1i(location, value));
 	}
 
-	void Shader::SetUniform(int location, uint value) const
+	void Shader::SetUniform(int location, uint32_t value) const
 	{
 		Bind();		
 		GL_CALL(glUniform1i(location, (int)value));

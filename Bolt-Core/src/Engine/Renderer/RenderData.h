@@ -12,7 +12,7 @@ namespace Bolt
 		const VertexArray* Vertices = nullptr;
 		const IndexBuffer* Indices = nullptr;
 		Matrix4f Transform = Matrix4f::Identity();
-		size_t IndexCount = (size_t)-1;
+		uint32_t IndexCount = (uint32_t)-1;
 	};
 
 }

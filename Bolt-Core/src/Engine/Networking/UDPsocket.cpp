@@ -55,7 +55,7 @@ namespace Bolt
 		return err;
 	}
 
-	int UDPsocket::SendTo(const SocketAddress& address, const void* data, uint length)
+	int UDPsocket::SendTo(const SocketAddress& address, const void* data, uint32_t length)
 	{
 		BLT_ASSERT(IsValid(), "Cannot SendTo invalid Socket");
 		int bytes = sendto(m_Socket, (const char*)data, length, 0, &address.m_SockAddr, address.GetSize());
@@ -72,7 +72,7 @@ namespace Bolt
 		return bytes;
 	}
 
-	int UDPsocket::RecvFrom(void* buffer, uint length, SocketAddress* outAddress)
+	int UDPsocket::RecvFrom(void* buffer, uint32_t length, SocketAddress* outAddress)
 	{
 		BLT_ASSERT(IsValid(), "Cannot RecvFrom invalid Socket");
 		SocketAddress outAddr;

@@ -13,7 +13,7 @@ namespace Bolt
 		m_Gen.seed((int)std::time(nullptr));
 	}
 
-	void Random::SetSeed(uint seed)
+	void Random::SetSeed(uint32_t seed)
 	{
 		m_Gen.seed(seed);
 	}

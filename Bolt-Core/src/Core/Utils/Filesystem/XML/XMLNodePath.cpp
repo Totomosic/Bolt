@@ -1,5 +1,6 @@
 #include "Types.h"
-#include "XMLNodePath.h"
+
+#include "XMLNodePath.h"
 #include "XMLnode.h"
 
 namespace Bolt
@@ -68,8 +69,8 @@ namespace Bolt
 				int index = 0;
 				if (node.contains('{') && node.contains('}'))
 				{
-					uint leftBrace = node.find_first_of('{');
-					uint rightBrace = node.find_first_of('}');
+					uint32_t leftBrace = node.find_first_of('{');
+					uint32_t rightBrace = node.find_first_of('}');
 					blt::string indexString = node.substr(leftBrace + 1, rightBrace - leftBrace - 1);
 					node = node.substr(0, leftBrace);
 				}

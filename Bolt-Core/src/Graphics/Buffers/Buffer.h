@@ -34,21 +34,21 @@ namespace Bolt
 	{
 	protected:
 		id_t m_Id;
-		size_t m_Size;
+		uint32_t m_Size;
 		BufferUsage m_Usage;
 		BufferTarget m_Target;
 		mutable bool m_IsMapped;
 
 	public:
-		Buffer(size_t capacity, BufferTarget target, BufferUsage usage = BufferUsage::StaticDraw);
-		Buffer(const void* data, size_t capacity, BufferTarget target, BufferUsage usage = BufferUsage::StaticDraw);		
+		Buffer(uint32_t capacity, BufferTarget target, BufferUsage usage = BufferUsage::StaticDraw);
+		Buffer(const void* data, uint32_t capacity, BufferTarget target, BufferUsage usage = BufferUsage::StaticDraw);		
 		Buffer(Buffer&& other) noexcept;		
 		Buffer& operator=(Buffer&& other) noexcept;
 		virtual ~Buffer();
 		Buffer(const Buffer& other) = delete;
 		Buffer& operator=(const Buffer& other) = delete;
 
-		size_t Size() const;
+		uint32_t Size() const;
 		BufferUsage Usage() const;
 		BufferTarget Target() const;
 		id_t Id() const;
@@ -59,18 +59,18 @@ namespace Bolt
 		virtual void* Map(Access access) const;
 		virtual bool Unmap() const;
 
-		void Upload(const void* data, size_t size, size_t offset = 0) const;
-		void Download(void* outData, size_t size, size_t offset = 0) const;
+		void Upload(const void* data, uint32_t size, uint32_t offset = 0) const;
+		void Download(void* outData, uint32_t size, uint32_t offset = 0) const;
 		void Download(void* outData) const; // Download all
 
 		// Resizes buffer and deletes contents
-		void Resize(size_t newSize);
-		void ResizePreserve(size_t newSize);
-		void TestResize(size_t newSize);
-		void TestResizePreserve(size_t newSize);
-		void Append(const void* data, size_t size);
-		void Insert(size_t position, const void* data, size_t size);
-		void Erase(size_t position, size_t count);
+		void Resize(uint32_t newSize);
+		void ResizePreserve(uint32_t newSize);
+		void TestResize(uint32_t newSize);
+		void TestResizePreserve(uint32_t newSize);
+		void Append(const void* data, uint32_t size);
+		void Insert(uint32_t position, const void* data, uint32_t size);
+		void Erase(uint32_t position, uint32_t count);
 
 	private:
 		void Create(const void* data); // Can be nullptr

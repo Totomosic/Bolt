@@ -16,7 +16,7 @@ namespace Bolt
 		ModelData result;
 		result.Vertices = std::make_unique<VertexArray>(RenderMode::Lines);
 		result.Indices = std::make_unique<IndexArray>();
-		uint indices[2] = { 0, 1 };
+		uint32_t indices[2] = { 0, 1 };
 		result.Indices->AddIndexBuffer(std::make_unique<IndexBuffer>(indices, 2));
 		Vector3f half = Direction * Length / 2.0f;
 		result.Bounds.MinX = -abs(half.x);

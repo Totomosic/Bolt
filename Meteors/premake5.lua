@@ -25,20 +25,15 @@ project "Meteors"
         "../%{IncludeDirs.ImGui}",
         "../%{IncludeDirs.spdlog}",
         "../%{IncludeDirs.FreeTypeGL}",
+        "../%{IncludeDirs.FreeType}",
         "../%{IncludeDirs.Lua}",
         "src"
-    }
-
-    libdirs
-    {
-        "../Bolt-Core/external/**"
     }
 
     links
     {
         "Bolt-Core",
         "opengl32.lib",
-        "freetype26d.lib",
         "ws2_32.lib"
     }
 

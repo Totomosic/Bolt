@@ -62,7 +62,7 @@ namespace Bolt
 		}
 
 		template<typename T>
-		void TransferArray(const blt::string& name, T* value, uint length)
+		void TransferArray(const blt::string& name, T* value, uint32_t length)
 		{
 			if (IsWriting())
 			{

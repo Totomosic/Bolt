@@ -44,10 +44,7 @@ namespace Bolt
 {
 
 	using byte = uint8_t;
-	using uint = size_t;
-	using int64 = int64_t;
-	using uint64 = uint64_t;
-	using id_t = uint;
+	using id_t = uint32_t;
 	using real = float;
 
 }

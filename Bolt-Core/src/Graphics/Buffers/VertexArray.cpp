@@ -109,12 +109,12 @@ namespace Bolt
 		return thisBuffer;
 	}
 
-	VertexBuffer& VertexArray::CreateVertexBuffer(size_t size, const BufferLayout& layout, BufferUsage usage)
+	VertexBuffer& VertexArray::CreateVertexBuffer(uint32_t size, const BufferLayout& layout, BufferUsage usage)
 	{
 		return CreateVertexBuffer(nullptr, size, layout, usage);
 	}
 
-	VertexBuffer& VertexArray::CreateVertexBuffer(const void* data, size_t size, const BufferLayout& layout, BufferUsage usage)
+	VertexBuffer& VertexArray::CreateVertexBuffer(const void* data, uint32_t size, const BufferLayout& layout, BufferUsage usage)
 	{
 		std::unique_ptr<VertexBuffer> buffer = std::make_unique<VertexBuffer>(data, size, layout, usage);
 		return AddVertexBuffer(std::move(buffer));

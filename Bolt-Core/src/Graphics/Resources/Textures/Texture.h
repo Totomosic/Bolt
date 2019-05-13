@@ -52,7 +52,6 @@ namespace Bolt
 
 	BLT_API enum class WrapMode : GLenum
 	{
-		Clamp = GL_CLAMP,
 		Repeat = GL_REPEAT,
 		ClampToEdge = GL_CLAMP_TO_EDGE
 	};

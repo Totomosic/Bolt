@@ -21,16 +21,16 @@ namespace blt
 		typedef blt::iterator<const char> const_iterator;
 
 	public:
-		static const size_t npos = (size_t)-1;
+		static const uint32_t npos = (uint32_t)-1;
 
 	private:
 		char* m_Buffer;
-		size_t m_Size;
-		size_t m_Capacity;
+		uint32_t m_Size;
+		uint32_t m_Capacity;
 
 	public:
 		string();
-		string(size_t capacity);
+		string(uint32_t capacity);
 		string(char c);
 		string(const char* str);
 		string(const char* buffer, unsigned int size);
@@ -43,9 +43,9 @@ namespace blt
 		string& operator=(const string& other);
 		string& operator=(string&& other) noexcept;
 
-		size_t size() const;
-		size_t length() const;
-		size_t capacity() const;
+		uint32_t size() const;
+		uint32_t length() const;
+		uint32_t capacity() const;
 		const char* c_str() const;
 		const char* data() const;
 		std::string cpp_str() const;
@@ -72,18 +72,18 @@ namespace blt
 
 		string& append(const string& str);
 		string& append(const char* str);
-		string& append(const char* str, size_t count);
+		string& append(const char* str, uint32_t count);
 		string& append(char c);
-		string& append(const string& str, size_t strbegin, size_t strlen);
-		string& insert(size_t pos, const string& str);
-		string& insert(size_t pos, const string& str, size_t strbegin, size_t strlen = npos);
-		string& insert(size_t pos, const char* str);
-		string& insert(size_t pos, const char* str, size_t count);
-		string& insert(size_t pos, size_t count, char c);
-		iterator insert(const_iterator pos, size_t count, char c);
+		string& append(const string& str, uint32_t strbegin, uint32_t strlen);
+		string& insert(uint32_t pos, const string& str);
+		string& insert(uint32_t pos, const string& str, uint32_t strbegin, uint32_t strlen = npos);
+		string& insert(uint32_t pos, const char* str);
+		string& insert(uint32_t pos, const char* str, uint32_t count);
+		string& insert(uint32_t pos, uint32_t count, char c);
+		iterator insert(const_iterator pos, uint32_t count, char c);
 		iterator insert(const_iterator pos, char c);
 
-		void reserve(size_t new_capacity);
+		void reserve(uint32_t new_capacity);
 		void clear();
 
 		friend string operator+(const string& left, const string& right);
@@ -103,46 +103,46 @@ namespace blt
 		bool operator!=(const char* other) const;
 		bool operator!=(char other) const;
 
-		string& erase(size_t begin, size_t count);
+		string& erase(uint32_t begin, uint32_t count);
 		iterator erase(iterator character);
 		iterator erase(iterator start, iterator finish);
-		size_t find(const string& str, size_t start = 0) const noexcept;
-		size_t find(const char* str, size_t start = 0) const;
-		size_t find(const char* buff, size_t count, size_t start) const;
-		size_t find(char c, size_t start = 0) const noexcept;
-		size_t rfind(const string& str, size_t start = npos) const noexcept;
-		size_t rfind(const char* str, size_t start = npos) const;
-		size_t rfind(const char* buff, size_t count, size_t start) const;
-		size_t rfind(char c, size_t start = npos) const noexcept;
-		size_t find_first_of(const string& chars, size_t start = 0) const noexcept;
-		size_t find_first_of(const char* chars, size_t start = 0) const;
-		size_t find_first_of(const char* chars, size_t count, size_t start) const;
-		size_t find_first_of(char c, size_t start = 0) const noexcept;
-		size_t find_last_of(const string& chars, size_t start = npos) const noexcept;
-		size_t find_last_of(const char* chars, size_t start = npos) const;
-		size_t find_last_of(const char* chars, size_t count, size_t start) const;
-		size_t find_last_of(char c, size_t start = npos) const noexcept;
-		size_t find_first_not_of(const string& chars, size_t start = 0) const noexcept;
-		size_t find_first_not_of(const char* chars, size_t start = 0) const;
-		size_t find_first_not_of(const char* chars, size_t count, size_t start) const;
-		size_t find_first_not_of(char c, size_t start = 0) const noexcept;
-		size_t find_last_not_of(const string& chars, size_t start = npos) const noexcept;
-		size_t find_last_not_of(const char* chars, size_t start = npos) const;
-		size_t find_last_not_of(const char* chars, size_t count, size_t start) const;
-		size_t find_last_not_of(char c, size_t start = npos) const noexcept;
+		uint32_t find(const string& str, uint32_t start = 0) const noexcept;
+		uint32_t find(const char* str, uint32_t start = 0) const;
+		uint32_t find(const char* buff, uint32_t count, uint32_t start) const;
+		uint32_t find(char c, uint32_t start = 0) const noexcept;
+		uint32_t rfind(const string& str, uint32_t start = npos) const noexcept;
+		uint32_t rfind(const char* str, uint32_t start = npos) const;
+		uint32_t rfind(const char* buff, uint32_t count, uint32_t start) const;
+		uint32_t rfind(char c, uint32_t start = npos) const noexcept;
+		uint32_t find_first_of(const string& chars, uint32_t start = 0) const noexcept;
+		uint32_t find_first_of(const char* chars, uint32_t start = 0) const;
+		uint32_t find_first_of(const char* chars, uint32_t count, uint32_t start) const;
+		uint32_t find_first_of(char c, uint32_t start = 0) const noexcept;
+		uint32_t find_last_of(const string& chars, uint32_t start = npos) const noexcept;
+		uint32_t find_last_of(const char* chars, uint32_t start = npos) const;
+		uint32_t find_last_of(const char* chars, uint32_t count, uint32_t start) const;
+		uint32_t find_last_of(char c, uint32_t start = npos) const noexcept;
+		uint32_t find_first_not_of(const string& chars, uint32_t start = 0) const noexcept;
+		uint32_t find_first_not_of(const char* chars, uint32_t start = 0) const;
+		uint32_t find_first_not_of(const char* chars, uint32_t count, uint32_t start) const;
+		uint32_t find_first_not_of(char c, uint32_t start = 0) const noexcept;
+		uint32_t find_last_not_of(const string& chars, uint32_t start = npos) const noexcept;
+		uint32_t find_last_not_of(const char* chars, uint32_t start = npos) const;
+		uint32_t find_last_not_of(const char* chars, uint32_t count, uint32_t start) const;
+		uint32_t find_last_not_of(char c, uint32_t start = npos) const noexcept;
 
 		string substr(const_iterator start, const_iterator end) const;
 		string substr(iterator start, iterator end) const;
-		string substr(size_t start, size_t count = npos) const;
+		string substr(uint32_t start, uint32_t count = npos) const;
 
-		string& replace(size_t pos, size_t count, const string& str);
+		string& replace(uint32_t pos, uint32_t count, const string& str);
 		string& replace(iterator i1, iterator i2, const string& str);
-		string& replace(size_t pos, size_t len, const string& str, size_t strpos, size_t strlen);
-		string& replace(size_t pos, size_t len, const char* str);
+		string& replace(uint32_t pos, uint32_t len, const string& str, uint32_t strpos, uint32_t strlen);
+		string& replace(uint32_t pos, uint32_t len, const char* str);
 		string& replace(iterator i1, iterator i2, const char* str);
-		string& replace(size_t pos, size_t len, const char* buff, size_t count);
-		string& replace(iterator i1, iterator i2, const char* buff, size_t count);
-		string& replace(size_t pos, size_t len, char c);
+		string& replace(uint32_t pos, uint32_t len, const char* buff, uint32_t count);
+		string& replace(iterator i1, iterator i2, const char* buff, uint32_t count);
+		string& replace(uint32_t pos, uint32_t len, char c);
 		string& replace(iterator i1, iterator i2, char c);
 		string& replace(iterator i1, iterator i2, iterator other1, iterator other2);
 
@@ -155,9 +155,9 @@ namespace blt
 		string& remove_all(const char* chars);
 		string& remove_all(char c);
 
-		bool contains(const string& str, size_t start = 0) const noexcept;
-		bool contains(const char* str, size_t start = 0) const;
-		bool contains(char c, size_t start = 0) const noexcept;
+		bool contains(const string& str, uint32_t start = 0) const noexcept;
+		bool contains(const char* str, uint32_t start = 0) const;
+		bool contains(char c, uint32_t start = 0) const noexcept;
 
 		bool begins_with(const string& str) const noexcept;
 		bool begins_with(const char* str) const noexcept;
@@ -166,9 +166,9 @@ namespace blt
 		bool ends_with(const char* str) const noexcept;
 		bool ends_with(char c) const noexcept;
 
-		int count_of(char c, size_t start = 0) const noexcept;
-		int count_of(const string& str, size_t start = 0) const noexcept;
-		int count_of(const char* str, size_t start = 0) const noexcept;
+		int count_of(char c, uint32_t start = 0) const noexcept;
+		int count_of(const string& str, uint32_t start = 0) const noexcept;
+		int count_of(const char* str, uint32_t start = 0) const noexcept;
 
 		std::vector<string> split(const string& delimeter) const;
 		std::vector<string> split(const char* delimeter) const;
@@ -178,11 +178,11 @@ namespace blt
 		friend std::ostream& operator<<(std::ostream& stream, const string& str);
 
 	private:
-		size_t calc_string_length(const char* str) const;
-		void realloc_buffer(size_t new_capacity);
-		void test_size(size_t required_size);
-		void shuffle_forward(size_t beginIndex, size_t count);
-		void shuffle_backward(size_t beginIndex, size_t count);
+		uint32_t calc_string_length(const char* str) const;
+		void realloc_buffer(uint32_t new_capacity);
+		void test_size(uint32_t required_size);
+		void shuffle_forward(uint32_t beginIndex, uint32_t count);
+		void shuffle_backward(uint32_t beginIndex, uint32_t count);
 		void null_terminate();
 
 		char* buffer_ptr() const;

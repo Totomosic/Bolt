@@ -20,9 +20,9 @@ namespace Bolt
 		float Noise(float x, float y) const;
 		float Noise(float x, float y, float z) const;
 
-		float Generate(size_t octaves, float x) const;
-		float Generate(size_t octaves, float x, float y) const;
-		float Generate(size_t octaves, float x, float y, float z) const;
+		float Generate(uint32_t octaves, float x) const;
+		float Generate(uint32_t octaves, float x, float y) const;
+		float Generate(uint32_t octaves, float x, float y, float z) const;
 
 	};
 

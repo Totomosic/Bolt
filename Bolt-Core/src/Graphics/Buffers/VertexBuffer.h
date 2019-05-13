@@ -11,8 +11,8 @@ namespace Bolt
 		BufferLayout m_Layout;
 		
 	public:
-		VertexBuffer(size_t size, const BufferLayout& layout, BufferUsage usage = BufferUsage::StaticDraw);
-		VertexBuffer(const void* data, size_t size, const BufferLayout& layout, BufferUsage usage = BufferUsage::StaticDraw);
+		VertexBuffer(uint32_t size, const BufferLayout& layout, BufferUsage usage = BufferUsage::StaticDraw);
+		VertexBuffer(const void* data, uint32_t size, const BufferLayout& layout, BufferUsage usage = BufferUsage::StaticDraw);
 
 		const BufferLayout& Layout() const;
 		int VertexCount() const;

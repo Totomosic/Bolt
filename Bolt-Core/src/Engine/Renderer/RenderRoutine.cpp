@@ -43,13 +43,13 @@ namespace Bolt
 				}
 				break;
 			case RendererUniform::LightCount:
-				shader.SetUniform(uniform.Location, context.Lights.size());
+				shader.SetUniform(uniform.Location, (int)context.Lights.size());
 				break;
 			}
 		}
 		for (const RenderData& data : group.Renderables)
 		{
-			uint renderCount = std::min((uint)data.Indices->IndexCount(), data.IndexCount);
+			uint32_t renderCount = std::min((uint32_t)data.Indices->IndexCount(), data.IndexCount);
 			for (const RendererUniformLocation& uniform : material->GetShader().GetShaderInstance().GetRendererUniforms())
 			{
 				if (uniform.Uniform == RendererUniform::ModelMatrix)

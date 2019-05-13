@@ -17,11 +17,11 @@ namespace Bolt
 			backend.SetOutputNode(xmlNode);
 		}
 
-		static void TransferArray(const blt::string& name, T* value, uint length, XMLnode& xmlNode, Backend& backend)
+		static void TransferArray(const blt::string& name, T* value, uint32_t length, XMLnode& xmlNode, Backend& backend)
 		{
 			id_t id = backend.AddSerializedValue(value);
 			XMLnode& child = xmlNode.AddChild(name, { { "id", std::to_string(id) }, { "type", "array" }, { "size", std::to_string(length) } });
-			for (uint i = 0; i < length; i++)
+			for (uint32_t i = 0; i < length; i++)
 			{
 				XMLWriteTraits<T, Backend>::Transfer(std::to_string(i), (value + i), child, backend);
 				backend.SetOutputNode(xmlNode);
@@ -49,7 +49,7 @@ namespace Bolt
 		static void Transfer(const blt::string& name, unsigned int* value, XMLnode& xmlNode, Backend& backend)
 		{
 			id_t id = backend.AddSerializedValue(value);
-			XMLnode& child = xmlNode.AddChild(name, { { "type", "uint" }, { "id", std::to_string(id) } });
+			XMLnode& child = xmlNode.AddChild(name, { { "type", "uint32_t" }, { "id", std::to_string(id) } });
 			child.AddData(std::to_string(*value));
 		}
 	};
@@ -79,10 +79,10 @@ namespace Bolt
 	};
 
 	template<typename Backend>
-	struct BLT_API XMLWriteTraits<int64, Backend>
+	struct BLT_API XMLWriteTraits<int64_t, Backend>
 	{
 	public:
-		static void Transfer(const blt::string& name, int64* value, XMLnode& xmlNode, Backend& backend)
+		static void Transfer(const blt::string& name, int64_t* value, XMLnode& xmlNode, Backend& backend)
 		{
 			id_t id = backend.AddSerializedValue(value);
 			XMLnode& child = xmlNode.AddChild(name, { { "type", "long" }, { "id", std::to_string(id) } });

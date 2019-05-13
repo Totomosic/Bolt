@@ -26,7 +26,7 @@ namespace Bolt
 
 	void LuaScript::Start()
 	{
-		m_Environment.SetGlobal("GameObject", (int)gameObject());
+		m_Environment.SetGlobal("GameObject", (intptr_t)gameObject());
 		if (m_HasStart)
 		{
 			m_Environment.Invoke<void>("Start");

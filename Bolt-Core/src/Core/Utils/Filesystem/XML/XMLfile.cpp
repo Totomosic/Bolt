@@ -60,7 +60,7 @@ namespace Bolt
 		m_WasLastEndTag = false;
 	}
 
-	void XMLfile::WriteXMLData(const void* data, uint length) const
+	void XMLfile::WriteXMLData(const void* data, uint32_t length) const
 	{
 		blt::string text((const char*)data, length);
 		WriteXMLData(text);

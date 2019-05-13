@@ -20,7 +20,7 @@ namespace Bolt
 	public:
 		TimerSet();
 
-		size_t Length() const;
+		uint32_t Length() const;
 		const std::vector<TimerInfo>& Queue() const;
 		std::vector<TimerInfo>& Queue();
 

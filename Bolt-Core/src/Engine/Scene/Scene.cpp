@@ -78,7 +78,7 @@ namespace Bolt
 	std::vector<const Layer*> Scene::GetLayers(id_t mask) const
 	{
 		std::vector<const Layer*> result;
-		id_t maxLayer = (int)log2(mask);
+		id_t maxLayer = (id_t)log2(mask);
 		for (id_t i = 0; i <= maxLayer; i++)
 		{
 			if (BLT_IS_BIT_SET(mask, i))
@@ -109,7 +109,7 @@ namespace Bolt
 	std::vector<Layer*> Scene::GetLayers(id_t mask)
 	{
 		std::vector<Layer*> result;
-		id_t maxLayer = (int)log2(mask);
+		id_t maxLayer = (id_t)log2(mask);
 		for (id_t i = 0; i <= maxLayer; i++)
 		{
 			if (BLT_IS_BIT_SET(mask, i))

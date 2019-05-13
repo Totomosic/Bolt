@@ -25,7 +25,7 @@ namespace blt
 		iterator(pointer ptr)
 			: m_Ptr(ptr)
 		{
-		
+			
 		}
 
 		iterator(const this_iterator& other) = default;

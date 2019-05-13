@@ -75,13 +75,13 @@ namespace Bolt
 
 		ShaderVariablePtr Stream(ShaderStream stream);
 		ShaderVariablePtr Uniform(const blt::string& linkName, ValueType type, std::shared_ptr<UniformValueContainer> defaultValue = nullptr);
-		ShaderVariablePtr UniformArray(const blt::string& linkName, ValueType type, size_t length);
+		ShaderVariablePtr UniformArray(const blt::string& linkName, ValueType type, uint32_t length);
 		ShaderVariablePtr RendererUniform(Bolt::RendererUniform uniform);
 		ShaderVariablePtr DeclareVar(ValueType type);
 		ShaderVariablePtr DefineVar(const ShaderValuePtr& value);
 		ShaderVariablePtr DeclarePassOut(ValueType type);
 		ShaderVariablePtr DeclarePassIn(const ShaderVariablePtr& passOut);
-		ShaderVariablePtr DeclareArray(ValueType type, size_t length);
+		ShaderVariablePtr DeclareArray(ValueType type, uint32_t length);
 
 		template<typename T>
 		ShaderVariablePtr DeclareVar()
@@ -102,7 +102,7 @@ namespace Bolt
 		}
 
 		template<typename T>
-		ShaderVariablePtr UniformArray(const blt::string& linkName, size_t length)
+		ShaderVariablePtr UniformArray(const blt::string& linkName, uint32_t length)
 		{
 			return UniformArray(linkName, GetValueType<T>(), length);
 		}
@@ -114,7 +114,7 @@ namespace Bolt
 		}
 
 		template<typename T>
-		ShaderVariablePtr DeclareArray(size_t length)
+		ShaderVariablePtr DeclareArray(uint32_t length)
 		{
 			return DeclareArray(GetValueType<T>(), length);
 		}

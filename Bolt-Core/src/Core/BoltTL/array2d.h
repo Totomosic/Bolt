@@ -8,7 +8,7 @@ namespace blt
 	// 0 1 2
 	// 3 4 5
 	// 6 7 8
-	template<typename T, size_t Cols, size_t Rows>
+	template<typename T, uint32_t Cols, uint32_t Rows>
 	class BLT_API array2d
 	{
 	public:
@@ -23,18 +23,18 @@ namespace blt
 
 	public:
 		ptr data() const { return m_Data; }
-		constexpr size_t size() const { return Cols * Rows; }
-		constexpr size_t length() const { return Cols * Rows; }
+		constexpr uint32_t size() const { return Cols * Rows; }
+		constexpr uint32_t length() const { return Cols * Rows; }
 
 		ref operator*() const { return *m_Data; }
 		const_ptr operator->() const { return m_Data; }
 		ptr operator->() { return m_Data; }
-		ref operator[](size_t index) const { return m_Data[index]; }
+		ref operator[](uint32_t index) const { return m_Data[index]; }
 
 		array_it begin() const { return array_it(m_Data); }
 		array_it end() const { return array_it(m_Data + Cols * Rows); }
 
-		ref get(size_t x, size_t y) const { return m_Data[x + y * Cols]; }
+		ref get(uint32_t x, uint32_t y) const { return m_Data[x + y * Cols]; }
 
 	};
 

@@ -15,7 +15,7 @@ project "FreeType-GL"
     includedirs
     {
         "../Glad/include",
-        "../../external/freetype/include/"
+        "../freetype/include/"
     }
     
     filter "system:windows"

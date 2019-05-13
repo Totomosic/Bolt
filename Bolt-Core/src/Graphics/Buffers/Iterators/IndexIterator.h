@@ -17,12 +17,12 @@ namespace Bolt
 		IndexIterator();
 		IndexIterator(const IndexMapping* mapping, int currentIndex);
 
-		const uint* Get() const;
-		uint* Get();
-		const uint* operator->() const;
-		uint* operator->();
-		const uint& operator*() const;
-		uint& operator*();
+		const uint32_t* Get() const;
+		uint32_t* Get();
+		const uint32_t* operator->() const;
+		uint32_t* operator->();
+		const uint32_t& operator*() const;
+		uint32_t& operator*();
 
 		IndexIterator& operator+=(int amount);
 		IndexIterator& operator-=(int amount);

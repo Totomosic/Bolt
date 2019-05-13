@@ -167,7 +167,7 @@ namespace Bolt
 		options.Magnification = (magString == "Nearest") ? MagFilter::Nearest : MagFilter::Linear;
 		options.Minification = (minString == "Nearest") ? MinFilter::Nearest : MinFilter::Linear;
 		options.MipmapMode = (mipmapString == "Disabled") ? Mipmaps::Disabled : Mipmaps::Enabled;
-		options.Wrap = (wrapString == "Repeat") ? WrapMode::Repeat : (wrapString == "Clamp") ? WrapMode::Clamp : WrapMode::ClampToEdge;
+		options.Wrap = (wrapString == "Repeat") ? WrapMode::Repeat : WrapMode::ClampToEdge;
 		std::unique_ptr<Texture2D> texture = std::make_unique<Texture2D>(image, options);
 		image.ReleasePixels();
 		id_t id = Register(std::move(texture));
@@ -186,7 +186,7 @@ namespace Bolt
 		std::vector<float> vertices;
 		std::vector<float> normals;
 		std::vector<float> texcoords;
-		std::vector<uint> indices;
+		std::vector<uint32_t> indices;
 		vertices.resize(verticesS.size());
 		normals.resize(normalsS.size());
 		texcoords.resize(texcoordsS.size());
@@ -201,7 +201,7 @@ namespace Bolt
 			return std::stof(str.c_str());
 		});
 		std::transform(indicesS.begin(), indicesS.end(), indices.begin(), [](const blt::string& str) {
-			return (uint)std::stoi(str.c_str());
+			return (uint32_t)std::stoi(str.c_str());
 		});
 
 		ModelData data;

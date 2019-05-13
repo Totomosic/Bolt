@@ -14,8 +14,8 @@ namespace Bolt
 	struct BLT_API ObjectCollection
 	{
 	public:
-		static constexpr size_t MAX_GAMEOBJECTS = GAMEOBJECTS_PER_LAYER;
-		static constexpr size_t RESERVED_GAMEOBJECTS = 5;
+		static constexpr uint32_t MAX_GAMEOBJECTS = GAMEOBJECTS_PER_LAYER;
+		static constexpr uint32_t RESERVED_GAMEOBJECTS = 5;
 
 		struct BLT_API GameObjectInfo
 		{
@@ -52,7 +52,7 @@ namespace Bolt
 
 		void TagGameObject(const blt::string& tag, GameObject* object) const;
 		void RemoveAllTags(GameObject* object) const;
-		void RemoveTags(GameObject* object, size_t count = 1) const;
+		void RemoveTags(GameObject* object, uint32_t count = 1) const;
 		void RemoveTag(GameObject* object, const blt::string& tag) const;
 
 		virtual SGQueryResult Query(const SGQuery& query) const;

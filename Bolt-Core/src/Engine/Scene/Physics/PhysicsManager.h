@@ -20,7 +20,7 @@ namespace Bolt
 			bool InUse;
 		};
 
-		static constexpr size_t MAX_PHYSICS_ENGINES = LAYERS_PER_SCENE;
+		static constexpr uint32_t MAX_PHYSICS_ENGINES = LAYERS_PER_SCENE;
 
 	private:
 		Scene* m_Scene;

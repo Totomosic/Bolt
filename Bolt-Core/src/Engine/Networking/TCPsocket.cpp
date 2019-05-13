@@ -109,7 +109,7 @@ namespace Bolt
 		return NO_ERROR;
 	}
 
-	int TCPsocket::Send(const void* data, uint length)
+	int TCPsocket::Send(const void* data, uint32_t length)
 	{
 		BLT_ASSERT(IsValid(), "Cannot Send with invalid Socket");
 		int bytesSent = send(m_Socket, static_cast<const char*>(data), (int)length, 0);
@@ -126,7 +126,7 @@ namespace Bolt
 		return bytesSent;
 	}
 
-	int TCPsocket::Recv(void* buffer, uint length)
+	int TCPsocket::Recv(void* buffer, uint32_t length)
 	{
 		BLT_ASSERT(IsValid(), "Cannot Recv from invalid Socket");
 		int bytesReceived = recv(m_Socket, static_cast<char*>(buffer), (int)length, 0);

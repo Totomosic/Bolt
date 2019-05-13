@@ -33,7 +33,7 @@ namespace Bolt
 			{
 				m_Ptr = (pointer)other.m_Ptr->Clone().release();
 				m_OwnsPtr = true;
-				BLT_CORE_WARN("Copied resource ({0}, ptr={1}) when copying ResourcePtr (constructor)", typeid(T).name(), (int)m_Ptr);
+				BLT_CORE_WARN("Copied resource ({0}, ptr={1}) when copying ResourcePtr (constructor)", typeid(T).name(), (intptr_t)m_Ptr);
 			}
 			else
 			{
@@ -48,7 +48,7 @@ namespace Bolt
 			{
 				m_Ptr = (pointer)other.m_Ptr->Clone().release();
 				m_OwnsPtr = true;
-				BLT_CORE_WARN("Copied resource ({0}, ptr={1}) when copying ResourcePtr (operator=)", typeid(T).name(), (int)m_Ptr);
+				BLT_CORE_WARN("Copied resource ({0}, ptr={1}) when copying ResourcePtr (operator=)", typeid(T).name(), (intptr_t)m_Ptr);
 			}
 			else
 			{
