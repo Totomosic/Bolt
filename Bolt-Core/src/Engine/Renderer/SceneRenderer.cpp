@@ -150,6 +150,15 @@ namespace Bolt
 		PopulateRenderPass(transparentPass, materialMap);
 
 		RenderingContext context = passData.GlobalContext;
+		if (context.Lights.empty())
+		{
+			LightSource globalLight;
+			globalLight.Position = { 0, 100, 0 };
+			globalLight.Color = Color::White;
+			globalLight.AmbientIntensity = 0.2f;
+			globalLight.Attenuation = { 1, 0, 0 };
+			context.Lights.push_back(globalLight);
+		}
 		RenderCamera camera;
 		camera.ViewMatrix = (passData.CameraOverride.ViewMatrix == nullptr) ? layer.ActiveCamera()->ViewMatrix() : *passData.CameraOverride.ViewMatrix;
 		camera.ProjectionMatrix = (passData.CameraOverride.ProjectionMatrix == nullptr) ? layer.ActiveCamera()->ProjectionMatrix() : *passData.CameraOverride.ProjectionMatrix;

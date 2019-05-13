@@ -144,7 +144,7 @@ namespace Bolt
 
 	GameObject* ObjectFactory::Cuboid(float width, float height, float depth, const Color& color, Transform transform) const
 	{
-		return Cuboid(width, height, depth, ResourceManager::Get().Materials().Default(color), std::move(transform));
+		return Cuboid(width, height, depth, ResourceManager::Get().Materials().DefaultLighting(color), std::move(transform));
 	}
 
 	GameObject* ObjectFactory::Cuboid(float width, float height, float depth, std::unique_ptr<Material>&& material, Transform transform) const
@@ -157,7 +157,7 @@ namespace Bolt
 
 	GameObject* ObjectFactory::Grid(float width, float depth, int xVertices, int zVertices, const Color& color, Transform transform) const
 	{
-		return Grid(width, depth, xVertices, zVertices, ResourceManager::Get().Materials().Default(color), std::move(transform));
+		return Grid(width, depth, xVertices, zVertices, ResourceManager::Get().Materials().DefaultLighting(color), std::move(transform));
 	}
 
 	GameObject* ObjectFactory::Grid(float width, float depth, int xVertices, int zVertices, std::unique_ptr<Material>&& material, Transform transform) const

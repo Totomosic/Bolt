@@ -21,6 +21,7 @@ namespace Bolt
 		int Location;
 		RendererUniform Uniform;
 		bool RequiresLink;
+		int Index = -1;
 	};
 
 	class BLT_API ShaderInstance

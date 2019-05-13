@@ -63,7 +63,7 @@ namespace Bolt
 		return true;
 	}
 
-	ShaderVariablePtr ShaderScope::DefineVariable(const ShaderValuePtr& value, const blt::string& meta)
+	ShaderVariablePtr ShaderScope::DefineVar(const ShaderValuePtr& value, const blt::string& meta)
 	{
 		ShaderVariablePtr var = std::make_shared<ShaderVariable>(value->Type());
 		AddOperation(std::make_unique<ShaderDefineOp>(var, value, meta));
@@ -71,7 +71,7 @@ namespace Bolt
 		return var;
 	}
 
-	ShaderVariablePtr ShaderScope::DeclareVariable(ValueType type, const blt::string& meta)
+	ShaderVariablePtr ShaderScope::DeclareVar(ValueType type, const blt::string& meta)
 	{
 		ShaderVariablePtr var = std::make_shared<ShaderVariable>(type);
 		AddOperation(std::make_unique<ShaderDeclareOp>(var, meta));

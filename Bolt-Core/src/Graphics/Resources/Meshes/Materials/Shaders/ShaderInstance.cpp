@@ -44,7 +44,7 @@ namespace Bolt
 				for (int i = 0; i < uniform.Length; i++)
 				{
 					blt::string arrPart = '[' + std::to_string(i) + ']';
-					RendererUniformLocation loc = { shader.GetUniformLocation(uniform.VarName + arrPart), uniform.Uniform, false };
+					RendererUniformLocation loc = { shader.GetUniformLocation(uniform.VarName + arrPart), uniform.Uniform, false, i };
 					if (loc.Location == -1)
 					{
 						BLT_CORE_WARN("Unable to find renderer uniform with name {}, it may not exist or may not be in use", uniform.VarName + arrPart);
@@ -54,7 +54,7 @@ namespace Bolt
 			}
 			else
 			{
-				RendererUniformLocation loc = { shader.GetUniformLocation(uniform.VarName), uniform.Uniform, true };
+				RendererUniformLocation loc = { shader.GetUniformLocation(uniform.VarName), uniform.Uniform, true, -1 };
 				BLT_ASSERT(loc.Location != -1, "Unable to find renderer uniform with name " + uniform.VarName);
 				result.push_back(std::move(loc));
 			}

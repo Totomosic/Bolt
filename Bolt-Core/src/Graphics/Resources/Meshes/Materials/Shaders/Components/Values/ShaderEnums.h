@@ -52,7 +52,8 @@ namespace Bolt
 		LightTypes,
 		LightColors,
 		LightDirections,
-		LightAmbients
+		LightAmbients,
+		LightAttenuations
 	};
 
 	BLT_API enum class ShaderStream
@@ -88,6 +89,8 @@ namespace Bolt
 			return ValueType::Vector3f;
 		case RendererUniform::LightAmbients:
 			return ValueType::Float;
+		case RendererUniform::LightAttenuations:
+			return ValueType::Vector3f;
 		}
 		BLT_ASSERT(false, "Unable to determine uniform type");
 		return ValueType::Void;
@@ -116,6 +119,8 @@ namespace Bolt
 		case RendererUniform::LightDirections:
 			return ValueTypeDim::Array;
 		case RendererUniform::LightAmbients:
+			return ValueTypeDim::Array;
+		case RendererUniform::LightAttenuations:
 			return ValueTypeDim::Array;
 		}
 		BLT_ASSERT(false, "Unable to determine uniform dimension");

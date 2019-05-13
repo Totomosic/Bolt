@@ -43,12 +43,12 @@ namespace Bolt
 
 	ShaderVariablePtr ShaderProgram::Stream(ShaderStream stream)
 	{
-		return GetGlobalScope().DeclareVariable(GetTypeOfShaderStream(stream), "layout(location = " + std::to_string((int)stream) + ") in");
+		return GetGlobalScope().DeclareVar(GetTypeOfShaderStream(stream), "layout(location = " + std::to_string((int)stream) + ") in");
 	}
 
 	ShaderVariablePtr ShaderProgram::Uniform(const blt::string& linkName, ValueType type, std::shared_ptr<UniformValueContainer> defaultValue)
 	{
-		ShaderVariablePtr var = GetGlobalScope().DeclareVariable(type, "uniform");
+		ShaderVariablePtr var = GetGlobalScope().DeclareVar(type, "uniform");
 		m_UserUniforms.push_back({ linkName, var.get(), 0, std::move(defaultValue) });
 		return var;
 	}
@@ -64,7 +64,7 @@ namespace Bolt
 	{
 		if (GetTypeDimOfRendererUniform(uniform) == ValueTypeDim::Single)
 		{
-			ShaderVariablePtr var = GetGlobalScope().DeclareVariable(GetTypeOfRendererUniform(uniform), "uniform");
+			ShaderVariablePtr var = GetGlobalScope().DeclareVar(GetTypeOfRendererUniform(uniform), "uniform");
 			m_RendererUniforms.push_back({ uniform, var.get(), 0 });
 			return var;
 		}
@@ -79,12 +79,12 @@ namespace Bolt
 
 	ShaderVariablePtr ShaderProgram::DeclareVar(ValueType type)
 	{
-		return GetMainScope().DeclareVariable(type, "");
+		return GetMainScope().DeclareVar(type, "");
 	}
 
 	ShaderVariablePtr ShaderProgram::DefineVar(const ShaderValuePtr& value)
 	{
-		return GetMainScope().DefineVariable(value, "");
+		return GetMainScope().DefineVar(value, "");
 	}
 
 	ShaderVariablePtr ShaderProgram::DeclarePassOut(ValueType type)
@@ -125,6 +125,11 @@ namespace Bolt
 	void ShaderProgram::DivAssign(const ShaderLValuePtr& var, const ShaderValuePtr& value)
 	{
 		GetMainScope().DivAssign(var, value);
+	}
+
+	ForLoopScope& ShaderProgram::For(const ShaderVariablePtr& counter, const ShaderValuePtr& initial, const ShaderValuePtr& condition, std::unique_ptr<ShaderOp>&& iteration)
+	{
+		return AddScope<ForLoopScope>(std::make_unique<SetValueOp>(counter, initial), condition, std::move(iteration));
 	}
 
 	void ShaderProgram::Reset()

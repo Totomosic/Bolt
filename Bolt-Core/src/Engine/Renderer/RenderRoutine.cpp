@@ -7,7 +7,7 @@
 namespace Bolt
 {
 
-	void RenderRoutine::operator()(const RenderGroup& group, const Matrix4f& viewMatrix, const Matrix4f& projectionMatrix)
+	void RenderRoutine::operator()(const RenderGroup& group, const Matrix4f& viewMatrix, const Matrix4f& projectionMatrix, const RenderingContext& context)
 	{
 		const Material* material = group.Material;
 		const Shader& shader = material->GetShader().GetShaderInstance().GetShader();
@@ -23,6 +23,27 @@ namespace Bolt
 				break;
 			case RendererUniform::Time:
 				shader.SetUniform(uniform.Location, Time::Get().RenderingTimeline().CurrentTime());
+				break;
+			case RendererUniform::LightPositions:
+				if (uniform.Index < context.Lights.size())
+				{
+					shader.SetUniform(uniform.Location, context.Lights.at(uniform.Index).Position);
+				}
+				break;
+			case RendererUniform::LightColors:
+				if (uniform.Index < context.Lights.size())
+				{
+					shader.SetUniform(uniform.Location, context.Lights.at(uniform.Index).Color);
+				}
+				break;
+			case RendererUniform::LightAmbients:
+				if (uniform.Index < context.Lights.size())
+				{
+					shader.SetUniform(uniform.Location, context.Lights.at(uniform.Index).AmbientIntensity);
+				}
+				break;
+			case RendererUniform::LightCount:
+				shader.SetUniform(uniform.Location, context.Lights.size());
 				break;
 			}
 		}
