@@ -5,10 +5,16 @@
 namespace Bolt
 {
 
-	Material::Material(const MaterialBuilder& builder, ShaderLinkContext&& shader)
-		: m_Builder(builder), m_Shader(std::move(shader)), m_RenderSettings()
+	Material::Material(ShaderLinkContext&& shader, bool isTransparent)
+		: m_Shader(std::move(shader)), m_RenderSettings(), m_IsTransparent(isTransparent)
 	{
-		
+		SetIsTransparent(isTransparent, true);
+	}
+
+	Material::Material(const ShaderLinkContext& shader, bool isTransparent)
+		: m_Shader(shader), m_RenderSettings(), m_IsTransparent(isTransparent)
+	{
+		SetIsTransparent(isTransparent, true);
 	}
 
 	const ShaderLinkContext& Material::GetShader() const
@@ -31,23 +37,23 @@ namespace Bolt
 		return m_RenderSettings;
 	}
 
-	MaterialBuilder& Material::GetBuilder()
+	bool Material::IsTransparent() const
 	{
-		return m_Builder;
+		return m_IsTransparent;
 	}
 
-	void Material::Rebuild()
+	void Material::SetIsTransparent(bool isTransparent, bool updateRenderSettings)
 	{
-		std::unique_ptr<Material> newMaterial = m_Builder.BuildMaterial();
-		ShaderLinkContext& links = newMaterial->GetShader();
-		GetShader().CopyLinksTo(links);
-		m_Shader = std::move(links);
+		m_IsTransparent = isTransparent;
+		if (updateRenderSettings)
+		{
+			m_RenderSettings.UseBlend = m_IsTransparent;
+		}
 	}
 
 	std::unique_ptr<Material> Material::Clone() const
 	{
-		std::unique_ptr<Material> material = m_Builder.BuildMaterial();
-		GetShader().CopyLinksTo(material->GetShader());
+		std::unique_ptr<Material> material = std::make_unique<Material>(*this);
 		return material;
 	}
 

@@ -8,7 +8,7 @@ namespace Bolt
 {
 
 	MaterialManager::MaterialManager()
-		: m_DefaultBuilder(), m_TextureBuilder(), m_FontBuilder(), m_DefaultLightingBuilder()
+		: m_DefaultBuilder(false), m_TextureBuilder(false), m_FontBuilder(true), m_DefaultLightingBuilder(false)
 	{
 		CreateDefaultMaterial(m_DefaultBuilder);
 		CreateTextureMaterial(m_TextureBuilder);

@@ -53,7 +53,7 @@ namespace Bolt
 		if (s_BlendEnabled != enabled)
 		{
 			s_BlendEnabled = enabled;
-			if (s_DepthEnabled)
+			if (s_BlendEnabled)
 			{
 				GL_CALL(glEnable(GL_BLEND));
 			}

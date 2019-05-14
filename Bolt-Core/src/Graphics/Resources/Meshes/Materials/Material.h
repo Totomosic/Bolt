@@ -10,27 +10,21 @@ namespace Bolt
 	class BLT_API Material
 	{
 	private:
-		MaterialBuilder m_Builder;
 		ShaderLinkContext m_Shader;
 		RenderSettings m_RenderSettings;
-
-	private:
-		Material(const MaterialBuilder& builder, ShaderLinkContext&& shader);
+		bool m_IsTransparent;
 
 	public:
-		Material(const Material& other) = delete;
-		Material& operator=(const Material& other) = delete;
-		Material(Material&& other) = default;
-		Material& operator=(Material&& other) = default;
-		~Material() = default;
+		Material(ShaderLinkContext&& shader, bool isTransparent);
+		Material(const ShaderLinkContext& shader, bool isTransparent);
 
 		const ShaderLinkContext& GetShader() const;
 		ShaderLinkContext& GetShader();
 		const RenderSettings& GetRenderSettings() const;
 		RenderSettings& GetRenderSettings();
+		bool IsTransparent() const;
 
-		MaterialBuilder& GetBuilder();
-		void Rebuild();
+		void SetIsTransparent(bool isTransparent, bool updateRenderSettings = true);
 
 		std::unique_ptr<Material> Clone() const;
 

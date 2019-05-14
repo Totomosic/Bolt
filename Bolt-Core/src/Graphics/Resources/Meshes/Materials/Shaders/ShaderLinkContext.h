@@ -9,6 +9,8 @@
 namespace Bolt
 {
 
+	// Represents a shader and the uniform values associated with it.
+	// Makes up the main part of Materials
 	class BLT_API ShaderLinkContext
 	{
 	public:
@@ -28,16 +30,29 @@ namespace Bolt
 
 	public:
 		ShaderLinkContext(const std::shared_ptr<ShaderInstance>& shaderInstance);
+		ShaderLinkContext(const ShaderLinkContext& other);
+		ShaderLinkContext& operator=(const ShaderLinkContext& other);
+		ShaderLinkContext(ShaderLinkContext&& other) = default;
+		ShaderLinkContext& operator=(ShaderLinkContext&& other) = default;
+		~ShaderLinkContext() = default;
 
 		const ShaderInstance& GetShaderInstance() const;
+		// Return a unique identifier for the link represented by linkName (use index when linking array)
 		id_t GetLinkId(const blt::string& linkName, int index = -1) const;
+		// Returns the container with the value for the link with linkName (use index when referring to array)
 		const UniformLinkContainer& GetLink(const blt::string& linkName, int index = -1) const;
+		// Returns the container with the value for the link with linkName (use index when referring to array)
 		UniformLinkContainer& GetLink(const blt::string& linkName, int index = -1);
+		// Returns the container with the value for the link with id linkId
 		const UniformLinkContainer& GetLink(id_t linkId) const;
+		// Returns the container with the value for the link with id linkId
 		UniformLinkContainer& GetLink(id_t linkId);
+		// Returns whether the link with linkName has a value linked to it (use index when referring to array)
 		bool IsLinked(const blt::string& linkName, int index = -1) const;
+		// Returns whether a link exists called linkName (use index when referring to array)
 		bool HasLink(const blt::string& linkName, int index = -1) const;
 
+		// Upload link values to the correct uniforms in shader
 		void ApplyLinks() const;
 
 		template<typename T>
@@ -226,8 +241,6 @@ namespace Bolt
 			BLT_ASSERT(ValidateUniformType<ResourcePtr<Font>>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(ResourcePtr<Font>).name(), ValueTypeToGLSLString(uniform.Type));
 			return (UniformLink<ResourcePtr<Font>>&)AddLink(linkName, std::make_unique<UniformLink<ResourcePtr<Font>>>(m_Shader->GetShader().Id(), GetUniformLocation(linkName).Location, value));
 		}
-
-		friend class Material;
 
 	private:
 		const UserUniformLocation& GetUniformLocation(const blt::string& linkName) const;
