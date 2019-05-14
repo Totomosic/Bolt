@@ -1,6 +1,7 @@
 #pragma once
 #include "Values/ShaderFuncResult.h"
 #include "Values/ShaderArrayValue.h"
+#include "FunctionScope.h"
 
 namespace Bolt
 {
@@ -55,6 +56,7 @@ namespace Bolt
 
 		static ShaderFuncResultPtr SampleTexture(ShaderValuePtr texture, ShaderValuePtr texCoords);
 
+		static ShaderFuncResultPtr Call(const FunctionScope& func, const std::vector<ShaderValuePtr>& inputs);
 		static ShaderArrayValuePtr Index(ShaderLValuePtr arr, ShaderValuePtr index);
 
 	private:

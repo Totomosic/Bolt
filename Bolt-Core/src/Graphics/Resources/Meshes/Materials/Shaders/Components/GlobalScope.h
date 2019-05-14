@@ -1,13 +1,21 @@
 #pragma once
 #include "ShaderScope.h"
+#include "FunctionScope.h"
 
 namespace Bolt
 {
 
 	class BLT_API GlobalScope : public ShaderScope
 	{
+	private:
+		std::vector<FunctionScope*> m_Functions;
+
 	public:
 		GlobalScope();
+
+		bool HasFunction(const blt::string& name) const;
+		const FunctionScope& GetFunction(const blt::string& name) const;
+		FunctionScope& DefineFunction(const blt::string& name, const ValueTypeInfo& returnType, const std::vector<ValueTypeInfo>& inputs);
 
 		void Build(ShaderBuilder& builder) const override;
 		BLT_DEFAULT_SHADERSCOPE_CLONE(GlobalScope);

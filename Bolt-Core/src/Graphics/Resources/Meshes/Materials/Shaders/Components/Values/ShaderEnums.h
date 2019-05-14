@@ -41,6 +41,13 @@ namespace Bolt
 		Array
 	};
 
+	struct BLT_API ValueTypeInfo
+	{
+	public:
+		ValueType Type = ValueType::Void;
+		ValueTypeDim Dimension = ValueTypeDim::Single;
+	};
+
 	BLT_API enum class RendererUniform
 	{
 		ModelMatrix,

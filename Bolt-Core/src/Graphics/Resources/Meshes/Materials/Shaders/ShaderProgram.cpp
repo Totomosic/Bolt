@@ -132,6 +132,11 @@ namespace Bolt
 		return AddScope<ForLoopScope>(std::make_unique<SetValueOp>(counter, initial), condition, std::move(iteration));
 	}
 
+	FunctionScope& ShaderProgram::DefineFunction(const blt::string& name, const ValueTypeInfo& returnType, const std::vector<ValueTypeInfo>& inputs)
+	{
+		return GetGlobalScope().DefineFunction(name, returnType, inputs);
+	}
+
 	void ShaderProgram::Reset()
 	{
 		m_UserUniforms.clear();
