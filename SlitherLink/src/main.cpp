@@ -18,7 +18,7 @@ namespace SlitherLink
 			camera->transform().Rotate(-PI / 6, Vector3f::Right());
 
 			ObjectFactory f(l);
-			GameObject* object = f.Grid(50, 50, 50, 50, Color::White, Transform({ 0, -1, 0 }));
+			GameObject* object = f.Grid(10, 10, 50, 50, Color::White, Transform({ 0, -5, 0 }));
 			Material& material = *object->mesh().Mesh.Materials[0];
 			material.GetShader().Link("Reflectivity", 0.5f);
 			material.GetShader().Link("ShineDamper", 5.0f);

@@ -19,6 +19,22 @@ namespace Bolt
 		}
 	}
 
+	ShaderLinkContext::ShaderLinkContext(const ShaderLinkContext& other)
+		: m_Shader(other.m_Shader), m_Links(), m_UserUniformLinks(other.m_UserUniformLinks)
+	{
+		m_Links.reserve(other.m_Links.size());
+		other.CopyLinksTo(*this);
+	}
+
+	ShaderLinkContext& ShaderLinkContext::operator=(const ShaderLinkContext& other)
+	{
+		m_Shader = other.m_Shader;
+		m_Links.reserve(other.m_Links.size());
+		m_UserUniformLinks = other.m_UserUniformLinks;
+		other.CopyLinksTo(*this);
+		return *this;
+	}
+
 	const ShaderInstance& ShaderLinkContext::GetShaderInstance() const
 	{
 		return *m_Shader;
