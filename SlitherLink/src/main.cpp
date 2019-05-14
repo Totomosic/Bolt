@@ -11,6 +11,7 @@ namespace SlitherLink
 	public:
 		void Init() override
 		{
+			GetWindow().SetClearColor(Color::CornflowerBlue);
 			Scene& s = SceneManager::Get().CreateScene();
 			camera = s.CreateCamera(Projection::Perspective(PI / 3, GetWindow().Aspect(), 0.1f, 100.0f));
 			Layer& l = s.CreateLayer(camera);
@@ -19,12 +20,15 @@ namespace SlitherLink
 			ObjectFactory f(l);
 			GameObject* object = f.Grid(50, 50, 50, 50, Color::White, Transform({ 0, -1, 0 }));
 			Material& material = *object->mesh().Mesh.Materials[0];
-			material.GetShader().Link("Reflectivity", 1.0f);
+			material.GetShader().Link("Reflectivity", 0.5f);
+			material.GetShader().Link("ShineDamper", 5.0f);
+			material.GetShader().Link("SpecularHighlight", Color::Magenta);
+			material.GetRenderSettings().UseCullFace = false;
 
 			LightSource light;
 			light.Color = Color::White;
-			light.AmbientIntensity = 0.3f;
-			light.Position = { 0, 10, 0 };
+			light.AmbientIntensity = 0.1f;
+			light.Position = { 0, 1, 0 };
 
 			RenderProcess p;
 			p.Options.GlobalContext.Lights.push_back(light);

@@ -313,6 +313,23 @@ namespace Bolt
 		return result;
 	}
 
+	ShaderFuncResultPtr ShaderFuncs::Call(const FunctionScope& func, const std::vector<ShaderValuePtr>& inputs)
+	{
+		BLT_ASSERT(func.GetInputs().size() == inputs.size(), "Number of arguments does not match arguments of function, required inputs {0}", func.GetInputs().size());
+		blt::string cmd = func.GetName() + '(';
+		if (inputs.size() > 0)
+		{
+			cmd += "@0";
+			for (int i = 1; i < inputs.size(); i++)
+			{
+				cmd += ", @" + std::to_string(i);
+			}
+		}
+		cmd += ')';
+		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>(cmd, inputs, func.GetReturnType().Type);
+		return result;
+	}
+
 	ShaderArrayValuePtr ShaderFuncs::Index(ShaderLValuePtr arr, ShaderValuePtr index)
 	{
 		BLT_ASSERT(index->Type() == ValueType::Int, "Index must be an int");

@@ -115,6 +115,7 @@ namespace Bolt
 	void MaterialManager::CreateDefaultLightingMaterial(MaterialBuilder& builder) const
 	{
 		VertexShader& vertex = builder.Factory().Vertex();
+		vertex.DefineFunction<void>("TestFunc");
 		ShaderVariablePtr modelMatrix = vertex.RendererUniform(RendererUniform::ModelMatrix);
 		ShaderVariablePtr viewMatrix = vertex.RendererUniform(RendererUniform::ViewMatrix);
 		ShaderVariablePtr projectionMatrix = vertex.RendererUniform(RendererUniform::ProjectionMatrix);

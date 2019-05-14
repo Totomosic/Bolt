@@ -16,20 +16,20 @@ namespace Bolt
 		{
 		public:
 			std::unique_ptr<Component> component;
-			uint32_t type_hash;
+			size_t type_hash;
 		};
 
 		struct BLT_API ComponentInfoPtr
 		{
 		public:
 			Component* component;
-			uint32_t type_hash;
+			size_t type_hash;
 		};
 
 	private:
 		IdManager<id_t> m_ComponentIdManager;
 		ComponentInfo m_ComponentArray[MAX_COMPONENTS];
-		std::unordered_map<uint32_t, id_t> m_TypeHashMap;
+		std::unordered_map<size_t, id_t> m_TypeHashMap;
 		std::vector<id_t> m_OrderedIndex;
 		ObjectPrefab* m_GameObject;
 		bool m_IsGameObject;
@@ -43,17 +43,17 @@ namespace Bolt
 		~ComponentManager();
 
 		Component& GetComponentById(id_t id) const;
-		Component& GetComponent(uint32_t componentTypeHash) const;
+		Component& GetComponent(size_t componentTypeHash) const;
 		// Returns true if component type exists and returns component through outComponent
-		bool GetComponent(uint32_t componentTypeHash, Component** outComponent) const;
+		bool GetComponent(size_t componentTypeHash, Component** outComponent) const;
 		bool HasComponentById(id_t id) const;
-		bool HasComponent(uint32_t componentTypeHash) const;
+		bool HasComponent(size_t componentTypeHash) const;
 		std::vector<Component*> GetComponents() const;
 		std::vector<ComponentInfoPtr> GetComponentsOrdered() const;
 
-		Component* AddComponent(uint32_t componentTypeHash, std::unique_ptr<Component>&& component);
+		Component* AddComponent(size_t componentTypeHash, std::unique_ptr<Component>&& component);
 		void RemoveComponentById(id_t id);
-		void RemoveComponent(uint32_t componentTypeHash);
+		void RemoveComponent(size_t componentTypeHash);
 		void Clear();
 
 		template<typename T>
@@ -100,7 +100,7 @@ namespace Bolt
 	private:
 		id_t FindNextId() const;
 		void SetGameObject(ObjectPrefab* object);
-		bool HasComponentPrivate(uint32_t componentHasType) const;
+		bool HasComponentPrivate(size_t componentHashType) const;
 
 	};
 

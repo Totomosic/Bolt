@@ -125,6 +125,7 @@ namespace Bolt
 		void MulAssign(const ShaderLValuePtr& var, const ShaderValuePtr& value);
 		void DivAssign(const ShaderLValuePtr& var, const ShaderValuePtr& value);
 		ForLoopScope& For(const ShaderVariablePtr& counter, const ShaderValuePtr& initial, const ShaderValuePtr& condition, std::unique_ptr<ShaderOp>&& iteration);
+		FunctionScope& DefineFunction(const blt::string& name, const ValueTypeInfo& returnType, const std::vector<ValueTypeInfo>& inputs);
 
 		virtual CompiledShaderProgram Compile() const = 0;
 		virtual void Reset();
@@ -142,8 +143,17 @@ namespace Bolt
 			GetMainScope().AddOperation(std::move(op));
 		}
 
+		template<typename Ret, typename... Args>
+		FunctionScope& DefineFunction(const blt::string& name)
+		{
+			std::vector<ValueTypeInfo> v;
+			v.reserve(sizeof...(Args));
+			(v.push_back(GetValueType<Args>()), ...);
+			return DefineFunction(name, ValueTypeInfo{ GetValueType<Ret>() }, v);
+		}
+
 	protected:
-		void CompileUniformVariables(CompiledShaderProgram& program) const;
+		void CompileUniformVariables(CompiledShaderProgram& program) const;		
 
 	};
 
