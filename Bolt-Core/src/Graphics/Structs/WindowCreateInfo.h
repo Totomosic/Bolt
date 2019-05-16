@@ -19,6 +19,7 @@ namespace Bolt
 		bool Visible = true;
 		bool Focused = true;
 		bool AlwaysOnTop = false;
+		bool TransparentFramebuffer = false;
 
 		int RedBits = 8;
 		int GreenBits = 8;

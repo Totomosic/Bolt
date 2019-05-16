@@ -11,7 +11,7 @@ namespace SlitherLink
 	public:
 		void Init() override
 		{
-			GetWindow().SetClearColor(Color::CornflowerBlue);
+			GetWindow().SetClearColor(Color(0, 0, 0, 0));
 			Scene& s = SceneManager::Get().CreateScene();
 			camera = s.CreateCamera(Projection::Perspective(PI / 3, GetWindow().Aspect(), 0.1f, 100.0f));
 			Layer& l = s.CreateLayer(camera);
