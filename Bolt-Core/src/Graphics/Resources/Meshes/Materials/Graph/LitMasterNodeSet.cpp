@@ -14,7 +14,7 @@ namespace Bolt
 
 	void LitMasterNodeSet::SetPosition(const MaterialValue& value)
 	{
-		BLT_ASSERT(value.MinimumShaderRequirement == ShaderType::Vertex, "VertexPosition must be able to be computed in the vertex shader");
+		BLT_ASSERT(IsShaderCompatible(value.ShaderStage, ShaderType::Vertex), "VertexPosition must be able to be computed in the vertex shader");
 		m_WorldPosition.CurrentValue = value;
 	}
 

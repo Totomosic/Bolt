@@ -55,6 +55,8 @@ namespace Bolt
 		static ShaderFuncResultPtr Vec4(ShaderValuePtr xwyz);
 
 		static ShaderFuncResultPtr SampleTexture(ShaderValuePtr texture, ShaderValuePtr texCoords);
+		// Similar to SampleTexture but requires explicit lod - can be used in vertex shader
+		static ShaderFuncResultPtr SampleTextureLod(ShaderValuePtr texture, ShaderValuePtr texCoords, ShaderValuePtr lod);
 
 		static ShaderFuncResultPtr Call(const FunctionScope& func, const std::vector<ShaderValuePtr>& inputs);
 		static ShaderArrayValuePtr Index(ShaderLValuePtr arr, ShaderValuePtr index);

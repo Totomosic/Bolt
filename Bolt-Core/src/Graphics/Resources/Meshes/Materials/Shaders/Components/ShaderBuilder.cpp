@@ -7,7 +7,7 @@ namespace Bolt
 	ShaderBuilder::ShaderBuilder(ShaderType shaderType)
 		: m_ShaderType(shaderType), m_Source("#version 430 core\n"), m_GlobalScope(), m_MainScope(1), m_VarCount(0), m_PassCount(0), m_CurrentScopeIndex(0), m_CurrentCursor(m_Source.size())
 	{
-
+		Reset();
 	}
 
 	ShaderType ShaderBuilder::GetShaderType() const
