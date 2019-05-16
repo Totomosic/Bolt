@@ -16,7 +16,8 @@ namespace Bolt
 		m_Data.m_Framebuffer.GetViewport().Height = info.Height;
 		m_Data.m_Framebuffer.ClearColor() = info.ClearColor;
 		
-		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_ANY_PROFILE);
+		glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_TRUE);
+		glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, info.TransparentFramebuffer);
 		glfwWindowHint(GLFW_DECORATED, info.Decorated);
 		glfwWindowHint(GLFW_RESIZABLE, info.Resizable);
 		glfwWindowHint(GLFW_VISIBLE, info.Visible);
