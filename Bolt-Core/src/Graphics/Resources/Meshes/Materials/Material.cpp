@@ -6,15 +6,15 @@ namespace Bolt
 {
 
 	Material::Material(ShaderLinkContext&& shader, bool isTransparent)
-		: m_Shader(std::move(shader)), m_RenderSettings(), m_IsTransparent(isTransparent)
+		: m_Shader(std::move(shader)), m_RenderSettings()
 	{
-		SetIsTransparent(isTransparent, true);
+		SetIsTransparent(isTransparent);
 	}
 
 	Material::Material(const ShaderLinkContext& shader, bool isTransparent)
-		: m_Shader(shader), m_RenderSettings(), m_IsTransparent(isTransparent)
+		: m_Shader(shader), m_RenderSettings()
 	{
-		SetIsTransparent(isTransparent, true);
+		SetIsTransparent(isTransparent);
 	}
 
 	const ShaderLinkContext& Material::GetShader() const
@@ -39,16 +39,12 @@ namespace Bolt
 
 	bool Material::IsTransparent() const
 	{
-		return m_IsTransparent;
+		return m_RenderSettings.UseBlend;
 	}
 
-	void Material::SetIsTransparent(bool isTransparent, bool updateRenderSettings)
+	void Material::SetIsTransparent(bool isTransparent)
 	{
-		m_IsTransparent = isTransparent;
-		if (updateRenderSettings)
-		{
-			m_RenderSettings.UseBlend = m_IsTransparent;
-		}
+		m_RenderSettings.UseBlend = isTransparent;
 	}
 
 	std::unique_ptr<Material> Material::Clone() const

@@ -1,5 +1,6 @@
 #pragma once
-#include "MaterialNode.h"
+#include "MaterialValue.h"
+#include "../../Shaders/Components/Values/ShaderVariable.h"
 
 namespace Bolt
 {
@@ -7,9 +8,12 @@ namespace Bolt
 	struct BLT_API MasterNode
 	{
 	public:
-		ValueType Type;
 		ShaderVariablePtr Variable;
-		ShaderLiteralPtr DefaultValue;
+		MaterialValue CurrentValue;
+
+	public:
+		inline ValueType GetType() const { return Variable->Type(); }
+		inline bool HasValue() const { return CurrentValue.Value != nullptr; }
 	};
 
 }
