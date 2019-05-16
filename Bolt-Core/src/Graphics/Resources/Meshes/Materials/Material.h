@@ -12,7 +12,6 @@ namespace Bolt
 	private:
 		ShaderLinkContext m_Shader;
 		RenderSettings m_RenderSettings;
-		bool m_IsTransparent;
 
 	public:
 		Material(ShaderLinkContext&& shader, bool isTransparent);
@@ -24,7 +23,7 @@ namespace Bolt
 		RenderSettings& GetRenderSettings();
 		bool IsTransparent() const;
 
-		void SetIsTransparent(bool isTransparent, bool updateRenderSettings = true);
+		void SetIsTransparent(bool isTransparent);
 
 		std::unique_ptr<Material> Clone() const;
 
