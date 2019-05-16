@@ -313,6 +313,14 @@ namespace Bolt
 		return result;
 	}
 
+	ShaderFuncResultPtr ShaderFuncs::SampleTextureLod(ShaderValuePtr texture, ShaderValuePtr texCoords, ShaderValuePtr lod)
+	{
+		BLT_ASSERT(texture->Type() == ValueType::Texture2D && texCoords->Type() == ValueType::Vector2f, "Only 2D textures supported");
+		BLT_ASSERT(lod->Type() == ValueType::Float, "LOD must be float");
+		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("textureLod(@0, @1, @2)", std::vector<ShaderValuePtr>{ std::move(texture), std::move(texCoords), std::move(lod) }, ValueType::Vector4f);
+		return result;
+	}
+
 	ShaderFuncResultPtr ShaderFuncs::Call(const FunctionScope& func, const std::vector<ShaderValuePtr>& inputs)
 	{
 		BLT_ASSERT(func.GetInputs().size() == inputs.size(), "Number of arguments does not match arguments of function, required inputs {0}", func.GetInputs().size());
