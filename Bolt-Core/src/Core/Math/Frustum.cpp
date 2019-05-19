@@ -1,5 +1,6 @@
-#include "Types.h"
-#include "Frustum.h"
+#include "bltpch.h"
+
+#include "Frustum.h"
 
 namespace Bolt
 {

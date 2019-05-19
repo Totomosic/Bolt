@@ -126,6 +126,8 @@ namespace Bolt
 		void DivAssign(const ShaderLValuePtr& var, const ShaderValuePtr& value);
 		ForLoopScope& For(const ShaderVariablePtr& counter, const ShaderValuePtr& initial, const ShaderValuePtr& condition, std::unique_ptr<ShaderOp>&& iteration);
 		FunctionScope& DefineFunction(const blt::string& name, const ValueTypeInfo& returnType, const std::vector<ValueTypeInfo>& inputs);
+		bool HasFunction(const blt::string& name) const;
+		FunctionScope& GetFunction(const blt::string& name) const;
 
 		virtual CompiledShaderProgram Compile() const = 0;
 		virtual void Reset();

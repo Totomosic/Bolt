@@ -1,4 +1,4 @@
-#include "Types.h"
+#include "bltpch.h"
 #include "GlobalScope.h"
 #include "ShaderBuilder.h"
 
@@ -6,34 +6,35 @@ namespace Bolt
 {
 
 	GlobalScope::GlobalScope() : ShaderScope(0),
-		m_Functions()
+		m_FunctionIndices()
 	{
 	
 	}
 
 	bool GlobalScope::HasFunction(const blt::string& name) const
 	{
-		auto it = std::find_if(m_Functions.begin(), m_Functions.end(), [&name](const FunctionScope * scope)
+		auto it = std::find_if(m_FunctionIndices.begin(), m_FunctionIndices.end(), [this, &name](int opIndex)
 			{
-				return scope->GetName() == name;
+				return GetFunctionByIndex(opIndex).GetName() == name;
 			});
-		return it != m_Functions.end();
+		return it != m_FunctionIndices.end();
 	}
 
-	const FunctionScope& GlobalScope::GetFunction(const blt::string& name) const
+	FunctionScope& GlobalScope::GetFunction(const blt::string& name) const
 	{
 		BLT_ASSERT(HasFunction(name), "No function exists with name {}", name);
-		auto it = std::find_if(m_Functions.begin(), m_Functions.end(), [&name](const FunctionScope * scope)
+		auto it = std::find_if(m_FunctionIndices.begin(), m_FunctionIndices.end(), [this, &name](int opIndex)
 			{
-				return scope->GetName() == name;
+				return GetFunctionByIndex(opIndex).GetName() == name;
 			});
-		return **it;
+		return GetFunctionByIndex(*it);
 	}
 
 	FunctionScope& GlobalScope::DefineFunction(const blt::string& name, const ValueTypeInfo& returnType, const std::vector<ValueTypeInfo>& inputs)
 	{
+		int index = GetNextOpIndex();
 		FunctionScope& scope = AddScope<FunctionScope>(m_ScopeIndex + 1, name, returnType, inputs);
-		m_Functions.push_back(&scope);
+		m_FunctionIndices.push_back(index);
 		return scope;
 	}
 
@@ -43,6 +44,12 @@ namespace Bolt
 		builder.NextLine();
 		BuildOperations(builder);
 		builder.SetScopeIndex(m_ScopeIndex);
+		builder.NextLine();
+	}
+
+	FunctionScope& GlobalScope::GetFunctionByIndex(int index) const
+	{
+		return (FunctionScope&)GetOpAtIndex(index);
 	}
 
 }

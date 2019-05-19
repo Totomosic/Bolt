@@ -1,4 +1,4 @@
-#include "Types.h"
+#include "bltpch.h"
 #include "ShaderBuilder.h"
 
 namespace Bolt
@@ -57,18 +57,20 @@ namespace Bolt
 
 	void ShaderBuilder::NextLine()
 	{
+#ifdef BLT_DEBUG
 		Write("\n");
 		Indent();
+#endif
 	}
 
 	blt::string ShaderBuilder::GetVariableName() const
 	{
-		return "var_" + GetShaderTypeString() + '_' + std::to_string(m_VarCount++);
+		return "v" + GetShaderTypeString() + std::to_string(m_VarCount++);
 	}
 
 	blt::string ShaderBuilder::GetPassName() const
 	{
-		return "pass_" + GetShaderTypeString() + '_' + std::to_string(m_PassCount++);
+		return "p" + GetShaderTypeString() + std::to_string(m_PassCount++);
 	}
 
 	void ShaderBuilder::Write(const blt::string& str)
@@ -101,11 +103,11 @@ namespace Bolt
 		switch (m_ShaderType)
 		{
 		case ShaderType::Vertex:
-			return "vertex";
+			return "v";
 		case ShaderType::Geometry:
-			return "geometry";
+			return "g";
 		case ShaderType::Fragment:
-			return "fragment";
+			return "f";
 		}
 		BLT_ASSERT(false, "Unable to determine string for shader type");
 		return "";
