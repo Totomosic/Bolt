@@ -8,8 +8,8 @@ project "Bolt-Core"
     targetdir (SolutionDir .. "bin/" .. outputdir .. "/Bolt-Core")
     objdir (SolutionDir .. "bin-int/" .. outputdir .. "/Bolt-Core")
 
-    pchheader "Types.h"
-    pchsource "src/Types.cpp"
+    pchheader "bltpch.h"
+    pchsource "src/bltpch.cpp"
     
     files
     {

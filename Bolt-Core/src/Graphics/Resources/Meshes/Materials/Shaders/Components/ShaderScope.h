@@ -74,6 +74,8 @@ namespace Bolt
 	protected:
 		void BuildOperations(ShaderBuilder& builder) const;
 		void AddDeclaredVar(const ShaderVariable* var);
+		int GetNextOpIndex() const;
+		ShaderOp& GetOpAtIndex(int index) const;
 	};
 
 }

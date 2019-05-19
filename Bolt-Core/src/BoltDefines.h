@@ -18,6 +18,8 @@ inline const char* ConvertError(GLenum error)
 	return "Unknown error";
 }
 
+#define BLT_MAKE_UNIQUE(T, ...) std::make_unique<T>(__VA_ARGS__)
+
 #ifdef BLT_DEBUG
 	#define GL_CALL(call) call; { int result = glGetError(); if (result != GL_NO_ERROR) { BLT_ASSERT(false, "OPENGL ERROR : {0} ({1})", ConvertError(result), result); } }
 #else

@@ -11,6 +11,7 @@ namespace Bolt
 	class BLT_API ShaderOp
 	{
 	public:
+		virtual inline bool IsCreateScopeOp() const { return false; }
 		virtual void Build(ShaderBuilder& builder) const = 0;
 		virtual std::unique_ptr<ShaderOp> Clone() const = 0;
 	};

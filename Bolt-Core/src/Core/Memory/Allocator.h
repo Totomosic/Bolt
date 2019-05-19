@@ -1,5 +1,5 @@
 #pragma once
-#include "Types.h"
+#include "bltpch.h"
 
 #define BLT_MEM_ALIGN 16
 #define BLT_ALLOC(size)	_aligned_malloc(size, BLT_MEM_ALIGN)

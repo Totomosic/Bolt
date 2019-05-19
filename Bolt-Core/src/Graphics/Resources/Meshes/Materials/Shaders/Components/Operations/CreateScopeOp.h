@@ -14,6 +14,7 @@ namespace Bolt
 	public:
 		CreateScopeOp(std::unique_ptr<ShaderScope>&& scope);
 
+		inline bool IsCreateScopeOp() const override { return true; }
 		void Build(ShaderBuilder& builder) const override;
 		virtual std::unique_ptr<ShaderOp> Clone() const override;
 

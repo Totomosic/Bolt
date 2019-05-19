@@ -1,4 +1,4 @@
-#include "Types.h"
+#include "bltpch.h"
 #include "ShaderScope.h"
 #include "ShaderBuilder.h"
 
@@ -147,17 +147,35 @@ namespace Bolt
 
 	void ShaderScope::BuildOperations(ShaderBuilder& builder) const
 	{
-		for (const auto& op : m_Operations)
+		for (int i = 0; i < m_Operations.size(); i++)
 		{
+			const auto& op = m_Operations.at(i);
 			op->Build(builder);
-			builder.Write(';');
-			builder.NextLine();
+			if (!op->IsCreateScopeOp())
+			{
+				builder.Write(';');
+			}
+			if (i != m_Operations.size() - 1)
+			{
+				builder.NextLine();
+			}
 		}
 	}
 
 	void ShaderScope::AddDeclaredVar(const ShaderVariable* var)
 	{
 		m_DeclaredVariables.push_back(var);
+	}
+
+	int ShaderScope::GetNextOpIndex() const
+	{
+		return m_Operations.size();
+	}
+
+	ShaderOp& ShaderScope::GetOpAtIndex(int index) const
+	{
+		BLT_ASSERT(index < m_Operations.size() && index >= 0, "Invalid index");
+		return *m_Operations.at(index);
 	}
 
 }

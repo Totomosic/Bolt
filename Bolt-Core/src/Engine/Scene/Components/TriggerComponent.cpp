@@ -1,4 +1,4 @@
-#include "Types.h"
+#include "bltpch.h"
 #include "TriggerComponent.h"
 
 namespace Bolt

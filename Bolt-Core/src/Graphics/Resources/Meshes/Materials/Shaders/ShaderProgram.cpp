@@ -1,4 +1,4 @@
-#include "Types.h"
+#include "bltpch.h"
 #include "ShaderProgram.h"
 
 #include "Components/Operations/SetValueOp.h"
@@ -130,6 +130,16 @@ namespace Bolt
 	ForLoopScope& ShaderProgram::For(const ShaderVariablePtr& counter, const ShaderValuePtr& initial, const ShaderValuePtr& condition, std::unique_ptr<ShaderOp>&& iteration)
 	{
 		return AddScope<ForLoopScope>(std::make_unique<SetValueOp>(counter, initial), condition, std::move(iteration));
+	}
+
+	bool ShaderProgram::HasFunction(const blt::string& name) const
+	{
+		return GetGlobalScope().HasFunction(name);
+	}
+
+	FunctionScope& ShaderProgram::GetFunction(const blt::string& name) const
+	{
+		return GetGlobalScope().GetFunction(name);
 	}
 
 	FunctionScope& ShaderProgram::DefineFunction(const blt::string& name, const ValueTypeInfo& returnType, const std::vector<ValueTypeInfo>& inputs)

@@ -1,5 +1,5 @@
 #include "bltpch.h"
-#include "PhysObjCollection.h"
+#include "MaterialGraphContext.h"
 
 namespace Bolt
 {

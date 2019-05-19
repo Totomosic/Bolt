@@ -1,5 +1,5 @@
 #pragma once
-#include "Types.h"
+#include "bltpch.h"
 #include "Events.h"
 
 namespace Bolt

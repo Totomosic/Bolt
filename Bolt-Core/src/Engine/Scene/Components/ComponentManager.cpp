@@ -1,4 +1,4 @@
-#include "Types.h"
+#include "bltpch.h"
 #include "ComponentManager.h"
 #include "../GameObject.h"
 
