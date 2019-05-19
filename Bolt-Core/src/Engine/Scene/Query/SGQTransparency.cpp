@@ -22,21 +22,17 @@ namespace Bolt
 		{
 			MeshRenderer& meshRenderer = object->Components().GetComponent<MeshRenderer>();
 			bool passed = !RequiresTransparency;
-			for (int i = 0; i < Mesh::MAX_MATERIALS; i++)
+			for (const auto& material : meshRenderer.Mesh.Materials)
 			{
-				const Material* material = meshRenderer.Mesh.Materials[i].get();
-				if (material != nullptr)
+				if (RequiresTransparency && material->IsTransparent())
 				{
-					if (RequiresTransparency && material->IsTransparent())
-					{
-						passed = true;
-						break;
-					}
-					else if (!RequiresTransparency && material->IsTransparent())
-					{
-						passed = false;
-						break;
-					}
+					passed = true;
+					break;
+				}
+				else if (!RequiresTransparency && material->IsTransparent())
+				{
+					passed = false;
+					break;
 				}
 			}
 			if (passed)

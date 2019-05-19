@@ -13,17 +13,22 @@ namespace SlitherLink
 		{
 			GetWindow().SetClearColor(Color(0, 0, 0, 0));
 			Scene& s = SceneManager::Get().CreateScene();
-			camera = s.CreateCamera(Projection::Perspective(PI / 3, GetWindow().Aspect(), 0.1f, 100.0f));
+			camera = s.CreateCamera(Projection::Perspective(PI / 3, GetWindow().Aspect(), 0.1f, 2000.0f));
 			Layer& l = s.CreateLayer(camera);
 			camera->transform().Rotate(-PI / 6, Vector3f::Right());
 
+			ResourcePack resources = ResourceManager::Get().FetchPack("res/resources.pack");
+			ResourceManager::Get().LoadPack(resources);
+
 			ObjectFactory f(l);
 			GameObject* object = f.Grid(10, 10, 50, 50, Color::White, Transform({ 0, -5, 0 }));
-			Material& material = *object->mesh().Mesh.Materials[0];
-			material.GetShader().Link("Reflectivity", 0.5f);
-			material.GetShader().Link("ShineDamper", 5.0f);
-			material.GetShader().Link("SpecularHighlight", Color::Magenta);
-			material.GetRenderSettings().UseCullFace = false;
+
+			Mesh m;
+			m.Models.push_back({ ResourceManager::Get().GetResource<Model>(resources.GetResourceId("Learjet")) });
+			auto material = ResourceManager::Get().Materials().DefaultLighting();
+			material->GetRenderSettings().UseCullFace = false;
+			m.Materials.push_back(std::move(material));
+			f.Instantiate(m);
 
 			LightSource light;
 			light.Color = Color::White;
@@ -40,7 +45,7 @@ namespace SlitherLink
 		void Update() override
 		{
 			Transform& t = camera->transform();
-			static float speed = 5;
+			static float speed = 10;
 			if (Input::Get().KeyDown(Keycode::W))
 			{
 				t.Translate(t.Forward() * speed * Time::Get().RenderingTimeline().DeltaTime());

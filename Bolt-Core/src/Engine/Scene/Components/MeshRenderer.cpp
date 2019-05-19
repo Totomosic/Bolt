@@ -52,7 +52,7 @@ namespace Bolt
 
 	std::unique_ptr<Component> MeshRenderer::Clone() const
 	{
-		return std::make_unique<MeshRenderer>(Mesh.Clone());
+		return std::make_unique<MeshRenderer>(Mesh);
 	}
 
 }

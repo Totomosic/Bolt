@@ -181,7 +181,6 @@ namespace Bolt
 		std::vector<blt::string> verticesS = resourceFile.Attributes.GetChild("vertices").Data.split(' ');
 		std::vector<blt::string> normalsS = resourceFile.Attributes.GetChild("normals").Data.split(' ');
 		std::vector<blt::string> texcoordsS = resourceFile.Attributes.GetChild("texcoords").Data.split(' ');
-		blt::string colors = resourceFile.Attributes.GetChild("colors").Data;
 		std::vector<blt::string> indicesS = resourceFile.Attributes.GetChild("indices").Data.split(' ');
 		std::vector<float> vertices;
 		std::vector<float> normals;
@@ -224,7 +223,7 @@ namespace Bolt
 				it[0] = Vector3f(vertices[vIndex + 0], vertices[vIndex + 1], vertices[vIndex + 2]);
 				it[1] = Vector3f(normals[nIndex + 0], normals[nIndex + 1], normals[nIndex + 2]);
 				it[2] = Vector2f(texcoords[tIndex + 0], texcoords[tIndex + 1]);
-				it[3] = Vector4<byte>(colors[cIndex + 0], colors[cIndex + 1], colors[cIndex + 2], colors[cIndex + 2]);
+				it[3] = Vector4<byte>(255, 255, 255, 255);
 				it++;
 			}
 		}
