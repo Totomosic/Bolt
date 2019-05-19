@@ -17,11 +17,9 @@ namespace Bolt
 			std::vector<int> MaterialIndices = { 0 }; // size should equal the number of index buffers that the model has
 		};
 
-		static constexpr int MAX_MATERIALS = 5;
-
 	public:
 		std::vector<ModelGroup> Models;
-		std::unique_ptr<Material> Materials[MAX_MATERIALS];
+		std::vector<std::unique_ptr<Material>> Materials;
 
 	public:
 		Mesh();
@@ -29,9 +27,7 @@ namespace Bolt
 		Mesh& operator=(const Mesh& other);
 		Mesh(Mesh&& other);
 		Mesh& operator=(Mesh&& other);
-		~Mesh();
-
-		Mesh Clone() const;
+		~Mesh() = default;
 
 	};
 

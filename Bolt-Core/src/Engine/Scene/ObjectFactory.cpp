@@ -119,7 +119,7 @@ namespace Bolt
 	{
 		Mesh mesh;
 		mesh.Models.push_back({ BasicModels::Get().Square(), Matrix4f::Scale(width, height, 1),{ 0 } });
-		mesh.Materials[0] = std::move(material);
+		mesh.Materials.push_back(std::move(material));
 		return Instantiate(std::move(mesh), std::move(transform));
 	}
 
@@ -138,7 +138,7 @@ namespace Bolt
 	{
 		Mesh mesh;
 		mesh.Models.push_back({ BasicModels::Get().Circle(), Matrix4f::Scale(width / 2, height / 2, 1), { 0 } });
-		mesh.Materials[0] = std::move(material);
+		mesh.Materials.push_back(std::move(material));
 		return Instantiate(std::move(mesh), std::move(transform));
 	}
 
@@ -151,7 +151,7 @@ namespace Bolt
 	{
 		Mesh mesh;
 		mesh.Models.push_back({ BasicModels::Get().Cube(), Matrix4f::Scale(width, height, depth),{ 0 } });
-		mesh.Materials[0] = std::move(material);
+		mesh.Materials.push_back(std::move(material));
 		return Instantiate(std::move(mesh), std::move(transform));
 	}
 
@@ -165,7 +165,7 @@ namespace Bolt
 		Mesh mesh;
 		// TODO: CHANGE
 		mesh.Models.push_back({ ResourcePtr<Model>(new Model(GridFactory(width, depth, xVertices, zVertices)), true), Matrix4f::Identity(), { 0 } });
-		mesh.Materials[0] = std::move(material);
+		mesh.Materials.push_back(std::move(material));
 		return Instantiate(std::move(mesh), std::move(transform));
 	}
 

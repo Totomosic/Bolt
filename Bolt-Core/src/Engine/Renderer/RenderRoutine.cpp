@@ -55,6 +55,7 @@ namespace Bolt
 				if (uniform.Uniform == RendererUniform::ModelMatrix)
 				{
 					shader.SetUniform(uniform.Location, data.Transform);
+					break;
 				}
 			}
 			data.Vertices->Bind();

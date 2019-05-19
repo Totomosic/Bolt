@@ -13,5 +13,6 @@ FILE_EXTENSION_TYPE_MAP = {
     ".jpg" : FILE_TYPE_IMAGE,
     ".jpeg" : FILE_TYPE_IMAGE,
     ".glsl" : FILE_TYPE_SHADER,
-    ".shader" : FILE_TYPE_SHADER
+    ".shader" : FILE_TYPE_SHADER,
+    ".obj" : FILE_TYPE_MODEL
 }
