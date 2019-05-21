@@ -13,7 +13,7 @@ namespace SlitherLink
 		{
 			GetWindow().SetClearColor(Color(0, 0, 0, 0));
 			Scene& s = SceneManager::Get().CreateScene();
-			camera = s.CreateCamera(Projection::Perspective(PI / 3, GetWindow().Aspect(), 0.1f, 2000.0f));
+			camera = s.CreateCamera(Projection::Perspective(PI / 3, GetWindow().Aspect(), 0.1f, 5000.0f));
 			Layer& l = s.CreateLayer(camera);
 			camera->transform().Rotate(-PI / 6, Vector3f::Right());
 
@@ -26,14 +26,13 @@ namespace SlitherLink
 			Mesh m;
 			m.Models.push_back({ ResourceManager::Get().GetResource<Model>(resources.GetResourceId("Learjet")) });
 			auto material = ResourceManager::Get().Materials().DefaultLighting();
-			material->GetRenderSettings().UseCullFace = false;
 			m.Materials.push_back(std::move(material));
 			f.Instantiate(m);
 
 			LightSource light;
 			light.Color = Color::White;
 			light.AmbientIntensity = 0.1f;
-			light.Position = { 0, 1, 0 };
+			light.Position = { 0, 100, 0 };
 
 			RenderProcess p;
 			p.Options.GlobalContext.Lights.push_back(light);
@@ -45,7 +44,7 @@ namespace SlitherLink
 		void Update() override
 		{
 			Transform& t = camera->transform();
-			static float speed = 10;
+			static float speed = 50;
 			if (Input::Get().KeyDown(Keycode::W))
 			{
 				t.Translate(t.Forward() * speed * Time::Get().RenderingTimeline().DeltaTime());

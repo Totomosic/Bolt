@@ -7,7 +7,7 @@ import src.filetypes as ft
 import src.res_handlers.resource_handlers as res
 import src.res_handlers.image_handler as image
 import src.res_handlers.shader_handler as shader
-import src.res_handlers.model_handler as model
+import src.res_handlers.obj_model_handler as obj
 import src.res_handlers.settings_data as settings
 import src.xml.XMLwriter as xml
 import src.xml.XMLreader as reader

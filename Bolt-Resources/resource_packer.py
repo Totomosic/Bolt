@@ -2,6 +2,7 @@ import os
 import sys
 
 import src.filetypes as ft
+import src.error_handler as err
 
 def Pack(input_dir, output_file):
     print("Packing...")
@@ -31,3 +32,4 @@ if __name__ == "__main__":
     if len(args) == 3:
         output_file = args[2]
     Pack(input_dir, output_file)
+    err.pause()
