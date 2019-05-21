@@ -36,6 +36,7 @@ if __name__ == "__main__":
         if len(args) == 4:
             int_dir = args[3]
         Build(input_dir, output_file, int_dir)
+        err.pause()
     except Exception as e:
         print(e)
         err.pause()

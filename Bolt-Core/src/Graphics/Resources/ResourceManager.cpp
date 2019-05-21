@@ -180,7 +180,7 @@ namespace Bolt
 		int vertexDimension = std::stoi(resourceFile.Attributes.GetChild("vertices").Attributes.at("dim").c_str());
 		std::vector<blt::string> verticesS = resourceFile.Attributes.GetChild("vertices").Data.split(' ');
 		std::vector<blt::string> normalsS = resourceFile.Attributes.GetChild("normals").Data.split(' ');
-		std::vector<blt::string> texcoordsS = resourceFile.Attributes.GetChild("texcoords").Data.split(' ');
+		std::vector<blt::string> texcoordsS = resourceFile.Attributes.GetChild("uvs").Data.split(' ');
 		std::vector<blt::string> indicesS = resourceFile.Attributes.GetChild("indices").Data.split(' ');
 		std::vector<float> vertices;
 		std::vector<float> normals;
