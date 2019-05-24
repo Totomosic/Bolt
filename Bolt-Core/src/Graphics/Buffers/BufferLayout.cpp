@@ -85,6 +85,7 @@ namespace Bolt
 		layout.AddAttribute<Vector3f>(1);
 		layout.AddAttribute<Vector2f>(1);
 		layout.AddAttribute<byte>(4, true);
+		layout.AddAttribute<Vector3f>(1);
 		return layout;
 	}
 

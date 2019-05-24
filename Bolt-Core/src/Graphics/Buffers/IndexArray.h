@@ -2,6 +2,7 @@
 #include "IndexBuffer.h"
 #include "IArrayDescriptor.h"
 #include "IndexMapping.h"
+#include "Core/Tasks/TaskManager.h"
 
 namespace Bolt
 {
@@ -33,6 +34,28 @@ namespace Bolt
 
 		IndexBuffer& AddIndexBuffer(std::unique_ptr<IndexBuffer>&& buffer);
 		IndexMapping Map() const;
+
+		template<typename FuncT0>
+		void MapAsync(FuncT0 callback)
+		{
+			MapAsync(std::move(callback), std::function<void()>([]() {}));
+		}
+
+		template<typename FuncT0, typename FuncT1>
+		void MapAsync(FuncT0 callback, FuncT1 finishedCallback)
+		{
+			IndexMapping* mapping = new IndexMapping(Map());
+			Task t = TaskManager::Run(make_shared_function([mapping, callback{ std::move(callback) }]()
+			{
+				callback(*mapping);
+				return mapping;
+			}));
+			t.ContinueWithOnMainThread(make_shared_function([callback{ std::move(finishedCallback) }](IndexMapping* mapping)
+			{
+				delete mapping;
+				callback();
+			}));
+		}
 
 		std::unique_ptr<IndexArray> Clone() const;
 

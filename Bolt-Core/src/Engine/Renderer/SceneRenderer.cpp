@@ -18,28 +18,34 @@ namespace Bolt
 			Mesh& mesh = object->Components().GetComponent<MeshRenderer>().Mesh;
 			for (Mesh::ModelGroup& model : mesh.Models)
 			{
-				const ModelData& modelData = model.Model->Data();
-				for (int i = 0; i < modelData.Indices->IndexBufferCount(); i++)
+				if (model.Model != nullptr)
 				{
-					const std::unique_ptr<IndexBuffer>& indexBuffer = modelData.Indices->GetIndexBuffer(i);
-					const std::unique_ptr<Material>& material = mesh.Materials[model.MaterialIndices[i]];
-					RenderData renderData;
-					renderData.Indices = indexBuffer.get();
-					renderData.Vertices = modelData.Vertices.get();
-					renderData.Transform = object->transform().TransformMatrix() * model.Transform;
-					bool found = false;
-					for (auto& pair : materialMap)
+					const ModelData& modelData = model.Model->Data();
+					if (modelData.Vertices != nullptr && modelData.Indices != nullptr)
 					{
-						if (pair.first == material.get())
+						for (int i = 0; i < modelData.Indices->IndexBufferCount(); i++)
 						{
-							pair.second.push_back(std::move(renderData));
-							found = true;
+							const std::unique_ptr<IndexBuffer>& indexBuffer = modelData.Indices->GetIndexBuffer(i);
+							const std::unique_ptr<Material>& material = mesh.Materials[model.MaterialIndices[i]];
+							RenderData renderData;
+							renderData.Indices = indexBuffer.get();
+							renderData.Vertices = modelData.Vertices.get();
+							renderData.Transform = object->transform().TransformMatrix() * model.Transform;
+							bool found = false;
+							for (auto& pair : materialMap)
+							{
+								if (pair.first == material.get())
+								{
+									pair.second.push_back(std::move(renderData));
+									found = true;
+								}
+							}
+							if (!found)
+							{
+								std::vector<RenderData> data = { std::move(renderData) };
+								materialMap.push_back({ material.get(), std::move(data) });
+							}
 						}
-					}
-					if (!found)
-					{
-						std::vector<RenderData> data = { std::move(renderData) };
-						materialMap.push_back({ material.get(), std::move(data) });
 					}
 				}
 			}

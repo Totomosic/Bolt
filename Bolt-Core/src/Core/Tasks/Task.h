@@ -1,6 +1,7 @@
 #pragma once
 #include "TaskResult.h"
 #include "TaskEvents.h"
+#include "Core/Events/EventManager.h"
 
 namespace Bolt
 {
@@ -15,9 +16,9 @@ namespace Bolt
 		template<typename DelegateT, typename TaskResultT>
 		Task(DelegateT func, Task<TaskResultT>& taskResult)
 		{
-			m_Result = LaunchAsync<TResult>(std::function<TResult()>([taskResult = std::move(taskResult.m_Result), del = std::move(func)]()->TResult
+			m_Result = LaunchAsync<TResult>(std::function<TResult()>([taskResult = std::move(taskResult.m_Result), del = std::move(func)]() mutable -> TResult
 			{
-				TaskResult<TaskResultT>& tResult = *(TaskResult<TaskResultT>*)&taskResult;
+				TaskResult<TaskResultT>& tResult = (TaskResult<TaskResultT>&)taskResult;
 				return del(tResult.Get());
 			}));
 		}
@@ -25,7 +26,7 @@ namespace Bolt
 		template<typename DelegateT>
 		Task(DelegateT func, Task<void>& taskResult)
 		{
-			m_Result = LaunchAsync<TResult>(std::function<TResult()>([taskResult = std::move(taskResult.m_Result), del = std::move(func)]()->TResult
+			m_Result = LaunchAsync<TResult>(std::function<TResult()>([taskResult = std::move(taskResult.m_Result), del = std::move(func)]() mutable -> TResult
 			{
 				TaskResult<int>& tResult = *(TaskResult<int>*)&taskResult;
 				tResult.Get();
@@ -37,7 +38,7 @@ namespace Bolt
 		template<typename DelegateT>
 		Task(DelegateT func)
 		{
-			m_Result = LaunchAsync<TResult>(std::function<TResult()>([del = std::move(func)]() -> TResult
+			m_Result = LaunchAsync<TResult>(std::function<TResult()>([del = std::move(func)]() mutable -> TResult
 			{
 				return del();
 			}));
@@ -67,10 +68,10 @@ namespace Bolt
 		template<typename DelegateT>
 		void ContinueWithOnMainThread(DelegateT func)
 		{
-			ContinueWith([func{ std::move(func) }](TResult value)
+			ContinueWith([func{ std::move(func) }](TResult value) mutable
 			{
-				EventManager::Post(TaskCompleted<TResult>(std::move(value), std::move(func)));
-			});			
+				EventManager::Get().Post(TaskCompleted<TResult>(std::move(value), std::move(func)));
+			});
 		}
 
 		template<typename> friend class Task;
@@ -87,9 +88,9 @@ namespace Bolt
 		template<typename DelegateT, typename TaskResultT>
 		Task(DelegateT func, Task<TaskResultT>& taskResult)
 		{
-			m_Result = LaunchAsync<int>(std::function<int()>([taskResult = std::move(taskResult.m_Result), del = std::move(func)]()->int
+			m_Result = LaunchAsync<int>(std::function<int()>([taskResult = std::move(taskResult.m_Result), del = std::move(func)]() mutable -> int
 			{
-				TaskResult<TaskResultT>& tResult = *(TaskResult<TaskResultT>*)&taskResult;				
+				TaskResult<TaskResultT>& tResult = (TaskResult<TaskResultT>&)taskResult;				
 				del(tResult.Get());
 				return 0;
 			}));
@@ -98,9 +99,9 @@ namespace Bolt
 		template<typename DelegateT>
 		Task(DelegateT func, Task<void>& taskResult)
 		{
-			m_Result = LaunchAsync<int>(std::function<int()>([taskResult = std::move(taskResult.m_Result), del = std::move(func)]()->int
+			m_Result = LaunchAsync<int>(std::function<int()>([taskResult = std::move(taskResult.m_Result), del = std::move(func)]() mutable -> int
 			{
-				TaskResult<int>& tResult = *(TaskResult<int>*)&taskResult;
+				TaskResult<int>& tResult = (TaskResult<int>&)taskResult;
 				tResult.Get();
 				del();
 				return 0;
@@ -111,7 +112,7 @@ namespace Bolt
 		template<typename DelegateT>
 		Task(DelegateT func)
 		{
-			m_Result = LaunchAsync<int>(std::function<int()>([del = std::move(func)]()->int
+			m_Result = LaunchAsync<int>(std::function<int()>([del = std::move(func)]() mutable -> int
 			{
 				del();
 				return 0;
@@ -137,9 +138,9 @@ namespace Bolt
 		template<typename DelegateT>
 		void ContinueWithOnMainThread(DelegateT func)
 		{
-			ContinueWith([func{ std::move(func) }]()
+			ContinueWith([func{ std::move(func) }]() mutable
 			{
-				EventManager::Post(TaskCompleted<int>(0, [func{ std::move(func) }](int ignore)
+				EventManager::Get().Post(TaskCompleted<int>(0, [func{ std::move(func) }](int ignore) mutable
 				{
 					func();
 				}));

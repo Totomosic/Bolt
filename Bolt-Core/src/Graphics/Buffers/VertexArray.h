@@ -2,6 +2,7 @@
 #include "Iterators/VertexIterator.h"
 #include "VertexBuffer.h"
 #include "ArrayDescriptor.h"
+#include "Core/Tasks/TaskManager.h"
 
 namespace Bolt
 {
@@ -50,6 +51,28 @@ namespace Bolt
 		void SetRenderMode(RenderMode mode);
 
 		VertexMapping Map() const;
+
+		template<typename FuncT0>
+		void MapAsync(FuncT0 callback) const
+		{
+			MapAsync(std::move(callback), std::function<void()>([]() {}));
+		}
+
+		template<typename FuncT0, typename FuncT1>
+		void MapAsync(FuncT0 callback, FuncT1 finishedCallback) const
+		{
+			VertexMapping* mapping = new VertexMapping(Map());
+			Task t = TaskManager::Run(make_shared_function([mapping, callback{ std::move(callback) }]()
+			{
+				callback(*mapping);
+				return mapping;
+			}));
+			t.ContinueWithOnMainThread(make_shared_function([callback{ std::move(finishedCallback) }](VertexMapping* mapping)
+				{
+					delete mapping;
+					callback();
+				}));
+		}
 
 		std::unique_ptr<VertexArray> Clone() const;
 

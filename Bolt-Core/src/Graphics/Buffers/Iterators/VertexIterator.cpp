@@ -52,6 +52,11 @@ namespace Bolt
 		return Seek(3).Read<Vector4<byte>>();
 	}
 
+	Vector3f& VertexIterator::Tangent() const
+	{
+		return Seek(4).Read<Vector3f>();
+	}
+
 	VertexIterator& VertexIterator::operator++()
 	{
 		m_VertexIndex++;

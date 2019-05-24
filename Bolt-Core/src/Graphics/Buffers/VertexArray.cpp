@@ -1,5 +1,4 @@
 #include "bltpch.h"
-
 #include "VertexArray.h"
 
 namespace Bolt
