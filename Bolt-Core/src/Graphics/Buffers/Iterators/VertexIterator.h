@@ -26,6 +26,7 @@ namespace Bolt
 		Vector3f& Normal() const;
 		Vector2f& TexCoord() const;
 		Vector4<byte>& Color() const;
+		Vector3f& Tangent() const;
 
 		VertexIterator& operator++();
 		VertexIterator& operator--();

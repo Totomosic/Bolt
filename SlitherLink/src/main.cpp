@@ -17,18 +17,8 @@ namespace SlitherLink
 			Layer& l = s.CreateLayer(camera);
 			camera->transform().Rotate(-PI / 6, Vector3f::Right());
 
-			ResourcePack resources = ResourceManager::Get().FetchPack("res/resources.pack");
-			ResourceManager::Get().LoadPack(resources);
-
 			ObjectFactory f(l);
-			GameObject* object = f.Grid(10, 10, 50, 50, Color::White, Transform({ 0, -5, 0 }));
-
-			Mesh m;
-			m.Models.push_back({ ResourceManager::Get().GetResource<Model>(resources.GetResourceId("Learjet")) });
-			auto material = ResourceManager::Get().Materials().DefaultLighting();
-			m.Materials.push_back(std::move(material));
-			f.Instantiate(m);
-
+			GameObject* object = f.Grid(500, 500, 10, 10, Color::White, Transform({ 0, -5, 0 }));
 			LightSource light;
 			light.Color = Color::White;
 			light.AmbientIntensity = 0.1f;

@@ -1,5 +1,6 @@
 #pragma once
 #include "Task.h"
+#include "SharedFunction.h"
 
 namespace Bolt
 {

@@ -28,10 +28,7 @@ namespace Bolt
 		const MaterialManager& Materials();
 		const FontManager& Fonts();
 
-		ResourceFile Fetch(const Filepath& resourceFile);
-		ResourcePack FetchPack(const Filepath& resourcePack);
-		ResourceFile& LoadFile(ResourceFile& resourceFile);
-		ResourcePack& LoadPack(ResourcePack& resourcePack);
+		void LoadPack(const Filepath& resourcePack, std::function<void(const ResourcePack&)> callback);
 
 		bool ResourceExists(const ResourceID& id);
 
@@ -48,11 +45,11 @@ namespace Bolt
 
 	private:
 		id_t FindNextId();
-
 		ResourceType StringToType(const blt::string& str);
-		ResourceFile& LoadTexture2DFile(ResourceFile& resourceFile);
-		ResourceFile& LoadModelFile(ResourceFile& resourceFile);
-		ResourceFile& LoadShaderFile(ResourceFile& resourceFile);
+
+		void LoadFile(ResourceFile& resourceFile);
+		void LoadTexture2DFile(ResourceFile& resourceFile);
+		void LoadModelFile(ResourceFile& resourceFile);
 
 	};
 

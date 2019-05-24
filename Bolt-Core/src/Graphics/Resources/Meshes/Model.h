@@ -21,11 +21,6 @@ namespace Bolt
 	public:
 		Model(const VertexFactory& factory);
 		Model(ModelData&& data);
-		Model(const Model& other) = delete;
-		Model(Model&& other) = default;
-		Model& operator=(const Model& other) = delete;
-		Model& operator=(Model&& other) = default;
-		~Model() = default;
 
 		const ModelData& Data() const;
 		ModelData& Data();

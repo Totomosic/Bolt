@@ -46,6 +46,7 @@ namespace Bolt
 					iterator[1] = Vector3f(0.0f, 1.0f, 0.0f);
 					iterator[2] = Vector2f((float)x / (xVertices - 1), 1 - (float)z / (zVertices - 1));
 					iterator[3] = color;
+					iterator[4] = Vector3f(1, 0, 0);
 					iterator++;
 
 					if (x < xVertices - 1 && z < zVertices - 1)
