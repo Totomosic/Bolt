@@ -150,7 +150,7 @@ namespace Bolt
 		{
 			std::vector<ValueTypeInfo> v;
 			v.reserve(sizeof...(Args));
-			(v.push_back(GetValueType<Args>()), ...);
+			(v.push_back({ GetValueType<Args>(), ValueTypeDim::Single }), ...);
 			return DefineFunction(name, ValueTypeInfo{ GetValueType<Ret>() }, v);
 		}
 

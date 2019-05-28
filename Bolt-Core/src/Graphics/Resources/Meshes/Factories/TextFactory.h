@@ -23,14 +23,14 @@ namespace Bolt
 	class BLT_API TextFactory : public VertexFactory
 	{
 	public:
-		ResourcePtr<const Font> TextFont;
+		ResourcePtr<Font> TextFont;
 		blt::string Text;
 		Bolt::Color Color;
 		AlignH HorizontalAlign;
 		AlignV VerticalAlign;
 
 	public:
-		TextFactory(const blt::string& text, const ResourcePtr<const Font>& font, const Bolt::Color& color = Color::White, AlignH horizontalAlignment = AlignH::Center, AlignV verticalAlignment = AlignV::Center);
+		TextFactory(const blt::string& text, const ResourcePtr<Font>& font, const Bolt::Color& color = Color::White, AlignH horizontalAlignment = AlignH::Center, AlignV verticalAlignment = AlignV::Center);
 
 		ModelData GenerateVertices() const override;
 

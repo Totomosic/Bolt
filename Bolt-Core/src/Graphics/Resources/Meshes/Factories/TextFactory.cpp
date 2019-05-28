@@ -5,7 +5,7 @@
 namespace Bolt
 {
 
-	TextFactory::TextFactory(const blt::string& text, const ResourcePtr<const Font>& font, const Bolt::Color& color, AlignH horizontalAlignment, AlignV verticalAlignment) : VertexFactory(),
+	TextFactory::TextFactory(const blt::string& text, const ResourcePtr<Font>& font, const Bolt::Color& color, AlignH horizontalAlignment, AlignV verticalAlignment) : VertexFactory(),
 		TextFont(font), Text(text), Color(color), HorizontalAlign(horizontalAlignment), VerticalAlign(verticalAlignment)
 	{
 

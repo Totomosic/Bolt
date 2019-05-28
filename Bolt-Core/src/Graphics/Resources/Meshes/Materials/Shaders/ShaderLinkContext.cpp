@@ -139,7 +139,10 @@ namespace Bolt
 		}
 		for (const auto& linkPair : m_UserUniformLinks)
 		{
-			other.AddLink(linkPair.first, m_Links.at(linkPair.second.LinkIndex)->Clone(other.GetShaderInstance().GetShader().Id(), other.GetUniformLocation(linkPair.first).Location));
+			if (linkPair.second.IsLinked)
+			{
+				other.AddLink(linkPair.first, m_Links.at(linkPair.second.LinkIndex)->Clone(other.GetShaderInstance().GetShader().Id(), other.GetUniformLocation(linkPair.first).Location));
+			}
 		}
 	}
 

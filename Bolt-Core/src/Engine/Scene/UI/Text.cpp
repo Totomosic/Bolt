@@ -7,7 +7,7 @@
 namespace Bolt
 {
 
-	Text::Text(const blt::string& text, const ResourcePtr<const Bolt::Font>& font, const Color& color, Transform&& transform, AlignH horizontal, AlignV vertical) : UIelement(),
+	Text::Text(const blt::string& text, const ResourcePtr<Bolt::Font>& font, const Color& color, Transform&& transform, AlignH horizontal, AlignV vertical) : UIelement(),
 		m_String(text), m_Font(font), m_Color(color), m_Transform(std::move(transform)), m_AlignH(horizontal), m_AlignV(vertical)
 	{
 		
@@ -18,7 +18,7 @@ namespace Bolt
 		return m_String;
 	}
 
-	ResourcePtr<const Font> Text::Font() const
+	ResourcePtr<Font> Text::Font() const
 	{
 		return m_Font;
 	}
@@ -37,7 +37,7 @@ namespace Bolt
 		}
 	}
 
-	void Text::SetFont(const ResourcePtr<const Bolt::Font>& font)
+	void Text::SetFont(const ResourcePtr<Bolt::Font>& font)
 	{
 		if (font != Font())
 		{

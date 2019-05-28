@@ -55,7 +55,10 @@ namespace Bolt
 			else
 			{
 				RendererUniformLocation loc = { shader.GetUniformLocation(uniform.VarName), uniform.Uniform, true, -1 };
-				BLT_ASSERT(loc.Location != -1, "Unable to find renderer uniform with name " + uniform.VarName);
+				if (loc.Location == -1)
+				{
+					BLT_WARN("Unable to find renderer uniform with name " + uniform.VarName);
+				}
 				result.push_back(std::move(loc));
 			}
 		}
@@ -65,6 +68,7 @@ namespace Bolt
 	std::vector<UserUniformLocation> ShaderInstance::GetUniformLocations(Shader& shader, const std::vector<UserUniformInfo>& uniforms)
 	{
 		std::vector<UserUniformLocation> result;
+		int textureCount = 0;
 		for (const UserUniformInfo& uniform : uniforms)
 		{
 			if (uniform.Dimension == ValueTypeDim::Array)
@@ -72,16 +76,27 @@ namespace Bolt
 				for (int i = 0; i < uniform.Length; i++)
 				{
 					blt::string arrPart = '[' + std::to_string(i) + ']';
-					UserUniformLocation loc = { uniform.LinkName + arrPart, shader.GetUniformLocation(uniform.VarName + arrPart), uniform.Type, false, uniform.DefaultValue };
+					UserUniformLocation loc = { uniform.LinkName + arrPart, shader.GetUniformLocation(uniform.VarName + arrPart), uniform.Type, false, textureCount, uniform.DefaultValue };
 					BLT_ASSERT(loc.Location != -1, "Unable to find user uniform with name " + uniform.VarName + arrPart);
 					result.push_back(std::move(loc));
+					if (uniform.Type == ValueType::Texture2D)
+					{
+						textureCount++;
+					}
 				}
 			}
 			else
 			{
-				UserUniformLocation loc = { uniform.LinkName, shader.GetUniformLocation(uniform.VarName), uniform.Type, true, uniform.DefaultValue };
-				BLT_ASSERT(loc.Location != -1, "Unable to find user uniform with name " + uniform.VarName);
+				UserUniformLocation loc = { uniform.LinkName, shader.GetUniformLocation(uniform.VarName), uniform.Type, true, textureCount, uniform.DefaultValue };
+				if (loc.Location == -1)
+				{
+					BLT_WARN("Unable to find user uniform with name " + uniform.VarName);
+				}
 				result.push_back(std::move(loc));
+				if (uniform.Type == ValueType::Texture2D)
+				{
+					textureCount++;
+				}
 			}
 		}
 		return result;

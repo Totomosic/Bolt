@@ -12,6 +12,7 @@ namespace Bolt
 		int Location;
 		ValueType Type;
 		bool RequiresLink;
+		int Index;
 		std::shared_ptr<UniformValueContainer> DefaultValue;
 	};
 

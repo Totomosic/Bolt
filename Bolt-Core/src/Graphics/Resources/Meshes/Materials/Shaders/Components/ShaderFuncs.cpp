@@ -7,7 +7,6 @@ namespace Bolt
 	ShaderFuncResultPtr ShaderFuncs::Add(ShaderValuePtr left, ShaderValuePtr right)
 	{
 		BLT_ASSERT(left->TypeDimension() == ValueTypeDim::Single && right->TypeDimension() == ValueTypeDim::Single, "Cannot operate on arrays");
-		BLT_ASSERT(TestDimensionEquality(left, right), "Inputs must be of the same dimension to be added");
 		ValueType resultType = DeduceOutputTypeNumeric(left, right);
 		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("(@0 + @1)", std::vector<ShaderValuePtr>{ std::move(left), std::move(right) }, resultType);
 		return result;
@@ -16,7 +15,6 @@ namespace Bolt
 	ShaderFuncResultPtr ShaderFuncs::Sub(ShaderValuePtr left, ShaderValuePtr right)
 	{
 		BLT_ASSERT(left->TypeDimension() == ValueTypeDim::Single && right->TypeDimension() == ValueTypeDim::Single, "Cannot operate on arrays");
-		BLT_ASSERT(TestDimensionEquality(left, right), "Inputs must be of the same dimension to be subtracted");
 		ValueType resultType = DeduceOutputTypeNumeric(left, right);
 		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("(@0 - @1)", std::vector<ShaderValuePtr>{ std::move(left), std::move(right) }, resultType);
 		return result;
@@ -34,7 +32,6 @@ namespace Bolt
 	ShaderFuncResultPtr ShaderFuncs::Div(ShaderValuePtr left, ShaderValuePtr right)
 	{
 		BLT_ASSERT(left->TypeDimension() == ValueTypeDim::Single && right->TypeDimension() == ValueTypeDim::Single, "Cannot operate on arrays");
-		BLT_ASSERT(TestDimensionEquality(left, right), "Inputs must be of the same dimension to be divided");
 		BLT_ASSERT(TestNotMatrix(left, right), "Matrices cannot be divided");
 		ValueType resultType = DeduceOutputTypeNumeric(left, right);
 		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("(@0 / @1)", std::vector<ShaderValuePtr>{ std::move(left), std::move(right) }, resultType);
@@ -80,6 +77,14 @@ namespace Bolt
 		BLT_ASSERT(value->TypeDimension() == ValueTypeDim::Single, "Cannot operate on arrays");
 		BLT_ASSERT(ValueTypeIsVector(value->Type()), "Can only normalize vectors");
 		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("normalize(@0)", std::vector<ShaderValuePtr>{ std::move(value) }, value->Type());
+		return result;
+	}
+
+	ShaderFuncResultPtr ShaderFuncs::Length(ShaderValuePtr value)
+	{
+		BLT_ASSERT(value->TypeDimension() == ValueTypeDim::Single, "Cannot operate on arrays");
+		BLT_ASSERT(ValueTypeIsVector(value->Type()), "Can only find length of vectors");
+		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("length(@0)", std::vector<ShaderValuePtr>{ std::move(value) }, ValueType::Float);
 		return result;
 	}
 
@@ -185,6 +190,15 @@ namespace Bolt
 		BLT_ASSERT(ValueTypeIsNumeric(left->Type()), "Input must be numeric");
 		BLT_ASSERT(left->Type() == right->Type(), "Types must match");
 		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("min(@0, @1)", std::vector<ShaderValuePtr>{ std::move(left), std::move(right) }, left->Type());
+		return result;
+	}
+
+	ShaderFuncResultPtr ShaderFuncs::Mix(ShaderValuePtr left, ShaderValuePtr right, ShaderValuePtr amount)
+	{
+		BLT_ASSERT(left->TypeDimension() == ValueTypeDim::Single && right->TypeDimension() == ValueTypeDim::Single, "Cannot operate on arrays");;
+		BLT_ASSERT(left->Type() == right->Type(), "Types must match");
+		BLT_ASSERT(amount->Type() == ValueType::Float, "Amount must be float")
+		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("mix(@0, @1, @2)", std::vector<ShaderValuePtr>{ std::move(left), std::move(right), std::move(amount) }, left->Type());
 		return result;
 	}
 

@@ -6,6 +6,7 @@
 #include "Graphics/Resources/Meshes/Factories/RectangleFactory.h"
 #include "Graphics/Resources/Meshes/Factories/CuboidFactory.h"
 #include "Graphics/Resources/Meshes/Factories/EllipseFactory.h"
+#include "Graphics/Resources/Meshes/Factories/SphereFactory.h"
 
 namespace Bolt
 {
@@ -20,6 +21,7 @@ namespace Bolt
 		m_SquareModel = ResourceManager::Get().GetResource<Model>(ResourceManager::Get().Register(std::make_unique<Model>(RectangleFactory(1, 1, Color::White))));
 		m_CircleModel = ResourceManager::Get().GetResource<Model>(ResourceManager::Get().Register(std::make_unique<Model>(EllipseFactory(2, 2, 360, Color::White))));
 		m_CubeModel = ResourceManager::Get().GetResource<Model>(ResourceManager::Get().Register(std::make_unique<Model>(CuboidFactory(1, 1, 1, Color::White))));
+		m_SphereModel = ResourceManager::Get().GetResource<Model>(ResourceManager::Get().Register(std::make_unique<Model>(SphereFactory(1, 100, Color::White))));
 	}
 
 	const ResourcePtr<Model>& BasicModels::Square() const
@@ -35,6 +37,11 @@ namespace Bolt
 	const ResourcePtr<Model>& BasicModels::Cube() const
 	{
 		return m_CubeModel;
+	}
+
+	const ResourcePtr<Model>& BasicModels::Sphere() const
+	{
+		return m_SphereModel;
 	}
 
 }

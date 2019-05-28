@@ -70,13 +70,16 @@ namespace Bolt
 		ViewMatrix,
 		ProjectionMatrix,
 		Time,
+		CameraPosition,
+		CameraDirection,
 		LightCount,
 		LightPositions,
 		LightTypes,
 		LightColors,
 		LightDirections,
 		LightAmbients,
-		LightAttenuations
+		LightAttenuations,
+		LightIntensities
 	};
 
 	BLT_API enum class ShaderStream
@@ -100,6 +103,10 @@ namespace Bolt
 			return ValueType::Matrix4f;
 		case RendererUniform::Time:
 			return ValueType::Float;
+		case RendererUniform::CameraPosition:
+			return ValueType::Vector3f;
+		case RendererUniform::CameraDirection:
+			return ValueType::Vector3f;
 		case RendererUniform::LightCount:
 			return ValueType::Int;
 		case RendererUniform::LightPositions:
@@ -114,6 +121,8 @@ namespace Bolt
 			return ValueType::Float;
 		case RendererUniform::LightAttenuations:
 			return ValueType::Vector3f;
+		case RendererUniform::LightIntensities:
+			return ValueType::Float;
 		}
 		BLT_ASSERT(false, "Unable to determine uniform type");
 		return ValueType::Void;
@@ -131,6 +140,10 @@ namespace Bolt
 			return ValueTypeDim::Single;
 		case RendererUniform::Time:
 			return ValueTypeDim::Single;
+		case RendererUniform::CameraPosition:
+			return ValueTypeDim::Single;
+		case RendererUniform::CameraDirection:
+			return ValueTypeDim::Single;
 		case RendererUniform::LightCount:
 			return ValueTypeDim::Single;
 		case RendererUniform::LightPositions:
@@ -144,6 +157,8 @@ namespace Bolt
 		case RendererUniform::LightAmbients:
 			return ValueTypeDim::Array;
 		case RendererUniform::LightAttenuations:
+			return ValueTypeDim::Array;
+		case RendererUniform::LightIntensities:
 			return ValueTypeDim::Array;
 		}
 		BLT_ASSERT(false, "Unable to determine uniform dimension");
@@ -163,6 +178,10 @@ namespace Bolt
 		case RendererUniform::LightDirections:
 			return 10;
 		case RendererUniform::LightAmbients:
+			return 10;
+		case RendererUniform::LightIntensities:
+			return 10;
+		case RendererUniform::LightAttenuations:
 			return 10;
 		}
 		BLT_ASSERT(false, "Unable to determine uniform length");
@@ -342,18 +361,6 @@ namespace Bolt
 	inline ValueType GetValueType<Texture2D>()
 	{
 		return ValueType::Texture2D;
-	}
-
-	template<>
-	inline ValueType GetValueType<const Texture2D>()
-	{
-		return GetValueType<Texture2D>();
-	}
-
-	template<>
-	inline ValueType GetValueType<ResourcePtr<const Texture2D>>()
-	{
-		return GetValueType<Texture2D>();
 	}
 
 	template<>

@@ -71,6 +71,7 @@ namespace Bolt
 		char* buffer = new char[realSize];
 		Read(buffer, size);
 		*outString = blt::string(buffer, realSize);
+		delete[] buffer;
 	}
 
 	blt::string File::ReadText(uint32_t size) const

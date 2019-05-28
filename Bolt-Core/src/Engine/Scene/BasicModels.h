@@ -11,6 +11,7 @@ namespace Bolt
 		ResourcePtr<Model> m_SquareModel;
 		ResourcePtr<Model> m_CircleModel;
 		ResourcePtr<Model> m_CubeModel;
+		ResourcePtr<Model> m_SphereModel;
 
 	public:
 		static BasicModels& Get();
@@ -21,6 +22,7 @@ namespace Bolt
 		const ResourcePtr<Model>& Square() const;
 		const ResourcePtr<Model>& Circle() const;
 		const ResourcePtr<Model>& Cube() const;
+		const ResourcePtr<Model>& Sphere() const;
 
 	};
 

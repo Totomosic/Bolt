@@ -35,7 +35,7 @@ namespace Bolt
 		id_t Register(std::unique_ptr<Resource>&& resource);
 		ResourcePtr<Resource> GetResource(const ResourceID& id);
 		void FreeResource(const ResourceID& id);
-		ResourcePtr<const Font> DefaultFont();
+		ResourcePtr<Font> DefaultFont();
 
 		template<typename T>
 		ResourcePtr<T> GetResource(const ResourceID& id)

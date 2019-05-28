@@ -20,6 +20,7 @@ namespace Bolt
 		static ShaderFuncResultPtr Dot(ShaderValuePtr left, ShaderValuePtr right);
 		static ShaderFuncResultPtr Cross(ShaderValuePtr left, ShaderValuePtr right);
 		static ShaderFuncResultPtr Normalize(ShaderValuePtr value);
+		static ShaderFuncResultPtr Length(ShaderValuePtr value);
 		static ShaderFuncResultPtr Reflect(ShaderValuePtr vector, ShaderValuePtr normal);
 		static ShaderFuncResultPtr Inverse(ShaderValuePtr value);
 
@@ -36,6 +37,7 @@ namespace Bolt
 
 		static ShaderFuncResultPtr Max(ShaderValuePtr left, ShaderValuePtr right);
 		static ShaderFuncResultPtr Min(ShaderValuePtr left, ShaderValuePtr right);
+		static ShaderFuncResultPtr Mix(ShaderValuePtr left, ShaderValuePtr right, ShaderValuePtr amount);
 
 		static ShaderFuncResultPtr x(ShaderValuePtr value);
 		static ShaderFuncResultPtr y(ShaderValuePtr value);

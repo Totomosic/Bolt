@@ -123,7 +123,7 @@ namespace Bolt
 		return Instantiate(std::move(mesh), std::move(transform));
 	}
 
-	GameObject* ObjectFactory::Image(float width, float height, const ResourcePtr<const Texture2D>& image, Transform transform) const
+	GameObject* ObjectFactory::Image(float width, float height, const ResourcePtr<Texture2D>& image, Transform transform) const
 	{
 		GameObject* object = Rectangle(width, height, ResourceManager::Get().Materials().Texture(image), std::move(transform));
 		return object;
@@ -151,6 +151,19 @@ namespace Bolt
 	{
 		Mesh mesh;
 		mesh.Models.push_back({ BasicModels::Get().Cube(), Matrix4f::Scale(width, height, depth),{ 0 } });
+		mesh.Materials.push_back(std::move(material));
+		return Instantiate(std::move(mesh), std::move(transform));
+	}
+
+	GameObject* ObjectFactory::Sphere(float radius, const Color& color, Transform transform) const
+	{
+		return Sphere(radius, ResourceManager::Get().Materials().DefaultLighting(color), std::move(transform));
+	}
+
+	GameObject* ObjectFactory::Sphere(float radius, std::unique_ptr<Material>&& material, Transform transform) const
+	{
+		Mesh mesh;
+		mesh.Models.push_back({ BasicModels::Get().Sphere(), Matrix4f::Scale(radius), { 0 } });
 		mesh.Materials.push_back(std::move(material));
 		return Instantiate(std::move(mesh), std::move(transform));
 	}

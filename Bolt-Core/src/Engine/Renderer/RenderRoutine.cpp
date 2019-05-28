@@ -24,6 +24,15 @@ namespace Bolt
 			case RendererUniform::Time:
 				shader.SetUniform(uniform.Location, Time::Get().RenderingTimeline().CurrentTime());
 				break;
+			case RendererUniform::CameraPosition:
+			{
+				Vector3f camPos = (Vector3f)viewMatrix.Inverse().Column(3).xyz();
+				shader.SetUniform(uniform.Location, camPos);
+				break;
+			}
+			case RendererUniform::CameraDirection:
+				shader.SetUniform(uniform.Location, (Vector3f)viewMatrix.Inverse().Row(2).xyz() * Vector3f(1, 1, -1));
+				break;
 			case RendererUniform::LightPositions:
 				if (uniform.Index < context.Lights.size())
 				{
@@ -40,6 +49,18 @@ namespace Bolt
 				if (uniform.Index < context.Lights.size())
 				{
 					shader.SetUniform(uniform.Location, context.Lights.at(uniform.Index).AmbientIntensity);
+				}
+				break;
+			case RendererUniform::LightIntensities:
+				if (uniform.Index < context.Lights.size())
+				{
+					shader.SetUniform(uniform.Location, context.Lights.at(uniform.Index).Intensity);
+				}
+				break;
+			case RendererUniform::LightAttenuations:
+				if (uniform.Index < context.Lights.size())
+				{
+					shader.SetUniform(uniform.Location, context.Lights.at(uniform.Index).Attenuation);
 				}
 				break;
 			case RendererUniform::LightCount:
