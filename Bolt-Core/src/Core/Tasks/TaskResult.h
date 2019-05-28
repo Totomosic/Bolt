@@ -31,7 +31,7 @@ namespace Bolt
 			{
 				std::this_thread::yield();
 			}
-			return m_State->Data;
+			return std::move(m_State->Data);
 		}
 
 	};

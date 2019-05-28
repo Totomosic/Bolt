@@ -31,6 +31,11 @@ namespace Bolt
 		return FromBool(false);
 	}
 
+	ShaderLiteralPtr ShaderLiteral::Pi()
+	{
+		return FromFloat((float)PI);
+	}
+
 	ShaderLiteralPtr ShaderLiteral::FromBool(bool value)
 	{
 		return std::make_shared<ShaderLiteral>((value) ? "true" : "false", ValueType::Bool);
@@ -48,12 +53,12 @@ namespace Bolt
 
 	ShaderLiteralPtr ShaderLiteral::FromVec2(const Vector2f& value)
 	{
-		return std::make_shared<ShaderLiteral>("vec4(" + std::to_string(value.x) + ", " + std::to_string(value.y) + ')', ValueType::Vector2f);
+		return std::make_shared<ShaderLiteral>("vec2(" + std::to_string(value.x) + ", " + std::to_string(value.y) + ')', ValueType::Vector2f);
 	}
 
 	ShaderLiteralPtr ShaderLiteral::FromVec3(const Vector3f& value)
 	{
-		return std::make_shared<ShaderLiteral>("vec4(" + std::to_string(value.x) + ", " + std::to_string(value.y) + ", " + std::to_string(value.z) + ')', ValueType::Vector3f);
+		return std::make_shared<ShaderLiteral>("vec3(" + std::to_string(value.x) + ", " + std::to_string(value.y) + ", " + std::to_string(value.z) + ')', ValueType::Vector3f);
 	}
 
 	ShaderLiteralPtr ShaderLiteral::FromVec4(const Vector4f& value)

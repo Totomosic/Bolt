@@ -33,10 +33,10 @@ namespace Bolt
 		{
 			CompiledShaderProgram vertexSource = m_Vertex.Compile();
 			CompiledShaderProgram fragmentSource = m_Fragment.Compile();
-			m_CurrentShaderInstance = std::make_shared<ShaderInstance>(vertexSource, fragmentSource);
-			m_IsValid = true;
 			BLT_TRACE("VERTEX SOURCE\n{}\n", vertexSource.Source);
 			BLT_TRACE("FRAGMENT SOURCE\n{}\n", fragmentSource.Source);
+			m_CurrentShaderInstance = std::make_shared<ShaderInstance>(vertexSource, fragmentSource);
+			m_IsValid = true;
 		}
 		return ShaderLinkContext(m_CurrentShaderInstance);
 	}

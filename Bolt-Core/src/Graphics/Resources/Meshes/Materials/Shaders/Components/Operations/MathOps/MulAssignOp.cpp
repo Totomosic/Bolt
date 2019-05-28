@@ -8,7 +8,7 @@ namespace Bolt
 	MulAssignOp::MulAssignOp(const ShaderLValuePtr& var, const ShaderValuePtr& value) : ShaderOp(),
 		m_Variable(var), m_Value(value)
 	{
-		BLT_ASSERT(m_Variable->Type() == m_Value->Type(), "Type of value must match variable");
+		BLT_ASSERT(m_Variable->Type() == m_Value->Type() || (ValueTypeIsVector(var->Type()) && value->Type() == ValueType::Float), "Type of value must match variable");
 	}
 
 	void MulAssignOp::Build(ShaderBuilder& builder) const

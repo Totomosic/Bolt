@@ -88,7 +88,7 @@ namespace Bolt
 		m_Resources.erase(id);
 	}
 
-	ResourcePtr<const Font> ResourceManager::DefaultFont()
+	ResourcePtr<Font> ResourceManager::DefaultFont()
 	{
 		return m_Fonts.Arial(48);
 	}
@@ -134,52 +134,45 @@ namespace Bolt
 
 	void ResourceManager::LoadTexture2DFile(ResourceFile& resourceFile)
 	{
-		resourceFile.Id = Register(nullptr);
-		std::unique_ptr<Resource>& ptr = m_Resources[resourceFile.Id];
-		int width = std::stoi(resourceFile.Attributes.GetChild("width").Data.c_str());
-		int height = std::stoi(resourceFile.Attributes.GetChild("height").Data.c_str());
-		const char* data = resourceFile.Attributes.GetChild("data").Data.data();
-		const blt::string& magString = resourceFile.Attributes.GetChild("options").Attributes.at("magnification");
-		const blt::string& minString = resourceFile.Attributes.GetChild("options").Attributes.at("minification");
-		const blt::string& mipmapString = resourceFile.Attributes.GetChild("options").Attributes.at("mipmaps");
-		const blt::string& wrapString = resourceFile.Attributes.GetChild("options").Attributes.at("wrap");
-		BLT_ASSERT(magString == "Nearest" || magString == "Linear", "Invalid Mag Option");
-		BLT_ASSERT(minString == "Nearest" || minString == "Linear", "Invalid Min Option");
-		BLT_ASSERT(mipmapString == "Enabled" || mipmapString == "Disabled", "Invalid Mipmap Option");
-		BLT_ASSERT(wrapString == "Repeat" || wrapString == "ClampToEdge", "Invalid Wrap Option");
-		Image image;
-		image.Width = width;
-		image.Height = height;
-		image.Components = 4;
-		image.Pixels = (byte*)data;
-		TextureCreateOptions options;
-		options.Magnification = (magString == "Nearest") ? MagFilter::Nearest : MagFilter::Linear;
-		options.Minification = (minString == "Nearest") ? MinFilter::Nearest : MinFilter::Linear;
-		options.MipmapMode = (mipmapString == "Disabled") ? Mipmaps::Disabled : Mipmaps::Enabled;
-		options.Wrap = (wrapString == "Repeat") ? WrapMode::Repeat : WrapMode::ClampToEdge;
-		std::unique_ptr<Texture2D> texture = std::make_unique<Texture2D>(image, options);
-		image.ReleasePixels();
+		resourceFile.Id = Register(std::make_unique<Texture2D>(1, 1));
+		Texture2D* ptr = (Texture2D*)m_Resources[resourceFile.Id].get();
+		Task t = TaskManager::Run([resourceFile{ std::move(resourceFile) }]()
+			{
+				int width = std::stoi(resourceFile.Attributes.GetChild("width").Data.c_str());
+				int height = std::stoi(resourceFile.Attributes.GetChild("height").Data.c_str());
+				blt::string data = resourceFile.Attributes.GetChild("data").Data;
+				const blt::string& magString = resourceFile.Attributes.GetChild("options").Attributes.at("magnification");
+				const blt::string& minString = resourceFile.Attributes.GetChild("options").Attributes.at("minification");
+				const blt::string& mipmapString = resourceFile.Attributes.GetChild("options").Attributes.at("mipmaps");
+				const blt::string& wrapString = resourceFile.Attributes.GetChild("options").Attributes.at("wrap");
+				BLT_ASSERT(magString == "Nearest" || magString == "Linear", "Invalid Mag Option");
+				BLT_ASSERT(minString == "Nearest" || minString == "Linear", "Invalid Min Option");
+				BLT_ASSERT(mipmapString == "Enabled" || mipmapString == "Disabled", "Invalid Mipmap Option");
+				BLT_ASSERT(wrapString == "Repeat" || wrapString == "ClampToEdge", "Invalid Wrap Option");
+				Image image;
+				image.Width = width;
+				image.Height = height;
+				image.Components = 4;
+				image.Pixels = new byte[data.length()];
+				memcpy(image.Pixels, data.data(), data.length());
+				TextureCreateOptions options;
+				options.Magnification = (magString == "Nearest") ? MagFilter::Nearest : MagFilter::Linear;
+				options.Minification = (minString == "Nearest") ? MinFilter::Nearest : MinFilter::Linear;
+				options.MipmapMode = (mipmapString == "Disabled") ? Mipmaps::Disabled : Mipmaps::Enabled;
+				options.Wrap = (wrapString == "Repeat") ? WrapMode::Repeat : WrapMode::ClampToEdge;
+				return std::pair<Image, TextureCreateOptions>{ std::move(image), options };
+			});
+		t.ContinueWithOnMainThread([ptr](std::pair<Image, TextureCreateOptions> result)
+			{
+				*ptr = Texture2D(result.first, result.second);
+			});
 	}
-
-	struct BLT_API ModelLoadCallback
-	{
-	public:
-		Model* Ptr;
-		ModelData Data;
-		VertexMapping Mapping;
-
-	public:
-		inline void operator()()
-		{
-			Ptr->Data() = std::move(Data);
-		}
-	};
 
 	void ResourceManager::LoadModelFile(ResourceFile& resourceFile)
 	{
 		resourceFile.Id = Register(std::make_unique<Model>(ModelData()));
 		Model* ptr = (Model*)m_Resources[resourceFile.Id].get();
-		Task t = TaskManager::Run([resourceFile]()
+		Task t = TaskManager::Run([resourceFile{ std::move(resourceFile) }]()
 			{
 				int vertexDimension = std::stoi(resourceFile.Attributes.GetChild("vertices").Attributes.at("dim").c_str());
 				std::vector<blt::string> verticesS = resourceFile.Attributes.GetChild("vertices").Data.split(' ');

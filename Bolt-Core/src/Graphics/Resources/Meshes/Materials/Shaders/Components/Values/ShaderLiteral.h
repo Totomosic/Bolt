@@ -22,6 +22,7 @@ namespace Bolt
 	public:
 		static ShaderLiteralPtr True();
 		static ShaderLiteralPtr False();
+		static ShaderLiteralPtr Pi();
 		static ShaderLiteralPtr FromBool(bool value);
 		static ShaderLiteralPtr FromInt(int value);
 		static ShaderLiteralPtr FromFloat(float value);

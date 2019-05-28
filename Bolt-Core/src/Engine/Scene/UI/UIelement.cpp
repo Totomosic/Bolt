@@ -99,13 +99,13 @@ namespace Bolt
 		return AddElement<UIsurface>(width, height, std::move(material), std::move(transform));
 	}
 
-	UIsurface& UIelement::Image(float width, float height, const ResourcePtr<const Texture2D>& texture, Transform&& transform)
+	UIsurface& UIelement::Image(float width, float height, const ResourcePtr<Texture2D>& texture, Transform&& transform)
 	{
 		std::unique_ptr<Material> material = ResourceManager::Get().Materials().Texture(texture);
 		return AddElement<UIsurface>(width, height, std::move(material), std::move(transform));
 	}
 
-	Bolt::Text& UIelement::Text(const blt::string& text, const ResourcePtr<const Font>& font, const Color& color, Transform&& transform, AlignH horizontal, AlignV vertical)
+	Bolt::Text& UIelement::Text(const blt::string& text, const ResourcePtr<Font>& font, const Color& color, Transform&& transform, AlignH horizontal, AlignV vertical)
 	{
 		return AddElement<Bolt::Text>(text, font, color, std::move(transform), horizontal, vertical);
 	}

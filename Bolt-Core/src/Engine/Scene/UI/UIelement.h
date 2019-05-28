@@ -44,8 +44,8 @@ namespace Bolt
 
 		UIsurface& Rectangle(float width, float height, const Color& color = Color::White, Transform&& transform = Transform());
 		UIsurface& Rectangle(float width, float height, std::unique_ptr<Material>&& material, Transform&& transform = Transform());
-		UIsurface& Image(float width, float height, const ResourcePtr<const Texture2D>& texture, Transform&& transform = Transform());
-		Bolt::Text& Text(const blt::string& text, const ResourcePtr<const Font>& font, const Color& color = Color::White, Transform&& transform = Transform(), AlignH horizontal = AlignH::Center, AlignV vertical = AlignV::Center);
+		UIsurface& Image(float width, float height, const ResourcePtr<Texture2D>& texture, Transform&& transform = Transform());
+		Bolt::Text& Text(const blt::string& text, const ResourcePtr<Font>& font, const Color& color = Color::White, Transform&& transform = Transform(), AlignH horizontal = AlignH::Center, AlignV vertical = AlignV::Center);
 		Bolt::Text& Text(const blt::string& text, const Color& color = Color::White, Transform&& transform = Transform(), AlignH horizontal = AlignH::Center, AlignV vertical = AlignV::Center);
 
 		friend class UIroot;
