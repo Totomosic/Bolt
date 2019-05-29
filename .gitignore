@@ -27,6 +27,7 @@ _ReSharper*/
 **.sln
 **.vcxproj*
 **.pack
+**.bres
 bin/
 bin-int/
 #Nuget packages folder
