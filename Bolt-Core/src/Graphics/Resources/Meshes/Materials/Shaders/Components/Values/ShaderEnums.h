@@ -23,11 +23,30 @@ namespace Bolt
 		VertFrag
 	};
 
+	// Returns true if shader is covered by compatibility
 	inline bool IsShaderCompatible(ShaderStageCompatibility compatibility, ShaderType shader)
 	{
 		return (shader == ShaderType::Vertex && (compatibility == ShaderStageCompatibility::All || compatibility == ShaderStageCompatibility::Vertex || compatibility == ShaderStageCompatibility::VertFrag))
 			|| (shader == ShaderType::Fragment && (compatibility == ShaderStageCompatibility::All || compatibility == ShaderStageCompatibility::Fragment || compatibility == ShaderStageCompatibility::VertFrag))
 			|| (shader == ShaderType::Geometry && (compatibility == ShaderStageCompatibility::All || compatibility == ShaderStageCompatibility::Geometry));
+	}
+
+	// Returns true if the compatibility of arg is covered by required
+	inline bool IsShaderCompatible(ShaderStageCompatibility arg, ShaderStageCompatibility required)
+	{
+		if (arg == ShaderStageCompatibility::All)
+		{
+			return true;
+		}
+		if (required == ShaderStageCompatibility::All)
+		{
+			return false;
+		}
+		if (arg == ShaderStageCompatibility::VertFrag)
+		{
+			return required == ShaderStageCompatibility::Vertex || required == ShaderStageCompatibility::Fragment;
+		}
+		return arg == required;
 	}
 
 	BLT_API enum class ValueType
