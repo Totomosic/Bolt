@@ -24,6 +24,7 @@ namespace Bolt
 		const ShaderVariablePtr& Color() const;
 		const ShaderVariablePtr& Tangent() const;
 		const ShaderVariablePtr& VertexPosition() const;
+		const ShaderVariablePtr& Stream(ShaderStream stream) const;
 
 		void SetVertexPosition(const ShaderValuePtr& value);
 

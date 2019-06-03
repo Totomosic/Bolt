@@ -4,15 +4,15 @@
 namespace Bolt
 {
 
-	ShaderBuilder::ShaderBuilder(ShaderType shaderType)
-		: m_ShaderType(shaderType), m_Source("#version 430 core\n"), m_GlobalScope(), m_MainScope(1), m_VarCount(0), m_PassCount(0), m_CurrentScopeIndex(0), m_CurrentCursor(m_Source.size())
+	ShaderBuilder::ShaderBuilder(ShaderStage shaderType)
+		: m_ShaderStage(shaderType), m_Source("#version 430 core\n"), m_GlobalScope(), m_MainScope(1), m_VarCount(0), m_PassCount(0), m_CurrentScopeIndex(0), m_CurrentCursor(m_Source.size())
 	{
 		Reset();
 	}
 
-	ShaderType ShaderBuilder::GetShaderType() const
+	ShaderStage ShaderBuilder::GetShaderStage() const
 	{
-		return m_ShaderType;
+		return m_ShaderStage;
 	}
 
 	const blt::string& ShaderBuilder::GetSource() const
@@ -65,12 +65,12 @@ namespace Bolt
 
 	blt::string ShaderBuilder::GetVariableName() const
 	{
-		return "v" + GetShaderTypeString() + std::to_string(m_VarCount++);
+		return "v" + GetShaderStageString() + std::to_string(m_VarCount++);
 	}
 
 	blt::string ShaderBuilder::GetPassName() const
 	{
-		return "p" + GetShaderTypeString() + std::to_string(m_PassCount++);
+		return "p" + GetShaderStageString() + std::to_string(m_PassCount++);
 	}
 
 	void ShaderBuilder::Write(const blt::string& str)
@@ -98,15 +98,15 @@ namespace Bolt
 		return source;
 	}
 
-	blt::string ShaderBuilder::GetShaderTypeString() const
+	blt::string ShaderBuilder::GetShaderStageString() const
 	{
-		switch (m_ShaderType)
+		switch (m_ShaderStage)
 		{
-		case ShaderType::Vertex:
+		case ShaderStage::Vertex:
 			return "v";
-		case ShaderType::Geometry:
+		case ShaderStage::Geometry:
 			return "g";
-		case ShaderType::Fragment:
+		case ShaderStage::Fragment:
 			return "f";
 		}
 		BLT_ASSERT(false, "Unable to determine string for shader type");
