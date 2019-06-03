@@ -10,15 +10,15 @@
 namespace Bolt
 {
 
-	ShaderProgram::ShaderProgram(ShaderType type)
-		: m_Builder(type), m_ShaderType(type), m_UserUniforms(), m_RendererUniforms()
+	ShaderProgram::ShaderProgram(ShaderStage type)
+		: m_Builder(type), m_ShaderStage(type), m_UserUniforms(), m_RendererUniforms()
 	{
 	
 	}
 
-	ShaderType ShaderProgram::Type() const
+	ShaderStage ShaderProgram::Type() const
 	{
-		return m_ShaderType;
+		return m_ShaderStage;
 	}
 
 	const GlobalScope& ShaderProgram::GetGlobalScope() const
@@ -39,11 +39,6 @@ namespace Bolt
 	MainScope& ShaderProgram::GetMainScope()
 	{
 		return m_Builder.GetMainScope();
-	}
-
-	ShaderVariablePtr ShaderProgram::Stream(ShaderStream stream)
-	{
-		return GetGlobalScope().DeclareVar(GetTypeOfShaderStream(stream), "layout(location = " + std::to_string((int)stream) + ") in");
 	}
 
 	ShaderVariablePtr ShaderProgram::Uniform(const blt::string& linkName, ValueType type, std::shared_ptr<UniformValueContainer> defaultValue)
@@ -163,6 +158,11 @@ namespace Bolt
 		{
 			program.RendererUniforms.push_back({ renderer.Var->GetVarName(), renderer.Uniform, renderer.Length });
 		}
+	}
+
+	ShaderVariablePtr ShaderProgram::PrivateStream(ShaderStream stream)
+	{
+		return GetGlobalScope().DeclareVar(GetTypeOfShaderStream(stream), "layout(location = " + std::to_string((int)stream) + ") in");
 	}
 
 }

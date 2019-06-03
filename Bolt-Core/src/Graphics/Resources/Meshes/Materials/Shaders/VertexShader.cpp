@@ -5,16 +5,16 @@
 namespace Bolt
 {
 
-	VertexShader::VertexShader() : ShaderProgram(ShaderType::Vertex),
+	VertexShader::VertexShader() : ShaderProgram(ShaderStage::Vertex),
 		m_PositionStream(nullptr), m_NormalStream(nullptr), m_TexCoordStream(nullptr), m_ColorStream(nullptr), m_TangentStream(nullptr), m_VertexPosition(nullptr)
 	{
 		m_VertexPosition = std::make_shared<ShaderVariable>(ValueType::Vector4f);
 		m_VertexPosition->SetVarName("gl_Position");
-		m_PositionStream = Stream(ShaderStream::Position);
-		m_NormalStream = Stream(ShaderStream::Normal);
-		m_TexCoordStream = Stream(ShaderStream::TexCoord);
-		m_ColorStream = Stream(ShaderStream::Color);
-		m_TangentStream = Stream(ShaderStream::Tangent);
+		m_PositionStream = PrivateStream(ShaderStream::Position);
+		m_NormalStream = PrivateStream(ShaderStream::Normal);
+		m_TexCoordStream = PrivateStream(ShaderStream::TexCoord);
+		m_ColorStream = PrivateStream(ShaderStream::Color);
+		m_TangentStream = PrivateStream(ShaderStream::Tangent);
 	}
 
 	const ShaderVariablePtr& VertexShader::Position() const
@@ -45,6 +45,25 @@ namespace Bolt
 	const ShaderVariablePtr& VertexShader::VertexPosition() const
 	{
 		return m_VertexPosition;
+	}
+
+	const ShaderVariablePtr& VertexShader::Stream(ShaderStream stream) const
+	{
+		switch (stream)
+		{
+		case ShaderStream::Position:
+			return Position();
+		case ShaderStream::Normal:
+			return Normal();
+		case ShaderStream::TexCoord:
+			return TexCoord();
+		case ShaderStream::Color:
+			return Color();
+		case ShaderStream::Tangent:
+			return Tangent();
+		}
+		BLT_ASSERT(false, "Invalid shader stream");
+		return Position();
 	}
 
 	void VertexShader::SetVertexPosition(const ShaderValuePtr& value)

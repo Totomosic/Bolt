@@ -9,7 +9,7 @@ namespace Bolt
 	class BLT_API ShaderBuilder
 	{
 	private:
-		ShaderType m_ShaderType;
+		ShaderStage m_ShaderStage;
 		blt::string m_Source;
 
 		GlobalScope m_GlobalScope;
@@ -22,9 +22,9 @@ namespace Bolt
 		int m_CurrentCursor;
 
 	public:
-		ShaderBuilder(ShaderType shaderType);
+		ShaderBuilder(ShaderStage shaderType);
 
-		ShaderType GetShaderType() const;
+		ShaderStage GetShaderStage() const;
 		const blt::string& GetSource() const;
 
 		const GlobalScope& GetGlobalScope() const;
@@ -46,7 +46,7 @@ namespace Bolt
 		blt::string Build();
 
 	private:
-		blt::string GetShaderTypeString() const;
+		blt::string GetShaderStageString() const;
 		void Reset();
 
 	};

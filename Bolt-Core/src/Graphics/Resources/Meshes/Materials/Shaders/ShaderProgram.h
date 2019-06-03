@@ -57,23 +57,22 @@ namespace Bolt
 	{
 	protected:
 		mutable ShaderBuilder m_Builder;
-		ShaderType m_ShaderType;
+		ShaderStage m_ShaderStage;
 
 		std::vector<UserUniformPtr> m_UserUniforms;
 		std::vector<RendererUniformPtr> m_RendererUniforms;
 
 	protected:
-		ShaderProgram(ShaderType type);
+		ShaderProgram(ShaderStage type);
 
 	public:
-		ShaderType Type() const;
+		ShaderStage Type() const;
 
 		const GlobalScope& GetGlobalScope() const;
 		GlobalScope& GetGlobalScope();
 		const MainScope& GetMainScope() const;
 		MainScope& GetMainScope();
 
-		ShaderVariablePtr Stream(ShaderStream stream);
 		ShaderVariablePtr Uniform(const blt::string& linkName, ValueType type, std::shared_ptr<UniformValueContainer> defaultValue = nullptr);
 		ShaderVariablePtr UniformArray(const blt::string& linkName, ValueType type, uint32_t length);
 		ShaderVariablePtr RendererUniform(Bolt::RendererUniform uniform);
@@ -156,6 +155,7 @@ namespace Bolt
 
 	protected:
 		void CompileUniformVariables(CompiledShaderProgram& program) const;		
+		ShaderVariablePtr PrivateStream(ShaderStream stream);
 
 	};
 
