@@ -1,5 +1,5 @@
 #pragma once
-#include "MasterNodes/MasterNodes.h"
+#include "MasterNodes/PBRMasterNodes.h"
 #include "Defaults/ValueNodes.h"
 #include "Defaults/VectorNodes.h"
 #include "Context/AttributeNode.h"

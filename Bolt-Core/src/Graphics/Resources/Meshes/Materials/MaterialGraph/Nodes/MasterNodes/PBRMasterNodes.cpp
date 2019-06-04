@@ -1,5 +1,5 @@
 #include "bltpch.h"
-#include "MasterNodes.h"
+#include "PBRMasterNodes.h"
 #include "../../MaterialGraph.h"
 
 #include "../Defaults/ValueNodes.h"
