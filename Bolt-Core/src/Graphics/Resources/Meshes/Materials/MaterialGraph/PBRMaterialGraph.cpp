@@ -1,7 +1,7 @@
 #include "bltpch.h"
 #include "PBRMaterialGraph.h"
 
-#include "Nodes/MasterNodes/MasterNodes.h"
+#include "Nodes/MasterNodes/PBRMasterNodes.h"
 
 namespace Bolt
 {

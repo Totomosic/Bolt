@@ -16,12 +16,13 @@ namespace SlitherLink
 			camera = s.CreateCamera(Projection::Perspective(PI / 3, GetWindow().Aspect(), 0.1f, 5000.0f));
 			Layer& l = s.CreateLayer(camera);
 			camera->transform().Rotate(-PI / 6, Vector3f::Right());
+			camera->transform().Translate(camera->transform().Forward() * -5);
 
 			ResourceManager::Get().LoadPack("res/resources.pack", [&l](const ResourcePack& resources)
 				{
 					PBRMaterialGraph graph;
 					PropertyNode& albedoProperty = graph.AddProperty("Albedo", ResourceManager::Get().GetResource<Texture2D>(resources.GetResourceId("rustediron2_basecolor")));
-					SampleTextureNode& albedoTexture = (SampleTextureNode&)graph.AddNode(std::make_unique<SampleTextureNode>());
+					SampleTextureNode& albedoTexture = graph.AddNode(std::make_unique<SampleTextureNode>());
 					albedoTexture.SetTexture(albedoProperty.GetValue());
 					graph.SetAlbedo(albedoTexture.GetRGB());
 
@@ -40,15 +41,19 @@ namespace SlitherLink
 					roughnessTexture.SetTexture(roughnessProperty.GetValue());
 					graph.SetRoughness(roughnessTexture.GetR());
 
-					SplitVec3Node& splitter = graph.AddNode(std::make_unique<SplitVec3Node>());
-					splitter.SetInput(graph.GetBuilder().GetContext().VertexPosition().GetValue());
-					graph.SetAlpha(splitter.GetR());
-
 					graph.Build();
 
 					ObjectFactory f(l);
 					GameObject* sphere = f.Sphere(2, graph.GetMaterial());
-					GameObject* sphere2 = f.Sphere(2, Color::White, Transform({ 5, 0, 0 }));
+
+					LitMaterialGraph litGraph;
+					PropertyNode& colorProperty = litGraph.AddProperty("Texture", ResourceManager::Get().GetResource<Texture2D>(resources.GetResourceId("rustediron2_basecolor")));
+					SampleTextureNode& litSampler = litGraph.AddNode<SampleTextureNode>();
+					litSampler.SetTexture(colorProperty.GetValue());
+					litGraph.SetColor(litSampler.GetRGB());
+					litGraph.Build();
+
+					GameObject* sphere2 = f.Sphere(2, litGraph.GetMaterial(), Transform({ 5, 0, 0 }));
 				});
 
 			RenderSchedule sch(s);
