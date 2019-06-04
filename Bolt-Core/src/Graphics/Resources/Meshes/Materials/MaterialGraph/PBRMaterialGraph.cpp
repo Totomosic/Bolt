@@ -21,42 +21,42 @@ namespace Bolt
 
 	void PBRMaterialGraph::SetVertexPosition(const NodeConnection& connection)
 	{
-		m_VertexPosition->Connect(0, connection);
+		m_VertexPosition->SetValue(connection);
 	}
 
 	void PBRMaterialGraph::SetAlbedo(const NodeConnection& connection)
 	{
-		m_Albedo->Connect(0, connection);
+		m_Albedo->SetValue(connection);
 	}
 
 	void PBRMaterialGraph::SetNormal(const NodeConnection& connection)
 	{
-		m_Normal->Connect(0, connection);
+		m_Normal->SetValue(connection);
 	}
 
 	void PBRMaterialGraph::SetMetallic(const NodeConnection& connection)
 	{
-		m_Metallic->Connect(0, connection);
+		m_Metallic->SetValue(connection);
 	}
 
 	void PBRMaterialGraph::SetRoughness(const NodeConnection& connection)
 	{
-		m_Roughness->Connect(0, connection);
+		m_Roughness->SetValue(connection);
 	}
 
 	void PBRMaterialGraph::SetOcclusion(const NodeConnection& connection)
 	{
-		m_Occlusion->Connect(0, connection);
+		m_Occlusion->SetValue(connection);
 	}
 
 	void PBRMaterialGraph::SetAlpha(const NodeConnection& connection)
 	{
-		m_Alpha->Connect(0, connection);
+		m_Alpha->SetValue(connection);
 	}
 
 	void PBRMaterialGraph::SetAlphaThreshold(const NodeConnection& connection)
 	{
-		m_AlphaThreshold->Connect(0, connection);
+		m_AlphaThreshold->SetValue(connection);
 	}
 
 	void PBRMaterialGraph::FinaliseBuild(const std::unordered_map<blt::string, ShaderValuePtr>& masterNodeValues)
@@ -116,6 +116,8 @@ namespace Bolt
 		ShaderVariablePtr ggx1 = geometrySmith.DefineVar(ShaderFuncs::Call(geometrySchlickGGX, { gNdotL, geometrySmith.GetArgument(3) }));
 		geometrySmith.Return(ShaderFuncs::Mul(ggx1, ggx2));
 
+		IfScope& alphaThresholdTest = fragment.If(ShaderFuncs::LessThan(masterNodeValues.at("Alpha"), masterNodeValues.at("AlphaThreshold")));
+		alphaThresholdTest.Discard();
 		ShaderVariablePtr albedo = fragment.DefineVar(masterNodeValues.at("Albedo"));
 		ShaderVariablePtr metallic = fragment.DefineVar(masterNodeValues.at("Metallic"));
 		ShaderVariablePtr roughness = fragment.DefineVar(masterNodeValues.at("Roughness"));
@@ -167,7 +169,7 @@ namespace Bolt
 		fragment.SetVariable(color, ShaderFuncs::Div(color, ShaderFuncs::Add(color, ShaderLiteral::FromVec3({ 1.0f, 1.0f, 1.0f }))));
 		fragment.SetVariable(color, ShaderFuncs::Pow(color, ShaderLiteral::FromVec3({ 1.0f / 2.2f, 1.0f / 2.2f, 1.0f / 2.2f })));
 
-		fragment.SetFragColor(ShaderFuncs::Vec4(color, ShaderLiteral::FromFloat(1.0f)));
+		fragment.SetFragColor(ShaderFuncs::Vec4(color, masterNodeValues.at("Alpha")));
 	}
 
 }

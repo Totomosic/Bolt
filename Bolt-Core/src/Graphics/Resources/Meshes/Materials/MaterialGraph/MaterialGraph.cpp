@@ -40,9 +40,10 @@ namespace Bolt
 		return *ptr;
 	}
 
-	void MaterialGraph::Build()
+	void MaterialGraph::Build(bool isTransparent)
 	{
 		m_Builder.Reset();
+		m_Builder.GetBuilder().SetIsTransparent(isTransparent);
 		m_IsBuilt = true;
 		std::unordered_map<blt::string, ShaderValuePtr> masterNodeResults;
 		for (const auto& pair : m_MasterNodes)

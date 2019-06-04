@@ -27,7 +27,8 @@ namespace Bolt
 		MaterialBuilder m_Builder;
 		MaterialGraphContext m_Context;
 
-		std::unordered_map<const MaterialNode*, BuiltMaterialNode> m_BuiltNodes;
+		std::unordered_map<const MaterialNode*, BuiltMaterialNode> m_BuiltVertexNodes;
+		std::unordered_map<const MaterialNode*, BuiltMaterialNode> m_BuiltFragmentNodes;
 		ShaderProgram* m_CurrentProgram;
 
 	public:
@@ -42,9 +43,10 @@ namespace Bolt
 		void Reset();
 
 	private:
-		bool IsAlreadyBuilt(const MaterialNode* node) const;
-		const BuiltMaterialNode& GetBuiltNode(const MaterialNode* node) const;
-		BuiltMaterialNode& GetBuiltNode(const MaterialNode* node);
+		bool IsAlreadyBuilt(const MaterialNode* node, ShaderStage stage) const;
+		const BuiltMaterialNode& GetBuiltNode(const MaterialNode* node, ShaderStage stage) const;
+		BuiltMaterialNode& GetBuiltNode(const MaterialNode* node, ShaderStage stage);
+		BuiltMaterialNode& CreateNewBuiltNode(const MaterialNode* node, ShaderStage stage, BuiltMaterialNode&& builtNode);
 
 	private:
 		static std::vector<NodeInfo> FlattenNode(const MaterialNode& node);

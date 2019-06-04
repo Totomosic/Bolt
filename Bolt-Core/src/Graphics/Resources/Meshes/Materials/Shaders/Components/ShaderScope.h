@@ -53,6 +53,8 @@ namespace Bolt
 		void SubAssign(const ShaderLValuePtr& var, const ShaderValuePtr& value);
 		void MulAssign(const ShaderLValuePtr& var, const ShaderValuePtr& value);
 		void DivAssign(const ShaderLValuePtr& var, const ShaderValuePtr& value);
+		// Discards current fragment (only valid in fragment shader)
+		void Discard();
 
 		virtual void Build(ShaderBuilder& builder) const = 0;
 		virtual std::unique_ptr<ShaderScope> Clone() const = 0;

@@ -16,6 +16,11 @@ namespace Bolt
 		return m_Stream;
 	}
 
+	NodeConnection AttributeNode::GetValue() const
+	{
+		return GetConnection(0);
+	}
+
 	void AttributeNode::Build(BuiltMaterialNode& node, const LinkedInputs& inputs, const MaterialGraphContext& context, MaterialGraphBuilder& builder) const
 	{
 		ShaderProgram& program = builder.GetProgram();

@@ -132,6 +132,11 @@ namespace Bolt
 		return AddScope<ForLoopScope>(std::make_unique<SetValueOp>(counter, initial), condition, std::move(iteration));
 	}
 
+	IfScope& ShaderProgram::If(const ShaderValuePtr& condition)
+	{
+		return AddScope<IfScope>(condition);
+	}
+
 	bool ShaderProgram::HasFunction(const blt::string& name) const
 	{
 		return GetGlobalScope().HasFunction(name);

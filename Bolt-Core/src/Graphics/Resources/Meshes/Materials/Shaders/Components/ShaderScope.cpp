@@ -16,6 +16,8 @@
 #include "Operations/MathOps/MulAssignOp.h"
 #include "Operations/MathOps/DivAssignOp.h"
 
+#include "Operations/DiscardOp.h"
+
 namespace Bolt
 {
 
@@ -143,6 +145,11 @@ namespace Bolt
 	void ShaderScope::DivAssign(const ShaderLValuePtr& var, const ShaderValuePtr& value)
 	{
 		AddOperation<DivAssignOp>(var, value);
+	}
+
+	void ShaderScope::Discard()
+	{
+		AddOperation<DiscardOp>();
 	}
 
 	void ShaderScope::BuildOperations(ShaderBuilder& builder) const

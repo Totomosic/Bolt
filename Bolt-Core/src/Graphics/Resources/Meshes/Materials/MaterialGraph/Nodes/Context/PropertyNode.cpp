@@ -17,6 +17,11 @@ namespace Bolt
 		return m_PropertyName;
 	}
 
+	NodeConnection PropertyNode::GetValue() const
+	{
+		return GetConnection(0);
+	}
+
 	void PropertyNode::Build(BuiltMaterialNode& node, const LinkedInputs& inputs, const MaterialGraphContext& context, MaterialGraphBuilder& builder) const
 	{
 		ShaderProgram& program = builder.GetProgram();

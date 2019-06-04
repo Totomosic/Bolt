@@ -9,6 +9,8 @@ namespace Bolt
 	public:
 		MasterNode(ShaderStageCompatibility compatibility, ValueType type);
 
+		void SetValue(const NodeConnection& connection);
+
 		virtual void Build(BuiltMaterialNode& node, const LinkedInputs& inputs, const MaterialGraphContext& context, MaterialGraphBuilder& builder) const override;
 		virtual void ConnectDefaults(MaterialGraph& graph, const MaterialGraphContext& context) = 0;
 	};

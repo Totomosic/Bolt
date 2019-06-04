@@ -6,7 +6,7 @@ namespace Bolt
 {
 
 	MaterialGraphBuilder::MaterialGraphBuilder()
-		: m_Builder(), m_Context(), m_BuiltNodes(), m_CurrentProgram(nullptr)
+		: m_Builder(), m_Context(), m_BuiltVertexNodes(), m_BuiltFragmentNodes(), m_CurrentProgram(nullptr)
 	{
 		Reset();
 	}
@@ -43,7 +43,7 @@ namespace Bolt
 		std::vector<NodeInfo> nodeList = FlattenNode(masterNode);
 		for (const NodeInfo& node : nodeList)
 		{
-			if (!IsAlreadyBuilt(node.NodePtr))
+			if (!IsAlreadyBuilt(node.NodePtr, m_CurrentProgram->Type()))
 			{
 				ShaderProgram* oldCurrentProgram = m_CurrentProgram;
 				bool wasCompatible = true;
@@ -57,12 +57,11 @@ namespace Bolt
 				for (int i = 0; i < node.Dependencies.size(); i++)
 				{
 					const NodeDependency& dependency = node.Dependencies.at(i);
-					BLT_ASSERT(IsAlreadyBuilt(dependency.NodePtr), "Invalid flatten order");
-					const BuiltMaterialNode& builtNode = GetBuiltNode(dependency.NodePtr);
+					BLT_ASSERT(IsAlreadyBuilt(dependency.NodePtr, oldCurrentProgram->Type()), "Invalid flatten order");
+					const BuiltMaterialNode& builtNode = GetBuiltNode(dependency.NodePtr, oldCurrentProgram->Type());
 					inputs.SetInput(i, builtNode.GetOutput(dependency.OutputIndex));
 				}
-				m_BuiltNodes[node.NodePtr] = BuiltMaterialNode(node.NodePtr->GetOutputCount());
-				BuiltMaterialNode& builtNode = m_BuiltNodes[node.NodePtr];
+				BuiltMaterialNode& builtNode = CreateNewBuiltNode(node.NodePtr, oldCurrentProgram->Type(), BuiltMaterialNode(node.NodePtr->GetOutputCount()));
 				node.NodePtr->Build(builtNode, inputs, GetContext(), *this);
 				if (!wasCompatible)
 				{
@@ -80,7 +79,7 @@ namespace Bolt
 				m_CurrentProgram = oldCurrentProgram;
 			}
 		}
-		return GetBuiltNode(&masterNode).GetOutput(0);
+		return GetBuiltNode(&masterNode, m_CurrentProgram->Type()).GetOutput(0);
 	}
 
 	std::unique_ptr<Material> MaterialGraphBuilder::Build() const
@@ -91,23 +90,63 @@ namespace Bolt
 	void MaterialGraphBuilder::Reset()
 	{
 		m_Builder = MaterialBuilder();
-		m_BuiltNodes.clear();
+		m_BuiltVertexNodes.clear();
+		m_BuiltFragmentNodes.clear();
 		m_CurrentProgram = &m_Builder.Factory().Vertex();
 	}
 
-	bool MaterialGraphBuilder::IsAlreadyBuilt(const MaterialNode* node) const
+	bool MaterialGraphBuilder::IsAlreadyBuilt(const MaterialNode* node, ShaderStage stage) const
 	{
-		return m_BuiltNodes.find(node) != m_BuiltNodes.end();
+		switch (stage)
+		{
+		case ShaderStage::Vertex:
+			return m_BuiltVertexNodes.find(node) != m_BuiltVertexNodes.end();
+		case ShaderStage::Fragment:
+			return m_BuiltFragmentNodes.find(node) != m_BuiltFragmentNodes.end();
+		}
+		BLT_ASSERT(false, "Invalid shader stage");
+		return false;
 	}
 
-	const BuiltMaterialNode& MaterialGraphBuilder::GetBuiltNode(const MaterialNode* node) const
+	const BuiltMaterialNode& MaterialGraphBuilder::GetBuiltNode(const MaterialNode* node, ShaderStage stage) const
 	{
-		return m_BuiltNodes.at(node);
+		switch (stage)
+		{
+		case ShaderStage::Vertex:
+			return m_BuiltVertexNodes.at(node);
+		case ShaderStage::Fragment:
+			return m_BuiltFragmentNodes.at(node);
+		}
+		BLT_ASSERT(false, "Invalid shader stage");
+		return m_BuiltVertexNodes.at(node);
 	}
 
-	BuiltMaterialNode& MaterialGraphBuilder::GetBuiltNode(const MaterialNode* node)
+	BuiltMaterialNode& MaterialGraphBuilder::GetBuiltNode(const MaterialNode* node, ShaderStage stage)
 	{
-		return m_BuiltNodes.at(node);
+		switch (stage)
+		{
+		case ShaderStage::Vertex:
+			return m_BuiltVertexNodes.at(node);
+		case ShaderStage::Fragment:
+			return m_BuiltFragmentNodes.at(node);
+		}
+		BLT_ASSERT(false, "Invalid shader stage");
+		return m_BuiltVertexNodes.at(node);
+	}
+
+	BuiltMaterialNode& MaterialGraphBuilder::CreateNewBuiltNode(const MaterialNode* node, ShaderStage stage, BuiltMaterialNode&& builtNode)
+	{
+		switch (stage)
+		{
+		case ShaderStage::Vertex:
+			m_BuiltVertexNodes[node] = std::move(builtNode);
+			return m_BuiltVertexNodes.at(node);
+		case ShaderStage::Fragment:
+			m_BuiltFragmentNodes[node] = std::move(builtNode);
+			return m_BuiltFragmentNodes.at(node);
+		}
+		BLT_ASSERT(false, "Invalid shader stage");
+		return m_BuiltVertexNodes.at(node);
 	}
 
 	std::vector<MaterialGraphBuilder::NodeInfo> MaterialGraphBuilder::FlattenNode(const MaterialNode& node)
