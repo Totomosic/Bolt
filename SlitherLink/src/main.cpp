@@ -1,7 +1,4 @@
 #include "Bolt.h"
-#include "Graphics/Resources/Meshes/Materials/MaterialGraph/PBRMaterialGraph.h"
-#include "Graphics/Resources/Meshes/Materials/MaterialGraph/Nodes/Math/MultiplyNode.h"
-#include "Graphics/Resources/Meshes/Materials/MaterialGraph/Nodes/Defaults/ValueNodes.h"
 
 namespace SlitherLink
 {
@@ -20,17 +17,37 @@ namespace SlitherLink
 			Layer& l = s.CreateLayer(camera);
 			camera->transform().Rotate(-PI / 6, Vector3f::Right());
 
-			PBRMaterialGraph graph;
-			MaterialNode& value = graph.AddNode(std::make_unique<FloatNode>(0.2f));
-			MaterialNode& mul = graph.AddNode(std::make_unique<MultiplyNode>());
-			mul.Connect(0, value.GetConnection(0));
-			mul.Connect(1, graph.GetBuilder().GetContext().VertexPosition().GetConnection(0));
-			graph.SetVertexPosition(mul.GetConnection(0));
-			graph.Build();
+			ResourceManager::Get().LoadPack("res/resources.pack", [&l](const ResourcePack& resources)
+				{
+					PBRMaterialGraph graph;
+					PropertyNode& albedoProperty = graph.AddProperty("Albedo", ResourceManager::Get().GetResource<Texture2D>(resources.GetResourceId("rustediron2_basecolor")));
+					SampleTextureNode& albedoTexture = (SampleTextureNode&)graph.AddNode(std::make_unique<SampleTextureNode>());
+					albedoTexture.SetTexture(albedoProperty.GetConnection(0));
+					MaterialNode& albedoSplit = graph.AddNode(std::make_unique<SplitNode>());
+					albedoSplit.Connect(0, albedoTexture.GetColor());
+					graph.SetAlbedo(albedoSplit.GetConnection(0));
 
-			ObjectFactory f(l);
-			GameObject* sphere = f.Sphere(2, graph.GetMaterial());
-			GameObject* sphere2 = f.Sphere(2, Color::Red, Transform({ 5, 0, 0 }));
+					PropertyNode& metallicProperty = graph.AddProperty("Metallic", ResourceManager::Get().GetResource<Texture2D>(resources.GetResourceId("rustediron2_metallic")));
+					SampleTextureNode& metallicTexture = (SampleTextureNode&)graph.AddNode(std::make_unique<SampleTextureNode>(SampleMode::Normal));
+					metallicTexture.SetTexture(metallicProperty.GetConnection(0));
+					graph.SetMetallic(metallicTexture.GetR());
+
+					PropertyNode& aoProperty = graph.AddProperty("AO", ResourceManager::Get().Textures().DefaultWhite());
+					SampleTextureNode& aoTexture = (SampleTextureNode&)graph.AddNode(std::make_unique<SampleTextureNode>(SampleMode::Normal));
+					aoTexture.SetTexture(aoProperty.GetConnection(0));
+					graph.SetOcclusion(aoTexture.GetR());
+
+					PropertyNode& roughnessProperty = graph.AddProperty("Roughness", ResourceManager::Get().GetResource<Texture2D>(resources.GetResourceId("rustediron2_roughness")));
+					SampleTextureNode& roughnessTexture = (SampleTextureNode&)graph.AddNode(std::make_unique<SampleTextureNode>(SampleMode::Normal));
+					roughnessTexture.SetTexture(roughnessProperty.GetConnection(0));
+					graph.SetRoughness(roughnessTexture.GetR());
+
+					graph.Build();
+
+					ObjectFactory f(l);
+					GameObject* sphere = f.Sphere(2, graph.GetMaterial());
+					GameObject* sphere2 = f.Sphere(2, Color::White, Transform({ 5, 0, 0 }));
+				});
 
 			RenderSchedule sch(s);
 			sch.AddRenderProcess({});

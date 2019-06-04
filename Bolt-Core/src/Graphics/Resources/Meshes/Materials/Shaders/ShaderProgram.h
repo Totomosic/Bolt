@@ -55,6 +55,9 @@ namespace Bolt
 
 	class BLT_API ShaderProgram
 	{
+	public:
+		static inline const char* NAMELESS_UNIFORM = "__NAMELESS__";
+
 	protected:
 		mutable ShaderBuilder m_Builder;
 		ShaderStage m_ShaderStage;

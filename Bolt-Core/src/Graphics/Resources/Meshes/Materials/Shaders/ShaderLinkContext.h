@@ -203,7 +203,7 @@ namespace Bolt
 			}
 			const UserUniformLocation& uniform = GetUniformLocation(linkName);
 			BLT_ASSERT(ValidateUniformType<ResourcePtr<Texture2D>>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(ResourcePtr<Texture2D>).name(), ValueTypeToGLSLString(uniform.Type));
-			return (UniformLink<ResourcePtr<Texture2D>>&)AddLink(linkName, std::make_unique<UniformLink<ResourcePtr<Texture2D>>>(m_Shader->GetShader().Id(), uniform.Location, value, uniform.Index));
+			return (UniformLink<ResourcePtr<Texture2D>>&)AddLink(linkName, std::make_unique<UniformLink<ResourcePtr<Texture2D>>>(m_Shader->GetShader().Id(), uniform.Location, value));
 		}
 
 		template<>
@@ -215,7 +215,7 @@ namespace Bolt
 			}
 			const UserUniformLocation& uniform = GetUniformLocation(linkName);
 			BLT_ASSERT(ValidateUniformType<ResourcePtr<Texture2D>>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(ResourcePtr<Font>).name(), ValueTypeToGLSLString(uniform.Type));
-			return (UniformLink<ResourcePtr<Font>>&)AddLink(linkName, std::make_unique<UniformLink<ResourcePtr<Font>>>(m_Shader->GetShader().Id(), uniform.Location, value, uniform.Index));
+			return (UniformLink<ResourcePtr<Font>>&)AddLink(linkName, std::make_unique<UniformLink<ResourcePtr<Font>>>(m_Shader->GetShader().Id(), uniform.Location, value));
 		}
 
 	private:

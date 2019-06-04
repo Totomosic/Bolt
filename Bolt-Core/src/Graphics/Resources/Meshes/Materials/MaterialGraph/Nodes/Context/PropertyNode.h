@@ -22,7 +22,7 @@ namespace Bolt
 
 	public:
 		template<typename T>
-		static std::unique_ptr<PropertyNode> Create(const std::string& propertyName, const T& defaultValue = T())
+		static std::unique_ptr<PropertyNode> Create(const blt::string& propertyName, const T& defaultValue = T())
 		{
 			return std::make_unique<PropertyNode>(propertyName, GetValueType<T>(), std::make_shared<UniformValue<T>>(defaultValue));
 		}

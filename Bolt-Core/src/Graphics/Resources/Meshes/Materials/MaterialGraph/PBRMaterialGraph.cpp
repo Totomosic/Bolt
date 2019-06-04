@@ -1,15 +1,22 @@
 #include "bltpch.h"
 #include "PBRMaterialGraph.h"
 
-#include "Nodes/MasterNodes/VertexPositionNode.h"
+#include "Nodes/MasterNodes/MasterNodes.h"
 
 namespace Bolt
 {
 
 	PBRMaterialGraph::PBRMaterialGraph() : MaterialGraph(),
-		m_VertexPosition(nullptr)
+		m_VertexPosition(nullptr), m_Albedo(nullptr), m_Normal(nullptr), m_Metallic(nullptr), m_Roughness(nullptr), m_Occlusion(nullptr), m_Alpha(nullptr), m_AlphaThreshold(nullptr)
 	{
-		m_VertexPosition = &AddMasterNode(std::make_unique<VertexPositionNode>());
+		m_VertexPosition = &AddMasterNode("VertexPosition", std::make_unique<VertexPositionNode>());
+		m_Albedo = &AddMasterNode("Albedo", std::make_unique<AlbedoNode>());
+		m_Normal = &AddMasterNode("Normal", std::make_unique<NormalNode>());
+		m_Metallic = &AddMasterNode("Metallic", std::make_unique<MetallicNode>());
+		m_Roughness = &AddMasterNode("Roughness", std::make_unique<RoughnessNode>());
+		m_Occlusion = &AddMasterNode("Occlusion", std::make_unique<OcclusionNode>());
+		m_Alpha = &AddMasterNode("Alpha", std::make_unique<AlphaNode>());
+		m_AlphaThreshold = &AddMasterNode("AlphaThreshold", std::make_unique<AlphaThresholdNode>());
 	}
 
 	void PBRMaterialGraph::SetVertexPosition(const NodeConnection& connection)
@@ -17,27 +24,59 @@ namespace Bolt
 		m_VertexPosition->Connect(0, connection);
 	}
 
-	void PBRMaterialGraph::FinaliseBuild(const std::vector<ShaderValuePtr>& masterNodeValues)
+	void PBRMaterialGraph::SetAlbedo(const NodeConnection& connection)
+	{
+		m_Albedo->Connect(0, connection);
+	}
+
+	void PBRMaterialGraph::SetNormal(const NodeConnection& connection)
+	{
+		m_Normal->Connect(0, connection);
+	}
+
+	void PBRMaterialGraph::SetMetallic(const NodeConnection& connection)
+	{
+		m_Metallic->Connect(0, connection);
+	}
+
+	void PBRMaterialGraph::SetRoughness(const NodeConnection& connection)
+	{
+		m_Roughness->Connect(0, connection);
+	}
+
+	void PBRMaterialGraph::SetOcclusion(const NodeConnection& connection)
+	{
+		m_Occlusion->Connect(0, connection);
+	}
+
+	void PBRMaterialGraph::SetAlpha(const NodeConnection& connection)
+	{
+		m_Alpha->Connect(0, connection);
+	}
+
+	void PBRMaterialGraph::SetAlphaThreshold(const NodeConnection& connection)
+	{
+		m_AlphaThreshold->Connect(0, connection);
+	}
+
+	void PBRMaterialGraph::FinaliseBuild(const std::unordered_map<blt::string, ShaderValuePtr>& masterNodeValues)
 	{
 		VertexShader& vertex = GetBuilder().GetBuilder().Factory().Vertex();
 		ShaderVariablePtr modelMatrix = vertex.RendererUniform(RendererUniform::ModelMatrix);
 		ShaderVariablePtr viewMatrix = vertex.RendererUniform(RendererUniform::ViewMatrix);
 		ShaderVariablePtr projectionMatrix = vertex.RendererUniform(RendererUniform::ProjectionMatrix);
-		ShaderVariablePtr outTexCoord = vertex.DeclarePassOut(ValueType::Vector2f);
 		ShaderVariablePtr outWorldPos = vertex.DeclarePassOut(ValueType::Vector3f);
 		ShaderVariablePtr outWorldNormal = vertex.DeclarePassOut(ValueType::Vector3f);
 
-		ShaderVariablePtr position = vertex.DefineVar(ShaderFuncs::Vec4(masterNodeValues[0], ShaderLiteral::FromFloat(1.0f)));
+		ShaderVariablePtr position = vertex.DefineVar(ShaderFuncs::Vec4(masterNodeValues.at("VertexPosition"), ShaderLiteral::FromFloat(1.0f)));
 		ShaderVariablePtr worldPosition = vertex.DefineVar(ShaderFuncs::Mul(modelMatrix, position));
 		ShaderVariablePtr viewPosition = vertex.DefineVar(ShaderFuncs::Mul(viewMatrix, worldPosition));
 		ShaderVariablePtr screenPosition = vertex.DefineVar(ShaderFuncs::Mul(projectionMatrix, viewPosition));
 		vertex.SetVertexPosition(screenPosition);
-		vertex.SetVariable(outTexCoord, vertex.TexCoord());
 		vertex.SetVariable(outWorldPos, ShaderFuncs::xyz(worldPosition));
 		vertex.SetVariable(outWorldNormal, ShaderFuncs::xyz(ShaderFuncs::Mul(modelMatrix, ShaderFuncs::Vec4(vertex.Normal(), ShaderLiteral::FromFloat(0.0f)))));
 
 		FragmentShader& fragment = GetBuilder().GetBuilder().Factory().Fragment();
-		ShaderVariablePtr inTexCoord = fragment.DeclarePassIn(outTexCoord);
 		ShaderVariablePtr inWorldPos = fragment.DeclarePassIn(outWorldPos);
 		ShaderVariablePtr inWorldNormal = fragment.DeclarePassIn(outWorldNormal);
 		ShaderVariablePtr cameraPosition = fragment.RendererUniform(RendererUniform::CameraPosition);
@@ -77,10 +116,10 @@ namespace Bolt
 		ShaderVariablePtr ggx1 = geometrySmith.DefineVar(ShaderFuncs::Call(geometrySchlickGGX, { gNdotL, geometrySmith.GetArgument(3) }));
 		geometrySmith.Return(ShaderFuncs::Mul(ggx1, ggx2));
 
-		ShaderVariablePtr albedo = fragment.DefineVar(ShaderLiteral::FromVec3({ 0.9f, 0.9f, 0.9f }));
-		ShaderVariablePtr metallic = fragment.DefineVar(ShaderLiteral::FromFloat(0.05f));
-		ShaderVariablePtr roughness = fragment.DefineVar(ShaderLiteral::FromFloat(0.9f));
-		ShaderVariablePtr ao = fragment.DefineVar(ShaderLiteral::FromFloat(1.0f));
+		ShaderVariablePtr albedo = fragment.DefineVar(masterNodeValues.at("Albedo"));
+		ShaderVariablePtr metallic = fragment.DefineVar(masterNodeValues.at("Metallic"));
+		ShaderVariablePtr roughness = fragment.DefineVar(masterNodeValues.at("Roughness"));
+		ShaderVariablePtr ao = fragment.DefineVar(masterNodeValues.at("Occlusion"));
 		// Unit normal vector
 		ShaderVariablePtr N = fragment.DefineVar(ShaderFuncs::Normalize(inWorldNormal));
 		// Unit to camera vector

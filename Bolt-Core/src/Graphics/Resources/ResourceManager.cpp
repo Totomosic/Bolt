@@ -19,19 +19,24 @@ namespace Bolt
 	}
 
 	ResourceManager::ResourceManager()
-		: m_Resources(), m_Materials(), m_Fonts()
+		: m_Resources(), m_Materials(), m_Fonts(), m_Textures()
 	{
 	
 	}
 
-	const MaterialManager& ResourceManager::Materials()
+	const MaterialManager& ResourceManager::Materials() const
 	{
 		return m_Materials;
 	}
 
-	const FontManager& ResourceManager::Fonts()
+	const FontManager& ResourceManager::Fonts() const
 	{
 		return m_Fonts;
+	}
+
+	const TextureManager& ResourceManager::Textures() const
+	{
+		return m_Textures;
 	}
 
 	void ResourceManager::LoadPack(const Filepath& resourcePack, std::function<void(const ResourcePack&)> callback)

@@ -60,12 +60,10 @@ namespace Bolt
 
 		ResourcePtr(ResourcePtr<T>&& other)
 		{
-			pointer ptr = m_Ptr;
-			bool ownsPtr = m_OwnsPtr;
 			m_Ptr = other.m_Ptr;
 			m_OwnsPtr = other.m_OwnsPtr;
-			other.m_Ptr = ptr;
-			other.m_OwnsPtr = ownsPtr;
+			other.m_Ptr = nullptr;
+			other.m_OwnsPtr = false;
 		}
 
 		ResourcePtr<T>& operator=(ResourcePtr<T>&& other)

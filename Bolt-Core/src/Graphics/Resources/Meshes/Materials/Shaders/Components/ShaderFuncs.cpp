@@ -227,6 +227,15 @@ namespace Bolt
 		return result;
 	}
 
+	ShaderFuncResultPtr ShaderFuncs::w(ShaderValuePtr value)
+	{
+		BLT_ASSERT(value->TypeDimension() == ValueTypeDim::Single, "Cannot operate on arrays");
+		BLT_ASSERT(ValueTypeIsVector(value->Type()), "Inputs must be vectors to be swizzelled");
+		BLT_ASSERT(ValueTypeGetDimension(value->Type()) > 3, "Input must be greater than 3D");
+		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("(@0).w", std::vector<ShaderValuePtr>{ std::move(value) }, ValueType::Float);
+		return result;
+	}
+
 	ShaderFuncResultPtr ShaderFuncs::xy(ShaderValuePtr value)
 	{
 		BLT_ASSERT(value->TypeDimension() == ValueTypeDim::Single, "Cannot operate on arrays");
