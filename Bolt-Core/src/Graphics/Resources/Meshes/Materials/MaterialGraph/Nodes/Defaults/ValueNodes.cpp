@@ -12,9 +12,9 @@ namespace Bolt
 		SetOutput(0, port);
 	}
 
-	float FloatNode::GetValue() const
+	NodeConnection FloatNode::GetValue() const
 	{
-		return m_Value;
+		return GetConnection(0);
 	}
 
 	void FloatNode::Build(BuiltMaterialNode& node, const LinkedInputs& inputs, const MaterialGraphContext& context, MaterialGraphBuilder& builder) const

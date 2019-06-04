@@ -12,7 +12,7 @@ namespace Bolt
 	public:
 		FloatNode(float value);
 
-		float GetValue() const;
+		NodeConnection GetValue() const;
 
 		virtual void Build(BuiltMaterialNode& node, const LinkedInputs& inputs, const MaterialGraphContext& context, MaterialGraphBuilder& builder) const override;
 		virtual void ConnectDefaults(MaterialGraph& graph, const MaterialGraphContext& context) override;

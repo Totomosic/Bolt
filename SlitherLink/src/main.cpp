@@ -22,25 +22,27 @@ namespace SlitherLink
 					PBRMaterialGraph graph;
 					PropertyNode& albedoProperty = graph.AddProperty("Albedo", ResourceManager::Get().GetResource<Texture2D>(resources.GetResourceId("rustediron2_basecolor")));
 					SampleTextureNode& albedoTexture = (SampleTextureNode&)graph.AddNode(std::make_unique<SampleTextureNode>());
-					albedoTexture.SetTexture(albedoProperty.GetConnection(0));
-					MaterialNode& albedoSplit = graph.AddNode(std::make_unique<SplitNode>());
-					albedoSplit.Connect(0, albedoTexture.GetColor());
-					graph.SetAlbedo(albedoSplit.GetConnection(0));
+					albedoTexture.SetTexture(albedoProperty.GetValue());
+					graph.SetAlbedo(albedoTexture.GetRGB());
 
 					PropertyNode& metallicProperty = graph.AddProperty("Metallic", ResourceManager::Get().GetResource<Texture2D>(resources.GetResourceId("rustediron2_metallic")));
-					SampleTextureNode& metallicTexture = (SampleTextureNode&)graph.AddNode(std::make_unique<SampleTextureNode>(SampleMode::Normal));
-					metallicTexture.SetTexture(metallicProperty.GetConnection(0));
+					SampleTextureNode& metallicTexture = graph.AddNode(std::make_unique<SampleTextureNode>(SampleMode::Normal));
+					metallicTexture.SetTexture(metallicProperty.GetValue());
 					graph.SetMetallic(metallicTexture.GetR());
 
 					PropertyNode& aoProperty = graph.AddProperty("AO", ResourceManager::Get().Textures().DefaultWhite());
-					SampleTextureNode& aoTexture = (SampleTextureNode&)graph.AddNode(std::make_unique<SampleTextureNode>(SampleMode::Normal));
-					aoTexture.SetTexture(aoProperty.GetConnection(0));
+					SampleTextureNode& aoTexture = graph.AddNode(std::make_unique<SampleTextureNode>(SampleMode::Normal));
+					aoTexture.SetTexture(aoProperty.GetValue());
 					graph.SetOcclusion(aoTexture.GetR());
 
 					PropertyNode& roughnessProperty = graph.AddProperty("Roughness", ResourceManager::Get().GetResource<Texture2D>(resources.GetResourceId("rustediron2_roughness")));
-					SampleTextureNode& roughnessTexture = (SampleTextureNode&)graph.AddNode(std::make_unique<SampleTextureNode>(SampleMode::Normal));
-					roughnessTexture.SetTexture(roughnessProperty.GetConnection(0));
+					SampleTextureNode& roughnessTexture = graph.AddNode(std::make_unique<SampleTextureNode>(SampleMode::Normal));
+					roughnessTexture.SetTexture(roughnessProperty.GetValue());
 					graph.SetRoughness(roughnessTexture.GetR());
+
+					SplitVec3Node& splitter = graph.AddNode(std::make_unique<SplitVec3Node>());
+					splitter.SetInput(graph.GetBuilder().GetContext().VertexPosition().GetValue());
+					graph.SetAlpha(splitter.GetR());
 
 					graph.Build();
 

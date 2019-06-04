@@ -42,13 +42,12 @@ namespace Bolt
 		const OutputPort& GetOutputPort(int index) const;
 		const NodeConnection& GetInputConnection(int index) const;
 
-		void Connect(int inputIndex, const NodeConnection& connection);
-		NodeConnection GetConnection(int outputIndex) const;
-
 		virtual void Build(BuiltMaterialNode& node, const LinkedInputs& inputs, const MaterialGraphContext& context, MaterialGraphBuilder& builder) const = 0;
 		virtual void ConnectDefaults(MaterialGraph& graph, const MaterialGraphContext& context) = 0;
 
 	protected:
+		void Connect(int inputIndex, const NodeConnection& connection);
+		NodeConnection GetConnection(int outputIndex) const;
 		void SetInput(int index, const InputPort& port);
 		void SetOutput(int index, const OutputPort& port);
 

@@ -14,6 +14,9 @@ namespace Bolt
 
 		const ShaderVariablePtr& FragColor() const;
 
+		// Discards current fragment (only valid in fragment shader)
+		void Discard();
+
 		void SetFragColor(const ShaderValuePtr& value);
 		CompiledShaderProgram Compile() const override;
 		void Reset() override;

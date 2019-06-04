@@ -20,7 +20,8 @@ namespace Bolt
 
 		void SetTexture(const NodeConnection& connection);
 		void SetTexCoord(const NodeConnection& connection);
-		NodeConnection GetColor() const;
+		NodeConnection GetRGBA() const;
+		NodeConnection GetRGB() const;
 		NodeConnection GetR() const;
 		NodeConnection GetG() const;
 		NodeConnection GetB() const;

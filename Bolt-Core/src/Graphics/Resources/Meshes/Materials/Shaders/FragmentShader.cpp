@@ -1,5 +1,6 @@
 #include "bltpch.h"
 #include "FragmentShader.h"
+#include "Components/Operations/DiscardOp.h"
 
 namespace Bolt
 {
@@ -13,6 +14,11 @@ namespace Bolt
 	const ShaderVariablePtr& FragmentShader::FragColor() const
 	{
 		return m_FragColor;
+	}
+
+	void FragmentShader::Discard()
+	{
+		AddOperation<DiscardOp>();
 	}
 
 	void FragmentShader::SetFragColor(const ShaderValuePtr& value)

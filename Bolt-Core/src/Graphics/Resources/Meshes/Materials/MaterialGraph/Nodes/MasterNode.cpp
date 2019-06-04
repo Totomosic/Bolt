@@ -13,6 +13,11 @@ namespace Bolt
 		SetOutput(0, oPort);
 	}
 
+	void MasterNode::SetValue(const NodeConnection& connection)
+	{
+		Connect(0, connection);
+	}
+
 	void MasterNode::Build(BuiltMaterialNode& node, const LinkedInputs& inputs, const MaterialGraphContext& context, MaterialGraphBuilder& builder) const
 	{
 		node.BuildOutput(0, builder.GetProgram().DefineVar(inputs.GetInput(0)));

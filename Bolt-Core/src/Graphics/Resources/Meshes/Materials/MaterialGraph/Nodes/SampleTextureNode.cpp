@@ -6,23 +6,25 @@
 namespace Bolt
 {
 
-	SampleTextureNode::SampleTextureNode(SampleMode mode) : MaterialNode(ShaderStageCompatibility::FragmentOnly, 2, 5),
+	SampleTextureNode::SampleTextureNode(SampleMode mode) : MaterialNode(ShaderStageCompatibility::FragmentOnly, 2, 6),
 		m_Mode(mode)
 	{
 		InputPort texturePort(ValueType::Texture2D);
 		InputPort uvPort(ValueType::Vector2f);
-		OutputPort outColorPort(ValueType::Vector4f);
+		OutputPort outRGBAPort(ValueType::Vector4f);
+		OutputPort outRGBPort(ValueType::Vector3f);
 		OutputPort outRPort(ValueType::Float);
 		OutputPort outGPort(ValueType::Float);
 		OutputPort outBPort(ValueType::Float);
 		OutputPort outAPort(ValueType::Float);
 		SetInput(0, texturePort);
 		SetInput(1, uvPort);
-		SetOutput(0, outColorPort);
-		SetOutput(1, outRPort);
-		SetOutput(2, outGPort);
-		SetOutput(3, outBPort);
-		SetOutput(4, outAPort);
+		SetOutput(0, outRGBAPort);
+		SetOutput(1, outRGBPort);
+		SetOutput(2, outRPort);
+		SetOutput(3, outGPort);
+		SetOutput(4, outBPort);
+		SetOutput(5, outAPort);
 	}
 
 	void SampleTextureNode::SetTexture(const NodeConnection& connection)
@@ -35,29 +37,34 @@ namespace Bolt
 		Connect(1, connection);
 	}
 
-	NodeConnection SampleTextureNode::GetColor() const
+	NodeConnection SampleTextureNode::GetRGBA() const
 	{
 		return GetConnection(0);
 	}
 
-	NodeConnection SampleTextureNode::GetR() const
+	NodeConnection SampleTextureNode::GetRGB() const
 	{
 		return GetConnection(1);
 	}
 
-	NodeConnection SampleTextureNode::GetG() const
+	NodeConnection SampleTextureNode::GetR() const
 	{
 		return GetConnection(2);
 	}
 
-	NodeConnection SampleTextureNode::GetB() const
+	NodeConnection SampleTextureNode::GetG() const
 	{
 		return GetConnection(3);
 	}
 
-	NodeConnection SampleTextureNode::GetA() const
+	NodeConnection SampleTextureNode::GetB() const
 	{
 		return GetConnection(4);
+	}
+
+	NodeConnection SampleTextureNode::GetA() const
+	{
+		return GetConnection(5);
 	}
 
 	void SampleTextureNode::Build(BuiltMaterialNode& node, const LinkedInputs& inputs, const MaterialGraphContext& context, MaterialGraphBuilder& builder) const
@@ -74,17 +81,18 @@ namespace Bolt
 			break;
 		}
 		node.BuildOutput(0, color);
-		node.BuildOutput(1, ShaderFuncs::x(color));
-		node.BuildOutput(2, ShaderFuncs::y(color));
-		node.BuildOutput(3, ShaderFuncs::z(color));
-		node.BuildOutput(4, ShaderFuncs::w(color));
+		node.BuildOutput(1, ShaderFuncs::xyz(color));
+		node.BuildOutput(2, ShaderFuncs::x(color));
+		node.BuildOutput(3, ShaderFuncs::y(color));
+		node.BuildOutput(4, ShaderFuncs::z(color));
+		node.BuildOutput(5, ShaderFuncs::w(color));
 	}
 
 	void SampleTextureNode::ConnectDefaults(MaterialGraph& graph, const MaterialGraphContext& context)
 	{
-		MaterialNode& texture = graph.AddProperty(ShaderProgram::NAMELESS_UNIFORM, ResourceManager::Get().Textures().DefaultWhite());
-		Connect(0, texture.GetConnection(0));
-		Connect(1, context.VertexTexCoord().GetConnection(0));
+		PropertyNode& texture = graph.AddProperty(ShaderProgram::NAMELESS_UNIFORM, ResourceManager::Get().Textures().DefaultWhite());
+		Connect(0, texture.GetValue());
+		Connect(1, context.VertexTexCoord().GetValue());
 	}
 
 }

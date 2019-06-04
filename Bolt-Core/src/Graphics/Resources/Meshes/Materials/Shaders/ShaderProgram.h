@@ -3,6 +3,7 @@
 #include "Components/GlobalScope.h"
 #include "Components/MainScope.h"
 #include "Components/ForLoopScope.h"
+#include "Components/IfScope.h"
 #include "Components/ShaderBuilder.h"
 #include "UniformValue.h"
 
@@ -127,6 +128,7 @@ namespace Bolt
 		void MulAssign(const ShaderLValuePtr& var, const ShaderValuePtr& value);
 		void DivAssign(const ShaderLValuePtr& var, const ShaderValuePtr& value);
 		ForLoopScope& For(const ShaderVariablePtr& counter, const ShaderValuePtr& initial, const ShaderValuePtr& condition, std::unique_ptr<ShaderOp>&& iteration);
+		IfScope& If(const ShaderValuePtr& condition);
 		FunctionScope& DefineFunction(const blt::string& name, const ValueTypeInfo& returnType, const std::vector<ValueTypeInfo>& inputs);
 		bool HasFunction(const blt::string& name) const;
 		FunctionScope& GetFunction(const blt::string& name) const;
