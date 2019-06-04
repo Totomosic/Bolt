@@ -161,8 +161,9 @@ namespace Bolt
 			LightSource globalLight;
 			globalLight.Position = { 0, 100, 0 };
 			globalLight.Color = Color::White;
-			globalLight.AmbientIntensity = 0.2f;
+			globalLight.AmbientIntensity = 0.05f;
 			globalLight.Attenuation = { 1, 0, 0 };
+			globalLight.Intensity = 10;
 			context.Lights.push_back(globalLight);
 		}
 		RenderCamera camera;

@@ -44,7 +44,12 @@ namespace Bolt
 	ShaderVariablePtr ShaderProgram::Uniform(const blt::string& linkName, ValueType type, std::shared_ptr<UniformValueContainer> defaultValue)
 	{
 		ShaderVariablePtr var = GetGlobalScope().DeclareVar(type, "uniform");
-		m_UserUniforms.push_back({ linkName, var.get(), 0, std::move(defaultValue) });
+		blt::string name = linkName;
+		if (name == NAMELESS_UNIFORM)
+		{
+			name = "uniform_" + std::to_string(m_UserUniforms.size());
+		}
+		m_UserUniforms.push_back({ name, var.get(), 0, std::move(defaultValue) });
 		return var;
 	}
 

@@ -43,18 +43,42 @@ namespace Bolt
 		std::vector<NodeInfo> nodeList = FlattenNode(masterNode);
 		for (const NodeInfo& node : nodeList)
 		{
-			BLT_ASSERT(IsShaderCompatible(masterNode.GetCompatibility(), node.NodePtr->GetCompatibility()), "Incompatible node");
-			LinkedInputs inputs(node.NodePtr->GetInputCount());
-			for (int i = 0; i < node.Dependencies.size(); i++)
+			if (!IsAlreadyBuilt(node.NodePtr))
 			{
-				const NodeDependency& dependency = node.Dependencies.at(i);
-				BLT_ASSERT(IsAlreadyBuilt(dependency.NodePtr), "Invalid flatten order");
-				const BuiltMaterialNode& builtNode = GetBuiltNode(dependency.NodePtr);
-				inputs.SetInput(i, builtNode.GetOutput(dependency.OutputIndex));
+				ShaderProgram* oldCurrentProgram = m_CurrentProgram;
+				bool wasCompatible = true;
+				if (!IsShaderCompatible(masterNode.GetCompatibility(), node.NodePtr->GetCompatibility()))
+				{
+					BLT_ASSERT(m_CurrentProgram->Type() == ShaderStage::Fragment, "Cannot be done, Incompatible node");
+					wasCompatible = false;
+					m_CurrentProgram = &GetBuilder().Factory().Vertex();
+				}
+				LinkedInputs inputs(node.NodePtr->GetInputCount());
+				for (int i = 0; i < node.Dependencies.size(); i++)
+				{
+					const NodeDependency& dependency = node.Dependencies.at(i);
+					BLT_ASSERT(IsAlreadyBuilt(dependency.NodePtr), "Invalid flatten order");
+					const BuiltMaterialNode& builtNode = GetBuiltNode(dependency.NodePtr);
+					inputs.SetInput(i, builtNode.GetOutput(dependency.OutputIndex));
+				}
+				m_BuiltNodes[node.NodePtr] = BuiltMaterialNode(node.NodePtr->GetOutputCount());
+				BuiltMaterialNode& builtNode = m_BuiltNodes[node.NodePtr];
+				node.NodePtr->Build(builtNode, inputs, GetContext(), *this);
+				if (!wasCompatible)
+				{
+					VertexShader& vertex = GetBuilder().Factory().Vertex();
+					FragmentShader& fragment = GetBuilder().Factory().Fragment();
+					for (int i = 0; i < builtNode.GetOutputCount(); i++)
+					{
+						ShaderValuePtr value = builtNode.GetOutput(i);
+						ShaderVariablePtr outValue = vertex.DeclarePassOut(value->Type());
+						vertex.SetVariable(outValue, value);
+						ShaderVariablePtr inValue = fragment.DeclarePassIn(outValue);
+						builtNode.BuildOutput(i, inValue);
+					}
+				}
+				m_CurrentProgram = oldCurrentProgram;
 			}
-			m_BuiltNodes[node.NodePtr] = BuiltMaterialNode(node.NodePtr->GetOutputCount());
-			BuiltMaterialNode& builtNode = m_BuiltNodes[node.NodePtr];
-			node.NodePtr->Build(builtNode, inputs, GetContext(), *this);
 		}
 		return GetBuiltNode(&masterNode).GetOutput(0);
 	}

@@ -5,6 +5,7 @@
 #include "ResourcePtr.h"
 #include "MaterialManager.h"
 #include "FontManager.h"
+#include "TextureManager.h"
 
 namespace Bolt
 {
@@ -18,6 +19,7 @@ namespace Bolt
 		std::unordered_map<ResourceID, std::unique_ptr<Resource>> m_Resources;
 		MaterialManager m_Materials;
 		FontManager m_Fonts;
+		TextureManager m_Textures;
 
 	public:
 		static ResourceManager& Get();
@@ -25,8 +27,9 @@ namespace Bolt
 	public:
 		ResourceManager();
 
-		const MaterialManager& Materials();
-		const FontManager& Fonts();
+		const MaterialManager& Materials() const;
+		const FontManager& Fonts() const;
+		const TextureManager& Textures() const;
 
 		void LoadPack(const Filepath& resourcePack, std::function<void(const ResourcePack&)> callback);
 

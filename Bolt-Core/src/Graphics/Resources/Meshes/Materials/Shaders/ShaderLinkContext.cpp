@@ -101,9 +101,11 @@ namespace Bolt
 			}
 			return pair.second.IsLinked == false && pair.second.RequiresLink;
 		}) == m_UserUniformLinks.end(), "Not all User uniforms were linked");
+		int index = 0;
 		for (const auto& uniform : m_Links)
 		{
-			uniform->UploadValue(m_Shader->GetShader());
+			uniform->UploadValue(m_Shader->GetShader(), index);
+			index++;
 		}
 	}
 

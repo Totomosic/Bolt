@@ -5,6 +5,8 @@
 namespace Bolt
 {
 
+	// VECTOR3 NODE
+
 	Vec3Node::Vec3Node(const Vector3f& value) : MaterialNode(ShaderStageCompatibility::All, 0, 1),
 		m_Value(value)
 	{
@@ -12,9 +14,9 @@ namespace Bolt
 		SetOutput(0, port);
 	}
 
-	const Vector3f& Vec3Node::GetValue() const
+	NodeConnection Vec3Node::GetValue() const
 	{
-		return m_Value;
+		return GetConnection(0);
 	}
 
 	void Vec3Node::Build(BuiltMaterialNode& node, const LinkedInputs& inputs, const MaterialGraphContext& context, MaterialGraphBuilder& builder) const
@@ -25,6 +27,30 @@ namespace Bolt
 	void Vec3Node::ConnectDefaults(MaterialGraph& graph, const MaterialGraphContext& context)
 	{
 	
+	}
+
+	// VECTOR4 NODE
+
+	Vec4Node::Vec4Node(const Vector4f& value) : MaterialNode(ShaderStageCompatibility::All, 0, 1),
+		m_Value(value)
+	{
+		OutputPort port(ValueType::Vector4f);
+		SetOutput(0, port);
+	}
+
+	NodeConnection Vec4Node::GetValue() const
+	{
+		return GetConnection(0);
+	}
+
+	void Vec4Node::Build(BuiltMaterialNode& node, const LinkedInputs& inputs, const MaterialGraphContext& context, MaterialGraphBuilder& builder) const
+	{
+		node.BuildOutput(0, ShaderLiteral::FromVec4(m_Value));
+	}
+
+	void Vec4Node::ConnectDefaults(MaterialGraph& graph, const MaterialGraphContext& context)
+	{
+
 	}
 
 }

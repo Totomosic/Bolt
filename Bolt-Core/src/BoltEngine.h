@@ -7,6 +7,7 @@
 
 #include "Graphics/Window.h"
 #include "Graphics/Resources/ResourceManager.h"
+#include "Graphics/Resources/Meshes/Materials/MaterialGraph/Graphs.h"
 
 #include "Engine/Application.h"
 #include "Engine/Engine.h"
