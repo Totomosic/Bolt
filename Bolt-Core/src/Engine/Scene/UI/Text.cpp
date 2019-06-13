@@ -50,7 +50,7 @@ namespace Bolt
 	{
 		m_Color = color;
 		Mesh& mesh = m_Object->Components().GetComponent<MeshRenderer>().Mesh;
-		mesh.Materials[0]->GetShader().GetLink("Color") = m_Color;
+		mesh.Materials[0]->GetLinkContext().GetLink("Color") = m_Color;
 	}
 
 	void Text::SetUIroot(UIroot* root)

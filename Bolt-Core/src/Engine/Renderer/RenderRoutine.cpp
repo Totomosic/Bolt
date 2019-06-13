@@ -10,8 +10,8 @@ namespace Bolt
 	void RenderRoutine::operator()(const RenderGroup& group, const Matrix4f& viewMatrix, const Matrix4f& projectionMatrix, const RenderingContext& context)
 	{
 		const Material* material = group.Material;
-		const Shader& shader = material->GetShader().GetShaderInstance().GetShader();
-		for (const RendererUniformLocation& uniform : material->GetShader().GetShaderInstance().GetRendererUniforms())
+		const Shader& shader = material->GetLinkContext().GetShaderInstance().GetShader();
+		for (const RendererUniformLocation& uniform : material->GetLinkContext().GetShaderInstance().GetRendererUniforms())
 		{
 			switch (uniform.Uniform)
 			{
@@ -71,7 +71,7 @@ namespace Bolt
 		for (const RenderData& data : group.Renderables)
 		{
 			uint32_t renderCount = std::min((uint32_t)data.Indices->IndexCount(), data.IndexCount);
-			for (const RendererUniformLocation& uniform : material->GetShader().GetShaderInstance().GetRendererUniforms())
+			for (const RendererUniformLocation& uniform : material->GetLinkContext().GetShaderInstance().GetRendererUniforms())
 			{
 				if (uniform.Uniform == RendererUniform::ModelMatrix)
 				{

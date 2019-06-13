@@ -27,6 +27,7 @@ namespace Bolt
 		const std::vector<std::unique_ptr<MaterialNode>>& GetNodes() const;
 		const MaterialGraphBuilder& GetBuilder() const;
 		MaterialGraphBuilder& GetBuilder();
+		const MaterialGraphContext& GetContext() const;
 
 		template<typename T>
 		T& AddNode()

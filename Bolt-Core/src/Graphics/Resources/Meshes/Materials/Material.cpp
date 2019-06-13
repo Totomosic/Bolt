@@ -17,12 +17,12 @@ namespace Bolt
 		SetIsTransparent(isTransparent);
 	}
 
-	const ShaderLinkContext& Material::GetShader() const
+	const ShaderLinkContext& Material::GetLinkContext() const
 	{
 		return m_Shader;
 	}
 
-	ShaderLinkContext& Material::GetShader()
+	ShaderLinkContext& Material::GetLinkContext()
 	{
 		return m_Shader;
 	}

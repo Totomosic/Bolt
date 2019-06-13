@@ -17,9 +17,9 @@ namespace Bolt
 	{
 	private:
 		std::unordered_map<ResourceID, std::unique_ptr<Resource>> m_Resources;
-		MaterialManager m_Materials;
 		FontManager m_Fonts;
 		TextureManager m_Textures;
+		MaterialManager m_Materials;
 
 	public:
 		static ResourceManager& Get();
@@ -35,10 +35,16 @@ namespace Bolt
 
 		bool ResourceExists(const ResourceID& id);
 
-		id_t Register(std::unique_ptr<Resource>&& resource);
+		id_t RegisterGetId(std::unique_ptr<Resource>&& resource);
 		ResourcePtr<Resource> GetResource(const ResourceID& id);
 		void FreeResource(const ResourceID& id);
 		ResourcePtr<Font> DefaultFont();
+
+		template<typename T>
+		ResourcePtr<T> Register(std::unique_ptr<T>&& resource)
+		{
+			return GetResource<T>(RegisterGetId(std::move(resource)));
+		}
 
 		template<typename T>
 		ResourcePtr<T> GetResource(const ResourceID& id)

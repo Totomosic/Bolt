@@ -12,7 +12,7 @@ namespace Bolt
 	void DrawRenderGroup(RenderRoutine* routine, const RenderGroup& group, const RenderingContext& context, const RenderCamera& camera)
 	{
 		Graphics::Get().GetState().ApplySettings(group.Material->GetRenderSettings());
-		group.Material->GetShader().ApplyLinks();
+		group.Material->GetLinkContext().ApplyLinks();
 		(*routine)(group, camera.ViewMatrix, camera.ProjectionMatrix, context);
 	}
 
