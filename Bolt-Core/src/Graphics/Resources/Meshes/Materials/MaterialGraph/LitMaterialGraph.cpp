@@ -101,7 +101,7 @@ namespace Bolt
 		ShaderVariablePtr lightColor = loop.DefineVar(ShaderFuncs::Index(lightColors, counter));
 		loop.AddAssign(totalDiffuse, ShaderFuncs::xyz(ShaderFuncs::Mul(ShaderFuncs::Index(lightColors, counter), multiplier)));
 		loop.AddAssign(totalSpecular, ShaderFuncs::xyz(ShaderFuncs::Mul(ShaderFuncs::Mul(lightColor, dampedSpecFactor), reflectivity)));
-		ShaderVariablePtr finalColor = fragment.DefineVar(ShaderFuncs::Mul(ShaderFuncs::Add(totalDiffuse, totalSpecular), color));
+		ShaderVariablePtr finalColor = fragment.DefineVar(ShaderFuncs::Mul(ShaderFuncs::Add(totalDiffuse, totalSpecular), ShaderFuncs::xyz(color)));
 		fragment.SetFragColor(ShaderFuncs::Vec4(finalColor, masterNodeValues.at("Alpha")));
 	}
 

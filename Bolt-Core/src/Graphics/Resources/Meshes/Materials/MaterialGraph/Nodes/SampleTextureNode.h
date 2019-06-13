@@ -18,6 +18,9 @@ namespace Bolt
 	public:
 		SampleTextureNode(SampleMode mode = SampleMode::Color);
 
+		SampleMode GetSampleMode() const;
+
+		void SetSampleMode(SampleMode mode);
 		void SetTexture(const NodeConnection& connection);
 		void SetTexCoord(const NodeConnection& connection);
 		NodeConnection GetRGBA() const;

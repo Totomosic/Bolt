@@ -31,6 +31,11 @@ namespace Bolt
 		return m_Builder;
 	}
 
+	const MaterialGraphContext& MaterialGraph::GetContext() const
+	{
+		return GetBuilder().GetContext();
+	}
+
 	MaterialNode& MaterialGraph::AddNode(std::unique_ptr<MaterialNode>&& node)
 	{
 		MaterialNode* ptr = node.get();

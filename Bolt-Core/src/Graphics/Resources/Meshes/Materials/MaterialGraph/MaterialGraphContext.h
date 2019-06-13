@@ -19,8 +19,11 @@ namespace Bolt
 	public:
 		MaterialGraphContext();
 
+		// Gets the object-space position (Vec3) of vertex provided by the model (without transformations)
 		const AttributeNode& VertexPosition() const;
+		// Gets the object-space normal (Vec3) of vertex provided by the model (without transformations)
 		const AttributeNode& VertexNormal() const;
+		// Gets the object-space texture coordinate (Vec2) provided by the model (without transformations)
 		const AttributeNode& VertexTexCoord() const;
 
 	};

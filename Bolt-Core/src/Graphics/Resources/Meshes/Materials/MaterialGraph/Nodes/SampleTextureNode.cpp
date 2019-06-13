@@ -27,6 +27,16 @@ namespace Bolt
 		SetOutput(5, outAPort);
 	}
 
+	SampleMode SampleTextureNode::GetSampleMode() const
+	{
+		return m_Mode;
+	}
+
+	void SampleTextureNode::SetSampleMode(SampleMode mode)
+	{
+		m_Mode = mode;
+	}
+
 	void SampleTextureNode::SetTexture(const NodeConnection& connection)
 	{
 		Connect(0, connection);

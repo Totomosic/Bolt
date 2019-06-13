@@ -23,7 +23,7 @@ namespace Bolt
 			return m_ArialFonts.at(fontSize);
 		}
 		std::unique_ptr<Font> f = m_ArialFactory.BuildFont(fontSize);
-		ResourcePtr<Font> font = ResourceManager::Get().GetResource<Font>(ResourceManager::Get().Register(std::move(f)));
+		ResourcePtr<Font> font = ResourceManager::Get().Register(std::move(f));
 		m_ArialFonts[fontSize] = font;
 		return font;
 	}
@@ -35,7 +35,7 @@ namespace Bolt
 			return m_CalibriFonts.at(fontSize);
 		}
 		std::unique_ptr<Font> f = m_CalibriFactory.BuildFont(fontSize);
-		ResourcePtr<Font> font = ResourceManager::Get().GetResource<Font>(ResourceManager::Get().Register(std::move(f)));
+		ResourcePtr<Font> font = ResourceManager::Get().Register(std::move(f));
 		m_CalibriFonts[fontSize] = font;
 		return font;
 	}
@@ -47,7 +47,7 @@ namespace Bolt
 			return m_ConsolasFonts.at(fontSize);
 		}
 		std::unique_ptr<Font> f = m_ConsolasFactory.BuildFont(fontSize);
-		ResourcePtr<Font> font = ResourceManager::Get().GetResource<Font>(ResourceManager::Get().Register(std::move(f)));
+		ResourcePtr<Font> font = ResourceManager::Get().Register(std::move(f));
 		m_ConsolasFonts[fontSize] = font;
 		return font;
 	}
@@ -59,7 +59,7 @@ namespace Bolt
 			return m_LucidaFonts.at(fontSize);
 		}
 		std::unique_ptr<Font> f = m_LucidaFactory.BuildFont(fontSize);
-		ResourcePtr<Font> font = ResourceManager::Get().GetResource<Font>(ResourceManager::Get().Register(std::move(f)));
+		ResourcePtr<Font> font = ResourceManager::Get().Register(std::move(f));
 		m_LucidaFonts[fontSize] = font;
 		return font;
 	}
@@ -71,7 +71,7 @@ namespace Bolt
 			return m_TimesFonts.at(fontSize);
 		}
 		std::unique_ptr<Font> f = m_TimesFactory.BuildFont(fontSize);
-		ResourcePtr<Font> font = ResourceManager::Get().GetResource<Font>(ResourceManager::Get().Register(std::move(f)));
+		ResourcePtr<Font> font = ResourceManager::Get().Register(std::move(f));
 		m_TimesFonts[fontSize] = font;
 		return font;
 	}
@@ -83,7 +83,7 @@ namespace Bolt
 			return m_VerdanaFonts.at(fontSize);
 		}
 		std::unique_ptr<Font> f = m_VerdanaFactory.BuildFont(fontSize);
-		ResourcePtr<Font> font = ResourceManager::Get().GetResource<Font>(ResourceManager::Get().Register(std::move(f)));
+		ResourcePtr<Font> font = ResourceManager::Get().Register(std::move(f));
 		m_VerdanaFonts[fontSize] = font;
 		return font;
 	}

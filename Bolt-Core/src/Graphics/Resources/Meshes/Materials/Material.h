@@ -17,8 +17,8 @@ namespace Bolt
 		Material(ShaderLinkContext&& shader, bool isTransparent);
 		Material(const ShaderLinkContext& shader, bool isTransparent);
 
-		const ShaderLinkContext& GetShader() const;
-		ShaderLinkContext& GetShader();
+		const ShaderLinkContext& GetLinkContext() const;
+		ShaderLinkContext& GetLinkContext();
 		const RenderSettings& GetRenderSettings() const;
 		RenderSettings& GetRenderSettings();
 		bool IsTransparent() const;

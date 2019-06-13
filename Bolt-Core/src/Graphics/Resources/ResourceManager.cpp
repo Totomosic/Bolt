@@ -19,7 +19,7 @@ namespace Bolt
 	}
 
 	ResourceManager::ResourceManager()
-		: m_Resources(), m_Materials(), m_Fonts(), m_Textures()
+		: m_Resources(), m_Fonts(), m_Textures(), m_Materials()
 	{
 	
 	}
@@ -71,7 +71,7 @@ namespace Bolt
 		return m_Resources.find(id) != m_Resources.end();
 	}
 
-	id_t ResourceManager::Register(std::unique_ptr<Resource>&& resource)
+	id_t ResourceManager::RegisterGetId(std::unique_ptr<Resource>&& resource)
 	{
 		id_t id = FindNextId();
 		m_Resources[id] = std::move(resource);
@@ -139,7 +139,7 @@ namespace Bolt
 
 	void ResourceManager::LoadTexture2DFile(ResourceFile& resourceFile)
 	{
-		resourceFile.Id = Register(std::make_unique<Texture2D>(1, 1));
+		resourceFile.Id = RegisterGetId(std::make_unique<Texture2D>(1, 1));
 		Texture2D* ptr = (Texture2D*)m_Resources[resourceFile.Id].get();
 		Task t = TaskManager::Run([resourceFile{ std::move(resourceFile) }]()
 			{
@@ -175,7 +175,7 @@ namespace Bolt
 
 	void ResourceManager::LoadModelFile(ResourceFile& resourceFile)
 	{
-		resourceFile.Id = Register(std::make_unique<Model>(ModelData()));
+		resourceFile.Id = RegisterGetId(std::make_unique<Model>(ModelData()));
 		Model* ptr = (Model*)m_Resources[resourceFile.Id].get();
 		Task t = TaskManager::Run([resourceFile{ std::move(resourceFile) }]()
 			{

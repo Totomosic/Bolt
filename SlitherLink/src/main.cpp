@@ -18,42 +18,14 @@ namespace SlitherLink
 			camera->transform().Rotate(-PI / 6, Vector3f::Right());
 			camera->transform().Translate(camera->transform().Forward() * -5);
 
-			ResourceManager::Get().LoadPack("res/resources.pack", [&l](const ResourcePack& resources)
+			ResourceManager::Get().LoadPack("res/resources.pack", [&l](const ResourcePack& pack)
 				{
-					PBRMaterialGraph graph;
-					PropertyNode& albedoProperty = graph.AddProperty("Albedo", ResourceManager::Get().GetResource<Texture2D>(resources.GetResourceId("rustediron2_basecolor")));
-					SampleTextureNode& albedoTexture = graph.AddNode(std::make_unique<SampleTextureNode>());
-					albedoTexture.SetTexture(albedoProperty.GetValue());
-					graph.SetAlbedo(albedoTexture.GetRGB());
-
-					PropertyNode& metallicProperty = graph.AddProperty("Metallic", ResourceManager::Get().GetResource<Texture2D>(resources.GetResourceId("rustediron2_metallic")));
-					SampleTextureNode& metallicTexture = graph.AddNode(std::make_unique<SampleTextureNode>(SampleMode::Normal));
-					metallicTexture.SetTexture(metallicProperty.GetValue());
-					graph.SetMetallic(metallicTexture.GetR());
-
-					PropertyNode& aoProperty = graph.AddProperty("AO", ResourceManager::Get().Textures().DefaultWhite());
-					SampleTextureNode& aoTexture = graph.AddNode(std::make_unique<SampleTextureNode>(SampleMode::Normal));
-					aoTexture.SetTexture(aoProperty.GetValue());
-					graph.SetOcclusion(aoTexture.GetR());
-
-					PropertyNode& roughnessProperty = graph.AddProperty("Roughness", ResourceManager::Get().GetResource<Texture2D>(resources.GetResourceId("rustediron2_roughness")));
-					SampleTextureNode& roughnessTexture = graph.AddNode(std::make_unique<SampleTextureNode>(SampleMode::Normal));
-					roughnessTexture.SetTexture(roughnessProperty.GetValue());
-					graph.SetRoughness(roughnessTexture.GetR());
-
-					graph.Build();
+					ResourceExtractor resources(pack);
+					std::unique_ptr<Material> pbrMaterial = ResourceManager::Get().Materials().PBRTexture();
+					pbrMaterial->GetLinkContext().Link("Albedo", resources.GetResourcePtr<Texture2D>("rustediron2_basecolor"));
 
 					ObjectFactory f(l);
-					GameObject* sphere = f.Sphere(2, graph.GetMaterial());
-
-					LitMaterialGraph litGraph;
-					PropertyNode& colorProperty = litGraph.AddProperty("Texture", ResourceManager::Get().GetResource<Texture2D>(resources.GetResourceId("rustediron2_basecolor")));
-					SampleTextureNode& litSampler = litGraph.AddNode<SampleTextureNode>();
-					litSampler.SetTexture(colorProperty.GetValue());
-					litGraph.SetColor(litSampler.GetRGB());
-					litGraph.Build();
-
-					GameObject* sphere2 = f.Sphere(2, litGraph.GetMaterial(), Transform({ 5, 0, 0 }));
+					f.Sphere(2, std::move(pbrMaterial));
 				});
 
 			RenderSchedule sch(s);
