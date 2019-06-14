@@ -139,12 +139,12 @@ namespace Bolt
 
 	void ResourceManager::LoadTexture2DFile(ResourceFile& resourceFile)
 	{
-		resourceFile.Id = RegisterGetId(std::make_unique<Texture2D>(1, 1));
+		int width = std::stoi(resourceFile.Attributes.GetChild("width").Data.c_str());
+		int height = std::stoi(resourceFile.Attributes.GetChild("height").Data.c_str());
+		resourceFile.Id = RegisterGetId(std::make_unique<Texture2D>(width, height));
 		Texture2D* ptr = (Texture2D*)m_Resources[resourceFile.Id].get();
-		Task t = TaskManager::Run([resourceFile{ std::move(resourceFile) }]()
+		Task t = TaskManager::Run([resourceFile{ std::move(resourceFile) }, width, height]()
 			{
-				int width = std::stoi(resourceFile.Attributes.GetChild("width").Data.c_str());
-				int height = std::stoi(resourceFile.Attributes.GetChild("height").Data.c_str());
 				blt::string data = resourceFile.Attributes.GetChild("data").Data;
 				const blt::string& magString = resourceFile.Attributes.GetChild("options").Attributes.at("magnification");
 				const blt::string& minString = resourceFile.Attributes.GetChild("options").Attributes.at("minification");
@@ -169,6 +169,7 @@ namespace Bolt
 			});
 		t.ContinueWithOnMainThread([ptr](std::pair<Image, TextureCreateOptions> result)
 			{
+				BLT_INFO(result.first.Width);
 				*ptr = Texture2D(result.first, result.second);
 			});
 	}

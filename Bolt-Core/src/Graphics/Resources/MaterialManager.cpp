@@ -122,7 +122,7 @@ namespace Bolt
 
 	void MaterialManager::CreateTextureLightingMaterial(LitMaterialGraph& graph) const
 	{
-		PropertyNode& color = graph.AddProperty("Color", ResourceManager::Get().Textures().DefaultWhite());
+		PropertyNode& color = graph.AddProperty("Texture", ResourceManager::Get().Textures().DefaultWhite());
 		SampleTextureNode& sampler = graph.AddNode<SampleTextureNode>();
 		sampler.SetTexture(color.GetValue());
 		graph.SetColor(sampler.GetRGBA());
