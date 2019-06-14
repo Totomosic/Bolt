@@ -51,8 +51,8 @@ project "Bolt-Core"
             "BLT_BUILD_STATIC",
             "NOMINMAX",
             "GLEW_STATIC",
-            "LAYERS_PER_SCENE=6",
-            "GAMEOBJECTS_PER_LAYER=1000"
+            "LAYERS_PER_SCENE=4",
+            "GAMEOBJECTS_PER_LAYER=2000"
         }
 
     filter "configurations:Debug"

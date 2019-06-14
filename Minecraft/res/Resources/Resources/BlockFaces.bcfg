@@ -1,0 +1,7 @@
+<RESOURCE_SETTINGS>
+	<Name>BlockFaces</Name>
+	<Wrap Mode>Repeat</Wrap Mode>
+	<Min Filter>Nearest</Min Filter>
+	<Mag Filter>Nearest</Mag Filter>
+	<Mipmaps>Disabled</Mipmaps>
+</RESOURCE_SETTINGS>
