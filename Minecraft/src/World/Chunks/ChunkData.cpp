@@ -14,10 +14,10 @@ namespace Minecraft
 	{
 		if (m_Width > 0 && m_Height > 0 && m_Depth > 0)
 		{
-			m_Blocks = std::make_unique<BlockId[]>(m_Width * m_Height * m_Depth);
+			m_Blocks = std::make_unique<BlockId[]>((uint64_t)m_Width * (uint64_t)m_Height * (uint64_t)m_Depth);
 			for (int i = 0; i < GetWidth() * GetHeight() * GetDepth(); i++)
 			{
-				m_Blocks[i] = BlockId::Grass;
+				m_Blocks[i] = BlockId::Air;
 			}
 		}
 	}
