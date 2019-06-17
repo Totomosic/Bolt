@@ -4,6 +4,7 @@
 #include "Core/Memory/Allocator.h"
 #include "Core/Tasks/TaskManager.h"
 #include "Core/Utils/Filesystem/Filesystem.h"
+#include "Core/Math/Random/NoiseFunctions/SimplexNoise.h"
 
 #include "Graphics/Window.h"
 #include "Graphics/Resources/ResourceManager.h"

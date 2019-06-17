@@ -18,7 +18,7 @@ namespace Minecraft
 	void BlockDatabase::Initialize(const TextureAtlas& textureAtlas)
 	{
 		s_TextureAtlas = textureAtlas;
-		None = Block(BlockId::None, GetTextureCoordinates(BlockId::None), false, false);
+		None = Block(BlockId::None, GetTextureCoordinates(BlockId::None), true, false);
 		Air = Block(BlockId::Air, GetTextureCoordinates(BlockId::Air), false, false);
 		Grass = Block(BlockId::Grass, GetTextureCoordinates(BlockId::Grass), true, true);
 		Dirt = Block(BlockId::Dirt, GetTextureCoordinates(BlockId::Dirt), true, true);

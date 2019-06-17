@@ -78,6 +78,7 @@ namespace Bolt
 		ShaderVariablePtr lightPositions = fragment.RendererUniform(RendererUniform::LightPositions);
 		ShaderVariablePtr lightColors = fragment.RendererUniform(RendererUniform::LightColors);
 		ShaderVariablePtr lightAmbients = fragment.RendererUniform(RendererUniform::LightAmbients);
+		ShaderVariablePtr lightIntensities = fragment.RendererUniform(RendererUniform::LightIntensities);
 		ShaderVariablePtr lightCount = fragment.RendererUniform(RendererUniform::LightCount);
 
 		IfScope& alphaThresholdTest = fragment.If(ShaderFuncs::LessThan(masterNodeValues.at("Alpha"), masterNodeValues.at("AlphaThreshold")));
@@ -98,7 +99,7 @@ namespace Bolt
 		ShaderVariablePtr multiplier = loop.DefineVar(ShaderFuncs::Max(nDotl, ShaderFuncs::Index(lightAmbients, counter)));
 		ShaderVariablePtr specularFactor = loop.DefineVar(ShaderFuncs::Max(ShaderFuncs::Dot(reflectedLight, unitToCamVec), ShaderLiteral::FromFloat(0.0f)));
 		ShaderVariablePtr dampedSpecFactor = loop.DefineVar(ShaderFuncs::Pow(specularFactor, shineDamper));
-		ShaderVariablePtr lightColor = loop.DefineVar(ShaderFuncs::Index(lightColors, counter));
+		ShaderVariablePtr lightColor = loop.DefineVar(ShaderFuncs::Mul(ShaderFuncs::Index(lightColors, counter), ShaderFuncs::Index(lightIntensities, counter)));
 		loop.AddAssign(totalDiffuse, ShaderFuncs::xyz(ShaderFuncs::Mul(ShaderFuncs::Index(lightColors, counter), multiplier)));
 		loop.AddAssign(totalSpecular, ShaderFuncs::xyz(ShaderFuncs::Mul(ShaderFuncs::Mul(lightColor, dampedSpecFactor), reflectivity)));
 		ShaderVariablePtr finalColor = fragment.DefineVar(ShaderFuncs::Mul(ShaderFuncs::Add(totalDiffuse, totalSpecular), ShaderFuncs::xyz(color)));
