@@ -38,23 +38,15 @@ namespace Bolt
 		template<typename FuncT0>
 		void MapAsync(FuncT0 callback)
 		{
-			MapAsync(std::move(callback), std::function<void()>([]() {}));
-		}
-
-		template<typename FuncT0, typename FuncT1>
-		void MapAsync(FuncT0 callback, FuncT1 finishedCallback)
-		{
-			IndexMapping* mapping = new IndexMapping(Map());
-			Task t = TaskManager::Run(make_shared_function([mapping, callback{ std::move(callback) }]()
+			Task t = TaskManager::Run(make_shared_function([mapping{ Map() }, callback{ std::move(callback) }]() mutable
 			{
-				callback(*mapping);
-				return mapping;
+				callback(mapping);
+				return std::move(mapping);
 			}));
-			t.ContinueWithOnMainThread(make_shared_function([callback{ std::move(finishedCallback) }](IndexMapping* mapping)
+			t.ContinueWithOnMainThread([](IndexMapping mapping)
 			{
-				delete mapping;
-				callback();
-			}));
+				
+			});
 		}
 
 		std::unique_ptr<IndexArray> Clone() const;

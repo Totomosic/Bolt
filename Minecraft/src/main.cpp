@@ -24,6 +24,9 @@ namespace Minecraft
 
 			camera->transform().Translate(0, 65, 20);
 
+			ObjectFactory f(l);
+			f.Cuboid(2, 2, 2, Color::Red, Transform({ 0, 65, 0 }));
+
 			ResourceManager::Get().LoadPack("res/resources.pack", [&l, this](const ResourcePack& pack)
 				{
 					ResourceExtractor resources(pack);
@@ -31,37 +34,42 @@ namespace Minecraft
 					BlockDatabase::Initialize(atlas);
 					ObjectFactory f(l);
 					
-					manager = std::make_unique<ChunkManager>(f, atlas.GetTexture(), 4, 4);
+					manager = std::make_unique<ChunkManager>(f, atlas.GetTexture(), 2, 2);
 					ChunkRegion& chunk = manager->GetChunkRegion();
-					SimplexNoise noise;
-					for (int x = 0; x < chunk.GetWidthInBlocks(); x++)
-					{
-						for (int z = 0; z < chunk.GetHeightInBlocks(); z++)
+					TaskManager::Run([&chunk]()
 						{
-							float height = noise.Generate(8, x / 150.0f, z / 150.0f);
-							int blockHeight = 65 + height * 10;
-							for (int y = 0; y < chunk.GetDepthInBlocks(); y++)
+							SimplexNoise noise;
+							for (int x = 0; x < chunk.GetWidthInBlocks(); x++)
 							{
-								if (y < blockHeight - 5)
+								for (int z = 0; z < chunk.GetHeightInBlocks(); z++)
 								{
-									chunk.SetBlockId(x, y, z, BlockId::Stone);
-								}
-								else if (y < blockHeight)
-								{
-									chunk.SetBlockId(x, y, z, BlockId::Dirt);
-								}
-								else if (y == blockHeight)
-								{
-									chunk.SetBlockId(x, y, z, BlockId::Grass);
-								}
-								else
-								{
-									chunk.SetBlockId(x, y, z, BlockId::Air);
+									float height = noise.Generate(8, x / 150.0f, z / 150.0f);
+									int blockHeight = 65 + height * 10;
+									for (int y = 0; y < chunk.GetDepthInBlocks(); y++)
+									{
+										if (y < blockHeight - 5)
+										{
+											chunk.SetBlockId(x, y, z, BlockId::Stone);
+										}
+										else if (y < blockHeight)
+										{
+											chunk.SetBlockId(x, y, z, BlockId::Dirt);
+										}
+										else if (y == blockHeight)
+										{
+											chunk.SetBlockId(x, y, z, BlockId::Grass);
+										}
+										else
+										{
+											chunk.SetBlockId(x, y, z, BlockId::Air);
+										}
+									}
 								}
 							}
-						}
-					}
-					manager->BuildAllChunks();
+						}).ContinueWithOnMainThread([manager{ manager.get() }]()
+							{
+								manager->BuildAllChunks();
+							});
 				});
 
 			RenderProcess p;

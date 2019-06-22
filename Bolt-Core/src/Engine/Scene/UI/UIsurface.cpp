@@ -24,6 +24,10 @@ namespace Bolt
 		UIelement::SetUIroot(root);
 		Mesh mesh;
 		mesh.Models.push_back({ BasicModels::Get().Square(), Matrix4f::Scale(m_Width, m_Height, 1), { 0 } });
+		if (mesh.Materials.size() < 1)
+		{
+			mesh.Materials.resize(1);
+		}
 		mesh.Materials[0] = std::move(m_Material);
 		m_Object->Components().AddComponent<MeshRenderer>(std::move(mesh));
 		m_Object->transform() = std::move(m_Transform);

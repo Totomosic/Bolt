@@ -20,7 +20,7 @@ namespace Aimbooster
 	{
 		if (!Paused)
 		{
-			CurrentTime += Time::RenderingTimeline().DeltaTime();
+			CurrentTime += Time::Get().RenderingTimeline().DeltaTime();
 			float size = StartingSize + (MaxSize - StartingSize) * sin(CurrentTime / Lifetime * PI);
 			gameObject()->transform().SetLocalScale(size, size, 1);
 			CurrentSize = size;
@@ -29,7 +29,7 @@ namespace Aimbooster
 				Destroy(gameObject());
 				TargetFailedEvent e;
 				e.Position = gameObject()->transform().Position();
-				EventManager::Post<TargetFailedEvent>(e);
+				EventManager::Get().Post<TargetFailedEvent>(e);
 			}
 			else
 			{
@@ -42,7 +42,7 @@ namespace Aimbooster
 						Destroy(gameObject());
 						GameObject* hitLocation = Factory->Ellipse(5, 5, Color::White, Transform({ Input::Get().MousePosition(width, height).x, Input::Get().MousePosition(width, height).y, gameObject()->transform().Position().z + 1 }));
 						Destroy(hitLocation, 1.0f);
-						EventManager::Post<TargetHitEvent>();
+						EventManager::Get().Post<TargetHitEvent>();
 					}
 				}
 			}

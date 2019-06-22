@@ -81,6 +81,7 @@ namespace Bolt
 		SampleTextureNode& sampler = graph.AddNode<SampleTextureNode>();
 		sampler.SetTexture(texture.GetValue());
 		graph.SetColor(sampler.GetRGBA());
+		graph.SetAlpha(sampler.GetA());
 		graph.Build();
 	}
 

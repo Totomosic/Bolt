@@ -25,7 +25,7 @@ namespace Meteors
 		Scene* m_GameScene;
 		Scene* m_EndScene;
 
-		Text* m_TimerText;
+		Text* m_TimerText = nullptr;
 
 		Text* m_FinalScoreText;
 		
@@ -52,16 +52,17 @@ namespace Meteors
 					return ListenerResponse();
 				});
 
-			ResourcePack resources = ResourceManager::Get().FetchPack("res/resources.pack");
-			ResourceManager::Get().LoadPack(resources);
+			ResourceManager::Get().LoadPack("res/resources.pack", [this](const ResourcePack& pack)
+				{
+					ResourceExtractor resources(pack);
+					RightFacingCharacterTexture = resources.GetResourceId("MarioRight");
+					LeftFacingCharacterTexture = resources.GetResourceId("MarioLeft");
+					RollingHillsTexture = resources.GetResourceId("RollingHills");
+					GroundTexture = resources.GetResourceId("Ground");
+					RegularMeteorTexture = resources.GetResourceId("Meteor");
 
-			RightFacingCharacterTexture = resources.GetResourceId("MarioRight");
-			LeftFacingCharacterTexture = resources.GetResourceId("MarioLeft");
-			RollingHillsTexture = resources.GetResourceId("RollingHills");
-			GroundTexture = resources.GetResourceId("Ground");
-			RegularMeteorTexture = resources.GetResourceId("Meteor");
-
-			LoadGameScene();
+					LoadGameScene();
+				});
 
 			RenderSchedule sch(*m_GameScene);
 			sch.AddRenderProcess({});
@@ -70,6 +71,8 @@ namespace Meteors
 			RenderSchedule esch(*m_EndScene);
 			esch.AddRenderProcess({});
 			SceneRenderer::Get().AddRenderSchedule(esch);
+
+			SceneManager::Get().SetCurrentScene(*(Scene*)nullptr);
 		}
 
 		void LoadGameScene()
@@ -89,7 +92,6 @@ namespace Meteors
 			player->mesh().Mesh.Materials[0]->SetIsTransparent(true);
 
 			GameObject* ground = factory.Image(ViewWidth, FloorHeight, ResourceManager::Get().GetResource<Texture2D>(GroundTexture), Transform({ ViewWidth / 2, FloorHeight / 2, -98 }));
-			ground->mesh().Mesh.Materials[0]->GetShader().Link("TexCoordMatrix", Matrix3f::Scale(19.2f, 1.0f, 1.0f));
 
 			manager.Player = player;
 
@@ -104,7 +106,10 @@ namespace Meteors
 
 		void Update() override
 		{
-			m_TimerText->SetText(GetTimeString());
+			if (m_TimerText)
+			{
+				m_TimerText->SetText(GetTimeString());
+			}
 
 			if (&SceneManager::Get().CurrentScene() == m_GameScene)
 			{

@@ -8,7 +8,7 @@ namespace Bolt
 	class BLT_API TaskState
 	{
 	public:
-		T Data;
+		std::unique_ptr<T> Data;
 		std::atomic<bool> IsFinished;
 	};
 
@@ -31,7 +31,8 @@ namespace Bolt
 			{
 				std::this_thread::yield();
 			}
-			return std::move(m_State->Data);
+			T data = std::move(*m_State->Data);
+			return data;
 		}
 
 	};
@@ -42,7 +43,7 @@ namespace Bolt
 		TaskResult<TResult> result;
 		std::thread t([statePtr = result.m_State, func = std::move(func)]()
 		{
-			statePtr->Data = func();
+			statePtr->Data = std::make_unique<TFuncResult>(func());
 			statePtr->IsFinished = true;
 		});
 		t.detach();

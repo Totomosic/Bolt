@@ -40,6 +40,7 @@ namespace Bolt
 		int VertexBufferCount() const;
 		int VertexCount() const;
 		id_t Id() const;
+		bool IsMapped() const;
 
 		void Bind() const;
 		void Unbind() const;
@@ -55,23 +56,15 @@ namespace Bolt
 		template<typename FuncT0>
 		void MapAsync(FuncT0 callback) const
 		{
-			MapAsync(std::move(callback), std::function<void()>([]() {}));
-		}
-
-		template<typename FuncT0, typename FuncT1>
-		void MapAsync(FuncT0 callback, FuncT1 finishedCallback) const
-		{
-			VertexMapping* mapping = new VertexMapping(Map());
-			Task t = TaskManager::Run(make_shared_function([mapping, callback{ std::move(callback) }]()
+			Task t = TaskManager::Run(make_shared_function([mapping{ Map() }, callback{ std::move(callback) }]() mutable
 			{
-				callback(*mapping);
-				return mapping;
+				callback(mapping);
+				return std::move(mapping);
 			}));
-			t.ContinueWithOnMainThread(make_shared_function([callback{ std::move(finishedCallback) }](VertexMapping* mapping)
-				{
-					delete mapping;
-					callback();
-				}));
+			t.ContinueWithOnMainThread([](VertexMapping mapping)
+			{
+
+			});
 		}
 
 		std::unique_ptr<VertexArray> Clone() const;

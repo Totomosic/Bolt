@@ -21,10 +21,13 @@ namespace Bolt
 		mutable std::unordered_map<float, ResourcePtr<Font>> m_TimesFonts;
 		FontFactory m_VerdanaFactory;
 		mutable std::unordered_map<float, ResourcePtr<Font>> m_VerdanaFonts;
+		mutable ResourcePtr<Font> m_DefaultFont;
 
 	public:
 		FontManager();
 
+		ResourcePtr<Font> Default() const;
+		void SetDefault(const ResourcePtr<Font>& defaultFont) const;
 		ResourcePtr<Font> Arial(float fontSize) const;
 		ResourcePtr<Font> Calibri(float fontSize) const;
 		ResourcePtr<Font> Consolas(float fontSize) const;
