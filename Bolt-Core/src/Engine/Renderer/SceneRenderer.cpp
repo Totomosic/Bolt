@@ -21,7 +21,7 @@ namespace Bolt
 				if (model.Model != nullptr)
 				{
 					const ModelData& modelData = model.Model->Data();
-					if (modelData.Vertices != nullptr && modelData.Indices != nullptr)
+					if (modelData.Vertices != nullptr && modelData.Indices != nullptr && !modelData.Vertices->IsMapped() && !modelData.Indices->IsMapped())
 					{
 						for (int i = 0; i < modelData.Indices->IndexBufferCount(); i++)
 						{

@@ -112,7 +112,7 @@ namespace Bolt
 
 	Bolt::Text& UIelement::Text(const blt::string& text, const Color& color, Transform&& transform, AlignH horizontal, AlignV vertical)
 	{
-		return AddElement<Bolt::Text>(text, ResourceManager::Get().DefaultFont(), color, std::move(transform), horizontal, vertical);
+		return AddElement<Bolt::Text>(text, ResourceManager::Get().Fonts().Default(), color, std::move(transform), horizontal, vertical);
 	}
 
 	void UIelement::SetUIroot(UIroot* root)

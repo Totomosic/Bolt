@@ -6,13 +6,6 @@
 namespace Bolt
 {
 
-	struct BLT_API ModelMapping
-	{
-	public:
-		VertexMapping VertexMap;
-		IndexMapping IndexMap;
-	};
-
 	class BLT_API Model : public Resource
 	{
 	private:

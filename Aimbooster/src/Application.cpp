@@ -19,8 +19,8 @@ namespace Aimbooster
 		Layer* mainLayer;
 		Camera* mainCamera;
 		Timer* targetTimer;
-		id_t titleArial;
-		id_t arial;
+		ResourcePtr<Font> titleArial;
+		ResourcePtr<Font> arial;
 		bool isPlaying;
 
 		ObjectFactory factory;
@@ -38,59 +38,62 @@ namespace Aimbooster
 	public:
 		void Init() override
 		{
-			AppWindow->SetClearColor(Color(52, 52, 52));
+			GetWindow().SetClearColor(Color(52, 52, 52));
 			isPlaying = false;
 
-			Scene& scene = SceneManager::CreateScene();
+			Scene& scene = SceneManager::Get().CreateScene();
 			mainLayer = &scene.CreateLayer();
-			mainCamera = scene.CreateCamera(AppWindow->GetFramebuffer().ViewFrustum(-100, 100), ProjectionType::Orthographic);
+			mainCamera = scene.CreateCamera(GetWindow().GetFramebuffer().ViewFrustum(-100, 100), ProjectionType::Orthographic);
 			mainLayer->SetActiveCamera(mainCamera);
 
-			arial = ResourceManager::Get().Register(std::make_unique<Font>("res/arial.ttf", 24));
-			titleArial = ResourceManager::Get().Register(std::make_unique<Font>("res/arial.ttf", 42));			
+			arial = ResourceManager::Get().Fonts().Arial(24);
+			titleArial = ResourceManager::Get().Fonts().Arial(42);
+			ResourceManager::Get().Fonts().SetDefault(arial);
 
-			ResourcePack resources = ResourceManager::Get().FetchPack("res/resources.pack");
-			ResourceManager::Get().LoadPack(resources);
-
-			Mesh targetMesh;
-			targetMesh.Models.push_back({ ResourcePtr<Model>(ObjectFactory::CircleModel()), Matrix4f::Identity(), { 0 } });
-			targetMesh.Materials[0] = ResourceManager::Get().Materials().Texture(ResourceManager::Get().GetResource<Texture2D>(resources.GetResourceId("target")));
-			ObjectPrefab titleTargetPrefab;
-			titleTargetPrefab.Components().AddComponent<MeshRenderer>(targetMesh);
-			ObjectPrefab targetPrefab;
-			targetPrefab.Components().AddComponent<MeshRenderer>(targetMesh);
-			targetPrefab.Components().AddComponent<Target>(TARGET_LIFETIME, TARGET_SIZE, &factory);
-
-			factory = ObjectFactory(*mainLayer);
-			TARGET_PREFAB = factory.AddPrefab(std::move(targetPrefab));
-			TITLE_TARGET_PREFAB = factory.AddPrefab(std::move(titleTargetPrefab));
-
-			targetTimer = &Time::RenderingTimeline().AddTimer(1 / TARGETS_PER_SECOND, std::bind(&App::CreateTarget, this));
-			targetTimer->Stop();
-			EventManager::Subscribe<TargetHitEvent>([this](TargetHitEvent& args) -> ListenerResponse
-			{
-				this->score++;
-				ListenerResponse response;
-				return response;
-			});
-			EventManager::Subscribe<TargetFailedEvent>([this](TargetFailedEvent& args) -> ListenerResponse
-			{
-				this->lives--;
-				GameObject* marker = factory.Ellipse(5, 5, Color::Black, Transform(args.Position));
-				Destroy(marker, 1.0f);
-				if (this->lives <= 0)
+			ResourceManager::Get().LoadPack("res/resources.pack", [thisPtr{ this }](const ResourcePack& pack)
 				{
-					CreateEndScreen();
-				}
-				ListenerResponse response;
-				return response;
-			});
+					ResourceExtractor resources(pack);
+					Mesh targetMesh;
+					targetMesh.Models.push_back({ ResourcePtr<Model>(BasicModels::Get().Circle()), Matrix4f::Identity(), { 0 } });
+					targetMesh.Materials.push_back(ResourceManager::Get().Materials().Texture(resources.GetResourcePtr<Texture2D>("target")));
+					ObjectPrefab titleTargetPrefab;
+					titleTargetPrefab.Components().AddComponent<MeshRenderer>(targetMesh);
+					ObjectPrefab targetPrefab;
+					targetPrefab.Components().AddComponent<MeshRenderer>(targetMesh);
+					targetPrefab.Components().AddComponent<Target>(thisPtr->TARGET_LIFETIME, thisPtr->TARGET_SIZE, &thisPtr->factory);
+
+					thisPtr->factory = ObjectFactory(*thisPtr->mainLayer);
+					thisPtr->TARGET_PREFAB = thisPtr->factory.AddPrefab(std::move(targetPrefab));
+					thisPtr->TITLE_TARGET_PREFAB = thisPtr->factory.AddPrefab(std::move(titleTargetPrefab));
+
+					thisPtr->targetTimer = &Time::Get().RenderingTimeline().AddTimer(1 / thisPtr->TARGETS_PER_SECOND, std::bind(&App::CreateTarget, thisPtr));
+					thisPtr->targetTimer->Stop();
+					EventManager::Get().Subscribe<TargetHitEvent>([thisPtr](TargetHitEvent& args) -> ListenerResponse
+						{
+							thisPtr->score++;
+							ListenerResponse response;
+							return response;
+						});
+					EventManager::Get().Subscribe<TargetFailedEvent>([thisPtr](TargetFailedEvent& args) -> ListenerResponse
+						{
+							thisPtr->lives--;
+							GameObject* marker = thisPtr->factory.Ellipse(5, 5, Color::Black, Transform(args.Position));
+							Destroy(marker, 1.0f);
+							if (thisPtr->lives <= 0)
+							{
+								thisPtr->CreateEndScreen();
+							}
+							ListenerResponse response;
+							return response;
+						});
+					thisPtr->CreateTitleScreen();
+				});
+
+			
 
 			RenderSchedule schedule(scene);
 			schedule.AddRenderProcess({  });
-			SceneRenderer::AddRenderSchedule(schedule);
-
-			CreateTitleScreen();
+			SceneRenderer::Get().AddRenderSchedule(schedule);
 		}
 
 		void Tick() override
@@ -102,16 +105,16 @@ namespace Aimbooster
 		{
 			if (isPlaying)
 			{
-				totalTime += Time::RenderingTimeline().DeltaTime();
+				totalTime += Time::Get().RenderingTimeline().DeltaTime();
 				timer->SetText(TimeToString());
-				fpsText->SetText(std::to_string((int)Time::FramesPerSecond()) + " fps");
+				fpsText->SetText(std::to_string((int)Time::Get().FramesPerSecond()) + " fps");
 				scoreText->SetText("Score: " + std::to_string(score));
 			}
 		}
 
 		void Render() override
 		{
-			Graphics::RenderScene();
+			Graphics::Get().RenderScene();
 		}	
 
 		void CreateTitleScreen()
@@ -122,7 +125,7 @@ namespace Aimbooster
 			targetTimer->Reset();
 			
 			mainLayer->UI().Rectangle(600, mainCamera->ViewHeight(), Color(10, 10, 10), Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() / 2, -10 }));
-			mainLayer->UI().Text("Aim Booster", ResourceManager::Get().GetResource<Font>(titleArial), Color::White, Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() - 300, -5 }), AlignH::Center);
+			mainLayer->UI().Text("Aim Booster", titleArial, Color::White, Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() - 300, -5 }), AlignH::Center);
 			UIsurface& playButton = mainLayer->UI().Rectangle(300, 50, Color(0, 200, 0), Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() / 2 - 150, -5 }));
 			playButton.Text("Play", Color::White, Transform({ 0, 0, 1 }));
 
@@ -139,17 +142,17 @@ namespace Aimbooster
 
 			playButton.EventHandler().OnHoverEntry.Subscribe([](UIHoverEntryEvent& args)
 			{
-				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetShader().GetLink("Color") = Color::Green;
+				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetLinkContext().GetLink("Color") = Color::Green;
 				ListenerResponse response;
-				response.HandledEvent = false;
+				response.HandledEvent = true;
 				return response;
 			});
 
 			playButton.EventHandler().OnHoverExit.Subscribe([](UIHoverExitEvent& args)
 			{
-				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetShader().GetLink("Color") = Color(0, 200, 0 );
+				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetLinkContext().GetLink("Color") = Color(0, 200, 0 );
 				ListenerResponse response;
-				response.HandledEvent = false;
+				response.HandledEvent = true;
 				return response;
 			});
 
@@ -157,19 +160,19 @@ namespace Aimbooster
 			{
 				Exit();
 				ListenerResponse response;
-				response.HandledEvent = false;
+				response.HandledEvent = true;
 				return response;
 			});
 
 			quitButton.EventHandler().OnHoverEntry.Subscribe([](UIHoverEntryEvent& args)
 			{
-				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetShader().GetLink("Color") = Color::Red;
+				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetLinkContext().GetLink("Color") = Color::Red;
 				return ListenerResponse();
 			});
 
 			quitButton.EventHandler().OnHoverExit.Subscribe([](UIHoverExitEvent& args)
 			{
-				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetShader().GetLink("Color") = Color(200, 0, 0);
+				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetLinkContext().GetLink("Color") = Color(200, 0, 0);
 				return ListenerResponse();
 			});
 			
@@ -198,13 +201,13 @@ namespace Aimbooster
 
 			qButton.EventHandler().OnHoverEntry.Subscribe([](UIHoverEntryEvent& args)
 			{
-				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetShader().GetLink("Color") = Color::Red;
+				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetLinkContext().GetLink("Color") = Color::Red;
 				return ListenerResponse();
 			});
 
 			qButton.EventHandler().OnHoverExit.Subscribe([](UIHoverExitEvent& args)
 			{
-				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetShader().GetLink("Color") = Color(200, 0, 0);
+				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetLinkContext().GetLink("Color") = Color(200, 0, 0);
 				return ListenerResponse();
 			});
 		}
@@ -217,7 +220,7 @@ namespace Aimbooster
 			targetTimer->Reset();
 
 			mainLayer->UI().Rectangle(600, mainCamera->ViewHeight(), Color(10, 10, 10), Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() / 2, -10 }));
-			mainLayer->UI().Text("Game Over", ResourceManager::Get().GetResource<Font>(titleArial), Color::White, Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() / 2 + 100, -5 }));
+			mainLayer->UI().Text("Game Over", titleArial, Color::White, Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() / 2 + 100, -5 }));
 			mainLayer->UI().Text("Play time: " + TimeToString(), Color::White, Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() / 2 + 0, -5 }));
 			mainLayer->UI().Text("Score: " + std::to_string(score), Color::White, Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() / 2 - 50, -5 }));
 			UIsurface& retryButton = mainLayer->UI().Rectangle(300, 50, Color(0, 200, 0), Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() / 2 - 150, -5 }));
@@ -230,13 +233,13 @@ namespace Aimbooster
 
 			retryButton.EventHandler().OnHoverEntry.Subscribe([](UIHoverEntryEvent& args)
 			{
-				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetShader().GetLink("Color") = Color::Green;
+				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetLinkContext().GetLink("Color") = Color::Green;
 				return ListenerResponse();
 			});
 
 			retryButton.EventHandler().OnHoverExit.Subscribe([](UIHoverExitEvent& args)
 			{
-				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetShader().GetLink("Color") = Color(0, 200, 0);
+				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetLinkContext().GetLink("Color") = Color(0, 200, 0);
 				return ListenerResponse();
 			});
 
@@ -250,13 +253,13 @@ namespace Aimbooster
 
 			menuButton.EventHandler().OnHoverEntry.Subscribe([](UIHoverEntryEvent& args)
 			{
-				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetShader().GetLink("Color") = Color::Red;
+				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetLinkContext().GetLink("Color") = Color::Red;
 				return ListenerResponse();
 			});
 
 			menuButton.EventHandler().OnHoverExit.Subscribe([](UIHoverExitEvent& args)
 			{
-				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetShader().GetLink("Color") = Color(200, 0, 0);
+				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetLinkContext().GetLink("Color") = Color(200, 0, 0);
 				return ListenerResponse();
 			});
 
@@ -283,13 +286,13 @@ namespace Aimbooster
 }
 
 int main()
-{
-	Engine e;
-	WindowCreateInfo createInfo;
-	createInfo.Title = "Aimbooster";
-	createInfo.Samples = 4;
-	createInfo.Resizable = true;
-	e.SetWindowCreateInfo(createInfo);
+{	
+	EngineCreateInfo createInfo;
+	createInfo.WindowInfo.Title = "Aimbooster";
+	createInfo.WindowInfo.Samples = 0;
+	createInfo.WindowInfo.Resizable = true;
+	createInfo.UseSockets = false;
+	Engine e(createInfo);
 	e.SetApplication<Aimbooster::App>();
 	e.Run();
 }

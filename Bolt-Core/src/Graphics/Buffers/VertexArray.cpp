@@ -68,6 +68,11 @@ namespace Bolt
 		return m_Id;
 	}
 
+	bool VertexArray::IsMapped() const
+	{
+		return m_IsMapped;
+	}
+
 	void VertexArray::Bind() const
 	{
 		GL_CALL(glBindVertexArray(m_Id));

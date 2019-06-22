@@ -13,7 +13,17 @@ namespace Bolt
 		m_TimesFactory("C:/Windows/Fonts/times.ttf"), m_TimesFonts(),
 		m_VerdanaFactory("C:/Windows/Fonts/verdana.ttf"), m_VerdanaFonts()
 	{
-		
+		m_DefaultFont = Arial(48);
+	}
+
+	ResourcePtr<Font> FontManager::Default() const
+	{
+		return m_DefaultFont;
+	}
+
+	void FontManager::SetDefault(const ResourcePtr<Font>& defaultFont) const
+	{
+		m_DefaultFont = defaultFont;
 	}
 
 	ResourcePtr<Font> FontManager::Arial(float fontSize) const

@@ -8,7 +8,7 @@ namespace Minecraft
 		: m_VisibleXChunks(visibleXChunks), m_VisibleZChunks(visibleZChunks), m_VisibleRegion(visibleXChunks, visibleZChunks), m_LoadedChunks(), m_ChunkObjects(nullptr)
 	{
 		BLT_ASSERT(visibleXChunks > 0 && visibleZChunks > 0, "invalid dimension");
-		m_ChunkObjects = std::make_unique<ChunkObject[]>(m_VisibleXChunks * m_VisibleZChunks);
+		m_ChunkObjects = std::make_unique<ChunkObject[]>((uint64_t)m_VisibleXChunks * m_VisibleZChunks);
 		for (int x = 0; x < visibleXChunks; x++)
 		{
 			for (int z = 0; z < visibleZChunks; z++)
@@ -22,7 +22,7 @@ namespace Minecraft
 				m.Models.push_back({ chunkModel });
 				m.Materials.push_back(std::move(material));
 				GameObject* chunkObject = factory.Instantiate(m, Transform({ (float)x * chunk->GetWidthInBlocks(), 0, (float)z * chunk->GetHeightInBlocks() }));
-				m_ChunkObjects[x + z * m_VisibleXChunks] = { chunkModel, chunkObject };
+				m_ChunkObjects[x + (uint64_t)z * m_VisibleXChunks] = { chunkModel, chunkObject };
 				m_LoadedChunks.push_back({ {x, z}, std::move(chunk) });
 			}
 		}
@@ -50,63 +50,66 @@ namespace Minecraft
 
 	void ChunkManager::BuildChunk(int x, int z) const
 	{
-		Model* modelPtr = m_ChunkObjects[x + z * GetVisibleXChunks()].ModelPtr.Get();
+		Model* modelPtr = m_ChunkObjects[x + (uint64_t)z * GetVisibleXChunks()].ModelPtr.Get();
 		TaskManager::Run([x, z, this]()
 			{
 				return GetChunkRegion().GetFaces(x, z);
 			}).ContinueWithOnMainThread([modelPtr](std::vector<BlockFace> faces)
 				{
-					ModelData data;
-					data.Vertices = std::make_unique<VertexArray>();
-					data.Indices = std::make_unique<IndexArray>();
-					data.Indices->AddIndexBuffer(std::make_unique<IndexBuffer>(faces.size() * 6));
-					BufferLayout layout = BufferLayout::Default();
-					VertexBuffer& buffer = data.Vertices->CreateVertexBuffer(faces.size() * 4 * layout.Size(), layout);
-					Vector4<byte> color = Color::White.ToBytes();
 					if (faces.size() > 0)
 					{
-						VertexMapping vMapping = data.Vertices->Map();
-						IndexMapping iMapping = data.Indices->Map();
-						VertexIterator it = vMapping.Begin();
-						IndexIterator indices = iMapping.Begin();
-						for (int i = 0; i < faces.size(); i++)
-						{
-							BlockFace& face = faces.at(i);
-							it[0] = face.TopLeft;
-							it[1] = face.Normal;
-							it[2] = Vector2f(face.Texture.Min.x, face.Texture.Max.y);
-							it[3] = color;
-							it++;
-							it[0] = face.BottomLeft;
-							it[1] = face.Normal;
-							it[2] = face.Texture.Min;
-							it[3] = color;
-							it++;
-							it[0] = face.BottomRight;
-							it[1] = face.Normal;
-							it[2] = Vector2f(face.Texture.Max.x, face.Texture.Min.y);
-							it[3] = color;
-							it++;
-							it[0] = face.TopRight;
-							it[1] = face.Normal;
-							it[2] = face.Texture.Max;
-							it[3] = color;
-							it++;
-							*indices = (uint32_t)i * 4 + 0;
-							indices++;
-							*indices = (uint32_t)i * 4 + 1;
-							indices++;
-							*indices = (uint32_t)i * 4 + 2;
-							indices++;
-							*indices = (uint32_t)i * 4 + 0;
-							indices++;
-							*indices = (uint32_t)i * 4 + 2;
-							indices++;
-							*indices = (uint32_t)i * 4 + 3;
-							indices++;
-						}
+						ModelData data;
+						data.Vertices = std::make_unique<VertexArray>();
+						data.Indices = std::make_unique<IndexArray>();
+						data.Indices->AddIndexBuffer(std::make_unique<IndexBuffer>(faces.size() * 6));
+						BufferLayout layout = BufferLayout::Default();
+						VertexBuffer& buffer = data.Vertices->CreateVertexBuffer(faces.size() * 4 * layout.Size(), layout);
+						data.MapAsync([faces{ std::move(faces) }](const ModelMapping& mapping)
+							{	
+								const VertexMapping& vMapping = mapping.VertexMap;
+								const IndexMapping& iMapping = mapping.IndexMap;
+								Vector4<byte> color = Color::White.ToBytes();
+								VertexIterator it = vMapping.Begin();
+								IndexIterator indices = iMapping.Begin();
+								for (int i = 0; i < faces.size(); i++)
+								{
+									const BlockFace& face = faces.at(i);
+									it[0] = face.TopLeft;
+									it[1] = face.Normal;
+									it[2] = Vector2f(face.Texture.Min.x, face.Texture.Max.y);
+									it[3] = color;
+									it++;
+									it[0] = face.BottomLeft;
+									it[1] = face.Normal;
+									it[2] = face.Texture.Min;
+									it[3] = color;
+									it++;
+									it[0] = face.BottomRight;
+									it[1] = face.Normal;
+									it[2] = Vector2f(face.Texture.Max.x, face.Texture.Min.y);
+									it[3] = color;
+									it++;
+									it[0] = face.TopRight;
+									it[1] = face.Normal;
+									it[2] = face.Texture.Max;
+									it[3] = color;
+									it++;
+									*indices = (uint32_t)i * 4 + 0;
+									indices++;
+									*indices = (uint32_t)i * 4 + 1;
+									indices++;
+									*indices = (uint32_t)i * 4 + 2;
+									indices++;
+									*indices = (uint32_t)i * 4 + 0;
+									indices++;
+									*indices = (uint32_t)i * 4 + 2;
+									indices++;
+									*indices = (uint32_t)i * 4 + 3;
+									indices++;
+								}
+							});
+						modelPtr->Data() = std::move(data);
 					}
-					modelPtr->Data() = std::move(data);
 				});
 	}
 

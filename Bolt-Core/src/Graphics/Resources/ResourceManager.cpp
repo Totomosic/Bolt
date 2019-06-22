@@ -93,11 +93,6 @@ namespace Bolt
 		m_Resources.erase(id);
 	}
 
-	ResourcePtr<Font> ResourceManager::DefaultFont()
-	{
-		return m_Fonts.Arial(48);
-	}
-
 	id_t ResourceManager::FindNextId()
 	{
 		id_t id = 0;
@@ -169,7 +164,6 @@ namespace Bolt
 			});
 		t.ContinueWithOnMainThread([ptr](std::pair<Image, TextureCreateOptions> result)
 			{
-				BLT_INFO(result.first.Width);
 				*ptr = Texture2D(result.first, result.second);
 			});
 	}
@@ -234,11 +228,8 @@ namespace Bolt
 						it[3] = Color::White.ToBytes();
 						it++;
 					}
-				}),
-				make_shared_function([ptr, data{ std::move(data) }]() mutable
-				{
-					ptr->Data() = std::move(data);
-				}));				
+				}));
+				ptr->Data() = std::move(data);
 			});		
 	}
 

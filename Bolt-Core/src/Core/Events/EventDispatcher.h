@@ -127,15 +127,15 @@ namespace Bolt
 				{
 					m_Listeners.erase(it);
 				}
-				else
-				{
-					it++;
-				}
 				if (response.HandledEvent)
 				{
 					// Event was handled and should not be propogated to other event listeners
 					handled = true;
 					break;
+				}
+				if (!response.UnsubscribeListener)
+				{
+					it++;
 				}
 			}
 			ListenerResponse response;

@@ -57,8 +57,8 @@ namespace Bolt
 	{
 		UIelement::SetUIroot(root);
 		Mesh mesh;
-		mesh.Models.push_back({ ResourcePtr<const Model>(new Model(TextFactory(m_String, m_Font, Color::White, m_AlignH, m_AlignV)), true), Matrix4f::Identity(), { 0 } });
-		mesh.Materials[0] = ResourceManager::Get().Materials().Font(m_Font, m_Color);
+		mesh.Models.push_back({ ResourcePtr<Model>(new Model(TextFactory(m_String, m_Font, Color::White, m_AlignH, m_AlignV)), true), Matrix4f::Identity(), { 0 } });
+		mesh.Materials.push_back(ResourceManager::Get().Materials().Font(m_Font, m_Color));
 		m_Object->Components().AddComponent(std::make_unique<MeshRenderer>(std::move(mesh)));
 		m_Object->transform() = std::move(m_Transform);
 	}
@@ -66,7 +66,7 @@ namespace Bolt
 	void Text::CreateTextModel()
 	{
 		Mesh& mesh = m_Object->Components().GetComponent<MeshRenderer>().Mesh;
-		mesh.Models[0].Model = ResourcePtr<const Model>(new Model(TextFactory(m_String, m_Font, Color::White, m_AlignH, m_AlignV)), true);
+		mesh.Models[0].Model = ResourcePtr<Model>(new Model(TextFactory(m_String, m_Font, Color::White, m_AlignH, m_AlignV)), true);
 	}
 
 }

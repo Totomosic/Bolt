@@ -16,12 +16,12 @@ namespace Meteors
 		if (Input::Get().KeyDown(Keycode::A))
 		{
 			m_Velocity.x = -m_Speed;
-			m.Mesh.Materials[0]->GetShader().Link("Texture", ResourceManager::Get().GetResource<Texture2D>(LeftFacingCharacterTexture));
+			m.Mesh.Materials[0]->GetLinkContext().Link("Texture", ResourceManager::Get().GetResource<Texture2D>(LeftFacingCharacterTexture));
 		}
 		else if (Input::Get().KeyDown(Keycode::D))
 		{
 			m_Velocity.x = m_Speed;
-			m.Mesh.Materials[0]->GetShader().Link("Texture", ResourceManager::Get().GetResource<Texture2D>(RightFacingCharacterTexture));
+			m.Mesh.Materials[0]->GetLinkContext().Link("Texture", ResourceManager::Get().GetResource<Texture2D>(RightFacingCharacterTexture));
 		}
 		else
 		{

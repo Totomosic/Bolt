@@ -15,3 +15,4 @@
 #include "Engine/Engine.h"
 #include "Engine/Scene/UI/Text.h"
 #include "Engine/Scene/UI/UIsurface.h"
+#include "Engine/Scripting/Lua/LuaScriptingEnv.h"

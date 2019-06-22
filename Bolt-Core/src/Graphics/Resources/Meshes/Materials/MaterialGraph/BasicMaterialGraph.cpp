@@ -58,6 +58,7 @@ namespace Bolt
 		alphaThresholdTest.Discard();
 		ShaderVariablePtr color = fragment.DefineVar(masterNodeValues.at("Color"));
 		ShaderVariablePtr finalColor = fragment.DefineVar(ShaderFuncs::xyz(ShaderFuncs::Mul(color, inColor)));
+		fragment.SetVariable(finalColor, ShaderFuncs::Pow(finalColor, ShaderLiteral::FromVec3({ 1 / 2.2f, 1 / 2.2f, 1 / 2.2f })));
 		fragment.SetFragColor(ShaderFuncs::Vec4(finalColor, masterNodeValues.at("Alpha")));
 	}
 
