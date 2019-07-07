@@ -56,6 +56,12 @@ namespace Bolt
 		return *ptr;
 	}
 
+	void SceneManager::DisableCurrentScene()
+	{
+		BLT_CORE_WARN("No Current Scene");
+		SetCurrentScene(*(Scene*)nullptr);
+	}
+
 	void SceneManager::SetCurrentScene(Scene& scene)
 	{
 		if (m_CurrentScene != nullptr)

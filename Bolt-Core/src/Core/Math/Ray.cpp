@@ -1,5 +1,6 @@
 #include "bltpch.h"
-#include "Ray.h"
+
+#include "Ray.h"
 
 namespace Bolt
 {

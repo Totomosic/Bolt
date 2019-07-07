@@ -24,7 +24,7 @@ namespace Bolt
 		m_VertexPosition->SetValue(connection);
 	}
 
-	void PBRMaterialGraph::SetAlbedo(const NodeConnection& connection)
+	void PBRMaterialGraph::SetRGB(const NodeConnection& connection)
 	{
 		m_Albedo->SetValue(connection);
 	}
@@ -118,7 +118,7 @@ namespace Bolt
 
 		IfScope& alphaThresholdTest = fragment.If(ShaderFuncs::LessThan(masterNodeValues.at("Alpha"), masterNodeValues.at("AlphaThreshold")));
 		alphaThresholdTest.Discard();
-		ShaderVariablePtr albedo = fragment.DefineVar(ShaderFuncs::xyz(masterNodeValues.at("Albedo")));
+		ShaderVariablePtr albedo = fragment.DefineVar(masterNodeValues.at("Albedo"));
 		ShaderVariablePtr metallic = fragment.DefineVar(masterNodeValues.at("Metallic"));
 		ShaderVariablePtr roughness = fragment.DefineVar(masterNodeValues.at("Roughness"));
 		ShaderVariablePtr ao = fragment.DefineVar(masterNodeValues.at("Occlusion"));

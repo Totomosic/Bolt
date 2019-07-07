@@ -16,7 +16,7 @@ namespace Bolt
 		BasicMaterialGraph();
 
 		void SetVertexPosition(const NodeConnection& connection);
-		void SetColor(const NodeConnection& connection);
+		void SetRGB(const NodeConnection& connection);
 		void SetAlpha(const NodeConnection& connection);
 		void SetAlphaThreshold(const NodeConnection& connection);
 

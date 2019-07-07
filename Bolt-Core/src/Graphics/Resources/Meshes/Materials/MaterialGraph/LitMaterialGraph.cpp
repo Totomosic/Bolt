@@ -23,7 +23,7 @@ namespace Bolt
 		m_VertexPosition->SetValue(connection);
 	}
 
-	void LitMaterialGraph::SetColor(const NodeConnection& connection)
+	void LitMaterialGraph::SetRGB(const NodeConnection& connection)
 	{
 		m_Color->SetValue(connection);
 	}
@@ -102,7 +102,7 @@ namespace Bolt
 		ShaderVariablePtr lightColor = loop.DefineVar(ShaderFuncs::Mul(ShaderFuncs::Index(lightColors, counter), ShaderFuncs::Index(lightIntensities, counter)));
 		loop.AddAssign(totalDiffuse, ShaderFuncs::xyz(ShaderFuncs::Mul(ShaderFuncs::Index(lightColors, counter), multiplier)));
 		loop.AddAssign(totalSpecular, ShaderFuncs::xyz(ShaderFuncs::Mul(ShaderFuncs::Mul(lightColor, dampedSpecFactor), reflectivity)));
-		ShaderVariablePtr finalColor = fragment.DefineVar(ShaderFuncs::Mul(ShaderFuncs::Add(totalDiffuse, totalSpecular), ShaderFuncs::xyz(color)));
+		ShaderVariablePtr finalColor = fragment.DefineVar(ShaderFuncs::Mul(ShaderFuncs::Add(totalDiffuse, totalSpecular), color));
 		fragment.SetFragColor(ShaderFuncs::Vec4(finalColor, masterNodeValues.at("Alpha")));
 	}
 
