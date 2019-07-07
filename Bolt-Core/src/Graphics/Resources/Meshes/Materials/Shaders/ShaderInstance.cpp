@@ -57,7 +57,7 @@ namespace Bolt
 				RendererUniformLocation loc = { shader.GetUniformLocation(uniform.VarName), uniform.Uniform, true, -1 };
 				if (loc.Location == -1)
 				{
-					BLT_WARN("Unable to find renderer uniform with name " + uniform.VarName);
+					BLT_CORE_WARN("Unable to find renderer uniform with name " + uniform.VarName);
 				}
 				result.push_back(std::move(loc));
 			}
@@ -90,7 +90,7 @@ namespace Bolt
 				UserUniformLocation loc = { uniform.LinkName, shader.GetUniformLocation(uniform.VarName), uniform.Type, true, textureCount, uniform.DefaultValue };
 				if (loc.Location == -1)
 				{
-					BLT_WARN("Unable to find user uniform with name " + uniform.VarName);
+					BLT_CORE_WARN("Unable to find user uniform with name " + uniform.VarName);
 				}
 				result.push_back(std::move(loc));
 				if (uniform.Type == ValueType::Texture2D)

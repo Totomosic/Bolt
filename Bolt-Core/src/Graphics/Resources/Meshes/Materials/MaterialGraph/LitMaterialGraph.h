@@ -18,7 +18,7 @@ namespace Bolt
 		LitMaterialGraph();
 
 		void SetVertexPosition(const NodeConnection& connection);
-		void SetColor(const NodeConnection& connection);
+		void SetRGB(const NodeConnection& connection);
 		void SetShininess(const NodeConnection& connection);
 		void SetShineDamper(const NodeConnection& connection);
 		void SetAlpha(const NodeConnection& connection);

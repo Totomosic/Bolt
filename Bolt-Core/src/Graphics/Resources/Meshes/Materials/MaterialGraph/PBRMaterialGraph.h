@@ -20,7 +20,7 @@ namespace Bolt
 		PBRMaterialGraph();
 
 		void SetVertexPosition(const NodeConnection& connection);
-		void SetAlbedo(const NodeConnection& connection);
+		void SetRGB(const NodeConnection& connection);
 		void SetNormal(const NodeConnection& connection);
 		void SetMetallic(const NodeConnection& connection);
 		void SetRoughness(const NodeConnection& connection);

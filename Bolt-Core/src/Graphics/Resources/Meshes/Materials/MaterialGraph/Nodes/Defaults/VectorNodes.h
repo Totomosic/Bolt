@@ -4,6 +4,20 @@
 namespace Bolt
 {
 
+	class BLT_API Vec2Node : public MaterialNode
+	{
+	private:
+		Vector2f m_Value;
+
+	public:
+		Vec2Node(const Vector2f& value);
+
+		NodeConnection GetValue() const;
+
+		virtual void Build(BuiltMaterialNode& node, const LinkedInputs& inputs, const MaterialGraphContext& context, MaterialGraphBuilder& builder) const override;
+		virtual void ConnectDefaults(MaterialGraph& graph, const MaterialGraphContext& context) override;
+	};
+
 	class BLT_API Vec3Node : public MaterialNode
 	{
 	private:

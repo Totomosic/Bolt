@@ -21,7 +21,7 @@ namespace Bolt
 		m_VertexPosition->SetValue(connection);
 	}
 
-	void BasicMaterialGraph::SetColor(const NodeConnection& connection)
+	void BasicMaterialGraph::SetRGB(const NodeConnection& connection)
 	{
 		m_Color->SetValue(connection);
 	}
@@ -57,7 +57,7 @@ namespace Bolt
 		IfScope& alphaThresholdTest = fragment.If(ShaderFuncs::LessThan(masterNodeValues.at("Alpha"), masterNodeValues.at("AlphaThreshold")));
 		alphaThresholdTest.Discard();
 		ShaderVariablePtr color = fragment.DefineVar(masterNodeValues.at("Color"));
-		ShaderVariablePtr finalColor = fragment.DefineVar(ShaderFuncs::xyz(ShaderFuncs::Mul(color, inColor)));
+		ShaderVariablePtr finalColor = fragment.DefineVar(ShaderFuncs::Mul(ShaderFuncs::xyz(inColor), color));
 		fragment.SetVariable(finalColor, ShaderFuncs::Pow(finalColor, ShaderLiteral::FromVec3({ 1 / 2.2f, 1 / 2.2f, 1 / 2.2f })));
 		fragment.SetFragColor(ShaderFuncs::Vec4(finalColor, masterNodeValues.at("Alpha")));
 	}

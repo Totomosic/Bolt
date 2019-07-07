@@ -37,7 +37,6 @@ namespace Bolt
 	{
 		if (&SceneManager::Get().CurrentScene() == nullptr)
 		{
-			BLT_CORE_WARN("No Active Scene");
 			return;
 		}
 		DefaultFramebuffer()->Clear();

@@ -71,7 +71,9 @@ namespace Bolt
 	void MaterialManager::CreateDefaultMaterial(BasicMaterialGraph& graph) const
 	{
 		PropertyNode& color = graph.AddProperty("Color", Color::White);
-		graph.SetColor(color.GetValue());
+		SplitVec4Node& splitter = graph.AddNode<SplitVec4Node>();
+		splitter.SetInput(color.GetValue());
+		graph.SetRGB(splitter.GetRGB());
 		graph.Build();
 	}
 
@@ -80,7 +82,7 @@ namespace Bolt
 		PropertyNode& texture = graph.AddProperty("Texture", ResourceManager::Get().Textures().DefaultWhite());
 		SampleTextureNode& sampler = graph.AddNode<SampleTextureNode>();
 		sampler.SetTexture(texture.GetValue());
-		graph.SetColor(sampler.GetRGBA());
+		graph.SetRGB(sampler.GetRGB());
 		graph.SetAlpha(sampler.GetA());
 		graph.Build();
 	}
@@ -113,7 +115,9 @@ namespace Bolt
 	void MaterialManager::CreateDefaultLightingMaterial(LitMaterialGraph& graph) const
 	{
 		PropertyNode& color = graph.AddProperty("Color", Color::White);
-		graph.SetColor(color.GetValue());
+		SplitVec4Node& splitter = graph.AddNode<SplitVec4Node>();
+		splitter.SetInput(color.GetValue());
+		graph.SetRGB(splitter.GetRGB());
 		PropertyNode& shininess = graph.AddProperty("Shininess", 0.0f);
 		graph.SetShininess(shininess.GetValue());
 		PropertyNode& shineDamper = graph.AddProperty("ShineDamper", 10.0f);
@@ -126,7 +130,7 @@ namespace Bolt
 		PropertyNode& color = graph.AddProperty("Texture", ResourceManager::Get().Textures().DefaultWhite());
 		SampleTextureNode& sampler = graph.AddNode<SampleTextureNode>();
 		sampler.SetTexture(color.GetValue());
-		graph.SetColor(sampler.GetRGBA());
+		graph.SetRGB(sampler.GetRGB());
 		PropertyNode& shininess = graph.AddProperty("Shininess", 0.0f);
 		graph.SetShininess(shininess.GetValue());
 		PropertyNode& shineDamper = graph.AddProperty("ShineDamper", 10.0f);
@@ -137,7 +141,9 @@ namespace Bolt
 	void MaterialManager::CreatePBRMaterial(PBRMaterialGraph& graph) const
 	{
 		PropertyNode& albedo = graph.AddProperty("Albedo", Color::White);
-		graph.SetAlbedo(albedo.GetValue());
+		SplitVec4Node& splitter = graph.AddNode<SplitVec4Node>();
+		splitter.SetInput(albedo.GetValue());
+		graph.SetRGB(splitter.GetRGB());
 		PropertyNode& metallic = graph.AddProperty("Metallic", 0.0f);
 		graph.SetMetallic(metallic.GetValue());
 		PropertyNode& roughness = graph.AddProperty("Roughness", 0.5f);
@@ -152,7 +158,7 @@ namespace Bolt
 		PropertyNode& albedo = graph.AddProperty("Albedo", ResourceManager::Get().Textures().DefaultWhite());
 		SampleTextureNode& albedoSampler = graph.AddNode(std::make_unique<SampleTextureNode>());
 		albedoSampler.SetTexture(albedo.GetValue());
-		graph.SetAlbedo(albedoSampler.GetRGBA());
+		graph.SetRGB(albedoSampler.GetRGB());
 		PropertyNode& metallic = graph.AddProperty("Metallic", ResourceManager::Get().Textures().DefaultBlack());
 		SampleTextureNode& metallicSampler = graph.AddNode(std::make_unique<SampleTextureNode>(SampleMode::Normal));
 		metallicSampler.SetTexture(metallic.GetValue());

@@ -72,7 +72,7 @@ namespace Meteors
 			esch.AddRenderProcess({});
 			SceneRenderer::Get().AddRenderSchedule(esch);
 
-			SceneManager::Get().SetCurrentScene(*(Scene*)nullptr);
+			SceneManager::Get().DisableCurrentScene();
 		}
 
 		void LoadGameScene()
@@ -86,12 +86,24 @@ namespace Meteors
 			ObjectFactory& factory = manager.Factory;
 			factory.SetCurrentLayer(layer);
 			factory.Image(ViewWidth, ViewHeight, ResourceManager::Get().GetResource<Texture2D>(RollingHillsTexture), Transform({ ViewWidth / 2, ViewHeight / 2, -99 }));
-			GameObject * player = factory.Image(CharacterWidth, CharacterHeight, ResourceManager::Get().GetResource<Texture2D>(RightFacingCharacterTexture), Transform({ ViewWidth / 2, FloorHeight + CharacterHeight / 2, 0 }));
+			GameObject* player = factory.Image(CharacterWidth, CharacterHeight, ResourceManager::Get().GetResource<Texture2D>(RightFacingCharacterTexture), Transform({ ViewWidth / 2, FloorHeight + CharacterHeight / 2, 0 }));
 			player->AddTag("Player");
 			player->Components().AddComponent<PlayerMovement>(PlayerSpeed, 2400, Gravity, 3);
 			player->mesh().Mesh.Materials[0]->SetIsTransparent(true);
 
-			GameObject* ground = factory.Image(ViewWidth, FloorHeight, ResourceManager::Get().GetResource<Texture2D>(GroundTexture), Transform({ ViewWidth / 2, FloorHeight / 2, -98 }));
+			BasicMaterialGraph groundGraph;
+			PropertyNode& texture = groundGraph.AddProperty("Texture", ResourceManager::Get().GetResource<Texture2D>(GroundTexture));
+			SampleTextureNode& sampler = groundGraph.AddNode<SampleTextureNode>();
+			Vec2Node& scaling = groundGraph.AddNode(std::make_unique<Vec2Node>(Vector2f{ 19.2f, 1.0f }));
+			MultiplyNode& multiply = groundGraph.AddNode<MultiplyNode>();
+			multiply.SetInputA(groundGraph.GetContext().VertexTexCoord().GetValue());
+			multiply.SetInputB(scaling.GetValue());
+			sampler.SetTexture(texture.GetValue());
+			sampler.SetTexCoord(multiply.GetResult());
+			groundGraph.SetRGB(sampler.GetRGB());
+			groundGraph.Build();
+
+			GameObject* ground = factory.Rectangle(ViewWidth, FloorHeight, groundGraph.GetMaterial(), Transform({ ViewWidth / 2, FloorHeight / 2, -98 }));
 
 			manager.Player = player;
 
