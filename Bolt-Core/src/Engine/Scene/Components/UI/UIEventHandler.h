@@ -6,57 +6,50 @@
 namespace Bolt
 {
 
-	class BLT_API UIClickedEvent : public Event
+	class BLT_API UIClickedEvent
 	{
 	public:
 		GameObject* Object;
 		Vector2f ScreenPosition;
 		Vector2f ObjectRelPosition;
 		MouseButton Button;
-
-		BLT_EVENT_ID_DEF(Events::ON_CLICKED);
 	};
 
-	class BLT_API UIHoverEvent : public Event
+	class BLT_API UIHoverEvent
 	{
 	public:
 		GameObject* Object;
 		Vector2f ScreenPosition;
 		Vector2f ObjectRelPosition;
-
-		BLT_EVENT_ID_DEF(Events::ON_HOVER);
 	};
 
-	class BLT_API UIHoverEntryEvent : public Event
+	class BLT_API UIHoverEntryEvent
 	{
 	public:
 		GameObject* Object;
 		Vector2f ScreenPosition;
 		Vector2f ObjectRelPosition;
-
-		BLT_EVENT_ID_DEF(Events::ON_HOVER_ENTRY);
 	};
 
-	class BLT_API UIHoverExitEvent : public Event
+	class BLT_API UIHoverExitEvent
 	{
 	public:
 		GameObject* Object;
 		Vector2f ScreenPosition;
 		Vector2f ObjectRelPosition;
-
-		BLT_EVENT_ID_DEF(Events::ON_HOVER_ENTRY);
 	};
 
 	class BLT_API UIEventHandler : public Component
 	{
 	private:
 		bool m_IsHovering;
+		EventBus m_EventBus;
 
 	public:
-		EventDispatcher<UIClickedEvent> OnClicked;
-		EventDispatcher<UIHoverEntryEvent> OnHoverEntry;
-		EventDispatcher<UIHoverEvent> OnHover;
-		EventDispatcher<UIHoverExitEvent> OnHoverExit;
+		EventEmitter<UIClickedEvent> OnClicked;
+		EventEmitter<UIHoverEntryEvent> OnHoverEntry;
+		EventEmitter<UIHoverEvent> OnHover;
+		EventEmitter<UIHoverExitEvent> OnHoverExit;
 
 	public:
 		UIEventHandler();

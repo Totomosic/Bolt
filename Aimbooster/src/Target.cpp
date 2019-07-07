@@ -29,7 +29,7 @@ namespace Aimbooster
 				Destroy(gameObject());
 				TargetFailedEvent e;
 				e.Position = gameObject()->transform().Position();
-				EventManager::Get().Post<TargetFailedEvent>(e);
+				EventManager::Get().Bus().Emit<TargetFailedEvent>(TARGET_FAILED_EVENT, e);
 			}
 			else
 			{
@@ -42,7 +42,7 @@ namespace Aimbooster
 						Destroy(gameObject());
 						GameObject* hitLocation = Factory->Ellipse(5, 5, Color::White, Transform({ Input::Get().MousePosition(width, height).x, Input::Get().MousePosition(width, height).y, gameObject()->transform().Position().z + 1 }));
 						Destroy(hitLocation, 1.0f);
-						EventManager::Get().Post<TargetHitEvent>();
+						EventManager::Get().Bus().Emit(TARGET_HIT_EVENT);
 					}
 				}
 			}

@@ -9,7 +9,11 @@ namespace Bolt
 {
 
 	UIEventHandler::UIEventHandler() : Component(),
-		m_IsHovering(false), OnClicked(), OnHoverEntry(), OnHover(), OnHoverExit()
+		m_IsHovering(false), m_EventBus(),
+		OnClicked(m_EventBus.GetEmitter<UIClickedEvent>(Events::ON_CLICKED)), 
+		OnHoverEntry(m_EventBus.GetEmitter<UIHoverEntryEvent>(Events::ON_HOVER_ENTRY)),
+		OnHover(m_EventBus.GetEmitter<UIHoverEvent>(Events::ON_HOVER)),
+		OnHoverExit(m_EventBus.GetEmitter<UIHoverExitEvent>(Events::ON_HOVER_EXIT))
 	{
 	
 	}
@@ -23,7 +27,7 @@ namespace Bolt
 			args.Object = gameObject();
 			args.ScreenPosition = Input::Get().MousePosition().xy();
 			args.ObjectRelPosition = args.ScreenPosition - args.Object->transform().Position().xy();
-			OnHover.Post(std::move(args));
+			OnHover.Emit(std::move(args));
 		}
 		if (!m_IsHovering && hovering)
 		{
@@ -31,7 +35,7 @@ namespace Bolt
 			args.Object = gameObject();
 			args.ScreenPosition = Input::Get().MousePosition().xy();
 			args.ObjectRelPosition = args.ScreenPosition - args.Object->transform().Position().xy();
-			OnHoverEntry.Post(std::move(args));
+			OnHoverEntry.Emit(std::move(args));
 		}
 		if (m_IsHovering && !hovering)
 		{
@@ -39,7 +43,7 @@ namespace Bolt
 			args.Object = gameObject();
 			args.ScreenPosition = Input::Get().MousePosition().xy();
 			args.ObjectRelPosition = args.ScreenPosition - args.Object->transform().Position().xy();
-			OnHoverExit.Post(std::move(args));
+			OnHoverExit.Emit(std::move(args));
 		}
 		if (m_IsHovering)
 		{
@@ -51,7 +55,7 @@ namespace Bolt
 				args.ScreenPosition = Input::Get().MousePosition().xy();
 				args.ObjectRelPosition = args.ScreenPosition - args.Object->transform().Position().xy();
 				args.Button = (MouseButton)button;
-				OnClicked.Post(std::move(args));
+				OnClicked.Emit(std::move(args));
 			}
 		}
 		m_IsHovering = hovering;

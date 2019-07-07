@@ -68,23 +68,19 @@ namespace Aimbooster
 
 					thisPtr->targetTimer = &Time::Get().RenderingTimeline().AddTimer(1 / thisPtr->TARGETS_PER_SECOND, std::bind(&App::CreateTarget, thisPtr));
 					thisPtr->targetTimer->Stop();
-					EventManager::Get().Subscribe<TargetHitEvent>([thisPtr](TargetHitEvent& args) -> ListenerResponse
+					EventManager::Get().Bus().On<void>(TARGET_HIT_EVENT, [thisPtr](Event<void>& args)
 						{
 							thisPtr->score++;
-							ListenerResponse response;
-							return response;
 						});
-					EventManager::Get().Subscribe<TargetFailedEvent>([thisPtr](TargetFailedEvent& args) -> ListenerResponse
+					EventManager::Get().Bus().On<TargetFailedEvent>(TARGET_FAILED_EVENT, [thisPtr](Event<TargetFailedEvent>& args)
 						{
 							thisPtr->lives--;
-							GameObject* marker = thisPtr->factory.Ellipse(5, 5, Color::Black, Transform(args.Position));
+							GameObject* marker = thisPtr->factory.Ellipse(5, 5, Color::Black, Transform(args.Data.Position));
 							Destroy(marker, 1.0f);
 							if (thisPtr->lives <= 0)
 							{
 								thisPtr->CreateEndScreen();
 							}
-							ListenerResponse response;
-							return response;
 						});
 					thisPtr->CreateTitleScreen();
 				});
@@ -132,48 +128,38 @@ namespace Aimbooster
 			UIsurface& quitButton = mainLayer->UI().Rectangle(300, 50, Color(200, 0, 0), Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() / 2 - 225, -5 }));
 			quitButton.Text("Quit", Color::White, Transform({ 0, 0, 1 }));
 
-			playButton.EventHandler().OnClicked.Subscribe([this](UIClickedEvent& args)
+			playButton.EventHandler().OnClicked.On([this](Event<UIClickedEvent>& e)
 			{
 				CreateGameScreen();
-				ListenerResponse response;
-				response.HandledEvent = true;
-				return response;
+				e.Handled = true;
 			});
 
-			playButton.EventHandler().OnHoverEntry.Subscribe([](UIHoverEntryEvent& args)
+			playButton.EventHandler().OnHoverEntry.On([](Event<UIHoverEntryEvent>& e)
 			{
-				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetLinkContext().GetLink("Color") = Color::Green;
-				ListenerResponse response;
-				response.HandledEvent = true;
-				return response;
+				e.Data.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetLinkContext().GetLink("Color") = Color::Green;
+				e.Handled = true;
 			});
 
-			playButton.EventHandler().OnHoverExit.Subscribe([](UIHoverExitEvent& args)
+			playButton.EventHandler().OnHoverExit.On([](Event<UIHoverExitEvent>& e)
 			{
-				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetLinkContext().GetLink("Color") = Color(0, 200, 0 );
-				ListenerResponse response;
-				response.HandledEvent = true;
-				return response;
+				e.Data.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetLinkContext().GetLink("Color") = Color(0, 200, 0);
+				e.Handled = true;
 			});
 
-			quitButton.EventHandler().OnClicked.Subscribe([this](UIClickedEvent& args)
+			quitButton.EventHandler().OnClicked.On([this](Event<UIClickedEvent>& e)
 			{
 				Exit();
-				ListenerResponse response;
-				response.HandledEvent = true;
-				return response;
+				e.Handled = true;
 			});
 
-			quitButton.EventHandler().OnHoverEntry.Subscribe([](UIHoverEntryEvent& args)
+			quitButton.EventHandler().OnHoverEntry.On([](Event<UIHoverEntryEvent>& e)
 			{
-				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetLinkContext().GetLink("Color") = Color::Red;
-				return ListenerResponse();
+				e.Data.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetLinkContext().GetLink("Color") = Color::Red;
 			});
 
-			quitButton.EventHandler().OnHoverExit.Subscribe([](UIHoverExitEvent& args)
+			quitButton.EventHandler().OnHoverExit.On([](Event<UIHoverExitEvent>& e)
 			{
-				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetLinkContext().GetLink("Color") = Color(200, 0, 0);
-				return ListenerResponse();
+				e.Data.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetLinkContext().GetLink("Color") = Color(200, 0, 0);
 			});
 			
 		}
@@ -193,22 +179,19 @@ namespace Aimbooster
 			fpsText = &mainLayer->UI().Text("60 fps", Color::White, Transform({ mainCamera->ViewWidth() - 100, mainCamera->ViewHeight() - 30, -5 }), AlignH::Left);
 			scoreText = &mainLayer->UI().Text("Score: 0", Color::White, Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() - 30, -5 }), AlignH::Center);
 
-			qButton.EventHandler().OnClicked.Subscribe([this](UIClickedEvent& args)
+			qButton.EventHandler().OnClicked.On([this](Event<UIClickedEvent>& e)
 			{
 				CreateTitleScreen();
-				return ListenerResponse();
 			});
 
-			qButton.EventHandler().OnHoverEntry.Subscribe([](UIHoverEntryEvent& args)
+			qButton.EventHandler().OnHoverEntry.On([](Event<UIHoverEntryEvent>& e)
 			{
-				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetLinkContext().GetLink("Color") = Color::Red;
-				return ListenerResponse();
+				e.Data.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetLinkContext().GetLink("Color") = Color::Red;
 			});
 
-			qButton.EventHandler().OnHoverExit.Subscribe([](UIHoverExitEvent& args)
+			qButton.EventHandler().OnHoverExit.On([](Event<UIHoverExitEvent>& e)
 			{
-				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetLinkContext().GetLink("Color") = Color(200, 0, 0);
-				return ListenerResponse();
+				e.Data.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetLinkContext().GetLink("Color") = Color(200, 0, 0);
 			});
 		}
 
@@ -225,42 +208,36 @@ namespace Aimbooster
 			mainLayer->UI().Text("Score: " + std::to_string(score), Color::White, Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() / 2 - 50, -5 }));
 			UIsurface& retryButton = mainLayer->UI().Rectangle(300, 50, Color(0, 200, 0), Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() / 2 - 150, -5 }));
 			retryButton.Text("Retry", Color::White, Transform({ 0, 0, 1 }));
-			retryButton.EventHandler().OnClicked.Subscribe([this](UIClickedEvent& args)
+			retryButton.EventHandler().OnClicked.On([this](Event<UIClickedEvent>& e)
 			{
 				CreateGameScreen();
-				return ListenerResponse();
 			});
 
-			retryButton.EventHandler().OnHoverEntry.Subscribe([](UIHoverEntryEvent& args)
+			retryButton.EventHandler().OnHoverEntry.On([](Event<UIHoverEntryEvent>& e)
 			{
-				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetLinkContext().GetLink("Color") = Color::Green;
-				return ListenerResponse();
+				e.Data.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetLinkContext().GetLink("Color") = Color::Green;
 			});
 
-			retryButton.EventHandler().OnHoverExit.Subscribe([](UIHoverExitEvent& args)
+			retryButton.EventHandler().OnHoverExit.On([](Event<UIHoverExitEvent>& e)
 			{
-				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetLinkContext().GetLink("Color") = Color(0, 200, 0);
-				return ListenerResponse();
+				e.Data.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetLinkContext().GetLink("Color") = Color(0, 200, 0);
 			});
 
 			UIsurface& menuButton = mainLayer->UI().Rectangle(300, 50, Color(200, 0, 0), Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() / 2 - 225, -5 }));
 			menuButton.Text("Main Menu", Color::White, Transform({ 0, 0, 1 }));
-			menuButton.EventHandler().OnClicked.Subscribe([this](UIClickedEvent& args)
+			menuButton.EventHandler().OnClicked.On([this](Event<UIClickedEvent>& e)
 			{
 				CreateTitleScreen();
-				return ListenerResponse();
 			});
 
-			menuButton.EventHandler().OnHoverEntry.Subscribe([](UIHoverEntryEvent& args)
+			menuButton.EventHandler().OnHoverEntry.On([](Event<UIHoverEntryEvent>& e)
 			{
-				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetLinkContext().GetLink("Color") = Color::Red;
-				return ListenerResponse();
+				e.Data.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetLinkContext().GetLink("Color") = Color::Red;
 			});
 
-			menuButton.EventHandler().OnHoverExit.Subscribe([](UIHoverExitEvent& args)
+			menuButton.EventHandler().OnHoverExit.On([](Event<UIHoverExitEvent>& e)
 			{
-				args.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetLinkContext().GetLink("Color") = Color(200, 0, 0);
-				return ListenerResponse();
+				e.Data.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetLinkContext().GetLink("Color") = Color(200, 0, 0);
 			});
 
 			totalTime = 0;

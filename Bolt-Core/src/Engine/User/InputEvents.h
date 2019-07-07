@@ -1,5 +1,5 @@
 #pragma once
-#include "Core/Events/EventDispatcher.h"
+#include "Core/Events/EventBus.h"
 
 namespace Bolt
 {
@@ -123,62 +123,50 @@ namespace Bolt
 		None = BLT_BIT(10)
 	};
 
-	struct BLT_API KeyPressedEvent : public Event
+	struct BLT_API KeyPressedEvent
 	{
 	public:
 		Keycode KeyCode;
 		bool IsRepeat;
-
-		BLT_EVENT_ID_DEF(Events::KEY_PRESSED);
 	};
 
-	struct BLT_API KeyReleasedEvent : public Event
+	struct BLT_API KeyReleasedEvent
 	{
 	public:
 		Keycode KeyCode;
-
-		BLT_EVENT_ID_DEF(Events::KEY_RELEASED);
 	};
 
-	struct BLT_API MouseMovedEvent : public Event
+	struct BLT_API MouseMovedEvent
 	{
 	public:
 		float x;
 		float y;
 		float relX;
 		float relY;
-
-		BLT_EVENT_ID_DEF(Events::MOUSE_POSITION_MOVED);
 	};
 
-	struct BLT_API MousePressedEvent : public Event
+	struct BLT_API MousePressedEvent
 	{
 	public:
 		MouseButton Button;
 		bool IsRepeat;
 		float x;
 		float y;
-
-		BLT_EVENT_ID_DEF(Events::MOUSE_PRESSED);
 	};
 
-	struct BLT_API MouseReleasedEvent : public Event
+	struct BLT_API MouseReleasedEvent
 	{
 	public:
 		MouseButton Button;
 		float x;
 		float y;
-
-		BLT_EVENT_ID_DEF(Events::MOUSE_RELEASED);
 	};
 
-	struct BLT_API MouseScrolledEvent : public Event
+	struct BLT_API MouseScrolledEvent
 	{
 	public:
 		float xOffset;
 		float yOffset;
-
-		BLT_EVENT_ID_DEF(Events::MOUSE_SCROLLED);
 	};
 
 }

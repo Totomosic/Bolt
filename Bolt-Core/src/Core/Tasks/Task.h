@@ -70,7 +70,7 @@ namespace Bolt
 		{
 			ContinueWith([func{ std::move(func) }](TResult value) mutable
 			{
-				EventManager::Get().Post(TaskCompleted<TResult>(std::move(value), std::move(func)));
+				EventManager::Get().Bus().Emit(Events::TASK_CONTINUE_ON_MAIN_THREAD, TaskCompleted<TResult>(std::move(value), std::move(func)));
 			});
 		}
 
@@ -140,7 +140,7 @@ namespace Bolt
 		{
 			ContinueWith([func{ std::move(func) }]() mutable
 			{
-				EventManager::Get().Post(TaskCompleted<int>(0, [func{ std::move(func) }](int ignore) mutable
+				EventManager::Get().Bus().Emit(Events::TASK_CONTINUE_ON_MAIN_THREAD, TaskCompleted<int>(0, [func{ std::move(func) }](int ignore) mutable
 				{
 					func();
 				}));

@@ -1,7 +1,7 @@
 #include "bltpch.h"
 #include "EventManager.h"
+#include "EventBus.h"
 
-#include "../Tasks/TaskEvents.h"
 #include "Engine/Engine.h"
 
 namespace Bolt
@@ -13,105 +13,55 @@ namespace Bolt
 	}
 
 	EventManager::EventManager()
-		: m_EventQueueMutex(), m_ListenersMutex(), m_EventQueue(EventManager::MAX_EVENTS), m_Listeners(), m_ListenerMap(), m_ListenerIdManager(0, EventManager::IGNORE_DISPATCHER_ID - 1), m_DispatcherIdManager(0, EventManager::IGNORE_DISPATCHER_ID - 1)
+		: m_EventBuses(), m_GlobalBus(std::make_unique<GenericEventBus<uint32_t>>())
 	{
-		Subscribe<TaskCompletedEvent>([](TaskCompletedEvent & e)
+		m_GlobalBus->On<TaskCompletedEvent>(Events::TASK_CONTINUE_ON_MAIN_THREAD, [](Event<TaskCompletedEvent>& e)
 			{
-				e.Execute();
-				ListenerResponse response;
-				return response;
+				e.Data.Execute();
 			});
 	}
 
-	id_t EventManager::GetNextDispatcherId()
+	EventBus& EventManager::Bus()
 	{
-		return m_DispatcherIdManager.GetNextId();
+		return *m_GlobalBus;
 	}
 
-	void EventManager::ReleaseDispatcherId(id_t id)
+	void EventManager::AddEventBus(EventBusBase* bus)
 	{
-		m_DispatcherIdManager.ReleaseId(id);
+		m_EventBuses.push_back(bus);
 	}
 
-	void EventManager::Unsubscribe(id_t listenerId)
+	void EventManager::UpdateEventBus(EventBusBase* oldBus, EventBusBase* newBus)
 	{
-		std::scoped_lock<std::mutex> lock(m_ListenersMutex);
-		BLT_ASSERT(m_ListenerMap.find(listenerId) != m_ListenerMap.end(), "Unable to find listener with Id " + std::to_string(listenerId));
-		id_t eventId = m_ListenerMap.at(listenerId);
-		std::vector<EventListenerInfo>& listenersVector = m_Listeners.at(eventId);
-		auto it = std::find_if(listenersVector.begin(), listenersVector.end(), [listenerId](EventListenerInfo& eListener)
-		{	
-			return eListener.ListenerId == listenerId;
-		});
-		listenersVector.erase(it);
-		ReleaseListenerId(listenerId);
-	}
-
-	void EventManager::FlushEvents()
-	{
-		EventInfo* eventQueue;
-		id_t eventQueueLength;
+		auto it = std::find(m_EventBuses.begin(), m_EventBuses.end(), oldBus);
+		if (it != m_EventBuses.end())
 		{
-			std::scoped_lock<std::mutex, std::mutex> lock(m_EventQueueMutex, m_ListenersMutex);
-			eventQueue = m_EventQueue.GetQueuePtr();
-			eventQueueLength = m_EventQueue.EventCount();
-			m_EventQueue.SwapQueues();
+			*it = newBus;
 		}
-		for (id_t i = 0; i < eventQueueLength; i++)
+		else
 		{
-			EventInfo& e = eventQueue[i];
-			for (auto& listener : m_Listeners[e.EventId])
-			{
-				if (listener.DispatcherId == EventManager::IGNORE_DISPATCHER_ID || e.DispatcherId == listener.DispatcherId)
-				{
-					ListenerResponse response = (*listener.Callback)(*e.Args);
-					if (response.UnsubscribeListener)
-					{
-						Unsubscribe(listener.ListenerId);
-					}
-					if (response.HandledEvent)
-					{
-						// Event has already been handled and should not be propogated to other event listeners
-						break;
-					}
-				}
-			}
+			BLT_CORE_WARN("BUS NOT FOUND");
 		}
 	}
 
-	id_t EventManager::FindNextListenerId()
+	void EventManager::RemoveBus(EventBusBase* bus)
 	{
-		return m_ListenerIdManager.GetNextId();
-	}
-
-	void EventManager::ReleaseListenerId(id_t id)
-	{
-		m_ListenerIdManager.ReleaseId(id);
-	}
-
-	id_t EventManager::Subscribe(id_t eventId, std::unique_ptr<EventListenerContainer<Event>> listener, id_t dispatcherId)
-	{
-		std::scoped_lock<std::mutex> lock(m_ListenersMutex);
-		id_t listenerId = FindNextListenerId();
-		id_t listenerIndex = m_Listeners[eventId].size();
-		m_Listeners.at(eventId).push_back({ std::move(listener), dispatcherId, listenerId });
-		m_ListenerMap[listenerId] = eventId;
-		return listenerId;
-	}
-
-	void EventManager::UpdateListener(id_t listenerId, std::unique_ptr<EventListenerContainer<Event>> listener)
-	{
-		std::scoped_lock<std::mutex> lock(m_ListenersMutex);
-		BLT_ASSERT(m_ListenerMap.find(listenerId) != m_ListenerMap.end(), "Unable to find listener with Id " + std::to_string(listenerId));
-		id_t eventId = m_ListenerMap.at(listenerId);
-		std::vector<EventListenerInfo>& listenersVector = m_Listeners.at(eventId);
-		for (EventListenerInfo& l : listenersVector)
+		auto it = std::find(m_EventBuses.begin(), m_EventBuses.end(), bus);
+		if (it != m_EventBuses.end())
 		{
-			if (l.ListenerId == listenerId)
-			{
-				l.Callback = std::move(listener);
-				break;
-			}
+			m_EventBuses.erase(it);
+		}
+		else
+		{
+			BLT_CORE_WARN("BUS NOT FOUND");
+		}
+	}
+
+	void EventManager::FlushAll() const
+	{
+		for (int i = m_EventBuses.size() - 1; i >= 0; i--)
+		{
+			m_EventBuses[i]->Flush();
 		}
 	}
 
