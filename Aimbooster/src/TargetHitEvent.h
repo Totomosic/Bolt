@@ -6,16 +6,12 @@ using namespace Bolt;
 namespace Aimbooster
 {
 
-	class TargetHitEvent : public Event
-	{
-	public:
-		BLT_EVENT_ID_DEF(EventManager::USER_EVENT_ID + 1);
-	};
+	constexpr int TARGET_HIT_EVENT = 10000;
+	constexpr int TARGET_FAILED_EVENT = 10001;
 
-	class TargetFailedEvent : public Event
+	class TargetFailedEvent
 	{
 	public:
-		BLT_EVENT_ID_DEF(EventManager::USER_EVENT_ID + 2);
 		Vector3f Position;
 	};
 

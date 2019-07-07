@@ -13,18 +13,18 @@ namespace Bolt
 		static constexpr int MAX_LAYERS = LAYERS_PER_SCENE;
 		static constexpr int MAX_CAMERAS = 32;
 
-	// EventDispatchers work when put above members but not below, INVESTIGATE
-	public:
-		EventDispatcher<SceneLoadedEvent> OnLoad;
-		EventDispatcher<SceneUnloadedEvent> OnUnload;
-
 	private:
+		EventBus m_EventBus;
 		std::unique_ptr<Layer[]> m_Layers;
 		int m_LayerCapacity;
 		Camera m_Cameras[MAX_CAMERAS];
 		id_t m_Id;
 
 		PhysicsManager m_PhysEngine;
+
+	public:
+		EventEmitter<SceneLoadedEvent> OnLoad;
+		EventEmitter<SceneUnloadedEvent> OnUnload;
 
 	public:
 		Scene(int layerCount = MAX_LAYERS);

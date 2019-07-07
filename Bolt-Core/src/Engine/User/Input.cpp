@@ -7,7 +7,13 @@ namespace Bolt
 {
 
 	Input::Input(Window* window)
-		: m_Mouse(), m_Keyboard(), m_Window(window), m_PressedCharacters(), m_ChangedKeys(), m_ChangedButtons(), OnKeyPressed(), OnKeyReleased(), OnMousePressed(), OnMouseReleased(), OnMouseScrolled(), OnMouseMoved()
+		: m_EventBus(), m_Mouse(), m_Keyboard(), m_Window(window), m_PressedCharacters(), m_ChangedKeys(), m_ChangedButtons(), 
+		OnKeyPressed(m_EventBus.GetEmitter<KeyPressedEvent>(Events::KEY_PRESSED)), 
+		OnKeyReleased(m_EventBus.GetEmitter<KeyReleasedEvent>(Events::KEY_RELEASED)),
+		OnMousePressed(m_EventBus.GetEmitter<MousePressedEvent>(Events::MOUSE_PRESSED)),
+		OnMouseReleased(m_EventBus.GetEmitter<MouseReleasedEvent>(Events::MOUSE_RELEASED)),
+		OnMouseMoved(m_EventBus.GetEmitter<MouseMovedEvent>(Events::MOUSE_POSITION_MOVED)),
+		OnMouseScrolled(m_EventBus.GetEmitter<MouseScrolledEvent>(Events::MOUSE_SCROLLED))
 	{
 		for (int i = 0; i < BLT_MAX_KEYS; i++)
 		{
@@ -279,7 +285,7 @@ namespace Bolt
 			args.y = (float)mouseY;
 			args.relX = m_Mouse.RelX;
 			args.relY = m_Mouse.RelY;
-			OnMouseMoved.Post(std::move(args));
+			OnMouseMoved.Emit(std::move(args));
 		}
 	}
 
@@ -294,7 +300,7 @@ namespace Bolt
 			MouseScrolledEvent args;
 			args.xOffset = (float)xScroll;
 			args.yOffset = (float)yScroll;
-			OnMouseScrolled.Post(std::move(args));
+			OnMouseScrolled.Emit(std::move(args));
 		}
 	}
 
@@ -314,7 +320,7 @@ namespace Bolt
 				args.IsRepeat = action == GLFW_REPEAT;
 				args.x = m_Mouse.X;
 				args.y = m_Mouse.Y;
-				OnMousePressed.Post(std::move(args));
+				OnMousePressed.Emit(std::move(args));
 			}
 			else
 			{
@@ -322,7 +328,7 @@ namespace Bolt
 				args.Button = (MouseButton)button;
 				args.x = m_Mouse.X;
 				args.y = m_Mouse.Y;
-				OnMouseReleased.Post(std::move(args));
+				OnMouseReleased.Emit(std::move(args));
 			}
 		}
 	}
@@ -341,13 +347,13 @@ namespace Bolt
 				KeyPressedEvent args;
 				args.KeyCode = (Keycode)key;
 				args.IsRepeat = action == GLFW_REPEAT;
-				OnKeyPressed.Post(std::move(args));
+				OnKeyPressed.Emit(std::move(args));
 			}
 			else
 			{
 				KeyReleasedEvent args;
 				args.KeyCode = (Keycode)key;
-				OnKeyReleased.Post(std::move(args));
+				OnKeyReleased.Emit(std::move(args));
 			}
 		}
 	}

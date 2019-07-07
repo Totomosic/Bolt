@@ -3,7 +3,6 @@
 #include "Structs/Monitor.h"
 #include "Structs/WindowCreateInfo.h"
 #include "WindowEvents.h"
-#include "Core/Events/EventDispatcher.h"
 
 namespace Bolt
 {
@@ -13,11 +12,11 @@ namespace Bolt
 	struct BLT_API WindowData
 	{
 	public:
-		EventDispatcher<WindowResizeEvent> m_OnResize;
-		EventDispatcher<WindowMovedEvent> m_OnMoved;
-		EventDispatcher<WindowFocusedEvent> m_OnFocus;
-		EventDispatcher<WindowFocusedEvent> m_OnFocusLost;
-		EventDispatcher<WindowClosedEvent> m_OnClose;
+		EventBus m_EventBus;
+		EventEmitter<WindowResizeEvent> m_OnResize;
+		EventEmitter<WindowMovedEvent> m_OnMoved;
+		EventEmitter<WindowFocusedEvent> m_OnFocused;
+		EventEmitter<WindowClosedEvent> m_OnClosed;
 
 		AppContext* m_Context;
 		GLFWwindow* m_WindowHandle;
@@ -43,11 +42,11 @@ namespace Bolt
 		Window& operator=(Window&& other) = delete;
 		~Window();
 
-		inline EventDispatcher<WindowResizeEvent>& OnResize() { return m_Data.m_OnResize; }
-		inline EventDispatcher<WindowMovedEvent>& OnMoved() { return m_Data.m_OnMoved; }
-		inline EventDispatcher<WindowFocusedEvent>& OnFocus() { return m_Data.m_OnFocus; }
-		inline EventDispatcher<WindowFocusedEvent>& OnFocusLost() { return m_Data.m_OnFocusLost; }
-		inline EventDispatcher<WindowClosedEvent>& OnClose() { return m_Data.m_OnClose; }
+		inline EventBus& Events() { return m_Data.m_EventBus; }
+		inline EventEmitter<WindowResizeEvent>& OnResize() { return m_Data.m_OnResize; }
+		inline EventEmitter<WindowMovedEvent>& OnMoved() { return m_Data.m_OnMoved; }
+		inline EventEmitter<WindowFocusedEvent>& OnFocused() { return m_Data.m_OnFocused; }
+		inline EventEmitter<WindowClosedEvent>& OnClose() { return m_Data.m_OnClosed; }
 
 		AppContext& GetContext() const;
 		const Framebuffer& GetFramebuffer() const;

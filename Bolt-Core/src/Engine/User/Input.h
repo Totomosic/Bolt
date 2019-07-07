@@ -53,6 +53,7 @@ namespace Bolt
 	class BLT_API Input
 	{
 	private:
+		EventBus m_EventBus;
 		MouseInstance m_Mouse;
 		KeyboardInstance m_Keyboard;
 		Window* m_Window;
@@ -62,12 +63,12 @@ namespace Bolt
 		std::vector<MouseInstance::Button> m_ChangedButtons;
 
 	public:
-		EventDispatcher<Bolt::KeyPressedEvent> OnKeyPressed;
-		EventDispatcher<Bolt::KeyReleasedEvent> OnKeyReleased;
-		EventDispatcher<Bolt::MousePressedEvent> OnMousePressed;
-		EventDispatcher<Bolt::MouseReleasedEvent> OnMouseReleased;
-		EventDispatcher<Bolt::MouseScrolledEvent> OnMouseScrolled;
-		EventDispatcher<Bolt::MouseMovedEvent> OnMouseMoved;
+		EventEmitter<KeyPressedEvent> OnKeyPressed;
+		EventEmitter<KeyReleasedEvent> OnKeyReleased;
+		EventEmitter<MousePressedEvent> OnMousePressed;
+		EventEmitter<MouseReleasedEvent> OnMouseReleased;
+		EventEmitter<MouseMovedEvent> OnMouseMoved;
+		EventEmitter<MouseScrolledEvent> OnMouseScrolled;
 
 	public:
 		static Input& Get();

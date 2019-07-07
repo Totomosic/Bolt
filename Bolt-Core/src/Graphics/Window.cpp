@@ -10,7 +10,11 @@ namespace Bolt
 	bool Window::s_IsGLADInitialized = false;
 
 	Window::Window(AppContext* context, const WindowCreateInfo& info)
-		: m_Data{ {}, {}, {}, {}, {}, context, nullptr, Framebuffer(), info.Title, info.Decorated, true }
+		: m_Data{ {}, m_Data.m_EventBus.GetEmitter<WindowResizeEvent>(Events::WINDOW_RESIZE),
+					  m_Data.m_EventBus.GetEmitter<WindowMovedEvent>(Events::WINDOW_MOVED),
+					  m_Data.m_EventBus.GetEmitter<WindowFocusedEvent>(Events::WINDOW_FOCUSED),
+					  m_Data.m_EventBus.GetEmitter<WindowClosedEvent>(Events::WINDOW_CLOSED), 
+		context, nullptr, Framebuffer(), info.Title, info.Decorated, true }
 	{
 		m_Data.m_Framebuffer.GetViewport().Width = info.Width;
 		m_Data.m_Framebuffer.GetViewport().Height = info.Height;
@@ -86,7 +90,7 @@ namespace Bolt
 		glfwSetWindowCloseCallback((GLFWwindow*)GetNativeWindow(), [](GLFWwindow * windowHandle)
 			{
 				Window& window = *(Window*)glfwGetWindowUserPointer(windowHandle);
-				window.OnClose().Post(WindowClosedEvent());
+				window.OnClose().Emit(WindowClosedEvent());
 			});
 		glfwSetWindowFocusCallback((GLFWwindow*)GetNativeWindow(), [](GLFWwindow* windowHandle, int focus)
 			{
@@ -238,7 +242,7 @@ namespace Bolt
 		m_Data.m_Framebuffer.GetViewport().Width = width;
 		m_Data.m_Framebuffer.GetViewport().Height = height;
 		glfwSetWindowSize((GLFWwindow*)GetNativeWindow(), width, height);
-		OnResize().Post(std::move(args));
+		OnResize().Emit(std::move(args));
 	}
 
 	void Window::SetWidth(int width)

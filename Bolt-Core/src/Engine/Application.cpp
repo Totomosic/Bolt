@@ -107,11 +107,9 @@ namespace Bolt
 	{
 		m_Context = std::make_unique<AppContext>(createInfo);
 		Engine::Instance().SetCurrentContext(m_Context.get());
-		m_Context->GetRenderContext().GetWindow().OnClose().Subscribe([this](WindowClosedEvent & e)
+		m_Context->GetRenderContext().GetWindow().OnClose().On([this](Event<WindowClosedEvent>& e)
 			{
 				Exit();
-				ListenerResponse response;
-				return response;
 			});
 	}
 
@@ -129,7 +127,7 @@ namespace Bolt
 		}
 		Engine::Instance().ApplyCurrentContext(m_Context.get());
 		Scene* scene = &SceneManager::Get().CurrentScene();
-		EventManager::Get().FlushEvents(); // Flush #1 (likely input events)
+		EventManager::Get().FlushAll(); // Flush #1 (likely input events)
 		Update();
 		if (scene != nullptr)
 		{
@@ -138,7 +136,7 @@ namespace Bolt
 		Render();
 		GetWindow().SwapBuffers();
 		Time::Get().Update();
-		EventManager::Get().FlushEvents(); // Flush #2 (likely other scene/app events)
+		EventManager::Get().FlushAll(); // Flush #2 (likely other scene/app events)
 		if (scene != nullptr)
 		{
 			scene->UpdateTemporaryObjects();

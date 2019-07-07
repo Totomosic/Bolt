@@ -1,26 +1,22 @@
 #pragma once
-#include "Core/Events/EventManager.h"
+#include "Core/Events/EventBus.h"
 
 namespace Bolt
 {
 
 	struct Scene;
 
-	class BLT_API SceneLoadedEvent : public Event
+	class BLT_API SceneLoadedEvent
 	{
 	public:
 		Scene* LoadedScene;
-		std::unique_ptr<Event> LoadData;
-
-		BLT_EVENT_ID_DEF(Events::SCENE_LOADED);
+		std::unique_ptr<EventContainer> LoadData;
 	};
 
-	class BLT_API SceneUnloadedEvent : public Event
+	class BLT_API SceneUnloadedEvent
 	{
 	public:
 		Scene* UnloadedScene;
-
-		BLT_EVENT_ID_DEF(Events::SCENE_UNLOADED);
 	};
 
 }
