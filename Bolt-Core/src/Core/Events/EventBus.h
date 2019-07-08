@@ -2,6 +2,7 @@
 #include "EventData.h"
 #include "EventManager.h"
 #include "EventEmitter.h"
+#include "EventBusMount.h"
 #include "IdManager.h"
 
 namespace Bolt
@@ -37,17 +38,16 @@ namespace Bolt
 	private:
 		std::mutex m_ListenersMutex;
 		std::mutex m_EventsMutex;
-		std::mutex m_ChildrenMutex;
 		std::unordered_map<EventIdT, std::vector<std::unique_ptr<EventListenerContainer>>> m_Listeners;
 		std::unordered_map<uint32_t, ListenerLocation> m_ListenerLocations;
 		std::vector<EventInfo> m_Events;
-		std::vector<GenericEventBus<EventId>*> m_Children;
-		GenericEventBus<EventId>* m_Parent;
 		IdManager<uint32_t> m_ListenerIds;
+
+		std::unique_ptr<EventBusMount> m_MountManager;
 
 	public:
 		GenericEventBus()
-			: m_ListenersMutex(), m_EventsMutex(), m_ChildrenMutex(), m_Listeners(), m_ListenerLocations(), m_Events(), m_Children(), m_Parent(nullptr), m_ListenerIds(0, (uint32_t)-1)
+			: m_ListenersMutex(), m_EventsMutex(), m_Listeners(), m_ListenerLocations(), m_Events(), m_ListenerIds(0, (uint32_t)-1), m_MountManager(std::make_unique<EventBusMount>(this))
 		{
 			EventManager::Get().AddEventBus(this);
 		}
@@ -56,58 +56,27 @@ namespace Bolt
 		GenericEventBus<EventIdT>& operator=(const GenericEventBus<EventIdT>& other) = delete;
 
 		GenericEventBus(GenericEventBus<EventIdT>&& other)
-			: m_ListenersMutex(), m_EventsMutex(), m_ChildrenMutex(), m_Listeners(std::move(other.m_Listeners)), m_ListenerLocations(std::move(other.m_ListenerLocations)), m_Events(std::move(other.m_Events)), 
-			m_Children(std::move(other.m_Children)), m_Parent(other.m_Parent), m_ListenerIds(std::move(other.m_ListenerIds))
+			: m_ListenersMutex(), m_EventsMutex(), m_Listeners(std::move(other.m_Listeners)), m_ListenerLocations(std::move(other.m_ListenerLocations)), m_Events(std::move(other.m_Events)), 
+			  m_ListenerIds(std::move(other.m_ListenerIds)), m_MountManager(std::move(other.m_MountManager))
 		{
-			if (m_Parent != nullptr)
-			{
-				m_Parent->UpdateChild(&other, this);
-			}
-			for (GenericEventBus<EventIdT>* child : m_Children)
-			{
-				child->SetParent(this);
-			}
+			m_MountManager->SetEventBus(this);
 			EventManager::Get().UpdateEventBus(&other, this);
 		}
 
 		GenericEventBus<EventIdT>& operator=(GenericEventBus<EventIdT>&& other)
 		{
-			if (m_Parent != nullptr)
-			{
-				m_Parent->RemoveChild(this);
-			}
 			m_Listeners = std::move(other.m_Listeners);
 			m_ListenerLocations = std::move(other.m_ListenerLocations);
 			m_Events = std::move(other.m_Events);
 			m_ListenerIds = std::move(other.m_ListenerIds);
-			for (GenericEventBus<EventIdT>* child : m_Children)
-			{
-				child->SetParent(nullptr);
-			}
-			m_Children = std::move(other.m_Children);
-			m_Parent = other.m_Parent;
-			if (m_Parent != nullptr)
-			{
-				m_Parent->UpdateChild(&other, this);
-			}
-			for (GenericEventBus<EventIdT>* child : m_Children)
-			{
-				child->SetParent(this);
-			}
+			m_MountManager = std::move(other.m_MountManager);
+			m_MountManager->SetEventBus(this);
 			EventManager::Get().UpdateEventBus(&other, this);
 			return *this;
 		}
 
 		~GenericEventBus()
 		{
-			for (GenericEventBus<EventIdT>* child : m_Children)
-			{
-				child->SetParent(nullptr);
-			}
-			if (m_Parent != nullptr)
-			{
-				m_Parent->RemoveChild(this);
-			}
 			EventManager::Get().RemoveBus(this);
 		}
 
@@ -117,10 +86,15 @@ namespace Bolt
 			return GenericEventEmitter<T, EventIdT>(eventId, *this);
 		}
 
-		void MountOn(GenericEventBus<EventIdT>& bus)
+		EventBusMount* GetMount() const
 		{
-			m_Parent = &bus;
-			bus.AddChild(this);
+			return m_MountManager.get();
+		}
+
+		void MountOn(GenericEventBus<EventIdT>& bus) const
+		{
+			GetMount()->AddParent(bus.GetMount());
+			bus.GetMount()->AddChild(GetMount());
 		}
 
 		template<typename T>
@@ -170,7 +144,6 @@ namespace Bolt
 
 		virtual void Flush() override
 		{
-			//std::scoped_lock<std::mutex> listenersLock(m_ListenersMutex);
 			std::vector<EventInfo> eventQueue;
 			{
 				std::scoped_lock<std::mutex> eventLock(m_EventsMutex);
@@ -179,17 +152,10 @@ namespace Bolt
 			}
 			for (EventInfo& event : eventQueue)
 			{
-				if (!event.Event->Handled && m_Listeners.find(event.Id) != m_Listeners.end())
+				ProcessEvent(event);
+				for (EventBusMount* mount : GetMount()->GetChildren())
 				{
-					std::vector<std::unique_ptr<EventListenerContainer>>& listeners = m_Listeners.at(event.Id);
-					for (const std::unique_ptr<EventListenerContainer>& listener : listeners)
-					{
-						listener->Emit(*event.Event);
-						if (event.Event->Handled)
-						{
-							break;
-						}
-					}
+					// PROCESS EVENT HERE
 				}
 			}
 		}
@@ -201,34 +167,19 @@ namespace Bolt
 			m_Events.push_back({ eventId, std::move(event) });
 		}
 
-		void SetParent(GenericEventBus<EventIdT>* bus)
+		void ProcessEvent(EventInfo& e) const
 		{
-			m_Parent = bus;
-		}
-
-		void AddChild(GenericEventBus<EventIdT>* bus)
-		{
-			std::scoped_lock<std::mutex> lock(m_ChildrenMutex);
-			m_Children.push_back(bus);
-		}
-
-		void UpdateChild(GenericEventBus<EventIdT>* oldBus, GenericEventBus<EventIdT>* newBus)
-		{
-			std::scoped_lock<std::mutex> lock(m_ChildrenMutex);
-			auto it = std::find(m_Children.begin(), m_Children.end(), oldBus);
-			if (it != m_Children.end())
+			if (!e.Event->Handled && m_Listeners.find(e.Id) != m_Listeners.end())
 			{
-				*it = newBus;
-			}
-		}
-
-		void RemoveChild(GenericEventBus<EventIdT>* bus)
-		{
-			std::scoped_lock<std::mutex> lock(m_ChildrenMutex);
-			auto it = std::find(m_Children.begin(), m_Children.end(), bus);
-			if (it != m_Children.end())
-			{
-				m_Children.erase(it);
+				const std::vector<std::unique_ptr<EventListenerContainer>>& listeners = m_Listeners.at(e.Id);
+				for (const std::unique_ptr<EventListenerContainer>& listener : listeners)
+				{
+					listener->Emit(*e.Event);
+					if (e.Event->Handled)
+					{
+						break;
+					}
+				}
 			}
 		}
 

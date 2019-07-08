@@ -82,98 +82,82 @@ namespace Bolt
 	}
 
 	void Shader::SetUniform(int location, bool value) const
-	{
-		Bind();		
+	{	
 		GL_CALL(glUniform1i(location, value));
 	}
 
 	void Shader::SetUniform(int location, int value) const
 	{
-		Bind();		
 		GL_CALL(glUniform1i(location, value));
 	}
 
 	void Shader::SetUniform(int location, uint32_t value) const
 	{
-		Bind();		
 		GL_CALL(glUniform1i(location, (int)value));
 	}
 
 	void Shader::SetUniform(int location, float value) const
-	{
-		Bind();		
+	{		
 		GL_CALL(glUniform1f(location, value));
 	}
 
 	void Shader::SetUniform(int location, double value) const
 	{
-		Bind();
 		GL_CALL(glUniform1d(location, value));
 	}
 
 	void Shader::SetUniform(int location, const Vector2f& value) const
 	{
-		Bind();
 		GL_CALL(glUniform2f(location, value.x, value.y));
 	}
 
 	void Shader::SetUniform(int location, const Vector2i& value) const
 	{
-		Bind();
 		GL_CALL(glUniform2i(location, value.x, value.y));
 	}
 
 	void Shader::SetUniform(int location, const Vector3f& value) const
 	{
-		Bind();
 		GL_CALL(glUniform3f(location, value.x, value.y, value.z));
 	}
 
 	void Shader::SetUniform(int location, const Vector3i& value) const
 	{
-		Bind();
 		GL_CALL(glUniform3i(location, value.x, value.y, value.z));
 	}
 
 	void Shader::SetUniform(int location, const Vector4f& value) const
 	{
-		Bind();
 		GL_CALL(glUniform4f(location, value.x, value.y, value.z, value.w));
 	}
 
 	void Shader::SetUniform(int location, const Vector4i& value) const
 	{
-		Bind();
 		GL_CALL(glUniform4i(location, value.x, value.y, value.z, value.w));
 	}
 
 	void Shader::SetUniform(int location, const Color& value) const
 	{
-		Bind();
 		GL_CALL(glUniform4f(location, value.r, value.g, value.b, value.a));
 	}
 
 	void Shader::SetUniform(int location, const Matrix2f& value) const
 	{
-		Bind();
 		GL_CALL(glUniformMatrix2fv(location, 1, GL_FALSE, value.values));
 	}
 
 	void Shader::SetUniform(int location, const Matrix3f& value) const
 	{
-		Bind();
 		GL_CALL(glUniformMatrix3fv(location, 1, GL_FALSE, value.values));
 	}
 
 	void Shader::SetUniform(int location, const Matrix4f& value) const
 	{
-		Bind();
 		GL_CALL(glUniformMatrix4fv(location, 1, GL_FALSE, value.values));
 	}
 
 	void Shader::SetUniform(int location, const Quaternion& value) const
 	{
-		Bind();
 		GL_CALL(glUniform4f(location, value.x, value.y, value.z, value.w));
 	}
 
