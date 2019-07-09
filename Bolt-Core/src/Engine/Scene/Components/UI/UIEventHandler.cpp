@@ -10,10 +10,10 @@ namespace Bolt
 
 	UIEventHandler::UIEventHandler() : Component(),
 		m_IsHovering(false), m_EventBus(),
-		OnClicked(m_EventBus.GetEmitter<UIClickedEvent>(Events::ON_CLICKED)), 
-		OnHoverEntry(m_EventBus.GetEmitter<UIHoverEntryEvent>(Events::ON_HOVER_ENTRY)),
-		OnHover(m_EventBus.GetEmitter<UIHoverEvent>(Events::ON_HOVER)),
-		OnHoverExit(m_EventBus.GetEmitter<UIHoverExitEvent>(Events::ON_HOVER_EXIT))
+		OnClicked(m_EventBus.GetEmitter<UIClickedEvent>(Events::UI.OnClicked)), 
+		OnHoverEntry(m_EventBus.GetEmitter<UIHoverEntryEvent>(Events::UI.OnHoverEntry)),
+		OnHover(m_EventBus.GetEmitter<UIHoverEvent>(Events::UI.OnHover)),
+		OnHoverExit(m_EventBus.GetEmitter<UIHoverExitEvent>(Events::UI.OnHoverExit))
 	{
 	
 	}

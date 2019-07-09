@@ -13,12 +13,13 @@ namespace Bolt
 	}
 
 	EventManager::EventManager()
-		: m_EventBuses(), m_GlobalBus(std::make_unique<GenericEventBus<uint32_t>>())
+		: m_EventBuses(), m_GlobalBus(std::make_unique<GenericEventBus<uint32_t>>(false))
 	{
-		m_GlobalBus->On<TaskCompletedEvent>(Events::TASK_CONTINUE_ON_MAIN_THREAD, [](Event<TaskCompletedEvent>& e)
+		m_GlobalBus->On<TaskCompletedEvent>(Events::Internal.AsyncTaskCompleted, [](Event<TaskCompletedEvent>& e)
 			{
 				e.Data.Execute();
 			});
+		AddEventBus((EventBusBase*)m_GlobalBus.get());
 	}
 
 	EventBus& EventManager::Bus()
@@ -29,6 +30,12 @@ namespace Bolt
 	void EventManager::AddEventBus(EventBusBase* bus)
 	{
 		m_EventBuses.push_back(bus);
+	}
+
+	void EventManager::AddEventBus(EventBus* bus)
+	{
+		AddEventBus((EventBusBase*)bus);
+		m_GlobalBus->MountOn(*bus);
 	}
 
 	void EventManager::UpdateEventBus(EventBusBase* oldBus, EventBusBase* newBus)
