@@ -4,40 +4,62 @@
 namespace Bolt
 {
 
+	struct BLT_API InputEvents
+	{
+	public:
+		uint32_t KeyPressed = 1;
+		uint32_t KeyReleased = 2;
+		uint32_t MousePressed = 3;
+		uint32_t MouseReleased = 4;
+		uint32_t MouseScrolled = 5;
+		uint32_t MouseMoved = 6;
+	};
+
+	struct BLT_API UIEvents
+	{
+	public:
+		uint32_t OnHoverEntry = 101;
+		uint32_t OnHover = 102;
+		uint32_t OnHoverExit = 103;
+		uint32_t OnClicked = 104;
+	};
+
+	struct BLT_API WindowEvents
+	{
+	public:
+		uint32_t WindowResized = 201;
+		uint32_t WindowMoved = 202;
+		uint32_t WindowFocused = 203;
+		uint32_t WindowLostFocus = 204;
+		uint32_t WindowClosed = 205;
+	};
+
+	struct BLT_API SceneEvents
+	{
+	public:
+		uint32_t SceneLoaded = 301;
+		uint32_t SceneUnloaded = 302;
+		uint32_t GameObjectInstantiated = 303;
+		uint32_t GameObjectDestroyed = 304;
+	};
+
+	struct BLT_API InternalEvents
+	{
+	public:
+		uint32_t AsyncTaskCompleted = 1001;
+	};
+
 	struct BLT_API Events
 	{
 	public:
-		static constexpr uint32_t NONE							= 0;
-		// Input Events
-		static constexpr uint32_t KEY_PRESSED					= 1;
-		static constexpr uint32_t KEY_RELEASED					= 2;
-		static constexpr uint32_t MOUSE_PRESSED					= 3;
-		static constexpr uint32_t MOUSE_RELEASED				= 4;
-		static constexpr uint32_t MOUSE_SCROLLED				= 5;
-		static constexpr uint32_t MOUSE_POSITION_MOVED			= 6;
-
-		// UI Events
-		static constexpr uint32_t ON_HOVER_ENTRY				= 7;
-		static constexpr uint32_t ON_HOVER						= 8;
-		static constexpr uint32_t ON_HOVER_EXIT					= 9;
-		static constexpr uint32_t ON_CLICKED					= 10;
-
-		// Window Events
-		static constexpr uint32_t WINDOW_RESIZE					= 11;
-		static constexpr uint32_t WINDOW_MOVED					= 12;
-		static constexpr uint32_t WINDOW_FOCUSED				= 13;
-		static constexpr uint32_t WINDOW_LOST_FOCUS				= 14;
-		static constexpr uint32_t WINDOW_CLOSED					= 15;
-
-		// Scene Events
-		static constexpr uint32_t SCENE_LOADED					= 16;
-		static constexpr uint32_t SCENE_UNLOADED				= 17;
-		static constexpr uint32_t GAMEOBJECT_INSTANTIATED		= 18;
-		static constexpr uint32_t GAMEOBJECT_DESTROYED			= 19;
-
-		// Task Events
-		static constexpr uint32_t TASK_CONTINUE_ON_MAIN_THREAD	= 20;
-
+		static constexpr uint32_t NONE = 0;
+		static constexpr uint32_t MIN_USER_ID = 10000;
+		
+		static constexpr InputEvents Input = InputEvents();
+		static constexpr UIEvents UI = UIEvents();
+		static constexpr WindowEvents Window = WindowEvents();
+		static constexpr SceneEvents Scene = SceneEvents();
+		static constexpr InternalEvents Internal = InternalEvents();
 	};
 
 }

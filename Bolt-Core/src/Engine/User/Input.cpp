@@ -8,12 +8,12 @@ namespace Bolt
 
 	Input::Input(Window* window)
 		: m_EventBus(), m_Mouse(), m_Keyboard(), m_Window(window), m_PressedCharacters(), m_ChangedKeys(), m_ChangedButtons(), 
-		OnKeyPressed(m_EventBus.GetEmitter<KeyPressedEvent>(Events::KEY_PRESSED)), 
-		OnKeyReleased(m_EventBus.GetEmitter<KeyReleasedEvent>(Events::KEY_RELEASED)),
-		OnMousePressed(m_EventBus.GetEmitter<MousePressedEvent>(Events::MOUSE_PRESSED)),
-		OnMouseReleased(m_EventBus.GetEmitter<MouseReleasedEvent>(Events::MOUSE_RELEASED)),
-		OnMouseMoved(m_EventBus.GetEmitter<MouseMovedEvent>(Events::MOUSE_POSITION_MOVED)),
-		OnMouseScrolled(m_EventBus.GetEmitter<MouseScrolledEvent>(Events::MOUSE_SCROLLED))
+		OnKeyPressed(m_EventBus.GetEmitter<KeyPressedEvent>(Events::Input.KeyPressed)), 
+		OnKeyReleased(m_EventBus.GetEmitter<KeyReleasedEvent>(Events::Input.KeyReleased)),
+		OnMousePressed(m_EventBus.GetEmitter<MousePressedEvent>(Events::Input.MousePressed)),
+		OnMouseReleased(m_EventBus.GetEmitter<MouseReleasedEvent>(Events::Input.MouseReleased)),
+		OnMouseMoved(m_EventBus.GetEmitter<MouseMovedEvent>(Events::Input.MouseMoved)),
+		OnMouseScrolled(m_EventBus.GetEmitter<MouseScrolledEvent>(Events::Input.MouseScrolled))
 	{
 		for (int i = 0; i < BLT_MAX_KEYS; i++)
 		{

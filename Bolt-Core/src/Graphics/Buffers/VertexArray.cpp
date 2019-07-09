@@ -14,14 +14,12 @@ namespace Bolt
 		: m_Id(other.m_Id), m_Vertices(std::move(other.m_Vertices)), m_RenderMode(other.m_RenderMode), m_Descriptor(std::move(other.m_Descriptor)), m_IsMapped(false)
 	{
 		BLT_ASSERT(!other.m_IsMapped, "Cannot move mapped array");
-		BLT_INFO("VA MOVED");
 		other.m_Id = 0;
 	}
 
 	VertexArray& VertexArray::operator=(VertexArray&& other) noexcept
 	{
 		BLT_ASSERT(!other.m_IsMapped, "Cannot move mapped array");
-		BLT_INFO("VA MOVED");
 		std::vector<std::unique_ptr<VertexBuffer>> tempVector = std::move(m_Vertices);
 		id_t tempID = m_Id;
 		m_Id = other.m_Id;
@@ -106,7 +104,6 @@ namespace Bolt
 			{
 				glVertexAttribPointer(pair.second.Index, pair.second.Count, (GLenum)pair.second.Type, pair.second.Normalised, layout.Stride(), (const GLvoid*)pair.second.Offset);
 			}	
-			//glVertexAttribPointer(pair.second.Index, pair.second.Count, (GLenum)pair.second.Type, pair.second.Normalised, layout.Stride(), (const GLvoid*)pair.second.Offset);
 		}
 		thisBuffer.Unbind();
 		m_Descriptor.AddVertexBuffer(&thisBuffer);

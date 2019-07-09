@@ -22,6 +22,7 @@ namespace Bolt
 		GenericEventBus<uint32_t>& Bus();
 
 		void AddEventBus(EventBusBase* bus);
+		void AddEventBus(GenericEventBus<uint32_t>* bus);
 		void UpdateEventBus(EventBusBase* oldBus, EventBusBase* newBus);
 		void RemoveBus(EventBusBase* bus);
 		void FlushAll() const;

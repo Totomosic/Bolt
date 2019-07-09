@@ -8,7 +8,7 @@ namespace Bolt
 
 	Scene::Scene(int layerCount)
 		: m_EventBus(), m_Layers(std::make_unique<Layer[]>(layerCount)), m_LayerCapacity(layerCount), m_Cameras(), m_Id(GameObject::InvalidID), m_PhysEngine(this),
-		OnLoad(m_EventBus.GetEmitter<SceneLoadedEvent>(Events::SCENE_LOADED)), OnUnload(m_EventBus.GetEmitter<SceneUnloadedEvent>(Events::SCENE_UNLOADED))
+		OnLoad(m_EventBus.GetEmitter<SceneLoadedEvent>(Events::Scene.SceneLoaded)), OnUnload(m_EventBus.GetEmitter<SceneUnloadedEvent>(Events::Scene.SceneUnloaded))
 	{
 		ClearCameras();
 	}
