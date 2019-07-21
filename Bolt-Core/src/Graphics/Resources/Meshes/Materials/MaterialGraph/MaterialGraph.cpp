@@ -2,13 +2,24 @@
 #include "MaterialGraph.h"
 #include "../Material.h"
 
+#include "Graphics/Resources/ResourceManager.h"
+
 namespace Bolt
 {
 
-	MaterialGraph::MaterialGraph()
-		: m_MasterNodes(), m_Nodes(), m_Builder()
+	MaterialGraph::MaterialGraph(ResourceManager* manager)
+		: m_Resources(manager), m_MasterNodes(), m_Nodes(), m_Builder(), m_IsBuilt(false)
 	{
 		
+	}
+
+	ResourceManager& MaterialGraph::GetResourceManager() const
+	{
+		if (m_Resources == nullptr)
+		{
+			return ResourceManager::Get();
+		}
+		return *m_Resources;
 	}
 
 	const std::unordered_map<blt::string, std::unique_ptr<MasterNode>>& MaterialGraph::GetMasterNodes() const

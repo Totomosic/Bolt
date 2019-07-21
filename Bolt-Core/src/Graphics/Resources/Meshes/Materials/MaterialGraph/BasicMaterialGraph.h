@@ -13,7 +13,7 @@ namespace Bolt
 		MasterNode* m_AlphaThreshold;
 
 	public:
-		BasicMaterialGraph();
+		BasicMaterialGraph(ResourceManager* manager = nullptr);
 
 		void SetVertexPosition(const NodeConnection& connection);
 		void SetRGB(const NodeConnection& connection);

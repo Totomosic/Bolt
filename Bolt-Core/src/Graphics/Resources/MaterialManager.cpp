@@ -9,8 +9,8 @@
 namespace Bolt
 {
 
-	MaterialManager::MaterialManager()
-		: m_DefaultGraph(), m_TextureGraph(), m_FontBuilder(true), m_DefaultLightingGraph(), m_TextureLightingGraph(), m_PBRGraph(), m_PBRTextureGraph()
+	MaterialManager::MaterialManager(ResourceManager* manager)
+		: m_Manager(manager), m_DefaultGraph(manager), m_TextureGraph(manager), m_FontBuilder(true), m_DefaultLightingGraph(manager), m_TextureLightingGraph(manager), m_PBRGraph(manager), m_PBRTextureGraph(manager)
 	{
 		CreateDefaultMaterial(m_DefaultGraph);
 		CreateTextureMaterial(m_TextureGraph);
@@ -79,7 +79,7 @@ namespace Bolt
 
 	void MaterialManager::CreateTextureMaterial(BasicMaterialGraph& graph) const
 	{
-		PropertyNode& texture = graph.AddProperty("Texture", ResourceManager::Get().Textures().DefaultWhite());
+		PropertyNode& texture = graph.AddProperty("Texture", m_Manager->Textures().DefaultWhite());
 		SampleTextureNode& sampler = graph.AddNode<SampleTextureNode>();
 		sampler.SetTexture(texture.GetValue());
 		graph.SetRGB(sampler.GetRGB());
@@ -127,7 +127,7 @@ namespace Bolt
 
 	void MaterialManager::CreateTextureLightingMaterial(LitMaterialGraph& graph) const
 	{
-		PropertyNode& color = graph.AddProperty("Texture", ResourceManager::Get().Textures().DefaultWhite());
+		PropertyNode& color = graph.AddProperty("Texture", m_Manager->Textures().DefaultWhite());
 		SampleTextureNode& sampler = graph.AddNode<SampleTextureNode>();
 		sampler.SetTexture(color.GetValue());
 		graph.SetRGB(sampler.GetRGB());
@@ -155,19 +155,19 @@ namespace Bolt
 
 	void MaterialManager::CreatePBRTextureMaterial(PBRMaterialGraph& graph) const
 	{
-		PropertyNode& albedo = graph.AddProperty("Albedo", ResourceManager::Get().Textures().DefaultWhite());
+		PropertyNode& albedo = graph.AddProperty("Albedo", m_Manager->Textures().DefaultWhite());
 		SampleTextureNode& albedoSampler = graph.AddNode(std::make_unique<SampleTextureNode>());
 		albedoSampler.SetTexture(albedo.GetValue());
 		graph.SetRGB(albedoSampler.GetRGB());
-		PropertyNode& metallic = graph.AddProperty("Metallic", ResourceManager::Get().Textures().DefaultBlack());
+		PropertyNode& metallic = graph.AddProperty("Metallic", m_Manager->Textures().DefaultBlack());
 		SampleTextureNode& metallicSampler = graph.AddNode(std::make_unique<SampleTextureNode>(SampleMode::Normal));
 		metallicSampler.SetTexture(metallic.GetValue());
 		graph.SetMetallic(metallicSampler.GetR());
-		PropertyNode& roughness = graph.AddProperty("Roughness", ResourceManager::Get().Textures().DefaultWhite());
+		PropertyNode& roughness = graph.AddProperty("Roughness", m_Manager->Textures().DefaultWhite());
 		SampleTextureNode& roughnessSampler = graph.AddNode(std::make_unique<SampleTextureNode>(SampleMode::Normal));
 		roughnessSampler.SetTexture(roughness.GetValue());
 		graph.SetRoughness(roughnessSampler.GetR());
-		PropertyNode& ao = graph.AddProperty("AO", ResourceManager::Get().Textures().DefaultWhite());
+		PropertyNode& ao = graph.AddProperty("AO", m_Manager->Textures().DefaultWhite());
 		SampleTextureNode& aoSampler = graph.AddNode(std::make_unique<SampleTextureNode>(SampleMode::Normal));
 		aoSampler.SetTexture(ao.GetValue());
 		graph.SetOcclusion(aoSampler.GetR());

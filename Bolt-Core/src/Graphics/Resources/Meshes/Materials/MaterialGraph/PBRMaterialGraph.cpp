@@ -2,11 +2,12 @@
 #include "PBRMaterialGraph.h"
 
 #include "Nodes/MasterNodes/PBRMasterNodes.h"
+#include "Graphics/Resources/ResourceManager.h"
 
 namespace Bolt
 {
 
-	PBRMaterialGraph::PBRMaterialGraph() : MaterialGraph(),
+	PBRMaterialGraph::PBRMaterialGraph(ResourceManager* manager) : MaterialGraph(manager),
 		m_VertexPosition(nullptr), m_Albedo(nullptr), m_Normal(nullptr), m_Metallic(nullptr), m_Roughness(nullptr), m_Occlusion(nullptr), m_Alpha(nullptr), m_AlphaThreshold(nullptr)
 	{
 		m_VertexPosition = &AddMasterNode("VertexPosition", std::make_unique<VertexPositionNode>());

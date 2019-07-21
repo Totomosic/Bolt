@@ -17,7 +17,7 @@ namespace Bolt
 		MasterNode* m_AlphaThreshold;
 
 	public:
-		PBRMaterialGraph();
+		PBRMaterialGraph(ResourceManager* manager = nullptr);
 
 		void SetVertexPosition(const NodeConnection& connection);
 		void SetRGB(const NodeConnection& connection);

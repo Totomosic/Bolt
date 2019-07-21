@@ -100,7 +100,7 @@ namespace Bolt
 
 	void SampleTextureNode::ConnectDefaults(MaterialGraph& graph, const MaterialGraphContext& context)
 	{
-		PropertyNode& texture = graph.AddProperty(ShaderProgram::NAMELESS_UNIFORM, ResourceManager::Get().Textures().DefaultWhite());
+		PropertyNode& texture = graph.AddProperty(ShaderProgram::NAMELESS_UNIFORM, graph.GetResourceManager().Textures().DefaultWhite());
 		Connect(0, texture.GetValue());
 		Connect(1, context.VertexTexCoord().GetValue());
 	}

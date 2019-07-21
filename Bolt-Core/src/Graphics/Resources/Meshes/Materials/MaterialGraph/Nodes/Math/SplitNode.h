@@ -25,10 +25,22 @@ namespace Bolt
 		SplitVec4Node();
 
 		NodeConnection GetRGB() const;
+		NodeConnection GetRG() const;
+		NodeConnection GetGB() const;
+		NodeConnection GetRB() const;
 		NodeConnection GetR() const;
 		NodeConnection GetG() const;
 		NodeConnection GetB() const;
 		NodeConnection GetA() const;
+
+		inline NodeConnection GetXYZ() const { return GetRGB(); }
+		inline NodeConnection GetXY() const { return GetRG(); }
+		inline NodeConnection GetXZ() const { return GetRB(); }
+		inline NodeConnection GetYZ() const { return GetGB(); }
+		inline NodeConnection GetX() const { return GetR(); }
+		inline NodeConnection GetY() const { return GetG(); }
+		inline NodeConnection GetZ() const { return GetB(); }
+		inline NodeConnection GetW() const { return GetA(); }
 
 		void SetInput(const NodeConnection& connection);
 

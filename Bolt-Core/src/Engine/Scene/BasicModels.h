@@ -5,6 +5,8 @@
 namespace Bolt
 {
 
+	class ResourceManager;
+
 	class BLT_API BasicModels
 	{
 	private:
@@ -17,7 +19,7 @@ namespace Bolt
 		static BasicModels& Get();
 
 	public:
-		BasicModels();
+		BasicModels(ResourceManager* manager);
 
 		const ResourcePtr<Model>& Square() const;
 		const ResourcePtr<Model>& Circle() const;

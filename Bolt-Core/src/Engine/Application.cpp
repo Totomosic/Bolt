@@ -13,7 +13,7 @@ namespace Bolt
 {
 
 	Application::Application()
-		: m_TickTimer(nullptr), m_IsRunning(false), m_ShouldExit(false), m_Context(), m_ChildApps(), m_NewApps()
+		: m_IsGraphicsEnabled(true), m_TickTimer(nullptr), m_IsRunning(false), m_ShouldExit(false), m_Context(), m_ChildApps(), m_NewApps()
 	{
 		
 	}
@@ -71,6 +71,11 @@ namespace Bolt
 	{
 		m_IsRunning = true;
 		m_ShouldExit = false;
+		if (!m_IsGraphicsEnabled)
+		{
+			BLT_CORE_WARN("Graphics are disabled");
+		}
+		BLT_CORE_INFO("Initializing...");
 		Init();
 		Time::Get().Update();
 		BLT_CORE_INFO("Init took " + std::to_string(Time::Get().RenderingTimeline().CurrentRealTime()) + " seconds");
@@ -103,14 +108,18 @@ namespace Bolt
 		m_ShouldExit = true;
 	}
 
-	void Application::CreateContext(const WindowCreateInfo& createInfo)
+	void Application::CreateContext(bool createRenderContext, const WindowCreateInfo& createInfo)
 	{
-		m_Context = std::make_unique<AppContext>(createInfo);
+		m_IsGraphicsEnabled = createRenderContext;
+		m_Context = std::make_unique<AppContext>(createRenderContext, createInfo);
 		Engine::Instance().SetCurrentContext(m_Context.get());
-		m_Context->GetRenderContext().GetWindow().OnClose().On([this](Event<WindowClosedEvent>& e)
-			{
-				Exit();
-			});
+		if (createRenderContext)
+		{
+			m_Context->GetRenderContext().GetWindow().OnClose().On([this](Event<WindowClosedEvent>& e)
+				{
+					Exit();
+				});
+		}
 	}
 
 	bool Application::UpdatePrivate()
@@ -126,6 +135,15 @@ namespace Bolt
 			}
 		}
 		Engine::Instance().ApplyCurrentContext(m_Context.get());
+		if (m_IsGraphicsEnabled)
+		{
+			return UpdateGraphics();
+		}
+		return UpdateNoGraphics();
+	}
+
+	bool Application::UpdateGraphics()
+	{
 		Scene* scene = &SceneManager::Get().CurrentScene();
 		EventManager::Get().FlushAll(); // Flush #1 (likely input events)
 		Update();
@@ -144,6 +162,14 @@ namespace Bolt
 		return true;
 	}
 
+	bool Application::UpdateNoGraphics()
+	{
+		Update();
+		Time::Get().Update();
+		EventManager::Get().FlushAll(); // Flush #2 (likely other scene/app events)
+		return true;
+	}
+
 	void Application::CloseChild(int index)
 	{
 		Application* ptr = m_ChildApps.at(index).get();
@@ -153,12 +179,15 @@ namespace Bolt
 
 	void Application::UpdateInput()
 	{
-		GetContext().GetRenderContext().GetInput().Update();
-		for (std::unique_ptr<Application>& child : m_ChildApps)
+		if (GetContext().HasRenderContext())
 		{
-			child->GetContext().GetRenderContext().GetInput().Update();
+			GetContext().GetRenderContext().GetInput().Update();
+			for (std::unique_ptr<Application>& child : m_ChildApps)
+			{
+				child->GetContext().GetRenderContext().GetInput().Update();
+			}
+			glfwPollEvents();
 		}
-		glfwPollEvents();
 	}
 
 	void Application::PushNewApps()
@@ -174,7 +203,7 @@ namespace Bolt
 	{
 		Application* ptr = app.App.get();
 		m_ChildApps.push_back(std::move(app.App));
-		ptr->CreateContext(app.Info);
+		ptr->CreateContext(m_IsGraphicsEnabled, app.Info);
 		ptr->Start();
 	}
 

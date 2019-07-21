@@ -27,6 +27,11 @@ namespace Minecraft
 			ObjectFactory f(l);
 			f.Cuboid(2, 2, 2, Color::Red, Transform({ 0, 65, 0 }));
 
+			camera->Components().AddComponent<TriggerComponent>(TriggerComponent::TriggerFunc(), [](GameObject* object)
+				{
+					object->transform().Translate(object->transform().Forward() * Time::Get().RenderingTimeline().DeltaTime());
+				});
+
 			ResourceManager::Get().LoadPack("res/resources.pack", [&l, this](const ResourcePack& pack)
 				{
 					ResourceExtractor resources(pack);
@@ -34,16 +39,17 @@ namespace Minecraft
 					BlockDatabase::Initialize(atlas);
 					ObjectFactory f(l);
 					
-					manager = std::make_unique<ChunkManager>(f, atlas.GetTexture(), 2, 2);
+					manager = std::make_unique<ChunkManager>(f, atlas.GetTexture(), 8, 8);
 					ChunkRegion& chunk = manager->GetChunkRegion();
 					TaskManager::Run([&chunk]()
 						{
 							SimplexNoise noise;
+							Vector2f seed(10, 10);
 							for (int x = 0; x < chunk.GetWidthInBlocks(); x++)
 							{
 								for (int z = 0; z < chunk.GetHeightInBlocks(); z++)
 								{
-									float height = noise.Generate(8, x / 150.0f, z / 150.0f);
+									float height = noise.Generate(8, x / 150.0f + seed.x, z / 150.0f + seed.y);
 									int blockHeight = 65 + height * 10;
 									for (int y = 0; y < chunk.GetDepthInBlocks(); y++)
 									{

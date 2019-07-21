@@ -99,7 +99,7 @@ namespace Bolt
 		if (err < 0)
 		{
 			int error = WSAGetLastError();
-			if (error = WSAEWOULDBLOCK)
+			if (error == WSAEWOULDBLOCK)
 			{
 				return 0;
 			}
@@ -116,7 +116,7 @@ namespace Bolt
 		if (bytesSent < 0)
 		{
 			int error = WSAGetLastError();
-			if (error = WSAEWOULDBLOCK)
+			if (error == WSAEWOULDBLOCK)
 			{
 				return 0;
 			}
@@ -133,7 +133,7 @@ namespace Bolt
 		if (bytesReceived < 0)
 		{
 			int error = WSAGetLastError();
-			if (error = WSAEWOULDBLOCK)
+			if (error == WSAEWOULDBLOCK)
 			{
 				return 0;
 			}

@@ -4,10 +4,12 @@
 #include "Nodes/MasterNodes/PBRMasterNodes.h"
 #include "Nodes/MasterNodes/LitMasterNodes.h"
 
+#include "Graphics/Resources/ResourceManager.h"
+
 namespace Bolt
 {
 
-	LitMaterialGraph::LitMaterialGraph() : MaterialGraph(),
+	LitMaterialGraph::LitMaterialGraph(ResourceManager* manager) : MaterialGraph(manager),
 		m_VertexPosition(nullptr), m_Color(nullptr), m_Shininess(nullptr), m_ShineDamper(nullptr), m_Alpha(nullptr), m_AlphaThreshold(nullptr)
 	{
 		m_VertexPosition = &AddMasterNode("VertexPosition", std::make_unique<VertexPositionNode>());
@@ -54,6 +56,7 @@ namespace Bolt
 		ShaderVariablePtr modelMatrix = vertex.RendererUniform(RendererUniform::ModelMatrix);
 		ShaderVariablePtr viewMatrix = vertex.RendererUniform(RendererUniform::ViewMatrix);
 		ShaderVariablePtr projectionMatrix = vertex.RendererUniform(RendererUniform::ProjectionMatrix);
+		ShaderVariablePtr cameraPosition = vertex.RendererUniform(RendererUniform::CameraPosition);
 		ShaderVariablePtr outColor = vertex.DeclarePassOut<Color>();
 		ShaderVariablePtr outToCamera = vertex.DeclarePassOut<Vector3f>();
 		ShaderVariablePtr outWorldNormal = vertex.DeclarePassOut<Vector3f>();
@@ -65,8 +68,7 @@ namespace Bolt
 		ShaderVariablePtr screenPos = vertex.DefineVar(ShaderFuncs::Mul(projectionMatrix, viewPos));
 		vertex.SetVertexPosition(screenPos);
 		vertex.SetVariable(outColor, vertex.Color());
-		ShaderVariablePtr invViewMatrix = vertex.DefineVar(ShaderFuncs::Inverse(viewMatrix));
-		vertex.SetVariable(outToCamera, ShaderFuncs::Sub(ShaderFuncs::xyz(ShaderFuncs::Index(invViewMatrix, ShaderLiteral::FromInt(3))), ShaderFuncs::xyz(worldPos)));
+		vertex.SetVariable(outToCamera, ShaderFuncs::Sub(cameraPosition, ShaderFuncs::xyz(worldPos)));
 		vertex.SetVariable(outWorldNormal, ShaderFuncs::xyz(ShaderFuncs::Mul(modelMatrix, ShaderFuncs::Vec4(vertex.Normal(), ShaderLiteral::FromFloat(0)))));
 		vertex.SetVariable(outWorldPos, ShaderFuncs::xyz(worldPos));
 

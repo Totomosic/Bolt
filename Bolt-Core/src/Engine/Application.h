@@ -16,6 +16,8 @@ namespace Bolt
 		};
 
 	private:
+		bool m_IsGraphicsEnabled;
+
 		Timer* m_TickTimer;
 		bool m_IsRunning;
 		bool m_ShouldExit;
@@ -61,8 +63,11 @@ namespace Bolt
 		friend class Engine;
 
 	private:
-		void CreateContext(const WindowCreateInfo& createInfo);
+		void CreateContext(bool createRenderContext, const WindowCreateInfo& createInfo);
 		bool UpdatePrivate();
+		bool UpdateGraphics();
+		bool UpdateNoGraphics();
+
 		void CloseChild(int index);
 
 		void UpdateInput();

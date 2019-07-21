@@ -6,9 +6,13 @@
 namespace Bolt
 {
 
+	class ResourceManager;
+
 	class BLT_API FontManager
 	{
 	private:
+		ResourceManager* m_Manager;
+
 		FontFactory m_ArialFactory;
 		mutable std::unordered_map<float, ResourcePtr<Font>> m_ArialFonts;
 		FontFactory m_CalibriFactory;
@@ -24,7 +28,7 @@ namespace Bolt
 		mutable ResourcePtr<Font> m_DefaultFont;
 
 	public:
-		FontManager();
+		FontManager(ResourceManager* manager);
 
 		ResourcePtr<Font> Default() const;
 		void SetDefault(const ResourcePtr<Font>& defaultFont) const;

@@ -8,7 +8,7 @@ namespace Bolt
 
 	Time& Time::Get()
 	{
-		return Engine::Instance().CurrentContext().GetRenderContext().GetTime();
+		return Engine::Instance().CurrentContext().GetTime();
 	}
 
 	Time::Time()

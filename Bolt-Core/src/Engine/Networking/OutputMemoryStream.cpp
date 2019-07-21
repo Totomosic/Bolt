@@ -5,38 +5,14 @@ namespace Bolt
 {
 
 	OutputMemoryStream::OutputMemoryStream(uint32_t capacity)
-		: m_Buffer(nullptr), m_Capacity(capacity), m_Head(0)
+		: m_Buffer(std::make_unique<byte[]>(capacity)), m_Capacity(capacity), m_Head(0)
 	{
-		ReallocBuffer(m_Capacity);
-	}
-
-	OutputMemoryStream::OutputMemoryStream(OutputMemoryStream&& other)
-		: m_Buffer(other.m_Buffer), m_Capacity(other.m_Capacity), m_Head(other.m_Head)
-	{
-		other.m_Buffer = nullptr;
-	}
-
-	OutputMemoryStream& OutputMemoryStream::operator=(OutputMemoryStream&& other)
-	{
-		byte* buff = m_Buffer;
-		m_Buffer = other.m_Buffer;
-		other.m_Buffer = buff;
-		m_Capacity = other.m_Capacity;
-		m_Head = other.m_Head;
-		return *this;
-	}
-
-	OutputMemoryStream::~OutputMemoryStream()
-	{
-		if (m_Buffer != nullptr)
-		{
-			std::free(m_Buffer);
-		}
+		
 	}
 
 	byte* OutputMemoryStream::GetBufferPtr() const
 	{
-		return m_Buffer;
+		return m_Buffer.get();
 	}
 
 	int OutputMemoryStream::GetRemainingDataSize() const
@@ -55,13 +31,18 @@ namespace Bolt
 		{
 			ReallocBuffer(std::max(m_Capacity * 2, m_Head + (int)length));
 		}
-		memcpy(m_Buffer + m_Head, data, length);
+		memcpy(GetBufferPtr() + m_Head, data, length);
 		m_Head += length;
 	}
 
 	void OutputMemoryStream::ReallocBuffer(uint32_t capacity)
 	{
-		m_Buffer = (byte*)std::realloc(m_Buffer, capacity);
+		byte* data = new byte[GetRemainingDataSize()];
+		memcpy(data, GetBufferPtr(), GetRemainingDataSize());
+		m_Buffer = std::make_unique<byte[]>(capacity);
+		memcpy(m_Buffer.get(), data, GetRemainingDataSize());
+		m_Capacity = capacity;
+		delete[] data;
 	}
 
 }

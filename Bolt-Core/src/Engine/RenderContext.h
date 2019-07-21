@@ -1,6 +1,4 @@
 #pragma once
-#include "Core/Time/Time.h"
-#include "Core/Events/EventManager.h"
 #include "Engine/User/Input.h"
 #include "Graphics/Window.h"
 #include "Graphics/Resources/ResourceManager.h"
@@ -14,18 +12,9 @@ namespace Bolt
 
 	class AppContext;
 
-	class BLT_API ContextManager
-	{
-	public:
-		ContextManager(AppContext* context);
-	};
-
 	class BLT_API RenderContext
 	{
 	private:
-		ContextManager m_Context;
-		Time m_Time;
-		EventManager m_Events;
 		Input m_Input;
 		Window m_Window;
 		ResourceManager m_Resources;
@@ -36,10 +25,7 @@ namespace Bolt
 
 	public:
 		RenderContext(AppContext* context, const WindowCreateInfo& createInfo);
-		~RenderContext();
 
-		EventManager& GetEventManager();
-		Time& GetTime();
 		Window& GetWindow();
 		BasicModels& GetBasicModels();
 		Graphics& GetGraphics();

@@ -44,6 +44,7 @@ namespace Bolt
 		static ShaderFuncResultPtr z(ShaderValuePtr value);
 		static ShaderFuncResultPtr w(ShaderValuePtr value);
 		static ShaderFuncResultPtr xy(ShaderValuePtr value);
+		static ShaderFuncResultPtr yz(ShaderValuePtr value);
 		static ShaderFuncResultPtr xz(ShaderValuePtr value);
 		static ShaderFuncResultPtr xyz(ShaderValuePtr value);
 

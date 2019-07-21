@@ -16,3 +16,9 @@
 #include "Engine/Scene/UI/Text.h"
 #include "Engine/Scene/UI/UIsurface.h"
 #include "Engine/Scripting/Lua/LuaScriptingEnv.h"
+#include "Engine/Scene/Components/Components.h"
+
+#include "Engine/Networking/UDPsocket.h"
+#include "Engine/Networking/TCPsocket.h"
+#include "Engine/Networking/IO/TCPclient.h"
+#include "Engine/Networking/IO/TCPserver.h"
