@@ -4,10 +4,12 @@
 #include "Nodes/MasterNodes/PBRMasterNodes.h"
 #include "Nodes/MasterNodes/LitMasterNodes.h"
 
+#include "Graphics/Resources/ResourceManager.h"
+
 namespace Bolt
 {
 
-	BasicMaterialGraph::BasicMaterialGraph() : MaterialGraph(),
+	BasicMaterialGraph::BasicMaterialGraph(ResourceManager* manager) : MaterialGraph(manager),
 		m_VertexPosition(nullptr), m_Color(nullptr), m_Alpha(nullptr), m_AlphaThreshold(nullptr)
 	{
 		m_VertexPosition = &AddMasterNode("VertexPosition", std::make_unique<VertexPositionNode>());

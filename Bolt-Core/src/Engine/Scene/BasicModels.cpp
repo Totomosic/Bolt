@@ -16,12 +16,12 @@ namespace Bolt
 		return Engine::Instance().CurrentContext().GetRenderContext().GetBasicModels();
 	}
 
-	BasicModels::BasicModels()
+	BasicModels::BasicModels(ResourceManager* manager)
 	{
-		m_SquareModel = ResourceManager::Get().Register(std::make_unique<Model>(RectangleFactory(1, 1, Color::White)));
-		m_CircleModel = ResourceManager::Get().Register(std::make_unique<Model>(EllipseFactory(2, 2, 360, Color::White)));
-		m_CubeModel = ResourceManager::Get().Register(std::make_unique<Model>(CuboidFactory(1, 1, 1, Color::White)));
-		m_SphereModel = ResourceManager::Get().Register(std::make_unique<Model>(SphereFactory(1, 100, Color::White)));
+		m_SquareModel = manager->Register(std::make_unique<Model>(RectangleFactory(1, 1, Color::White)));
+		m_CircleModel = manager->Register(std::make_unique<Model>(EllipseFactory(2, 2, 360, Color::White)));
+		m_CubeModel = manager->Register(std::make_unique<Model>(CuboidFactory(1, 1, 1, Color::White)));
+		m_SphereModel = manager->Register(std::make_unique<Model>(SphereFactory(1, 100, Color::White)));
 	}
 
 	const ResourcePtr<Model>& BasicModels::Square() const

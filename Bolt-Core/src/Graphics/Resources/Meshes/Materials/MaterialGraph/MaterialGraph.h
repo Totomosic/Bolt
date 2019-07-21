@@ -11,18 +11,23 @@
 namespace Bolt
 {
 
+	class ResourceManager;
+
 	class BLT_API MaterialGraph
 	{
 	private:
+		ResourceManager* m_Resources;
+
 		std::unordered_map<blt::string, std::unique_ptr<MasterNode>> m_MasterNodes;
 		std::vector<std::unique_ptr<MaterialNode>> m_Nodes;
 		MaterialGraphBuilder m_Builder;
 		bool m_IsBuilt;
 
 	public:
-		MaterialGraph();
+		MaterialGraph(ResourceManager* resourceManager);
 		virtual ~MaterialGraph() {}
 
+		ResourceManager& GetResourceManager() const;
 		const std::unordered_map<blt::string, std::unique_ptr<MasterNode>>& GetMasterNodes() const;
 		const std::vector<std::unique_ptr<MaterialNode>>& GetNodes() const;
 		const MaterialGraphBuilder& GetBuilder() const;

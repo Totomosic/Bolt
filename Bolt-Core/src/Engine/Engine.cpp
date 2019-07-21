@@ -46,7 +46,7 @@ namespace Bolt
 	void Engine::SetApplication(std::unique_ptr<Application>&& app)
 	{
 		m_RootApplication = std::move(app);
-		m_RootApplication->CreateContext(m_CreateInfo.WindowInfo);
+		m_RootApplication->CreateContext(m_CreateInfo.UseGraphics, m_CreateInfo.WindowInfo);
 		m_RootApplication->Start();
 	}
 
@@ -66,8 +66,14 @@ namespace Bolt
 
 	void Engine::ApplyCurrentContext(AppContext* context)
 	{
-		SetCurrentContext(context);
-		context->GetRenderContext().GetWindow().MakeCurrent();
+		if (m_CurrentContext != context)
+		{
+			SetCurrentContext(context);
+			if (context->HasRenderContext())
+			{
+				context->GetRenderContext().GetWindow().MakeCurrent();
+			}
+		}
 	}
 
 }

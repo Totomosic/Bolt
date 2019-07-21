@@ -5,8 +5,8 @@
 namespace Bolt
 {
 
-	TextureManager::TextureManager()
-		: m_DefaultWhite(std::make_unique<Texture2D>(1, 1)), m_DefaultBlack(std::make_unique<Texture2D>(1, 1))
+	TextureManager::TextureManager(ResourceManager* manager)
+		: m_Manager(manager), m_DefaultWhite(std::make_unique<Texture2D>(1, 1)), m_DefaultBlack(std::make_unique<Texture2D>(1, 1))
 	{
 		m_DefaultWhite->LoadPixels();
 		m_DefaultWhite->Pixels[0] = Color::White;

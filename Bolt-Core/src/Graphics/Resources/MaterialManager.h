@@ -8,9 +8,13 @@
 namespace Bolt
 {
 
+	class ResourceManager;
+
 	class BLT_API MaterialManager
 	{
 	private:
+		ResourceManager* m_Manager;
+
 		BasicMaterialGraph m_DefaultGraph;
 		BasicMaterialGraph m_TextureGraph;
 		MaterialBuilder m_FontBuilder;
@@ -20,7 +24,7 @@ namespace Bolt
 		PBRMaterialGraph m_PBRTextureGraph;
 		
 	public:
-		MaterialManager();
+		MaterialManager(ResourceManager* manager);
 
 		std::unique_ptr<Material> Default(const Color& baseColor = Color::White) const;
 		std::unique_ptr<Material> Texture(const ResourcePtr<Texture2D>& texture) const;

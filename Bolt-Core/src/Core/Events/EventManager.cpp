@@ -9,7 +9,7 @@ namespace Bolt
 
 	EventManager& EventManager::Get()
 	{
-		return Engine::Instance().CurrentContext().GetRenderContext().GetEventManager();
+		return Engine::Instance().CurrentContext().GetEventManager();
 	}
 
 	EventManager::EventManager()
@@ -60,7 +60,7 @@ namespace Bolt
 		}
 		else
 		{
-			BLT_CORE_WARN("BUS NOT FOUND");
+			BLT_CORE_WARN("BUS NOT FOUND WHEN REMOVING");
 		}
 	}
 

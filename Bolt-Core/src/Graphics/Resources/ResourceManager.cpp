@@ -19,7 +19,7 @@ namespace Bolt
 	}
 
 	ResourceManager::ResourceManager()
-		: m_Resources(), m_Fonts(), m_Textures(), m_Materials()
+		: m_Resources(), m_Fonts(this), m_Textures(this), m_Materials(this)
 	{
 	
 	}

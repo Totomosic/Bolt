@@ -8,6 +8,9 @@ namespace Bolt
 	{
 	public:
 		bool Handled = false;
+
+	public:
+		virtual ~EventContainer() {}
 	};
 
 	template<typename T>
@@ -40,6 +43,9 @@ namespace Bolt
 	{
 	public:
 		virtual void Emit(EventContainer& e) = 0;
+
+	public:
+		virtual ~EventListenerContainer() {}
 	};
 
 	template<typename T>

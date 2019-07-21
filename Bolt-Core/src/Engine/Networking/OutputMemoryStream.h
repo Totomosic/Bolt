@@ -7,17 +7,12 @@ namespace Bolt
 	class BLT_API OutputMemoryStream
 	{
 	private:
-		byte* m_Buffer;
+		std::unique_ptr<byte[]> m_Buffer;
 		int m_Capacity;
 		int m_Head;
 
 	public:
 		OutputMemoryStream(uint32_t capacity = 1);
-		OutputMemoryStream(const OutputMemoryStream& other) = delete;
-		OutputMemoryStream& operator=(const OutputMemoryStream& other) = delete;
-		OutputMemoryStream(OutputMemoryStream&& other);
-		OutputMemoryStream& operator=(OutputMemoryStream&& other);
-		~OutputMemoryStream();
 
 		byte* GetBufferPtr() const;
 		int GetRemainingDataSize() const;
