@@ -5,6 +5,7 @@ class App : public Application
 {
 public:
 	Camera* m_Camera;
+	float* m_Roughness = nullptr;
 
 public:
 	void Init() override
@@ -13,7 +14,7 @@ public:
 		m_Camera = scene.CreateCamera(Projection::Perspective(PI / 3, GetWindow().Aspect(), 0.1f, 100.0f));
 		Layer& layer = scene.CreateLayer(m_Camera);
 
-		ResourceManager::Get().LoadPack("res/resources.pack", [&layer](const ResourcePack& pack)
+		ResourceManager::Get().LoadPack("res/resources.pack", [&layer, this](const ResourcePack& pack)
 			{
 				ResourceExtractor resources(pack);
 				ObjectFactory factory(layer);
@@ -24,6 +25,7 @@ public:
 				material->LinkAO(resources.GetResourcePtr<Texture2D>("streaked-metal1-ao"));
 
 				auto mat = ResourceManager::Get().Materials().PBR();
+				m_Roughness = &mat->GetLinkContext().GetLink<float>("Roughness").Value();
 
 				for (int i = -3; i <= 3; i++)
 				{
@@ -55,6 +57,11 @@ public:
 
 	void Update() override
 	{
+		if (m_Roughness != nullptr)
+		{
+			*m_Roughness = Map<float>(sin(Time::Get().RenderingTimeline().CurrentTime()), -1, 1, 0, 1);
+		}
+
 		float speed = 4 * Time::Get().RenderingTimeline().DeltaTime();
 		if (Input::Get().KeyDown(Keycode::W))
 		{

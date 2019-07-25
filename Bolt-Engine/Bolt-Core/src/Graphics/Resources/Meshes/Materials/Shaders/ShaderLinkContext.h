@@ -68,15 +68,15 @@ namespace Bolt
 		}
 
 		template<typename T>
-		const UniformLink<T>& GetLink(id_t linkId, int index = -1) const
+		const UniformLink<T>& GetLink(id_t linkId) const
 		{
-			return (const UniformLink<T>&)GetLink(linkId, index);
+			return (const UniformLink<T>&)GetLink(linkId);
 		}
 
 		template<typename T>
-		UniformLink<T>& GetLink(id_t linkId, int index = -1)
+		UniformLink<T>& GetLink(id_t linkId)
 		{
-			return (UniformLink<T>&)GetLink(linkId, index);
+			return (UniformLink<T>&)GetLink(linkId);
 		}
 
 		template<typename T>
