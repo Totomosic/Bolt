@@ -11,29 +11,32 @@ workspace "Bolt"
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 -- Solution Directory
-SolutionDir = "..\\"
+SolutionDir = "..\\..\\"
+-- Bolt Directory
+BoltDir = "Bolt-Engine\\"
 -- Projects Directory
-ProjectsDir = ""
+ProjectsDir = "Projects\\"
 
 -- Include directories relative to solutions directory
 IncludeDirs = {}
-IncludeDirs["GLFW"] = "Bolt-Core\\vendor\\GLFW\\include"
-IncludeDirs["Glad"] = "Bolt-Core\\vendor\\Glad\\include"
-IncludeDirs["ImGui"] = "Bolt-Core\\vendor\\ImGui"
-IncludeDirs["spdlog"] = "Bolt-Core\\vendor\\spdlog\\include"
-IncludeDirs["FreeTypeGL"] = "Bolt-Core\\vendor\\FreeType-GL"
-IncludeDirs["FreeType"] = "Bolt-Core\\vendor\\FreeType\\include"
-IncludeDirs["Lua"] = "Bolt-Core\\vendor\\Lua\\src"
+IncludeDirs["Bolt"] = "..\\" .. BoltDir .. "Bolt-Core\\src"
+IncludeDirs["GLFW"] = "..\\" .. BoltDir .. "Bolt-Core\\vendor\\GLFW\\include"
+IncludeDirs["Glad"] = "..\\" .. BoltDir .. "Bolt-Core\\vendor\\Glad\\include"
+IncludeDirs["ImGui"] = "..\\" .. BoltDir .. "Bolt-Core\\vendor\\ImGui"
+IncludeDirs["spdlog"] = "..\\" .. BoltDir .. "Bolt-Core\\vendor\\spdlog\\include"
+IncludeDirs["FreeTypeGL"] = "..\\" .. BoltDir .. "Bolt-Core\\vendor\\FreeType-GL"
+IncludeDirs["FreeType"] = "..\\" .. BoltDir .. "Bolt-Core\\vendor\\FreeType\\include"
+IncludeDirs["Lua"] = "..\\" .. BoltDir .. "Bolt-Core\\vendor\\Lua\\src"
 
-include (ProjectsDir .. "Tools\\ResourceConverter")
-include (ProjectsDir .. "Bolt-Core\\vendor\\GLFW")
-include (ProjectsDir .. "Bolt-Core\\vendor\\Glad")
-include (ProjectsDir .. "Bolt-Core\\vendor\\ImGui")
-include (ProjectsDir .. "Bolt-Core\\vendor\\spdlog")
-include (ProjectsDir .. "Bolt-Core\\vendor\\FreeType")
-include (ProjectsDir .. "Bolt-Core\\vendor\\FreeType-GL")
-include (ProjectsDir .. "Bolt-Core\\vendor\\Lua")
-include (ProjectsDir .. "Bolt-Core")
+include ("Tools\\ResourceConverter")
+include (BoltDir .. "Bolt-Core\\vendor\\GLFW")
+include (BoltDir .. "Bolt-Core\\vendor\\Glad")
+include (BoltDir .. "Bolt-Core\\vendor\\ImGui")
+include (BoltDir .. "Bolt-Core\\vendor\\spdlog")
+include (BoltDir .. "Bolt-Core\\vendor\\FreeType")
+include (BoltDir .. "Bolt-Core\\vendor\\FreeType-GL")
+include (BoltDir .. "Bolt-Core\\vendor\\Lua")
+include (BoltDir .. "Bolt-Core")
 include (ProjectsDir .. "DND")
 include (ProjectsDir .. "Aimbooster")
 include (ProjectsDir .. "Blockstream")
@@ -41,3 +44,4 @@ include (ProjectsDir .. "Meteors")
 include (ProjectsDir .. "Minecraft")
 include (ProjectsDir .. "Battleships")
 include (ProjectsDir .. "BattleshipServer")
+include (ProjectsDir .. "PBRExample")

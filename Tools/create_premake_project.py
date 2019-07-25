@@ -20,8 +20,7 @@ PREMAKE_FORMAT_STRING_TEMPLATE = """project "{0}"
     
     includedirs
     {{
-        "../Bolt-Core/external/",
-        "../Bolt-Core/src/",
+        "../%{{IncludeDirs.Bolt}}",
         "../%{{IncludeDirs.GLFW}}",
         "../%{{IncludeDirs.Glad}}",
         "../%{{IncludeDirs.ImGui}}",
@@ -64,7 +63,7 @@ PREMAKE_FORMAT_STRING_TEMPLATE = """project "{0}"
         optimize \"on\""""
 
 SOLUTION_PREMAKE_FILE = "..\\premake5.lua"
-PROJECTS_DIR = "..\\"
+PROJECTS_DIR = "..\\Projects\\"
 
 def create_dir(name):
     if not os.path.exists(name):
