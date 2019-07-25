@@ -107,7 +107,7 @@ namespace Bolt
 
 	GameObject* ObjectFactory::Instantiate(Mesh mesh, Transform transform) const
 	{
-		return Instantiate(std::make_unique<MeshRenderer>(mesh), std::move(transform));
+		return Instantiate(std::make_unique<MeshRenderer>(std::move(mesh)), std::move(transform));
 	}
 
 	GameObject* ObjectFactory::Rectangle(float width, float height, const Color& color, Transform transform) const

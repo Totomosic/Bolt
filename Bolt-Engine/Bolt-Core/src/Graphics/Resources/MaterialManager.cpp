@@ -144,7 +144,7 @@ namespace Bolt
 		SplitVec4Node& splitter = graph.AddNode<SplitVec4Node>();
 		splitter.SetInput(albedo.GetValue());
 		graph.SetRGB(splitter.GetRGB());
-		PropertyNode& metallic = graph.AddProperty("Metallic", 0.0f);
+		PropertyNode& metallic = graph.AddProperty("Metallic", 0.5f);
 		graph.SetMetallic(metallic.GetValue());
 		PropertyNode& roughness = graph.AddProperty("Roughness", 0.5f);
 		graph.SetRoughness(roughness.GetValue());
