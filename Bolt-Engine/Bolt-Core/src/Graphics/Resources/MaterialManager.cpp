@@ -150,6 +150,10 @@ namespace Bolt
 		graph.SetRoughness(roughness.GetValue());
 		PropertyNode& ao = graph.AddProperty("AO", 1.0f);
 		graph.SetOcclusion(ao.GetValue());
+		PropertyNode& alpha = graph.AddProperty("Alpha", 1.0f);
+		graph.SetAlpha(alpha.GetValue());
+		PropertyNode& alphaThreshold = graph.AddProperty("AlphaThreshold", 0.0f);
+		graph.SetAlphaThreshold(alphaThreshold.GetValue());
 		graph.Build();
 	}
 
@@ -171,6 +175,10 @@ namespace Bolt
 		SampleTextureNode& aoSampler = graph.AddNode(std::make_unique<SampleTextureNode>(SampleMode::Normal));
 		aoSampler.SetTexture(ao.GetValue());
 		graph.SetOcclusion(aoSampler.GetR());
+		PropertyNode& alpha = graph.AddProperty("Alpha", 1.0f);
+		graph.SetAlpha(alpha.GetValue());
+		PropertyNode& alphaThreshold = graph.AddProperty("AlphaThreshold", 0.0f);
+		graph.SetAlphaThreshold(alphaThreshold.GetValue());
 		graph.Build();
 	}
 

@@ -25,7 +25,9 @@ public:
 				material->LinkAO(resources.GetResourcePtr<Texture2D>("streaked-metal1-ao"));
 
 				auto mat = ResourceManager::Get().Materials().PBR();
-				m_Roughness = &mat->GetLinkContext().GetLink<float>("Roughness").Value();
+				mat->SetIsTransparent(true);
+				mat->LinkAlphaThreshold(0.5f);
+				m_Roughness = &mat->GetLinkContext().GetLink<float>("Alpha").Value();
 
 				for (int i = -3; i <= 3; i++)
 				{
@@ -59,7 +61,7 @@ public:
 	{
 		if (m_Roughness != nullptr)
 		{
-			*m_Roughness = Map<float>(sin(Time::Get().RenderingTimeline().CurrentTime()), -1, 1, 0, 1);
+			*m_Roughness = Map<float>(sin(Time::Get().RenderingTimeline().CurrentTime()), -1, 1, 0.2f, 1);
 		}
 
 		float speed = 4 * Time::Get().RenderingTimeline().DeltaTime();

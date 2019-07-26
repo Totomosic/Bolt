@@ -38,6 +38,16 @@ namespace Bolt
 		return GetLinkContext().Link("AO", ao);
 	}
 
+	UniformLink<float>& PBRMaterial::LinkAlpha(float alpha)
+	{
+		return GetLinkContext().Link("Alpha", alpha);
+	}
+
+	UniformLink<float>& PBRMaterial::LinkAlphaThreshold(float threshold)
+	{
+		return GetLinkContext().Link("AlphaThreshold", threshold);
+	}
+
 	// ===================================================================================================================================================================
 	// PBR TEXTURE MATERIAL
 	// ===================================================================================================================================================================
@@ -70,6 +80,16 @@ namespace Bolt
 	UniformLink<ResourcePtr<Texture2D>>& PBRTextureMaterial::LinkAO(const ResourcePtr<Texture2D>& ao)
 	{
 		return GetLinkContext().Link("AO", ao);
+	}
+
+	UniformLink<float>& PBRTextureMaterial::LinkAlpha(float alpha)
+	{
+		return GetLinkContext().Link("Alpha", alpha);
+	}
+
+	UniformLink<float>& PBRTextureMaterial::LinkAlphaThreshold(float threshold)
+	{
+		return GetLinkContext().Link("AlphaThreshold", threshold);
 	}
 
 }
