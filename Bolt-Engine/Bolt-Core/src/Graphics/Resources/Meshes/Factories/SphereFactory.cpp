@@ -26,7 +26,7 @@ namespace Bolt
 		result.Bounds.MaxZ = 0;
 
 		BufferLayout layout = BufferLayout::Default();
-		result.Vertices->AddVertexBuffer(std::make_unique<VertexBuffer>((SectorCount * SectorCount) * layout.Stride(), layout));
+		result.Vertices->AddVertexBuffer(std::make_unique<VertexBuffer>(((SectorCount + 1) * (SectorCount + 1)) * layout.Stride(), layout));
 
 		Vector4<byte> color = Color.ToBytes();
 

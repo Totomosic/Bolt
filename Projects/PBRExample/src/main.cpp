@@ -24,18 +24,16 @@ public:
 				material->LinkRoughness(resources.GetResourcePtr<Texture2D>("streaked-metal1-rough"));
 				material->LinkAO(resources.GetResourcePtr<Texture2D>("streaked-metal1-ao"));
 
-				auto mat = ResourceManager::Get().Materials().PBR();
-				mat->SetIsTransparent(true);
-				mat->LinkAlphaThreshold(0.5f);
-				m_Roughness = &mat->GetLinkContext().GetLink<float>("Alpha").Value();
-
 				for (int i = -3; i <= 3; i++)
 				{
 					for (int j = -3; j <= 3; j++)
 					{
 						factory.Sphere(1, material->Clone(), Transform({ i * 2.1f, j * 2.1f, -10 }))->transform().Rotate(PI / 2, Vector3f::Right());
 					}
-				}	
+				}
+
+				auto mat = ResourceManager::Get().Materials().PBR();
+				m_Roughness = &mat->LinkRoughness(0.2f).Value();
 				factory.Sphere(2, std::move(mat), Transform({ 0, 0, -20 }));
 			});
 
