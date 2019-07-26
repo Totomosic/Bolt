@@ -14,6 +14,8 @@ namespace Bolt
 		UniformLink<float>& LinkMetallic(float metallic);
 		UniformLink<float>& LinkRoughness(float roughness);
 		UniformLink<float>& LinkAO(float ao);
+		UniformLink<float>& LinkAlpha(float alpha);
+		UniformLink<float>& LinkAlphaThreshold(float threshold);
 	};
 
 	class BLT_API PBRTextureMaterial : public Material
@@ -26,6 +28,8 @@ namespace Bolt
 		UniformLink<ResourcePtr<Texture2D>>& LinkMetallic(const ResourcePtr<Texture2D>& metallic);
 		UniformLink<ResourcePtr<Texture2D>>& LinkRoughness(const ResourcePtr<Texture2D>& roughness);
 		UniformLink<ResourcePtr<Texture2D>>& LinkAO(const ResourcePtr<Texture2D>& ao);
+		UniformLink<float>& LinkAlpha(float alpha);
+		UniformLink<float>& LinkAlphaThreshold(float threshold);
 
 	};
 
