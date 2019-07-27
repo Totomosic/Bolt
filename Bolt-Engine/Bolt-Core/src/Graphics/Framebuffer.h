@@ -60,7 +60,9 @@ namespace Bolt
 		const Texture2D* CreateColorBuffer(ColorBuffer buffer = ColorBuffer::Color0);
 		const Texture2D* CreateDepthBuffer();
 		const Texture2D* CreateColorBuffer(const ResourcePtr<Texture2D>& texture, ColorBuffer buffer = ColorBuffer::Color0);
-		const Texture2D* CreateDepthBuffer(const ResourcePtr<Texture2D>&  texture);
+		const Texture2D* CreateDepthBuffer(const ResourcePtr<Texture2D>& texture);
+		const Texture2D* CreateColorBuffer(ResourcePtr<Texture2D>&& texture, ColorBuffer buffer = ColorBuffer::Color0);
+		const Texture2D* CreateDepthBuffer(ResourcePtr<Texture2D>&& texture);
 		RenderBuffer CreateColorRenderBuffer(ColorBuffer buffer = ColorBuffer::Color0);
 		RenderBuffer CreateDepthRenderBuffer();
 

@@ -79,15 +79,7 @@ namespace Bolt
 			return (UniformLink<T>&)GetLink(linkId);
 		}
 
-		template<typename T>
-		UniformLink<T>& Link(const blt::string& linkName, const T& value, int index = -1)
-		{
-			BLT_ASSERT(false, "Unsupported uniform type {}", typeid(T).name());
-			return UniformLink<T>();
-		}
-
-		template<>
-		UniformLink<int>& Link(const blt::string& linkName, const int& value, int index)
+		inline UniformLink<int>& Link(const blt::string& linkName, const int& value, int index = -1)
 		{
 			if (index >= 0)
 			{
@@ -98,8 +90,7 @@ namespace Bolt
 			return (UniformLink<int>&)AddLink(linkName, std::make_unique<UniformLink<int>>(m_Shader->GetShader().Id(), uniform.Location, value));
 		}
 
-		template<>
-		UniformLink<float>& Link(const blt::string& linkName, const float& value, int index)
+		inline UniformLink<float>& Link(const blt::string& linkName, const float& value, int index = -1)
 		{
 			if (index >= 0)
 			{
@@ -110,8 +101,7 @@ namespace Bolt
 			return (UniformLink<float>&)AddLink(linkName, std::make_unique<UniformLink<float>>(m_Shader->GetShader().Id(), uniform.Location, value));
 		}
 
-		template<>
-		UniformLink<Vector2f>& Link(const blt::string& linkName, const Vector2f& value, int index)
+		inline UniformLink<Vector2f>& Link(const blt::string& linkName, const Vector2f& value, int index = -1)
 		{
 			if (index >= 0)
 			{
@@ -122,8 +112,7 @@ namespace Bolt
 			return (UniformLink<Vector2f>&)AddLink(linkName, std::make_unique<UniformLink<Vector2f>>(m_Shader->GetShader().Id(), uniform.Location, value));
 		}
 
-		template<>
-		UniformLink<Vector3f>& Link(const blt::string& linkName, const Vector3f& value, int index)
+		inline UniformLink<Vector3f>& Link(const blt::string& linkName, const Vector3f& value, int index = -1)
 		{
 			if (index >= 0)
 			{
@@ -134,8 +123,7 @@ namespace Bolt
 			return (UniformLink<Vector3f>&)AddLink(linkName, std::make_unique<UniformLink<Vector3f>>(m_Shader->GetShader().Id(), uniform.Location, value));
 		}
 
-		template<>
-		UniformLink<Vector4f>& Link(const blt::string& linkName, const Vector4f& value, int index)
+		inline UniformLink<Vector4f>& Link(const blt::string& linkName, const Vector4f& value, int index = -1)
 		{
 			if (index >= 0)
 			{
@@ -146,8 +134,7 @@ namespace Bolt
 			return (UniformLink<Vector4f>&)AddLink(linkName, std::make_unique<UniformLink<Vector4f>>(m_Shader->GetShader().Id(), uniform.Location, value));
 		}
 
-		template<>
-		UniformLink<Color>& Link(const blt::string& linkName, const Color& value, int index)
+		inline UniformLink<Color>& Link(const blt::string& linkName, const Color& value, int index = -1)
 		{
 			if (index >= 0)
 			{
@@ -158,8 +145,7 @@ namespace Bolt
 			return (UniformLink<Color>&)AddLink(linkName, std::make_unique<UniformLink<Color>>(m_Shader->GetShader().Id(), uniform.Location, value));
 		}
 
-		template<>
-		UniformLink<Matrix2f>& Link(const blt::string& linkName, const Matrix2f& value, int index)
+		inline UniformLink<Matrix2f>& Link(const blt::string& linkName, const Matrix2f& value, int index = -1)
 		{
 			if (index >= 0)
 			{
@@ -170,8 +156,7 @@ namespace Bolt
 			return (UniformLink<Matrix2f>&)AddLink(linkName, std::make_unique<UniformLink<Matrix2f>>(m_Shader->GetShader().Id(), uniform.Location, value));
 		}
 
-		template<>
-		UniformLink<Matrix3f>& Link(const blt::string& linkName, const Matrix3f& value, int index)
+		inline UniformLink<Matrix3f>& Link(const blt::string& linkName, const Matrix3f& value, int index = -1)
 		{
 			if (index >= 0)
 			{
@@ -182,8 +167,7 @@ namespace Bolt
 			return (UniformLink<Matrix3f>&)AddLink(linkName, std::make_unique<UniformLink<Matrix3f>>(m_Shader->GetShader().Id(), uniform.Location, value));
 		}
 
-		template<>
-		UniformLink<Matrix4f>& Link(const blt::string& linkName, const Matrix4f& value, int index)
+		inline UniformLink<Matrix4f>& Link(const blt::string& linkName, const Matrix4f& value, int index = -1)
 		{
 			if (index >= 0)
 			{
@@ -194,8 +178,7 @@ namespace Bolt
 			return (UniformLink<Matrix4f>&)AddLink(linkName, std::make_unique<UniformLink<Matrix4f>>(m_Shader->GetShader().Id(), uniform.Location, value));
 		}
 
-		template<>
-		UniformLink<ResourcePtr<Texture2D>>& Link(const blt::string& linkName, const ResourcePtr<Texture2D>& value, int index)
+		inline UniformLink<ResourcePtr<Texture2D>>& Link(const blt::string& linkName, const ResourcePtr<Texture2D>& value, int index = -1)
 		{
 			if (index >= 0)
 			{
@@ -206,8 +189,7 @@ namespace Bolt
 			return (UniformLink<ResourcePtr<Texture2D>>&)AddLink(linkName, std::make_unique<UniformLink<ResourcePtr<Texture2D>>>(m_Shader->GetShader().Id(), uniform.Location, value));
 		}
 
-		template<>
-		UniformLink<ResourcePtr<Font>>& Link(const blt::string& linkName, const ResourcePtr<Font>& value, int index)
+		inline UniformLink<ResourcePtr<Font>>& Link(const blt::string& linkName, const ResourcePtr<Font>& value, int index = -1)
 		{
 			if (index >= 0)
 			{
@@ -216,6 +198,18 @@ namespace Bolt
 			const UserUniformLocation& uniform = GetUniformLocation(linkName);
 			BLT_ASSERT(ValidateUniformType<ResourcePtr<Texture2D>>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(ResourcePtr<Font>).name(), ValueTypeToGLSLString(uniform.Type));
 			return (UniformLink<ResourcePtr<Font>>&)AddLink(linkName, std::make_unique<UniformLink<ResourcePtr<Font>>>(m_Shader->GetShader().Id(), uniform.Location, value));
+		}
+
+		template<typename FuncT, typename R = typename std::result_of<FuncT()>::type>
+		UniformLink<std::function<R()>>& Link(const blt::string& linkName, const FuncT& value, int index = -1)
+		{
+			if (index >= 0)
+			{
+				return Link(linkName + '[' + std::to_string(index) + ']', value);
+			}
+			const UserUniformLocation& uniform = GetUniformLocation(linkName);
+			BLT_ASSERT(ValidateUniformType<R>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(R).name(), ValueTypeToGLSLString(uniform.Type));
+			return (UniformLink<std::function<R()>>&)AddLink(linkName, std::make_unique<UniformLink<std::function<R()>>>(m_Shader->GetShader().Id(), uniform.Location, value));
 		}
 
 	private:

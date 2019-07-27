@@ -25,7 +25,12 @@ namespace Bolt
 
 		void SetIsTransparent(bool isTransparent);
 
-		std::unique_ptr<Material> Clone() const;
+		template<typename MaterialT = Material>
+		std::unique_ptr<MaterialT> Clone() const
+		{
+			std::unique_ptr<MaterialT> material = std::make_unique<MaterialT>((const MaterialT&)*this);
+			return material;
+		}
 
 		friend class MaterialBuilder;
 

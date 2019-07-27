@@ -47,10 +47,4 @@ namespace Bolt
 		m_RenderSettings.UseBlend = isTransparent;
 	}
 
-	std::unique_ptr<Material> Material::Clone() const
-	{
-		std::unique_ptr<Material> material = std::make_unique<Material>(*this);
-		return material;
-	}
-
 }
