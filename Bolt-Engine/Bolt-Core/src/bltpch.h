@@ -45,6 +45,5 @@ namespace Bolt
 
 	using byte = uint8_t;
 	using id_t = uint32_t;
-	using real = float;
 
 }

@@ -5,8 +5,8 @@ project "Bolt-Resources"
     cppdialect "C++17"
     staticruntime "on"
     
-    targetdir ("bin/" .. outputdir)
-    objdir ("bin-int/" .. outputdir)
+    targetdir (SolutionDir .. "bin/" .. outputdir .. "/%{prj.name}")
+    objdir (SolutionDir .. "bin-int/" .. outputdir .. "/%{prj.name}")
     
     files
     {
