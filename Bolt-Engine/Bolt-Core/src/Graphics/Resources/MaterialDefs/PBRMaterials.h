@@ -16,6 +16,13 @@ namespace Bolt
 		UniformLink<float>& LinkAO(float ao);
 		UniformLink<float>& LinkAlpha(float alpha);
 		UniformLink<float>& LinkAlphaThreshold(float threshold);
+
+		UniformLink<std::function<Color()>>& LinkAlbedo(const std::function<Color()>& abledoRGB);
+		UniformLink<std::function<float()>>& LinkMetallic(const std::function<float()>& metallic);
+		UniformLink<std::function<float()>>& LinkRoughness(const std::function<float()>& roughness);
+		UniformLink<std::function<float()>>& LinkAO(const std::function<float()>& ao);
+		UniformLink<std::function<float()>>& LinkAlpha(const std::function<float()>& alpha);
+		UniformLink<std::function<float()>>& LinkAlphaThreshold(const std::function<float()>& threshold);
 	};
 
 	class BLT_API PBRTextureMaterial : public Material
@@ -30,6 +37,13 @@ namespace Bolt
 		UniformLink<ResourcePtr<Texture2D>>& LinkAO(const ResourcePtr<Texture2D>& ao);
 		UniformLink<float>& LinkAlpha(float alpha);
 		UniformLink<float>& LinkAlphaThreshold(float threshold);
+
+		UniformLink<std::function<ResourcePtr<Texture2D>()>>& LinkAlbedo(const std::function<ResourcePtr<Texture2D>()>& abledo);
+		UniformLink<std::function<ResourcePtr<Texture2D>()>>& LinkMetallic(const std::function<ResourcePtr<Texture2D>()>& metallic);
+		UniformLink<std::function<ResourcePtr<Texture2D>()>>& LinkRoughness(const std::function<ResourcePtr<Texture2D>()>& roughness);
+		UniformLink<std::function<ResourcePtr<Texture2D>()>>& LinkAO(const std::function<ResourcePtr<Texture2D>()>& ao);
+		UniformLink<std::function<float()>>& LinkAlpha(const std::function<float()>& alpha);
+		UniformLink<std::function<float()>>& LinkAlphaThreshold(const std::function<float()>& threshold);
 
 	};
 

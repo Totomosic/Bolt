@@ -1,7 +1,7 @@
 #pragma once
 #include "Logging.h"
 
-inline const char* ConvertError(GLenum error)
+inline const char* ConvertError(uint32_t error)
 {
 	switch (error)
 	{
@@ -27,7 +27,7 @@ inline const char* ConvertError(GLenum error)
 #endif
 
 #define BLT_OFFSET_OF(object, field) ((uint32_t)(&(((object*)(nullptr))->field)))
-#define BLT_BIT(x) (1 << x)
+#define BLT_BIT(x) (1 << (x))
 #define BLT_IS_BIT_SET(var, num) (!!((var) & BLT_BIT(num)))
 #define BLT_CONTAINS_BIT(var, bitvalue) (!!(((int)var) & ((int)bitvalue)))
 

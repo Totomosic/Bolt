@@ -30,7 +30,7 @@ namespace blt
 
 	public:
 		string();
-		string(uint32_t capacity);
+		explicit string(uint32_t capacity);
 		string(char c);
 		string(const char* str);
 		string(const char* buffer, unsigned int size);

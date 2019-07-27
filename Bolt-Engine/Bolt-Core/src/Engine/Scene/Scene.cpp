@@ -40,7 +40,8 @@ namespace Bolt
 
 	id_t Scene::GetMaskOfLayer(id_t id) const
 	{
-		return BLT_BIT(id);
+		id_t mask = BLT_BIT(id);
+		return mask;
 	}
 
 	id_t Scene::GetMaskOfLayers(const std::vector<id_t>& layers) const

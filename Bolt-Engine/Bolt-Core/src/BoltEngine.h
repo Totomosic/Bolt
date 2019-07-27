@@ -10,6 +10,7 @@
 #include "Graphics/Resources/ResourceManager.h"
 #include "Graphics/Resources/ResourceExtractor.h"
 #include "Graphics/Resources/Meshes/Materials/MaterialGraph/Graphs.h"
+#include "Graphics/Resources/Textures/RenderTexture2D.h"
 
 #include "Engine/Application.h"
 #include "Engine/Engine.h"

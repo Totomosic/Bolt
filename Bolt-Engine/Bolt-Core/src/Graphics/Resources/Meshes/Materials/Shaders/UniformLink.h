@@ -7,6 +7,41 @@
 namespace Bolt
 {
 
+	template<typename T>
+	static void UploadShaderValue(const Shader& shader, int location, const T& value, int index)
+	{
+		shader.SetUniform(location, value);
+	}
+
+	template<>
+	static void UploadShaderValue(const Shader& shader, int location, const ResourcePtr<Texture2D>& value, int index)
+	{
+		if (value != nullptr)
+		{
+			shader.SetUniform(location, index);
+			value->Bind(index);
+		}
+	}
+
+	template<>
+	static void UploadShaderValue(const Shader& shader, int location, const ResourcePtr<Font>& value, int index)
+	{
+		if (value != nullptr)
+		{
+			shader.SetUniform(location, index);
+			value->Bind(index);
+		}
+	}
+
+	template<typename T>
+	static void UploadShaderValue(const Shader& shader, int location, const std::function<T()>& value, int index)
+	{
+		if (value)
+		{
+			UploadShaderValue(shader, location, value(), index);
+		}
+	}
+
 	class BLT_API UniformLinkContainer
 	{
 	protected:
@@ -80,120 +115,12 @@ namespace Bolt
 
 		void UploadValue(const Shader& shader, int index) const override
 		{
-			shader.SetUniform(m_Location, m_Value);
+			UploadShaderValue(shader, m_Location, m_Value, index);
 		}
 
 		std::unique_ptr<UniformLinkContainer> Clone(id_t shaderId, int location) const override
 		{
 			return std::make_unique<UniformLink<T>>(shaderId, location, m_Value);
-		}
-
-	};
-
-	template<>
-	class BLT_API UniformLink<ResourcePtr<Texture2D>> : public UniformLinkContainer
-	{
-	private:
-		ResourcePtr<Texture2D> m_Value;
-
-	public:
-		UniformLink() : UniformLinkContainer(0, -1)
-		{
-
-		}
-
-		UniformLink(id_t shaderId, int location, const ResourcePtr<Texture2D>& value) : UniformLinkContainer(shaderId, location),
-			m_Value(value)
-		{
-
-		}
-
-		const void* GetValuePtr() const override
-		{
-			return (const void*)&m_Value;
-		}
-
-		void* GetValuePtr() override
-		{
-			return (void*)&m_Value;
-		}
-
-		const ResourcePtr<Texture2D>& Value() const
-		{
-			return m_Value;
-		}
-
-		ResourcePtr<Texture2D>& Value()
-		{
-			return m_Value;
-		}
-
-		void UploadValue(const Shader& shader, int index) const override
-		{
-			if (m_Value != nullptr)
-			{
-				shader.SetUniform(m_Location, index);
-				m_Value->Bind(index);
-			}
-		}
-
-		std::unique_ptr<UniformLinkContainer> Clone(id_t shaderId, int location) const override
-		{
-			return std::make_unique<UniformLink<ResourcePtr<Texture2D>>>(shaderId, location, m_Value);
-		}
-
-	};
-
-	template<>
-	class BLT_API UniformLink<ResourcePtr<Font>> : public UniformLinkContainer
-	{
-	private:
-		ResourcePtr<Font> m_Value;
-
-	public:
-		UniformLink() : UniformLinkContainer(0, -1)
-		{
-
-		}
-
-		UniformLink(id_t shaderId, int location, const ResourcePtr<Font>& value) : UniformLinkContainer(shaderId, location),
-			m_Value(value)
-		{
-
-		}
-
-		const void* GetValuePtr() const override
-		{
-			return (const void*)&m_Value;
-		}
-
-		void* GetValuePtr() override
-		{
-			return (void*)&m_Value;
-		}
-
-		const ResourcePtr<Font>& Value() const
-		{
-			return m_Value;
-		}
-
-		ResourcePtr<Font>& Value()
-		{
-			return m_Value;
-		}
-
-		void UploadValue(const Shader& shader, int index) const override
-		{
-			if (m_Value != nullptr)
-			{
-				shader.SetUniform(m_Location, index);
-				m_Value->Bind(index);
-			}
-		}
-
-		std::unique_ptr<UniformLinkContainer> Clone(id_t shaderId, int location) const override
-		{
-			return std::make_unique<UniformLink<ResourcePtr<Font>>>(shaderId, location, m_Value);
 		}
 
 	};
