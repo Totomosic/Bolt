@@ -19,16 +19,18 @@ ProjectsDir = "Projects\\"
 
 -- Include directories relative to solutions directory
 IncludeDirs = {}
-IncludeDirs["Bolt"] = "..\\" .. BoltDir .. "Bolt-Core\\src"
-IncludeDirs["GLFW"] = "..\\" .. BoltDir .. "Bolt-Core\\vendor\\GLFW\\include"
-IncludeDirs["Glad"] = "..\\" .. BoltDir .. "Bolt-Core\\vendor\\Glad\\include"
-IncludeDirs["ImGui"] = "..\\" .. BoltDir .. "Bolt-Core\\vendor\\ImGui"
-IncludeDirs["spdlog"] = "..\\" .. BoltDir .. "Bolt-Core\\vendor\\spdlog\\include"
+IncludeDirs["Bolt"] =       "..\\" .. BoltDir .. "Bolt-Core\\src"
+IncludeDirs["GLFW"] =       "..\\" .. BoltDir .. "Bolt-Core\\vendor\\GLFW\\include"
+IncludeDirs["Glad"] =       "..\\" .. BoltDir .. "Bolt-Core\\vendor\\Glad\\include"
+IncludeDirs["ImGui"] =      "..\\" .. BoltDir .. "Bolt-Core\\vendor\\ImGui"
+IncludeDirs["spdlog"] =     "..\\" .. BoltDir .. "Bolt-Core\\vendor\\spdlog\\include"
 IncludeDirs["FreeTypeGL"] = "..\\" .. BoltDir .. "Bolt-Core\\vendor\\FreeType-GL"
-IncludeDirs["FreeType"] = "..\\" .. BoltDir .. "Bolt-Core\\vendor\\FreeType\\include"
-IncludeDirs["Lua"] = "..\\" .. BoltDir .. "Bolt-Core\\vendor\\Lua\\src"
+IncludeDirs["FreeType"] =   "..\\" .. BoltDir .. "Bolt-Core\\vendor\\FreeType\\include"
+IncludeDirs["Lua"] =        "..\\" .. BoltDir .. "Bolt-Core\\vendor\\Lua\\src"
 
+group ("Tools")
 include ("Tools\\ResourceConverter")
+group ("Bolt")
 include (BoltDir .. "Bolt-Core\\vendor\\GLFW")
 include (BoltDir .. "Bolt-Core\\vendor\\Glad")
 include (BoltDir .. "Bolt-Core\\vendor\\ImGui")
@@ -37,6 +39,7 @@ include (BoltDir .. "Bolt-Core\\vendor\\FreeType")
 include (BoltDir .. "Bolt-Core\\vendor\\FreeType-GL")
 include (BoltDir .. "Bolt-Core\\vendor\\Lua")
 include (BoltDir .. "Bolt-Core")
+group ("Projects")
 include (ProjectsDir .. "DND")
 include (ProjectsDir .. "Aimbooster")
 include (ProjectsDir .. "Blockstream")
