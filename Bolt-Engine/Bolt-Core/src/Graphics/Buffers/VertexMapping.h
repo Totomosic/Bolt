@@ -39,6 +39,8 @@ namespace Bolt
 		VertexMapping& operator=(VertexMapping&& other);
 		~VertexMapping();
 
+		int VertexCount() const;
+
 		VertexIterator Begin() const;
 		VertexIterator End() const;
 		VertexIterator GetVertex(int index) const;

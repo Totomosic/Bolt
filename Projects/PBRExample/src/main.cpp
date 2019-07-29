@@ -6,8 +6,6 @@ class App : public Application
 public:
 	Camera* m_Camera;
 
-	RenderTexture2D* m_Framebuffer;
-
 public:
 	void Init() override
 	{
@@ -15,36 +13,35 @@ public:
 		Scene& scene = SceneManager::Get().CreateScene();
 		m_Camera = scene.CreateCamera(Projection::Perspective(PI / 3, GetWindow().Aspect(), 0.1f, 100.0f));
 		Layer& layer = scene.CreateLayer(m_Camera);
-		Camera* displayCamera = scene.CreateCamera(Projection::Orthographic(0, Width(), 0, Height(), 0, 100));
-		Layer& displayLayer = scene.CreateLayer(displayCamera);
 
-		m_Framebuffer = new RenderTexture2D(300, 300, TextureComponent::Color);
-		ObjectFactory factory(displayLayer);
-		GameObject* display = factory.Image(1280, 720, m_Framebuffer, Transform({ Width() / 2, Height() / 2, -10 }));
-		display->mesh().Mesh.Materials[0]->SetIsTransparent(true);
+		Camera* uiCamera = scene.CreateCamera(Projection::Orthographic(0, Width(), 0, Height(), -100, 100));
+		Layer& uiLayer = scene.CreateLayer(uiCamera);
 
-		ResourceManager::Get().LoadPack("res/loadingResources.pack", [&layer](const ResourcePack& pack)
+		Model model(CuboidFactory(1, 1, 1));
+		model.CalculateTangents(model.Map());
+
+		ResourceManager::Get().LoadPack("res/loadingResources.pack", [&uiLayer, this](const ResourcePack& pack)
 			{
 				ResourceExtractor resources(pack);
-				ObjectFactory factory(layer);
-				GameObject* loadingSymbol = factory.Image(3, 3, resources.GetResourcePtr<Texture2D>("loadingSymbol"), Transform({ 0, 0, -10 }));
-				loadingSymbol->mesh().Mesh.Materials[0]->SetIsTransparent(true);
-				loadingSymbol->Components().AddComponent<TriggerComponent>(TriggerComponent::TriggerFunc(), [](GameObject* object)
+				UIsurface& loadingSymbol = uiLayer.UI().Image(200, 200, resources.GetResourcePtr<Texture2D>("loadingSymbol"), Transform({ Width() / 2, Height() / 2, -10 }));
+				loadingSymbol.Object()->mesh().Mesh.Materials[0]->SetIsTransparent(true);
+				loadingSymbol.Object()->Components().AddComponent<TriggerComponent>(TriggerComponent::TriggerFunc(), [](GameObject* object)
 					{
 						object->transform().Rotate(2 * PI * Time::Get().RenderingTimeline().DeltaTime(), Vector3f::Forward());
 					});
 			});
 
-		ResourceManager::Get().LoadPack("res/resources.pack", [&layer, this](const ResourcePack& pack)
+		ResourceManager::Get().LoadPack("res/resources.pack", [&layer, &uiLayer, this](const ResourcePack& pack)
 			{
-				layer.Clear();
+				uiLayer.Clear();
 				ResourceExtractor resources(pack);
 				ObjectFactory factory(layer);
 				auto material = ResourceManager::Get().Materials().PBRTexture();
-				material->LinkAlbedo(resources.GetResourcePtr<Texture2D>("streaked-metal1-albedo"));
-				material->LinkMetallic(resources.GetResourcePtr<Texture2D>("streaked-metal1-metalness"));
-				material->LinkRoughness(resources.GetResourcePtr<Texture2D>("streaked-metal1-rough"));
-				material->LinkAO(resources.GetResourcePtr<Texture2D>("streaked-metal1-ao"));
+				material->LinkAlbedo(resources.GetResourcePtr<Texture2D>("sandstonecliff-albedo"));
+				material->LinkMetallic(resources.GetResourcePtr<Texture2D>("sandstonecliff-metalness"));
+				material->LinkRoughness(resources.GetResourcePtr<Texture2D>("sandstonecliff-roughness"));
+				material->LinkAO(resources.GetResourcePtr<Texture2D>("sandstonecliff-ao"));
+				//material->LinkNormal(resources.GetResourcePtr<Texture2D>("sandstonecliff-normal-ue"));
 
 				for (int i = -3; i <= 3; i++)
 				{
@@ -68,22 +65,16 @@ public:
 		sun.Intensity = 15;
 		sun.Color = Color(230, 100, 100);
 		sun.Attenuation = Vector3f(1, 0, 0);
-		sun.AmbientIntensity = 0.03f;
+		sun.AmbientIntensity = 0.05f;
 
 		RenderProcess process;
 		process.Options.GlobalContext.Lights.push_back(sun);
 		sun.Position = Vector3f(-300, 0, 1000);
 		sun.Color = Color(100, 100, 230);
 		process.Options.GlobalContext.Lights.push_back(sun);
-		process.Options.RenderTarget = m_Framebuffer;
-		process.LayerMask = scene.GetMaskOfLayer(layer.Id());
-
-		RenderProcess displayProcess;
-		displayProcess.LayerMask = scene.GetMaskOfLayer(displayLayer.Id());
 
 		RenderSchedule sch(scene);
 		sch.AddRenderProcess(process);
-		sch.AddRenderProcess(displayProcess);
 		SceneRenderer::Get().AddRenderSchedule(sch);
 	}
 
@@ -117,7 +108,6 @@ public:
 
 	void Render() override
 	{
-		m_Framebuffer->Clear();
 		Graphics::Get().RenderScene();
 	}
 };
@@ -125,7 +115,6 @@ public:
 int main()
 {
 	EngineCreateInfo info;
-	info.WindowInfo.Samples = 0;
 	Engine e(info);
 	e.SetApplication<App>();
 	e.Run();

@@ -38,6 +38,11 @@ namespace Bolt
 		return GetLinkContext().Link("AO", ao);
 	}
 
+	UniformLink<Vector3f>& PBRMaterial::LinkNormal(const Vector3f& normal)
+	{
+		return GetLinkContext().Link("Normal", normal);
+	}
+
 	UniformLink<float>& PBRMaterial::LinkAlpha(float alpha)
 	{
 		return GetLinkContext().Link("Alpha", alpha);
@@ -66,6 +71,11 @@ namespace Bolt
 	UniformLink<std::function<float()>>& PBRMaterial::LinkAO(const std::function<float()>& ao)
 	{
 		return GetLinkContext().Link("AO", ao);
+	}
+
+	UniformLink<std::function<Vector3f()>>& PBRMaterial::LinkNormal(const std::function<Vector3f()>& normal)
+	{
+		return GetLinkContext().Link("Normal", normal);
 	}
 
 	UniformLink<std::function<float()>>& PBRMaterial::LinkAlpha(const std::function<float()>& alpha)
@@ -112,6 +122,11 @@ namespace Bolt
 		return GetLinkContext().Link("AO", ao);
 	}
 
+	UniformLink<ResourcePtr<Texture2D>>& PBRTextureMaterial::LinkNormal(const ResourcePtr<Texture2D>& normal)
+	{
+		return GetLinkContext().Link("Normal", normal);
+	}
+
 	UniformLink<float>& PBRTextureMaterial::LinkAlpha(float alpha)
 	{
 		return GetLinkContext().Link("Alpha", alpha);
@@ -140,6 +155,11 @@ namespace Bolt
 	UniformLink<std::function<ResourcePtr<Texture2D>()>>& PBRTextureMaterial::LinkAO(const std::function<ResourcePtr<Texture2D>()>& ao)
 	{
 		return GetLinkContext().Link("AO", ao);
+	}
+
+	UniformLink<std::function<ResourcePtr<Texture2D>()>>& PBRTextureMaterial::LinkNormal(const std::function<ResourcePtr<Texture2D>()>& normal)
+	{
+		return GetLinkContext().Link("Normal", normal);
 	}
 
 	UniformLink<std::function<float()>>& PBRTextureMaterial::LinkAlpha(const std::function<float()>& alpha)
