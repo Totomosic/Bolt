@@ -6,7 +6,7 @@ namespace Bolt
 {
 
 	TextureManager::TextureManager(ResourceManager* manager)
-		: m_Manager(manager), m_DefaultWhite(std::make_unique<Texture2D>(1, 1)), m_DefaultBlack(std::make_unique<Texture2D>(1, 1)), m_DefaultBlue(std::make_unique<Texture2D>(1, 1))
+		: m_Manager(manager), m_DefaultWhite(std::make_unique<Texture2D>(1, 1)), m_DefaultBlack(std::make_unique<Texture2D>(1, 1)), m_DefaultNormalMap(std::make_unique<Texture2D>(1, 1))
 	{
 		m_DefaultWhite->LoadPixels();
 		m_DefaultWhite->Pixels[0] = Color::White;
@@ -16,9 +16,9 @@ namespace Bolt
 		m_DefaultBlack->Pixels[0] = Color::Black;
 		m_DefaultBlack->UpdatePixels();
 
-		m_DefaultBlue->LoadPixels();
-		m_DefaultBlue->Pixels[0] = Color(0, 0, 255);
-		m_DefaultBlue->UpdatePixels();
+		m_DefaultNormalMap->LoadPixels();
+		m_DefaultNormalMap->Pixels[0] = Color::FromFloats(0.5f, 0.5f, 1.0f);
+		m_DefaultNormalMap->UpdatePixels();
 	}
 
 	ResourcePtr<Texture2D> TextureManager::DefaultWhite() const
@@ -31,9 +31,9 @@ namespace Bolt
 		return ResourcePtr<Texture2D>(m_DefaultBlack.get(), false);
 	}
 
-	ResourcePtr<Texture2D> TextureManager::DefaultBlue() const
+	ResourcePtr<Texture2D> TextureManager::DefaultNormalMap() const
 	{
-		return ResourcePtr<Texture2D>(m_DefaultBlue.get(), false);
+		return ResourcePtr<Texture2D>(m_DefaultNormalMap.get(), false);
 	}
 
 }

@@ -37,11 +37,11 @@ public:
 				ResourceExtractor resources(pack);
 				ObjectFactory factory(layer);
 				auto material = ResourceManager::Get().Materials().PBRTexture();
-				material->LinkAlbedo(resources.GetResourcePtr<Texture2D>("sandstonecliff-albedo"));
-				material->LinkMetallic(resources.GetResourcePtr<Texture2D>("sandstonecliff-metalness"));
-				material->LinkRoughness(resources.GetResourcePtr<Texture2D>("sandstonecliff-roughness"));
-				material->LinkAO(resources.GetResourcePtr<Texture2D>("sandstonecliff-ao"));
-				//material->LinkNormal(resources.GetResourcePtr<Texture2D>("sandstonecliff-normal-ue"));
+				material->LinkAlbedo(resources.GetResourcePtr<Texture2D>("d"));
+				material->LinkMetallic(resources.GetResourcePtr<Texture2D>("m"));
+				material->LinkRoughness(resources.GetResourcePtr<Texture2D>("r"));
+				material->LinkAO(resources.GetResourcePtr<Texture2D>("h"));
+				material->LinkNormal(resources.GetResourcePtr<Texture2D>("n"));
 
 				for (int i = -3; i <= 3; i++)
 				{
@@ -61,16 +61,13 @@ public:
 			});
 
 		LightSource sun;
-		sun.Position = Vector3f(300, 0, 1000);
-		sun.Intensity = 15;
-		sun.Color = Color(230, 100, 100);
+		sun.Position = Vector3f(0, 0, 1000);
+		sun.Intensity = 5;
+		sun.Color = Color::White;
 		sun.Attenuation = Vector3f(1, 0, 0);
-		sun.AmbientIntensity = 0.05f;
+		sun.AmbientIntensity = 0.1f;
 
 		RenderProcess process;
-		process.Options.GlobalContext.Lights.push_back(sun);
-		sun.Position = Vector3f(-300, 0, 1000);
-		sun.Color = Color(100, 100, 230);
 		process.Options.GlobalContext.Lights.push_back(sun);
 
 		RenderSchedule sch(scene);
