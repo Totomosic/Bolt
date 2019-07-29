@@ -12,5 +12,10 @@ Currently only Windows is supported with plans to support Linux, MacOS and maybe
 
 # Installing:
 ##### 1. Download or clone this repository onto your computer
-##### 2. Run the "GenerateProjects.bat" file
-##### 3. Open the project in visual studio
+##### 2. Run the "GenerateProjects.bat" script
+##### 3. Open the solution in visual studio
+
+## Building a project with resources:
+#### 1. Install python3 and run `pip install pillow`
+#### 2. Run the "BuildResources.bat" script, this should generate a `.pack` file
+#### 3. Build and run the project
