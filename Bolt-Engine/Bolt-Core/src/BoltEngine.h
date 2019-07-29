@@ -12,6 +12,10 @@
 #include "Graphics/Resources/Meshes/Materials/MaterialGraph/Graphs.h"
 #include "Graphics/Resources/Textures/RenderTexture2D.h"
 
+#include "Graphics/Resources/Meshes/Model.h"
+#include "Graphics/Resources/Meshes/Factories/RectangleFactory.h"
+#include "Graphics/Resources/Meshes/Factories/CuboidFactory.h"
+
 #include "Engine/Application.h"
 #include "Engine/Engine.h"
 #include "Engine/Scene/UI/Text.h"

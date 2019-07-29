@@ -14,12 +14,14 @@ namespace Bolt
 
 		std::unique_ptr<Texture2D> m_DefaultWhite;
 		std::unique_ptr<Texture2D> m_DefaultBlack;
+		std::unique_ptr<Texture2D> m_DefaultBlue;
 
 	public:
 		TextureManager(ResourceManager* manager);
 
 		ResourcePtr<Texture2D> DefaultWhite() const;
 		ResourcePtr<Texture2D> DefaultBlack() const;
+		ResourcePtr<Texture2D> DefaultBlue() const;
 	};
 
 }

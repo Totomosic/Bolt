@@ -103,6 +103,13 @@ namespace Bolt
 		return result;
 	}
 
+	ShaderFuncResultPtr ShaderFuncs::Transpose(ShaderValuePtr value)
+	{
+		BLT_ASSERT(ValueTypeIsMatrix(value->Type()), "Can only transpose matrices");
+		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("transpose(@0)", std::vector<ShaderValuePtr>{ std::move(value) }, value->Type());
+		return result;
+	}
+
 	ShaderFuncResultPtr ShaderFuncs::LessThan(ShaderValuePtr left, ShaderValuePtr right)
 	{
 		BLT_ASSERT(left->TypeDimension() == ValueTypeDim::Single && right->TypeDimension() == ValueTypeDim::Single, "Cannot operate on arrays");
@@ -335,6 +342,27 @@ namespace Bolt
 	{
 		BLT_ASSERT(ValueTypeIsNumeric(xyzw->Type()), "xyzw should be a number");
 		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("vec4(@0)", std::vector<ShaderValuePtr>{ std::move(xyzw) }, ValueType::Vector4f);
+		return result;
+	}
+
+	ShaderFuncResultPtr ShaderFuncs::Matrix2(ShaderValuePtr r0, ShaderValuePtr r1)
+	{
+		BLT_ASSERT(r0->Type() == ValueType::Vector2f && r1->Type() == ValueType::Vector2f, "Rows must be Vector2f");
+		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("mat2(@0, @1)", std::vector<ShaderValuePtr>{ std::move(r0), std::move(r1) }, ValueType::Matrix2f);
+		return result;
+	}
+
+	ShaderFuncResultPtr ShaderFuncs::Matrix3(ShaderValuePtr r0, ShaderValuePtr r1, ShaderValuePtr r2)
+	{
+		BLT_ASSERT(r0->Type() == ValueType::Vector3f && r1->Type() == ValueType::Vector3f && r2->Type() == ValueType::Vector3f, "Rows must be Vector3f");
+		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("mat3(@0, @1, @2)", std::vector<ShaderValuePtr>{ std::move(r0), std::move(r1), std::move(r2) }, ValueType::Matrix3f);
+		return result;
+	}
+
+	ShaderFuncResultPtr ShaderFuncs::Matrix4(ShaderValuePtr r0, ShaderValuePtr r1, ShaderValuePtr r2, ShaderValuePtr r3)
+	{
+		BLT_ASSERT(r0->Type() == ValueType::Vector4f && r1->Type() == ValueType::Vector4f && r2->Type() == ValueType::Vector4f && r3->Type() == ValueType::Vector4f, "Rows must be Vector4f");
+		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("mat4(@0, @1, @2, @3)", std::vector<ShaderValuePtr>{ std::move(r0), std::move(r1), std::move(r2), std::move(r3) }, ValueType::Matrix4f);
 		return result;
 	}
 

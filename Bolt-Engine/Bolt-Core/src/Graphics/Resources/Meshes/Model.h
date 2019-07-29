@@ -12,8 +12,8 @@ namespace Bolt
 		ModelData m_Data;
 
 	public:
-		Model(const VertexFactory& factory);
-		Model(ModelData&& data);
+		Model(const VertexFactory& factory, bool calculateTangents = true);
+		Model(ModelData&& data, bool calculateTangents = true);
 
 		const ModelData& Data() const;
 		ModelData& Data();
@@ -25,6 +25,8 @@ namespace Bolt
 		ModelMapping Map() const;
 
 		std::unique_ptr<Resource> Clone() const override;
+
+		void CalculateTangents(ModelMapping& mapping) const;
 
 		template<uint32_t VertexCount>
 		std::vector<Face<VertexCount>> GetFaces(ModelMapping& mapping) const

@@ -23,6 +23,7 @@ namespace Bolt
 		static ShaderFuncResultPtr Length(ShaderValuePtr value);
 		static ShaderFuncResultPtr Reflect(ShaderValuePtr vector, ShaderValuePtr normal);
 		static ShaderFuncResultPtr Inverse(ShaderValuePtr value);
+		static ShaderFuncResultPtr Transpose(ShaderValuePtr value);
 
 		static ShaderFuncResultPtr LessThan(ShaderValuePtr left, ShaderValuePtr right);
 		static ShaderFuncResultPtr LequalThan(ShaderValuePtr left, ShaderValuePtr right);
@@ -57,6 +58,10 @@ namespace Bolt
 		static ShaderFuncResultPtr Vec4(ShaderValuePtr xy, ShaderValuePtr z, ShaderValuePtr w);
 		static ShaderFuncResultPtr Vec4(ShaderValuePtr xyz, ShaderValuePtr w);
 		static ShaderFuncResultPtr Vec4(ShaderValuePtr xwyz);
+		
+		static ShaderFuncResultPtr Matrix2(ShaderValuePtr r0, ShaderValuePtr r1);
+		static ShaderFuncResultPtr Matrix3(ShaderValuePtr r0, ShaderValuePtr r1, ShaderValuePtr r2);
+		static ShaderFuncResultPtr Matrix4(ShaderValuePtr r0, ShaderValuePtr r1, ShaderValuePtr r2, ShaderValuePtr r3);
 
 		static ShaderFuncResultPtr SampleTexture(ShaderValuePtr texture, ShaderValuePtr texCoords);
 		// Similar to SampleTexture but requires explicit lod - can be used in vertex shader

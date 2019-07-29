@@ -30,6 +30,8 @@ namespace Bolt
 		IndexMapping& operator=(IndexMapping&& other);
 		~IndexMapping();
 
+		int IndexCount() const;
+
 		IndexIterator Begin() const;
 		IndexIterator End() const;
 		IndexIterator GetIndex(int index) const;

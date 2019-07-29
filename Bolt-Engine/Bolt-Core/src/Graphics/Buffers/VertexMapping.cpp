@@ -42,6 +42,11 @@ namespace Bolt
 		}
 	}
 
+	int VertexMapping::VertexCount() const
+	{
+		return m_Array->VertexCount();
+	}
+
 	VertexIterator VertexMapping::Begin() const
 	{
 		return GetVertex(0);

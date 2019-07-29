@@ -34,6 +34,11 @@ namespace Bolt
 		}
 	}
 
+	int IndexMapping::IndexCount() const
+	{
+		return m_Array->IndexCount();
+	}
+
 	IndexIterator IndexMapping::Begin() const
 	{
 		return GetIndex(0);

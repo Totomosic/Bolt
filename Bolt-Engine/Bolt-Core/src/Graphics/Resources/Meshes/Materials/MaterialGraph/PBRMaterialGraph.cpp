@@ -68,18 +68,28 @@ namespace Bolt
 		ShaderVariablePtr projectionMatrix = vertex.RendererUniform(RendererUniform::ProjectionMatrix);
 		ShaderVariablePtr outWorldPos = vertex.DeclarePassOut(ValueType::Vector3f);
 		ShaderVariablePtr outWorldNormal = vertex.DeclarePassOut(ValueType::Vector3f);
+		ShaderVariablePtr outTBNMatrix = vertex.DeclarePassOut(ValueType::Matrix3f);
 
 		ShaderVariablePtr position = vertex.DefineVar(ShaderFuncs::Vec4(masterNodeValues.at("VertexPosition"), ShaderLiteral::FromFloat(1.0f)));
 		ShaderVariablePtr worldPosition = vertex.DefineVar(ShaderFuncs::Mul(modelMatrix, position));
 		ShaderVariablePtr viewPosition = vertex.DefineVar(ShaderFuncs::Mul(viewMatrix, worldPosition));
 		ShaderVariablePtr screenPosition = vertex.DefineVar(ShaderFuncs::Mul(projectionMatrix, viewPosition));
+
+		ShaderVariablePtr worldNormal = vertex.DefineVar(ShaderFuncs::xyz(ShaderFuncs::Mul(modelMatrix, ShaderFuncs::Vec4(vertex.Normal(), ShaderLiteral::FromFloat(0.0f)))));
+
+		ShaderVariablePtr tangent = vertex.DefineVar(ShaderFuncs::xyz(ShaderFuncs::Mul(modelMatrix, ShaderFuncs::Vec4(vertex.Tangent(), ShaderLiteral::FromFloat(0.0f)))));
+		ShaderVariablePtr bitangent = vertex.DefineVar(ShaderFuncs::Cross(worldNormal, tangent));
+		// We want a matrix that transforms from tangent space to world space
+		vertex.SetVariable(outTBNMatrix, ShaderFuncs::Matrix3(tangent, bitangent, worldNormal));
+
 		vertex.SetVertexPosition(screenPosition);
 		vertex.SetVariable(outWorldPos, ShaderFuncs::xyz(worldPosition));
-		vertex.SetVariable(outWorldNormal, ShaderFuncs::xyz(ShaderFuncs::Mul(modelMatrix, ShaderFuncs::Vec4(vertex.Normal(), ShaderLiteral::FromFloat(0.0f)))));
+		vertex.SetVariable(outWorldNormal, worldNormal);
 
 		FragmentShader& fragment = GetBuilder().GetBuilder().Factory().Fragment();
 		ShaderVariablePtr inWorldPos = fragment.DeclarePassIn(outWorldPos);
 		ShaderVariablePtr inWorldNormal = fragment.DeclarePassIn(outWorldNormal);
+		ShaderVariablePtr inTBNMatrix = fragment.DeclarePassIn(outTBNMatrix);
 		ShaderVariablePtr cameraPosition = fragment.RendererUniform(RendererUniform::CameraPosition);
 		ShaderVariablePtr lightPositions = fragment.RendererUniform(RendererUniform::LightPositions);
 		ShaderVariablePtr lightColors = fragment.RendererUniform(RendererUniform::LightColors);
@@ -87,6 +97,10 @@ namespace Bolt
 		ShaderVariablePtr lightIntensities = fragment.RendererUniform(RendererUniform::LightIntensities);
 		ShaderVariablePtr lightAttenuations = fragment.RendererUniform(RendererUniform::LightAttenuations);
 		ShaderVariablePtr lightCount = fragment.RendererUniform(RendererUniform::LightCount);
+
+		// Takes a normal in tangent space ((0, 0, 1) is default normal) and transforms it into world space
+		FunctionScope& calcWorldNormal = fragment.DefineFunction<Vector3f, Vector3f>("calcWorldNormal");
+		calcWorldNormal.Return(ShaderFuncs::Normalize(ShaderFuncs::Mul(inTBNMatrix, calcWorldNormal.GetArgument(0))));
 
 		FunctionScope& fresnelSchlick = fragment.DefineFunction<Vector3f, float, Vector3f>("fresnelSchlick");
 		ShaderVariablePtr oneTakeF = fresnelSchlick.DefineVar(ShaderFuncs::Sub(ShaderLiteral::FromFloat(1.0f), fresnelSchlick.GetArgument(1)));
@@ -123,8 +137,8 @@ namespace Bolt
 		ShaderVariablePtr metallic = fragment.DefineVar(masterNodeValues.at("Metallic"));
 		ShaderVariablePtr roughness = fragment.DefineVar(masterNodeValues.at("Roughness"));
 		ShaderVariablePtr ao = fragment.DefineVar(masterNodeValues.at("Occlusion"));
-		// Unit normal vector
-		ShaderVariablePtr N = fragment.DefineVar(ShaderFuncs::Normalize(inWorldNormal));
+		// Unit world space normal vector
+		ShaderVariablePtr N = fragment.DefineVar(ShaderFuncs::Call(calcWorldNormal, { ShaderFuncs::Normalize(masterNodeValues.at("Normal")) }));
 		// Unit to camera vector
 		ShaderVariablePtr V = fragment.DefineVar(ShaderFuncs::Normalize(ShaderFuncs::Sub(cameraPosition, inWorldPos)));
 		// Total radiance vector

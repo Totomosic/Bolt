@@ -1,4 +1,5 @@
 import os
+import shutil
 
 PREMAKE_FORMAT_STRING_TEMPLATE = """project "{0}"
     location ""
@@ -64,6 +65,8 @@ PREMAKE_FORMAT_STRING_TEMPLATE = """project "{0}"
 
 SOLUTION_PREMAKE_FILE = "..\\premake5.lua"
 PROJECTS_DIR = "..\\Projects\\"
+PROJECT_INCLUDE_TEMPLATE = "\ninclude (ProjectsDir .. \"{}\")"
+BUILD_RESOURCES_FILE = "BuildResources.bat"
 
 def create_dir(name):
     if not os.path.exists(name):
@@ -71,10 +74,14 @@ def create_dir(name):
 
 def main():
     prj_name = input("Project Name: ")
+    res_dir = "{}{}\\res".format(PROJECTS_DIR, prj_name)
 
     create_dir("{}{}".format(PROJECTS_DIR, prj_name))
     create_dir("{}{}\\src".format(PROJECTS_DIR, prj_name))
-    create_dir("{}{}\\res".format(PROJECTS_DIR, prj_name))
+    create_dir(res_dir)
+    create_dir("{}{}\\res\\Resources".format(PROJECTS_DIR, prj_name))
+
+    shutil.copyfile(BUILD_RESOURCES_FILE, res_dir + "\\" + BUILD_RESOURCES_FILE)
 
     f = open("{}{}/premake5.lua".format(PROJECTS_DIR, prj_name), "w")
     src = PREMAKE_FORMAT_STRING_TEMPLATE.format(prj_name)
@@ -82,7 +89,7 @@ def main():
     f.close()
 
     f = open(SOLUTION_PREMAKE_FILE, "a")
-    f.write("\ninclude (ProjectsDir .. \"{}\")".format(prj_name))
+    f.write(PROJECT_INCLUDE_TEMPLATE.format(prj_name))
     f.close()
 
 if __name__ == "__main__":

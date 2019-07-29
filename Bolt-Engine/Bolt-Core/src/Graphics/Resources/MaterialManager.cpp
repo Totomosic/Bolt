@@ -150,6 +150,8 @@ namespace Bolt
 		graph.SetRoughness(roughness.GetValue());
 		PropertyNode& ao = graph.AddProperty("AO", 1.0f);
 		graph.SetOcclusion(ao.GetValue());
+		PropertyNode& normal = graph.AddProperty("Normal", Vector3f(0, 0, 1));
+		graph.SetNormal(normal.GetValue());
 		PropertyNode& alpha = graph.AddProperty("Alpha", 1.0f);
 		graph.SetAlpha(alpha.GetValue());
 		PropertyNode& alphaThreshold = graph.AddProperty("AlphaThreshold", 0.0f);
@@ -175,6 +177,16 @@ namespace Bolt
 		SampleTextureNode& aoSampler = graph.AddNode(std::make_unique<SampleTextureNode>(SampleMode::Normal));
 		aoSampler.SetTexture(ao.GetValue());
 		graph.SetOcclusion(aoSampler.GetR());
+		PropertyNode& normal = graph.AddProperty("Normal", m_Manager->Textures().DefaultBlue());
+		SampleTextureNode& normalSampler = graph.AddNode(std::make_unique<SampleTextureNode>(SampleMode::Normal));
+		normalSampler.SetTexture(normal.GetValue());
+		MultiplyNode& normalScaling = graph.AddNode<MultiplyNode>();
+		normalScaling.SetInputA(normalSampler.GetRGB());
+		normalScaling.SetInputB(graph.AddNode(std::make_unique<FloatNode>(0.5f)).GetValue());
+		AddNode& normalAdding = graph.AddNode<AddNode>();
+		normalAdding.SetInputA(normalScaling.GetResult());
+		normalAdding.SetInputB(graph.AddNode(std::make_unique<FloatNode>(0.5f)).GetValue());
+		graph.SetNormal(normalAdding.GetResult());
 		PropertyNode& alpha = graph.AddProperty("Alpha", 1.0f);
 		graph.SetAlpha(alpha.GetValue());
 		PropertyNode& alphaThreshold = graph.AddProperty("AlphaThreshold", 0.0f);
