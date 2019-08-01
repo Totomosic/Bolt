@@ -22,6 +22,11 @@ namespace Minecraft
 			camera = s.CreateCamera(Projection::Perspective(PI / 3, GetWindow().Aspect(), 0.1f, 5000.0f));
 			Layer& l = s.CreateLayer(camera);
 
+			GetWindow().OnResize().On([this](Event<WindowResizeEvent>& e)
+				{
+					camera->SetProjection(Projection::Perspective(PI / 3, GetWindow().Aspect(), 0.1f, 5000.0f));
+				});
+
 			camera->transform().Translate(0, 65, 20);
 
 			ObjectFactory f(l);

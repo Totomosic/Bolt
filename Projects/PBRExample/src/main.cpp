@@ -20,6 +20,11 @@ public:
 		Model model(CuboidFactory(1, 1, 1));
 		model.CalculateTangents(model.Map());
 
+		GetWindow().OnResize().On([this](Event<WindowResizeEvent>& e)
+			{
+				m_Camera->SetProjection(Projection::Perspective(PI / 3, GetWindow().Aspect(), 0.1f, 100.0f));
+			});
+
 		ResourceManager::Get().LoadPack("res/loadingResources.pack", [&uiLayer, this](const ResourcePack& pack)
 			{
 				ResourceExtractor resources(pack);
