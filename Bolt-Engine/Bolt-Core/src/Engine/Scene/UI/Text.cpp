@@ -66,7 +66,7 @@ namespace Bolt
 	void Text::CreateTextModel()
 	{
 		Mesh& mesh = m_Object->Components().GetComponent<MeshRenderer>().Mesh;
-		mesh.Models[0].Model = ResourcePtr<Model>(new Model(TextFactory(m_String, m_Font, Color::White, m_AlignH, m_AlignV)), true);
+		mesh.Models[0].Model = ResourcePtr<Model>(new Model(TextFactory(m_String, m_Font, Color::White, m_AlignH, m_AlignV), false), true);
 	}
 
 }

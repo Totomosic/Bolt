@@ -56,18 +56,11 @@ public:
 						factory.Sphere(1, std::move(mat), Transform({ i * 2.1f, j * 2.1f, -10 }))->transform().Rotate(PI / 2, Vector3f::Right());
 					}
 				}
-
-				auto mat = ResourceManager::Get().Materials().PBR();
-				mat->LinkRoughness([]()
-					{
-						return Map<float>(sin(Time::Get().RenderingTimeline().CurrentTime()), -1, 1, 0.2f, 1.0f);
-					});
-				factory.Sphere(2, std::move(mat), Transform({ 0, 0, -20 }));
 			});
 
 		LightSource sun;
 		sun.Position = Vector3f(0, 0, 1000);
-		sun.Intensity = 5;
+		sun.Intensity = 10;
 		sun.Color = Color::White;
 		sun.Attenuation = Vector3f(1, 0, 0);
 		sun.AmbientIntensity = 0.1f;

@@ -182,6 +182,7 @@ namespace Aimbooster
 			qButton.EventHandler().OnClicked.On([this](Event<UIClickedEvent>& e)
 			{
 				CreateTitleScreen();
+				e.Handled = true;
 			});
 
 			qButton.EventHandler().OnHoverEntry.On([](Event<UIHoverEntryEvent>& e)
@@ -211,6 +212,7 @@ namespace Aimbooster
 			retryButton.EventHandler().OnClicked.On([this](Event<UIClickedEvent>& e)
 			{
 				CreateGameScreen();
+				e.Handled = true;
 			});
 
 			retryButton.EventHandler().OnHoverEntry.On([](Event<UIHoverEntryEvent>& e)
@@ -228,6 +230,7 @@ namespace Aimbooster
 			menuButton.EventHandler().OnClicked.On([this](Event<UIClickedEvent>& e)
 			{
 				CreateTitleScreen();
+				e.Handled = true;
 			});
 
 			menuButton.EventHandler().OnHoverEntry.On([](Event<UIHoverEntryEvent>& e)
