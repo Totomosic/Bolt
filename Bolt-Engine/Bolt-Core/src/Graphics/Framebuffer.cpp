@@ -240,6 +240,13 @@ namespace Bolt
 		GL_CALL(glClear((GLbitfield)buffer));
 	}
 
+	void Framebuffer::SetSize(int width, int height)
+	{
+		m_Viewport.Width = width;
+		m_Viewport.Height = height;
+		m_Viewport.Bind();
+	}
+
 	void Framebuffer::Create()
 	{
 		GL_CALL(glGenFramebuffers(1, &m_Id));

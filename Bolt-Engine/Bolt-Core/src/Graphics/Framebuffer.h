@@ -71,6 +71,7 @@ namespace Bolt
 		void Bind() const;
 		void Unbind() const;
 		void Clear(ClearBuffer buffer = ClearBuffer::Color | ClearBuffer::Depth) const;
+		void SetSize(int width, int height);
 
 		friend class Window;
 		friend struct WindowData;
