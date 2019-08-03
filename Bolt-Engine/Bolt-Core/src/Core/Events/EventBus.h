@@ -48,7 +48,6 @@ namespace Bolt
 		std::unordered_map<uint32_t, ListenerLocation> m_ListenerLocations;
 		std::vector<EventInfo> m_Events;
 		IdManager<uint32_t> m_ListenerIds;
-
 		std::unique_ptr<EventBusMount<EventIdT>> m_MountManager;
 
 	public:
@@ -65,8 +64,10 @@ namespace Bolt
 
 		void MountOn(GenericEventBus<EventIdT>& bus) const;
 		template<typename T>
-		uint32_t On(const EventIdT& eventId, const typename EventListener<T>::callback_t& callback);
+		uint32_t AddEventListener(const EventIdT& eventId, const typename EventListener<T>::callback_t& callback, ListenerPriority priority = ListenerPriority::Medium);
 
+		int GetListenerPriorityIndex(uint32_t id) const;
+		void SetListenerPriorityIndex(uint32_t id, int priorityIndex);
 		void RemoveEventListener(uint32_t id);
 
 		template<typename T>
@@ -79,6 +80,11 @@ namespace Bolt
 	private:
 		void EmitEvent(const EventIdT& eventId, std::unique_ptr<EventContainer>&& event);
 		void ProcessEvent(EventInfo& e) const;
+
+		static void PushEventListener(std::vector<std::unique_ptr<EventListenerContainer>>& vector, std::unique_ptr<EventListenerContainer>&& listener);
+		static void PushEventListenerHigh(std::vector<std::unique_ptr<EventListenerContainer>>& vector, std::unique_ptr<EventListenerContainer>&& listener);
+		static void PushEventListenerMedium(std::vector<std::unique_ptr<EventListenerContainer>>& vector, std::unique_ptr<EventListenerContainer>&& listener);
+		static void PushEventListenerLow(std::vector<std::unique_ptr<EventListenerContainer>>& vector, std::unique_ptr<EventListenerContainer>&& listener);
 
 	};
 
@@ -179,14 +185,56 @@ namespace Bolt
 
 	template<typename EventIdT>
 	template<typename T>
-	uint32_t GenericEventBus<EventIdT>::On(const EventIdT& eventId, const typename EventListener<T>::callback_t& callback)
+	uint32_t GenericEventBus<EventIdT>::AddEventListener(const EventIdT& eventId, const typename EventListener<T>::callback_t& callback, ListenerPriority priority)
 	{
+		BLT_ASSERT(priority != ListenerPriority::Custom, "Cannot create a listener with custom priority");
 		std::scoped_lock<std::mutex> lock(m_ListenersMutex);
 		uint32_t id = m_ListenerIds.GetNextId();
-		std::unique_ptr<EventListener<T>> listener = std::make_unique<EventListener<T>>(callback);
+		std::unique_ptr<EventListener<T>> listener = std::make_unique<EventListener<T>>(callback, priority);
 		m_ListenerLocations[id] = { eventId, listener.get() };
-		m_Listeners[eventId].push_back(std::move(listener));
+		PushEventListener(m_Listeners[eventId], std::move(listener));
 		return id;
+	}
+
+	template<typename EventIdT>
+	int GenericEventBus<EventIdT>::GetListenerPriorityIndex(uint32_t id) const
+	{
+		std::scoped_lock<std::mutex> lock(m_ListenersMutex);
+		ListenerLocation& location = m_ListenerLocations.at(id);
+		std::vector<std::unique_ptr<EventListenerContainer>>& vector = m_Listeners[location.Id];
+		for (int i = 0; i < vector.size(); i++)
+		{
+			if (vector.at(i).get() == location.Listener)
+			{
+				return i;
+			}
+		}
+		BLT_ASSERT(false, "No listener with id {}", id);
+		return -1;
+	}
+
+	template<typename EventIdT>
+	void GenericEventBus<EventIdT>::SetListenerPriorityIndex(uint32_t id, int priorityIndex)
+	{
+		std::scoped_lock<std::mutex> lock(m_ListenersMutex);
+		ListenerLocation& location = m_ListenerLocations.at(id);
+		std::vector<std::unique_ptr<EventListenerContainer>>& vector = m_Listeners[location.Id];
+		int index = -1;
+		for (int i = 0; i < vector.size(); i++)
+		{
+			if (vector.at(i).get() == location.Listener)
+			{
+				index = i;
+				break;
+			}
+		}
+		BLT_ASSERT(index != -1, "No listener with id {}", id);
+		if (priorityIndex >= vector.size())
+		{
+			priorityIndex = (int)vector.size() - 1;
+		}
+		vector.at(index)->m_Priority = ListenerPriority::Custom;
+		std::rotate(vector.begin() + priorityIndex, vector.begin() + index, vector.begin() + index + 1);
 	}
 
 	template<typename EventIdT>
@@ -263,7 +311,7 @@ namespace Bolt
 					if (e.Event->Handled)
 					{
 						break;
-					}
+					}					
 				}
 			}
 			if (!e.Event->Handled)
@@ -274,10 +322,73 @@ namespace Bolt
 					if (e.Event->Handled)
 					{
 						break;
-					}
+					}					
 				}
 			}
 		}
+	}
+
+	template<typename EventIdT>
+	void GenericEventBus<EventIdT>::PushEventListener(std::vector<std::unique_ptr<EventListenerContainer>>& vector, std::unique_ptr<EventListenerContainer>&& listener)
+	{
+		switch (listener->GetPriority())
+		{
+		case ListenerPriority::Low:
+			PushEventListenerLow(vector, std::move(listener));
+			break;
+		case ListenerPriority::Medium:
+			PushEventListenerMedium(vector, std::move(listener));
+			break;
+		case ListenerPriority::High:
+			PushEventListenerHigh(vector, std::move(listener));
+			break;
+		}
+	}
+
+	template<typename EventIdT>
+	void GenericEventBus<EventIdT>::PushEventListenerHigh(std::vector<std::unique_ptr<EventListenerContainer>>& vector, std::unique_ptr<EventListenerContainer>&& listener)
+	{
+		if (vector.size() == 0)
+		{
+			vector.push_back(std::move(listener));
+			return;
+		}
+		for (int i = 0; i < vector.size(); i++)
+		{
+			EventListenerContainer& container = *vector.at(i);
+			if (container.GetPriority() < ListenerPriority::High)
+			{
+				vector.insert(vector.begin() + i, std::move(listener));
+				return;
+			}
+		}
+		vector.push_back(std::move(listener));
+	}
+
+	template<typename EventIdT>
+	void GenericEventBus<EventIdT>::PushEventListenerMedium(std::vector<std::unique_ptr<EventListenerContainer>>& vector, std::unique_ptr<EventListenerContainer>&& listener)
+	{
+		if (vector.size() == 0)
+		{
+			vector.push_back(std::move(listener));
+			return;
+		}
+		for (int i = 0; i < vector.size(); i++)
+		{
+			EventListenerContainer& container = *vector.at(i);
+			if (container.GetPriority() < ListenerPriority::Medium)
+			{
+				vector.insert(vector.begin() + i, std::move(listener));
+				return;
+			}
+		}
+		vector.push_back(std::move(listener));
+	}
+
+	template<typename EventIdT>
+	void GenericEventBus<EventIdT>::PushEventListenerLow(std::vector<std::unique_ptr<EventListenerContainer>>& vector, std::unique_ptr<EventListenerContainer>&& listener)
+	{
+		vector.push_back(std::move(listener));
 	}
 
 	using EventBus = GenericEventBus<uint32_t>;

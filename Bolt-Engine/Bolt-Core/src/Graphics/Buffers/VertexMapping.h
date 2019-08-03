@@ -26,10 +26,17 @@ namespace Bolt
 			int Stride;
 		};
 
+		struct BLT_API AttributeInfo
+		{
+		public:
+			void* BasePtr;
+			int Stride;
+		};
+
 	private:
 		const VertexArray* m_Array;
 		std::vector<MappingPtr> m_MappedPtrs;
-		std::unordered_map<int, int> m_AttributeMap;
+		mutable std::unordered_map<int, AttributeInfo> m_Attributes;
 
 	public:
 		VertexMapping(const std::vector<MappingPtr>& mappedPtrs);
@@ -50,6 +57,8 @@ namespace Bolt
 
 	private:
 		bool HasAttribute(int attribIndex) const;
+		std::pair<const MappingPtr&, const MappingAttribute&> GetMappingInfo(int attribIndex) const;
+		const AttributeInfo& GetAttribute(int attribIndex) const;
 		void* GetAttributePtr(int attribIndex, int vertexIndex) const;
 		void SetVertexArray(const VertexArray* vertexArray);
 
