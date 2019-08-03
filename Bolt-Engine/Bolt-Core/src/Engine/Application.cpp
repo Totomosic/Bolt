@@ -115,7 +115,7 @@ namespace Bolt
 		Engine::Instance().SetCurrentContext(m_Context.get());
 		if (createRenderContext)
 		{
-			m_Context->GetRenderContext().GetWindow().OnClose().On([this](Event<WindowClosedEvent>& e)
+			m_Context->GetRenderContext().GetWindow().OnClose().AddEventListener([this](Event<WindowClosedEvent>& e)
 				{
 					Exit();
 				});

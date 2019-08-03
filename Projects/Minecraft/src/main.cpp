@@ -27,15 +27,8 @@ namespace Minecraft
 					camera->SetProjection(Projection::Perspective(PI / 3, GetWindow().Aspect(), 0.1f, 5000.0f));
 				});
 
-			camera->transform().Translate(0, 65, 20);
-
-			ObjectFactory f(l);
-			f.Cuboid(2, 2, 2, Color::Red, Transform({ 0, 65, 0 }));
-
-			camera->Components().AddComponent<TriggerComponent>(TriggerComponent::TriggerFunc(), [](GameObject* object)
-				{
-					object->transform().Translate(object->transform().Forward() * Time::Get().RenderingTimeline().DeltaTime());
-				});
+			camera->transform().Translate(64, 200, 64);
+			camera->transform().Rotate(-PI / 2, Vector3f::Right());
 
 			ResourceManager::Get().LoadPack("res/resources.pack", [&l, this](const ResourcePack& pack)
 				{

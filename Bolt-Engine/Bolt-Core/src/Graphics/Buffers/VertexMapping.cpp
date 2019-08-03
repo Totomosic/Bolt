@@ -6,20 +6,13 @@ namespace Bolt
 {
 
 	VertexMapping::VertexMapping(const std::vector<VertexMapping::MappingPtr>& mappedPtrs)
-		: m_Array(nullptr), m_MappedPtrs(mappedPtrs), m_AttributeMap()
+		: m_Array(nullptr), m_MappedPtrs(mappedPtrs), m_Attributes()
 	{
-		for (int i = 0; i < m_MappedPtrs.size(); i++)
-		{
-			MappingPtr& ptr = m_MappedPtrs[i];
-			for (MappingAttribute& attrib : ptr.Attributes)
-			{
-				m_AttributeMap[attrib.Index] = i;
-			}
-		}
+
 	}
 
 	VertexMapping::VertexMapping(VertexMapping&& other)
-		: m_Array(other.m_Array), m_MappedPtrs(std::move(other.m_MappedPtrs)), m_AttributeMap(std::move(other.m_AttributeMap))
+		: m_Array(other.m_Array), m_MappedPtrs(std::move(other.m_MappedPtrs)), m_Attributes(std::move(other.m_Attributes))
 	{
 		other.m_Array = nullptr;
 	}
@@ -29,7 +22,7 @@ namespace Bolt
 		const VertexArray* myArray = m_Array;
 		m_Array = other.m_Array;
 		m_MappedPtrs = std::move(other.m_MappedPtrs);
-		m_AttributeMap = std::move(other.m_AttributeMap);
+		m_Attributes = std::move(other.m_Attributes);
 		other.m_Array = myArray;
 		return *this;
 	}
@@ -64,22 +57,54 @@ namespace Bolt
 
 	bool VertexMapping::HasAttribute(int attributeIndex) const
 	{
-		return m_AttributeMap.find(attributeIndex) != m_AttributeMap.end();
+		auto it = std::find_if(m_MappedPtrs.begin(), m_MappedPtrs.end(), [attributeIndex](const MappingPtr& ptr)
+			{
+				auto it = std::find_if(ptr.Attributes.begin(), ptr.Attributes.end(), [attributeIndex](const MappingAttribute& attr)
+					{
+						return attr.Index == attributeIndex;
+					});
+				return it != ptr.Attributes.end();
+			});
+		return it != m_MappedPtrs.end();
+	}
+
+	std::pair<const VertexMapping::MappingPtr&, const VertexMapping::MappingAttribute&> VertexMapping::GetMappingInfo(int attribIndex) const
+	{
+		for (const MappingPtr& ptr : m_MappedPtrs)
+		{
+			auto it = std::find_if(ptr.Attributes.begin(), ptr.Attributes.end(), [attribIndex](const MappingAttribute& attr)
+				{
+					return attr.Index == attribIndex;
+				});
+			return { ptr, *it };
+		}
+		BLT_ASSERT(false, "Unable to find mapping attribute");
+		return { *(MappingPtr*)nullptr, *(MappingAttribute*)nullptr };
+	}
+
+	const VertexMapping::AttributeInfo& VertexMapping::GetAttribute(int attribIndex) const
+	{
+		BLT_ASSERT(HasAttribute(attribIndex), "No attribute with index {} exists", attribIndex);
+		auto it = m_Attributes.find(attribIndex);
+		if (it == m_Attributes.end())
+		{		
+			auto attribInfo = GetMappingInfo(attribIndex);
+			const MappingPtr& ptr = attribInfo.first;
+			const MappingAttribute& attrib = attribInfo.second;
+			byte* dataPtr = (byte*)ptr.Ptr;
+			dataPtr += attrib.Offset;
+			AttributeInfo info = { (void*)dataPtr, ptr.Stride };
+			m_Attributes[attribIndex] = info;
+			return m_Attributes[attribIndex];
+		}
+		return it->second;
 	}
 
 	void* VertexMapping::GetAttributePtr(int attributeIndex, int vertexIndex) const
 	{
 		BLT_ASSERT(HasAttribute(attributeIndex), "Attribute with index {} does not exist", attributeIndex);
-		const MappingPtr& ptr = m_MappedPtrs.at(m_AttributeMap.at(attributeIndex));
-		auto it = std::find_if(ptr.Attributes.begin(), ptr.Attributes.end(), [attributeIndex](const MappingAttribute& attrib)
-			{
-				return attrib.Index == attributeIndex;
-			});
-		const MappingAttribute& attrib = *it;
-		byte* dataPtr = (byte*)ptr.Ptr;
-		dataPtr += attrib.Offset;
-		dataPtr += ptr.Stride * vertexIndex;
-		return (void*)dataPtr;
+		const AttributeInfo& info = GetAttribute(attributeIndex);
+		return (void*)(((byte*)info.BasePtr) + (intptr_t)(vertexIndex * info.Stride));
 	}
 
 	void VertexMapping::SetVertexArray(const VertexArray* vertexArray)

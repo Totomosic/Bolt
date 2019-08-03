@@ -4,6 +4,14 @@
 namespace Bolt
 {
 
+	enum class ListenerPriority
+	{
+		Low,
+		Medium,
+		High,
+		Custom
+	};
+
 	class BLT_API EventContainer
 	{
 	public:
@@ -11,6 +19,8 @@ namespace Bolt
 
 	public:
 		virtual ~EventContainer() {}
+
+		inline void StopPropagation() { Handled = true; }
 	};
 
 	template<typename T>
@@ -41,11 +51,23 @@ namespace Bolt
 
 	class BLT_API EventListenerContainer
 	{
-	public:
-		virtual void Emit(EventContainer& e) = 0;
+	protected:
+		ListenerPriority m_Priority = ListenerPriority::Medium;
 
 	public:
+		EventListenerContainer(ListenerPriority priority)
+			: m_Priority(priority)
+		{
+		
+		}
+
 		virtual ~EventListenerContainer() {}
+		virtual void Emit(EventContainer& e) = 0;	
+
+		inline ListenerPriority GetPriority() const { return m_Priority; }
+
+		template<typename> friend class GenericEventBus;
+
 	};
 
 	template<typename T>
@@ -58,8 +80,8 @@ namespace Bolt
 		callback_t m_Callback;
 
 	public:
-		EventListener(const callback_t& callback)
-			: m_Callback(callback)
+		EventListener(const callback_t& callback, ListenerPriority priority) : EventListenerContainer(priority),
+			m_Callback(callback)
 		{
 		
 		}

@@ -17,10 +17,17 @@ public:
 		Camera* uiCamera = scene.CreateCamera(Projection::Orthographic(0, Width(), 0, Height(), -100, 100));
 		Layer& uiLayer = scene.CreateLayer(uiCamera);
 
-		Model model(CuboidFactory(1, 1, 1));
-		model.CalculateTangents(model.Map());
+		EventBus test;
+		test.AddEventListener<void>(0, [](Event<void>& e) {}, ListenerPriority::Low);
+		test.AddEventListener<void>(0, [](Event<void>& e) {}, ListenerPriority::Low);
+		test.AddEventListener<void>(0, [](Event<void>& e) {}, ListenerPriority::High);
+		test.AddEventListener<void>(0, [](Event<void>& e) {}, ListenerPriority::Medium);
+		test.AddEventListener<void>(0, [](Event<void>& e) {}, ListenerPriority::High);
+		test.AddEventListener<void>(0, [](Event<void>& e) {}, ListenerPriority::Medium);
+		uint32_t id = test.AddEventListener<void>(0, [](Event<void>& e) {}, ListenerPriority::Low);
+		test.SetListenerPriorityIndex(id, 0);
 
-		GetWindow().OnResize().On([this](Event<WindowResizeEvent>& e)
+		GetWindow().OnResize().AddEventListener([this](Event<WindowResizeEvent>& e)
 			{
 				m_Camera->SetProjection(Projection::Perspective(PI / 3, GetWindow().Aspect(), 0.1f, 100.0f));
 			});
