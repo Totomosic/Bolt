@@ -46,7 +46,7 @@ namespace Meteors
 
 			UIsurface& retryButton = endLayer.UI().Rectangle(300, 50, Color::Green, Transform({ ViewWidth / 2, ViewHeight / 2 - 100, 0 }));
 			retryButton.Text("Play Again", ResourceManager::Get().Fonts().Verdana(24), Color::Black, Transform({ 0, 0, 1 }));
-			retryButton.EventHandler().OnClicked.On([this](Event<UIClickedEvent>& e)
+			retryButton.EventHandler().OnClicked.AddEventListener([this](Event<UIClickedEvent>& e)
 				{
 					LoadGameScene();
 				});

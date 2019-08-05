@@ -128,36 +128,36 @@ namespace Aimbooster
 			UIsurface& quitButton = mainLayer->UI().Rectangle(300, 50, Color(200, 0, 0), Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() / 2 - 225, -5 }));
 			quitButton.Text("Quit", Color::White, Transform({ 0, 0, 1 }));
 
-			playButton.EventHandler().OnClicked.On([this](Event<UIClickedEvent>& e)
+			playButton.EventHandler().OnClicked.AddEventListener([this](Event<UIClickedEvent>& e)
 			{
 				CreateGameScreen();
 				e.Handled = true;
 			});
 
-			playButton.EventHandler().OnHoverEntry.On([](Event<UIHoverEntryEvent>& e)
+			playButton.EventHandler().OnHoverEntry.AddEventListener([](Event<UIHoverEntryEvent>& e)
 			{
 				e.Data.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetLinkContext().GetLink("Color") = Color::Green;
 				e.Handled = true;
 			});
 
-			playButton.EventHandler().OnHoverExit.On([](Event<UIHoverExitEvent>& e)
+			playButton.EventHandler().OnHoverExit.AddEventListener([](Event<UIHoverExitEvent>& e)
 			{
 				e.Data.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetLinkContext().GetLink("Color") = Color(0, 200, 0);
 				e.Handled = true;
 			});
 
-			quitButton.EventHandler().OnClicked.On([this](Event<UIClickedEvent>& e)
+			quitButton.EventHandler().OnClicked.AddEventListener([this](Event<UIClickedEvent>& e)
 			{
 				Exit();
 				e.Handled = true;
 			});
 
-			quitButton.EventHandler().OnHoverEntry.On([](Event<UIHoverEntryEvent>& e)
+			quitButton.EventHandler().OnHoverEntry.AddEventListener([](Event<UIHoverEntryEvent>& e)
 			{
 				e.Data.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetLinkContext().GetLink("Color") = Color::Red;
 			});
 
-			quitButton.EventHandler().OnHoverExit.On([](Event<UIHoverExitEvent>& e)
+			quitButton.EventHandler().OnHoverExit.AddEventListener([](Event<UIHoverExitEvent>& e)
 			{
 				e.Data.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetLinkContext().GetLink("Color") = Color(200, 0, 0);
 			});
@@ -179,18 +179,18 @@ namespace Aimbooster
 			fpsText = &mainLayer->UI().Text("60 fps", Color::White, Transform({ mainCamera->ViewWidth() - 100, mainCamera->ViewHeight() - 30, -5 }), AlignH::Left);
 			scoreText = &mainLayer->UI().Text("Score: 0", Color::White, Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() - 30, -5 }), AlignH::Center);
 
-			qButton.EventHandler().OnClicked.On([this](Event<UIClickedEvent>& e)
+			qButton.EventHandler().OnClicked.AddEventListener([this](Event<UIClickedEvent>& e)
 			{
 				CreateTitleScreen();
 				e.Handled = true;
 			});
 
-			qButton.EventHandler().OnHoverEntry.On([](Event<UIHoverEntryEvent>& e)
+			qButton.EventHandler().OnHoverEntry.AddEventListener([](Event<UIHoverEntryEvent>& e)
 			{
 				e.Data.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetLinkContext().GetLink("Color") = Color::Red;
 			});
 
-			qButton.EventHandler().OnHoverExit.On([](Event<UIHoverExitEvent>& e)
+			qButton.EventHandler().OnHoverExit.AddEventListener([](Event<UIHoverExitEvent>& e)
 			{
 				e.Data.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetLinkContext().GetLink("Color") = Color(200, 0, 0);
 			});
@@ -209,36 +209,36 @@ namespace Aimbooster
 			mainLayer->UI().Text("Score: " + std::to_string(score), Color::White, Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() / 2 - 50, -5 }));
 			UIsurface& retryButton = mainLayer->UI().Rectangle(300, 50, Color(0, 200, 0), Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() / 2 - 150, -5 }));
 			retryButton.Text("Retry", Color::White, Transform({ 0, 0, 1 }));
-			retryButton.EventHandler().OnClicked.On([this](Event<UIClickedEvent>& e)
+			retryButton.EventHandler().OnClicked.AddEventListener([this](Event<UIClickedEvent>& e)
 			{
 				CreateGameScreen();
 				e.Handled = true;
 			});
 
-			retryButton.EventHandler().OnHoverEntry.On([](Event<UIHoverEntryEvent>& e)
+			retryButton.EventHandler().OnHoverEntry.AddEventListener([](Event<UIHoverEntryEvent>& e)
 			{
 				e.Data.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetLinkContext().GetLink("Color") = Color::Green;
 			});
 
-			retryButton.EventHandler().OnHoverExit.On([](Event<UIHoverExitEvent>& e)
+			retryButton.EventHandler().OnHoverExit.AddEventListener([](Event<UIHoverExitEvent>& e)
 			{
 				e.Data.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetLinkContext().GetLink("Color") = Color(0, 200, 0);
 			});
 
 			UIsurface& menuButton = mainLayer->UI().Rectangle(300, 50, Color(200, 0, 0), Transform({ mainCamera->ViewWidth() / 2, mainCamera->ViewHeight() / 2 - 225, -5 }));
 			menuButton.Text("Main Menu", Color::White, Transform({ 0, 0, 1 }));
-			menuButton.EventHandler().OnClicked.On([this](Event<UIClickedEvent>& e)
+			menuButton.EventHandler().OnClicked.AddEventListener([this](Event<UIClickedEvent>& e)
 			{
 				CreateTitleScreen();
 				e.Handled = true;
 			});
 
-			menuButton.EventHandler().OnHoverEntry.On([](Event<UIHoverEntryEvent>& e)
+			menuButton.EventHandler().OnHoverEntry.AddEventListener([](Event<UIHoverEntryEvent>& e)
 			{
 				e.Data.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetLinkContext().GetLink("Color") = Color::Red;
 			});
 
-			menuButton.EventHandler().OnHoverExit.On([](Event<UIHoverExitEvent>& e)
+			menuButton.EventHandler().OnHoverExit.AddEventListener([](Event<UIHoverExitEvent>& e)
 			{
 				e.Data.Object->Components().GetComponent<MeshRenderer>().Mesh.Materials[0]->GetLinkContext().GetLink("Color") = Color(200, 0, 0);
 			});

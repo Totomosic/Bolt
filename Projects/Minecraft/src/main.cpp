@@ -22,12 +22,12 @@ namespace Minecraft
 			camera = s.CreateCamera(Projection::Perspective(PI / 3, GetWindow().Aspect(), 0.1f, 5000.0f));
 			Layer& l = s.CreateLayer(camera);
 
-			GetWindow().OnResize().On([this](Event<WindowResizeEvent>& e)
+			GetWindow().OnResize().AddEventListener([this](Event<WindowResizeEvent>& e)
 				{
 					camera->SetProjection(Projection::Perspective(PI / 3, GetWindow().Aspect(), 0.1f, 5000.0f));
 				});
 
-			camera->transform().Translate(64, 200, 64);
+			camera->transform().Translate(32, 200, 32);
 			camera->transform().Rotate(-PI / 2, Vector3f::Right());
 
 			ResourceManager::Get().LoadPack("res/resources.pack", [&l, this](const ResourcePack& pack)
@@ -37,7 +37,7 @@ namespace Minecraft
 					BlockDatabase::Initialize(atlas);
 					ObjectFactory f(l);
 					
-					manager = std::make_unique<ChunkManager>(f, atlas.GetTexture(), 8, 8);
+					manager = std::make_unique<ChunkManager>(f, atlas.GetTexture(), 4, 4);
 					ChunkRegion& chunk = manager->GetChunkRegion();
 					TaskManager::Run([&chunk]()
 						{
