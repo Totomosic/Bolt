@@ -37,31 +37,31 @@ namespace Bolt
 
 		T PeekNextId() const
 		{
-			if (m_CurrentMaxId < m_MaxId)
-			{
-				return m_CurrentMaxId;
-			}
 			if (m_AvailableIds.size() > 0)
 			{
 				T id = m_AvailableIds.back();
 				return id;
 			}
+			if (m_CurrentMaxId < m_MaxId)
+			{
+				return m_CurrentMaxId;
+			}			
 			BLT_ASSERT(false, "No available Id");
 			return m_MaxId;
 		}
 
 		T GetNextId() const
 		{
-			if (m_CurrentMaxId < m_MaxId)
-			{
-				return m_CurrentMaxId++;
-			}
 			if (m_AvailableIds.size() > 0)
 			{
 				T id = m_AvailableIds.back();
 				m_AvailableIds.pop_back();
 				return id;
 			}
+			if (m_CurrentMaxId < m_MaxId)
+			{
+				return m_CurrentMaxId++;
+			}			
 			BLT_ASSERT(false, "No available Id");
 			return m_MaxId;
 		}
