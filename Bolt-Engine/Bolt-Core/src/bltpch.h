@@ -46,4 +46,10 @@ namespace Bolt
 	using byte = uint8_t;
 	using id_t = uint32_t;
 
+	template<typename T>
+	using Scope = std::unique_ptr<T>;
+
+	template<typename T>
+	using Ref = std::shared_ptr<T>;
+
 }

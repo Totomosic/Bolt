@@ -35,27 +35,7 @@ namespace Bolt
 
 	};
 
-#ifdef BLT_DEBUG
-	#define BLT_CORE_TRACE(...) ::Bolt::Log::GetCoreLogger()->trace(__VA_ARGS__)
-	#define BLT_CORE_INFO(...)  ::Bolt::Log::GetCoreLogger()->info(__VA_ARGS__)
-	#define BLT_CORE_WARN(...)  ::Bolt::Log::GetCoreLogger()->warn(__VA_ARGS__)
-	#define BLT_CORE_ERROR(...) ::Bolt::Log::GetCoreLogger()->error(__VA_ARGS__)
-	#define BLT_CORE_FATAL(...) ::Bolt::Log::GetCoreLogger()->critical(__VA_ARGS__)
-
-	#define BLT_TRACE(...) ::Bolt::Log::GetClientLogger()->trace(__VA_ARGS__)
-	#define BLT_INFO(...) ::Bolt::Log::GetClientLogger()->info(__VA_ARGS__)
-	#define BLT_WARN(...) ::Bolt::Log::GetClientLogger()->warn(__VA_ARGS__)
-	#define BLT_ERROR(...) ::Bolt::Log::GetClientLogger()->error(__VA_ARGS__)
-	#define BLT_FATAL(...) ::Bolt::Log::GetClientLogger()->critical(__VA_ARGS__)
-
-	#define BLT_LUA_TRACE(...) ::Bolt::Log::GetLuaLogger()->trace(__VA_ARGS__)
-	#define BLT_LUA_INFO(...) ::Bolt::Log::GetLuaLogger()->info(__VA_ARGS__)
-	#define BLT_LUA_WARN(...) ::Bolt::Log::GetLuaLogger()->warn(__VA_ARGS__)
-	#define BLT_LUA_ERROR(...) ::Bolt::Log::GetLuaLogger()->error(__VA_ARGS__)
-	#define BLT_LUA_FATAL(...) ::Bolt::Log::GetLuaLogger()->critical(__VA_ARGS__)
-
-	#define BLT_ASSERT(arg, ...) { if (!(arg)) { BLT_CORE_FATAL(__VA_ARGS__); __debugbreak(); } }
-#else 
+#ifdef BLT_DIST 
 	#define BLT_CORE_TRACE(...)
 	#define BLT_CORE_INFO(...)
 	#define BLT_CORE_WARN(...)
@@ -75,6 +55,26 @@ namespace Bolt
 	#define BLT_LUA_FATAL(...)
 
 	#define BLT_ASSERT(arg, ...)
+#else
+	#define BLT_CORE_TRACE(...) ::Bolt::Log::GetCoreLogger()->trace(__VA_ARGS__)
+	#define BLT_CORE_INFO(...)  ::Bolt::Log::GetCoreLogger()->info(__VA_ARGS__)
+	#define BLT_CORE_WARN(...)  ::Bolt::Log::GetCoreLogger()->warn(__VA_ARGS__)
+	#define BLT_CORE_ERROR(...) ::Bolt::Log::GetCoreLogger()->error(__VA_ARGS__)
+	#define BLT_CORE_FATAL(...) ::Bolt::Log::GetCoreLogger()->critical(__VA_ARGS__)
+
+	#define BLT_TRACE(...) ::Bolt::Log::GetClientLogger()->trace(__VA_ARGS__)
+	#define BLT_INFO(...) ::Bolt::Log::GetClientLogger()->info(__VA_ARGS__)
+	#define BLT_WARN(...) ::Bolt::Log::GetClientLogger()->warn(__VA_ARGS__)
+	#define BLT_ERROR(...) ::Bolt::Log::GetClientLogger()->error(__VA_ARGS__)
+	#define BLT_FATAL(...) ::Bolt::Log::GetClientLogger()->critical(__VA_ARGS__)
+
+	#define BLT_LUA_TRACE(...) ::Bolt::Log::GetLuaLogger()->trace(__VA_ARGS__)
+	#define BLT_LUA_INFO(...) ::Bolt::Log::GetLuaLogger()->info(__VA_ARGS__)
+	#define BLT_LUA_WARN(...) ::Bolt::Log::GetLuaLogger()->warn(__VA_ARGS__)
+	#define BLT_LUA_ERROR(...) ::Bolt::Log::GetLuaLogger()->error(__VA_ARGS__)
+	#define BLT_LUA_FATAL(...) ::Bolt::Log::GetLuaLogger()->critical(__VA_ARGS__)
+
+	#define BLT_ASSERT(arg, ...) { if (!(arg)) { BLT_CORE_FATAL(__VA_ARGS__); __debugbreak(); } }
 #endif
 
 }

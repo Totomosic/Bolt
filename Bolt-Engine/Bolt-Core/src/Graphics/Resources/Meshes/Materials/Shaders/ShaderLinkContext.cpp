@@ -4,7 +4,7 @@
 namespace Bolt
 {
 
-	ShaderLinkContext::ShaderLinkContext(const std::shared_ptr<ShaderInstance>& shaderInstance)
+	ShaderLinkContext::ShaderLinkContext(const Ref<ShaderInstance>& shaderInstance)
 		: m_Shader(shaderInstance), m_Links(), m_UserUniformLinks()
 	{
 		const std::vector<UserUniformLocation>& uniforms = m_Shader->GetUserUniforms();
