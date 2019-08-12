@@ -49,6 +49,7 @@ project "Bolt-Core"
         {
             "BLT_PLATFORM_WINDOWS",
             "BLT_BUILD_STATIC",
+            "_CRT_SECURE_NO_WARNINGS",
             "NOMINMAX",
             "GLEW_STATIC",
             "LAYERS_PER_SCENE=4",

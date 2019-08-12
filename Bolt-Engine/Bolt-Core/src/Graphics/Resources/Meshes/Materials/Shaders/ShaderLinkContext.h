@@ -24,12 +24,12 @@ namespace Bolt
 		};
 
 	private:
-		std::shared_ptr<ShaderInstance> m_Shader;
+		Ref<ShaderInstance> m_Shader;
 		std::vector<std::unique_ptr<UniformLinkContainer>> m_Links;
 		std::unordered_map<blt::string, LinkId> m_UserUniformLinks;
 
 	public:
-		ShaderLinkContext(const std::shared_ptr<ShaderInstance>& shaderInstance);
+		ShaderLinkContext(const Ref<ShaderInstance>& shaderInstance);
 		ShaderLinkContext(const ShaderLinkContext& other);
 		ShaderLinkContext& operator=(const ShaderLinkContext& other);
 		ShaderLinkContext(ShaderLinkContext&& other) = default;
