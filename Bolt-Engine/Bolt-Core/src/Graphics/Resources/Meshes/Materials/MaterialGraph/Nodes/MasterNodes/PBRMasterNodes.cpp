@@ -29,7 +29,7 @@ namespace Bolt
 
 	void AlbedoNode::ConnectDefaults(MaterialGraph& graph, const MaterialGraphContext& context)
 	{
-		Connect(0, graph.AddNode(std::make_unique<Vec3Node>(Vector3f{ 1.0f, 1.0f, 1.0f })).GetValue());
+		Connect(0, graph.AddNode(std::make_unique<ConstantVec3Node>(Vector3f{ 1.0f, 1.0f, 1.0f })).GetValue());
 	}
 
 	// NORMAL NODE
@@ -41,7 +41,7 @@ namespace Bolt
 
 	void NormalNode::ConnectDefaults(MaterialGraph& graph, const MaterialGraphContext& context)
 	{
-		Connect(0, graph.AddNode(std::make_unique<Vec3Node>(Vector3f{ 0.0f, 0.0f, 1.0f })).GetValue());
+		Connect(0, graph.AddNode(std::make_unique<ConstantVec3Node>(Vector3f{ 0.0f, 0.0f, 1.0f })).GetValue());
 	}
 
 	// METALLIC NODE

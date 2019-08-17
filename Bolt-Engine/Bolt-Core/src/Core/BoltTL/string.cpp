@@ -912,7 +912,10 @@ namespace blt
 		{
 			end = size();
 		}
-		result.push_back(substr(start, end - start));
+		if (start != end)
+		{
+			result.push_back(substr(start, end - start));
+		}
 		return result;
 	}
 
@@ -932,7 +935,10 @@ namespace blt
 		{
 			end = size();
 		}
-		result.push_back(substr(start, end - start));
+		if (start != end)
+		{
+			result.push_back(substr(start, end - start));
+		}
 		return result;
 	}
 

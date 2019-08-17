@@ -67,7 +67,7 @@ namespace Bolt
 	std::vector<const Layer*> Scene::GetAllLayers() const
 	{
 		std::vector<const Layer*> result;
-		for (int i = 0; i < MAX_LAYERS; i++)
+		for (int i = 0; i < m_LayerCapacity; i++)
 		{
 			if (m_Layers[i].m_Id != GameObject::InvalidID && m_Layers[i].IsEnabled())
 			{
@@ -98,7 +98,7 @@ namespace Bolt
 	std::vector<Layer*> Scene::GetAllLayers()
 	{
 		std::vector<Layer*> result;
-		for (int i = 0; i < MAX_LAYERS; i++)
+		for (int i = 0; i < m_LayerCapacity; i++)
 		{
 			if (m_Layers[i].m_Id != GameObject::InvalidID && m_Layers[i].IsEnabled())
 			{
@@ -162,7 +162,7 @@ namespace Bolt
 	void Scene::Update()
 	{
 		// Update layers in reverse order
-		for (int i = (int)MAX_LAYERS - 1; i >= 0; i--)
+		for (int i = (int)m_LayerCapacity - 1; i >= 0; i--)
 		{
 			if (m_Layers[i].IsEnabled())
 			{
@@ -181,7 +181,7 @@ namespace Bolt
 
 	void Scene::UpdateTemporaryObjects()
 	{
-		for (int i = 0; i < MAX_LAYERS; i++)
+		for (int i = 0; i < m_LayerCapacity; i++)
 		{
 			if (m_Layers[i].IsEnabled())
 			{
@@ -214,7 +214,7 @@ namespace Bolt
 
 	id_t Scene::FindNextId() const
 	{
-		for (id_t i = 0; i < Scene::MAX_LAYERS; i++)
+		for (id_t i = 0; i < m_LayerCapacity; i++)
 		{
 			if (!m_Layers[i].IsEnabled())
 			{
