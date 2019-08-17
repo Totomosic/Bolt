@@ -8,7 +8,7 @@ namespace Bolt
 
 	// SPLIT VECTOR3 NODE
 
-	SplitVec3Node::SplitVec3Node() : MaterialNode(ShaderStageCompatibility::All, 1, 8)
+	SplitVec3Node::SplitVec3Node() : MaterialNode(ShaderStageCompatibility::All, 1, 6)
 	{
 
 	}
@@ -28,6 +28,21 @@ namespace Bolt
 		return GetConnection(2);
 	}
 
+	NodeConnection SplitVec3Node::GetRG() const
+	{
+		return GetConnection(3);
+	}
+
+	NodeConnection SplitVec3Node::GetGB() const
+	{
+		return GetConnection(4);
+	}
+
+	NodeConnection SplitVec3Node::GetRB() const
+	{
+		return GetConnection(5);
+	}
+
 	void SplitVec3Node::SetInput(const NodeConnection& connection)
 	{
 		Connect(0, connection);
@@ -38,11 +53,14 @@ namespace Bolt
 		node.BuildOutput(0, ShaderFuncs::x(inputs.GetInput(0)));
 		node.BuildOutput(1, ShaderFuncs::y(inputs.GetInput(0)));
 		node.BuildOutput(2, ShaderFuncs::z(inputs.GetInput(0)));
+		node.BuildOutput(3, ShaderFuncs::xy(inputs.GetInput(0)));
+		node.BuildOutput(4, ShaderFuncs::yz(inputs.GetInput(0)));
+		node.BuildOutput(5, ShaderFuncs::xz(inputs.GetInput(0)));
 	}
 
 	void SplitVec3Node::ConnectDefaults(MaterialGraph& graph, const MaterialGraphContext& context)
 	{
-		Connect(0, graph.AddNode(std::make_unique<Vec3Node>(Vector3f(0.0f, 0.0f, 0.0f))).GetValue());
+		Connect(0, graph.AddNode(std::make_unique<ConstantVec3Node>(Vector3f(0.0f, 0.0f, 0.0f))).GetValue());
 	}
 
 	// SPLIT VECTOR4 NODE
@@ -111,7 +129,7 @@ namespace Bolt
 
 	void SplitVec4Node::ConnectDefaults(MaterialGraph& graph, const MaterialGraphContext& context)
 	{
-		Connect(0, graph.AddNode(std::make_unique<Vec4Node>(Vector4f(0.0f, 0.0f, 0.0f, 0.0f))).GetValue());
+		Connect(0, graph.AddNode(std::make_unique<ConstantVec4Node>(Vector4f(0.0f, 0.0f, 0.0f, 0.0f))).GetValue());
 	}
 
 }

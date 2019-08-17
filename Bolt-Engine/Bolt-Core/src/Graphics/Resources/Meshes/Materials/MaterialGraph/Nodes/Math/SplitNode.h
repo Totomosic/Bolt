@@ -12,6 +12,9 @@ namespace Bolt
 		NodeConnection GetR() const;
 		NodeConnection GetG() const;
 		NodeConnection GetB() const;
+		NodeConnection GetRG() const;
+		NodeConnection GetGB() const;
+		NodeConnection GetRB() const;
 
 		void SetInput(const NodeConnection& connection);
 
