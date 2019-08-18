@@ -28,8 +28,6 @@ IncludeDirs["FreeTypeGL"] = "..\\" .. BoltDir .. "Bolt-Core\\vendor\\FreeType-GL
 IncludeDirs["FreeType"] =   "..\\" .. BoltDir .. "Bolt-Core\\vendor\\FreeType\\include"
 IncludeDirs["Lua"] =        "..\\" .. BoltDir .. "Bolt-Core\\vendor\\Lua\\src"
 
-group ("Tools")
-include ("Tools\\ResourceConverter")
 group ("Bolt/Vendor")
 include (BoltDir .. "Bolt-Core\\vendor\\GLFW")
 include (BoltDir .. "Bolt-Core\\vendor\\Glad")
