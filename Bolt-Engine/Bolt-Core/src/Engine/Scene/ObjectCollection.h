@@ -30,13 +30,16 @@ namespace Bolt
 
 	private:
 		IdManager<id_t> m_IdManager;
+		int m_GameObjectCapacity;
 
-		GameObjectInfo m_GameObjects[MAX_GAMEOBJECTS];
+		std::unique_ptr<GameObjectInfo[]> m_GameObjects;
 		std::vector<GameObject*> m_ActiveGameObjects;
 		mutable std::unordered_map<blt::string, std::vector<GameObject*>> m_Tags;
 
 	public:
 		ObjectCollection();
+
+		void Initialize(int maxGameObjects);
 
 		const GameObject& GetGameObjectById(id_t id) const;
 		GameObject& GetGameObjectById(id_t id);
@@ -44,6 +47,7 @@ namespace Bolt
 		GameObject& GetGameObjectByTag(const blt::string& tag, int index = 0) const;
 		const std::vector<GameObject*>& GetGameObjectsByTag(const blt::string& tag) const;
 		bool TagExists(const blt::string& tag) const;
+		bool IsValidId(id_t id) const;
 
 		virtual id_t AddGameObject(GameObject&& object);
 		virtual void RemoveGameObject(GameObject* object);

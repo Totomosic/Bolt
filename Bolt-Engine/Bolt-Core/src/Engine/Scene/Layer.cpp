@@ -83,7 +83,7 @@ namespace Bolt
 
 	void Layer::RemoveGameObject(GameObject* object)
 	{
-		if (object->Id() < ObjectCollection::MAX_GAMEOBJECTS)
+		if (m_GameObjects.IsValidId(object->Id()))
 		{
 			m_GameObjects.RemoveGameObject(object);
 		}
@@ -91,7 +91,7 @@ namespace Bolt
 
 	void Layer::RemoveGameObject(id_t id)
 	{
-		if (id < ObjectCollection::MAX_GAMEOBJECTS)
+		if (m_GameObjects.IsValidId(id))
 		{
 			RemoveGameObject(&m_GameObjects.GetGameObjectById(id));
 		}
@@ -156,10 +156,11 @@ namespace Bolt
 		BLT_TRANSFER(backend, m_ActiveCamera);
 	}
 
-	void Layer::Create(id_t id)
+	void Layer::Create(id_t id, int maxGameObjects)
 	{
 		m_Id = id;
 		Enable();
+		m_GameObjects.Initialize(maxGameObjects);
 		m_UIroot.GetFactory().SetCurrentLayer(*this);
 		m_UIroot.m_Object = &m_GameObjects.GetGameObjectById(0);
 	}

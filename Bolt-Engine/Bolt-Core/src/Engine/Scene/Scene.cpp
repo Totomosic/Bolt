@@ -126,10 +126,10 @@ namespace Bolt
 		return result;
 	}
 
-	Layer& Scene::CreateLayer(Camera* activeCamera)
+	Layer& Scene::CreateLayer(Camera* activeCamera, int maxGameObjects)
 	{
 		id_t id = FindNextId();
-		m_Layers[id].Create(id);
+		m_Layers[id].Create(id, maxGameObjects);
 		m_Layers[id].SetActiveCamera(activeCamera);
 		return m_Layers[id];
 	}

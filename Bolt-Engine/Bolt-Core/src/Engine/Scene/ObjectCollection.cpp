@@ -14,8 +14,17 @@ namespace Bolt
 	}
 
 	ObjectCollection::ObjectCollection()
-		: m_IdManager(ObjectCollection::RESERVED_GAMEOBJECTS, ObjectCollection::MAX_GAMEOBJECTS - 1), m_GameObjects{}, m_ActiveGameObjects()
+		: m_IdManager(0, 0), m_GameObjectCapacity(0), m_GameObjects(), m_ActiveGameObjects()
 	{
+		
+	}
+
+	void ObjectCollection::Initialize(int maxGameObjects)
+	{
+		BLT_ASSERT(maxGameObjects > RESERVED_GAMEOBJECTS, "Must contain more than {} GameObjects", RESERVED_GAMEOBJECTS);
+		m_IdManager = IdManager<id_t>(RESERVED_GAMEOBJECTS, maxGameObjects - 1);
+		m_GameObjectCapacity = maxGameObjects;
+		m_GameObjects = std::make_unique<GameObjectInfo[]>(maxGameObjects);
 		CreateReservedGameObjects();
 	}
 
@@ -47,6 +56,11 @@ namespace Bolt
 	bool ObjectCollection::TagExists(const blt::string& tag) const
 	{
 		return m_Tags.find(tag) != m_Tags.end();
+	}
+
+	bool ObjectCollection::IsValidId(id_t id) const
+	{
+		return id < m_GameObjectCapacity;
 	}
 
 	id_t ObjectCollection::AddGameObject(GameObject&& object)
@@ -82,7 +96,7 @@ namespace Bolt
 		}		
 		else
 		{
-			BLT_CORE_WARN("NOT IN ACTIVE OBJECTS");
+			BLT_CORE_WARN("DELTED GAMEOBJECT NOT IN ACTIVE OBJECTS");
 		}
 	}
 
@@ -152,7 +166,7 @@ namespace Bolt
 
 	void ObjectCollection::Transfer(XMLserializer& backend, bool isWriting)
 	{
-		BLT_TRANSFER_ARRAY(backend, m_GameObjects, MAX_GAMEOBJECTS);
+		
 	}
 
 	id_t ObjectCollection::FindNextId() const
