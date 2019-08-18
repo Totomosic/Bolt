@@ -25,6 +25,7 @@ namespace Bolt
 	{
 		std::unique_ptr<Material> material = m_DefaultGraph.GetMaterial();
 		material->GetLinkContext().Link("Color", baseColor);
+		material->SetIsTransparent(baseColor.a < 0.99f);
 		return material;
 	}
 
