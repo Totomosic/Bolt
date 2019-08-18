@@ -75,6 +75,7 @@ namespace Bolt
 		SplitVec4Node& splitter = graph.AddNode<SplitVec4Node>();
 		splitter.SetInput(color.GetValue());
 		graph.SetRGB(splitter.GetRGB());
+		graph.SetAlpha(splitter.GetA());
 		graph.Build();
 	}
 
@@ -123,6 +124,7 @@ namespace Bolt
 		graph.SetShininess(shininess.GetValue());
 		PropertyNode& shineDamper = graph.AddProperty("ShineDamper", 10.0f);
 		graph.SetShineDamper(shineDamper.GetValue());
+		graph.SetAlpha(splitter.GetA());
 		graph.Build();
 	}
 
@@ -136,6 +138,7 @@ namespace Bolt
 		graph.SetShininess(shininess.GetValue());
 		PropertyNode& shineDamper = graph.AddProperty("ShineDamper", 10.0f);
 		graph.SetShineDamper(shineDamper.GetValue());
+		graph.SetAlpha(sampler.GetA());
 		graph.Build();
 	}
 
