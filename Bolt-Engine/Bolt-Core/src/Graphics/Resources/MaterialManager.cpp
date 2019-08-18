@@ -182,10 +182,10 @@ namespace Bolt
 		normalSampler.SetTexture(normal.GetValue());
 		MultiplyNode& normalScaling = graph.AddNode<MultiplyNode>();
 		normalScaling.SetInputA(normalSampler.GetRGB());
-		normalScaling.SetInputB(graph.AddNode(std::make_unique<FloatNode>(2.0f)).GetValue());
+		normalScaling.SetInputB(graph.AddNode(std::make_unique<ConstantFloatNode>(2.0f)).GetValue());
 		SubtractNode& normalSubtract = graph.AddNode<SubtractNode>();
 		normalSubtract.SetInputA(normalScaling.GetResult());
-		normalSubtract.SetInputB(graph.AddNode(std::make_unique<FloatNode>(1.0f)).GetValue());
+		normalSubtract.SetInputB(graph.AddNode(std::make_unique<ConstantFloatNode>(1.0f)).GetValue());
 		graph.SetNormal(normalSubtract.GetResult());
 		PropertyNode& alpha = graph.AddProperty("Alpha", 1.0f);
 		graph.SetAlpha(alpha.GetValue());
