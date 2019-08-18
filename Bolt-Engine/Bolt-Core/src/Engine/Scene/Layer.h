@@ -71,7 +71,7 @@ namespace Bolt
 	private:
 		GameObject* AddTemporaryGameObject(GameObject&& object);
 		void MarkGameObjectForDelete(GameObject* object, float timeToDelete = 0.0f);
-		void Create(id_t id);
+		void Create(id_t id, int maxGameObjects);
 
 	};
 

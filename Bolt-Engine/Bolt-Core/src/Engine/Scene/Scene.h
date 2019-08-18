@@ -49,7 +49,7 @@ namespace Bolt
 		std::vector<Layer*> GetAllLayers();
 		std::vector<Layer*> GetLayers(id_t mask);
 
-		Layer& CreateLayer(Camera* activeCamera = nullptr);
+		Layer& CreateLayer(Camera* activeCamera = nullptr, int maxGameObjects = ObjectCollection::MAX_GAMEOBJECTS);
 
 		Camera* CreateCamera(const Projection& projection = Projection());
 		Camera* CreateCamera(const Frustum& frustum, ProjectionType type);
