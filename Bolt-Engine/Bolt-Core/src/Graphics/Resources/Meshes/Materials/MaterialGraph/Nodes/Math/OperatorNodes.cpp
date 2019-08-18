@@ -35,7 +35,7 @@ namespace Bolt
 
 	void AddNode::ConnectDefaults(MaterialGraph& graph, const MaterialGraphContext& context)
 	{
-		FloatNode& node = graph.AddNode(std::make_unique<FloatNode>(1.0f));
+		ConstantFloatNode& node = graph.AddNode(std::make_unique<ConstantFloatNode>(1.0f));
 		Connect(0, node.GetValue());
 		Connect(1, node.GetValue());
 	}
@@ -69,8 +69,8 @@ namespace Bolt
 
 	void SubtractNode::ConnectDefaults(MaterialGraph& graph, const MaterialGraphContext& context)
 	{
-		FloatNode& a = graph.AddNode(std::make_unique<FloatNode>(1.0f));
-		FloatNode& b = graph.AddNode(std::make_unique<FloatNode>(0.0f));
+		ConstantFloatNode& a = graph.AddNode(std::make_unique<ConstantFloatNode>(1.0f));
+		ConstantFloatNode& b = graph.AddNode(std::make_unique<ConstantFloatNode>(0.0f));
 		Connect(0, a.GetValue());
 		Connect(1, b.GetValue());
 	}
@@ -104,7 +104,7 @@ namespace Bolt
 
 	void MultiplyNode::ConnectDefaults(MaterialGraph& graph, const MaterialGraphContext& context)
 	{
-		FloatNode& node = graph.AddNode(std::make_unique<FloatNode>(1.0f));
+		ConstantFloatNode& node = graph.AddNode(std::make_unique<ConstantFloatNode>(1.0f));
 		Connect(0, node.GetValue());
 		Connect(1, node.GetValue());
 	}
@@ -138,7 +138,7 @@ namespace Bolt
 
 	void DivideNode::ConnectDefaults(MaterialGraph& graph, const MaterialGraphContext& context)
 	{
-		FloatNode& node = graph.AddNode(std::make_unique<FloatNode>(1.0f));
+		ConstantFloatNode& node = graph.AddNode(std::make_unique<ConstantFloatNode>(1.0f));
 		Connect(0, node.GetValue());
 		Connect(1, node.GetValue());
 	}

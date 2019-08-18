@@ -53,7 +53,7 @@ namespace Bolt
 
 	void MetallicNode::ConnectDefaults(MaterialGraph& graph, const MaterialGraphContext& context)
 	{
-		Connect(0, graph.AddNode(std::make_unique<FloatNode>(0.0f)).GetValue());
+		Connect(0, graph.AddNode(std::make_unique<ConstantFloatNode>(0.0f)).GetValue());
 	}
 
 	// ROUGHNESS NODE
@@ -65,7 +65,7 @@ namespace Bolt
 
 	void RoughnessNode::ConnectDefaults(MaterialGraph& graph, const MaterialGraphContext& context)
 	{
-		Connect(0, graph.AddNode(std::make_unique<FloatNode>(0.5f)).GetValue());
+		Connect(0, graph.AddNode(std::make_unique<ConstantFloatNode>(0.5f)).GetValue());
 	}
 
 	// OCCLUSION NODE
@@ -77,7 +77,7 @@ namespace Bolt
 
 	void OcclusionNode::ConnectDefaults(MaterialGraph& graph, const MaterialGraphContext& context)
 	{
-		Connect(0, graph.AddNode(std::make_unique<FloatNode>(1.0f)).GetValue());
+		Connect(0, graph.AddNode(std::make_unique<ConstantFloatNode>(1.0f)).GetValue());
 	}
 
 	// ALPHA NODE
@@ -89,7 +89,7 @@ namespace Bolt
 
 	void AlphaNode::ConnectDefaults(MaterialGraph& graph, const MaterialGraphContext& context)
 	{
-		Connect(0, graph.AddNode(std::make_unique<FloatNode>(1.0f)).GetValue());
+		Connect(0, graph.AddNode(std::make_unique<ConstantFloatNode>(1.0f)).GetValue());
 	}
 
 	// ALPHA THRESHOLD NODE
@@ -101,7 +101,7 @@ namespace Bolt
 
 	void AlphaThresholdNode::ConnectDefaults(MaterialGraph& graph, const MaterialGraphContext& context)
 	{
-		Connect(0, graph.AddNode(std::make_unique<FloatNode>(0.0f)).GetValue());
+		Connect(0, graph.AddNode(std::make_unique<ConstantFloatNode>(0.0f)).GetValue());
 	}
 
 }

@@ -4,13 +4,13 @@
 namespace Bolt
 {
 
-	class BLT_API FloatNode : public MaterialNode
+	class BLT_API ConstantFloatNode : public MaterialNode
 	{
 	private:
 		float m_Value;
 
 	public:
-		FloatNode(float value);
+		ConstantFloatNode(float value);
 
 		NodeConnection GetValue() const;
 

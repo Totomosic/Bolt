@@ -53,6 +53,7 @@ namespace Bolt
 	void MaterialNode::Connect(int inputIndex, const NodeConnection& connection)
 	{
 		BLT_ASSERT(inputIndex >= 0 && inputIndex < GetInputCount(), "Invalid input index");
+		BLT_ASSERT(ValidateInput(m_Inputs[inputIndex].Port, connection), "Invalid input connection type");
 		m_Inputs[inputIndex].Connection = connection;
 	}
 
@@ -74,6 +75,15 @@ namespace Bolt
 	{
 		BLT_ASSERT(index >= 0 && index < GetOutputCount(), "Invalid output index");
 		m_Outputs[index] = port;
+	}
+
+	bool MaterialNode::ValidateInput(const InputPort& port, const NodeConnection& connection) const
+	{
+		if (!port.HasType() || !connection.GetOutputPort().HasType())
+		{
+			return true;
+		}
+		return port.GetType() == connection.GetOutputPort().GetType();
 	}
 
 }

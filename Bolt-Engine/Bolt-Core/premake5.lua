@@ -32,7 +32,6 @@ project "Bolt-Core"
 
     links
     {
-        "opengl32.lib",
         "ws2_32.lib",
         "GLFW",
         "Glad",

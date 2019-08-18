@@ -6,11 +6,52 @@
 namespace Bolt
 {
 
+	// SPLIT VECTOR2 NODE
+
+	SplitVec2Node::SplitVec2Node() : MaterialNode(ShaderStageCompatibility::All, 1, 2)
+	{
+		MaterialNode::SetInput(0, InputPort(ValueType::Vector2f));
+		SetOutput(0, OutputPort(ValueType::Float));
+		SetOutput(1, OutputPort(ValueType::Float));
+	}
+
+	NodeConnection SplitVec2Node::GetR() const
+	{
+		return GetConnection(0);
+	}
+
+	NodeConnection SplitVec2Node::GetG() const
+	{
+		return GetConnection(1);
+	}
+
+	void SplitVec2Node::SetInput(const NodeConnection& value)
+	{
+		Connect(0, value);
+	}
+
+	void SplitVec2Node::Build(BuiltMaterialNode& node, const LinkedInputs& inputs, const MaterialGraphContext& context, MaterialGraphBuilder& builder) const
+	{
+		node.BuildOutput(0, ShaderFuncs::x(inputs.GetInput(0)));
+		node.BuildOutput(1, ShaderFuncs::y(inputs.GetInput(0)));
+	}
+
+	void SplitVec2Node::ConnectDefaults(MaterialGraph& graph, const MaterialGraphContext& context)
+	{
+		Connect(0, graph.AddNode(std::make_unique<ConstantVec2Node>(Vector2f(0.0f, 0.0f))).GetValue());
+	}
+
 	// SPLIT VECTOR3 NODE
 
 	SplitVec3Node::SplitVec3Node() : MaterialNode(ShaderStageCompatibility::All, 1, 6)
 	{
-
+		MaterialNode::SetInput(0, InputPort(ValueType::Vector3f));
+		SetOutput(0, ValueType::Float);
+		SetOutput(1, ValueType::Float);
+		SetOutput(2, ValueType::Float);
+		SetOutput(3, ValueType::Vector2f);
+		SetOutput(4, ValueType::Vector2f);
+		SetOutput(5, ValueType::Vector2f);
 	}
 
 	NodeConnection SplitVec3Node::GetR() const
@@ -67,7 +108,15 @@ namespace Bolt
 
 	SplitVec4Node::SplitVec4Node() : MaterialNode(ShaderStageCompatibility::All, 1, 8)
 	{
-
+		MaterialNode::SetInput(0, InputPort(ValueType::Vector4f));
+		SetOutput(0, OutputPort(ValueType::Vector3f));
+		SetOutput(1, OutputPort(ValueType::Vector2f));
+		SetOutput(2, OutputPort(ValueType::Vector2f));
+		SetOutput(3, OutputPort(ValueType::Vector2f));
+		SetOutput(4, OutputPort(ValueType::Float));
+		SetOutput(5, OutputPort(ValueType::Float));
+		SetOutput(6, OutputPort(ValueType::Float));
+		SetOutput(7, OutputPort(ValueType::Float));
 	}
 
 	NodeConnection SplitVec4Node::GetRGB() const

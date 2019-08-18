@@ -51,6 +51,8 @@ namespace Bolt
 		void SetInput(int index, const InputPort& port);
 		void SetOutput(int index, const OutputPort& port);
 
+		bool ValidateInput(const InputPort& port, const NodeConnection& connection) const;
+
 	};
 
 }
