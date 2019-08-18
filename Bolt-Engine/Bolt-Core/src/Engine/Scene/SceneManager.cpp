@@ -52,6 +52,7 @@ namespace Bolt
 		if (m_CurrentScene == nullptr)
 		{
 			m_CurrentScene = ptr;
+			m_CurrentScene->SetIsActive(true);
 		}
 		return *ptr;
 	}
@@ -68,6 +69,7 @@ namespace Bolt
 		{
 			SceneUnloadedEvent e;
 			e.UnloadedScene = m_CurrentScene;
+			m_CurrentScene->SetIsActive(false);
 			m_CurrentScene->OnUnload.Emit(std::move(e));
 		}
 		m_CurrentScene = &scene;
@@ -76,6 +78,7 @@ namespace Bolt
 			SceneLoadedEvent e;
 			e.LoadedScene = m_CurrentScene;
 			e.LoadData = nullptr;
+			m_CurrentScene->SetIsActive(true);
 			m_CurrentScene->OnLoad.Emit(std::move(e));
 		}
 	}

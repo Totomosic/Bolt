@@ -19,6 +19,7 @@ namespace Bolt
 		int m_LayerCapacity;
 		Camera m_Cameras[MAX_CAMERAS];
 		id_t m_Id;
+		bool m_IsActive;
 
 		PhysicsManager m_PhysEngine;
 
@@ -36,6 +37,7 @@ namespace Bolt
 		const PhysicsManager& Physics() const;
 		PhysicsManager& Physics();
 		id_t Id() const;
+		bool IsActive() const;
 
 		const Layer& GetLayer(id_t id) const;
 		Layer& GetLayer(id_t id);
@@ -67,6 +69,7 @@ namespace Bolt
 		void ClearCameras();
 		id_t FindNextId() const;
 		id_t FindNextCameraId() const;
+		void SetIsActive(bool isActive);
 
 	};
 

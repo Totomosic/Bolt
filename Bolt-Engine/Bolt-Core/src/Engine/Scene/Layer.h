@@ -21,6 +21,7 @@ namespace Bolt
 		id_t m_Id;
 		ObjectCollection m_GameObjects;
 		bool m_Enabled;
+		bool m_IsActive;
 		Camera* m_ActiveCamera;
 		
 		UIManager m_UIManager;
@@ -42,6 +43,7 @@ namespace Bolt
 		UIManager& UI();
 
 		bool IsEnabled() const;
+		bool IsActive() const;
 		void Enable();
 		void Disable();
 		void SetEnabled(bool isEnabled);
@@ -68,6 +70,8 @@ namespace Bolt
 		GameObject* AddTemporaryGameObject(GameObject&& object);
 		void MarkGameObjectForDelete(GameObject* object, float timeToDelete = 0.0f);
 		void Create(id_t id, int maxGameObjects);
+
+		void SetIsActive(bool isActive);
 
 	};
 
