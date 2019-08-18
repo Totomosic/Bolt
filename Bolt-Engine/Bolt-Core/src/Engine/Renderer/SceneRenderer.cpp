@@ -3,6 +3,9 @@
 #include "SceneRenderer.h"
 #include "Engine/Engine.h"
 #include "Engine/Scene/Query/SGQTransparency.h"
+#include "Engine/Scene/GameObject.h"
+#include "Graphics/Resources/Meshes/Mesh.h"
+#include "Engine/Scene/Components/MeshRenderer.h"
 
 namespace Bolt
 {

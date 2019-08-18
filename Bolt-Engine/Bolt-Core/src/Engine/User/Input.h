@@ -53,10 +53,20 @@ namespace Bolt
 	class BLT_API Input
 	{
 	private:
+		struct BLT_API MouseDownInfo
+		{
+		public:
+			bool IsValid = false;
+			Vector2f MouseDownPosition;
+			std::chrono::time_point<std::chrono::high_resolution_clock> MouseDownTime;
+		};
+
+	private:
 		EventBus m_EventBus;
 		MouseInstance m_Mouse;
 		KeyboardInstance m_Keyboard;
 		Window* m_Window;
+		MouseDownInfo m_MouseDownLast;
 
 		std::vector<char> m_PressedCharacters;
 		std::vector<KeyboardInstance::Key> m_ChangedKeys;
@@ -69,6 +79,7 @@ namespace Bolt
 		EventEmitter<MouseReleasedEvent> OnMouseReleased;
 		EventEmitter<MouseMovedEvent> OnMouseMoved;
 		EventEmitter<MouseScrolledEvent> OnMouseScrolled;
+		EventEmitter<MouseClickEvent> OnMouseClicked;
 
 	public:
 		static Input& Get();

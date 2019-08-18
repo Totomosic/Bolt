@@ -22,6 +22,30 @@ namespace Minecraft
 			camera = s.CreateCamera(Projection::Perspective(PI / 3, GetWindow().Aspect(), 0.1f, 5000.0f));
 			Layer& l = s.CreateLayer(camera);
 
+			Camera* uiCamera = s.CreateCamera(Projection::Orthographic(0, Width(), 0, Height(), -100, 100));
+			Layer& uiLayer = s.CreateLayer(uiCamera);
+
+			UISurface& surface = uiLayer.UI().Root().CreateSurface(300, 300, Color::Red, Transform({ 200, 200, 0 }));
+			UIText& text = surface.CreateText("Test", Color::Black, Transform({ 0, 0, 1 }));
+			surface.Events().OnFocus.AddEventListener([](Event<UIFocusEvent>& e)
+				{
+					BLT_INFO("FOCUSED");
+				});
+			surface.Events().OnFocusLost.AddEventListener([](Event<UIFocusLostEvent>& e)
+				{
+					BLT_INFO("LOST FOCUS");
+				});
+			surface.Events().OnClick.AddEventListener([](Event<UIClickedEvent>& e)
+				{
+					BLT_INFO("SURFACE CLICKED");
+				});
+
+			text.Events().OnClick.AddEventListener([](Event<UIClickedEvent>& e)
+				{
+					BLT_INFO("TEXT CLICKED");
+					e.StopPropagation();
+				});
+
 			GetWindow().OnResize().AddEventListener([this](Event<WindowResizeEvent>& e)
 				{
 					camera->SetProjection(Projection::Perspective(PI / 3, GetWindow().Aspect(), 0.1f, 5000.0f));

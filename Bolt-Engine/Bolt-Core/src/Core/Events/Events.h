@@ -13,6 +13,7 @@ namespace Bolt
 		uint32_t MouseReleased = 4;
 		uint32_t MouseScrolled = 5;
 		uint32_t MouseMoved = 6;
+		uint32_t MouseClicked = 7;
 	};
 
 	struct BLT_API UIEvents
@@ -22,6 +23,8 @@ namespace Bolt
 		uint32_t OnHover = 102;
 		uint32_t OnHoverExit = 103;
 		uint32_t OnClicked = 104;
+		uint32_t OnFocus = 105;
+		uint32_t OnFocusLost = 106;
 	};
 
 	struct BLT_API WindowEvents

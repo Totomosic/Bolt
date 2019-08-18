@@ -1,14 +1,11 @@
 #pragma once
 #include "ObjectCollection.h"
 #include "Query/SGQuery.h"
-
-#include "UI/UIroot.h"
 #include "LayerEvents.h"
+#include "UI/UIManager.h"
 
 namespace Bolt
 {
-
-	class UIsurface;
 
 	struct BLT_API Layer
 	{
@@ -25,9 +22,8 @@ namespace Bolt
 		ObjectCollection m_GameObjects;
 		bool m_Enabled;
 		Camera* m_ActiveCamera;
-
-		UIroot m_UIroot;
 		
+		UIManager m_UIManager;
 		std::vector<TempGameObject> m_TemporaryObjects;
 
 	public:
@@ -36,14 +32,14 @@ namespace Bolt
 		Layer& operator=(const Layer& other) = delete;
 		Layer(Layer&& other) = default;
 		Layer& operator=(Layer&& other) = default;
-		~Layer();
+		~Layer() = default;
 
 		const ObjectCollection& GameObjects() const;
 		ObjectCollection& GameObjects();
 		Camera* ActiveCamera() const;
 		id_t Id() const;
-		const UIroot& UI() const;
-		UIroot& UI();
+		const UIManager& UI() const;
+		UIManager& UI();
 
 		bool IsEnabled() const;
 		void Enable();

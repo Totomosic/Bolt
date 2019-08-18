@@ -13,18 +13,20 @@ namespace Bolt
 	std::vector<Cuboid> MeshRenderer::GetMeshBounds() const
 	{
 		BLT_ASSERT(Mesh.Models.size() > 0, "No models in mesh");
-		Vector3f position = gameObject()->transform().Position();
 		std::vector<Cuboid> result;
 		for (int i = 0; i < Mesh.Models.size(); i++)
 		{
 			const Mesh::ModelGroup& model = Mesh.Models[i];
 			const ModelData& info = model.Model->Data();
-			float width = info.Bounds.MaxX - info.Bounds.MinX;
-			float height = info.Bounds.MaxY - info.Bounds.MinY;
-			float depth = info.Bounds.MaxZ - info.Bounds.MinZ;
-			Vector3f meshScale = Vector3f(model.Transform.Element(0, 0), model.Transform.Element(1, 1), model.Transform.Element(2, 2));
-			Vector3f size = Vector3f(width, height, depth) * gameObject()->transform().Scale() * meshScale;
-			Cuboid bounds = { position - size / 2, position + size / 2 };
+			Cuboid bounds = { { info.Bounds.MinX, info.Bounds.MinY, info.Bounds.MinZ }, { info.Bounds.MaxX, info.Bounds.MaxY, info.Bounds.MaxZ } };
+			bounds.Min = (model.Transform * Vector4f(bounds.Min, 1.0f)).xyz();
+			bounds.Max = (model.Transform * Vector4f(bounds.Max, 1.0f)).xyz();
+			bounds.Min.x = std::min(bounds.Min.x, bounds.Max.x);
+			bounds.Min.y = std::min(bounds.Min.y, bounds.Max.y);
+			bounds.Min.z = std::min(bounds.Min.z, bounds.Max.z);
+			bounds.Max.x = std::max(bounds.Min.x, bounds.Max.x);
+			bounds.Max.y = std::max(bounds.Min.y, bounds.Max.y);
+			bounds.Max.z = std::max(bounds.Min.z, bounds.Max.z);
 			result.push_back(bounds);
 		}
 		return result;
@@ -38,7 +40,7 @@ namespace Bolt
 		Cuboid result;
 		result.Min = Vector3f(MAX_VALUE, MAX_VALUE, MAX_VALUE);
 		result.Max = Vector3f(MIN_VALUE, MIN_VALUE, MIN_VALUE);
-		for (Cuboid bounds : GetMeshBounds())
+		for (Cuboid& bounds : GetMeshBounds())
 		{
 			result.Min.x = std::min(result.Min.x, bounds.Min.x);
 			result.Min.y = std::min(result.Min.y, bounds.Min.y);
