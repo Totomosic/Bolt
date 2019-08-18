@@ -7,7 +7,7 @@ namespace Bolt
 {
 
 	Scene::Scene(int layerCount)
-		: m_EventBus(), m_Layers(std::make_unique<Layer[]>(layerCount)), m_LayerCapacity(layerCount), m_Cameras(), m_Id(GameObject::InvalidID), m_PhysEngine(this),
+		: m_EventBus(), m_Layers(std::make_unique<Layer[]>(layerCount)), m_LayerCapacity(layerCount), m_Cameras(), m_Id(GameObject::InvalidID), m_PhysEngine(this), m_IsActive(false),
 		OnLoad(m_EventBus.GetEmitter<SceneLoadedEvent>(Events::Scene.SceneLoaded)), OnUnload(m_EventBus.GetEmitter<SceneUnloadedEvent>(Events::Scene.SceneUnloaded))
 	{
 		ClearCameras();
@@ -26,6 +26,11 @@ namespace Bolt
 	id_t Scene::Id() const
 	{
 		return m_Id;
+	}
+
+	bool Scene::IsActive() const
+	{
+		return m_IsActive;
 	}
 
 	const Layer& Scene::GetLayer(id_t id) const
@@ -236,6 +241,15 @@ namespace Bolt
 		}
 		BLT_ASSERT(false, "Unable to find valid Id for Camera");
 		return GameObject::InvalidID;
+	}
+
+	void Scene::SetIsActive(bool isActive)
+	{
+		m_IsActive = isActive;
+		for (Layer* layer : GetAllLayers())
+		{
+			layer->SetIsActive(m_IsActive);
+		}
 	}
 
 }

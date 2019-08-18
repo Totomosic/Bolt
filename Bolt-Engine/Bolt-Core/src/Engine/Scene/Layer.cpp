@@ -7,7 +7,7 @@ namespace Bolt
 {
 
 	Layer::Layer()
-		: m_Id(GameObject::InvalidID), m_GameObjects(), m_Enabled(false), m_UIManager(this), m_ActiveCamera(nullptr)
+		: m_Id(GameObject::InvalidID), m_GameObjects(), m_Enabled(false), m_IsActive(false), m_UIManager(this), m_ActiveCamera(nullptr)
 	{
 
 	}
@@ -45,6 +45,11 @@ namespace Bolt
 	bool Layer::IsEnabled() const
 	{
 		return m_Enabled;
+	}
+
+	bool Layer::IsActive() const
+	{
+		return m_IsActive;
 	}
 
 	void Layer::Enable()
@@ -155,6 +160,11 @@ namespace Bolt
 		Enable();
 		m_GameObjects.Initialize(maxGameObjects);
 		m_UIManager.Initialize();
+	}
+
+	void Layer::SetIsActive(bool isActive)
+	{
+		m_IsActive = isActive;
 	}
 
 	void Destroy(GameObject* object, float timeToDelete)

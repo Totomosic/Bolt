@@ -2,6 +2,7 @@
 #include "UIManager.h"
 
 #include "Engine/User/Input.h"
+#include "Engine/Scene/SceneManager.h"
 
 namespace Bolt
 {
@@ -12,21 +13,24 @@ namespace Bolt
 	{
 		m_MouseClickListener = Input::Get().OnMouseClicked.AddEventListener([this](Event<MouseClickEvent>& e)
 			{
-				Vector2f point(e.Data.x, e.Data.y);
-				std::vector<UIElement*> elements = GetElementsUnderPoint(point);
-				if (elements.size() > 0)
+				if (m_Factory.CurrentLayer()->IsActive())
 				{
-					UIElement* selectedElement = elements[0];
-					if (m_FocusedElement != selectedElement)
+					Vector2f point(e.Data.x, e.Data.y);
+					std::vector<UIElement*> elements = GetElementsUnderPoint(point);
+					if (elements.size() > 0)
 					{
-						selectedElement->Focus();						
+						UIElement* selectedElement = elements[0];
+						if (m_FocusedElement != selectedElement)
+						{
+							selectedElement->Focus();
+						}
+						selectedElement->Events().OnClick.Emit({ *selectedElement, { e.Data.x, e.Data.y }, e.Data.Button });
+						e.StopPropagation();
 					}
-					selectedElement->Events().OnClick.Emit({ *selectedElement, { e.Data.x, e.Data.y }, e.Data.Button });
-					e.StopPropagation();
-				}
-				else if (m_FocusedElement != nullptr)
-				{
-					m_FocusedElement->Blur();
+					else if (m_FocusedElement != nullptr)
+					{
+						m_FocusedElement->Blur();
+					}
 				}
 			}, ListenerPriority::High);
 	}
