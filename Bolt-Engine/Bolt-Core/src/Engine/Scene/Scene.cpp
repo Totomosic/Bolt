@@ -136,6 +136,7 @@ namespace Bolt
 		id_t id = FindNextId();
 		m_Layers[id].Create(id, maxGameObjects);
 		m_Layers[id].SetActiveCamera(activeCamera);
+		m_Layers[id].SetIsActive(m_IsActive);
 		return m_Layers[id];
 	}
 
