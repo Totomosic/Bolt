@@ -18,10 +18,11 @@
 
 #include "Engine/Application.h"
 #include "Engine/Engine.h"
-#include "Engine/Scene/UI/Text.h"
-#include "Engine/Scene/UI/UIsurface.h"
 #include "Engine/Scripting/Lua/LuaScriptingEnv.h"
 #include "Engine/Scene/Components/Components.h"
+
+#include "Engine/Scene/UI/UISurface.h"
+#include "Engine/Scene/UI/UIText.h"
 
 #include "Engine/Networking/UDPsocket.h"
 #include "Engine/Networking/TCPsocket.h"

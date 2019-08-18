@@ -169,4 +169,12 @@ namespace Bolt
 		float yOffset;
 	};
 
+	struct BLT_API MouseClickEvent
+	{
+	public:
+		MouseButton Button;
+		float x;
+		float y;
+	};
+
 }

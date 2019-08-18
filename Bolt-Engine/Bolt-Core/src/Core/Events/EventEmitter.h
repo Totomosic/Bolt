@@ -30,9 +30,14 @@ namespace Bolt
 			return m_EventBus;
 		}
 
-		uint32_t AddEventListener(const typename EventListener<T>::callback_t& callback)
+		uint32_t AddEventListener(const typename EventListener<T>::callback_t& callback, ListenerPriority priority = ListenerPriority::Medium)
 		{
-			return m_EventBus.AddEventListener<T>(m_EventId, callback);
+			return m_EventBus.AddEventListener<T>(m_EventId, callback, priority);
+		}
+
+		void RemoveEventListener(uint32_t listenerId)
+		{
+			m_EventBus.RemoveEventListener(listenerId);
 		}
 
 		void Emit(const T& data)

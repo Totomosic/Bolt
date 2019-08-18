@@ -1,59 +1,63 @@
 #pragma once
-#include "Core/Color.h"
 #include "../GameObject.h"
-#include "../Components/UI/UIEventHandler.h"
-#include "Graphics/Resources/Textures/Texture2D.h"
-#include "Graphics/Resources/Textures/Fonts/Font.h"
+#include "UIEventHandler.h"
+
+#include "Graphics/Resources/Meshes/Mesh.h"
 #include "Graphics/Resources/Meshes/Factories/TextFactory.h"
-#include "Graphics/Resources/Meshes/Materials/Material.h"
 
 namespace Bolt
 {
 
-	class UIroot;
-	class UIsurface;
-	class Text;
+	class UIManager;
+	class UISurface;
+	class UIText;
 
-	class BLT_API UIelement
+	class BLT_API UIElement
 	{
 	protected:
-		UIroot* m_Root;
-		UIelement* m_Parent;
-		std::vector<std::unique_ptr<UIelement>> m_Children;
-		GameObject* m_Object;
+		UIManager* m_Manager;
+		GameObject* m_GameObject;
+		UIElement* m_Parent;
+		std::vector<std::unique_ptr<UIElement>> m_Children;		
+		UIEventHandler m_Events;
+		bool m_IsFocused;
 
 	public:
-		UIelement();
-		UIelement(GameObject* object);
-		virtual ~UIelement();
+		UIElement(UIManager* manager, UIElement* parent);
+		UIElement(UIElement&& other) = delete;
+		UIElement& operator=(UIElement&& other) = delete;
+		~UIElement();
 
-		GameObject* Object() const;
-		UIelement& Parent() const;
-		UIEventHandler& EventHandler() const;
-		UIelement& GetElement(id_t index) const;
-		UIelement& AddElement(std::unique_ptr<UIelement>&& element);
-		void RemoveElement(UIelement* element);
-		void ReleaseGameObjects();
+		UIElement& GetParent() const;
+		bool HasParent() const;
+		const std::vector<std::unique_ptr<UIElement>>& GetChildren() const;
+
+		const Transform& GetTransform() const;
+		bool HasMesh() const;
+		const Mesh& GetMesh() const;
+		Mesh& GetMesh();
+		const UIEventHandler& Events() const;
+		UIEventHandler& Events();
+		bool HasFocus() const;
+
+		GameObject* GetGameObject() const;
+		UIManager* GetManager() const;
+
+		void Focus();
+		void Blur();
 		void Clear();
 
-		template<typename T, typename ...Args>
-		T& AddElement(Args&&... args)
-		{
-			return *(T*)&AddElement(std::make_unique<T>(std::move(args)...));
-		}
+		virtual bool ContainsPoint(const Vector2f& screenPoint) const;
 
-		UIsurface& Rectangle(float width, float height, const Color& color = Color::White, Transform&& transform = Transform());
-		UIsurface& Rectangle(float width, float height, std::unique_ptr<Material>&& material, Transform&& transform = Transform());
-		UIsurface& Image(float width, float height, const ResourcePtr<Texture2D>& texture, Transform&& transform = Transform());
-		Bolt::Text& Text(const blt::string& text, const ResourcePtr<Font>& font, const Color& color = Color::White, Transform&& transform = Transform(), AlignH horizontal = AlignH::Center, AlignV vertical = AlignV::Center);
-		Bolt::Text& Text(const blt::string& text, const Color& color = Color::White, Transform&& transform = Transform(), AlignH horizontal = AlignH::Center, AlignV vertical = AlignV::Center);
-
-		friend class UIroot;
-		friend struct Layer;
+		UIElement& CreateElement();
+		UISurface& CreateSurface(float width, float height, std::unique_ptr<Material>&& material, Transform&& transform = Transform());
+		UISurface& CreateSurface(float width, float height, const Color& color, Transform&& transform = Transform());
+		UIText& CreateText(const blt::string& text, const ResourcePtr<Font>& font, const Color& color = Color::Black, Transform&& transform = Transform(), AlignH horizontal = AlignH::Center, AlignV vertical = AlignV::Center);
+		UIText& CreateText(const blt::string& text, const Color& color = Color::Black, Transform&& transform = Transform(), AlignH horizontal = AlignH::Center, AlignV vertical = AlignV::Center);
 
 	protected:
-		virtual void SetUIroot(UIroot* root);
-		void SetParent(UIelement* parent);
+		void SetGameObject(GameObject* object);
+		UIElement& AddChildElement(std::unique_ptr<UIElement>&& element);
 
 	};
 

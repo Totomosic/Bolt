@@ -7,15 +7,9 @@ namespace Bolt
 {
 
 	Layer::Layer()
-		: m_Id(GameObject::InvalidID), m_GameObjects(), m_Enabled(false), m_ActiveCamera(nullptr), m_UIroot()
+		: m_Id(GameObject::InvalidID), m_GameObjects(), m_Enabled(false), m_UIManager(this), m_ActiveCamera(nullptr)
 	{
 
-	}
-
-	Layer::~Layer()
-	{
-		m_UIroot.ReleaseGameObjects();
-		m_UIroot.Clear();
 	}
 
 	const ObjectCollection& Layer::GameObjects() const
@@ -38,14 +32,14 @@ namespace Bolt
 		return m_Id;
 	}
 
-	const UIroot& Layer::UI() const
+	const UIManager& Layer::UI() const
 	{
-		return m_UIroot;
+		return m_UIManager;
 	}
 
-	UIroot& Layer::UI()
+	UIManager& Layer::UI()
 	{
-		return m_UIroot;
+		return m_UIManager;
 	}
 
 	bool Layer::IsEnabled() const
@@ -99,13 +93,12 @@ namespace Bolt
 
 	void Layer::Clear()
 	{
+		m_UIManager.Clear();
 		std::vector<GameObject*> objects = m_GameObjects.GetAllGameObjects();
 		for (GameObject* object : objects)
 		{
 			RemoveGameObject(object);
 		}
-		UI().ReleaseGameObjects();
-		UI().Clear();
 		m_GameObjects.Reset();
 		m_TemporaryObjects.clear();
 	}
@@ -161,8 +154,7 @@ namespace Bolt
 		m_Id = id;
 		Enable();
 		m_GameObjects.Initialize(maxGameObjects);
-		m_UIroot.GetFactory().SetCurrentLayer(*this);
-		m_UIroot.m_Object = &m_GameObjects.GetGameObjectById(0);
+		m_UIManager.Initialize();
 	}
 
 	void Destroy(GameObject* object, float timeToDelete)
