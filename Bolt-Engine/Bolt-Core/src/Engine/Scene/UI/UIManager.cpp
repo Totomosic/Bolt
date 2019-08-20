@@ -7,11 +7,30 @@
 namespace Bolt
 {
 
-	UIManager::UIManager(Layer* layer)
-		: m_Factory(*layer), m_RootElement(), m_FocusedElement(nullptr),
-		m_MouseClickListener(0)
+	UIManager::EventListenerHandler::EventListenerHandler()
+		: m_Listeners()
 	{
-		m_MouseClickListener = Input::Get().OnMouseClicked.AddEventListener([this](Event<MouseClickEvent>& e)
+	
+	}
+
+	UIManager::EventListenerHandler::~EventListenerHandler()
+	{
+		for (const auto& listener : m_Listeners)
+		{
+			listener.Emitter->RemoveEventListener(listener.Listener);
+		}
+	}
+
+	void UIManager::EventListenerHandler::AddListener(EventEmitterBase* emitter, uint32_t listenerId)
+	{
+		m_Listeners.push_back({ emitter, listenerId });
+	}
+
+
+	UIManager::UIManager(Layer* layer)
+		: m_Factory(*layer), m_RootElement(), m_FocusedElement(nullptr), m_Listeners()
+	{
+		m_Listeners.AddListener(Input::Get().OnMouseClicked, [this](Event<MouseClickEvent>& e)
 			{
 				if (m_Factory.CurrentLayer()->IsActive())
 				{
@@ -33,11 +52,6 @@ namespace Bolt
 					}
 				}
 			}, ListenerPriority::High);
-	}
-
-	UIManager::~UIManager()
-	{
-		Input::Get().OnMouseClicked.RemoveEventListener(m_MouseClickListener);
 	}
 
 	void UIManager::Initialize()

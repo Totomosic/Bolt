@@ -17,6 +17,7 @@ namespace Bolt
 	class BLT_API EventBusBase
 	{
 	public:
+		virtual void RemoveEventListener(uint32_t listenerId) = 0;
 		virtual void Flush() = 0;
 	};
 
@@ -68,7 +69,7 @@ namespace Bolt
 
 		int GetListenerPriorityIndex(uint32_t id) const;
 		void SetListenerPriorityIndex(uint32_t id, int priorityIndex);
-		void RemoveEventListener(uint32_t id);
+		void RemoveEventListener(uint32_t id) override;
 
 		template<typename T>
 		void Emit(const EventIdT& eventId, const T& data);
