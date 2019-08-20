@@ -1,0 +1,3 @@
+[submodule "Bolt-Engine/Bolt-Core/vendor/OpenAL-Soft"]
+	path = Bolt-Engine/Bolt-Core/vendor/OpenAL-Soft
+	url = https://github.com/kcat/openal-soft
