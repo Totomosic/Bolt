@@ -52,15 +52,15 @@ namespace Bolt
 		std::unordered_map<uint32_t, ListenerLocation> m_ListenerLocations;
 		std::vector<EventInfo> m_Events;
 		IdManager<uint32_t> m_ListenerIds;
-		std::unique_ptr<EventBusMount<EventIdT>> m_MountManager;
+		mutable EventBusMount<EventIdT> m_MountManager;
 		std::vector<EventEmitterBase*> m_EventEmitters;
 
 	public:
 		GenericEventBus(bool addToEventManager = true);
 		GenericEventBus(const GenericEventBus<EventIdT>& other) = delete;
 		GenericEventBus<EventIdT>& operator=(const GenericEventBus<EventIdT>& other) = delete;
-		GenericEventBus(GenericEventBus<EventIdT>&& other);
-		GenericEventBus<EventIdT>& operator=(GenericEventBus<EventIdT>&& other);
+		GenericEventBus(GenericEventBus<EventIdT>&& other) = delete;
+		GenericEventBus<EventIdT>& operator=(GenericEventBus<EventIdT>&& other) = delete;
 		~GenericEventBus();
 
 		template<typename T>
@@ -84,16 +84,9 @@ namespace Bolt
 		void Emit(const EventIdT& eventId);
 		virtual void Flush() override;
 
-		template<typename, typename> friend class GenericEventEmitter;
-
 	private:
 		void EmitEvent(const EventIdT& eventId, std::unique_ptr<EventContainer>&& event);
 		void ProcessEvent(EventInfo& e) const;
-
-		void AddEventEmitter(EventEmitterBase* emitter);
-		void UpdateEventEmitter(EventEmitterBase* oldEmitter, EventEmitterBase* newEmitter);
-		void RemoveEventEmitter(EventEmitterBase* emitter);
-		void UpdateAllEventEmitters(GenericEventBus<EventIdT>* bus);
 
 		static void PushEventListener(std::vector<std::unique_ptr<EventListenerContainer>>& vector, std::unique_ptr<EventListenerContainer>&& listener);
 		static void PushEventListenerHigh(std::vector<std::unique_ptr<EventListenerContainer>>& vector, std::unique_ptr<EventListenerContainer>&& listener);
@@ -166,38 +159,12 @@ namespace Bolt
 
 	template<typename EventIdT>
 	GenericEventBus<EventIdT>::GenericEventBus(bool addToEventManager)
-		: m_ListenersMutex(), m_EventsMutex(), m_Listeners(), m_ListenerLocations(), m_Events(), m_ListenerIds(0, (uint32_t)-1), m_MountManager(std::make_unique<EventBusMount<EventIdT>>(this))
+		: m_ListenersMutex(), m_EventsMutex(), m_Listeners(), m_ListenerLocations(), m_Events(), m_ListenerIds(0, (uint32_t)-1), m_MountManager(this)
 	{
 		if (addToEventManager)
 		{
 			EventManager::Get().AddEventBus(this);
 		}		
-	}
-
-	template<typename EventIdT>
-	GenericEventBus<EventIdT>::GenericEventBus(GenericEventBus<EventIdT>&& other)
-		: m_ListenersMutex(), m_EventsMutex(), m_Listeners(std::move(other.m_Listeners)), m_ListenerLocations(std::move(other.m_ListenerLocations)), m_Events(std::move(other.m_Events)),
-		m_ListenerIds(std::move(other.m_ListenerIds)), m_MountManager(std::move(other.m_MountManager)), m_EventEmitters(std::move(other.m_EventEmitters))
-	{
-		m_MountManager->SetEventBus(this);
-		UpdateAllEventEmitters(this);
-		EventManager::Get().UpdateEventBus(&other, this);
-	}
-
-	template<typename EventIdT>
-	GenericEventBus<EventIdT>& GenericEventBus<EventIdT>::operator=(GenericEventBus<EventIdT>&& other)
-	{
-		UpdateAllEventEmitters(nullptr)
-		m_Listeners = std::move(other.m_Listeners);
-		m_ListenerLocations = std::move(other.m_ListenerLocations);
-		m_Events = std::move(other.m_Events);
-		m_ListenerIds = std::move(other.m_ListenerIds);
-		m_MountManager = std::move(other.m_MountManager);
-		m_MountManager->SetEventBus(this);
-		m_EventEmitters = std::move(other.m_EventEmitters);
-		UpdateAllEventEmitters(this);
-		EventManager::Get().UpdateEventBus(&other, this);
-		return *this;
 	}
 
 	template<typename EventIdT>
@@ -216,7 +183,7 @@ namespace Bolt
 	template<typename EventIdT>
 	EventBusMount<EventIdT>* GenericEventBus<EventIdT>::GetMount() const
 	{
-		return m_MountManager.get();
+		return &m_MountManager;
 	}
 
 	template<typename EventIdT>
@@ -376,49 +343,6 @@ namespace Bolt
 					}					
 				}
 			}
-		}
-	}
-
-	template<typename EventIdT>
-	void GenericEventBus<EventIdT>::AddEventEmitter(EventEmitterBase* emitter)
-	{
-		m_EventEmitters.push_back(emitter);
-	}
-
-	template<typename EventIdT>
-	void GenericEventBus<EventIdT>::UpdateEventEmitter(EventEmitterBase* oldEmitter, EventEmitterBase* newEmitter)
-	{
-		auto it = std::find(m_EventEmitters.begin(), m_EventEmitters.end(), oldEmitter);
-		if (it != m_EventEmitters.end())
-		{
-			*it = newEmitter;
-		}
-		else
-		{
-			BLT_CORE_WARN("Attempted to update event emitter that does not exist");
-		}
-	}
-	
-	template<typename EventIdT>
-	void GenericEventBus<EventIdT>::RemoveEventEmitter(EventEmitterBase* emitter)
-	{
-		auto it = std::find(m_EventEmitters.begin(), m_EventEmitters.end(), emitter);
-		if (it != m_EventEmitters.end())
-		{
-			m_EventEmitters.erase(it);
-		}
-		else
-		{
-			BLT_CORE_WARN("Attempted to remove event emitter that does not exist");
-		}
-	}
-
-	template<typename EventIdT>
-	void GenericEventBus<EventIdT>::UpdateAllEventEmitters(GenericEventBus<EventIdT>* bus)
-	{
-		for (EventEmitterBase* emitter : m_EventEmitters)
-		{
-			emitter->SetEventBus(bus);
 		}
 	}
 
