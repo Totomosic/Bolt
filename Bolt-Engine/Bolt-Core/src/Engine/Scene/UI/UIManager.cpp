@@ -7,30 +7,10 @@
 namespace Bolt
 {
 
-	UIManager::EventListenerHandler::EventListenerHandler()
-		: m_Listeners()
-	{
-	
-	}
-
-	UIManager::EventListenerHandler::~EventListenerHandler()
-	{
-		for (const auto& listener : m_Listeners)
-		{
-			listener.Emitter->RemoveEventListener(listener.Listener);
-		}
-	}
-
-	void UIManager::EventListenerHandler::AddListener(EventEmitterBase* emitter, uint32_t listenerId)
-	{
-		m_Listeners.push_back({ emitter, listenerId });
-	}
-
-
 	UIManager::UIManager(Layer* layer)
-		: m_Factory(*layer), m_RootElement(), m_FocusedElement(nullptr), m_Listeners()
+		: m_Factory(*layer), m_RootElement(), m_FocusedElement(nullptr), m_MouseClickedHandler()
 	{
-		m_Listeners.AddListener(Input::Get().OnMouseClicked, [this](Event<MouseClickEvent>& e)
+		m_MouseClickedHandler = Input::Get().OnMouseClicked.AddScopedEventListener([this](Event<MouseClickEvent>& e)
 			{
 				if (m_Factory.CurrentLayer()->IsActive())
 				{

@@ -5,11 +5,18 @@ namespace Bolt
 {
 
 	template<typename> class GenericEventBus;
+	template<typename> class GenericScopedEventListener;
 
 	class BLT_API EventEmitterBase
 	{
 	public:
+		virtual ~EventEmitterBase() {}
 		virtual void RemoveEventListener(uint32_t listenerId) = 0;
+		
+		template<typename> friend class GenericEventBus;
+
+	protected:
+		virtual void SetEventBus(EventBusBase* eventBus) = 0;
 	};
 
 	template<typename T, typename EventIdT>
@@ -26,7 +33,32 @@ namespace Bolt
 		GenericEventEmitter(const EventIdT& eventId, GenericEventBus<EventIdT>& bus)
 			: m_EventId(eventId), m_EventBus(&bus)
 		{
-		
+			m_EventBus->AddEventEmitter(this);
+		}
+
+		GenericEventEmitter(GenericEventEmitter<T, EventIdT>&& other)
+			: m_EventId(other.m_EventId), m_EventBus(other.m_EventBus)
+		{
+			m_EventBus->UpdateEventEmitter(&other, this);
+			other.m_EventBus = nullptr;
+		}
+
+		GenericEventEmitter<T, EventIdT>& operator=(GenericEventEmitter<T, EventIdT>&& other)
+		{
+			m_EventId = other.m_EventId;
+			GenericEventBus<EventIdT>* bus = m_EventBus;
+			m_EventBus = other.m_EventBus;
+			other.m_EventBus = bus;
+			m_EventBus->UpdateEventEmitter(&other, this);
+			return *this;
+		}
+
+		~GenericEventEmitter() override
+		{
+			if (m_EventBus != nullptr)
+			{
+				m_EventBus->RemoveEventEmitter(this);
+			}
 		}
 
 		const EventIdT& EventId() const
@@ -42,6 +74,11 @@ namespace Bolt
 		uint32_t AddEventListener(const typename callback_t& callback, ListenerPriority priority = ListenerPriority::Medium)
 		{
 			return m_EventBus->AddEventListener<T>(m_EventId, callback, priority);
+		}
+
+		GenericScopedEventListener<EventIdT> AddScopedEventListener(const typename callback_t& callback, ListenerPriority priority = ListenerPriority::Medium)
+		{
+			return m_EventBus->AddScopedEventListener<T>(m_EventId, callback, priority);
 		}
 
 		void RemoveEventListener(uint32_t listenerId) override
@@ -62,6 +99,12 @@ namespace Bolt
 		void Emit()
 		{
 			m_EventBus->Emit(m_EventId);
+		}
+
+	protected:
+		void SetEventBus(EventBusBase* eventBus) override
+		{
+			m_EventBus = (GenericEventBus<EventIdT>*)eventBus;
 		}
 
 	};
