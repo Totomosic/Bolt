@@ -14,6 +14,9 @@ namespace Bolt
 	template<typename T>
 	class EventBusMount;
 
+	template<typename T>
+	class GenericScopedEventListener;
+
 	class BLT_API EventBusBase
 	{
 	public:
@@ -50,6 +53,7 @@ namespace Bolt
 		std::vector<EventInfo> m_Events;
 		IdManager<uint32_t> m_ListenerIds;
 		std::unique_ptr<EventBusMount<EventIdT>> m_MountManager;
+		std::vector<EventEmitterBase*> m_EventEmitters;
 
 	public:
 		GenericEventBus(bool addToEventManager = true);
@@ -66,6 +70,8 @@ namespace Bolt
 		void MountOn(GenericEventBus<EventIdT>& bus) const;
 		template<typename T>
 		uint32_t AddEventListener(const EventIdT& eventId, const typename EventListener<T>::callback_t& callback, ListenerPriority priority = ListenerPriority::Medium);
+		template<typename T>
+		GenericScopedEventListener<EventIdT> AddScopedEventListener(const EventIdT& eventId, const typename EventListener<T>::callback_t& callback, ListenerPriority priority = ListenerPriority::Medium);
 
 		int GetListenerPriorityIndex(uint32_t id) const;
 		void SetListenerPriorityIndex(uint32_t id, int priorityIndex);
@@ -78,9 +84,16 @@ namespace Bolt
 		void Emit(const EventIdT& eventId);
 		virtual void Flush() override;
 
+		template<typename, typename> friend class GenericEventEmitter;
+
 	private:
 		void EmitEvent(const EventIdT& eventId, std::unique_ptr<EventContainer>&& event);
 		void ProcessEvent(EventInfo& e) const;
+
+		void AddEventEmitter(EventEmitterBase* emitter);
+		void UpdateEventEmitter(EventEmitterBase* oldEmitter, EventEmitterBase* newEmitter);
+		void RemoveEventEmitter(EventEmitterBase* emitter);
+		void UpdateAllEventEmitters(GenericEventBus<EventIdT>* bus);
 
 		static void PushEventListener(std::vector<std::unique_ptr<EventListenerContainer>>& vector, std::unique_ptr<EventListenerContainer>&& listener);
 		static void PushEventListenerHigh(std::vector<std::unique_ptr<EventListenerContainer>>& vector, std::unique_ptr<EventListenerContainer>&& listener);
@@ -122,6 +135,32 @@ namespace Bolt
 	};
 
 	// ============================================================================================================================================================================
+	// SCOPED EVENT LISTENER DECLARATION
+	// ============================================================================================================================================================================
+
+	template<typename EventIdT>
+	class BLT_API GenericScopedEventListener
+	{
+	private:
+		GenericEventBus<EventIdT>* m_EventBus;
+		uint32_t m_ListenerId;
+
+	public:
+		GenericScopedEventListener();
+		GenericScopedEventListener(GenericEventBus<EventIdT>& eventBus, uint32_t listenerId);
+		GenericScopedEventListener(const GenericScopedEventListener<EventIdT>& other) = delete;
+		GenericScopedEventListener<EventIdT>& operator=(const GenericScopedEventListener<EventIdT>& other) = delete;
+		GenericScopedEventListener(GenericScopedEventListener<EventIdT>&& other);
+		GenericScopedEventListener<EventIdT>& operator=(GenericScopedEventListener<EventIdT>&& other);
+		~GenericScopedEventListener();
+
+		GenericEventBus<EventIdT>& GetEventBus() const;
+		uint32_t GetListenerId() const;
+		uint32_t ReleaseListener();
+
+	};
+
+	// ============================================================================================================================================================================
 	// EVENT BUS IMPLEMENTATION
 	// ============================================================================================================================================================================
 
@@ -138,21 +177,25 @@ namespace Bolt
 	template<typename EventIdT>
 	GenericEventBus<EventIdT>::GenericEventBus(GenericEventBus<EventIdT>&& other)
 		: m_ListenersMutex(), m_EventsMutex(), m_Listeners(std::move(other.m_Listeners)), m_ListenerLocations(std::move(other.m_ListenerLocations)), m_Events(std::move(other.m_Events)),
-		m_ListenerIds(std::move(other.m_ListenerIds)), m_MountManager(std::move(other.m_MountManager))
+		m_ListenerIds(std::move(other.m_ListenerIds)), m_MountManager(std::move(other.m_MountManager)), m_EventEmitters(std::move(other.m_EventEmitters))
 	{
 		m_MountManager->SetEventBus(this);
+		UpdateAllEventEmitters(this);
 		EventManager::Get().UpdateEventBus(&other, this);
 	}
 
 	template<typename EventIdT>
 	GenericEventBus<EventIdT>& GenericEventBus<EventIdT>::operator=(GenericEventBus<EventIdT>&& other)
 	{
+		UpdateAllEventEmitters(nullptr)
 		m_Listeners = std::move(other.m_Listeners);
 		m_ListenerLocations = std::move(other.m_ListenerLocations);
 		m_Events = std::move(other.m_Events);
 		m_ListenerIds = std::move(other.m_ListenerIds);
 		m_MountManager = std::move(other.m_MountManager);
 		m_MountManager->SetEventBus(this);
+		m_EventEmitters = std::move(other.m_EventEmitters);
+		UpdateAllEventEmitters(this);
 		EventManager::Get().UpdateEventBus(&other, this);
 		return *this;
 	}
@@ -195,6 +238,13 @@ namespace Bolt
 		m_ListenerLocations[id] = { eventId, listener.get() };
 		PushEventListener(m_Listeners[eventId], std::move(listener));
 		return id;
+	}
+
+	template<typename EventIdT>
+	template<typename T>
+	GenericScopedEventListener<EventIdT> GenericEventBus<EventIdT>::AddScopedEventListener(const EventIdT& eventId, const typename EventListener<T>::callback_t& callback, ListenerPriority priority)
+	{
+		return GenericScopedEventListener<EventIdT>(*this, AddEventListener<T>(eventId, callback, priority));
 	}
 
 	template<typename EventIdT>
@@ -330,6 +380,49 @@ namespace Bolt
 	}
 
 	template<typename EventIdT>
+	void GenericEventBus<EventIdT>::AddEventEmitter(EventEmitterBase* emitter)
+	{
+		m_EventEmitters.push_back(emitter);
+	}
+
+	template<typename EventIdT>
+	void GenericEventBus<EventIdT>::UpdateEventEmitter(EventEmitterBase* oldEmitter, EventEmitterBase* newEmitter)
+	{
+		auto it = std::find(m_EventEmitters.begin(), m_EventEmitters.end(), oldEmitter);
+		if (it != m_EventEmitters.end())
+		{
+			*it = newEmitter;
+		}
+		else
+		{
+			BLT_CORE_WARN("Attempted to update event emitter that does not exist");
+		}
+	}
+	
+	template<typename EventIdT>
+	void GenericEventBus<EventIdT>::RemoveEventEmitter(EventEmitterBase* emitter)
+	{
+		auto it = std::find(m_EventEmitters.begin(), m_EventEmitters.end(), emitter);
+		if (it != m_EventEmitters.end())
+		{
+			m_EventEmitters.erase(it);
+		}
+		else
+		{
+			BLT_CORE_WARN("Attempted to remove event emitter that does not exist");
+		}
+	}
+
+	template<typename EventIdT>
+	void GenericEventBus<EventIdT>::UpdateAllEventEmitters(GenericEventBus<EventIdT>* bus)
+	{
+		for (EventEmitterBase* emitter : m_EventEmitters)
+		{
+			emitter->SetEventBus(bus);
+		}
+	}
+
+	template<typename EventIdT>
 	void GenericEventBus<EventIdT>::PushEventListener(std::vector<std::unique_ptr<EventListenerContainer>>& vector, std::unique_ptr<EventListenerContainer>&& listener)
 	{
 		switch (listener->GetPriority())
@@ -393,6 +486,70 @@ namespace Bolt
 	}
 
 	using EventBus = GenericEventBus<uint32_t>;
+
+	// ============================================================================================================================================================================
+	// SCOPED EVENT LISTENER IMPLEMENTATION
+	// ============================================================================================================================================================================
+
+	template<typename EventIdT>
+	GenericScopedEventListener<EventIdT>::GenericScopedEventListener() : GenericScopedEventListener(*(GenericEventBus<EventIdT>*)nullptr, 0)
+	{
+	
+	}
+
+	template<typename EventIdT>
+	GenericScopedEventListener<EventIdT>::GenericScopedEventListener(GenericEventBus<EventIdT>& eventBus, uint32_t listenerId)
+		: m_EventBus(&eventBus), m_ListenerId(listenerId)
+	{
+	
+	}
+
+	template<typename EventIdT>
+	GenericScopedEventListener<EventIdT>::GenericScopedEventListener(GenericScopedEventListener<EventIdT>&& other)
+		: m_EventBus(other.m_EventBus), m_ListenerId(other.m_ListenerId)
+	{
+		other.m_EventBus = nullptr;
+	}
+
+	template<typename EventIdT>
+	GenericScopedEventListener<EventIdT>& GenericScopedEventListener<EventIdT>::operator=(GenericScopedEventListener<EventIdT>&& other)
+	{
+		GenericEventBus<EventIdT>* bus = m_EventBus;
+		m_EventBus = other.m_EventBus;
+		m_ListenerId = other.m_ListenerId;
+		other.m_EventBus = bus;
+		return *this;
+	}
+
+	template<typename EventIdT>
+	GenericScopedEventListener<EventIdT>::~GenericScopedEventListener()
+	{
+		if (m_EventBus != nullptr)
+		{
+			m_EventBus->RemoveEventListener(m_ListenerId);
+		}
+	}
+
+	template<typename EventIdT>
+	GenericEventBus<EventIdT>& GenericScopedEventListener<EventIdT>::GetEventBus() const
+	{
+		return *m_EventBus;
+	}
+
+	template<typename EventIdT>
+	uint32_t GenericScopedEventListener<EventIdT>::GetListenerId() const
+	{
+		return m_ListenerId;
+	}
+
+	template<typename EventIdT>
+	uint32_t GenericScopedEventListener<EventIdT>::ReleaseListener()
+	{
+		m_EventBus = nullptr;
+		return m_ListenerId;
+	}
+
+	using ScopedEventListener = GenericScopedEventListener<uint32_t>;
 
 	// ============================================================================================================================================================================
 	// EVENT BUS MOUNT IMPLEMENTATION
