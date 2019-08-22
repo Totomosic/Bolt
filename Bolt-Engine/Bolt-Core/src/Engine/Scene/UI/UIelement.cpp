@@ -6,14 +6,16 @@
 #include "../Layer.h"
 #include "Graphics/Resources/ResourceManager.h"
 
+#include "UICompoundElement.h"
 #include "UISurface.h"
 #include "UIText.h"
+#include "Compounds/UITextInput.h"
 
 namespace Bolt
 {
 
 	UIElement::UIElement(UIManager* manager, UIElement* parent)
-		: m_Manager(manager), m_Parent(parent), m_Children(), m_GameObject(nullptr), m_Events(), m_IsFocused(false)
+		: m_Manager(manager), m_Parent(parent), m_Children(), m_GameObject(nullptr), m_Id(""), m_Events(), m_IsFocused(false)
 	{
 		SetGameObject(m_Manager->Factory().Instantiate());
 		if (HasParent())
@@ -54,6 +56,11 @@ namespace Bolt
 	const std::vector<std::unique_ptr<UIElement>>& UIElement::GetChildren() const
 	{
 		return m_Children;
+	}
+
+	const blt::string& UIElement::GetId() const
+	{
+		return m_Id;
 	}
 
 	const Transform& UIElement::GetTransform() const
@@ -120,6 +127,19 @@ namespace Bolt
 		m_Children.clear();
 	}
 
+	void UIElement::SetId(const blt::string& id)
+	{
+		if (m_Id == "")
+		{
+			m_Manager->SetElementId(id, this);
+		}
+		else
+		{
+			m_Manager->UpdateElementId(m_Id, id);
+		}
+		m_Id = id;
+	}
+
 	bool UIElement::ContainsPoint(const Vector2f& point) const
 	{
 		if (!HasMesh())
@@ -141,6 +161,11 @@ namespace Bolt
 		return AddChildElement(std::make_unique<UIElement>(m_Manager, this));
 	}
 
+	UICompoundElement& UIElement::CreateCompoundElement()
+	{
+		return (UICompoundElement&)AddChildElement(std::make_unique<UICompoundElement>(m_Manager, this));
+	}
+
 	UISurface& UIElement::CreateSurface(float width, float height, std::unique_ptr<Material>&& material, Transform&& transform)
 	{
 		return (UISurface&)AddChildElement(std::make_unique<UISurface>(m_Manager, this, width, height, std::move(material), std::move(transform)));
@@ -159,6 +184,16 @@ namespace Bolt
 	UIText& UIElement::CreateText(const blt::string& text, const Color& color, Transform&& transform, AlignH horizontal, AlignV vertical)
 	{
 		return CreateText(text, ResourceManager::Get().Fonts().Default(), color, std::move(transform), horizontal, vertical);
+	}
+
+	UITextInput& UIElement::CreateTextInput(float width, float height, const ResourcePtr<Font>& font, const Color& fontColor, Transform&& transform)
+	{
+		return (UITextInput&)AddChildElement(std::make_unique<UITextInput>(m_Manager, this, width, height, font, fontColor, ResourceManager::Get().Materials().Default(Color::White), std::move(transform)));
+	}
+
+	UITextInput& UIElement::CreateTextInput(float width, float height, const Color& fontColor, Transform&& transform)
+	{
+		return CreateTextInput(width, height, ResourceManager::Get().Fonts().Default(), fontColor, std::move(transform));
 	}
 
 	void UIElement::SetGameObject(GameObject* object)

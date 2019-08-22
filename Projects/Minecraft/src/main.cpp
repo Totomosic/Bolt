@@ -26,38 +26,7 @@ namespace Minecraft
 			Layer& uiLayer = s.CreateLayer(uiCamera);
 
 			UISurface& surface = uiLayer.UI().Root().CreateSurface(300, 300, Color::Red, Transform({ 200, 200, 0 }));
-			UIText& text = surface.CreateText("Test", Color::Black, Transform({ 0, 0, 1 }));
-			surface.Events().OnFocus.AddEventListener([](Event<UIFocusEvent>& e)
-				{
-					BLT_INFO("FOCUSED");
-				});
-			surface.Events().OnFocusLost.AddEventListener([](Event<UIFocusLostEvent>& e)
-				{
-					BLT_INFO("LOST FOCUS");
-				});
-			surface.Events().OnClick.AddEventListener([](Event<UIClickedEvent>& e)
-				{
-					BLT_INFO("SURFACE CLICKED");
-				});
-			surface.Events().OnKeyDown.AddEventListener([](Event<UIKeyDownEvent>& e)
-				{
-					BLT_INFO("SURFACE KEY PRESSED {}", (char)e.Data.Key);
-				});
-
-			text.Events().OnClick.AddEventListener([](Event<UIClickedEvent>& e)
-				{
-					BLT_INFO("TEXT CLICKED");
-					e.StopPropagation();
-				});
-			text.Events().OnKeyDown.AddEventListener([](Event<UIKeyDownEvent>& e)
-				{
-					BLT_INFO("TEXT KEY PRESSED {}", (char)e.Data.Key);
-				});
-
-			GetWindow().OnResize().AddEventListener([this](Event<WindowResizeEvent>& e)
-				{
-					camera->SetProjection(Projection::Perspective(PI / 3, GetWindow().Aspect(), 0.1f, 5000.0f));
-				});
+			UITextInput& input = surface.CreateTextInput(300, 100, Color::Black, Transform({ 0, 0, 1 }));
 
 			camera->transform().Translate(32, 200, 32);
 			camera->transform().Rotate(-PI / 2, Vector3f::Right());
