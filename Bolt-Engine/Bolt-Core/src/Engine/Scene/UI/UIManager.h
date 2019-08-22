@@ -13,6 +13,9 @@ namespace Bolt
 		UIElement* m_FocusedElement;
 		
 		ScopedEventListener m_MouseClickedHandler;
+		ScopedEventListener m_MouseDownHandler;
+		ScopedEventListener m_KeyDownHandler;
+		ScopedEventListener m_KeyUpHandler;
 
 	public:
 		UIManager(Layer* layer);
@@ -23,6 +26,7 @@ namespace Bolt
 		ObjectFactory& Factory();
 		const UIElement& Root() const;
 		UIElement& Root();
+		bool IsActive() const;
 
 		void Clear() const;
 
