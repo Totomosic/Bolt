@@ -8,11 +8,23 @@ namespace Bolt
 {
 
 	UIManager::UIManager(Layer* layer)
-		: m_Factory(*layer), m_RootElement(), m_FocusedElement(nullptr), m_MouseClickedHandler()
+		: m_Factory(*layer), m_RootElement(), m_FocusedElement(nullptr), m_MouseClickedHandler(), m_MouseDownHandler(), m_KeyDownHandler(), m_KeyUpHandler()
 	{
 		m_MouseClickedHandler = Input::Get().OnMouseClicked.AddScopedEventListener([this](Event<MouseClickEvent>& e)
 			{
-				if (m_Factory.CurrentLayer()->IsActive())
+				if (IsActive())
+				{
+					Vector2f point(e.Data.x, e.Data.y);
+					if (m_FocusedElement != nullptr)
+					{
+						m_FocusedElement->Events().OnClick.Emit({ *m_FocusedElement, point, e.Data.Button });
+					}
+				}
+			}, ListenerPriority::High);
+
+		m_MouseDownHandler = Input::Get().OnMousePressed.AddScopedEventListener([this](Event<MousePressedEvent>& e)
+			{
+				if (IsActive())
 				{
 					Vector2f point(e.Data.x, e.Data.y);
 					std::vector<UIElement*> elements = GetElementsUnderPoint(point);
@@ -23,7 +35,7 @@ namespace Bolt
 						{
 							selectedElement->Focus();
 						}
-						selectedElement->Events().OnClick.Emit({ *selectedElement, { e.Data.x, e.Data.y }, e.Data.Button });
+						selectedElement->Events().OnMouseDown.Emit({ *selectedElement, point, e.Data.Button });
 						e.StopPropagation();
 					}
 					else if (m_FocusedElement != nullptr)
@@ -32,6 +44,28 @@ namespace Bolt
 					}
 				}
 			}, ListenerPriority::High);
+
+		m_KeyDownHandler = Input::Get().OnKeyPressed.AddScopedEventListener([this](Event<KeyPressedEvent>& e)
+			{
+				if (IsActive())
+				{
+					if (m_FocusedElement != nullptr)
+					{
+						m_FocusedElement->Events().OnKeyDown.Emit({ *m_FocusedElement, e.Data.KeyCode, e.Data.IsRepeat });
+					}
+				}
+			});
+
+		m_KeyUpHandler = Input::Get().OnKeyReleased.AddScopedEventListener([this](Event<KeyReleasedEvent>& e)
+			{
+				if (IsActive())
+				{
+					if (m_FocusedElement != nullptr)
+					{
+						m_FocusedElement->Events().OnKeyDown.Emit({ *m_FocusedElement, e.Data.KeyCode });
+					}
+				}
+			});
 	}
 
 	void UIManager::Initialize()
@@ -57,6 +91,11 @@ namespace Bolt
 	UIElement& UIManager::Root()
 	{
 		return *m_RootElement;
+	}
+
+	bool UIManager::IsActive() const
+	{
+		return m_Factory.CurrentLayer()->IsActive();
 	}
 
 	void UIManager::Clear() const

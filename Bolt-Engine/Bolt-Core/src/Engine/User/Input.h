@@ -52,6 +52,9 @@ namespace Bolt
 
 	class BLT_API Input
 	{
+	public:
+		static constexpr int CLICK_DELAY = 35;
+
 	private:
 		struct BLT_API MouseDownInfo
 		{

@@ -25,6 +25,11 @@ namespace Bolt
 		uint32_t OnClicked = 104;
 		uint32_t OnFocus = 105;
 		uint32_t OnFocusLost = 106;
+		uint32_t OnMouseDown = 107;
+		uint32_t OnMouseUp = 108;
+		uint32_t OnKeyDown = 109;
+		uint32_t OnKeyUp = 110;
+		uint32_t OnCharPressed = 111;
 	};
 
 	struct BLT_API WindowEvents

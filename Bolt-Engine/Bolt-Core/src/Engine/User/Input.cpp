@@ -338,12 +338,12 @@ namespace Bolt
 				{
 					float dx = m_Mouse.X - m_MouseDownLast.MouseDownPosition.x;
 					float dy = m_Mouse.Y - m_MouseDownLast.MouseDownPosition.y;
-					if ((dx <= 5 && dy <= 5) || (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - m_MouseDownLast.MouseDownTime).count() < 15))
+					if ((dx <= 5 && dy <= 5) || (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - m_MouseDownLast.MouseDownTime).count() < CLICK_DELAY))
 					{
 						MouseClickEvent args;
 						args.Button = (MouseButton)button;
-						args.x = m_MouseDownLast.MouseDownPosition.x;
-						args.y = m_MouseDownLast.MouseDownPosition.y;
+						args.x = m_Mouse.X;// m_MouseDownLast.MouseDownPosition.x;
+						args.y = m_Mouse.Y;// m_MouseDownLast.MouseDownPosition.y;
 						OnMouseClicked.Emit(std::move(args));
 					}
 					m_MouseDownLast.IsValid = false;

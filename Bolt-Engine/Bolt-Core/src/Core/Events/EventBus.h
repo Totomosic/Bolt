@@ -29,6 +29,9 @@ namespace Bolt
 	{
 	public:
 		using EventId = EventIdT;
+		template<typename T>
+		using emitter = GenericEventEmitter<T, EventIdT>;
+		using scoped_listener = GenericScopedEventListener<EventIdT>;
 
 	private:
 		struct BLT_API ListenerLocation
@@ -473,7 +476,7 @@ namespace Bolt
 		return m_ListenerId;
 	}
 
-	using ScopedEventListener = GenericScopedEventListener<uint32_t>;
+	using ScopedEventListener = typename EventBus::scoped_listener;
 
 	// ============================================================================================================================================================================
 	// EVENT BUS MOUNT IMPLEMENTATION

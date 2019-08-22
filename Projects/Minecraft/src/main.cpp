@@ -39,11 +39,19 @@ namespace Minecraft
 				{
 					BLT_INFO("SURFACE CLICKED");
 				});
+			surface.Events().OnKeyDown.AddEventListener([](Event<UIKeyDownEvent>& e)
+				{
+					BLT_INFO("SURFACE KEY PRESSED {}", (char)e.Data.Key);
+				});
 
 			text.Events().OnClick.AddEventListener([](Event<UIClickedEvent>& e)
 				{
 					BLT_INFO("TEXT CLICKED");
 					e.StopPropagation();
+				});
+			text.Events().OnKeyDown.AddEventListener([](Event<UIKeyDownEvent>& e)
+				{
+					BLT_INFO("TEXT KEY PRESSED {}", (char)e.Data.Key);
 				});
 
 			GetWindow().OnResize().AddEventListener([this](Event<WindowResizeEvent>& e)
