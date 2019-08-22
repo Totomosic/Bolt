@@ -83,6 +83,7 @@ namespace Bolt
 		EventEmitter<MouseMovedEvent> OnMouseMoved;
 		EventEmitter<MouseScrolledEvent> OnMouseScrolled;
 		EventEmitter<MouseClickEvent> OnMouseClicked;
+		EventEmitter<CharPressedEvent> OnCharPressed;
 
 	public:
 		static Input& Get();

@@ -14,7 +14,8 @@ namespace Bolt
 		OnMouseReleased(m_EventBus.GetEmitter<MouseReleasedEvent>(Events::Input.MouseReleased)),
 		OnMouseMoved(m_EventBus.GetEmitter<MouseMovedEvent>(Events::Input.MouseMoved)),
 		OnMouseScrolled(m_EventBus.GetEmitter<MouseScrolledEvent>(Events::Input.MouseScrolled)),
-		OnMouseClicked(m_EventBus.GetEmitter<MouseClickEvent>(Events::Input.MouseClicked))
+		OnMouseClicked(m_EventBus.GetEmitter<MouseClickEvent>(Events::Input.MouseClicked)),
+		OnCharPressed(m_EventBus.GetEmitter<CharPressedEvent>(Events::Input.CharPressed))
 	{
 		for (int i = 0; i < BLT_MAX_KEYS; i++)
 		{
@@ -336,8 +337,8 @@ namespace Bolt
 				OnMouseReleased.Emit(std::move(args));
 				if (m_MouseDownLast.IsValid)
 				{
-					float dx = m_Mouse.X - m_MouseDownLast.MouseDownPosition.x;
-					float dy = m_Mouse.Y - m_MouseDownLast.MouseDownPosition.y;
+					float dx = std::abs(m_Mouse.X - m_MouseDownLast.MouseDownPosition.x);
+					float dy = std::abs(m_Mouse.Y - m_MouseDownLast.MouseDownPosition.y);
 					if ((dx <= 5 && dy <= 5) || (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - m_MouseDownLast.MouseDownTime).count() < CLICK_DELAY))
 					{
 						MouseClickEvent args;
@@ -382,6 +383,7 @@ namespace Bolt
 		if (IsCurrentlySelected())
 		{
 			m_PressedCharacters.push_back((char)code);
+			OnCharPressed.Emit({ code });
 		}
 	}
 

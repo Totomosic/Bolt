@@ -18,8 +18,6 @@ inline const char* ConvertError(uint32_t error)
 	return "Unknown error";
 }
 
-#define BLT_MAKE_UNIQUE(T, ...) std::make_unique<T>(__VA_ARGS__)
-
 #ifdef BLT_DEBUG
 	#define GL_CALL(call) call; { int result = glGetError(); if (result != GL_NO_ERROR) { BLT_ASSERT(false, "OPENGL ERROR : {0} ({1})", ConvertError(result), result); } }
 #else
@@ -34,3 +32,6 @@ inline const char* ConvertError(uint32_t error)
 // Serialization Helpers
 #define BLT_TRANSFER(backend, member_var) backend.Transfer(#member_var, &member_var)
 #define BLT_TRANSFER_ARRAY(backend, member_var, length) backend.TransferArray(#member_var, member_var, length)
+
+// Event Helpers
+#define BLT_BIND_EVENT_FN(func) std::bind(&func, this, std::placeholders::_1)

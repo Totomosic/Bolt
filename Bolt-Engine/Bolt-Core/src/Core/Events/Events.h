@@ -14,6 +14,7 @@ namespace Bolt
 		uint32_t MouseScrolled = 5;
 		uint32_t MouseMoved = 6;
 		uint32_t MouseClicked = 7;
+		uint32_t CharPressed = 8;
 	};
 
 	struct BLT_API UIEvents

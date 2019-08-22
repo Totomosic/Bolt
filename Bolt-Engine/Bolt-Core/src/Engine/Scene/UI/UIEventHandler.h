@@ -41,6 +41,14 @@ namespace Bolt
 		MouseButton Button;
 	};
 
+	struct BLT_API UIMouseUpEvent
+	{
+	public:
+		UIElement& Target;
+		Vector2f Position;
+		MouseButton Button;
+	};
+
 	struct BLT_API UIKeyDownEvent
 	{
 	public:
@@ -54,6 +62,13 @@ namespace Bolt
 	public:
 		UIElement& Target;
 		Keycode Key;
+	};
+
+	struct BLT_API UICharPressedEvent
+	{
+	public:
+		UIElement& Target;
+		uint32_t CharCode;
 	};
 
 	// ===========================================================================================================================================
@@ -70,8 +85,10 @@ namespace Bolt
 		EventEmitter<UIFocusEvent> OnFocus;
 		EventEmitter<UIFocusLostEvent> OnFocusLost;
 		EventEmitter<UIMouseDownEvent> OnMouseDown;
+		EventEmitter<UIMouseUpEvent> OnMouseUp;
 		EventEmitter<UIKeyDownEvent> OnKeyDown;
 		EventEmitter<UIKeyUpEvent> OnKeyUp;
+		EventEmitter<UICharPressedEvent> OnCharPressed;
 
 	public:
 		UIEventHandler();

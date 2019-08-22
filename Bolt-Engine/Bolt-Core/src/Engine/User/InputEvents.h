@@ -177,4 +177,10 @@ namespace Bolt
 		float y;
 	};
 
+	struct BLT_API CharPressedEvent
+	{
+	public:
+		uint32_t CharCode;
+	};
+
 }

@@ -21,6 +21,8 @@ namespace Bolt
 		void SetColor(const Color& color);
 		void SetText(const blt::string& text);
 		void SetFont(const ResourcePtr<Font>& font);
+		void SetHorizontalAlign(AlignH horizontal);
+		void SetVerticalAlign(AlignV vertical);
 
 	private:
 		void RecreateModel();

@@ -40,16 +40,28 @@ namespace Bolt
 		RecreateModel();
 	}
 
+	void UIText::SetHorizontalAlign(AlignH horizontal)
+	{
+		m_HorizontalAlign = horizontal;
+		RecreateModel();
+	}
+
+	void UIText::SetVerticalAlign(AlignV vertical)
+	{
+		m_VerticalAlign = vertical;
+		RecreateModel();
+	}
+
 	void UIText::RecreateModel()
 	{
 		Mesh& mesh = GetMesh();
-		mesh.Models[0].Model = ResourcePtr<Model>(new Model(TextFactory(m_Text, m_Font, Color::White, m_HorizontalAlign, m_VerticalAlign)), true);
+		mesh.Models[0].Model = ResourcePtr<Model>(new Model(TextFactory(m_Text, m_Font, Color::White, m_HorizontalAlign, m_VerticalAlign), false), true);
 	}
 
 	Mesh UIText::CreateMesh(const Color& color)
 	{
 		Mesh mesh;
-		mesh.Models.push_back({ ResourcePtr<Model>(new Model(TextFactory(m_Text, m_Font, Color::White, m_HorizontalAlign, m_VerticalAlign)), true) });
+		mesh.Models.push_back({ ResourcePtr<Model>(new Model(TextFactory(m_Text, m_Font, Color::White, m_HorizontalAlign, m_VerticalAlign), false), true) });
 		mesh.Materials.push_back(ResourceManager::Get().Materials().Font(m_Font, color));
 		return mesh;
 	}
