@@ -77,18 +77,26 @@ namespace Bolt
 	void* Buffer::Map(Access access) const
 	{
 		BLT_ASSERT(!m_IsMapped, "Cannot Map Mapped buffer");
-		Bind();
-		void* result = GL_CALL(glMapBuffer((GLenum)m_Target, (GLenum)access));
 		m_IsMapped = true;
+		if (Size() == 0)
+		{
+			return nullptr;
+		}		
+		Bind();	
+		void* result = GL_CALL(glMapBuffer((GLenum)m_Target, (GLenum)access));		
 		return result;
 	}
 
 	bool Buffer::Unmap() const
 	{
 		BLT_ASSERT(m_IsMapped, "Cannot Unmap Unmapped buffer");
+		m_IsMapped = false;
+		if (Size() == 0)
+		{
+			return true;
+		}
 		Bind();
 		bool result = GL_CALL(glUnmapBuffer((GLenum)m_Target));
-		m_IsMapped = false;
 		return result;
 	}
 
