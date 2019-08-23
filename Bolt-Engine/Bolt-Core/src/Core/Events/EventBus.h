@@ -20,6 +20,7 @@ namespace Bolt
 	class BLT_API EventBusBase
 	{
 	public:
+		virtual ~EventBusBase() {}
 		virtual void RemoveEventListener(uint32_t listenerId) = 0;
 		virtual void Flush() = 0;
 	};

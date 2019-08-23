@@ -55,6 +55,8 @@ namespace Bolt
 	#define BLT_LUA_FATAL(...)
 
 	#define BLT_ASSERT(arg, ...)
+
+	#define BLT_DEBUG_ONLY(x)
 #else
 	#define BLT_CORE_TRACE(...) ::Bolt::Log::GetCoreLogger()->trace(__VA_ARGS__)
 	#define BLT_CORE_INFO(...)  ::Bolt::Log::GetCoreLogger()->info(__VA_ARGS__)
@@ -75,6 +77,8 @@ namespace Bolt
 	#define BLT_LUA_FATAL(...) ::Bolt::Log::GetLuaLogger()->critical(__VA_ARGS__)
 
 	#define BLT_ASSERT(arg, ...) { if (!(arg)) { BLT_CORE_FATAL(__VA_ARGS__); __debugbreak(); } }
+
+	#define BLT_DEBUG_ONLY(x) x
 #endif
 
 }

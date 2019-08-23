@@ -188,12 +188,32 @@ namespace Bolt
 
 	UITextInput& UIElement::CreateTextInput(float width, float height, const ResourcePtr<Font>& font, const Color& fontColor, Transform&& transform)
 	{
-		return (UITextInput&)AddChildElement(std::make_unique<UITextInput>(m_Manager, this, width, height, font, fontColor, ResourceManager::Get().Materials().Default(Color::White), std::move(transform)));
+		return CreateTextInput(width, height, Color::White, font, fontColor, std::move(transform));
 	}
 
 	UITextInput& UIElement::CreateTextInput(float width, float height, const Color& fontColor, Transform&& transform)
 	{
 		return CreateTextInput(width, height, ResourceManager::Get().Fonts().Default(), fontColor, std::move(transform));
+	}
+
+	UITextInput& UIElement::CreateTextInput(float width, float height, const Color& backgroundColor, const ResourcePtr<Font>& font, const Color& fontColor, Transform&& transform)
+	{
+		return CreateTextInput(width, height, ResourceManager::Get().Materials().Default(backgroundColor), font, fontColor, std::move(transform));
+	}
+
+	UITextInput& UIElement::CreateTextInput(float width, float height, const Color& backgroundColor, const Color& fontColor, Transform&& transform)
+	{
+		return CreateTextInput(width, height, backgroundColor, ResourceManager::Get().Fonts().Default(), fontColor, std::move(transform));
+	}
+
+	UITextInput& UIElement::CreateTextInput(float width, float height, std::unique_ptr<Material>&& material, const ResourcePtr<Font>& font, const Color& fontColor, Transform&& transform)
+	{
+		return (UITextInput&)AddChildElement(std::make_unique<UITextInput>(m_Manager, this, width, height, font, fontColor, std::move(material), std::move(transform)));
+	}
+
+	UITextInput& UIElement::CreateTextInput(float width, float height, std::unique_ptr<Material>&& material, const Color& fontColor, Transform&& transform)
+	{
+		return CreateTextInput(width, height, std::move(material), ResourceManager::Get().Fonts().Default(), fontColor, std::move(transform));
 	}
 
 	void UIElement::SetGameObject(GameObject* object)

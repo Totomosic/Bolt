@@ -62,6 +62,10 @@ namespace Bolt
 		UIText& CreateText(const blt::string& text, const Color& color = Color::Black, Transform&& transform = Transform(), AlignH horizontal = AlignH::Center, AlignV vertical = AlignV::Center);
 		UITextInput& CreateTextInput(float width, float height, const ResourcePtr<Font>& font, const Color& fontColor = Color::Black, Transform&& transform = Transform());
 		UITextInput& CreateTextInput(float width, float height, const Color& fontColor = Color::Black, Transform&& transform = Transform());
+		UITextInput& CreateTextInput(float width, float height, const Color& backgroundColor, const ResourcePtr<Font>& font, const Color& fontColor = Color::Black, Transform&& transform = Transform());
+		UITextInput& CreateTextInput(float width, float height, const Color& backgroundColor, const Color& fontColor = Color::Black, Transform&& transform = Transform());
+		UITextInput& CreateTextInput(float width, float height, std::unique_ptr<Material>&& material, const ResourcePtr<Font>& font, const Color& fontColor = Color::Black, Transform&& transform = Transform());
+		UITextInput& CreateTextInput(float width, float height, std::unique_ptr<Material>&& material, const Color& fontColor = Color::Black, Transform&& transform = Transform());
 
 	protected:
 		void SetGameObject(GameObject* object);

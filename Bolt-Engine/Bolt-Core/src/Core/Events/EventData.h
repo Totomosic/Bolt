@@ -4,7 +4,7 @@
 namespace Bolt
 {
 
-	enum class ListenerPriority
+	BLT_API enum class ListenerPriority
 	{
 		Low,
 		Medium,
