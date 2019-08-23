@@ -10,7 +10,7 @@ namespace Bolt
 		BLT_ASSERT(Filesystem::FileExists(fontFile), "Unable to find font file " + fontFile.Path());
 		m_TextureAtlas = std::unique_ptr<texture_atlas_t, std::function<void(texture_atlas_t*)>>(texture_atlas_new(m_Width, m_Height, 1), [](texture_atlas_t* ptr) { texture_atlas_delete(ptr); });
 		m_TextureFont = std::unique_ptr<texture_font_t, std::function<void(texture_font_t*)>>(texture_font_new_from_file(m_TextureAtlas.get(), m_FontSize, fontFile.Path().c_str()), [](texture_font_t* ptr) { texture_font_delete(ptr); });
-		texture_font_load_glyphs(m_TextureFont.get(), "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-=+';:,.<>?/`~|\\!@#$%^&*()_\"[]{}");
+		texture_font_load_glyphs(m_TextureFont.get(), "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-=+';:,.<>?/`~|\\!@#$%^&*()_\"[]{}•");
 		m_TextureAtlas->id = m_Id;
 		GL_CALL(glTexSubImage2D((GLenum)Target(), 0, 0, 0, Width(), Height(), GL_RED, GL_UNSIGNED_BYTE, m_TextureAtlas->data));
 	}
