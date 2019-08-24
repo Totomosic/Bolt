@@ -15,7 +15,7 @@ namespace Bolt
 {
 
 	UIElement::UIElement(UIManager* manager, UIElement* parent)
-		: m_Manager(manager), m_Parent(parent), m_Children(), m_GameObject(nullptr), m_Id(""), m_Events(), m_IsFocused(false)
+		: m_Manager(manager), m_Parent(parent), m_Children(), m_GameObject(nullptr), m_Id(""), m_Events(), m_IsFocused(false), m_CompoundElement(nullptr)
 	{
 		SetGameObject(m_Manager->Factory().Instantiate());
 		if (HasParent())
@@ -23,15 +23,21 @@ namespace Bolt
 			GetParent().Events().Bus().MountOn(m_Events.Bus());
 		}
 
-		m_Events.OnFocus.AddEventListener([](Event<UIFocusEvent>& e)
+		m_Events.OnFocus.AddEventListener([this](Event<UIFocusEvent>& e)
 			{
-				// Don't propagate focus events
-				e.StopPropagation();
+				// Don't propagate focus events if there is no compound element
+				if (m_CompoundElement == nullptr)
+				{
+					e.StopPropagation();
+				}
 			}, ListenerPriority::Low);
-		m_Events.OnFocusLost.AddEventListener([](Event<UIFocusLostEvent>& e)
+		m_Events.OnFocusLost.AddEventListener([this](Event<UIFocusLostEvent>& e)
 			{
-				// Don't propagate focus events
-				e.StopPropagation();
+				// Don't propagate focus events if there is no compound element
+				if (m_CompoundElement == nullptr)
+				{
+					e.StopPropagation();
+				}
 			}, ListenerPriority::Low);
 	}
 
@@ -108,6 +114,15 @@ namespace Bolt
 		return m_Manager;
 	}
 
+	UIElement& UIElement::GetCompoundElement()
+	{
+		if (m_CompoundElement != nullptr)
+		{
+			return *m_CompoundElement;
+		}
+		return *this;
+	}
+
 	void UIElement::Focus()
 	{
 		m_IsFocused = true;
@@ -138,6 +153,31 @@ namespace Bolt
 			m_Manager->UpdateElementId(m_Id, id);
 		}
 		m_Id = id;
+	}
+
+	void UIElement::SetCompoundElement(UIElement* element)
+	{
+		m_CompoundElement = element;
+	}
+
+	void UIElement::RemoveChildElement(UIElement& element)
+	{
+		auto it = std::find_if(m_Children.begin(), m_Children.end(), [&element](const std::unique_ptr<UIElement>& el)
+			{
+				return el.get() == &element;
+			});
+		if (it != m_Children.end())
+		{
+			m_Children.erase(it);
+		}
+	}
+
+	void UIElement::Remove()
+	{
+		if (HasParent())
+		{
+			GetParent().RemoveChildElement(*this);
+		}
 	}
 
 	bool UIElement::ContainsPoint(const Vector2f& point) const

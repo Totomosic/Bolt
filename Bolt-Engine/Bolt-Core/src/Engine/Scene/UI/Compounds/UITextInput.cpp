@@ -11,6 +11,8 @@ namespace Bolt
 		SetGameObject(m_Manager->Factory().Instantiate(std::move(transform)));
 		m_Background = &CreateSurface(width, height, std::move(backgroundMaterial));
 		m_Text = &CreateText("", font, fontColor, Transform({ 0, 0, 1 }), AlignH::Center, AlignV::Center);
+		m_Background->SetCompoundElement(this);
+		m_Text->SetCompoundElement(this);
 		SetupEventHandlers();
 	}
 

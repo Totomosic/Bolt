@@ -165,6 +165,14 @@ namespace Bolt
 	void Layer::SetIsActive(bool isActive)
 	{
 		m_IsActive = isActive;
+		if (isActive)
+		{
+			m_UIManager.OnActivate();
+		}
+		else
+		{
+			m_UIManager.OnDeactivate();
+		}
 	}
 
 	void Destroy(GameObject* object, float timeToDelete)

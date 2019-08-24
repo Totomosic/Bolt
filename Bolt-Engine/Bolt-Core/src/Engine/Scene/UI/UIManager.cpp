@@ -8,7 +8,8 @@ namespace Bolt
 {
 
 	UIManager::UIManager(Layer* layer)
-		: m_Factory(*layer), m_RootElement(), m_FocusedElement(nullptr), m_ElementIdMap(), m_MouseClickedHandler(), m_MouseDownHandler(), m_MouseUpHandler(), m_KeyDownHandler(), m_KeyUpHandler(), m_CharPressedHandler()
+		: m_Factory(*layer), m_RootElement(), m_FocusedElement(nullptr), m_ElementIdMap(), m_TabElements(), m_TabIndex(-1),
+		m_MouseClickedHandler(), m_MouseDownHandler(), m_MouseUpHandler(), m_KeyDownHandler(), m_KeyUpHandler(), m_CharPressedHandler()
 	{
 		m_MouseClickedHandler = Input::Get().OnMouseClicked.AddScopedEventListener(BLT_BIND_EVENT_FN(UIManager::MouseClickHandler), ListenerPriority::High);
 		m_MouseDownHandler = Input::Get().OnMousePressed.AddScopedEventListener(BLT_BIND_EVENT_FN(UIManager::MouseDownHandler), ListenerPriority::High);
@@ -54,14 +55,78 @@ namespace Bolt
 		return *m_ElementIdMap.at(id);
 	}
 
+	void UIManager::AddElementToTabList(UIElement* element)
+	{
+		m_TabElements.push_back(element);
+	}
+
+	void UIManager::InsertElementIntoTabList(int index, UIElement* element)
+	{
+		index = Clamp(index, 0, (int)m_TabElements.size());
+		if (index == m_TabElements.size())
+		{
+			AddElementToTabList(element);
+		}
+		else
+		{
+			m_TabElements.insert(m_TabElements.begin() + index, element);
+		}
+	}
+
+	void UIManager::SetCurrentTabIndex(int index)
+	{
+		m_TabIndex = index;
+		if (m_TabIndex == -1)
+		{
+			SetFocusedElementInternal(nullptr);
+		}
+		else
+		{
+			m_TabIndex = m_TabIndex % m_TabElements.size();
+			if (m_TabIndex < m_TabElements.size())
+			{
+				SetFocusedElementInternal(m_TabElements[m_TabIndex]);
+			}
+		}
+	}
+
 	void UIManager::Clear() const
 	{
 		m_RootElement->Clear();
 	}
 
+	void UIManager::OnActivate()
+	{
+		m_TabIndex = -1;
+		m_FocusedElement = nullptr;
+	}
+
+	void UIManager::OnDeactivate()
+	{
+		m_TabIndex = -1;
+		if (m_FocusedElement != nullptr)
+		{
+			m_FocusedElement->Blur();
+			m_FocusedElement = nullptr;
+		}
+	}
+
 	void UIManager::SetFocusedElement(UIElement* element)
 	{
 		if (m_FocusedElement != nullptr && element != nullptr)
+		{
+			m_FocusedElement->Blur();
+		}
+		m_FocusedElement = element;
+	}
+
+	void UIManager::SetFocusedElementInternal(UIElement* element)
+	{
+		if (element != nullptr)
+		{
+			element->Focus();
+		}
+		else if (m_FocusedElement != nullptr)
 		{
 			m_FocusedElement->Blur();
 		}
@@ -147,13 +212,20 @@ namespace Bolt
 				if (m_FocusedElement != selectedElement)
 				{
 					selectedElement->Focus();
+					auto it = std::find(m_TabElements.begin(), m_TabElements.end(), &selectedElement->GetCompoundElement());
+					if (it != m_TabElements.end())
+					{
+						auto index = it - m_TabElements.begin();
+						m_TabIndex = (int)index;
+					}
 				}
 				selectedElement->Events().OnMouseDown.Emit({ *selectedElement, point, e.Data.Button });
 				e.StopPropagation();
 			}
 			else if (m_FocusedElement != nullptr)
 			{
-				m_FocusedElement->Blur();
+				SetFocusedElementInternal(nullptr);
+				m_TabIndex = -1;
 			}
 		}
 	}
@@ -174,6 +246,10 @@ namespace Bolt
 	{
 		if (IsActive())
 		{
+			if (m_TabElements.size() > 0 && e.Data.KeyCode == Keycode::Tab && m_FocusedElement != nullptr)
+			{
+				SetCurrentTabIndex(m_TabIndex + 1);
+			}
 			if (m_FocusedElement != nullptr)
 			{
 				m_FocusedElement->Events().OnKeyDown.Emit({ *m_FocusedElement, e.Data.KeyCode, e.Data.IsRepeat });

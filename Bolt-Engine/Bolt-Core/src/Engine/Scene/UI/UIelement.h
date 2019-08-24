@@ -25,6 +25,8 @@ namespace Bolt
 		blt::string m_Id;
 		bool m_IsFocused;
 
+		UIElement* m_CompoundElement;
+
 	public:
 		UIElement(UIManager* manager, UIElement* parent);
 		UIElement(UIElement&& other) = delete;
@@ -46,11 +48,16 @@ namespace Bolt
 
 		GameObject* GetGameObject() const;
 		UIManager* GetManager() const;
+		virtual UIElement& GetCompoundElement();
 
 		void Focus();
 		void Blur();
 		void Clear();
 		void SetId(const blt::string& id);
+		void SetCompoundElement(UIElement* element);
+
+		void RemoveChildElement(UIElement& element);
+		void Remove();
 
 		virtual bool ContainsPoint(const Vector2f& screenPoint) const;
 
