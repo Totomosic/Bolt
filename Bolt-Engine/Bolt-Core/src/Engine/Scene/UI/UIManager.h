@@ -12,6 +12,9 @@ namespace Bolt
 		std::unique_ptr<UIElement> m_RootElement;
 		UIElement* m_FocusedElement;
 		std::unordered_map<blt::string, UIElement*> m_ElementIdMap;
+
+		std::vector<UIElement*> m_TabElements;
+		int m_TabIndex;
 		
 		ScopedEventListener m_MouseClickedHandler;
 		ScopedEventListener m_MouseDownHandler;
@@ -38,12 +41,19 @@ namespace Bolt
 			return (T&)GetElementById(id);
 		}
 
+		void AddElementToTabList(UIElement* element);
+		void InsertElementIntoTabList(int index, UIElement* element);
+		void SetCurrentTabIndex(int index);
 		void Clear() const;
+
+		void OnActivate();
+		void OnDeactivate();
 
 		friend class UIElement;
 
 	private:
 		void SetFocusedElement(UIElement* element);
+		void SetFocusedElementInternal(UIElement* element);
 		std::vector<UIElement*> GetElementsUnderPoint(const Vector2f& point, int limit = -1) const;
 		void GetElementsUnderPointRecursive(const Vector2f& point, UIElement* currentElement, std::vector<UIElement*>& elements, int limit) const;
 
