@@ -108,6 +108,11 @@ namespace Bolt
 		return engineId;
 	}
 
+	void PhysicsManager::Update(double elapsedTime)
+	{
+		
+	}
+
 	void PhysicsManager::ResetMaskMap()
 	{
 		m_LayerMaskMap.clear();

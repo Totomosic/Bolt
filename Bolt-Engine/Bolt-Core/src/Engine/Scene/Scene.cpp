@@ -7,20 +7,10 @@ namespace Bolt
 {
 
 	Scene::Scene(int layerCount)
-		: m_EventBus(), m_Layers(std::make_unique<Layer[]>(layerCount)), m_LayerCapacity(layerCount), m_Cameras(), m_Id(GameObject::InvalidID), m_PhysEngine(this), m_IsActive(false),
+		: m_EventBus(), m_Layers(std::make_unique<Layer[]>(layerCount)), m_LayerCapacity(layerCount), m_Cameras(), m_Id(GameObject::InvalidID), m_IsActive(false),
 		OnLoad(m_EventBus.GetEmitter<SceneLoadedEvent>(Events::Scene.SceneLoaded)), OnUnload(m_EventBus.GetEmitter<SceneUnloadedEvent>(Events::Scene.SceneUnloaded))
 	{
 		ClearCameras();
-	}
-
-	const PhysicsManager& Scene::Physics() const
-	{
-		return m_PhysEngine;
-	}
-
-	PhysicsManager& Scene::Physics()
-	{
-		return m_PhysEngine;
 	}
 
 	id_t Scene::Id() const
