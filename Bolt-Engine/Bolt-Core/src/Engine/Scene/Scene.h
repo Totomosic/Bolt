@@ -21,8 +21,6 @@ namespace Bolt
 		id_t m_Id;
 		bool m_IsActive;
 
-		PhysicsManager m_PhysEngine;
-
 	public:
 		EventEmitter<SceneLoadedEvent> OnLoad;
 		EventEmitter<SceneUnloadedEvent> OnUnload;
@@ -34,8 +32,6 @@ namespace Bolt
 		Scene(Scene&& other) = delete;
 		Scene& operator=(Scene&& other) = delete;
 
-		const PhysicsManager& Physics() const;
-		PhysicsManager& Physics();
 		id_t Id() const;
 		bool IsActive() const;
 

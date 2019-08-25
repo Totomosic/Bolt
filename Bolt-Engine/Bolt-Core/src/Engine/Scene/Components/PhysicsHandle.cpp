@@ -13,12 +13,12 @@ namespace Bolt
 
 	PhysicsHandle::~PhysicsHandle()
 	{
-		SceneManager::Get().CurrentScene().Physics().RemoveGameObject(gameObject());
+		//SceneManager::Get().CurrentScene().Physics().RemoveGameObject(gameObject());
 	}
 
 	void PhysicsHandle::Start()
 	{
-		PhysEngineId = SceneManager::Get().CurrentScene().Physics().AddGameObject(gameObject());
+		//PhysEngineId = SceneManager::Get().CurrentScene().Physics().AddGameObject(gameObject());
 	}
 
 	std::unique_ptr<Component> PhysicsHandle::Clone() const
