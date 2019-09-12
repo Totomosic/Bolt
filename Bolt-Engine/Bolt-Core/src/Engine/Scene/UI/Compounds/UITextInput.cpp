@@ -9,14 +9,14 @@ namespace Bolt
 		m_Background(nullptr), m_Text(nullptr), m_String(""), m_Obfuscate(false)
 	{
 		SetGameObject(m_Manager->Factory().Instantiate(std::move(transform)));
-		m_Background = &CreateSurface(width, height, std::move(backgroundMaterial));
+		m_Background = &CreateRectangle(width, height, std::move(backgroundMaterial));
 		m_Text = &CreateText("", font, fontColor, Transform({ 0, 0, 1 }), AlignH::Center, AlignV::Center);
 		m_Background->SetCompoundElement(this);
 		m_Text->SetCompoundElement(this);
 		SetupEventHandlers();
 	}
 
-	UISurface& UITextInput::BackgroundElement() const
+	UIRectangle& UITextInput::BackgroundElement() const
 	{
 		return *m_Background;
 	}

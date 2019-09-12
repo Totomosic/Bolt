@@ -6,9 +6,9 @@
 namespace Bolt
 {
 
-	UISurface::UISurface(UIManager* manager, UIElement* parent, float width, float height, std::unique_ptr<Material>&& material, Transform&& transform) : UIElement(manager, parent)
+	UISurface::UISurface(UIManager* manager, UIElement* parent) : UIElement(manager, parent)
 	{
-		SetGameObject(m_Manager->Factory().Rectangle(width, height, std::move(material), std::move(transform)));
+		
 	}
 
 }

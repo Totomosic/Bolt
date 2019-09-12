@@ -8,6 +8,7 @@
 
 #include "UICompoundElement.h"
 #include "UISurface.h"
+#include "Shapes/UIRectangle.h"
 #include "UIText.h"
 #include "Compounds/UITextInput.h"
 
@@ -206,14 +207,14 @@ namespace Bolt
 		return (UICompoundElement&)AddChildElement(std::make_unique<UICompoundElement>(m_Manager, this));
 	}
 
-	UISurface& UIElement::CreateSurface(float width, float height, std::unique_ptr<Material>&& material, Transform&& transform)
+	UIRectangle& UIElement::CreateRectangle(float width, float height, std::unique_ptr<Material>&& material, Transform&& transform)
 	{
-		return (UISurface&)AddChildElement(std::make_unique<UISurface>(m_Manager, this, width, height, std::move(material), std::move(transform)));
+		return (UIRectangle&)AddChildElement(std::make_unique<UIRectangle>(m_Manager, this, width, height, std::move(material), std::move(transform)));
 	}
 
-	UISurface& UIElement::CreateSurface(float width, float height, const Color& color, Transform&& transform)
+	UIRectangle& UIElement::CreateRectangle(float width, float height, const Color& color, Transform&& transform)
 	{
-		return CreateSurface(width, height, ResourceManager::Get().Materials().Default(color), std::move(transform));
+		return CreateRectangle(width, height, ResourceManager::Get().Materials().Default(color), std::move(transform));
 	}
 
 	UIText& UIElement::CreateText(const blt::string& text, const ResourcePtr<Font>& font, const Color& color, Transform&& transform, AlignH horizontal, AlignV vertical)

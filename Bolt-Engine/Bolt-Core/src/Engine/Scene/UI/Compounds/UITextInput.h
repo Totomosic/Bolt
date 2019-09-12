@@ -1,7 +1,7 @@
 #pragma once
 #include "../UICompoundElement.h"
 #include "../UIText.h"
-#include "../UIsurface.h"
+#include "../Shapes/UIRectangle.h"
 
 namespace Bolt
 {
@@ -9,7 +9,7 @@ namespace Bolt
 	class BLT_API UITextInput : public UICompoundElement
 	{
 	private:
-		UISurface* m_Background;
+		UIRectangle* m_Background;
 		UIText* m_Text;
 		blt::string m_String;
 		bool m_Obfuscate;
@@ -17,7 +17,7 @@ namespace Bolt
 	public:
 		UITextInput(UIManager* manager, UIElement* parent, float width, float height, const ResourcePtr<Font>& font, const Color& fontColor, std::unique_ptr<Material>&& backgroundMaterial, Transform&& transform);
 
-		UISurface& BackgroundElement() const;
+		UIRectangle& BackgroundElement() const;
 		UIText& TextElement() const;
 
 		const blt::string& GetText() const;
