@@ -10,7 +10,7 @@ namespace Bolt
 
 	class UIManager;
 	class UICompoundElement;
-	class UISurface;
+	class UIRectangle;
 	class UIText;
 	class UITextInput;
 
@@ -31,7 +31,7 @@ namespace Bolt
 		UIElement(UIManager* manager, UIElement* parent);
 		UIElement(UIElement&& other) = delete;
 		UIElement& operator=(UIElement&& other) = delete;
-		~UIElement();
+		virtual ~UIElement();
 
 		UIElement& GetParent() const;
 		bool HasParent() const;
@@ -63,8 +63,8 @@ namespace Bolt
 
 		UIElement& CreateElement();
 		UICompoundElement& CreateCompoundElement();
-		UISurface& CreateSurface(float width, float height, std::unique_ptr<Material>&& material, Transform&& transform = Transform());
-		UISurface& CreateSurface(float width, float height, const Color& color, Transform&& transform = Transform());
+		UIRectangle& CreateRectangle(float width, float height, std::unique_ptr<Material>&& material, Transform&& transform = Transform());
+		UIRectangle& CreateRectangle(float width, float height, const Color& color, Transform&& transform = Transform());
 		UIText& CreateText(const blt::string& text, const ResourcePtr<Font>& font, const Color& color = Color::Black, Transform&& transform = Transform(), AlignH horizontal = AlignH::Center, AlignV vertical = AlignV::Center);
 		UIText& CreateText(const blt::string& text, const Color& color = Color::Black, Transform&& transform = Transform(), AlignH horizontal = AlignH::Center, AlignV vertical = AlignV::Center);
 		UITextInput& CreateTextInput(float width, float height, const ResourcePtr<Font>& font, const Color& fontColor = Color::Black, Transform&& transform = Transform());

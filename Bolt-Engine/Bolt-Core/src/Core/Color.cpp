@@ -201,7 +201,7 @@ namespace Bolt
 		float g;
 		float b;
 
-		if (saturation <= 0.0) 
+		if (saturation <= 0.0f) 
 		{
 			r = value;
 			g = value;
@@ -209,13 +209,13 @@ namespace Bolt
 			return Color((byte)(r * 255), (byte)(g * 255), (byte)(b * 255), 255);
 		}
 		hh = hue;
-		if (hh >= 360.0) hh = 0.0;
-		hh /= 60.0;
+		if (hh >= 360.0f) hh = 0.0f;
+		hh /= 60.0f;
 		i = (long)hh;
 		ff = hh - i;
-		p = value * (1.0 - saturation);
-		q = value * (1.0 - (saturation * ff));
-		t = value * (1.0 - (saturation * (1.0 - ff)));
+		p = value * (1.0f - saturation);
+		q = value * (1.0f - (saturation * ff));
+		t = value * (1.0f - (saturation * (1.0f - ff)));
 
 		switch (i) 
 		{
