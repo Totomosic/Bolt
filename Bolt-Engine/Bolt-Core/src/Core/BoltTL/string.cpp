@@ -654,7 +654,11 @@ namespace blt
 	string string::substr(uint32_t start, uint32_t count) const
 	{
 		string result;
-		if (count == npos)
+		if (empty() || start >= size())
+		{
+			return "";
+		}
+		if (count == npos || count > size())
 		{
 			count = size() - start;
 		}

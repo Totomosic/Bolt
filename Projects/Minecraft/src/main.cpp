@@ -25,7 +25,7 @@ namespace Minecraft
 			Camera* uiCamera = s.CreateCamera(Projection::Orthographic(0, Width(), 0, Height(), -100, 100));
 			Layer& uiLayer = s.CreateLayer(uiCamera);
 
-			UISurface& surface = uiLayer.UI().Root().CreateSurface(300, 300, Color::Red, Transform({ 200, 200, 0 }));
+			UIRectangle& surface = uiLayer.UI().Root().CreateRectangle(300, 300, Color::Red, Transform({ 200, 200, 0 }));
 			UITextInput& input = surface.CreateTextInput(300, 100, Color::Black, Transform({ 0, 0, 1 }));
 
 			camera->transform().Translate(32, 200, 32);

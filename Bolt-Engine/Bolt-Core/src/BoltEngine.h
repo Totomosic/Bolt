@@ -11,6 +11,8 @@
 #include "Graphics/Resources/ResourceExtractor.h"
 #include "Graphics/Resources/Meshes/Materials/MaterialGraph/Graphs.h"
 #include "Graphics/Resources/Textures/RenderTexture2D.h"
+#include "Graphics/Resources/Meshes/Materials/Shaders/ShaderFileReader.h"
+#include "Graphics/Resources/Meshes/Materials/MaterialFileReader.h"
 
 #include "Graphics/Resources/Meshes/Model.h"
 #include "Graphics/Resources/Meshes/Factories/RectangleFactory.h"
