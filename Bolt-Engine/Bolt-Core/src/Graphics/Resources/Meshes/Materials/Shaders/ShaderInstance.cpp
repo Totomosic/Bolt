@@ -10,6 +10,8 @@ namespace Bolt
 	{
 		m_RendererUniforms = GetUniformLocations(m_Shader, ConcatVectors(vertex.RendererUniforms, fragment.RendererUniforms));
 		m_UserUniforms = GetUniformLocations(m_Shader, ConcatVectors(vertex.UserUniforms, fragment.UserUniforms));
+		BLT_CORE_TRACE("VERTEX SOURCE\n{}\n", vertex.Source);
+		BLT_CORE_TRACE("FRAGMENT SOURCE\n{}\n", fragment.Source);
 	}
 
 	ShaderInstance::ShaderInstance(const CompiledShaderProgram& vertex, const CompiledShaderProgram& geometry, const CompiledShaderProgram& fragment)
@@ -17,6 +19,9 @@ namespace Bolt
 	{
 		m_RendererUniforms = GetUniformLocations(m_Shader, ConcatVectors(ConcatVectors(vertex.RendererUniforms, fragment.RendererUniforms), geometry.RendererUniforms));
 		m_UserUniforms = GetUniformLocations(m_Shader, ConcatVectors(ConcatVectors(vertex.UserUniforms, fragment.UserUniforms), geometry.UserUniforms));
+		BLT_CORE_TRACE("VERTEX SOURCE\n{}\n", vertex.Source);
+		BLT_CORE_TRACE("GEOMETRY SOURCE\n{}\n", geometry.Source);
+		BLT_CORE_TRACE("FRAGMENT SOURCE\n{}\n", fragment.Source);
 	}
 
 	const Shader& ShaderInstance::GetShader() const

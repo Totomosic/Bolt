@@ -219,6 +219,58 @@ namespace Bolt
 		BLT_ASSERT(false, "Invalid type");
 		return "ERROR_TYPE";
 	}
+#undef BLT_VALUE_TYPE_TO_GLSL_STRING_HELPER
+
+#define BLT_GLSL_STRING_TO_VALUE_TYPE_HELPER(type, str)	\
+	if (glslStr == str) { return ValueType::type; }
+
+	inline ValueType GLSLStringToValueType(const blt::string& glslStr)
+	{
+		BLT_GLSL_STRING_TO_VALUE_TYPE_HELPER(Void, "void");
+		BLT_GLSL_STRING_TO_VALUE_TYPE_HELPER(Bool, "bool");
+		BLT_GLSL_STRING_TO_VALUE_TYPE_HELPER(Int, "int");
+		BLT_GLSL_STRING_TO_VALUE_TYPE_HELPER(Float, "float");
+
+		BLT_GLSL_STRING_TO_VALUE_TYPE_HELPER(Vector2f, "vec2");
+		BLT_GLSL_STRING_TO_VALUE_TYPE_HELPER(Vector3f, "vec3");
+		BLT_GLSL_STRING_TO_VALUE_TYPE_HELPER(Vector4f, "vec4");
+
+		BLT_GLSL_STRING_TO_VALUE_TYPE_HELPER(Matrix2f, "mat2");
+		BLT_GLSL_STRING_TO_VALUE_TYPE_HELPER(Matrix3f, "mat3");
+		BLT_GLSL_STRING_TO_VALUE_TYPE_HELPER(Matrix4f, "mat4");
+
+		BLT_GLSL_STRING_TO_VALUE_TYPE_HELPER(Texture1D, "sampler1D");
+		BLT_GLSL_STRING_TO_VALUE_TYPE_HELPER(Texture2D, "sampler2D");
+		BLT_GLSL_STRING_TO_VALUE_TYPE_HELPER(Texture3D, "sampler3D");
+		BLT_GLSL_STRING_TO_VALUE_TYPE_HELPER(TextureCube, "samplerCube");
+		BLT_ASSERT(false, "Invalid glsl string");
+		return ValueType::Void;
+	}
+#undef BLT_GLSL_STRING_TO_VALUE_TYPE_HELPER
+
+#define BLT_RENDERER_UNIFORM_FROM_STRING_HELPER(uniform)	\
+	if (str == #uniform) { return RendererUniform::uniform; }
+
+	inline RendererUniform GetRendererUniformFromString(const blt::string& str)
+	{
+		BLT_RENDERER_UNIFORM_FROM_STRING_HELPER(ModelMatrix);
+		BLT_RENDERER_UNIFORM_FROM_STRING_HELPER(ViewMatrix);
+		BLT_RENDERER_UNIFORM_FROM_STRING_HELPER(ProjectionMatrix);
+		BLT_RENDERER_UNIFORM_FROM_STRING_HELPER(Time);
+		BLT_RENDERER_UNIFORM_FROM_STRING_HELPER(CameraPosition);
+		BLT_RENDERER_UNIFORM_FROM_STRING_HELPER(CameraDirection);
+		BLT_RENDERER_UNIFORM_FROM_STRING_HELPER(LightCount);
+		BLT_RENDERER_UNIFORM_FROM_STRING_HELPER(LightPositions);
+		BLT_RENDERER_UNIFORM_FROM_STRING_HELPER(LightTypes);
+		BLT_RENDERER_UNIFORM_FROM_STRING_HELPER(LightColors);
+		BLT_RENDERER_UNIFORM_FROM_STRING_HELPER(LightDirections);
+		BLT_RENDERER_UNIFORM_FROM_STRING_HELPER(LightAmbients);
+		BLT_RENDERER_UNIFORM_FROM_STRING_HELPER(LightAttenuations);
+		BLT_RENDERER_UNIFORM_FROM_STRING_HELPER(LightIntensities);
+		BLT_ASSERT(false, "Invalid renderer uniform");
+		return RendererUniform::ModelMatrix;
+	}
+#undef BLT_RENDERER_UNIFORM_FROM_STRING_HELPER
 
 	inline bool ValueTypeIsNumeric(ValueType type)
 	{

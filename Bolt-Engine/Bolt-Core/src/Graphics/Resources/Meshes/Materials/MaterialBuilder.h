@@ -23,7 +23,7 @@ namespace Bolt
 		template<typename MaterialT>
 		std::unique_ptr<MaterialT> BuildMaterial() const
 		{
-			std::unique_ptr<MaterialT> material = std::unique_ptr<MaterialT>(new MaterialT(m_Factory.BuildShader(), IsTransparent()));
+			std::unique_ptr<MaterialT> material = std::make_unique<MaterialT>(m_Factory.BuildShader(), IsTransparent());
 			return material;
 		}
 
