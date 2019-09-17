@@ -82,7 +82,10 @@ namespace Bolt
 				{
 					blt::string arrPart = '[' + std::to_string(i) + ']';
 					UserUniformLocation loc = { uniform.LinkName + arrPart, shader.GetUniformLocation(uniform.VarName + arrPart), uniform.Type, false, textureCount, uniform.DefaultValue };
-					BLT_ASSERT(loc.Location != -1, "Unable to find user uniform with name " + uniform.VarName + arrPart);
+					if (loc.Location == -1)
+					{
+						BLT_CORE_WARN("Unable to find user uniform with name {0}{1}", uniform.VarName, arrPart);
+					}
 					result.push_back(std::move(loc));
 					if (uniform.Type == ValueType::Texture2D)
 					{
@@ -95,7 +98,7 @@ namespace Bolt
 				UserUniformLocation loc = { uniform.LinkName, shader.GetUniformLocation(uniform.VarName), uniform.Type, true, textureCount, uniform.DefaultValue };
 				if (loc.Location == -1)
 				{
-					BLT_CORE_WARN("Unable to find user uniform with name " + uniform.VarName);
+					BLT_CORE_WARN("Unable to find user uniform with name {}", uniform.VarName);
 				}
 				result.push_back(std::move(loc));
 				if (uniform.Type == ValueType::Texture2D)

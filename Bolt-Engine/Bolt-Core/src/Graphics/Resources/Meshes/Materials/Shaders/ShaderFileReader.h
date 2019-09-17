@@ -10,7 +10,7 @@ namespace Bolt
 		struct BLT_API UniformMetadata
 		{
 		public:
-			bool IsRenderer;
+			bool IsRenderer = false;
 			RendererUniform Uniform;
 			blt::string LinkName;
 		};
@@ -19,9 +19,10 @@ namespace Bolt
 		{
 		public:
 			blt::string VariableName;
-			ValueType Type;
-			ValueTypeDim Dimension;
+			ValueType Type = ValueType::Void;
+			ValueTypeDim Dimension = ValueTypeDim::Single;
 			UniformMetadata Meta;
+			int Length = 0;
 		};
 
 	private:
@@ -65,6 +66,7 @@ namespace Bolt
 		static std::vector<UniformInfo> ProcessShaderSource(blt::string& source);
 		static blt::string ReadValue(const blt::string& line, const blt::string& key);
 		static blt::string ReadStringValue(const blt::string& line, const blt::string& key);
+		static int ReadGlslConstInt(const blt::string& value, const blt::string& source);
 		static void PopulateShaderUniforms(CompiledShaderProgram& program, const std::vector<UniformInfo>& uniforms);
 	};
 
