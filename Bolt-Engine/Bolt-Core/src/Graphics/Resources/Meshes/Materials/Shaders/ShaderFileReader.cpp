@@ -159,17 +159,17 @@ namespace Bolt
 		blt::string shaderSources[3];
 
 		const char* typeToken = "#type";
-		size_t typeTokenLength = strlen(typeToken);
-		size_t pos = source.find(typeToken, 0);
+		uint32_t typeTokenLength = (uint32_t)strlen(typeToken);
+		uint32_t pos = source.find(typeToken, 0);
 		while (pos != blt::string::npos)
 		{
-			size_t eol = source.find_first_of("\r\n", pos);
+			uint32_t eol = source.find_first_of("\r\n", pos);
 			BLT_ASSERT(eol != blt::string::npos, "Syntax error");
-			size_t begin = pos + typeTokenLength + 1;
+			uint32_t begin = pos + typeTokenLength + 1;
 			blt::string type = source.substr(begin, eol - begin);
 			BLT_ASSERT(ShaderTypeFromString(type) != -1, "Invalid shader type specified");
 
-			size_t nextLinePos = source.find_first_not_of("\r\n", eol);
+			uint32_t nextLinePos = source.find_first_not_of("\r\n", eol);
 			pos = source.find(typeToken, nextLinePos);
 			shaderSources[ShaderTypeFromString(type)] = source.substr(nextLinePos, pos - (nextLinePos == blt::string::npos ? source.size() - 1 : nextLinePos));
 		}
@@ -210,15 +210,23 @@ namespace Bolt
 			blt::string& type = parts[1];
 			blt::string& name = parts[2];
 			bool isArray = false;
+			int length = 0;
 			if (name.contains('['))
 			{
-				name = name.substr(0, name.find('['));
+				uint32_t start = name.find('[');
+				uint32_t end = name.find(']', start);
+				BLT_ASSERT(end != blt::string::npos, "Invalid syntax");
+				blt::string lengthString = name.substr(start + 1, end - start - 1);
+				name = name.substr(0, start);				
+				length = ReadGlslConstInt(lengthString, source);
 				isArray = true;
+				BLT_CORE_INFO("ARRAY LENGTH {}", length);
 			}
 			UniformInfo& uniform = uniformMap[name];
 			uniform.Dimension = (isArray) ? ValueTypeDim::Array : ValueTypeDim::Single;
 			uniform.VariableName = name;
 			uniform.Type = GLSLStringToValueType(type);
+			uniform.Length = length;
 			uniformIndex = source.find("uniform", eol);
 		}
 
@@ -287,6 +295,25 @@ namespace Bolt
 		return line.substr(start + 1, end - start - 1);
 	}
 
+	int ShaderFileReader::ReadGlslConstInt(const blt::string& value, const blt::string& source)
+	{
+		int i = std::atoi(value.c_str());
+		if (i > 0)
+		{
+			return i;
+		}
+		// value represents a const-int variable
+		uint32_t location = source.find("const int " + value);
+		BLT_ASSERT(location != blt::string::npos, "Invalid syntax, could not find const int variable {}", value);
+		uint32_t equals = source.find('=', location);
+		BLT_ASSERT(equals != blt::string::npos, "Invalid syntax");
+		uint32_t end = source.find(';', equals);
+		BLT_ASSERT(end != blt::string::npos, "Invalid syntax");
+		blt::string newValue = source.substr(equals + 1, end - equals - 1);
+		newValue.remove_all(" \r\t\n");
+		return ReadGlslConstInt(newValue, source);
+	}
+
 	void ShaderFileReader::PopulateShaderUniforms(CompiledShaderProgram& program, const std::vector<UniformInfo>& uniforms)
 	{
 		for (const auto& uniform : uniforms)
@@ -309,7 +336,7 @@ namespace Bolt
 				info.Type = uniform.Type;
 				info.Dimension = uniform.Dimension;
 				info.LinkName = uniform.Meta.LinkName;
-				info.Length = 1;
+				info.Length = uniform.Length;
 				program.UserUniforms.push_back(info);
 			}
 		}

@@ -83,7 +83,7 @@ namespace Bolt
 		{
 			if (index >= 0)
 			{
-				return Link(linkName + '[' + std::to_string(index) + ']', value);
+				return LinkIndexed(linkName, value, index);
 			}
 			const UserUniformLocation& uniform = GetUniformLocation(linkName);
 			BLT_ASSERT(ValidateUniformType<int>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(int).name(), ValueTypeToGLSLString(uniform.Type));
@@ -94,7 +94,7 @@ namespace Bolt
 		{
 			if (index >= 0)
 			{
-				return Link(linkName + '[' + std::to_string(index) + ']', value);
+				return LinkIndexed(linkName, value, index);
 			}
 			const UserUniformLocation& uniform = GetUniformLocation(linkName);
 			BLT_ASSERT(ValidateUniformType<float>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(float).name(), ValueTypeToGLSLString(uniform.Type));
@@ -105,7 +105,7 @@ namespace Bolt
 		{
 			if (index >= 0)
 			{
-				return Link(linkName + '[' + std::to_string(index) + ']', value);
+				return LinkIndexed(linkName, value, index);
 			}
 			const UserUniformLocation& uniform = GetUniformLocation(linkName);
 			BLT_ASSERT(ValidateUniformType<Vector2f>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(Vector2f).name(), ValueTypeToGLSLString(uniform.Type));
@@ -116,7 +116,7 @@ namespace Bolt
 		{
 			if (index >= 0)
 			{
-				return Link(linkName + '[' + std::to_string(index) + ']', value);
+				return LinkIndexed(linkName, value, index);
 			}
 			const UserUniformLocation& uniform = GetUniformLocation(linkName);
 			BLT_ASSERT(ValidateUniformType<Vector3f>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(Vector3f).name(), ValueTypeToGLSLString(uniform.Type));
@@ -127,7 +127,7 @@ namespace Bolt
 		{
 			if (index >= 0)
 			{
-				return Link(linkName + '[' + std::to_string(index) + ']', value);
+				return LinkIndexed(linkName, value, index);
 			}
 			const UserUniformLocation& uniform = GetUniformLocation(linkName);
 			BLT_ASSERT(ValidateUniformType<Vector4f>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(Vector4f).name(), ValueTypeToGLSLString(uniform.Type));
@@ -138,7 +138,7 @@ namespace Bolt
 		{
 			if (index >= 0)
 			{
-				return Link(linkName + '[' + std::to_string(index) + ']', value);
+				return LinkIndexed(linkName, value, index);
 			}
 			const UserUniformLocation& uniform = GetUniformLocation(linkName);
 			BLT_ASSERT(ValidateUniformType<Color>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(Color).name(), ValueTypeToGLSLString(uniform.Type));
@@ -149,7 +149,7 @@ namespace Bolt
 		{
 			if (index >= 0)
 			{
-				return Link(linkName + '[' + std::to_string(index) + ']', value);
+				return LinkIndexed(linkName, value, index);
 			}
 			const UserUniformLocation& uniform = GetUniformLocation(linkName);
 			BLT_ASSERT(ValidateUniformType<Matrix2f>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(Matrix2f).name(), ValueTypeToGLSLString(uniform.Type));
@@ -160,7 +160,7 @@ namespace Bolt
 		{
 			if (index >= 0)
 			{
-				return Link(linkName + '[' + std::to_string(index) + ']', value);
+				return LinkIndexed(linkName, value, index);
 			}
 			const UserUniformLocation& uniform = GetUniformLocation(linkName);
 			BLT_ASSERT(ValidateUniformType<Matrix3f>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(Matrix3f).name(), ValueTypeToGLSLString(uniform.Type));
@@ -171,7 +171,7 @@ namespace Bolt
 		{
 			if (index >= 0)
 			{
-				return Link(linkName + '[' + std::to_string(index) + ']', value);
+				return LinkIndexed(linkName, value, index);
 			}
 			const UserUniformLocation& uniform = GetUniformLocation(linkName);
 			BLT_ASSERT(ValidateUniformType<Matrix4f>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(Matrix4f).name(), ValueTypeToGLSLString(uniform.Type));
@@ -182,7 +182,7 @@ namespace Bolt
 		{
 			if (index >= 0)
 			{
-				return Link(linkName + '[' + std::to_string(index) + ']', value);
+				return LinkIndexed(linkName, value, index);
 			}
 			const UserUniformLocation& uniform = GetUniformLocation(linkName);
 			BLT_ASSERT(ValidateUniformType<ResourcePtr<Texture2D>>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(ResourcePtr<Texture2D>).name(), ValueTypeToGLSLString(uniform.Type));
@@ -193,7 +193,7 @@ namespace Bolt
 		{
 			if (index >= 0)
 			{
-				return Link(linkName + '[' + std::to_string(index) + ']', value);
+				return LinkIndexed(linkName, value, index);
 			}
 			const UserUniformLocation& uniform = GetUniformLocation(linkName);
 			BLT_ASSERT(ValidateUniformType<ResourcePtr<Texture2D>>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(ResourcePtr<Font>).name(), ValueTypeToGLSLString(uniform.Type));
@@ -205,11 +205,27 @@ namespace Bolt
 		{
 			if (index >= 0)
 			{
-				return Link(linkName + '[' + std::to_string(index) + ']', value);
+				return LinkIndexedFunction(linkName, value, index);
 			}
 			const UserUniformLocation& uniform = GetUniformLocation(linkName);
 			BLT_ASSERT(ValidateUniformType<R>(uniform), "Uniform with LinkName {0} does not have type {1} (Type = {2})", linkName, typeid(R).name(), ValueTypeToGLSLString(uniform.Type));
 			return (UniformLink<std::function<R()>>&)AddLink(linkName, std::make_unique<UniformLink<std::function<R()>>>(m_Shader->GetShader().Id(), uniform.Location, value));
+		}
+
+		template<typename T>
+		UniformLink<T>& LinkIndexed(const blt::string& linkName, const T& value, int index)
+		{
+			BLT_ASSERT(HasLink(linkName, 0), "Uniform {} is not an array", linkName);
+			BLT_ASSERT(HasLink(linkName, index), "Uniform index {} out of range", index);
+			return Link(linkName + '[' + std::to_string(index) + ']', value, index);
+		}
+
+		template<typename FuncT, typename R = typename std::result_of<FuncT()>::type>
+		UniformLink<std::function<R()>>& LinkIndexedFunction(const blt::string& linkName, const FuncT& value, int index)
+		{
+			BLT_ASSERT(HasLink(linkName, 0), "Uniform {} is not an array", linkName);
+			BLT_ASSERT(HasLink(linkName, index), "Uniform index {} out of range", index);
+			return Link(linkName + '[' + std::to_string(index) + ']', value, index);
 		}
 
 	private:
