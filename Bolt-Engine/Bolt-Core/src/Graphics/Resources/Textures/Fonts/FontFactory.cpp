@@ -7,12 +7,17 @@ namespace Bolt
 	FontFactory::FontFactory(const Filepath& fontFile)
 		: m_FontFile(fontFile)
 	{
-		BLT_ASSERT(Filesystem::FileExists(fontFile), "File does not exist: {}", fontFile.Path());
+		
 	}
 
 	std::unique_ptr<Font> FontFactory::BuildFont(float size, int textureWidth, int textureHeight) const
 	{
-		return std::make_unique<Font>(m_FontFile, size, textureWidth, textureHeight);
+		if (Filesystem::FileExists(m_FontFile))
+		{
+			return std::make_unique<Font>(m_FontFile, size, textureWidth, textureHeight);
+		}
+		BLT_CORE_WARN("Font file {} does not exist", m_FontFile);
+		return nullptr;
 	}
 
 	std::unique_ptr<Resource> FontFactory::Clone() const
