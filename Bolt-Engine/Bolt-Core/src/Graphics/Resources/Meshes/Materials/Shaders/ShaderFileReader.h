@@ -52,8 +52,11 @@ namespace Bolt
 		void SetFragmentFile(const Filepath& file);
 		void SetShaderFile(const Filepath& file);
 
+		// Manually set the vertex source to use while building
 		void SetVertexSource(const blt::string& source);
+		// Manually set the geometry source to use while building
 		void SetGeometrySource(const blt::string& source);
+		// Manually set the fragment source to use while building
 		void SetFragmentSource(const blt::string& source);
 
 		const Ref<ShaderInstance>& GetShader() const;

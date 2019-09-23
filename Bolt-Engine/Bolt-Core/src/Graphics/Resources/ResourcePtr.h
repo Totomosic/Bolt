@@ -145,7 +145,7 @@ namespace std
 	struct hash<Bolt::ResourcePtr<T>>
 	{
 	public:
-		size_t operator()(const Bolt::ResourcePtr<T>& ptr)
+		size_t operator()(const Bolt::ResourcePtr<T>& ptr) const
 		{
 			return std::hash<const void*>()((const void*)ptr.Get());
 		}

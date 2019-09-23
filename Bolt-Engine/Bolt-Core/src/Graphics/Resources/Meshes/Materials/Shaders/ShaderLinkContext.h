@@ -217,7 +217,7 @@ namespace Bolt
 		{
 			BLT_ASSERT(HasLink(linkName, 0), "Uniform {} is not an array", linkName);
 			BLT_ASSERT(HasLink(linkName, index), "Uniform index {} out of range", index);
-			return Link(linkName + '[' + std::to_string(index) + ']', value, index);
+			return Link(linkName + '[' + std::to_string(index) + ']', value);
 		}
 
 		template<typename FuncT, typename R = typename std::result_of<FuncT()>::type>
@@ -225,7 +225,7 @@ namespace Bolt
 		{
 			BLT_ASSERT(HasLink(linkName, 0), "Uniform {} is not an array", linkName);
 			BLT_ASSERT(HasLink(linkName, index), "Uniform index {} out of range", index);
-			return Link(linkName + '[' + std::to_string(index) + ']', value, index);
+			return Link(linkName + '[' + std::to_string(index) + ']', value);
 		}
 
 	private:

@@ -54,6 +54,10 @@ namespace Bolt
 					{
 						BLT_CORE_WARN("Unable to find renderer uniform with name {}, it may not exist or may not be in use", uniform.VarName + arrPart);
 					}
+					else
+					{
+						BLT_CORE_INFO("Found renderer uniform in shader {0}, {1} location = {2}", shader.Id(), uniform.VarName + arrPart, loc.Location);
+					}
 					result.push_back(std::move(loc));
 				}
 			}
@@ -63,6 +67,10 @@ namespace Bolt
 				if (loc.Location == -1)
 				{
 					BLT_CORE_WARN("Unable to find renderer uniform with name " + uniform.VarName);
+				}
+				else
+				{
+					BLT_CORE_INFO("Found renderer uniform in shader {0}, {1} location = {2}", shader.Id(), uniform.VarName, loc.Location);
 				}
 				result.push_back(std::move(loc));
 			}
@@ -86,6 +94,10 @@ namespace Bolt
 					{
 						BLT_CORE_WARN("Unable to find user uniform with name {0}{1}", uniform.VarName, arrPart);
 					}
+					else
+					{
+						BLT_CORE_INFO("Found user uniform in shader {0}, {1} location = {2}", shader.Id(), loc.LinkName, loc.Location);
+					}
 					result.push_back(std::move(loc));
 					if (uniform.Type == ValueType::Texture2D)
 					{
@@ -99,6 +111,10 @@ namespace Bolt
 				if (loc.Location == -1)
 				{
 					BLT_CORE_WARN("Unable to find user uniform with name {}", uniform.VarName);
+				}
+				else
+				{
+					BLT_CORE_INFO("Found user uniform in shader {0}, {1} location = {2}", shader.Id(), loc.LinkName, loc.Location);
 				}
 				result.push_back(std::move(loc));
 				if (uniform.Type == ValueType::Texture2D)

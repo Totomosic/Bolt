@@ -74,6 +74,9 @@ namespace Bolt
 		int GetColorIndex() const;
 		int GetTangentIndex() const;
 
+		bool operator==(const BufferLayout& other) const;
+		bool operator!=(const BufferLayout& other) const;
+
 		template<typename T>
 		void AddAttribute(int count, bool normalized = false)
 		{
