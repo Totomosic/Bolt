@@ -121,6 +121,12 @@ namespace Bolt
 		return AddVertexBuffer(std::move(buffer));
 	}
 
+	VertexBuffer& VertexArray::GetVertexBuffer(int index)
+	{
+		BLT_ASSERT(index < VertexBufferCount(), "Index out of range");
+		return *m_Vertices[index];
+	}
+
 	void VertexArray::SetRenderMode(RenderMode mode)
 	{
 		m_RenderMode = mode;

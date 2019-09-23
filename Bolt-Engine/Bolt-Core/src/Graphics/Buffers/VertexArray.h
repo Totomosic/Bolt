@@ -49,6 +49,7 @@ namespace Bolt
 		VertexBuffer& AddVertexBuffer(std::unique_ptr<VertexBuffer>&& buffer);
 		VertexBuffer& CreateVertexBuffer(uint32_t size, const BufferLayout& layout, BufferUsage usage = BufferUsage::StaticDraw);
 		VertexBuffer& CreateVertexBuffer(const void* data, uint32_t size, const BufferLayout& layout, BufferUsage usage = BufferUsage::StaticDraw);
+		VertexBuffer& GetVertexBuffer(int index);
 		void SetRenderMode(RenderMode mode);
 
 		VertexMapping Map() const;

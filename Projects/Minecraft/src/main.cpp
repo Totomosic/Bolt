@@ -14,6 +14,8 @@ namespace Minecraft
 		Camera* camera;
 		std::unique_ptr<ChunkManager> manager;
 
+		Renderer2D* renderer;
+
 	public:
 		void Init() override
 		{
@@ -25,13 +27,11 @@ namespace Minecraft
 			Camera* uiCamera = s.CreateCamera(Projection::Orthographic(0, Width(), 0, Height(), -100, 100));
 			Layer& uiLayer = s.CreateLayer(uiCamera);
 
-			UIRectangle& surface = uiLayer.UI().Root().CreateRectangle(300, 300, Color::Red, Transform({ 200, 200, 0 }));
-			UITextInput& input = surface.CreateTextInput(300, 100, Color::Black, Transform({ 0, 0, 1 }));
-
 			camera->transform().Translate(32, 200, 32);
 			camera->transform().Rotate(-PI / 2, Vector3f::Right());
 
-			Renderer2D renderer;
+			renderer = new Renderer2D;
+			renderer->SetSpritesPerDraw(10000);
 
 			ResourceManager::Get().LoadPack("res/resources.pack", [&l, this](const ResourcePack& pack)
 				{
@@ -110,7 +110,7 @@ namespace Minecraft
 			{
 				t.Translate(-t.Right() * speed * Time::Get().RenderingTimeline().DeltaTime());
 			}
-			if (Input::Get().MouseButtonDown(MouseButton::Middle))
+			if (Input::Get().MouseButtonDown(MouseButton::Left) || Input::Get().MouseButtonDown(MouseButton::Middle))
 			{
 				float x = Input::Get().RelMousePosition().x;
 				float y = Input::Get().RelMousePosition().y;
@@ -122,6 +122,10 @@ namespace Minecraft
 		void Render() override
 		{
 			Graphics::Get().RenderScene();
+			renderer->BeginScene({ Matrix4f::Identity(), Matrix4f::Orthographic(0, 1280, 0, 720, -100, 100) });
+			renderer->DrawSprite(500, 50, 200, 200, Color::Blue);
+			renderer->EndScene();
+			renderer->Flush();
 		}
 
 	};

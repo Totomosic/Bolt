@@ -91,6 +91,21 @@ namespace Bolt
 		return TANGENT_INDEX;
 	}
 
+	bool BufferLayout::operator==(const BufferLayout& other) const
+	{
+		return !(*this != other);
+	}
+
+	bool BufferLayout::operator!=(const BufferLayout& other) const
+	{
+		// Not a perfect test
+		if (AttributeCount() != other.AttributeCount())
+		{
+			return true;
+		}
+		return Stride() != other.Stride();
+	}
+
 	void BufferLayout::AddAttribute(const VertexAttribute& attribute)
 	{
 		m_Attributes[attribute.Index] = attribute;

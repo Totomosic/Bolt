@@ -28,14 +28,25 @@ namespace Bolt
 		struct BLT_API SpriteBatch
 		{
 		public:
-			std::unique_ptr<VertexArray> Vertices;
-			std::unique_ptr<IndexBuffer> Indices;
+			std::unique_ptr<VertexArray> Vertices = nullptr;
+			std::unique_ptr<IndexBuffer> Indices = nullptr;
 			std::unordered_map<ResourcePtr<Texture2D>, int> Textures;
 			int SpriteCount = 0;
 
 			void* VerticesPtr = nullptr;
-			void* IndicePtr = nullptr;
+			void* IndicesPtr = nullptr;
 		};
+
+#pragma pack(push, 1)
+		struct BLT_API SpriteVertex
+		{
+		public:
+			Vector3f Position;
+			Vector2f TexCoord;
+			Vector4<byte> Color;
+			int TextureUnit;
+		};
+#pragma pack(pop)
 
 	private:
 		BufferLayout m_Layout;
@@ -43,7 +54,8 @@ namespace Bolt
 		int m_SpritesPerDraw;
 		std::vector<SpriteBatch> m_Batches;
 		std::vector<SpriteBatch> m_TextureBatches;
-		SpriteBatch* m_CurrentBatch;
+		int m_CurrentBatchIndex;
+		int m_CurrentTextureBatchIndex;
 
 		std::unique_ptr<ShaderLinkContext> m_DefaultShader;
 		std::unique_ptr<ShaderLinkContext> m_TextureShader;
@@ -62,10 +74,12 @@ namespace Bolt
 		void DrawSprite(float x0, float y0, float width, float height, const Color& color = Color::White, const ResourcePtr<Texture2D>& texture = nullptr, const TextureFrame& frame = {});
 
 	private:
-		static SpriteBatch CreateSpriteBatch(int spriteCount);
+		static SpriteBatch CreateSpriteBatch(int spriteCount, const BufferLayout& layout);
 		void RecreateSpriteBatches();
 		void CreateDefaultShader();
 		void CreateTextureShader();
+
+		void ApplyRendererUniforms(const ShaderLinkContext& shader, const Matrix4f& viewMatrix, const Matrix4f& projectionMatrix) const;
 
 	};
 
