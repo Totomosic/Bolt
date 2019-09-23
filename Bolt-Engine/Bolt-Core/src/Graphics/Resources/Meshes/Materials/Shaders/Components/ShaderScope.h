@@ -29,8 +29,8 @@ namespace Bolt
 
 		ShaderVariablePtr DefineVar(const ShaderValuePtr& value, const blt::string& meta = "");
 		ShaderVariablePtr DeclareVar(ValueType type, const blt::string& meta = "");
-		ShaderVariablePtr DeclarePassIn(const ShaderVariablePtr& outVar, const blt::string& meta = "");
-		ShaderVariablePtr DeclarePassOut(ValueType type, const blt::string& meta = "");
+		ShaderPassVariablePtr DeclarePassIn(const ShaderPassVariablePtr& outVar, const blt::string& meta = "");
+		ShaderPassVariablePtr DeclarePassOut(ValueType type, PassType passType,  const blt::string& meta = "");
 		ShaderVariablePtr DeclareArray(ValueType type, const ShaderLiteralPtr& length, const blt::string& meta = "");
 		void AddOperation(std::unique_ptr<ShaderOp>&& op);
 		void InsertOperation(int index, std::unique_ptr<ShaderOp>&& op);
@@ -58,6 +58,7 @@ namespace Bolt
 
 		virtual void Build(ShaderBuilder& builder) const = 0;
 		virtual std::unique_ptr<ShaderScope> Clone() const = 0;
+		virtual void Reset();
 
 		template<typename T, typename... Args>
 		T& AddScope(Args&& ... args)

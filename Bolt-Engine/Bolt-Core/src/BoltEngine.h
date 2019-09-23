@@ -31,3 +31,5 @@
 #include "Engine/Networking/TCPsocket.h"
 #include "Engine/Networking/IO/TCPclient.h"
 #include "Engine/Networking/IO/TCPserver.h"
+
+#include "Engine/Renderer/2D/Renderer2D.h"

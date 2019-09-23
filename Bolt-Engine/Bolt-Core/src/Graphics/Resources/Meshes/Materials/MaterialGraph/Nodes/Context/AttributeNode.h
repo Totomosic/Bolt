@@ -7,12 +7,12 @@ namespace Bolt
 	class BLT_API AttributeNode : public MaterialNode
 	{
 	private:
-		ShaderStream m_Stream;
+		int m_Stream;
 
 	public:
-		AttributeNode(ShaderStream stream);
+		AttributeNode(int stream);
 
-		ShaderStream GetStream() const;
+		int GetStream() const;
 		NodeConnection GetValue() const;
 
 		virtual void Build(BuiltMaterialNode& node, const LinkedInputs& inputs, const MaterialGraphContext& context, MaterialGraphBuilder& builder) const override;

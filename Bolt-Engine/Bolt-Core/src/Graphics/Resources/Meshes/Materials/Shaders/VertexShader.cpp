@@ -5,65 +5,28 @@
 namespace Bolt
 {
 
-	VertexShader::VertexShader() : ShaderProgram(ShaderStage::Vertex),
-		m_PositionStream(nullptr), m_NormalStream(nullptr), m_TexCoordStream(nullptr), m_ColorStream(nullptr), m_TangentStream(nullptr), m_VertexPosition(nullptr)
+	VertexShader::VertexShader(const BufferLayout& layout) : ShaderProgram(ShaderStage::Vertex),
+		m_Layout(layout), m_Streams(), m_VertexPosition(nullptr)
 	{
 		m_VertexPosition = std::make_shared<ShaderVariable>(ValueType::Vector4f);
 		m_VertexPosition->SetVarName("gl_Position");
-		m_PositionStream = PrivateStream(ShaderStream::Position);
-		m_NormalStream = PrivateStream(ShaderStream::Normal);
-		m_TexCoordStream = PrivateStream(ShaderStream::TexCoord);
-		m_ColorStream = PrivateStream(ShaderStream::Color);
-		m_TangentStream = PrivateStream(ShaderStream::Tangent);
+		CreateStreams();
 	}
 
-	const ShaderVariablePtr& VertexShader::Position() const
+	const BufferLayout& VertexShader::GetLayout() const
 	{
-		return m_PositionStream;
+		return m_Layout;
 	}
 
-	const ShaderVariablePtr& VertexShader::Normal() const
+	void VertexShader::SetBufferLayout(const BufferLayout& layout)
 	{
-		return m_NormalStream;
+		m_Layout = layout;
+		CreateStreams();
 	}
 
-	const ShaderVariablePtr& VertexShader::TexCoord() const
+	const ShaderVariablePtr& VertexShader::Stream(int streamIndex) const
 	{
-		return m_TexCoordStream;
-	}
-
-	const ShaderVariablePtr& VertexShader::Color() const
-	{
-		return m_ColorStream;
-	}
-
-	const ShaderVariablePtr& VertexShader::Tangent() const
-	{
-		return m_TangentStream;
-	}
-
-	const ShaderVariablePtr& VertexShader::VertexPosition() const
-	{
-		return m_VertexPosition;
-	}
-
-	const ShaderVariablePtr& VertexShader::Stream(ShaderStream stream) const
-	{
-		switch (stream)
-		{
-		case ShaderStream::Position:
-			return Position();
-		case ShaderStream::Normal:
-			return Normal();
-		case ShaderStream::TexCoord:
-			return TexCoord();
-		case ShaderStream::Color:
-			return Color();
-		case ShaderStream::Tangent:
-			return Tangent();
-		}
-		BLT_ASSERT(false, "Invalid shader stream");
-		return Position();
+		return m_Streams.at(streamIndex);
 	}
 
 	void VertexShader::SetVertexPosition(const ShaderValuePtr& value)
@@ -82,6 +45,60 @@ namespace Bolt
 	void VertexShader::Reset()
 	{
 		ShaderProgram::Reset();
+	}
+
+	ShaderVariablePtr VertexShader::PrivateStream(int streamIndex)
+	{
+		return GetGlobalScope().DeclareVar(GetTypeOfShaderStream(streamIndex), "layout(location = " + std::to_string((int)streamIndex) + ") in");
+	}
+
+	ValueType VertexShader::GetTypeOfShaderStream(int streamIndex) const
+	{
+		BLT_ASSERT(m_Layout.HasAttribute(streamIndex), "Invalid attribute {}", streamIndex);
+		const auto& stream = m_Layout.GetAttribute(streamIndex);
+		DataType type = stream.Type;
+		int count = stream.Count;
+		if (type == DataType::Float)
+		{
+			switch (count)
+			{
+			case 1:
+				return ValueType::Float;
+			case 2:
+				return ValueType::Vector2f;
+			case 3: 
+				return ValueType::Vector3f;
+			case 4:
+				return ValueType::Vector4f;
+			}
+		}
+		else if (type == DataType::Int)
+		{
+			switch (count)
+			{
+			case 1:
+				return ValueType::Int;
+			}
+		}
+		else if (type == DataType::UByte)
+		{
+			if (stream.Normalised && count == 4)
+			{
+				return ValueType::Vector4f;
+			}
+		}
+		BLT_ASSERT(false, "Invalid datatype");
+		return ValueType::Void;
+	}
+
+	void VertexShader::CreateStreams()
+	{
+		m_Builder.Reset();
+		m_Streams.clear();
+		for (const auto& attribute : m_Layout.GetAttributes())
+		{
+			m_Streams[attribute.Index] = PrivateStream(attribute.Index);
+		}
 	}
 
 }

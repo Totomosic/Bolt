@@ -57,26 +57,26 @@ namespace Bolt
 		ShaderVariablePtr viewMatrix = vertex.RendererUniform(RendererUniform::ViewMatrix);
 		ShaderVariablePtr projectionMatrix = vertex.RendererUniform(RendererUniform::ProjectionMatrix);
 		ShaderVariablePtr cameraPosition = vertex.RendererUniform(RendererUniform::CameraPosition);
-		ShaderVariablePtr outColor = vertex.DeclarePassOut<Color>();
-		ShaderVariablePtr outToCamera = vertex.DeclarePassOut<Vector3f>();
-		ShaderVariablePtr outWorldNormal = vertex.DeclarePassOut<Vector3f>();
-		ShaderVariablePtr outWorldPos = vertex.DeclarePassOut<Vector3f>();
+		ShaderPassVariablePtr outColor = vertex.DeclarePassOut<Color>();
+		ShaderPassVariablePtr outToCamera = vertex.DeclarePassOut<Vector3f>();
+		ShaderPassVariablePtr outWorldNormal = vertex.DeclarePassOut<Vector3f>();
+		ShaderPassVariablePtr outWorldPos = vertex.DeclarePassOut<Vector3f>();
 
 		ShaderVariablePtr position = vertex.DefineVar(ShaderFuncs::Vec4(masterNodeValues.at("VertexPosition"), ShaderLiteral::FromFloat(1.0f)));
 		ShaderVariablePtr worldPos = vertex.DefineVar(ShaderFuncs::Mul(modelMatrix, position));
 		ShaderVariablePtr viewPos = vertex.DefineVar(ShaderFuncs::Mul(viewMatrix, worldPos));
 		ShaderVariablePtr screenPos = vertex.DefineVar(ShaderFuncs::Mul(projectionMatrix, viewPos));
 		vertex.SetVertexPosition(screenPos);
-		vertex.SetVariable(outColor, vertex.Color());
+		vertex.SetVariable(outColor, vertex.Stream(BufferLayout::COLOR_INDEX));
 		vertex.SetVariable(outToCamera, ShaderFuncs::Sub(cameraPosition, ShaderFuncs::xyz(worldPos)));
-		vertex.SetVariable(outWorldNormal, ShaderFuncs::xyz(ShaderFuncs::Mul(modelMatrix, ShaderFuncs::Vec4(vertex.Normal(), ShaderLiteral::FromFloat(0)))));
+		vertex.SetVariable(outWorldNormal, ShaderFuncs::xyz(ShaderFuncs::Mul(modelMatrix, ShaderFuncs::Vec4(vertex.Stream(BufferLayout::NORMAL_INDEX), ShaderLiteral::FromFloat(0)))));
 		vertex.SetVariable(outWorldPos, ShaderFuncs::xyz(worldPos));
 
 		FragmentShader& fragment = GetBuilder().GetBuilder().Factory().Fragment();
-		ShaderVariablePtr inColor = fragment.DeclarePassIn(outColor);
-		ShaderVariablePtr inToCamera = fragment.DeclarePassIn(outToCamera);
-		ShaderVariablePtr inWorldNormal = fragment.DeclarePassIn(outWorldNormal);
-		ShaderVariablePtr inWorldPos = fragment.DeclarePassIn(outWorldPos);
+		ShaderPassVariablePtr inColor = fragment.DeclarePassIn(outColor);
+		ShaderPassVariablePtr inToCamera = fragment.DeclarePassIn(outToCamera);
+		ShaderPassVariablePtr inWorldNormal = fragment.DeclarePassIn(outWorldNormal);
+		ShaderPassVariablePtr inWorldPos = fragment.DeclarePassIn(outWorldPos);
 		ShaderVariablePtr lightPositions = fragment.RendererUniform(RendererUniform::LightPositions);
 		ShaderVariablePtr lightColors = fragment.RendererUniform(RendererUniform::LightColors);
 		ShaderVariablePtr lightAmbients = fragment.RendererUniform(RendererUniform::LightAmbients);

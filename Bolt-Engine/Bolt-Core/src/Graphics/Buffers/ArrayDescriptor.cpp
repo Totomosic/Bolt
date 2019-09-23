@@ -62,7 +62,7 @@ namespace Bolt
 				VertexMapping::MappingAttribute attribute;
 				attribute.Index = attrib.Index;
 				attribute.Offset = attrib.Offset;
-				attribute.Size = attrib.Count * 4; // TODO: Fix
+				attribute.Size = attrib.Count * GetSizeofDatatype(attrib.Type);
 				mappingPtr.Attributes.push_back(attribute);
 			}
 			mappedPtrs.push_back(mappingPtr);

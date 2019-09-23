@@ -38,20 +38,20 @@ namespace Bolt
 			VertexIterator iterator = vMapping.Begin();
 			IndexIterator indices = iMapping.Begin();
 
-			iterator[0] = Vector3f(0, 0, 0);
-			iterator[1] = Vector3f(0, 0, 1);
-			iterator[2] = Vector2f(0.5f, 0.5f);
-			iterator[3] = color;
+			iterator.Position() = Vector3f(0, 0, 0);
+			iterator.Normal() = Vector3f(0, 0, 1);
+			iterator.TexCoord() = Vector2f(0.5f, 0.5f);
+			iterator.Color() = color;
 			iterator++;
 			for (int i = 0; i < VerticesPerRev; i++)
 			{
 				float a = (float)PI * 2 / VerticesPerRev * i;
 				float x = cos(a);
 				float y = sin(a);
-				iterator[0] = Vector3f(x * w, y * h, 0);
-				iterator[1] = Vector3f(0, 0, 1);
-				iterator[2] = Vector2f((x + 1) / 2, (y + 1) / 2);
-				iterator[3] = color;
+				iterator.Position() = Vector3f(x * w, y * h, 0);
+				iterator.Normal() = Vector3f(0, 0, 1);
+				iterator.TexCoord() = Vector2f((x + 1) / 2, (y + 1) / 2);
+				iterator.Color() = color;
 				iterator++;
 
 				if (i != VerticesPerRev - 1)

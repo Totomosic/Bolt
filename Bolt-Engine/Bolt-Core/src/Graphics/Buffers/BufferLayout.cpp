@@ -66,6 +66,31 @@ namespace Bolt
 		AddAttribute(attrib);
 	}
 
+	int BufferLayout::GetPostionIndex() const
+	{
+		return POSITION_INDEX;
+	}
+
+	int BufferLayout::GetNormalIndex() const
+	{
+		return NORMAL_INDEX;
+	}
+
+	int BufferLayout::GetTexCoordIndex() const
+	{
+		return TEXCOORD_INDEX;
+	}
+
+	int BufferLayout::GetColorIndex() const
+	{
+		return COLOR_INDEX;
+	}
+
+	int BufferLayout::GetTangentIndex() const
+	{
+		return TANGENT_INDEX;
+	}
+
 	void BufferLayout::AddAttribute(const VertexAttribute& attribute)
 	{
 		m_Attributes[attribute.Index] = attribute;
@@ -81,11 +106,11 @@ namespace Bolt
 	BufferLayout BufferLayout::Default()
 	{
 		BufferLayout layout;
-		layout.AddAttribute<Vector3f>(1);
-		layout.AddAttribute<Vector3f>(1);
-		layout.AddAttribute<Vector2f>(1);
-		layout.AddAttribute<byte>(4, true);
-		layout.AddAttribute<Vector3f>(1);
+		layout.AddAttribute<Vector3f>(POSITION_INDEX, 1);
+		layout.AddAttribute<Vector3f>(NORMAL_INDEX, 1);
+		layout.AddAttribute<Vector2f>(TEXCOORD_INDEX, 1);
+		layout.AddAttribute<byte>(COLOR_INDEX, 4, true);
+		layout.AddAttribute<Vector3f>(TANGENT_INDEX, 1);
 		return layout;
 	}
 

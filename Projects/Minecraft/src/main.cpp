@@ -31,6 +31,8 @@ namespace Minecraft
 			camera->transform().Translate(32, 200, 32);
 			camera->transform().Rotate(-PI / 2, Vector3f::Right());
 
+			Renderer2D renderer;
+
 			ResourceManager::Get().LoadPack("res/resources.pack", [&l, this](const ResourcePack& pack)
 				{
 					ResourceExtractor resources(pack);

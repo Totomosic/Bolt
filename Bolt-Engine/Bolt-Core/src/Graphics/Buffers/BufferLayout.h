@@ -14,6 +14,23 @@ namespace Bolt
 		Float = GL_FLOAT
 	};
 
+	BLT_API inline int GetSizeofDatatype(DataType type)
+	{
+		switch (type)
+		{
+		case DataType::UInt:
+			return sizeof(GLuint);
+		case DataType::Int:
+			return sizeof(GLint);
+		case DataType::UByte:
+			return sizeof(GLubyte);
+		case DataType::Float:
+			return sizeof(GLfloat);
+		}
+		BLT_ASSERT(false, "Invalid datatype");
+		return 0;
+	}
+
 	class BLT_API BufferLayout
 	{
 	public:
@@ -26,6 +43,12 @@ namespace Bolt
 			bool Normalised;
 			int Offset;
 		};
+
+		static constexpr int POSITION_INDEX = 0;
+		static constexpr int NORMAL_INDEX = 1;
+		static constexpr int TEXCOORD_INDEX = 2;
+		static constexpr int COLOR_INDEX = 3;
+		static constexpr int TANGENT_INDEX = 4;
 
 	private:
 		std::unordered_map<int, VertexAttribute> m_Attributes;
@@ -44,6 +67,12 @@ namespace Bolt
 
 		void AddAttribute(int count, DataType type = DataType::Float, bool normalized = false);
 		void AddAttribute(int index, int count, DataType type = DataType::Float, bool normalized = false);
+
+		int GetPostionIndex() const;
+		int GetNormalIndex() const;
+		int GetTexCoordIndex() const;
+		int GetColorIndex() const;
+		int GetTangentIndex() const;
 
 		template<typename T>
 		void AddAttribute(int count, bool normalized = false)
@@ -109,6 +138,12 @@ namespace Bolt
 		void AddAttribute<int>(int index, int count, bool normalized)
 		{
 			AddAttribute(index, count, DataType::Int, normalized);
+		}
+
+		template<>
+		void AddAttribute<byte>(int index, int count, bool normalized)
+		{
+			AddAttribute(index, count, DataType::UByte, normalized);
 		}
 
 		template<>

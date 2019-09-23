@@ -34,15 +34,15 @@ namespace Bolt
 		{
 			VertexMapping mapping = result.Vertices->Map();
 			VertexIterator iterator = mapping.Begin();
-			iterator[0] = -half;
-			iterator[1] = Vector3f(0, 0, 1);
-			iterator[2] = Vector2f(0, 1);
-			iterator[3] = color;
+			iterator.Position() = -half;
+			iterator.Normal() = Vector3f(0, 0, 1);
+			iterator.TexCoord() = Vector2f(0, 1);
+			iterator.Color() = color;
 			iterator++;
-			iterator[0] = half;
-			iterator[1] = Vector3f(0, 0, 1);
-			iterator[2] = Vector2f(0, 0);
-			iterator[3] = color;
+			iterator.Position() = half;
+			iterator.Normal() = Vector3f(0, 0, 1);
+			iterator.TexCoord() = Vector2f(0, 0);
+			iterator.Color() = color;
 		}
 
 		return result;

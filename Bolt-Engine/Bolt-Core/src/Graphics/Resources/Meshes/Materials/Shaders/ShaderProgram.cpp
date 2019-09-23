@@ -87,14 +87,14 @@ namespace Bolt
 		return GetMainScope().DefineVar(value, "");
 	}
 
-	ShaderVariablePtr ShaderProgram::DeclarePassOut(ValueType type)
+	ShaderPassVariablePtr ShaderProgram::DeclarePassOut(ValueType type, PassType passType)
 	{
-		return GetGlobalScope().DeclarePassOut(type);
+		return GetGlobalScope().DeclarePassOut(type, passType, GetGLSLStringFromPassType(passType));
 	}
 
-	ShaderVariablePtr ShaderProgram::DeclarePassIn(const ShaderVariablePtr& passOut)
+	ShaderPassVariablePtr ShaderProgram::DeclarePassIn(const ShaderPassVariablePtr& passOut)
 	{
-		return GetGlobalScope().DeclarePassIn(passOut);
+		return GetGlobalScope().DeclarePassIn(passOut, GetGLSLStringFromPassType(passOut->GetPassType()));
 	}
 
 	ShaderVariablePtr ShaderProgram::DeclareArray(ValueType type, uint32_t length)
@@ -170,9 +170,10 @@ namespace Bolt
 		}
 	}
 
-	ShaderVariablePtr ShaderProgram::PrivateStream(ShaderStream stream)
+	ShaderVariablePtr ShaderProgram::PrivateStream(int streamIndex)
 	{
-		return GetGlobalScope().DeclareVar(GetTypeOfShaderStream(stream), "layout(location = " + std::to_string((int)stream) + ") in");
+		BLT_ASSERT(false, "Can only use shader streams in vertex shader");
+		return ShaderVariablePtr();
 	}
 
 }

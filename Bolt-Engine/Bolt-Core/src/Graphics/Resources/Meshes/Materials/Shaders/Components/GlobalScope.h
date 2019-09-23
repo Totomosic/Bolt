@@ -19,6 +19,7 @@ namespace Bolt
 
 		void Build(ShaderBuilder& builder) const override;
 		BLT_DEFAULT_SHADERSCOPE_CLONE(GlobalScope);
+		void Reset() override;
 
 	private:
 		FunctionScope& GetFunctionByIndex(int index) const;
