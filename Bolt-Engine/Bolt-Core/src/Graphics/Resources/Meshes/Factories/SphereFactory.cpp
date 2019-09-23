@@ -59,19 +59,19 @@ namespace Bolt
 					// vertex position (x, y, z)
 					x = xy * cosf(sectorAngle);             // r * cos(u) * cos(v)
 					y = xy * sinf(sectorAngle);             // r * cos(u) * sin(v)
-					iterator[0] = Vector3f(x, y, z);
+					iterator.Position() = Vector3f(x, y, z);
 
 					// normalized vertex normal (nx, ny, nz)
 					nx = x * lengthInv;
 					ny = y * lengthInv;
 					nz = z * lengthInv;
-					iterator[1] = Vector3f(nx, ny, nz);
+					iterator.Normal() = Vector3f(nx, ny, nz);
 
 					// vertex tex coord (s, t) range between [0, 1]
 					s = (float)j / SectorCount;
 					t = (float)i / SectorCount;
-					iterator[2] = Vector2f(s, t);
-					iterator[3] = color;
+					iterator.TexCoord() = Vector2f(s, t);
+					iterator.Color() = color;
 					iterator++;
 				}
 			}

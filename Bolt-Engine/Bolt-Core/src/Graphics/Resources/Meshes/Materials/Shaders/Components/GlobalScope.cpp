@@ -47,6 +47,12 @@ namespace Bolt
 		builder.NextLine();
 	}
 
+	void GlobalScope::Reset()
+	{
+		ShaderScope::Reset();
+		m_FunctionIndices.clear();
+	}
+
 	FunctionScope& GlobalScope::GetFunctionByIndex(int index) const
 	{
 		return (FunctionScope&)GetOpAtIndex(index);

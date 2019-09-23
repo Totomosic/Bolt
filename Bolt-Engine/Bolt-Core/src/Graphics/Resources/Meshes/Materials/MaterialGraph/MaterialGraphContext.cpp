@@ -1,11 +1,12 @@
 #include "bltpch.h"
 #include "MaterialGraphContext.h"
+#include "Graphics/Buffers/BufferLayout.h"
 
 namespace Bolt
 {
 
 	MaterialGraphContext::MaterialGraphContext()
-		: m_VertexPosition(ShaderStream::Position), m_VertexNormal(ShaderStream::Normal), m_VertexTexCoord(ShaderStream::TexCoord)
+		: m_VertexPosition(BufferLayout::POSITION_INDEX), m_VertexNormal(BufferLayout::NORMAL_INDEX), m_VertexTexCoord(BufferLayout::TEXCOORD_INDEX)
 	{
 		
 	}

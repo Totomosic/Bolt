@@ -44,17 +44,17 @@ namespace Bolt
 		ShaderVariablePtr modelMatrix = vertex.RendererUniform(RendererUniform::ModelMatrix);
 		ShaderVariablePtr viewMatrix = vertex.RendererUniform(RendererUniform::ViewMatrix);
 		ShaderVariablePtr projectionMatrix = vertex.RendererUniform(RendererUniform::ProjectionMatrix);
-		ShaderVariablePtr outColor = vertex.DeclarePassOut<Color>();
+		ShaderPassVariablePtr outColor = vertex.DeclarePassOut<Color>();
 
 		ShaderVariablePtr position = vertex.DefineVar(ShaderFuncs::Vec4(masterNodeValues.at("VertexPosition"), ShaderLiteral::FromFloat(1.0f)));
 		ShaderVariablePtr worldPos = vertex.DefineVar(ShaderFuncs::Mul(modelMatrix, position));
 		ShaderVariablePtr viewPos = vertex.DefineVar(ShaderFuncs::Mul(viewMatrix, worldPos));
 		ShaderVariablePtr screenPos = vertex.DefineVar(ShaderFuncs::Mul(projectionMatrix, viewPos));
 		vertex.SetVertexPosition(screenPos);
-		vertex.SetVariable(outColor, vertex.Color());
+		vertex.SetVariable(outColor, vertex.Stream(BufferLayout::COLOR_INDEX));
 
 		FragmentShader& fragment = GetBuilder().GetBuilder().Factory().Fragment();
-		ShaderVariablePtr inColor = fragment.DeclarePassIn(outColor);
+		ShaderPassVariablePtr inColor = fragment.DeclarePassIn(outColor);
 
 		IfScope& alphaThresholdTest = fragment.If(ShaderFuncs::LessThan(masterNodeValues.at("Alpha"), masterNodeValues.at("AlphaThreshold")));
 		alphaThresholdTest.Discard();

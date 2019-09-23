@@ -44,10 +44,10 @@ namespace Bolt
 		void Indent();
 
 		blt::string Build();
+		void Reset();
 
 	private:
 		blt::string GetShaderStageString() const;
-		void Reset();
 
 	};
 

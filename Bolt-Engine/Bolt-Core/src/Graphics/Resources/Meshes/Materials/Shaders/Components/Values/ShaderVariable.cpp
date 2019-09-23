@@ -5,6 +5,10 @@
 namespace Bolt
 {
 
+	// =======================================================================================================================================
+	// SHADER VARIABLE
+	// =======================================================================================================================================
+
 	ShaderVariable::ShaderVariable(ValueType type, ValueTypeDim dim) : ShaderLValue(type, dim)
 	{
 	
@@ -23,6 +27,21 @@ namespace Bolt
 	void ShaderVariable::Build(ShaderBuilder& builder) const
 	{
 		builder.Write(m_Name);
+	}
+
+	// =======================================================================================================================================
+	// SHADER PASS VARIABLE
+	// =======================================================================================================================================
+
+	ShaderPassVariable::ShaderPassVariable(ValueType type, ValueTypeDim dim, PassType passType) : ShaderVariable(type, dim),
+		m_PassType(passType)
+	{
+	
+	}
+
+	PassType ShaderPassVariable::GetPassType() const
+	{
+		return m_PassType;
 	}
 
 }

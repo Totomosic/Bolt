@@ -70,9 +70,9 @@ namespace Bolt
 					for (int i = 0; i < builtNode.GetOutputCount(); i++)
 					{
 						ShaderValuePtr value = builtNode.GetOutput(i);
-						ShaderVariablePtr outValue = vertex.DeclarePassOut(value->Type());
+						ShaderPassVariablePtr outValue = vertex.DeclarePassOut(value->Type());
 						vertex.SetVariable(outValue, value);
-						ShaderVariablePtr inValue = fragment.DeclarePassIn(outValue);
+						ShaderPassVariablePtr inValue = fragment.DeclarePassIn(outValue);
 						builtNode.BuildOutput(i, inValue);
 					}
 				}

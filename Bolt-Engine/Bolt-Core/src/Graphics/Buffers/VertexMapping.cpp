@@ -104,7 +104,8 @@ namespace Bolt
 	{
 		BLT_ASSERT(HasAttribute(attributeIndex), "Attribute with index {} does not exist", attributeIndex);
 		const AttributeInfo& info = GetAttribute(attributeIndex);
-		return (void*)(((byte*)info.BasePtr) + (intptr_t)(vertexIndex * info.Stride));
+		void* ptr = (void*)(((byte*)info.BasePtr) + (intptr_t)((intptr_t)vertexIndex * (intptr_t)info.Stride));
+		return ptr;
 	}
 
 	void VertexMapping::SetVertexArray(const VertexArray* vertexArray)

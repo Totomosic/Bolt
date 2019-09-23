@@ -65,13 +65,11 @@ namespace Bolt
 		LightIntensities
 	};
 
-	BLT_API enum class ShaderStream
+	BLT_API enum class PassType
 	{
-		Position,
-		Normal,
-		TexCoord,
-		Color,
-		Tangent
+		None,
+		Flat,
+		Varying
 	};
 
 	inline ValueType GetTypeOfRendererUniform(RendererUniform uniform)
@@ -171,25 +169,6 @@ namespace Bolt
 		return 0;
 	}
 
-	inline ValueType GetTypeOfShaderStream(ShaderStream stream)
-	{
-		switch (stream)
-		{
-		case ShaderStream::Position:
-			return ValueType::Vector3f;
-		case ShaderStream::Normal:
-			return ValueType::Vector3f;
-		case ShaderStream::TexCoord:
-			return ValueType::Vector2f;
-		case ShaderStream::Color:
-			return ValueType::Vector4f;
-		case ShaderStream::Tangent:
-			return ValueType::Vector3f;
-		}
-		BLT_ASSERT(false, "Unable to determine stream type");
-		return ValueType::Void;
-	}
-
 #define BLT_VALUE_TYPE_TO_GLSL_STRING_HELPER(type, str)	\
 	case ValueType::type:	\
 		return str;
@@ -271,6 +250,21 @@ namespace Bolt
 		return RendererUniform::ModelMatrix;
 	}
 #undef BLT_RENDERER_UNIFORM_FROM_STRING_HELPER
+
+	inline blt::string GetGLSLStringFromPassType(PassType type)
+	{
+		switch (type)
+		{
+		case PassType::None:
+			return "";
+		case PassType::Flat:
+			return "flat";
+		case PassType::Varying:
+			return "varying";
+		}
+		BLT_ASSERT(false, "Invalid PassType {}", (int)type);
+		return "";
+	}
 
 	inline bool ValueTypeIsNumeric(ValueType type)
 	{

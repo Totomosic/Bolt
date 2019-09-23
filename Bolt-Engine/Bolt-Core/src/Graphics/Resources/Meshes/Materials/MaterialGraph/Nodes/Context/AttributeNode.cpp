@@ -5,13 +5,13 @@
 namespace Bolt
 {
 
-	AttributeNode::AttributeNode(ShaderStream stream) : MaterialNode(ShaderStageCompatibility::VertexOnly, 0, 1),
+	AttributeNode::AttributeNode(int stream) : MaterialNode(ShaderStageCompatibility::VertexOnly, 0, 1),
 		m_Stream(stream)
 	{
 	
 	}
 
-	ShaderStream AttributeNode::GetStream() const
+	int AttributeNode::GetStream() const
 	{
 		return m_Stream;
 	}

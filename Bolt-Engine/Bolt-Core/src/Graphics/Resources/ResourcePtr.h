@@ -137,3 +137,18 @@ namespace Bolt
 	};
 
 }
+
+namespace std
+{
+
+	template<typename T>
+	struct hash<Bolt::ResourcePtr<T>>
+	{
+	public:
+		size_t operator()(const Bolt::ResourcePtr<T>& ptr)
+		{
+			return std::hash<const void*>()((const void*)ptr.Get());
+		}
+	};
+
+}

@@ -119,6 +119,8 @@ namespace Bolt
 		m_CurrentCursor = m_Source.size();
 		m_VarCount = 0;
 		m_PassCount = 0;
+		m_GlobalScope.Reset();
+		m_MainScope.Reset();
 	}
 
 }

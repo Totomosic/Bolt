@@ -22,4 +22,18 @@ namespace Bolt
 
 	};
 
+	class ShaderPassVariable;
+	using ShaderPassVariablePtr = std::shared_ptr<ShaderPassVariable>;
+
+	class BLT_API ShaderPassVariable : public ShaderVariable
+	{
+	private:
+		PassType m_PassType;
+
+	public:
+		ShaderPassVariable(ValueType type, ValueTypeDim dim = ValueTypeDim::Single, PassType passType = PassType::None);
+
+		PassType GetPassType() const;
+	};
+
 }

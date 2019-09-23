@@ -57,7 +57,7 @@ namespace Bolt
 	class BLT_API ShaderProgram
 	{
 	public:
-		static inline const char* NAMELESS_UNIFORM = "__NAMELESS__";
+		static constexpr inline const char* NAMELESS_UNIFORM = "__NAMELESS__";
 
 	protected:
 		mutable ShaderBuilder m_Builder;
@@ -82,8 +82,8 @@ namespace Bolt
 		ShaderVariablePtr RendererUniform(Bolt::RendererUniform uniform);
 		ShaderVariablePtr DeclareVar(ValueType type);
 		ShaderVariablePtr DefineVar(const ShaderValuePtr& value);
-		ShaderVariablePtr DeclarePassOut(ValueType type);
-		ShaderVariablePtr DeclarePassIn(const ShaderVariablePtr& passOut);
+		ShaderPassVariablePtr DeclarePassOut(ValueType type, PassType passType = PassType::None);
+		ShaderPassVariablePtr DeclarePassIn(const ShaderPassVariablePtr& passOut);
 		ShaderVariablePtr DeclareArray(ValueType type, uint32_t length);
 
 		template<typename T>
@@ -111,9 +111,9 @@ namespace Bolt
 		}
 
 		template<typename T>
-		ShaderVariablePtr DeclarePassOut()
+		ShaderPassVariablePtr DeclarePassOut(PassType passType = PassType::None)
 		{
-			return DeclarePassOut(GetValueType<T>());
+			return DeclarePassOut(GetValueType<T>(), passType);
 		}
 
 		template<typename T>
@@ -160,7 +160,7 @@ namespace Bolt
 
 	protected:
 		void CompileUniformVariables(CompiledShaderProgram& program) const;		
-		ShaderVariablePtr PrivateStream(ShaderStream stream);
+		virtual ShaderVariablePtr PrivateStream(int streamIndex);
 
 	};
 

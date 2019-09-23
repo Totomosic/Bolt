@@ -95,20 +95,20 @@ namespace Bolt
 		ShaderVariablePtr modelMatrix = vertex.RendererUniform(RendererUniform::ModelMatrix);
 		ShaderVariablePtr viewMatrix = vertex.RendererUniform(RendererUniform::ViewMatrix);
 		ShaderVariablePtr projectionMatrix = vertex.RendererUniform(RendererUniform::ProjectionMatrix);
-		ShaderVariablePtr outColor = vertex.DeclarePassOut<Color>();
-		ShaderVariablePtr outTexCoord = vertex.DeclarePassOut<Vector2f>();
+		ShaderPassVariablePtr outColor = vertex.DeclarePassOut<Color>();
+		ShaderPassVariablePtr outTexCoord = vertex.DeclarePassOut<Vector2f>();
 
-		ShaderVariablePtr position = vertex.DefineVar(ShaderFuncs::Vec4(vertex.Position(), ShaderLiteral::FromFloat(1.0f)));
+		ShaderVariablePtr position = vertex.DefineVar(ShaderFuncs::Vec4(vertex.Stream(BufferLayout::POSITION_INDEX), ShaderLiteral::FromFloat(1.0f)));
 		ShaderVariablePtr worldPos = vertex.DefineVar(ShaderFuncs::Mul(modelMatrix, position));
 		ShaderVariablePtr viewPos = vertex.DefineVar(ShaderFuncs::Mul(viewMatrix, worldPos));
 		ShaderVariablePtr screenPos = vertex.DefineVar(ShaderFuncs::Mul(projectionMatrix, viewPos));
 		vertex.SetVertexPosition(screenPos);
-		vertex.SetVariable(outColor, vertex.Color());
-		vertex.SetVariable(outTexCoord, vertex.TexCoord());
+		vertex.SetVariable(outColor, vertex.Stream(BufferLayout::COLOR_INDEX));
+		vertex.SetVariable(outTexCoord, vertex.Stream(BufferLayout::TEXCOORD_INDEX));
 
 		FragmentShader& fragment = builder.Factory().Fragment();
-		ShaderVariablePtr inColor = fragment.DeclarePassIn(outColor);
-		ShaderVariablePtr inTexCoord = fragment.DeclarePassIn(outTexCoord);
+		ShaderPassVariablePtr inColor = fragment.DeclarePassIn(outColor);
+		ShaderPassVariablePtr inTexCoord = fragment.DeclarePassIn(outTexCoord);
 		ShaderVariablePtr color = fragment.Uniform<Color>("Color");
 		ShaderVariablePtr font = fragment.Uniform<Texture2D>("Font");
 		fragment.SetFragColor(ShaderFuncs::Vec4(ShaderFuncs::x(color), ShaderFuncs::y(color), ShaderFuncs::z(color), ShaderFuncs::x(ShaderFuncs::SampleTexture(font, outTexCoord))));

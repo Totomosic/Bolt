@@ -14,7 +14,7 @@ namespace Bolt
 	VertexIterator::VertexIterator(const VertexMapping* mapping, int vertexIndex)
 		: m_Mapping(mapping), m_VertexIndex(vertexIndex)
 	{
-	
+		
 	}
 
 	int VertexIterator::VertexIndex() const
@@ -34,27 +34,27 @@ namespace Bolt
 
 	Vector3f& VertexIterator::Position() const
 	{
-		return Seek(0).Read<Vector3f>();
+		return Seek(BufferLayout::POSITION_INDEX).Read<Vector3f>();
 	}
 
 	Vector3f& VertexIterator::Normal() const
 	{
-		return Seek(1).Read<Vector3f>();
+		return Seek(BufferLayout::NORMAL_INDEX).Read<Vector3f>();
 	}
 
 	Vector2f& VertexIterator::TexCoord() const
 	{
-		return Seek(2).Read<Vector2f>();
+		return Seek(BufferLayout::TEXCOORD_INDEX).Read<Vector2f>();
 	}
 
 	Vector4<byte>& VertexIterator::Color() const
 	{
-		return Seek(3).Read<Vector4<byte>>();
+		return Seek(BufferLayout::COLOR_INDEX).Read<Vector4<byte>>();
 	}
 
 	Vector3f& VertexIterator::Tangent() const
 	{
-		return Seek(4).Read<Vector3f>();
+		return Seek(BufferLayout::TANGENT_INDEX).Read<Vector3f>();
 	}
 
 	VertexIterator& VertexIterator::operator++()

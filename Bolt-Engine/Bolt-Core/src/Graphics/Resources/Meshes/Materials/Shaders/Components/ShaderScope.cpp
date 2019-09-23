@@ -81,17 +81,17 @@ namespace Bolt
 		return var;
 	}
 
-	ShaderVariablePtr ShaderScope::DeclarePassIn(const ShaderVariablePtr& outVar, const blt::string& meta)
+	ShaderPassVariablePtr ShaderScope::DeclarePassIn(const ShaderPassVariablePtr& outVar, const blt::string& meta)
 	{
-		ShaderVariablePtr var = std::make_shared<ShaderVariable>(outVar->Type());
+		ShaderPassVariablePtr var = std::make_shared<ShaderPassVariable>(outVar->Type(), ValueTypeDim::Single, outVar->GetPassType());
 		AddOperation(std::make_unique<DeclarePassInOp>(var, outVar, meta));
 		AddDeclaredVar(var.get());
 		return var;
 	}
 
-	ShaderVariablePtr ShaderScope::DeclarePassOut(ValueType type, const blt::string& meta)
+	ShaderPassVariablePtr ShaderScope::DeclarePassOut(ValueType type, PassType passType, const blt::string& meta)
 	{
-		ShaderVariablePtr var = std::make_shared<ShaderVariable>(type);
+		ShaderPassVariablePtr var = std::make_shared<ShaderPassVariable>(type, ValueTypeDim::Single, passType);
 		AddOperation(std::make_unique<DeclarePassOutOp>(var, meta));
 		AddDeclaredVar(var.get());
 		return var;
@@ -150,6 +150,12 @@ namespace Bolt
 	void ShaderScope::Discard()
 	{
 		AddOperation<DiscardOp>();
+	}
+
+	void ShaderScope::Reset()
+	{
+		m_Operations.clear();
+		m_DeclaredVariables.clear();
 	}
 
 	void ShaderScope::BuildOperations(ShaderBuilder& builder) const

@@ -66,18 +66,18 @@ namespace Bolt
 		ShaderVariablePtr modelMatrix = vertex.RendererUniform(RendererUniform::ModelMatrix);
 		ShaderVariablePtr viewMatrix = vertex.RendererUniform(RendererUniform::ViewMatrix);
 		ShaderVariablePtr projectionMatrix = vertex.RendererUniform(RendererUniform::ProjectionMatrix);
-		ShaderVariablePtr outWorldPos = vertex.DeclarePassOut(ValueType::Vector3f);
-		ShaderVariablePtr outWorldNormal = vertex.DeclarePassOut(ValueType::Vector3f);
-		ShaderVariablePtr outTBNMatrix = vertex.DeclarePassOut(ValueType::Matrix3f);
+		ShaderPassVariablePtr outWorldPos = vertex.DeclarePassOut(ValueType::Vector3f);
+		ShaderPassVariablePtr outWorldNormal = vertex.DeclarePassOut(ValueType::Vector3f);
+		ShaderPassVariablePtr outTBNMatrix = vertex.DeclarePassOut(ValueType::Matrix3f);
 
 		ShaderVariablePtr position = vertex.DefineVar(ShaderFuncs::Vec4(masterNodeValues.at("VertexPosition"), ShaderLiteral::FromFloat(1.0f)));
 		ShaderVariablePtr worldPosition = vertex.DefineVar(ShaderFuncs::Mul(modelMatrix, position));
 		ShaderVariablePtr viewPosition = vertex.DefineVar(ShaderFuncs::Mul(viewMatrix, worldPosition));
 		ShaderVariablePtr screenPosition = vertex.DefineVar(ShaderFuncs::Mul(projectionMatrix, viewPosition));
 
-		ShaderVariablePtr worldNormal = vertex.DefineVar(ShaderFuncs::xyz(ShaderFuncs::Mul(modelMatrix, ShaderFuncs::Vec4(vertex.Normal(), ShaderLiteral::FromFloat(0.0f)))));
+		ShaderVariablePtr worldNormal = vertex.DefineVar(ShaderFuncs::xyz(ShaderFuncs::Mul(modelMatrix, ShaderFuncs::Vec4(vertex.Stream(BufferLayout::NORMAL_INDEX), ShaderLiteral::FromFloat(0.0f)))));
 
-		ShaderVariablePtr tangent = vertex.DefineVar(ShaderFuncs::xyz(ShaderFuncs::Mul(modelMatrix, ShaderFuncs::Vec4(vertex.Tangent(), ShaderLiteral::FromFloat(0.0f)))));
+		ShaderVariablePtr tangent = vertex.DefineVar(ShaderFuncs::xyz(ShaderFuncs::Mul(modelMatrix, ShaderFuncs::Vec4(vertex.Stream(BufferLayout::TANGENT_INDEX), ShaderLiteral::FromFloat(0.0f)))));
 		ShaderVariablePtr bitangent = vertex.DefineVar(ShaderFuncs::Cross(worldNormal, tangent));
 		// We want a matrix that transforms from tangent space to world space
 		vertex.SetVariable(outTBNMatrix, ShaderFuncs::Matrix3(tangent, bitangent, worldNormal));
@@ -87,9 +87,9 @@ namespace Bolt
 		vertex.SetVariable(outWorldNormal, worldNormal);
 
 		FragmentShader& fragment = GetBuilder().GetBuilder().Factory().Fragment();
-		ShaderVariablePtr inWorldPos = fragment.DeclarePassIn(outWorldPos);
-		ShaderVariablePtr inWorldNormal = fragment.DeclarePassIn(outWorldNormal);
-		ShaderVariablePtr inTBNMatrix = fragment.DeclarePassIn(outTBNMatrix);
+		ShaderPassVariablePtr inWorldPos = fragment.DeclarePassIn(outWorldPos);
+		ShaderPassVariablePtr inWorldNormal = fragment.DeclarePassIn(outWorldNormal);
+		ShaderPassVariablePtr inTBNMatrix = fragment.DeclarePassIn(outTBNMatrix);
 		ShaderVariablePtr cameraPosition = fragment.RendererUniform(RendererUniform::CameraPosition);
 		ShaderVariablePtr lightPositions = fragment.RendererUniform(RendererUniform::LightPositions);
 		ShaderVariablePtr lightColors = fragment.RendererUniform(RendererUniform::LightColors);
