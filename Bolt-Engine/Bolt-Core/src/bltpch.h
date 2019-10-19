@@ -1,4 +1,5 @@
 #pragma once
+#include "Core/Memory/Allocator.h"
 #include "freetype-gl.h"
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"

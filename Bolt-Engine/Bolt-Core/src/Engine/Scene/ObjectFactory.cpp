@@ -177,7 +177,7 @@ namespace Bolt
 	{
 		Mesh mesh;
 		// TODO: CHANGE
-		mesh.Models.push_back({ ResourcePtr<Model>(new Model(GridFactory(width, depth, xVertices, zVertices)), true), Matrix4f::Identity(), { 0 } });
+		mesh.Models.push_back({ ResourcePtr<Model>(BLT_NEW Model(GridFactory(width, depth, xVertices, zVertices)), true), Matrix4f::Identity(), { 0 } });
 		mesh.Materials.push_back(std::move(material));
 		return Instantiate(std::move(mesh), std::move(transform));
 	}
@@ -202,7 +202,7 @@ namespace Bolt
 
 		Mesh mesh;
 		// TODO: CHANGE
-		mesh.Models.push_back({ ResourcePtr<Model>(new Model(LineFactory(Vector3f::Right(), distance)), true), Matrix4f::Identity(),{ 0 } });
+		mesh.Models.push_back({ ResourcePtr<Model>(BLT_NEW Model(LineFactory(Vector3f::Right(), distance)), true), Matrix4f::Identity(),{ 0 } });
 		mesh.Materials[0] = ResourceManager::Get().Materials().Default(color);
 
 		return Instantiate(std::move(mesh), std::move(t));

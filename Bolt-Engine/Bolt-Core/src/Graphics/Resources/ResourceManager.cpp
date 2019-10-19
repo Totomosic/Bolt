@@ -153,7 +153,7 @@ namespace Bolt
 				image.Width = width;
 				image.Height = height;
 				image.Components = 4;
-				image.Pixels = new byte[data.length()];
+				image.Pixels = BLT_NEW byte[data.length()];
 				memcpy(image.Pixels, data.data(), data.length());
 				TextureCreateOptions options;
 				options.Magnification = (magString == "Nearest") ? MagFilter::Nearest : MagFilter::Linear;

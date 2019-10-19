@@ -37,12 +37,12 @@ namespace Bolt
 
 	void OutputMemoryStream::ReallocBuffer(uint32_t capacity)
 	{
-		byte* data = new byte[GetRemainingDataSize()];
+		byte* data = BLT_NEW byte[GetRemainingDataSize()];
 		memcpy(data, GetBufferPtr(), GetRemainingDataSize());
 		m_Buffer = std::make_unique<byte[]>(capacity);
 		memcpy(m_Buffer.get(), data, GetRemainingDataSize());
 		m_Capacity = capacity;
-		delete[] data;
+		BLT_DELETE_ARR data;
 	}
 
 }

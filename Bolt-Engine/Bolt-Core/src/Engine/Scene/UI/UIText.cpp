@@ -55,13 +55,13 @@ namespace Bolt
 	void UIText::RecreateModel()
 	{
 		Mesh& mesh = GetMesh();
-		mesh.Models[0].Model = ResourcePtr<Model>(new Model(TextFactory(m_Text, m_Font, Color::White, m_HorizontalAlign, m_VerticalAlign), false), true);
+		mesh.Models[0].Model = ResourcePtr<Model>(BLT_NEW Model(TextFactory(m_Text, m_Font, Color::White, m_HorizontalAlign, m_VerticalAlign), false), true);
 	}
 
 	Mesh UIText::CreateMesh(const Color& color)
 	{
 		Mesh mesh;
-		mesh.Models.push_back({ ResourcePtr<Model>(new Model(TextFactory(m_Text, m_Font, Color::White, m_HorizontalAlign, m_VerticalAlign), false), true) });
+		mesh.Models.push_back({ ResourcePtr<Model>(BLT_NEW Model(TextFactory(m_Text, m_Font, Color::White, m_HorizontalAlign, m_VerticalAlign), false), true) });
 		mesh.Materials.push_back(ResourceManager::Get().Materials().Font(m_Font, color));
 		return mesh;
 	}

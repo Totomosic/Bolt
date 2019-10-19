@@ -130,7 +130,7 @@ namespace Bolt
 	std::unique_ptr<Resource> Texture::Clone() const
 	{
 		std::unique_ptr<Texture> texture = std::make_unique<Texture>(m_Width, m_Height, m_Target, m_Format, m_Mipmaps);
-		float* imageData = new float[m_Width * m_Height * 4];
+		float* imageData = BLT_NEW float[m_Width * m_Height * 4];
 		Bind();
 		Download(imageData, StorageType::Float);
 		texture->Bind();
@@ -139,7 +139,7 @@ namespace Bolt
 		{
 			texture->GenerateMipmaps();
 		}
-		delete[] imageData;
+		BLT_DELETE_ARR imageData;
 		return texture;
 	}
 	

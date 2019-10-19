@@ -23,10 +23,10 @@ namespace Bolt
 	std::unique_ptr<IndexBuffer> IndexBuffer::Clone() const
 	{
 		std::unique_ptr<IndexBuffer> indexBuffer = std::make_unique<IndexBuffer>(Size() / sizeof(uint32_t), Usage());
-		byte* data = new byte[Size()];
+		byte* data = BLT_NEW byte[Size()];
 		Download(data, Size(), 0);
 		indexBuffer->Upload(data, Size(), 0);
-		delete[] data;
+		BLT_DELETE_ARR data;
 		return indexBuffer;
 	}
 

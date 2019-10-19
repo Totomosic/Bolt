@@ -7,7 +7,7 @@ namespace Bolt
 {
 
 	Layer::Layer()
-		: m_Id(GameObject::InvalidID), m_GameObjects(), m_Enabled(false), m_IsActive(false), m_UIManager(this), m_ActiveCamera(nullptr)
+		: m_Id(GameObject::InvalidID), m_GameObjects(), m_Enabled(false), m_IsActive(false), m_ActiveCamera(nullptr), m_TemporaryObjects(), m_UIManager(this)
 	{
 
 	}

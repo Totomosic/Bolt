@@ -55,7 +55,7 @@ namespace Bolt
 	{
 		if (Pixels != nullptr)
 		{
-			delete[] Pixels;
+			BLT_DELETE_ARR Pixels;
 		}
 	}
 
@@ -63,7 +63,7 @@ namespace Bolt
 	{
 		if (Pixels == nullptr)
 		{
-			Pixels = new Color[m_Width * m_Height];
+			Pixels = BLT_NEW Color[m_Width * m_Height];
 		}
 		Bind();
 		GL_CALL(glGetTexImage((GLenum)m_Target, 0, GL_RGBA, GL_FLOAT, Pixels));
@@ -80,7 +80,7 @@ namespace Bolt
 		}
 		if (deletePixels)
 		{
-			delete[] Pixels;
+			BLT_DELETE_ARR Pixels;
 			Pixels = nullptr;
 		}
 	}
@@ -91,7 +91,7 @@ namespace Bolt
 		image.Width = Width();
 		image.Height = Height();
 		image.Components = 4;
-		image.Pixels = new byte[image.Width * image.Height * image.Components];
+		image.Pixels = BLT_NEW byte[image.Width * image.Height * image.Components];
 		Bind();
 		GL_CALL(glGetTexImage((GLenum)m_Target, 0, GL_RGBA, GL_UNSIGNED_BYTE, image.Pixels));
 		return image;
@@ -104,7 +104,7 @@ namespace Bolt
 		result.Width = w;
 		result.Height = h;
 		result.Components = 4;
-		result.Pixels = new byte[result.Width * result.Height * result.Components];
+		result.Pixels = BLT_NEW byte[result.Width * result.Height * result.Components];
 		for (int i = y; i < y + h; i++)
 		{
 			memcpy(result.Pixels + (i - y) * result.Width * 4, image.Pixels + x * 4 + i * image.Width * 4, w * 4);
@@ -129,14 +129,14 @@ namespace Bolt
 		image.Width = w;
 		image.Height = h;
 		image.Components = 4;
-		image.Pixels = new byte[w * h * 4];
+		image.Pixels = BLT_NEW byte[w * h * 4];
 		Vector4<byte> bytes = color.ToBytes();
 		for (int i = 0; i < w * h; i++)
 		{
 			memcpy(image.Pixels + i * 4, &bytes, 4);
 		}
 		SetRegion(x, y, w, h, image);
-		delete[] image.ReleasePixels();
+		BLT_DELETE_ARR image.ReleasePixels();
 	}
 
 	void Texture2D::SetRegion(int x, int y, int w, int h, const Image& image)
@@ -173,7 +173,7 @@ namespace Bolt
 		im.Width = iw;
 		im.Height = ih;
 		im.Components = 4;
-		im.Pixels = new byte[im.Width * im.Height * im.Components];
+		im.Pixels = BLT_NEW byte[im.Width * im.Height * im.Components];
 		for (int i = iy; i < iy + ih; i++)
 		{
 			memcpy(im.Pixels + iw * (i - iy) * 4, image.Pixels + ix * 4 + image.Width * i * 4, iw * 4);

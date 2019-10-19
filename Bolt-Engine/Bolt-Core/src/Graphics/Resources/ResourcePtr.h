@@ -82,7 +82,7 @@ namespace Bolt
 			if (m_OwnsPtr && m_Ptr != nullptr)
 			{
 				// Delete Ptr
-				delete m_Ptr;
+				BLT_DELETE m_Ptr;
 			}
 		}
 

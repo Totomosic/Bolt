@@ -128,7 +128,7 @@ namespace Bolt
 		}
 	}
 
-	void Renderer2D::DrawSprite(float x0, float y0, float width, float height, const Color& color, const ResourcePtr<Texture2D>& texture, const TextureFrame& frame)
+	void Renderer2D::DrawSprite(float x0, float y0, float width, float height, const Color& color, float rotation, const ResourcePtr<Texture2D>& texture, const TextureFrame& frame)
 	{
 		SpriteBatch* currentBatch = nullptr;
 		bool isTextured = texture != nullptr;
@@ -170,22 +170,26 @@ namespace Bolt
 
 		Vector4<byte> c = color.ToBytes();
 
-		vertexPtr->Position = Vector3f(x0, y0 + height, 0);
+		Matrix3f matrix = Matrix3f::Rotation(rotation, Vector3f(0, 0, 1));
+		float hw = width / 2.0f;
+		float hh = width / 2.0f;
+
+		vertexPtr->Position = matrix * Vector3f(-hw, hh, 0) + Vector3f(x0 + hw, y0 + hh, 0);
 		vertexPtr->TexCoord = Vector2f(frame.x, frame.y + frame.h);
 		vertexPtr->Color = c;
 		vertexPtr->TextureUnit = textureUnit;
 		vertexPtr++;
-		vertexPtr->Position = Vector3f(x0, y0, 0);
+		vertexPtr->Position = matrix * Vector3f(-hw, -hh, 0) + Vector3f(x0 + hw, y0 + hh, 0);
 		vertexPtr->TexCoord = Vector2f(frame.x, frame.y);
 		vertexPtr->Color = c;
 		vertexPtr->TextureUnit = textureUnit;
 		vertexPtr++;
-		vertexPtr->Position = Vector3f(x0 + width, y0, 0);
+		vertexPtr->Position = matrix * Vector3f(hw, -hh, 0) + Vector3f(x0 + hw, y0 + hh, 0);
 		vertexPtr->TexCoord = Vector2f(frame.x + frame.w, frame.y);
 		vertexPtr->Color = c;
 		vertexPtr->TextureUnit = textureUnit;
 		vertexPtr++;
-		vertexPtr->Position = Vector3f(x0 + width, y0 + height, 0);
+		vertexPtr->Position = matrix * Vector3f(hw, hh, 0) + Vector3f(x0 + hw, y0 + hh, 0);
 		vertexPtr->TexCoord = Vector2f(frame.x + frame.w, frame.y + frame.h);
 		vertexPtr->Color = c;
 		vertexPtr->TextureUnit = textureUnit;
@@ -217,6 +221,36 @@ namespace Bolt
 				}
 			}
 		}
+	}
+
+	void Renderer2D::DrawRectangle(float x, float y, float width, float height, const Color& color, float rotation)
+	{
+		DrawSprite(x, y, width, height, color, rotation);
+	}
+
+	void Renderer2D::DrawTexture(float x, float y, float width, float height, const ResourcePtr<Texture2D>& texture, float rotation, const TextureFrame& frame)
+	{
+		DrawSprite(x, y, width, height, Color::White, rotation, texture, frame);
+	}
+
+	void Renderer2D::DrawString(const blt::string& string, const ResourcePtr<Font>& font, float x, float y, const Color& color)
+	{
+
+	}
+
+	void Renderer2D::DrawString(const blt::string& string, float x, float y, const Color& color)
+	{
+
+	}
+
+	void Renderer2D::DrawEllipse(float x, float y, float width, float height, const Color& color, const ResourcePtr<Texture2D>& texture, const TextureFrame& frame)
+	{
+
+	}
+
+	void Renderer2D::DrawLine(float x0, float y0, float x1, float y1, float width, const Color& color)
+	{
+
 	}
 
 	Renderer2D::SpriteBatch Renderer2D::CreateSpriteBatch(int spriteCount, const BufferLayout& layout)

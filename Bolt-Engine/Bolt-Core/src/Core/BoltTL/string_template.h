@@ -956,7 +956,7 @@ namespace blt
 		void realloc_buffer(uint32_t newCapacity)
 		{
 			m_Buffer = (pointer_t)std::realloc(m_Buffer, newCapacity * type_size);
-			m_BufferCapacityCount = newCapacity;
+			m_BufferCapacityCount = BLT_NEWCapacity;
 		}
 
 		// Append the null terminator character at the end of the string

@@ -81,7 +81,7 @@ namespace Bolt
 	{
 		if (id < ObjectCollection::RESERVED_GAMEOBJECTS)
 		{
-			BLT_CORE_ERROR("Attempted to delete reserved GameObject with Id: {}", id);
+			BLT_CORE_ERROR("Attempted to BLT_DELETE reserved GameObject with Id: {}", id);
 			return;
 		}
 		GameObject* obj = &m_GameObjects[id].Object;

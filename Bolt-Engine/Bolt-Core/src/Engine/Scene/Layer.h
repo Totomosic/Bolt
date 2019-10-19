@@ -18,14 +18,14 @@ namespace Bolt
 		};
 
 	private:
-		id_t m_Id;
+		id_t m_Id;		
 		ObjectCollection m_GameObjects;
 		bool m_Enabled;
 		bool m_IsActive;
 		Camera* m_ActiveCamera;
-		
-		UIManager m_UIManager;
+
 		std::vector<TempGameObject> m_TemporaryObjects;
+		UIManager m_UIManager;
 
 	public:
 		Layer();

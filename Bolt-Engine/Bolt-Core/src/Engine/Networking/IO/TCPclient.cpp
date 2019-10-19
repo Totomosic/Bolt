@@ -46,7 +46,7 @@ namespace Bolt
 						uint32_t typeLength;
 						uint32_t dataLength;
 						stream.Read(&typeLength);
-						char* typeString = new char[typeLength];
+						char* typeString = BLT_NEW char[typeLength];
 						stream.Read(typeString, typeLength);
 						stream.Read(&dataLength);
 						InputMemoryStream dataStream(dataLength);
@@ -54,7 +54,7 @@ namespace Bolt
 
 						Bus().Emit(typeString, TCPmessage{ *this, std::move(dataStream) });
 
-						delete[] typeString;
+						BLT_DELETE_ARR typeString;
 					}
 				}
 			}).detach();

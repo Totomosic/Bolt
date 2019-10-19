@@ -64,7 +64,7 @@ namespace blt
 		{
 			if (m_Buffer != nullptr)
 			{
-				delete[] m_Buffer;
+				BLT_DELETE_ARR m_Buffer;
 			}
 		}
 
@@ -263,44 +263,44 @@ namespace blt
 
 		void realloc_buffer_copy(uint32_t new_capacity)
 		{
-			pointer newBuffer = new value_type[new_capacity];
+			pointer newBuffer = BLT_NEW value_type[new_capacity];
 			if (m_Buffer != nullptr)
 			{
 				for (uint32_t i = 0; i < size(); i++)
 				{
 					newBuffer[i] = buffer_ptr()[i];
 				}
-				delete[] m_Buffer;
+				BLT_DELETE_ARR m_Buffer;
 			}
-			m_Buffer = newBuffer;
-			m_Capacity = new_capacity;
+			m_Buffer = BLT_NEWBuffer;
+			m_Capacity = BLT_NEW_capacity;
 		}
 
 		void realloc_buffer_move(uint32_t new_capacity)
 		{
-			pointer newBuffer = new value_type[new_capacity];
+			pointer newBuffer = BLT_NEW value_type[new_capacity];
 			if (m_Buffer != nullptr)
 			{
 				for (uint32_t i = 0; i < size(); i++)
 				{
 					newBuffer[i] = std::move(buffer_ptr()[i]);
 				}
-				delete[] m_Buffer;
+				BLT_DELETE_ARR m_Buffer;
 			}
-			m_Buffer = newBuffer;
-			m_Capacity = new_capacity;
+			m_Buffer = BLT_NEWBuffer;
+			m_Capacity = BLT_NEW_capacity;
 		}
 
 		void realloc_buffer_trivial(uint32_t new_capacity)
 		{
-			pointer newBuffer = new value_type[new_capacity];
+			pointer newBuffer = BLT_NEW value_type[new_capacity];
 			if (m_Buffer != nullptr)
 			{
 				memcpy(newBuffer, buffer_ptr(), size() * sizeof(value_type));
-				delete[] m_Buffer;
+				BLT_DELETE_ARR m_Buffer;
 			}
-			m_Buffer = newBuffer;
-			m_Capacity = new_capacity;
+			m_Buffer = BLT_NEWBuffer;
+			m_Capacity = BLT_NEW_capacity;
 		}
 
 		pointer buffer_ptr() const

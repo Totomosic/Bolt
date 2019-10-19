@@ -128,11 +128,11 @@ namespace Bolt
 	void Buffer::ResizePreserve(uint32_t newSize)
 	{
 		uint32_t oldSize = (newSize < Size()) ? newSize : Size();
-		byte* oldData = new byte[oldSize];
+		byte* oldData = BLT_NEW byte[oldSize];
 		Download(oldData, oldSize, 0);
 		Resize(newSize);
 		Upload(oldData, oldSize, 0);
-		delete[] oldData;
+		BLT_DELETE_ARR oldData;
 	}
 
 	void Buffer::TestResize(uint32_t newSize)
@@ -163,12 +163,12 @@ namespace Bolt
 	{
 		uint32_t oldSize = Size();
 		uint32_t rightDataSize = oldSize - position;
-		byte* rightData = new byte[rightDataSize];
+		byte* rightData = BLT_NEW byte[rightDataSize];
 		Download(rightData, rightDataSize, position);
 		TestResizePreserve(oldSize + size);
 		Upload(data, size, position);
 		Upload(rightData, rightDataSize, position + size);
-		delete[] rightData;
+		BLT_DELETE_ARR rightData;
 		m_Size = oldSize + size;
 	}
 
@@ -176,10 +176,10 @@ namespace Bolt
 	{
 		uint32_t oldSize = Size();
 		uint32_t dataSize = oldSize - position - count;
-		byte* data = new byte[dataSize];
+		byte* data = BLT_NEW byte[dataSize];
 		Download(data, dataSize, position + count);
 		Upload(data, dataSize, position);
-		delete[] data;
+		BLT_DELETE_ARR data;
 		m_Size = oldSize - count;
 	}
 

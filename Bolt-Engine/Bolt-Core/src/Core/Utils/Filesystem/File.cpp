@@ -68,10 +68,10 @@ namespace Bolt
 	void File::ReadText(blt::string* outString, uint32_t size) const
 	{
 		uint32_t realSize = std::min(size, GetSize());
-		char* buffer = new char[realSize];
+		char* buffer = BLT_NEW char[realSize];
 		Read(buffer, size);
 		*outString = blt::string(buffer, realSize);
-		delete[] buffer;
+		BLT_DELETE_ARR buffer;
 	}
 
 	blt::string File::ReadText(uint32_t size) const

@@ -17,7 +17,7 @@ namespace Bolt
 		memset(&hint, 0, sizeof(addrinfo));
 		hint.ai_family = AF_INET;
 
-		addrinfo* result = new addrinfo();
+		addrinfo* result = BLT_NEW addrinfo();
 		int error = getaddrinfo(inAddress.c_str(), inPort.c_str(), &hint, &result);
 		if (error != 0 && result != nullptr)
 		{

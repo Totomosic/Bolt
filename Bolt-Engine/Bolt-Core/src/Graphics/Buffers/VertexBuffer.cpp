@@ -29,10 +29,10 @@ namespace Bolt
 	std::unique_ptr<VertexBuffer> VertexBuffer::Clone() const
 	{
 		std::unique_ptr<VertexBuffer> buffer = std::make_unique<VertexBuffer>(Size(), Layout(), Usage());
-		byte* data = new byte[Size()];
+		byte* data = BLT_NEW byte[Size()];
 		Download(data, Size(), 0);
 		buffer->Upload(data, Size(), 0);
-		delete[] data;
+		BLT_DELETE_ARR data;
 		return buffer;
 	}
 

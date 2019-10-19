@@ -122,13 +122,13 @@ namespace Bolt
 	const Texture2D* Framebuffer::CreateColorBuffer(ColorBuffer buffer)
 	{
 		TextureCreateOptions createOptions = { WrapMode::Repeat, MagFilter::Linear, MinFilter::Linear, Mipmaps::Disabled };
-		return CreateColorBuffer(ResourcePtr<Texture2D>(new Texture2D(Width(), Height(), createOptions), true), buffer);
+		return CreateColorBuffer(ResourcePtr<Texture2D>(BLT_NEW Texture2D(Width(), Height(), createOptions), true), buffer);
 	}
 
 	const Texture2D* Framebuffer::CreateDepthBuffer()
 	{
 		TextureCreateOptions createOptions = { WrapMode::Repeat, MagFilter::Linear, MinFilter::Linear, Mipmaps::Disabled };
-		return CreateDepthBuffer(ResourcePtr<Texture2D>(new Texture2D(Width(), Height(), createOptions), true));
+		return CreateDepthBuffer(ResourcePtr<Texture2D>(BLT_NEW Texture2D(Width(), Height(), createOptions), true));
 	}
 
 	const Texture2D* Framebuffer::CreateColorBuffer(const ResourcePtr<Texture2D>& texture, ColorBuffer buffer)
