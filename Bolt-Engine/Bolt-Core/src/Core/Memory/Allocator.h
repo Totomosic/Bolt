@@ -26,6 +26,7 @@ namespace Bolt
 	{
 	private:
 		static std::atomic<size_t> s_AllocatedBytes;
+		static std::atomic<size_t> s_AllocationCount;
 
 	public:
 		CustomAllocator() = delete;
@@ -37,6 +38,7 @@ namespace Bolt
 		static void FreeDebug(void* block);
 
 		static size_t GetAllocatedBytes();
+		static size_t GetAllocationCount();
 	};
 
 }
