@@ -27,6 +27,7 @@ project "Bolt-Core"
         "../%{IncludeDirs.FreeTypeGL}",
         "../%{IncludeDirs.FreeType}",
         "../%{IncludeDirs.Lua}",
+        "../%{IncludeDirs.Python}",
         "src"
     }
 
@@ -38,7 +39,7 @@ project "Bolt-Core"
         "ImGui",
         "FreeType",
         "FreeType-GL",
-        "Lua"
+        "Lua",
     }
 
     filter "system:windows"

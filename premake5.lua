@@ -27,6 +27,14 @@ IncludeDirs["spdlog"] =     "..\\" .. BoltDir .. "Bolt-Core\\vendor\\spdlog\\inc
 IncludeDirs["FreeTypeGL"] = "..\\" .. BoltDir .. "Bolt-Core\\vendor\\FreeType-GL"
 IncludeDirs["FreeType"] =   "..\\" .. BoltDir .. "Bolt-Core\\vendor\\FreeType\\include"
 IncludeDirs["Lua"] =        "..\\" .. BoltDir .. "Bolt-Core\\vendor\\Lua\\src"
+IncludeDirs["Python"] =     "..\\" .. BoltDir .. "Bolt-Core\\vendor\\Python\\include"
+
+-- Library directories relative to solutions directory
+LibraryDirs = {}
+LibraryDirs["Python"] =     "..\\" .. BoltDir .. "Bolt-Core\\vendor\\Python\\lib"
+
+-- Links
+Links = {}
 
 group ("Bolt/Vendor")
 include (BoltDir .. "Bolt-Core\\vendor\\GLFW")

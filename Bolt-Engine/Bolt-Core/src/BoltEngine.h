@@ -21,6 +21,7 @@
 #include "Engine/Application.h"
 #include "Engine/Engine.h"
 #include "Engine/Scripting/Lua/LuaScriptingEnv.h"
+#include "Engine/Scripting/Python/PythonScripting.h"
 #include "Engine/Scene/Components/Components.h"
 
 #include "Engine/Scene/UI/UISurface.h"
