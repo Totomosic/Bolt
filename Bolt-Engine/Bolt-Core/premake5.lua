@@ -40,6 +40,7 @@ project "Bolt-Core"
         "FreeType",
         "FreeType-GL",
         "Lua",
+        "pythoncore",
     }
 
     filter "system:windows"
