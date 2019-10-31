@@ -16,6 +16,8 @@ SolutionDir = "../../"
 BoltDir = "Bolt-Core/"
 -- Projects Directory
 ProjectsDir = "Projects/"
+-- Resources Directory
+ResourcesDir = "Bolt-Resources/"
 
 -- Include directories relative to solution directory
 IncludeDirs = {}
@@ -35,6 +37,8 @@ LibraryDirs = {}
 -- Links
 Links = {}
 
+group("Resources")
+include (ResourcesDir .. "Converter")
 group ("Bolt/Vendor")
 include (BoltDir .. "vendor/GLFW")
 include (BoltDir .. "vendor/Glad")
