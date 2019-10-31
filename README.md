@@ -11,8 +11,8 @@
 Currently only Windows is supported with plans to support Linux, MacOS and maybe Android/ios in the future.
 
 # Installing:
-##### 1. Download or clone this repository onto your computer
-##### 2. Run the "GenerateProjects.bat" script
+##### 1. Download or clone this repository onto your computer (use `--recursive` to include submodules)
+##### 2. Run the "Win-GenProjects.bat" script
 ##### 3. Open the solution in visual studio
 
 ## Building a project with resources:
