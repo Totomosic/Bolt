@@ -5,8 +5,8 @@ project "Bolt-Core"
     cppdialect "C++17"
     staticruntime "on"
     
-    targetdir (SolutionDir .. "bin/" .. outputdir .. "/Bolt-Core")
-    objdir (SolutionDir .. "bin-int/" .. outputdir .. "/Bolt-Core")
+    targetdir ("../bin/" .. outputdir .. "/Bolt-Core")
+    objdir ("../bin-int/" .. outputdir .. "/Bolt-Core")
 
     pchheader "bltpch.h"
     pchsource "src/bltpch.cpp"
@@ -19,14 +19,14 @@ project "Bolt-Core"
     
     includedirs
     {
-        "%{IncludeDirs.GLFW}",
-        "%{IncludeDirs.Glad}",
-		"%{IncludeDirs.ImGui}",
-        "%{IncludeDirs.spdlog}",
-        "%{IncludeDirs.FreeTypeGL}",
-        "%{IncludeDirs.FreeType}",
-        "%{IncludeDirs.Lua}",
-        "%{IncludeDirs.Python}",
+        "../%{IncludeDirs.GLFW}",
+        "../%{IncludeDirs.Glad}",
+		"../%{IncludeDirs.ImGui}",
+        "../%{IncludeDirs.spdlog}",
+        "../%{IncludeDirs.FreeTypeGL}",
+        "../%{IncludeDirs.FreeType}",
+        "../%{IncludeDirs.Lua}",
+        "../%{IncludeDirs.Python}",
         "src"
     }
 

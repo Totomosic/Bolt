@@ -4,8 +4,8 @@ project "Glad"
     language "C"
     staticruntime "on"
 
-    targetdir (SolutionDir .. "../../bin/" .. outputdir .. "/%{prj.name}")
-    objdir (SolutionDir .. "../../bin-int/" .. outputdir .. "/%{prj.name}")
+    targetdir ("../../../bin/" .. outputdir .. "/%{prj.name}")
+    objdir ("../../../bin-int/" .. outputdir .. "/%{prj.name}")
 
     files
     {

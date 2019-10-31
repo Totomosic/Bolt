@@ -21,14 +21,15 @@ PREMAKE_FORMAT_STRING_TEMPLATE = """project "{0}"
     
     includedirs
     {{
-        "../%{{IncludeDirs.Bolt}}",
-        "../%{{IncludeDirs.GLFW}}",
-        "../%{{IncludeDirs.Glad}}",
-        "../%{{IncludeDirs.ImGui}}",
-        "../%{{IncludeDirs.spdlog}}",
-        "../%{{IncludeDirs.FreeType}}",
-        "../%{{IncludeDirs.FreeTypeGL}}",
-        "../%{{IncludeDirs.Lua}}",
+        "../../%{{IncludeDirs.Bolt}}",
+        "../../%{{IncludeDirs.GLFW}}",
+        "../../%{{IncludeDirs.Glad}}",
+        "../../%{{IncludeDirs.ImGui}}",
+        "../../%{{IncludeDirs.spdlog}}",
+        "../../%{{IncludeDirs.FreeType}}",
+        "../../%{{IncludeDirs.FreeTypeGL}}",
+        "../../%{{IncludeDirs.Lua}}",
+        "../../%{{IncludeDirs.Python}}",
         "src"
     }}
 

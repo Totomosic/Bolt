@@ -10,42 +10,41 @@ workspace "Bolt"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
--- Solution Directory
-SolutionDir = "..\\"
+-- Solution Directory relative to a project
+SolutionDir = "../../"
 -- Bolt Directory
-BoltDir = "Bolt-Core\\"
+BoltDir = "Bolt-Core/"
 -- Projects Directory
-ProjectsDir = "Projects\\"
+ProjectsDir = "Projects/"
 
--- Include directories relative to projects directory
+-- Include directories relative to solution directory
 IncludeDirs = {}
-IncludeDirs["Bolt"] =       "..\\" .. BoltDir .. "src"
-IncludeDirs["GLFW"] =       "..\\" .. BoltDir .. "vendor\\GLFW\\include"
-IncludeDirs["Glad"] =       "..\\" .. BoltDir .. "vendor\\Glad\\include"
-IncludeDirs["ImGui"] =      "..\\" .. BoltDir .. "vendor\\ImGui"
-IncludeDirs["spdlog"] =     "..\\" .. BoltDir .. "vendor\\spdlog\\include"
-IncludeDirs["FreeTypeGL"] = "..\\" .. BoltDir .. "vendor\\FreeType-GL"
-IncludeDirs["FreeType"] =   "..\\" .. BoltDir .. "vendor\\FreeType\\include"
-IncludeDirs["Lua"] =        "..\\" .. BoltDir .. "vendor\\Lua\\src"
-IncludeDirs["Python"] =     "..\\" .. BoltDir .. "vendor\\Python\\include"
+IncludeDirs["Bolt"] =       BoltDir .. "src"
+IncludeDirs["GLFW"] =       BoltDir .. "vendor/GLFW/include"
+IncludeDirs["Glad"] =       BoltDir .. "vendor/Glad/include"
+IncludeDirs["ImGui"] =      BoltDir .. "vendor/ImGui"
+IncludeDirs["spdlog"] =     BoltDir .. "vendor/spdlog/include"
+IncludeDirs["FreeTypeGL"] = BoltDir .. "vendor/FreeType-GL"
+IncludeDirs["FreeType"] =   BoltDir .. "vendor/FreeType/include"
+IncludeDirs["Lua"] =        BoltDir .. "vendor/Lua/src"
+IncludeDirs["Python"] =     BoltDir .. "vendor/Python/include"
 
--- Library directories relative to projects directory
+-- Library directories relative to solution directory
 LibraryDirs = {}
-LibraryDirs["Python"] =     "..\\" .. BoltDir .. "Bolt-Core\\vendor\\Python\\lib"
 
 -- Links
 Links = {}
 
 group ("Bolt/Vendor")
-include (BoltDir .. "vendor\\GLFW")
-include (BoltDir .. "vendor\\Glad")
-include (BoltDir .. "vendor\\ImGui")
-include (BoltDir .. "vendor\\spdlog")
-include (BoltDir .. "vendor\\FreeType")
-include (BoltDir .. "vendor\\FreeType-GL")
-include (BoltDir .. "vendor\\Lua")
+include (BoltDir .. "vendor/GLFW")
+include (BoltDir .. "vendor/Glad")
+include (BoltDir .. "vendor/ImGui")
+include (BoltDir .. "vendor/spdlog")
+include (BoltDir .. "vendor/FreeType")
+include (BoltDir .. "vendor/FreeType-GL")
+include (BoltDir .. "vendor/Lua")
 group("Bolt/Vendor/Python")
-include (BoltDir .. "vendor\\Python\\cpython\\PCBuild")
+include (BoltDir .. "vendor/Python/cpython/PCBuild")
 group ("Bolt")
 include (BoltDir)
 group ("Projects")

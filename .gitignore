@@ -34,5 +34,3 @@ bin-int/
 #Nuget packages folder
 packages/
 *.pem
-python-build
-Python-3.6.7
