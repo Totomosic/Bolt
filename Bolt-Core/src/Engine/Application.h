@@ -17,6 +17,7 @@ namespace Bolt
 
 	private:
 		bool m_IsGraphicsEnabled;
+		id_t m_AppId;
 
 		Timer* m_TickTimer;
 		bool m_IsRunning;
@@ -35,6 +36,8 @@ namespace Bolt
 		Window& GetWindow();
 		Application& GetChildApp(int index) const;
 		int ChildCount() const;
+		id_t GetAppId() const;
+		bool IsChildApp() const;
 
 		float Width() const;
 		float Height() const;

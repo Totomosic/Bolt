@@ -13,7 +13,7 @@ namespace Bolt
 {
 
 	Application::Application()
-		: m_IsGraphicsEnabled(true), m_TickTimer(nullptr), m_IsRunning(false), m_ShouldExit(false), m_Context(), m_ChildApps(), m_NewApps()
+		: m_IsGraphicsEnabled(true), m_AppId(0), m_TickTimer(nullptr), m_IsRunning(false), m_ShouldExit(false), m_Context(), m_ChildApps(), m_NewApps()
 	{
 		
 	}
@@ -50,6 +50,16 @@ namespace Bolt
 	int Application::ChildCount() const
 	{
 		return m_ChildApps.size();
+	}
+
+	id_t Application::GetAppId() const
+	{
+		return m_AppId;
+	}
+
+	bool Application::IsChildApp() const
+	{
+		return m_AppId != 0;
 	}
 
 	float Application::Width() const
@@ -202,6 +212,7 @@ namespace Bolt
 	void Application::PushNewApp(Application::NewAppInfo& app)
 	{
 		Application* ptr = app.App.get();
+		ptr->m_AppId = m_ChildApps.size() + 1;
 		m_ChildApps.push_back(std::move(app.App));
 		ptr->CreateContext(m_IsGraphicsEnabled, app.Info);
 		ptr->Start();
