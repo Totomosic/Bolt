@@ -22,9 +22,9 @@ namespace Bolt
 
 	Frustum Frustum::Perspective(float fovy, float aspect, float nearPlane, float farPlane)
 	{
-		float height = nearPlane * tan(fovy);
+		float height = nearPlane * tan(fovy / 2.0f);
 		float width = height * aspect;
-		Frustum result = { -width / 2.0f, width / 2.0f, -height / 2.0f, height / 2.0f, nearPlane, farPlane };
+		Frustum result = { -width, width, -height, height, nearPlane, farPlane };
 		return result;
 	}
 
