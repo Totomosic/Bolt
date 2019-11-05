@@ -21,6 +21,8 @@ namespace Bolt
 		id_t m_Id;
 		bool m_IsActive;
 
+		Layer* m_CurrentLayer;
+
 	public:
 		EventEmitter<SceneLoadedEvent> OnLoad;
 		EventEmitter<SceneUnloadedEvent> OnUnload;
@@ -41,6 +43,9 @@ namespace Bolt
 		id_t GetMaskOfLayers(const std::vector<id_t>& layerIds) const;
 		const Camera* GetCameraById(id_t id) const;
 		Camera* GetCameraById(id_t id);
+
+		Layer& GetCurrentLayer() const;
+		void SetCurrentLayer(Layer& layer);
 
 		std::vector<const Layer*> GetAllLayers() const;
 		std::vector<const Layer*> GetLayers(id_t mask) const;

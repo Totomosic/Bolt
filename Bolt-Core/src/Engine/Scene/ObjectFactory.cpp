@@ -5,12 +5,18 @@
 #include "Graphics/Resources/Meshes/Factories/GridFactory.h"
 #include "Graphics/Resources/Meshes/Factories/LineFactory.h"
 
+#include "Engine/CurrentContext.h"
+
 namespace Bolt
 {
 
 	ObjectFactory::ObjectFactory() : ObjectFactory(*(Layer*)nullptr)
 	{
-	
+		SceneManager& manager = CurrentContext::GetSceneManager();
+		if (&manager != nullptr && &manager.CurrentScene() != nullptr)
+		{
+			SetCurrentLayer(CurrentContext::GetSceneManager().CurrentScene().GetCurrentLayer());
+		}
 	}
 
 	ObjectFactory::ObjectFactory(Layer& layer)

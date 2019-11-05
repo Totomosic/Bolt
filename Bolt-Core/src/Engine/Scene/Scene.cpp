@@ -7,7 +7,7 @@ namespace Bolt
 {
 
 	Scene::Scene(int layerCount)
-		: m_EventBus(), m_Layers(std::make_unique<Layer[]>(layerCount)), m_LayerCapacity(layerCount), m_Cameras(), m_Id(GameObject::InvalidID), m_IsActive(false),
+		: m_EventBus(), m_Layers(std::make_unique<Layer[]>(layerCount)), m_LayerCapacity(layerCount), m_Cameras(), m_Id(GameObject::InvalidID), m_IsActive(false), m_CurrentLayer(nullptr),
 		OnLoad(m_EventBus.GetEmitter<SceneLoadedEvent>(Events::Scene.SceneLoaded)), OnUnload(m_EventBus.GetEmitter<SceneUnloadedEvent>(Events::Scene.SceneUnloaded))
 	{
 		ClearCameras();
@@ -57,6 +57,16 @@ namespace Bolt
 	Camera* Scene::GetCameraById(id_t id)
 	{
 		return &m_Cameras[id];
+	}
+
+	Layer& Scene::GetCurrentLayer() const
+	{
+		return *m_CurrentLayer;
+	}
+
+	void Scene::SetCurrentLayer(Layer& layer)
+	{
+		m_CurrentLayer = &layer;
 	}
 
 	std::vector<const Layer*> Scene::GetAllLayers() const
@@ -127,7 +137,12 @@ namespace Bolt
 		m_Layers[id].Create(id, maxGameObjects);
 		m_Layers[id].SetActiveCamera(activeCamera);
 		m_Layers[id].SetIsActive(m_IsActive);
-		return m_Layers[id];
+		Layer& l = m_Layers[id];
+		if (m_CurrentLayer == nullptr)
+		{
+			SetCurrentLayer(l);
+		}
+		return l;
 	}
 
 	Camera* Scene::CreateCamera(const Projection& projection)
