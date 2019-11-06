@@ -5,7 +5,7 @@
 #ifndef BLT_DIST
 #define BLT_DEBUG_SWITCH(debug, ndebug) debug
 #else
-#define BLT_DEBUG_SWITCH(debugm ndebug) ndebug
+#define BLT_DEBUG_SWITCH(debug, ndebug) ndebug
 #endif
 
 namespace Bolt
