@@ -31,20 +31,20 @@ namespace Bolt
 
 	Directorypath Filepath::Directory() const
 	{
-		uint32_t index = m_Path.find_last_of('\\');
+		uint32_t index = m_Path.find_last_of(Directorypath::DIRECTORY_DELIMITER);
 		Directorypath directory = Path().substr(0, index);
 		return directory;
 	}
 
 	blt::string Filepath::Filename() const
 	{
-		uint32_t index = m_Path.find_last_of('\\');
+		uint32_t index = m_Path.find_last_of(Directorypath::DIRECTORY_DELIMITER);
 		return m_Path.substr(index + 1, m_Path.length() - index - 1);
 	}
 
 	blt::string Filepath::SimpleFilename() const
 	{
-		uint32_t index = m_Path.find_last_of('\\');
+		uint32_t index = m_Path.find_last_of(Directorypath::DIRECTORY_DELIMITER);
 		uint32_t extIndex = m_Path.find_last_of('.');
 		return m_Path.substr(index + 1, index - extIndex - 1);
 	}
@@ -90,7 +90,7 @@ namespace Bolt
 
 	void Filepath::StandardizePath(blt::string& filepath)
 	{
-		filepath.replace_all('/', '\\');
+		filepath.replace_all('\\', Directorypath::DIRECTORY_DELIMITER);
 	}
 
 }

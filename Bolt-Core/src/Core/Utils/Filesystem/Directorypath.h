@@ -8,6 +8,9 @@ namespace Bolt
 
 	struct BLT_API Directorypath
 	{
+	public:
+		static constexpr char DIRECTORY_DELIMITER = '/';
+
 	private:
 		blt::string m_Path;
 

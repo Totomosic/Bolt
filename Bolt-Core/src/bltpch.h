@@ -7,6 +7,7 @@
 #include "lua.hpp"
 
 #include "Core/BoltTL/string.h"
+#include "Core/BoltTL/basic_string.h"
 #include "Core/BoltTL/array2d.h"
 #include "BoltDefines.h"
 

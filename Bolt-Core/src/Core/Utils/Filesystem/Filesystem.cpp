@@ -15,8 +15,7 @@ namespace Bolt
 
 	bool Filesystem::FileExists(const Filepath& filepath)
 	{
-		std::ifstream f(filepath.Path().c_str());
-		return f.good();
+		return std::filesystem::exists(filepath.Path().c_str());
 	}
 
 	File Filesystem::Open(const Filepath& filepath, OpenMode mode)
@@ -56,8 +55,8 @@ namespace Bolt
 	void Filesystem::Initialize()
 	{
 		char buff[FILENAME_MAX];
-		BLT_GET_CURRENT_DIRECTORY(buff, FILENAME_MAX);
-		s_WorkingDirectory = Directorypath(blt::string(buff) + '\\');
+		auto result = BLT_GET_CURRENT_DIRECTORY(buff, FILENAME_MAX);
+		s_WorkingDirectory = Directorypath(blt::string(buff) + Directorypath::DIRECTORY_DELIMITER);
 	}
 
 }

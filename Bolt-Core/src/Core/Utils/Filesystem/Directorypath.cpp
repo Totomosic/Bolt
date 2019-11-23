@@ -36,7 +36,7 @@ namespace Bolt
 
 	Directorypath Directorypath::Parent() const
 	{
-		uint32_t index = m_Path.find_last_of('\\', m_Path.length() - 2);
+		uint32_t index = m_Path.find_last_of(DIRECTORY_DELIMITER, m_Path.length() - 2);
 		return m_Path.substr(0, index);
 	}
 
@@ -85,14 +85,14 @@ namespace Bolt
 
 	void Directorypath::StandardizePath(blt::string& directorypath)
 	{
-		directorypath.replace_all('/', '\\');
-		if (directorypath.front() == '\\')
+		directorypath.replace_all('\\', DIRECTORY_DELIMITER);
+		if (directorypath.front() == DIRECTORY_DELIMITER)
 		{
 			directorypath = directorypath.substr(1);
 		}
-		if (directorypath.back() != '\\')
+		if (directorypath.back() != DIRECTORY_DELIMITER)
 		{
-			directorypath.append('\\');
+			directorypath.append(DIRECTORY_DELIMITER);
 		}
 	}
 

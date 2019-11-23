@@ -11,14 +11,16 @@
 #include <vector>
 #include "iterator.h"
 
+#include "basic_string.h"
+
 namespace blt
 {
 
 	class string
 	{
 	public:
-		typedef blt::iterator<char> iterator;
-		typedef blt::iterator<const char> const_iterator;
+		using iterator = basic_string_iterator<char, false>;
+		using const_iterator = basic_string_iterator<const char, false>;
 
 	public:
 		static const uint32_t npos = (uint32_t)-1;

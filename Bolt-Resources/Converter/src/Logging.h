@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/fmt/ostr.h>
@@ -43,7 +42,7 @@ namespace Bolt
 #define BLT_ERROR(...) ::Bolt::Log::GetClientLogger()->error(__VA_ARGS__)
 #define BLT_FATAL(...) ::Bolt::Log::GetClientLogger()->critical(__VA_ARGS__)
 
-#define BLT_ASSERT(arg, ...) { if (!(arg)) { BLT_CORE_FATAL(__VA_ARGS__); __debugbreak(); } }
+#define BLT_ASSERT(arg, ...) { if (!(arg)) { BLT_FATAL(__VA_ARGS__); __debugbreak(); } }
 
 #define BLT_DEBUG_ONLY(x) x
 #endif
