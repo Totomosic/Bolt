@@ -169,52 +169,145 @@ namespace blt
 		size_type m_Length;
 
 	public:
-		basic_string_view()
+		constexpr basic_string_view()
 			: m_Ptr(nullptr), m_Length(0)
 		{
 		
 		}
 
-		basic_string_view(const T* str) : basic_string_view(str, strlen(str))
+		constexpr basic_string_view(const T* str) : basic_string_view(str, CalculateStringLength(str))
 		{
 			
 		}
 
-		basic_string_view(const T* ptr, size_type length)
+		constexpr basic_string_view(const T* ptr, size_type length)
 			: m_Ptr(ptr), m_Length(length)
 		{
 		
 		}
 
-		operator std::string_view() const { return std::string_view(m_Ptr, m_Length); }
+		constexpr operator std::string_view() const { return std::string_view(m_Ptr, m_Length); }
 
-		inline size_type size() const { return m_Length; }
-		inline size_type length() const { return m_Length; }
-		inline const T* c_str() const { return m_Ptr; }
-		inline const T* data() const { return m_Ptr; }
-		bool empty() const { return m_Length == 0; }
+		constexpr inline size_type size() const { return m_Length; }
+		constexpr inline size_type length() const { return m_Length; }
+		constexpr inline const T* c_str() const { return m_Ptr; }
+		constexpr inline const T* data() const { return m_Ptr; }
+		constexpr bool empty() const { return m_Length == 0; }
 
-		const_iterator begin() const { return const_iterator(GetBufferPtr()); }
-		const_iterator cbegin() const { return const_iterator(GetBufferPtr()); }
-		const_reverse_iterator rbegin() const { return const_reverse_iterator(GetBufferPtr() + length()); }
-		const_reverse_iterator crbegin() const { return const_reverse_iterator(GetBufferPtr() + length()); }
-		const_iterator end() const { return const_iterator(GetBufferPtr() + length()); }
-		const_iterator cend() const { return const_iterator(GetBufferPtr() + length()); }
-		const_reverse_iterator rend() const { return const_reverse_iterator(GetBufferPtr()); }
-		const_reverse_iterator crend() const { return const_reverse_iterator(GetBufferPtr()); }
+		constexpr const_iterator begin() const { return const_iterator(GetBufferPtr()); }
+		constexpr const_iterator cbegin() const { return const_iterator(GetBufferPtr()); }
+		constexpr const_reverse_iterator rbegin() const { return const_reverse_iterator(GetBufferPtr() + length()); }
+		constexpr const_reverse_iterator crbegin() const { return const_reverse_iterator(GetBufferPtr() + length()); }
+		constexpr const_iterator end() const { return const_iterator(GetBufferPtr() + length()); }
+		constexpr const_iterator cend() const { return const_iterator(GetBufferPtr() + length()); }
+		constexpr const_reverse_iterator rend() const { return const_reverse_iterator(GetBufferPtr()); }
+		constexpr const_reverse_iterator crend() const { return const_reverse_iterator(GetBufferPtr()); }
 
-		inline const T& front() const { return (*this)[0]; }
-		inline T& front() { return (*this)[0]; }
-		inline const T& back() const { return (*this)[length() - 1]; }
-		inline T& back() { return (*this)[length() - 1]; }
+		constexpr inline const T& front() const { return (*this)[0]; }
+		constexpr inline T& front() { return (*this)[0]; }
+		constexpr inline const T& back() const { return (*this)[length() - 1]; }
+		constexpr inline T& back() { return (*this)[length() - 1]; }
 
-		const T& operator[](size_type index) const { return GetBufferPtr()[index]; }
-		T& operator[](size_type index) { return GetBufferPtr()[index]; }
-		const T& at(size_type index) const { return GetBufferPtr()[index]; }
-		T& at(size_type index) { return GetBufferPtr()[index]; }
+		constexpr const T& operator[](size_type index) const { return GetBufferPtr()[index]; }
+		constexpr T& operator[](size_type index) { return GetBufferPtr()[index]; }
+		constexpr const T& at(size_type index) const { return GetBufferPtr()[index]; }
+		constexpr T& at(size_type index) { return GetBufferPtr()[index]; }
+
+		//constexpr size_type copy(T* s, size_type n, size_type pos = 0) const;
+		constexpr basic_string_view<T> substr(size_type pos = 0, size_type n = npos) const;
+		constexpr int compare(basic_string_view<T> s) const noexcept;
+		constexpr int compare(size_type pos1, size_type n1, basic_string_view<T> s) const;
+		constexpr int compare(size_type pos1, size_type n1, basic_string_view<T> s, size_type pos2, size_type n2) const;
+		constexpr int compare(const T* s) const;
+		constexpr int compare(size_type pos1, size_type n1, const T* s) const;
+		constexpr int compare(size_type pos1, size_type n1, const T* s, size_type n2) const;
+
+		constexpr bool starts_with(basic_string_view<T> x) const noexcept
+		{
+			if constexpr (x.length() > length())
+				return false;
+			for (constexpr int i = 0; i < x.length(); i++)
+			{
+				if constexpr ((*this)[i] != x[i])
+					return false;
+			}
+			return true;
+		}
+		constexpr bool starts_with(T x) const noexcept
+		{
+			if constexpr (empty())
+				return false;
+			return front() == x;
+		}
+		constexpr bool starts_with(const T* x) const { return starts_with(basic_string_view<T>(x)); }
+
+		constexpr bool ends_with(basic_string_view<T> x) const noexcept
+		{
+			if constexpr (x.length() > length())
+				return false;
+			for (constexpr int i = 0; i < x.length(); i++)
+			{
+				if constexpr ((*this)[length() - x.length() + i] != x[i])
+					return false;
+			}
+			return true;
+		}
+		constexpr bool ends_with(T x) const noexcept
+		{
+			return (empty()) ? false : back() == x;
+		}
+		constexpr bool ends_with(const T* x) const { return ends_with(basic_string_view<T>(x)); }
+
+		constexpr size_type find(basic_string_view<T> s, size_type pos = 0) const noexcept
+		{
+			if constexpr (s.length() + pos > length())
+				return npos;
+			for (constexpr i = pos; i < length(); i++)
+			{
+				constexpr bool found = true;
+				for (constexpr j = 0; j < s.length(); j++)
+				{
+
+				}
+				
+			}
+		}
+
+		constexpr size_type find(T c, size_type pos = 0) const noexcept;
+		constexpr size_type find(const T* s, size_type pos, size_type n) const;
+		constexpr size_type find(const T* s, size_type pos = 0) const;
+
+		constexpr size_type rfind(basic_string_view<T> s, size_type pos = npos) const noexcept;
+		constexpr size_type rfind(T c, size_type pos = npos) const noexcept;
+		constexpr size_type rfind(const T* s, size_type pos, size_type n) const;
+		constexpr size_type rfind(const T* s, size_type pos = npos) const;
+
+		constexpr size_type find_first_of(basic_string_view<T> s, size_type pos = 0) const noexcept;
+		constexpr size_type find_first_of(T c, size_type pos = 0) const noexcept;
+		constexpr size_type find_first_of(const T* s, size_type pos, size_type n) const;
+		constexpr size_type find_first_of(const T* s, size_type pos = 0) const;
+
+		constexpr size_type find_last_of(basic_string_view<T> s, size_type pos = npos) const noexcept;
+		constexpr size_type find_last_of(T c, size_type pos = npos) const noexcept;
+		constexpr size_type find_last_of(const T* s, size_type pos, size_type n) const;
+		constexpr size_type find_last_of(const T* s, size_type pos = npos) const;
+
+		constexpr size_type find_first_not_of(basic_string_view<T> s, size_type pos = 0) const noexcept;
+		constexpr size_type find_first_not_of(T c, size_type pos = 0) const noexcept;
+		constexpr size_type find_first_not_of(const T* s, size_type pos, size_type n) const;
+		constexpr size_type find_first_not_of(const T* s, size_type pos = 0) const;
+
+		constexpr size_type find_last_not_of(basic_string_view<T> s, size_type pos = npos) const noexcept;
+		constexpr size_type find_last_not_of(T c, size_type pos = npos) const noexcept;
+		constexpr size_type find_last_not_of(const T* s, size_type pos, size_type n) const;
+		constexpr size_type find_last_not_of(const T* s, size_type pos = npos) const;
 
 	private:
-		inline T* GetBufferPtr() const { return m_Ptr; }
+		constexpr inline const T* GetBufferPtr() const { return m_Ptr; }
+		constexpr size_type CalculateStringLength(const T* str) const
+		{
+			return *str ? 1 + CalculateStringLength(str + 1) : 0;
+		}
 
 	};
 
