@@ -1,6 +1,0 @@
-[submodule "Bolt-Engine/Bolt-Core/vendor/OpenAL-Soft"]
-	path = Bolt-Engine/Bolt-Core/vendor/OpenAL-Soft
-	url = https://github.com/kcat/openal-soft
-[submodule "Bolt-Engine/Bolt-Core/vendor/Python/cpython"]
-	path = Bolt-Engine/Bolt-Core/vendor/Python/cpython
-	url = https://github.com/Totomosic/cpython.git
