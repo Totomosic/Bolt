@@ -27,11 +27,8 @@ _ReSharper*/
 __pycache__/
 **.sln
 **.vcxproj*
-**.pack
-**.bres
 bin/
 bin-int/
 #Nuget packages folder
 packages/
 *.pem
-!**/PCBuild/*.vcxproj
