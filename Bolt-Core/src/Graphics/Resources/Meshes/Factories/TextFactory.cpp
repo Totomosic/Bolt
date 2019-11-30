@@ -1,6 +1,7 @@
 #include "bltpch.h"
-
 #include "TextFactory.h"
+
+#include "Core/Profiling/Profiling.h"
 
 namespace Bolt
 {
@@ -13,6 +14,7 @@ namespace Bolt
 
 	ModelData TextFactory::GenerateVertices() const
 	{
+		BLT_PROFILE_FUNCTION();
 		std::vector<Font::FontCharacter> characters = TextFont->GetCharacters(Text);
 		Vector2f size = TextFont->SizeOfText(Text);
 		float height = TextFont->SizeOfText("fg").y;

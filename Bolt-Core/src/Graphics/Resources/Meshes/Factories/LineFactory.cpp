@@ -1,6 +1,7 @@
 #include "bltpch.h"
-
 #include "LineFactory.h"
+
+#include "Core/Profiling/Profiling.h"
 
 namespace Bolt
 {
@@ -13,6 +14,7 @@ namespace Bolt
 
 	ModelData LineFactory::GenerateVertices() const
 	{
+		BLT_PROFILE_FUNCTION();
 		ModelData result;
 		result.Vertices = std::make_unique<VertexArray>(RenderMode::Lines);
 		result.Indices = std::make_unique<IndexArray>();

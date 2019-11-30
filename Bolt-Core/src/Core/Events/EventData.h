@@ -1,5 +1,6 @@
 #pragma once
 #include "bltpch.h"
+#include "Core/Profiling/Profiling.h"
 
 namespace Bolt
 {
@@ -88,6 +89,7 @@ namespace Bolt
 
 		virtual void Emit(EventContainer& e) override
 		{
+			BLT_PROFILE_FUNCTION();
 			m_Callback((Event<T>&)e);
 		}
 	};

@@ -9,6 +9,8 @@
 #include "Renderer/GLState.h"
 #include "Scene/SceneManager.h"
 
+#include "Core/Profiling/Profiling.h"
+
 namespace Bolt
 {
 
@@ -20,6 +22,7 @@ namespace Bolt
 
 	Application::~Application()
 	{
+		BLT_PROFILE_FUNCTION();
 		for (int i = m_ChildApps.size() - 1; i >= 0; i--)
 		{
 			CloseChild(i);
@@ -79,6 +82,7 @@ namespace Bolt
 
 	void Application::Start()
 	{
+		BLT_PROFILE_FUNCTION();
 		m_IsRunning = true;
 		m_ShouldExit = false;
 		if (!m_IsGraphicsEnabled)
@@ -86,7 +90,10 @@ namespace Bolt
 			BLT_CORE_WARN("Graphics are disabled");
 		}
 		BLT_CORE_INFO("Initializing...");
-		Init();
+		{		
+			BLT_PROFILE_SCOPE("Init()");
+			Init();
+		}
 		Time::Get().Update();
 		BLT_CORE_INFO("Init took " + std::to_string(Time::Get().RenderingTimeline().CurrentRealTime()) + " seconds");
 		Time::Get().Reset();
@@ -120,6 +127,7 @@ namespace Bolt
 
 	void Application::CreateContext(bool createRenderContext, const WindowCreateInfo& createInfo)
 	{
+		BLT_PROFILE_FUNCTION();
 		m_IsGraphicsEnabled = createRenderContext;
 		m_Context = std::make_unique<AppContext>(createRenderContext, createInfo);
 		Engine::Instance().SetCurrentContext(m_Context.get());
@@ -134,6 +142,7 @@ namespace Bolt
 
 	bool Application::UpdatePrivate()
 	{
+		BLT_PROFILE_FUNCTION();
 		PushNewApps();
 		for (int i = m_ChildApps.size() - 1; i >=0; i--)
 		{
@@ -154,14 +163,21 @@ namespace Bolt
 
 	bool Application::UpdateGraphics()
 	{
+		BLT_PROFILE_FUNCTION();
 		Scene* scene = &SceneManager::Get().CurrentScene();
 		EventManager::Get().FlushAll(); // Flush #1 (likely input events)
-		Update();
+		{
+			BLT_PROFILE_SCOPE("Update()");
+			Update();
+		}
 		if (scene != nullptr)
 		{
 			scene->Update();
 		}
-		Render();
+		{
+			BLT_PROFILE_SCOPE("Render()");
+			Render();
+		}
 		GetWindow().SwapBuffers();
 		Time::Get().Update();
 		EventManager::Get().FlushAll(); // Flush #2 (likely other scene/app events)
@@ -174,7 +190,11 @@ namespace Bolt
 
 	bool Application::UpdateNoGraphics()
 	{
-		Update();
+		BLT_PROFILE_FUNCTION();
+		{
+			BLT_PROFILE_SCOPE("Update()");
+			Update();
+		}
 		Time::Get().Update();
 		EventManager::Get().FlushAll(); // Flush #2 (likely other scene/app events)
 		return true;
@@ -182,6 +202,7 @@ namespace Bolt
 
 	void Application::CloseChild(int index)
 	{
+		BLT_PROFILE_FUNCTION();
 		Application* ptr = m_ChildApps.at(index).get();
 		Engine::Instance().ApplyCurrentContext(&ptr->GetContext());
 		m_ChildApps.erase(m_ChildApps.begin() + index);
@@ -189,6 +210,7 @@ namespace Bolt
 
 	void Application::UpdateInput()
 	{
+		BLT_PROFILE_FUNCTION();
 		if (GetContext().HasRenderContext())
 		{
 			GetContext().GetRenderContext().GetInput().Update();
@@ -202,6 +224,7 @@ namespace Bolt
 
 	void Application::PushNewApps()
 	{
+		BLT_PROFILE_FUNCTION();
 		for (NewAppInfo& app : m_NewApps)
 		{
 			PushNewApp(app);
@@ -211,6 +234,7 @@ namespace Bolt
 
 	void Application::PushNewApp(Application::NewAppInfo& app)
 	{
+		BLT_PROFILE_FUNCTION();
 		Application* ptr = app.App.get();
 		ptr->m_AppId = m_ChildApps.size() + 1;
 		m_ChildApps.push_back(std::move(app.App));

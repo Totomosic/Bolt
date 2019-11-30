@@ -1,6 +1,8 @@
 #include "bltpch.h"
 #include "SphereFactory.h"
 
+#include "Core/Profiling/Profiling.h"
+
 namespace Bolt
 {
 
@@ -12,6 +14,7 @@ namespace Bolt
 
 	ModelData SphereFactory::GenerateVertices() const
 	{
+		BLT_PROFILE_FUNCTION();
 		float w = Radius / 2.0f;
 		float h = Radius / 2.0f;
 		ModelData result;

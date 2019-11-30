@@ -1,12 +1,15 @@
 #include "bltpch.h"
 #include "Font.h"
 
+#include "Core/Profiling/Profiling.h"
+
 namespace Bolt
 {
 
 	Font::Font(const Filepath& fontFile, float fontSize, int textureWidth, int textureHeight) : Texture2D(textureWidth, textureHeight, TextureFormat::R, { WrapMode::ClampToEdge, MagFilter::Linear, MinFilter::Linear, Mipmaps::Disabled }),
 		m_FontSize(fontSize)
 	{
+		BLT_PROFILE_FUNCTION();
 		BLT_ASSERT(Filesystem::FileExists(fontFile), "Unable to find font file " + fontFile.Path());
 		m_TextureAtlas = std::unique_ptr<texture_atlas_t, std::function<void(texture_atlas_t*)>>(texture_atlas_new(m_Width, m_Height, 1), [](texture_atlas_t* ptr) { texture_atlas_delete(ptr); });
 		m_TextureFont = std::unique_ptr<texture_font_t, std::function<void(texture_font_t*)>>(texture_font_new_from_file(m_TextureAtlas.get(), m_FontSize, fontFile.Path().c_str()), [](texture_font_t* ptr) { texture_font_delete(ptr); });
@@ -22,6 +25,7 @@ namespace Bolt
 
 	std::vector<Font::FontCharacter> Font::GetCharacters(const blt::string& str) const
 	{
+		BLT_PROFILE_FUNCTION();
 		std::vector<FontCharacter> result;
 		for (int i = 0; i < str.size(); i++)
 		{
@@ -41,6 +45,7 @@ namespace Bolt
 
 	Vector2f Font::SizeOfText(const blt::string& text) const
 	{
+		BLT_PROFILE_FUNCTION();
 		std::vector<Font::FontCharacter> characters = GetCharacters(text);
 		Vector2f size = std::accumulate(characters.begin(), characters.end(), Vector2f(), [](const Vector2f& current, const Font::FontCharacter& chr) {
 			Vector2f result;

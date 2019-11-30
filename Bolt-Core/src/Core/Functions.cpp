@@ -5,11 +5,14 @@
 #define STB_IMAGE_IMPLEMENTATION 
 #include "../vendor/stb_image.h"
 
+#include "Core/Profiling/Profiling.h"
+
 namespace Bolt
 {
 
 	Image LoadTexture(const Filepath& file, bool flipVertically, bool flipHorizontally)
 	{
+		BLT_PROFILE_FUNCTION();
 		BLT_ASSERT(Filesystem::FileExists(file), "Unable to find Image with path " + file.Path());
 		Image result;
 		int channels;

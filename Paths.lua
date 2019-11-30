@@ -19,7 +19,6 @@ IncludeDirs["spdlog"] =     BoltDir .. "vendor/spdlog/include"
 IncludeDirs["FreeTypeGL"] = BoltDir .. "vendor/FreeType-GL"
 IncludeDirs["FreeType"] =   BoltDir .. "vendor/FreeType/include"
 IncludeDirs["Lua"] =        BoltDir .. "vendor/Lua/src"
-IncludeDirs["Python"] =     BoltDir .. "vendor/Python/include"
 
 -- Library directories relative to solution directory
 LibraryDirs = {}

@@ -2,6 +2,7 @@
 
 #include "Time.h"
 #include "Engine/Engine.h"
+#include "Core/Profiling/Profiling.h"
 
 namespace Bolt
 {
@@ -37,6 +38,7 @@ namespace Bolt
 
 	void Time::Update()
 	{
+		BLT_PROFILE_FUNCTION();
 		double current = (std::chrono::high_resolution_clock::now() - m_StartTime).count();
 		double currentSeconds = current / 1e9;
 		m_RenderingTimeline.Update(currentSeconds - m_PrevTime);

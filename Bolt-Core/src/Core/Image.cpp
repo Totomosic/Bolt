@@ -1,7 +1,8 @@
 #include "bltpch.h"
-
 #include "Image.h"
 #include "Functions.h"
+
+#include "Core/Profiling/Profiling.h"
 
 namespace Bolt
 {
@@ -37,6 +38,7 @@ namespace Bolt
 
 	Image::~Image()
 	{
+		BLT_PROFILE_FUNCTION();
 		if (Pixels != nullptr)
 		{
 			BLT_DELETE_ARR Pixels;
@@ -45,6 +47,7 @@ namespace Bolt
 
 	Image Image::Resize(int width, int height, ResizeFilter filter) const
 	{
+		BLT_PROFILE_FUNCTION();
 		switch (filter)
 		{
 		case ResizeFilter::Linear:
@@ -58,6 +61,7 @@ namespace Bolt
 
 	byte* Image::ReleasePixels()
 	{
+		BLT_PROFILE_FUNCTION();
 		byte* pixelsPtr = Pixels;
 		Pixels = nullptr;
 		return pixelsPtr;
@@ -65,6 +69,7 @@ namespace Bolt
 
 	Image Image::ResizeLinear(int width, int height) const
 	{
+		BLT_PROFILE_FUNCTION();
 		Image result;
 		result.Width = width;
 		result.Height = height;
@@ -98,6 +103,7 @@ namespace Bolt
 
 	Image Image::ResizeNearest(int width, int height) const
 	{
+		BLT_PROFILE_FUNCTION();
 		Image result;
 		result.Width = width;
 		result.Height = height;
@@ -122,7 +128,7 @@ namespace Bolt
 
 	byte* Image::GetPixel(int x, int y) const
 	{
-		return Pixels + ((x + y * Width) * Components);
+		return Pixels + (uintptr_t)((x + y * Width) * Components);
 	}
 
 }

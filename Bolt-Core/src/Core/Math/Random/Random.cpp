@@ -1,6 +1,7 @@
 #include "bltpch.h"
 
 #include "Random.h"
+#include "Core/Profiling/Profiling.h"
 
 namespace Bolt
 {
@@ -10,6 +11,7 @@ namespace Bolt
 
 	void Random::Initialize()
 	{
+		BLT_PROFILE_FUNCTION();
 		m_Gen.seed((int)std::time(nullptr));
 	}
 

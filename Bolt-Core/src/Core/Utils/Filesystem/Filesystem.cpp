@@ -2,6 +2,7 @@
 
 #include "Filesystem.h"
 #include <filesystem>
+#include "Core/Profiling/Profiling.h"
 
 namespace Bolt
 {
@@ -54,6 +55,7 @@ namespace Bolt
 
 	void Filesystem::Initialize()
 	{
+		BLT_PROFILE_FUNCTION();
 		char buff[FILENAME_MAX];
 		auto result = BLT_GET_CURRENT_DIRECTORY(buff, FILENAME_MAX);
 		s_WorkingDirectory = Directorypath(blt::string(buff) + Directorypath::DIRECTORY_DELIMITER);

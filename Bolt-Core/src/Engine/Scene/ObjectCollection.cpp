@@ -1,6 +1,7 @@
 #include "bltpch.h"
 
 #include "ObjectCollection.h"
+#include "Core/Profiling/Profiling.h"
 
 namespace Bolt
 {
@@ -79,6 +80,7 @@ namespace Bolt
 
 	void ObjectCollection::RemoveGameObject(id_t id)
 	{
+		BLT_PROFILE_FUNCTION();
 		if (id < ObjectCollection::RESERVED_GAMEOBJECTS)
 		{
 			BLT_CORE_ERROR("Attempted to BLT_DELETE reserved GameObject with Id: {}", id);

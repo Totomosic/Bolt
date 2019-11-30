@@ -5,17 +5,21 @@
 #include "../Renderer/Graphics.h"
 #include "../Scene/ObjectFactory.h"
 
+#include "Core/Profiling/Profiling.h"
+
 namespace Bolt
 {
 
 	void Initializer::PreOpenGL(const EngineCreateInfo& createInfo)
 	{
+		BLT_PROFILE_FUNCTION();
 		Log::Initialize();
 		BLT_CORE_INFO("Logger Initialized");
 		Filesystem::Initialize();
 		BLT_CORE_INFO("Filesystem Initialized");
 		if (createInfo.UseGraphics)
 		{
+			BLT_PROFILE_SCOPE("glfwInit()");
 			int result = glfwInit();
 			BLT_ASSERT(result != GL_NO_ERROR, "GLFW failed to initialize");
 			BLT_CORE_INFO("GLFW Initialized");
@@ -28,6 +32,7 @@ namespace Bolt
 		BLT_CORE_INFO("Random Initialized");
 		if (createInfo.UseSockets)
 		{
+			BLT_PROFILE_SCOPE("InitSockets()");
 			WSADATA data;
 			if (WSAStartup(MAKEWORD(2, 2), &data) != 0)
 			{

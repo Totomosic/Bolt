@@ -4,6 +4,8 @@
 #include "Engine/User/Input.h"
 #include "Engine/AppContext.h"
 
+#include "Core/Profiling/Profiling.h"
+
 namespace Bolt
 {
 
@@ -176,11 +178,13 @@ namespace Bolt
 
 	void Window::SwapBuffers() const
 	{
+		BLT_PROFILE_FUNCTION();
 		glfwSwapBuffers((GLFWwindow*)GetNativeWindow());
 	}
 
 	void Window::MakeCurrent() const
 	{
+		BLT_PROFILE_FUNCTION();
 		glfwMakeContextCurrent((GLFWwindow*)GetNativeWindow());
 	}
 

@@ -1,12 +1,14 @@
 #include "bltpch.h"
-
 #include "Camera.h"
+
+#include "Core/Profiling/Profiling.h"
 
 namespace Bolt
 {
 
 	Plane TransformPlane(const Matrix4f& transform, const Plane& plane)
 	{
+		BLT_PROFILE_FUNCTION();
 		Vector4f o = Vector4f(plane.xyz().Normalize() * plane.w, -1);
 		Vector4f n = Vector4f(plane.xyz().Normalize(), 0);
 		o = transform * o;
@@ -16,6 +18,7 @@ namespace Bolt
 
 	void Projection::GetPlanes(const Matrix4f& viewMatrix, Plane* outPlanes) const
 	{
+		BLT_PROFILE_FUNCTION();
 		Matrix4f transform = (ProjectionMatrix * viewMatrix).Inverse();
 		Plane nearPlane = Plane(0.0f, 0.0f, 1.0, 1.0f);
 		Plane farPlane = Plane(0.0f, 0.0f, -1.0f, 1.0f);
@@ -39,11 +42,13 @@ namespace Bolt
 
 	Projection Projection::Perspective(float fovy, float aspect, float nearPlane, float farPlane)
 	{
+		BLT_PROFILE_FUNCTION();
 		return { Frustum::Perspective(fovy, aspect, nearPlane, farPlane), ProjectionType::Perspective, Matrix4f::Perspective(fovy, aspect, nearPlane, farPlane) };
 	}
 
 	Projection Projection::Orthographic(float left, float right, float bottom, float top, float nearPlane, float farPlane)
 	{
+		BLT_PROFILE_FUNCTION();
 		return { { left, right, bottom, top, nearPlane, farPlane }, ProjectionType::Orthographic, Matrix4f::Orthographic(left, right, bottom, top, nearPlane, farPlane) };
 	}
 
@@ -108,6 +113,7 @@ namespace Bolt
 
 	Ray Camera::NDCToWorldRay(const Vector3f& ndcCoordinate) const
 	{
+		BLT_PROFILE_FUNCTION();
 		if (m_Projection.Type == ProjectionType::Orthographic)
 		{
 			return Ray(m_Transform.Position() + ndcCoordinate, -Vector3f::Forward());
@@ -136,6 +142,7 @@ namespace Bolt
 
 	void Camera::CalculateProjectionMatrix(Projection& projection)
 	{
+		BLT_PROFILE_FUNCTION();
 		if (projection.Type == ProjectionType::Orthographic)
 		{
 			projection.ProjectionMatrix = Matrix4f::Orthographic(projection.ViewFrustum);

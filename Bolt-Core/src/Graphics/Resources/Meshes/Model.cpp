@@ -1,6 +1,7 @@
 #include "bltpch.h"
-
 #include "Model.h"
+
+#include "Core/Profiling/Profiling.h"
 
 namespace Bolt
 {
@@ -58,11 +59,13 @@ namespace Bolt
 
 	ModelMapping Model::Map() const
 	{
+		BLT_PROFILE_FUNCTION();
 		return { Data().Vertices->Map(), Data().Indices->Map() };
 	}
 
 	std::unique_ptr<Resource> Model::Clone() const
 	{
+		BLT_PROFILE_FUNCTION();
 		std::unique_ptr<Model> model = std::make_unique<Model>(ModelData{ m_Data.Vertices->Clone(), m_Data.Indices->Clone(), m_Data.Bounds });
 		return model;
 	}
@@ -70,6 +73,7 @@ namespace Bolt
 	// Algorithm: Lengyel, Eric. “Computing Tangent Space Basis Vectors for an Arbitrary Mesh”. Terathon Software, 2001. http://terathon.com/code/tangent.html
 	void Model::CalculateTangents(ModelMapping& mapping) const
 	{
+		BLT_PROFILE_FUNCTION();
 		BLT_ASSERT(m_Data.Vertices->GetRenderMode() == RenderMode::Triangles, "Can only calculate tangents for triangle based models");
 		BLT_ASSERT(mapping.IndexMap.IndexCount() % 3 == 0, "Index count is not a multiple of 3");
 		IndexIterator indices = mapping.IndexMap.Begin();
@@ -128,6 +132,7 @@ namespace Bolt
 
 	int Model::CalculateBufferIndex(int triangleIndex) const
 	{
+		BLT_PROFILE_FUNCTION();
 		int current = 0;
 		for (int i = 0; i < m_Data.Indices->IndexBufferCount(); i++)
 		{

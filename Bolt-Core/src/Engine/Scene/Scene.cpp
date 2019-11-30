@@ -1,7 +1,7 @@
-#include "bltpch.h"
-
-#include "Scene.h"
+#include "bltpch.h"#include "Scene.h"
 #include "SceneManager.h"
+
+#include "Core/Profiling/Profiling.h"
 
 namespace Bolt
 {
@@ -41,6 +41,7 @@ namespace Bolt
 
 	id_t Scene::GetMaskOfLayers(const std::vector<id_t>& layers) const
 	{
+		BLT_PROFILE_FUNCTION();
 		id_t mask = 0;
 		for (id_t id : layers)
 		{
@@ -71,6 +72,7 @@ namespace Bolt
 
 	std::vector<const Layer*> Scene::GetAllLayers() const
 	{
+		BLT_PROFILE_FUNCTION();
 		std::vector<const Layer*> result;
 		for (int i = 0; i < m_LayerCapacity; i++)
 		{
@@ -84,6 +86,7 @@ namespace Bolt
 
 	std::vector<const Layer*> Scene::GetLayers(id_t mask) const
 	{
+		BLT_PROFILE_FUNCTION();
 		std::vector<const Layer*> result;
 		id_t maxLayer = (id_t)log2(mask);
 		for (id_t i = 0; i <= maxLayer; i++)
@@ -102,6 +105,7 @@ namespace Bolt
 
 	std::vector<Layer*> Scene::GetAllLayers()
 	{
+		BLT_PROFILE_FUNCTION();
 		std::vector<Layer*> result;
 		for (int i = 0; i < m_LayerCapacity; i++)
 		{
@@ -115,6 +119,7 @@ namespace Bolt
 
 	std::vector<Layer*> Scene::GetLayers(id_t mask)
 	{
+		BLT_PROFILE_FUNCTION();
 		std::vector<Layer*> result;
 		id_t maxLayer = (id_t)log2(mask);
 		for (id_t i = 0; i <= maxLayer; i++)
@@ -133,6 +138,7 @@ namespace Bolt
 
 	Layer& Scene::CreateLayer(Camera* activeCamera, int maxGameObjects)
 	{
+		BLT_PROFILE_FUNCTION();
 		id_t id = FindNextId();
 		m_Layers[id].Create(id, maxGameObjects);
 		m_Layers[id].SetActiveCamera(activeCamera);
@@ -147,6 +153,7 @@ namespace Bolt
 
 	Camera* Scene::CreateCamera(const Projection& projection)
 	{
+		BLT_PROFILE_FUNCTION();
 		id_t id = FindNextCameraId();
 		Camera* camera = &m_Cameras[id];
 		camera->SetProjection(projection);
@@ -172,6 +179,7 @@ namespace Bolt
 
 	void Scene::Update()
 	{
+		BLT_PROFILE_FUNCTION();
 		// Update layers in reverse order
 		for (int i = (int)m_LayerCapacity - 1; i >= 0; i--)
 		{
@@ -192,6 +200,7 @@ namespace Bolt
 
 	void Scene::UpdateTemporaryObjects()
 	{
+		BLT_PROFILE_FUNCTION();
 		for (int i = 0; i < m_LayerCapacity; i++)
 		{
 			if (m_Layers[i].IsEnabled())
@@ -203,9 +212,11 @@ namespace Bolt
 
 	SGQueryResult Scene::Query(const SGQuery& query) const
 	{
+		BLT_PROFILE_FUNCTION();
 		SGQueryResult result;
 		for (const Layer* layer : GetAllLayers())
 		{
+			BLT_PROFILE_SCOPE("std::vector<GameObject*> SGQuery::Evaluate(const std::vector<GameObject*>&, GameObject*, GameObject*)");
 			std::vector<GameObject*> objects = query.Evaluate(layer->GameObjects(), &result.MostRelevant, &result.LeastRelevant);
 			for (GameObject* object : objects)
 			{
@@ -225,6 +236,7 @@ namespace Bolt
 
 	id_t Scene::FindNextId() const
 	{
+		BLT_PROFILE_FUNCTION();
 		for (id_t i = 0; i < m_LayerCapacity; i++)
 		{
 			if (!m_Layers[i].IsEnabled())
@@ -238,6 +250,7 @@ namespace Bolt
 
 	id_t Scene::FindNextCameraId() const
 	{
+		BLT_PROFILE_FUNCTION();
 		for (id_t i = 0; i < Scene::MAX_CAMERAS; i++)
 		{
 			if (m_Cameras[i].Id() == GameObject::InvalidID)

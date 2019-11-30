@@ -1,7 +1,8 @@
 #include "bltpch.h"
-
 #include "SceneManager.h"
 #include "Engine/Engine.h"
+
+#include "Core/Profiling/Profiling.h"
 
 namespace Bolt
 {
@@ -29,6 +30,7 @@ namespace Bolt
 
 	Scene& SceneManager::GetSceneByName(const blt::string& name)
 	{
+		BLT_PROFILE_FUNCTION();
 		auto it = m_SceneMap.find(name);
 		if (it != m_SceneMap.end())
 		{
@@ -40,6 +42,7 @@ namespace Bolt
 
 	Scene& SceneManager::CreateScene(int layerCount, const blt::string& name)
 	{
+		BLT_PROFILE_FUNCTION();
 		id_t index = m_Scenes.size();
 		std::unique_ptr<Scene> s = std::make_unique<Scene>(layerCount);
 		Scene* ptr = s.get();
@@ -65,6 +68,7 @@ namespace Bolt
 
 	void SceneManager::SetCurrentScene(Scene& scene)
 	{
+		BLT_PROFILE_FUNCTION();
 		if (m_CurrentScene != nullptr)
 		{
 			SceneUnloadedEvent e;

@@ -3,6 +3,8 @@
 #include "Input.h"
 #include "Engine/Engine.h"
 
+#include "Core/Profiling/Profiling.h"
+
 namespace Bolt
 {
 
@@ -259,6 +261,7 @@ namespace Bolt
 
 	void Input::Update()
 	{
+		BLT_PROFILE_FUNCTION();
 		m_PressedCharacters.clear();
 		m_ChangedButtons.clear();
 		m_ChangedKeys.clear();

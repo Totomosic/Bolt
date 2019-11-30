@@ -1,6 +1,7 @@
 #include "bltpch.h"
-
 #include "Transform.h"
+
+#include "Core/Profiling/Profiling.h"
 
 namespace Bolt
 {
@@ -76,6 +77,7 @@ namespace Bolt
 
 	void Transform::SetParent(const Transform* transform)
 	{
+		BLT_PROFILE_FUNCTION();
 		if (transform == nullptr && m_Parent != nullptr)
 		{
 			auto it = std::find(m_Parent->m_Children.begin(), m_Parent->m_Children.end(), this);
@@ -275,6 +277,7 @@ namespace Bolt
 
 	void Transform::Rotate(float angle, Vector3f axis, Space rotationSpace)
 	{
+		BLT_PROFILE_FUNCTION();
 		if (rotationSpace == Space::World)
 		{
 			axis = Orientation().Inverse() * axis;
@@ -328,6 +331,7 @@ namespace Bolt
 	{
 		if (!m_IsValid)
 		{
+			BLT_PROFILE_SCOPE("void Transform::RecalculateMatrix(void)");
 			RecalculateMatrix();
 		}
 	}

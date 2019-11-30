@@ -11,12 +11,13 @@ namespace Bolt
 	}
 
 	Instrumentor::Instrumentor()
-		: m_CurrentSession(nullptr), m_ProfileCount(0)
+		: m_Mutex(), m_CurrentSession(nullptr), m_ProfileCount(0)
 	{
 	}
 
 	void Instrumentor::BeginSession(const blt::string& name, const blt::string& filepath)
 	{
+		std::scoped_lock<std::mutex> lock(m_Mutex);
 		m_OutputStream.open(filepath.cpp_str());
 		WriteHeader();
 		m_CurrentSession = std::make_unique<InstrumentationSession>(InstrumentationSession{ name });
@@ -24,6 +25,7 @@ namespace Bolt
 
 	void Instrumentor::EndSession()
 	{
+		std::scoped_lock<std::mutex> lock(m_Mutex);
 		WriteFooter();
 		m_OutputStream.close();
 		m_CurrentSession = nullptr;
@@ -32,6 +34,7 @@ namespace Bolt
 
 	void Instrumentor::WriteProfile(const ProfileResult& result)
 	{
+		std::scoped_lock<std::mutex> lock(m_Mutex);
 		if (m_ProfileCount++ > 0)
 		{
 			m_OutputStream << ",";

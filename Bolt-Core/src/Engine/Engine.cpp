@@ -8,6 +8,8 @@
 #include "Scene/SceneManager.h"
 #include "Engine/Initialization/Destructor.h"
 
+#include "Core/Profiling/Profiling.h"
+
 namespace Bolt
 {
 
@@ -22,14 +24,20 @@ namespace Bolt
 	Engine::Engine(EngineCreateInfo createInfo)
 		: m_RootApplication(), m_CreateInfo(createInfo), m_CurrentContext(nullptr)
 	{
+		BLT_PROFILE_BEGIN_SESSION("BoltInit", "BoltInit.json");
 		s_EngineInstance = this;
 		Initializer::PreOpenGL(m_CreateInfo);
 	}
 
 	Engine::~Engine()
 	{
-		m_RootApplication.reset(nullptr);
-		Destructor::Run();
+		BLT_PROFILE_BEGIN_SESSION("BoltDestroy", "BoltDestroy.json");
+		{
+			BLT_PROFILE_FUNCTION();
+			m_RootApplication.reset(nullptr);
+			Destructor::Run();
+		}
+		BLT_PROFILE_END_SESSION();
 	}
 
 	AppContext& Engine::CurrentContext() const
@@ -39,12 +47,14 @@ namespace Bolt
 
 	void Engine::UpdateApplication()
 	{
+		BLT_PROFILE_FUNCTION();
 		m_RootApplication->UpdateInput();
 		m_RootApplication->UpdatePrivate();
 	}
 
 	void Engine::SetApplication(std::unique_ptr<Application>&& app)
 	{
+		BLT_PROFILE_FUNCTION();
 		m_RootApplication = std::move(app);
 		m_RootApplication->CreateContext(m_CreateInfo.UseGraphics, m_CreateInfo.WindowInfo);
 		m_RootApplication->Start();
@@ -52,11 +62,17 @@ namespace Bolt
 
 	void Engine::Run()
 	{
+		BLT_PROFILE_END_SESSION();
 		BLT_ASSERT(m_RootApplication.get() != nullptr, "Must have a valid Application to run");
-		while (!m_RootApplication->ShouldExit())
+		BLT_PROFILE_BEGIN_SESSION("BoltRuntime", "BoltRuntime.json");
 		{
-			UpdateApplication();
+			BLT_PROFILE_FUNCTION();
+			while (!m_RootApplication->ShouldExit())
+			{
+				UpdateApplication();
+			}
 		}
+		BLT_PROFILE_END_SESSION();
 	}
 
 	void Engine::SetCurrentContext(AppContext* context)
@@ -66,6 +82,7 @@ namespace Bolt
 
 	void Engine::ApplyCurrentContext(AppContext* context)
 	{
+		BLT_PROFILE_FUNCTION();
 		if (m_CurrentContext != context)
 		{
 			SetCurrentContext(context);

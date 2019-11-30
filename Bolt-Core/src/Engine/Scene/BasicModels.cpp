@@ -8,6 +8,8 @@
 #include "Graphics/Resources/Meshes/Factories/EllipseFactory.h"
 #include "Graphics/Resources/Meshes/Factories/SphereFactory.h"
 
+#include "Core/Profiling/Profiling.h"
+
 namespace Bolt
 {
 
@@ -18,6 +20,7 @@ namespace Bolt
 
 	BasicModels::BasicModels(ResourceManager* manager)
 	{
+		BLT_PROFILE_FUNCTION();
 		m_SquareModel = manager->Register(std::make_unique<Model>(RectangleFactory(1, 1, Color::White)));
 		m_CircleModel = manager->Register(std::make_unique<Model>(EllipseFactory(2, 2, 360, Color::White)));
 		m_CubeModel = manager->Register(std::make_unique<Model>(CuboidFactory(1, 1, 1, Color::White)));

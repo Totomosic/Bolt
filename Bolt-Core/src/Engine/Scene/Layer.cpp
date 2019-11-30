@@ -2,6 +2,7 @@
 #include "Layer.h"
 #include "ObjectCollection.h"
 #include "Core/Time/Time.h"
+#include "Core/Profiling/Profiling.h"
 
 namespace Bolt
 {
@@ -82,6 +83,7 @@ namespace Bolt
 
 	void Layer::RemoveGameObject(GameObject* object)
 	{
+		BLT_PROFILE_FUNCTION();
 		if (m_GameObjects.IsValidId(object->Id()))
 		{
 			m_GameObjects.RemoveGameObject(object);
@@ -110,6 +112,7 @@ namespace Bolt
 
 	void Layer::Update()
 	{
+		BLT_PROFILE_FUNCTION();
 		std::vector<GameObject*> objects = m_GameObjects.GetAllGameObjects();
 		for (GameObject* object : objects)
 		{
@@ -123,6 +126,7 @@ namespace Bolt
 
 	void Layer::UpdateTemporaryObjects()
 	{
+		BLT_PROFILE_FUNCTION();
 		for (int i = m_TemporaryObjects.size() - 1; i >= 0; i--)
 		{
 			TempGameObject& tObj = m_TemporaryObjects[i];

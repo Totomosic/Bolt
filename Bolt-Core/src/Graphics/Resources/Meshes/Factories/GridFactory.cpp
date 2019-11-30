@@ -1,6 +1,7 @@
 #include "bltpch.h"
-
 #include "GridFactory.h"
+
+#include "Core/Profiling/Profiling.h"
 
 namespace Bolt
 {
@@ -13,6 +14,7 @@ namespace Bolt
 
 	ModelData GridFactory::GenerateVertices() const
 	{
+		BLT_PROFILE_FUNCTION();
 		ModelData result;
 		result.Vertices = std::make_unique<VertexArray>(RenderMode::Triangles);
 		result.Indices = std::make_unique<IndexArray>();

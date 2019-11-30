@@ -2,6 +2,8 @@
 #include "ComponentManager.h"
 #include "../GameObject.h"
 
+#include "Core/Profiling/Profiling.h"
+
 namespace Bolt
 {
 
@@ -36,6 +38,7 @@ namespace Bolt
 
 	ComponentManager::~ComponentManager()
 	{
+		BLT_PROFILE_FUNCTION();
 		for (id_t index : m_OrderedIndex)
 		{
 			m_ComponentArray[index].component->End();
@@ -44,17 +47,20 @@ namespace Bolt
 
 	Component& ComponentManager::GetComponentById(id_t id) const
 	{
+		BLT_PROFILE_FUNCTION();
 		return *m_ComponentArray[id].component;
 	}
 
 	Component& ComponentManager::GetComponent(size_t componentTypeHash) const
 	{
+		BLT_PROFILE_FUNCTION();
 		BLT_ASSERT(HasComponentPrivate(componentTypeHash), "Does not have given component type");
 		return *m_ComponentArray[m_TypeHashMap.at(componentTypeHash)].component;
 	}
 
 	bool ComponentManager::GetComponent(size_t componentTypeHash, Component** outComponent) const
 	{
+		BLT_PROFILE_FUNCTION();
 		auto it = m_TypeHashMap.find(componentTypeHash);
 		if (it == m_TypeHashMap.end())
 		{
@@ -73,6 +79,7 @@ namespace Bolt
 
 	bool ComponentManager::HasComponent(size_t componentTypeHash) const
 	{
+		BLT_PROFILE_FUNCTION();
 		if (m_TypeHashMap.empty())
 		{
 			return false;
@@ -83,6 +90,7 @@ namespace Bolt
 
 	std::vector<Component*> ComponentManager::GetComponents() const
 	{
+		BLT_PROFILE_FUNCTION();
 		std::vector<Component*> result;
 		for (id_t index : m_OrderedIndex)
 		{
@@ -93,6 +101,7 @@ namespace Bolt
 
 	std::vector<ComponentManager::ComponentInfoPtr> ComponentManager::GetComponentsOrdered() const
 	{
+		BLT_PROFILE_FUNCTION();
 		std::vector<ComponentInfoPtr> result;
 		for (id_t index : m_OrderedIndex)
 		{
@@ -103,6 +112,7 @@ namespace Bolt
 
 	Component* ComponentManager::AddComponent(size_t componentTypeHash, std::unique_ptr<Component>&& component)
 	{
+		BLT_PROFILE_FUNCTION();
 		if (HasComponentPrivate(componentTypeHash))
 		{
 			RemoveComponentById(m_TypeHashMap.at(componentTypeHash));
@@ -123,6 +133,7 @@ namespace Bolt
 
 	void ComponentManager::RemoveComponentById(id_t id)
 	{
+		BLT_PROFILE_FUNCTION();
 		ComponentInfo& c = m_ComponentArray[id];
 		c.component->End();
 		c.component.reset(nullptr);
@@ -144,6 +155,7 @@ namespace Bolt
 
 	void ComponentManager::Clear()
 	{
+		BLT_PROFILE_FUNCTION();
 		for (id_t index : m_OrderedIndex)
 		{
 			m_ComponentArray[index].component->End();
@@ -166,6 +178,7 @@ namespace Bolt
 
 	void ComponentManager::SetGameObject(ObjectPrefab* object)
 	{
+		BLT_PROFILE_FUNCTION();
 		m_GameObject = object;
 		for (id_t index : m_OrderedIndex)
 		{
@@ -175,6 +188,7 @@ namespace Bolt
 
 	bool ComponentManager::HasComponentPrivate(size_t componentTypeHash) const
 	{
+		BLT_PROFILE_FUNCTION();
 		if (m_TypeHashMap.empty())
 		{
 			return false;

@@ -2,6 +2,8 @@
 #include "bltpch.h"
 #include "../Functions.h"
 
+#include "Core/Profiling/Profiling.h"
+
 namespace Bolt
 {
 
@@ -23,6 +25,7 @@ namespace Bolt
 
 		bool IsIdAvailable(T id) const
 		{
+			BLT_PROFILE_FUNCTION();
 			if (id > m_CurrentMaxId)
 			{
 				return true;
@@ -37,6 +40,7 @@ namespace Bolt
 
 		T PeekNextId() const
 		{
+			BLT_PROFILE_FUNCTION();
 			if (m_AvailableIds.size() > 0)
 			{
 				T id = m_AvailableIds.back();
@@ -52,6 +56,7 @@ namespace Bolt
 
 		T GetNextId() const
 		{
+			BLT_PROFILE_FUNCTION();
 			if (m_AvailableIds.size() > 0)
 			{
 				T id = m_AvailableIds.back();

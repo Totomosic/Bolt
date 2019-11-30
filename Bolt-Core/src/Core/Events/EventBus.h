@@ -4,6 +4,8 @@
 #include "EventEmitter.h"
 #include "IdManager.h"
 
+#include "Core/Profiling/Profiling.h"
+
 namespace Bolt
 {
 
@@ -202,6 +204,7 @@ namespace Bolt
 	template<typename T>
 	uint32_t GenericEventBus<EventIdT>::AddEventListener(const EventIdT& eventId, const typename EventListener<T>::callback_t& callback, ListenerPriority priority)
 	{
+		BLT_PROFILE_FUNCTION();
 		BLT_ASSERT(priority != ListenerPriority::Custom, "Cannot create a listener with custom priority");
 		std::scoped_lock<std::mutex> lock(m_ListenersMutex);
 		uint32_t id = m_ListenerIds.GetNextId();
@@ -221,6 +224,7 @@ namespace Bolt
 	template<typename EventIdT>
 	int GenericEventBus<EventIdT>::GetListenerPriorityIndex(uint32_t id) const
 	{
+		BLT_PROFILE_FUNCTION();
 		std::scoped_lock<std::mutex> lock(m_ListenersMutex);
 		ListenerLocation& location = m_ListenerLocations.at(id);
 		std::vector<std::unique_ptr<EventListenerContainer>>& vector = m_Listeners[location.Id];
@@ -238,6 +242,7 @@ namespace Bolt
 	template<typename EventIdT>
 	void GenericEventBus<EventIdT>::SetListenerPriorityIndex(uint32_t id, int priorityIndex)
 	{
+		BLT_PROFILE_FUNCTION();
 		std::scoped_lock<std::mutex> lock(m_ListenersMutex);
 		ListenerLocation& location = m_ListenerLocations.at(id);
 		std::vector<std::unique_ptr<EventListenerContainer>>& vector = m_Listeners[location.Id];
@@ -262,6 +267,7 @@ namespace Bolt
 	template<typename EventIdT>
 	void GenericEventBus<EventIdT>::RemoveEventListener(uint32_t id)
 	{
+		BLT_PROFILE_FUNCTION();
 		std::scoped_lock<std::mutex> lock(m_ListenersMutex);
 		ListenerLocation& location = m_ListenerLocations.at(id);
 		std::vector<std::unique_ptr<EventListenerContainer>>& vector = m_Listeners[location.Id];
@@ -300,6 +306,7 @@ namespace Bolt
 	template<typename EventIdT>
 	void GenericEventBus<EventIdT>::Flush()
 	{
+		BLT_PROFILE_FUNCTION();
 		std::vector<EventInfo> eventQueue;
 		{
 			std::scoped_lock<std::mutex> eventLock(m_EventsMutex);
@@ -315,6 +322,7 @@ namespace Bolt
 	template<typename EventIdT>
 	void GenericEventBus<EventIdT>::EmitEvent(const EventIdT& eventId, std::unique_ptr<EventContainer>&& event)
 	{
+		BLT_PROFILE_FUNCTION();
 		std::scoped_lock<std::mutex> lock(m_EventsMutex);
 		m_Events.push_back({ eventId, std::move(event) });
 	}
@@ -322,6 +330,7 @@ namespace Bolt
 	template<typename EventIdT>
 	void GenericEventBus<EventIdT>::ProcessEvent(EventInfo& e) const
 	{
+		BLT_PROFILE_FUNCTION();
 		if (!e.Event->Handled)
 		{
 			if (m_Listeners.find(e.Id) != m_Listeners.end())

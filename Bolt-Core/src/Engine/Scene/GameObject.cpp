@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "Layer.h"
 #include "Core/Time/Time.h"
+#include "Core/Profiling/Profiling.h"
 
 namespace Bolt
 {
@@ -107,6 +108,7 @@ namespace Bolt
 
 	void GameObject::MakeChildOf(GameObject* parent)
 	{
+		BLT_PROFILE_FUNCTION();
 		if (parent == nullptr)
 		{
 			MakeStandalone();
@@ -147,18 +149,22 @@ namespace Bolt
 
 	void GameObject::Update()
 	{
+		BLT_PROFILE_FUNCTION();
 		std::vector<Component*> components = m_Components.GetComponents();
 		for (Component* c : components)
 		{
+			BLT_PROFILE_SCOPE("void Component::Update(void)");
 			c->Update();
 		}
 	}
 
 	void GameObject::LateUpdate()
 	{
+		BLT_PROFILE_FUNCTION();
 		std::vector<Component*> components = m_Components.GetComponents();
 		for (Component* c : components)
 		{
+			BLT_PROFILE_SCOPE("void Component::LateUpdate(void)");
 			c->LateUpdate();
 		}
 		for (int i = m_TemporaryComponents.size() - 1; i >= 0; i--)
@@ -175,6 +181,7 @@ namespace Bolt
 
 	ObjectPrefab GameObject::GetPrefab() const
 	{
+		BLT_PROFILE_FUNCTION();
 		ObjectPrefab prefab;
 		prefab.transform().SetLocalPosition(transform().LocalPosition());
 		prefab.transform().SetLocalOrientation(transform().LocalOrientation());
@@ -197,6 +204,7 @@ namespace Bolt
 
 	void Destroy(Component* c, float timeToDelete)
 	{
+		BLT_PROFILE_FUNCTION();
 		if (c->gameObject() == nullptr)
 		{
 			BLT_CORE_WARN("Deleting component that either is not attached to GameObject or has already been deleted, Id = {}", c->Id());
@@ -217,6 +225,7 @@ namespace Bolt
 
 	void GameObject::OnDestroy()
 	{
+		BLT_PROFILE_FUNCTION();
 		MakeStandalone();
 		m_TemporaryComponents.clear();
 		m_Components.Clear();
@@ -232,6 +241,7 @@ namespace Bolt
 
 	GameObject* GameObject::Instantiate(Layer* layer, Transform transform)
 	{
+		BLT_PROFILE_FUNCTION();
 		GameObject* object = layer->AddGameObject(GameObject());
 		object->transform() = std::move(transform);
 		return object;

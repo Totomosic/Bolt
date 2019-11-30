@@ -1,5 +1,6 @@
 #pragma once
 #include "../Vectors/Vector3.h"
+#include "Core/Profiling/Profiling.h"
 
 namespace Bolt
 {

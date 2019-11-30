@@ -6,8 +6,8 @@
 namespace Bolt
 {
 
-	ObjectPrefab::ObjectPrefab(Transform transform)
-		: m_Transform(std::move(transform)), m_Components(this)
+	ObjectPrefab::ObjectPrefab()
+		: m_Transform(), m_Components(this)
 	{
 		
 	}

@@ -16,7 +16,7 @@ namespace Bolt
 		ComponentManager m_Components;
 
 	public:
-		ObjectPrefab(Transform transform = Transform());
+		ObjectPrefab();
 		ObjectPrefab(const ObjectPrefab& other) = delete;
 		ObjectPrefab& operator=(const ObjectPrefab& other) = delete;
 		ObjectPrefab(ObjectPrefab&& other);

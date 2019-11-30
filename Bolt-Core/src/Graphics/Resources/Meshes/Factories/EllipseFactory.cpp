@@ -1,6 +1,7 @@
 #include "bltpch.h"
-
 #include "EllipseFactory.h"
+
+#include "Core/Profiling/Profiling.h"
 
 namespace Bolt
 {
@@ -13,6 +14,7 @@ namespace Bolt
 
 	ModelData EllipseFactory::GenerateVertices() const
 	{
+		BLT_PROFILE_FUNCTION();
 		float w = Width / 2;
 		float h = Height / 2;
 

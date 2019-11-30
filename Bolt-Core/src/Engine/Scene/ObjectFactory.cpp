@@ -6,6 +6,7 @@
 #include "Graphics/Resources/Meshes/Factories/LineFactory.h"
 
 #include "Engine/CurrentContext.h"
+#include "Core/Profiling/Profiling.h"
 
 namespace Bolt
 {
@@ -75,6 +76,7 @@ namespace Bolt
 
 	GameObject* ObjectFactory::Instantiate(Transform transform) const
 	{
+		BLT_PROFILE_FUNCTION();
 		GameObject* object = GameObject::Instantiate(CurrentLayer(), std::move(transform));
 		object->MakeChildOf(CurrentParent());
 		return object;

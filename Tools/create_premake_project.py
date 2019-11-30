@@ -29,7 +29,6 @@ PREMAKE_FORMAT_STRING_TEMPLATE = """project "{0}"
         "../../%{{IncludeDirs.FreeType}}",
         "../../%{{IncludeDirs.FreeTypeGL}}",
         "../../%{{IncludeDirs.Lua}}",
-        "../../%{{IncludeDirs.Python}}",
         "src"
     }}
 

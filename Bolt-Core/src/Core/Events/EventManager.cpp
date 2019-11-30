@@ -3,6 +3,7 @@
 #include "EventBus.h"
 
 #include "Engine/Engine.h"
+#include "Core/Profiling/Profiling.h"
 
 namespace Bolt
 {
@@ -66,6 +67,7 @@ namespace Bolt
 
 	void EventManager::FlushAll() const
 	{
+		BLT_PROFILE_FUNCTION();
 		for (int i = m_EventBuses.size() - 1; i >= 0; i--)
 		{
 			m_EventBuses[i]->Flush();

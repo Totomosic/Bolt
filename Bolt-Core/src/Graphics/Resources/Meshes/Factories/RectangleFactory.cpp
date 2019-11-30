@@ -1,6 +1,7 @@
 #include "bltpch.h"
-
 #include "RectangleFactory.h"
+
+#include "Core/Profiling/Profiling.h"
 
 namespace Bolt
 {
@@ -13,6 +14,7 @@ namespace Bolt
 
 	ModelData RectangleFactory::GenerateVertices() const
 	{
+		BLT_PROFILE_FUNCTION();
 		float w = Width / 2.0f;
 		float h = Height / 2.0f;
 
