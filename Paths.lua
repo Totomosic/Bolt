@@ -1,24 +1,21 @@
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
--- Solution Directory relative to a project
-SolutionDir = "../../"
 -- Bolt Directory
-BoltDir = "Bolt-Core/"
--- Projects Directory
-ProjectsDir = "Projects/"
+BoltCoreDir = "Bolt-Core/"
 -- Resources Directory
 ResourcesDir = "Bolt-Resources/"
+SolutionDir = "../../"
 
 -- Include directories relative to solution directory
 IncludeDirs = {}
-IncludeDirs["Bolt"] =       BoltDir .. "src"
-IncludeDirs["GLFW"] =       BoltDir .. "vendor/GLFW/include"
-IncludeDirs["Glad"] =       BoltDir .. "vendor/Glad/include"
-IncludeDirs["ImGui"] =      BoltDir .. "vendor/ImGui"
-IncludeDirs["spdlog"] =     BoltDir .. "vendor/spdlog/include"
-IncludeDirs["FreeTypeGL"] = BoltDir .. "vendor/FreeType-GL"
-IncludeDirs["FreeType"] =   BoltDir .. "vendor/FreeType/include"
-IncludeDirs["Lua"] =        BoltDir .. "vendor/Lua/src"
+IncludeDirs["Bolt"] =       BoltCoreDir .. "src"
+IncludeDirs["GLFW"] =       BoltCoreDir .. "vendor/GLFW/include"
+IncludeDirs["Glad"] =       BoltCoreDir .. "vendor/Glad/include"
+IncludeDirs["ImGui"] =      BoltCoreDir .. "vendor/ImGui"
+IncludeDirs["spdlog"] =     BoltCoreDir .. "vendor/spdlog/include"
+IncludeDirs["FreeTypeGL"] = BoltCoreDir .. "vendor/FreeType-GL"
+IncludeDirs["FreeType"] =   BoltCoreDir .. "vendor/FreeType/include"
+IncludeDirs["Lua"] =        BoltCoreDir .. "vendor/Lua/src"
 
 -- Library directories relative to solution directory
 LibraryDirs = {}
