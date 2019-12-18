@@ -1,6 +1,5 @@
 #pragma once
 #include "Core/Math/Maths.h"
-#include "Component.h"
 
 namespace Bolt
 {
