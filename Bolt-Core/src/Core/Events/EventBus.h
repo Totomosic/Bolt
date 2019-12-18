@@ -61,6 +61,8 @@ namespace Bolt
 		mutable EventBusMount<EventIdT> m_MountManager;
 		std::vector<EventEmitterBase*> m_EventEmitters;
 
+		bool m_ImmediateMode;
+
 	public:
 		GenericEventBus(bool addToEventManager = true);
 		GenericEventBus(const GenericEventBus<EventIdT>& other) = delete;
@@ -68,6 +70,9 @@ namespace Bolt
 		GenericEventBus(GenericEventBus<EventIdT>&& other) = delete;
 		GenericEventBus<EventIdT>& operator=(GenericEventBus<EventIdT>&& other) = delete;
 		~GenericEventBus();
+
+		bool IsImmediateMode() const;
+		void SetImmediateMode(bool immediate);
 
 		template<typename T>
 		GenericEventEmitter<T, EventIdT> GetEmitter(const EventIdT& eventId);
@@ -165,18 +170,30 @@ namespace Bolt
 
 	template<typename EventIdT>
 	GenericEventBus<EventIdT>::GenericEventBus(bool addToEventManager)
-		: m_ListenersMutex(), m_EventsMutex(), m_Listeners(), m_ListenerLocations(), m_Events(), m_ListenerIds(0, (uint32_t)-1), m_MountManager(this)
+		: m_ListenersMutex(), m_EventsMutex(), m_Listeners(), m_ListenerLocations(), m_Events(), m_ListenerIds(0, (uint32_t)-1), m_MountManager(this), m_ImmediateMode(false)
 	{
 		if (addToEventManager)
 		{
 			EventManager::Get().AddEventBus(this);
-		}		
+		}
 	}
 
 	template<typename EventIdT>
 	GenericEventBus<EventIdT>::~GenericEventBus()
 	{
 		EventManager::Get().RemoveBus(this);
+	}
+
+	template<typename EventIdT>
+	inline bool GenericEventBus<EventIdT>::IsImmediateMode() const
+	{
+		return m_ImmediateMode;
+	}
+
+	template<typename EventIdT>
+	void GenericEventBus<EventIdT>::SetImmediateMode(bool immediate)
+	{
+		m_ImmediateMode = immediate;
 	}
 
 	template<typename EventIdT>
@@ -323,8 +340,16 @@ namespace Bolt
 	void GenericEventBus<EventIdT>::EmitEvent(const EventIdT& eventId, std::unique_ptr<EventContainer>&& event)
 	{
 		BLT_PROFILE_FUNCTION();
-		std::scoped_lock<std::mutex> lock(m_EventsMutex);
-		m_Events.push_back({ eventId, std::move(event) });
+		if (m_ImmediateMode)
+		{
+			GenericEventBus<EventIdT>::EventInfo e{ eventId, std::move(event) };
+			ProcessEvent(e);
+		}
+		else
+		{
+			std::scoped_lock<std::mutex> lock(m_EventsMutex);
+			m_Events.push_back({ eventId, std::move(event) });
+		}
 	}
 
 	template<typename EventIdT>
@@ -342,7 +367,7 @@ namespace Bolt
 					if (e.Event->Handled)
 					{
 						break;
-					}					
+					}
 				}
 			}
 			if (!e.Event->Handled)
@@ -353,7 +378,7 @@ namespace Bolt
 					if (e.Event->Handled)
 					{
 						break;
-					}					
+					}
 				}
 			}
 		}
@@ -431,14 +456,14 @@ namespace Bolt
 	template<typename EventIdT>
 	GenericScopedEventListener<EventIdT>::GenericScopedEventListener() : GenericScopedEventListener(*(GenericEventBus<EventIdT>*)nullptr, 0)
 	{
-	
+
 	}
 
 	template<typename EventIdT>
 	GenericScopedEventListener<EventIdT>::GenericScopedEventListener(GenericEventBus<EventIdT>& eventBus, uint32_t listenerId)
 		: m_EventBus(&eventBus), m_ListenerId(listenerId)
 	{
-	
+
 	}
 
 	template<typename EventIdT>
