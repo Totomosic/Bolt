@@ -44,6 +44,10 @@ namespace Bolt
 
 	UIElement::~UIElement()
 	{
+		if (m_IsFocused)
+		{
+			Blur();
+		}
 		if (m_GameObject != nullptr)
 		{
 			Destroy(m_GameObject);

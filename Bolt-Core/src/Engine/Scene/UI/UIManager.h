@@ -10,7 +10,7 @@ namespace Bolt
 	private:
 		ObjectFactory m_Factory;
 		std::unique_ptr<UIElement> m_RootElement;
-		UIElement* m_FocusedElement;
+		mutable UIElement* m_FocusedElement;
 		std::unordered_map<blt::string, UIElement*> m_ElementIdMap;
 
 		std::vector<UIElement*> m_TabElements;
@@ -66,6 +66,8 @@ namespace Bolt
 		void KeyDownHandler(Event<KeyPressedEvent>& e);
 		void KeyUpHandler(Event<KeyReleasedEvent>& e);
 		void CharPressedHandler(Event<CharPressedEvent>& e);
+
+		Vector2f RemapMousePosition(const Vector2f& position) const;
 
 	};
 

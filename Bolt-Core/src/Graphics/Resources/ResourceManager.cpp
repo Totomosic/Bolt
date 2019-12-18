@@ -41,29 +41,22 @@ namespace Bolt
 
 	void ResourceManager::LoadPack(const Filepath& resourcePack, std::function<void(const ResourcePack&)> callback)
 	{
-		Task t = TaskManager::Run([resourcePack, this]()
-			{
-				XMLfile file = Filesystem::OpenXML(resourcePack);
-				XMLnode root = file.LoadXML();
-				ResourcePack result;
-				for (XMLnode& resource : root.Children)
-				{
-					ResourceFile resFile;
-					resFile.Name = resource.Attributes.at("name");
-					resFile.Type = StringToType(resource.Name);
-					resFile.Attributes = resource;
-					result.m_Resources[resFile.Name] = std::move(resFile);
-				}
-				return result;
-			});
-		t.ContinueWithOnMainThread([callback{callback}, this](ResourcePack result)
-			{
-				for (auto& pair : result.m_Resources)
-				{
-					LoadFile(pair.second); ;
-				}
-				callback(result);
-			});	
+		XMLfile file = Filesystem::OpenXML(resourcePack);
+		XMLnode root = file.LoadXML();
+		ResourcePack result;
+		for (XMLnode& resource : root.Children)
+		{
+			ResourceFile resFile;
+			resFile.Name = resource.Attributes.at("name");
+			resFile.Type = StringToType(resource.Name);
+			resFile.Attributes = resource;
+			result.m_Resources[resFile.Name] = std::move(resFile);
+		}
+		for (auto& pair : result.m_Resources)
+		{
+			LoadFile(pair.second); ;
+		}
+		callback(result);
 	}
 
 	bool ResourceManager::ResourceExists(const ResourceID& id)
@@ -138,34 +131,27 @@ namespace Bolt
 		int height = std::stoi(resourceFile.Attributes.GetChild("height").Data.c_str());
 		resourceFile.Id = RegisterGetId(std::make_unique<Texture2D>(width, height));
 		Texture2D* ptr = (Texture2D*)m_Resources[resourceFile.Id].get();
-		Task t = TaskManager::Run([resourceFile{ std::move(resourceFile) }, width, height]()
-			{
-				blt::string data = resourceFile.Attributes.GetChild("data").Data;
-				const blt::string& magString = resourceFile.Attributes.GetChild("options").Attributes.at("magnification");
-				const blt::string& minString = resourceFile.Attributes.GetChild("options").Attributes.at("minification");
-				const blt::string& mipmapString = resourceFile.Attributes.GetChild("options").Attributes.at("mipmaps");
-				const blt::string& wrapString = resourceFile.Attributes.GetChild("options").Attributes.at("wrap");
-				BLT_ASSERT(magString == "Nearest" || magString == "Linear", "Invalid Mag Option");
-				BLT_ASSERT(minString == "Nearest" || minString == "Linear", "Invalid Min Option");
-				BLT_ASSERT(mipmapString == "Enabled" || mipmapString == "Disabled", "Invalid Mipmap Option");
-				BLT_ASSERT(wrapString == "Repeat" || wrapString == "ClampToEdge", "Invalid Wrap Option");
-				Image image;
-				image.Width = width;
-				image.Height = height;
-				image.Components = 4;
-				image.Pixels = BLT_NEW byte[data.length()];
-				memcpy(image.Pixels, data.data(), data.length());
-				TextureCreateOptions options;
-				options.Magnification = (magString == "Nearest") ? MagFilter::Nearest : MagFilter::Linear;
-				options.Minification = (minString == "Nearest") ? MinFilter::Nearest : MinFilter::Linear;
-				options.MipmapMode = (mipmapString == "Disabled") ? Mipmaps::Disabled : Mipmaps::Enabled;
-				options.Wrap = (wrapString == "Repeat") ? WrapMode::Repeat : WrapMode::ClampToEdge;
-				return std::pair<Image, TextureCreateOptions>{ std::move(image), options };
-			});
-		t.ContinueWithOnMainThread([ptr](std::pair<Image, TextureCreateOptions> result)
-			{
-				*ptr = Texture2D(result.first, result.second);
-			});
+		blt::string data = resourceFile.Attributes.GetChild("data").Data;
+		const blt::string& magString = resourceFile.Attributes.GetChild("options").Attributes.at("magnification");
+		const blt::string& minString = resourceFile.Attributes.GetChild("options").Attributes.at("minification");
+		const blt::string& mipmapString = resourceFile.Attributes.GetChild("options").Attributes.at("mipmaps");
+		const blt::string& wrapString = resourceFile.Attributes.GetChild("options").Attributes.at("wrap");
+		BLT_ASSERT(magString == "Nearest" || magString == "Linear", "Invalid Mag Option");
+		BLT_ASSERT(minString == "Nearest" || minString == "Linear", "Invalid Min Option");
+		BLT_ASSERT(mipmapString == "Enabled" || mipmapString == "Disabled", "Invalid Mipmap Option");
+		BLT_ASSERT(wrapString == "Repeat" || wrapString == "ClampToEdge", "Invalid Wrap Option");
+		Image image;
+		image.Width = width;
+		image.Height = height;
+		image.Components = 4;
+		image.Pixels = BLT_NEW byte[data.length()];
+		memcpy(image.Pixels, data.data(), data.length());
+		TextureCreateOptions options;
+		options.Magnification = (magString == "Nearest") ? MagFilter::Nearest : MagFilter::Linear;
+		options.Minification = (minString == "Nearest") ? MinFilter::Nearest : MinFilter::Linear;
+		options.MipmapMode = (mipmapString == "Disabled") ? Mipmaps::Disabled : Mipmaps::Enabled;
+		options.Wrap = (wrapString == "Repeat") ? WrapMode::Repeat : WrapMode::ClampToEdge;
+		*ptr = Texture2D(std::move(image), options);
 	}
 
 	void ResourceManager::LoadModelFile(ResourceFile& resourceFile)

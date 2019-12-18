@@ -29,6 +29,7 @@
 #include "Engine/Scene/UI/UIText.h"
 #include "Engine/Scene/UI/Compounds/UITextInput.h"
 
+#include "Engine/Networking/SocketUtil.h"
 #include "Engine/Networking/UDPsocket.h"
 #include "Engine/Networking/TCPsocket.h"
 #include "Engine/Networking/IO/TCPclient.h"

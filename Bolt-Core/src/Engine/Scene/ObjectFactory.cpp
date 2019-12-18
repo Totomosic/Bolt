@@ -13,10 +13,13 @@ namespace Bolt
 
 	ObjectFactory::ObjectFactory() : ObjectFactory(*(Layer*)nullptr)
 	{
-		SceneManager& manager = CurrentContext::GetSceneManager();
-		if (&manager != nullptr && &manager.CurrentScene() != nullptr)
+		if (Engine::IsInitialized())
 		{
-			SetCurrentLayer(CurrentContext::GetSceneManager().CurrentScene().GetCurrentLayer());
+			SceneManager& manager = CurrentContext::GetSceneManager();
+			if (&manager != nullptr && &manager.CurrentScene() != nullptr)
+			{
+				SetCurrentLayer(CurrentContext::GetSceneManager().CurrentScene().GetCurrentLayer());
+			}
 		}
 	}
 

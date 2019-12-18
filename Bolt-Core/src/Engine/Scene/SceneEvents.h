@@ -1,5 +1,6 @@
 #pragma once
 #include "Core/Events/EventBus.h"
+#include <any>
 
 namespace Bolt
 {
@@ -10,7 +11,7 @@ namespace Bolt
 	{
 	public:
 		Scene* LoadedScene;
-		std::unique_ptr<EventContainer> LoadData;
+		std::any LoadData;
 	};
 
 	class BLT_API SceneUnloadedEvent

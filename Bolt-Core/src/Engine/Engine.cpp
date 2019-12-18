@@ -21,6 +21,11 @@ namespace Bolt
 		return *s_EngineInstance;
 	}
 
+	bool Engine::IsInitialized()
+	{
+		return s_EngineInstance != nullptr;
+	}
+
 	Engine::Engine(EngineCreateInfo createInfo)
 		: m_RootApplication(), m_CreateInfo(createInfo), m_CurrentContext(nullptr)
 	{

@@ -93,6 +93,7 @@ namespace Bolt
 	void UIManager::Clear() const
 	{
 		m_RootElement->Clear();
+		m_FocusedElement = nullptr;
 	}
 
 	void UIManager::OnActivate()
@@ -189,10 +190,10 @@ namespace Bolt
 	// =============================================================================================================================================================================
 
 	void UIManager::MouseClickHandler(Event<MouseClickEvent>& e)
-	{
+	{		
 		if (IsActive())
 		{
-			Vector2f point(e.Data.x, e.Data.y);
+			Vector2f point = RemapMousePosition({ e.Data.x, e.Data.y });
 			if (m_FocusedElement != nullptr)
 			{
 				m_FocusedElement->Events().OnClick.Emit({ *m_FocusedElement, point, e.Data.Button });
@@ -204,7 +205,7 @@ namespace Bolt
 	{
 		if (IsActive())
 		{
-			Vector2f point(e.Data.x, e.Data.y);
+			Vector2f point = RemapMousePosition({ e.Data.x, e.Data.y });
 			std::vector<UIElement*> elements = GetElementsUnderPoint(point);
 			if (elements.size() > 0)
 			{
@@ -236,7 +237,7 @@ namespace Bolt
 		{
 			if (m_FocusedElement != nullptr)
 			{
-				Vector2f point(e.Data.x, e.Data.y);
+				Vector2f point = RemapMousePosition({ e.Data.x, e.Data.y });
 				m_FocusedElement->Events().OnMouseUp.Emit({ *m_FocusedElement, point, e.Data.Button });
 			}
 		}
@@ -277,6 +278,18 @@ namespace Bolt
 				m_FocusedElement->Events().OnCharPressed.Emit({ *m_FocusedElement, e.Data.CharCode });
 			}
 		}
+	}
+
+	Vector2f UIManager::RemapMousePosition(const Vector2f& position) const
+	{
+		Camera* camera = m_Factory.CurrentLayer()->ActiveCamera();
+		if (camera)
+		{
+			float width = camera->ViewWidth();
+			float height = camera->ViewHeight();
+			return Input::Get().MousePosition(width, height).xy();
+		}
+		return position;
 	}
 
 }

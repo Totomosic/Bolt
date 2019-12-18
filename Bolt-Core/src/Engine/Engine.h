@@ -19,6 +19,7 @@ namespace Bolt
 
 	public:
 		static Engine& Instance();
+		static bool IsInitialized();
 
 	public:
 		Engine(EngineCreateInfo createInfo = EngineCreateInfo());
