@@ -6,6 +6,7 @@
 #include "MaterialManager.h"
 #include "FontManager.h"
 #include "TextureManager.h"
+#include "BasicModels.h"
 
 namespace Bolt
 {
@@ -20,6 +21,7 @@ namespace Bolt
 		FontManager m_Fonts;
 		TextureManager m_Textures;
 		MaterialManager m_Materials;
+		BasicModels m_Models;
 
 	public:
 		static ResourceManager& Get();
@@ -30,6 +32,7 @@ namespace Bolt
 		const MaterialManager& Materials() const;
 		const FontManager& Fonts() const;
 		const TextureManager& Textures() const;
+		const BasicModels& Models() const;
 
 		void LoadPack(const Filepath& resourcePack, std::function<void(const ResourcePack&)> callback);
 

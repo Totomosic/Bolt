@@ -1,24 +1,13 @@
 #include "bltpch.h"
-
 #include "RenderSchedule.h"
 
 namespace Bolt
 {
 
-	RenderSchedule::RenderSchedule() : RenderSchedule(*(const Scene*)nullptr)
+	RenderSchedule::RenderSchedule()
+		: m_Processes()
 	{
 	
-	}
-
-	RenderSchedule::RenderSchedule(const Scene& scene)
-		: m_Scene(&scene), m_Processes()
-	{
-	
-	}
-
-	const Scene& RenderSchedule::GetScene() const
-	{
-		return *m_Scene;
 	}
 
 	const std::vector<RenderProcess>& RenderSchedule::Processes() const

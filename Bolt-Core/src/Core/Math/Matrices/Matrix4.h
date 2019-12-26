@@ -55,7 +55,8 @@ namespace Bolt
 				
 		}	
 				
-		Matrix4()	
+		Matrix4()
+			: values()
 		{	
 			for (int i = 0; i < 16; i++)	
 			{	

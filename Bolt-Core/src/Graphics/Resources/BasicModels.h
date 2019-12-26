@@ -16,9 +16,6 @@ namespace Bolt
 		ResourcePtr<Model> m_SphereModel;
 
 	public:
-		static BasicModels& Get();
-
-	public:
 		BasicModels(ResourceManager* manager);
 
 		const ResourcePtr<Model>& Square() const;

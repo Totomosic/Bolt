@@ -1,7 +1,6 @@
 #include "bltpch.h"
 
 #include "Graphics.h"
-#include "SceneRenderer.h"
 #include "Engine/Engine.h"
 
 namespace Bolt
@@ -35,12 +34,12 @@ namespace Bolt
 
 	void Graphics::RenderScene()
 	{
-		if (&SceneManager::Get().CurrentScene() == nullptr)
-		{
-			return;
-		}
 		DefaultFramebuffer()->Clear();
-		SceneRenderer::Get().Render(SceneManager::Get().CurrentScene());
+		if (SceneManager::Get().HasCurrentScene())
+		{
+			TimeDelta delta = Time::Get().RenderingTimeline().DeltaTime();
+			SceneManager::Get().GetCurrentScene().Render(delta);
+		}
 	}
 
 }

@@ -18,16 +18,12 @@
 #include "Graphics/Resources/Meshes/Model.h"
 #include "Graphics/Resources/Meshes/Factories/RectangleFactory.h"
 #include "Graphics/Resources/Meshes/Factories/CuboidFactory.h"
+#include "Graphics/Resources/Meshes/Mesh.h"
 
 #include "Engine/Application.h"
 #include "Engine/Engine.h"
 #include "Engine/CurrentContext.h"
 #include "Engine/Scripting/Lua/LuaScriptingEnv.h"
-#include "Engine/Scene/Components/Components.h"
-
-#include "Engine/Scene/UI/UISurface.h"
-#include "Engine/Scene/UI/UIText.h"
-#include "Engine/Scene/UI/Compounds/UITextInput.h"
 
 #include "Engine/Networking/SocketUtil.h"
 #include "Engine/Networking/UDPsocket.h"
@@ -36,3 +32,8 @@
 #include "Engine/Networking/IO/TCPserver.h"
 
 #include "Engine/Renderer/2D/Renderer2D.h"
+
+#include "Engine/Scene/EntityManager.h"
+
+#include "Engine/Scene/Components/Transform.h"
+#include "Engine/Scene/Components/Camera.h"

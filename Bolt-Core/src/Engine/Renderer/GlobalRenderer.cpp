@@ -1,7 +1,6 @@
 #include "bltpch.h"
 #include "GlobalRenderer.h"
 #include "Graphics.h"
-#include "Engine/Scene/Lighting/LightSource.h"
 #include "Graphics/Framebuffer.h"
 
 namespace Bolt

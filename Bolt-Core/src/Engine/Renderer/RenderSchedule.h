@@ -1,7 +1,6 @@
 #pragma once
 #include "RenderCamera.h"
 #include "RenderOptions.h"
-#include "Engine/Scene/Scene.h"
 
 namespace Bolt
 {
@@ -17,16 +16,12 @@ namespace Bolt
 	class BLT_API RenderSchedule
 	{
 	private:
-		const Scene* m_Scene;
 		std::vector<RenderProcess> m_Processes;
 
 	public:
 		RenderSchedule();
-		RenderSchedule(const Scene& scene);
 
-		const Scene& GetScene() const;
 		const std::vector<RenderProcess>& Processes() const;
-
 		id_t AddRenderProcess(const RenderProcess& process);
 
 	};

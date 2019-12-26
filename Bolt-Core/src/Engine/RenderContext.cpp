@@ -7,7 +7,7 @@ namespace Bolt
 {
 
 	RenderContext::RenderContext(AppContext* context, const WindowCreateInfo& createInfo)
-		: m_Input(&m_Window), m_Window(context, createInfo), m_Resources(), m_Models(&m_Resources), m_Graphics(&m_Window), m_SceneManager(), m_SceneRenderer()
+		: m_Input(&m_Window), m_Window(context, createInfo), m_Resources(), m_Graphics(&m_Window)
 	{
 
 	}
@@ -17,24 +17,9 @@ namespace Bolt
 		return m_Window;
 	}
 
-	BasicModels& RenderContext::GetBasicModels()
-	{
-		return m_Models;
-	}
-
 	Graphics& RenderContext::GetGraphics()
 	{
 		return m_Graphics;
-	}
-
-	SceneManager& RenderContext::GetSceneManager()
-	{
-		return m_SceneManager;
-	}
-
-	SceneRenderer& RenderContext::GetSceneRenderer()
-	{
-		return m_SceneRenderer;
 	}
 
 	Input& RenderContext::GetInput()
@@ -45,6 +30,11 @@ namespace Bolt
 	ResourceManager& RenderContext::GetResourceManager()
 	{
 		return m_Resources;
+	}
+
+	SceneManager& RenderContext::GetSceneManager()
+	{
+		return m_SceneManager;
 	}
 
 }

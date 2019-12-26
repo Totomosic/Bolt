@@ -7,57 +7,9 @@ namespace Bolt
 {
 
 	Transform::Transform(Vector3f position, Quaternion orientation, Vector3f scale)
-		: m_Parent(nullptr), m_Children(), m_LocalPosition(position), m_LocalOrientation(orientation), m_LocalScale(scale), m_TransformMatrix(Matrix4f::Identity()), m_InverseTransformMatrix(Matrix4f::Identity()), m_IsValid(false), m_UpdateOnInvalidate(false)
+		: m_LocalPosition(position), m_LocalOrientation(orientation), m_LocalScale(scale), m_TransformMatrix(Matrix4f::Identity()), m_InverseTransformMatrix(Matrix4f::Identity()), m_IsValid(false), m_UpdateOnInvalidate(false)
 	{
 		RecalculateMatrix();
-	}
-
-	Transform::Transform(Transform&& other)
-		: m_Parent(nullptr), m_Children(std::move(other.m_Children)), m_LocalPosition(other.m_LocalPosition), m_LocalOrientation(other.m_LocalOrientation), m_LocalScale(other.m_LocalScale),
-		m_TransformMatrix(other.m_TransformMatrix), m_InverseTransformMatrix(other.m_InverseTransformMatrix), m_IsValid(other.m_IsValid), m_UpdateOnInvalidate(other.m_UpdateOnInvalidate)
-	{
-		SetParent(&other.Parent());
-		for (Transform* t : m_Children)
-		{
-			t->m_Parent = this;
-		}
-	}
-
-	Transform& Transform::operator=(Transform&& other)
-	{
-		m_Children = std::move(other.m_Children);
-		m_LocalPosition = other.m_LocalPosition;
-		m_LocalOrientation = other.m_LocalOrientation;
-		m_LocalScale = other.m_LocalScale;
-		m_TransformMatrix = other.m_TransformMatrix;
-		m_InverseTransformMatrix = other.m_InverseTransformMatrix;
-		m_IsValid = other.m_IsValid;
-		m_UpdateOnInvalidate = other.m_UpdateOnInvalidate;
-		SetParent(&other.Parent());
-		for (Transform* t : m_Children)
-		{
-			t->m_Parent = this;
-		}
-		return *this;
-	}
-
-	Transform::~Transform()
-	{
-		SetParent(nullptr);
-		for (Transform* child : m_Children)
-		{
-			child->SetParent(nullptr);
-		}
-	}
-
-	const Transform& Transform::Parent() const
-	{
-		return *m_Parent;
-	}
-
-	bool Transform::HasParent() const
-	{
-		return m_Parent != nullptr;
 	}
 
 	bool Transform::GetUpdateOnInvalidate() const
@@ -65,33 +17,9 @@ namespace Bolt
 		return m_UpdateOnInvalidate;
 	}
 
-	void Transform::SetParent(const Transform* transform)
-	{
-		BLT_PROFILE_FUNCTION();
-		if (transform == nullptr && m_Parent != nullptr)
-		{
-			auto it = std::find(m_Parent->m_Children.begin(), m_Parent->m_Children.end(), this);
-			if (it != m_Parent->m_Children.end())
-			{
-				m_Parent->m_Children.erase(it);
-			}
-		}
-		else if (transform != nullptr)
-		{
-			transform->m_Children.push_back(this);
-		}
-		m_Parent = (Transform*)transform;
-		Invalidate();
-	}
-
 	void Transform::SetUpdateOnInvalidate(bool update)
 	{
 		m_UpdateOnInvalidate = update;
-	}
-
-	int Transform::ChildCount() const
-	{
-		return m_Children.size();
 	}
 
 	const Vector3f& Transform::LocalPosition() const
@@ -118,20 +46,12 @@ namespace Bolt
 	Quaternion Transform::Orientation() const
 	{
 		CheckRecalculate();
-		if (HasParent())
-		{
-			return Parent().Orientation() * m_LocalOrientation;
-		}
 		return m_LocalOrientation;
 	}
 
 	Vector3f Transform::Scale() const
 	{
 		CheckRecalculate();
-		if (HasParent())
-		{
-			return Parent().Scale() * m_LocalScale;
-		}
 		return m_LocalScale;
 	}
 
@@ -283,23 +203,9 @@ namespace Bolt
 		Invalidate();
 	}
 
-	void Transform::Transfer(XMLserializer& backend, bool isWriting)
-	{
-		BLT_TRANSFER(backend, m_LocalPosition);
-		BLT_TRANSFER(backend, m_LocalOrientation);
-		BLT_TRANSFER(backend, m_LocalScale);
-
-		BLT_TRANSFER(backend, m_Parent);
-		BLT_TRANSFER(backend, m_Children);
-	}
-
 	void Transform::RecalculateMatrix() const
 	{
 		m_TransformMatrix = Matrix4f::Translation(m_LocalPosition) * m_LocalOrientation.ToMatrix4f() * Matrix4f::Scale(m_LocalScale);
-		if (HasParent())
-		{
-			m_TransformMatrix = Parent().TransformMatrix() * m_TransformMatrix;
-		}
 		m_InverseTransformMatrix = m_TransformMatrix.Inverse();
 		m_IsValid = true;
 	}
@@ -310,10 +216,6 @@ namespace Bolt
 		if (m_UpdateOnInvalidate)
 		{
 			RecalculateMatrix();
-		}
-		for (const Transform* child : m_Children)
-		{
-			child->Invalidate();
 		}
 	}
 

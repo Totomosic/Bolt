@@ -8,7 +8,7 @@ namespace Bolt
 	struct BLT_API RenderGroup
 	{
 	public:
-		const Material* Material;
+		const Material* Material = nullptr;
 		std::vector<RenderData> Renderables;
 	};
 

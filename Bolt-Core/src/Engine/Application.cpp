@@ -7,7 +7,6 @@
 #include "User/Input.h"
 #include "Renderer/Graphics.h"
 #include "Renderer/GLState.h"
-#include "Scene/SceneManager.h"
 
 #include "Core/Profiling/Profiling.h"
 
@@ -164,15 +163,15 @@ namespace Bolt
 	bool Application::UpdateGraphics()
 	{
 		BLT_PROFILE_FUNCTION();
-		Scene* scene = &SceneManager::Get().CurrentScene();
 		EventManager::Get().FlushAll(); // Flush #1 (likely input events)
+		TimeDelta delta = Time::Get().RenderingTimeline().DeltaTime();
 		{
 			BLT_PROFILE_SCOPE("Update()");
 			Update();
 		}
-		if (scene != nullptr)
+		if (SceneManager::Get().HasCurrentScene())
 		{
-			scene->Update();
+			SceneManager::Get().GetCurrentScene().Update(delta);
 		}
 		{
 			BLT_PROFILE_SCOPE("Render()");
@@ -181,10 +180,6 @@ namespace Bolt
 		GetWindow().SwapBuffers();
 		Time::Get().Update();
 		EventManager::Get().FlushAll(); // Flush #2 (likely other scene/app events)
-		if (scene != nullptr)
-		{
-			scene->UpdateTemporaryObjects();
-		}
 		return true;
 	}
 

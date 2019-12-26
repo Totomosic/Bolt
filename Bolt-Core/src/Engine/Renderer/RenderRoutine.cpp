@@ -33,7 +33,7 @@ namespace Bolt
 			case RendererUniform::CameraDirection:
 				shader.SetUniform(uniform.Location, (Vector3f)viewMatrix.Inverse().Row(2).xyz() * Vector3f(1, 1, -1));
 				break;
-			case RendererUniform::LightPositions:
+			/*case RendererUniform::LightPositions:
 				if (uniform.Index < context.Lights.size())
 				{
 					shader.SetUniform(uniform.Location, context.Lights.at(uniform.Index).Position);
@@ -65,7 +65,7 @@ namespace Bolt
 				break;
 			case RendererUniform::LightCount:
 				shader.SetUniform(uniform.Location, (int)context.Lights.size());
-				break;
+				break;*/
 			}
 		}
 		for (const RenderData& data : group.Renderables)

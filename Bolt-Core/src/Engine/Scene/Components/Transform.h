@@ -1,5 +1,6 @@
 #pragma once
 #include "Core/Math/Maths.h"
+#include "Component.h"
 
 namespace Bolt
 {
@@ -10,12 +11,9 @@ namespace Bolt
 		Local
 	};
 
-	struct BLT_API Transform
+	class BLT_API Transform : public Component<Transform>
 	{
 	private:
-		Transform* m_Parent;
-		mutable std::vector<Transform*> m_Children;
-
 		Vector3f m_LocalPosition;
 		Quaternion m_LocalOrientation;
 		Vector3f m_LocalScale;
@@ -26,19 +24,10 @@ namespace Bolt
 		mutable bool m_UpdateOnInvalidate;
 
 	public:
-		Transform(Vector3f position = Vector3f(0.0f), Quaternion orientation = Quaternion::Identity(), Vector3f scale = Vector3f(1.0f, 1.0f, 1.0f));
-		Transform(const Transform& other) = delete;
-		Transform& operator=(const Transform& other) = delete;
-		Transform(Transform&& other);
-		Transform& operator=(Transform&& other);
-		~Transform();
+		Transform(Vector3f position = Vector3f(0.0f), Quaternion orientation = Quaternion::Identity(), Vector3f scale = Vector3f(1.0f));
 
-		const Transform& Parent() const;
-		bool HasParent() const;
 		bool GetUpdateOnInvalidate() const;
-		void SetParent(const Transform* transform);
 		void SetUpdateOnInvalidate(bool update);
-		int ChildCount() const;
 
 		const Vector3f& LocalPosition() const;
 		const Quaternion& LocalOrientation() const;
@@ -78,8 +67,6 @@ namespace Bolt
 		void Rotate(float angle, Vector3f axis, Space rotateSpace = Space::World);
 
 		void Reset();
-
-		void Transfer(XMLserializer& backend, bool isWriting);
 
 	private:
 		void RecalculateMatrix() const;

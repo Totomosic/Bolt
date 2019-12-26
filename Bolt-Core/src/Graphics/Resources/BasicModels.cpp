@@ -13,11 +13,6 @@
 namespace Bolt
 {
 
-	BasicModels& BasicModels::Get()
-	{
-		return Engine::Instance().CurrentContext().GetRenderContext().GetBasicModels();
-	}
-
 	BasicModels::BasicModels(ResourceManager* manager)
 	{
 		BLT_PROFILE_FUNCTION();

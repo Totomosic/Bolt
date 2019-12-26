@@ -1,6 +1,7 @@
 #pragma once
 #include "Timer.h"
 #include "Timeline.h"
+#include "TimeDelta.h"
 
 namespace Bolt
 {
