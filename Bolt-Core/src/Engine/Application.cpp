@@ -177,6 +177,7 @@ namespace Bolt
 			BLT_PROFILE_SCOPE("Render()");
 			Render();
 		}
+		Graphics::Get().GetRenderer().Flush();
 		GetWindow().SwapBuffers();
 		Time::Get().Update();
 		EventManager::Get().FlushAll(); // Flush #2 (likely other scene/app events)

@@ -1,11 +1,11 @@
 #pragma once
-#include "../RenderCamera.h"
 #include "Core/Math/Matrices/Matrix4.h"
 #include "Graphics/Buffers/VertexArray.h"
 #include "Graphics/Buffers/IndexBuffer.h"
 #include "Graphics/Resources/Textures/Texture2D.h"
 #include "Graphics/Resources/ResourcePtr.h"
 #include "Graphics/Framebuffer.h"
+#include "../RenderingContext.h"
 
 #include "Graphics/Resources/Meshes/Materials/Shaders/ShaderLinkContext.h"
 #include "TextureFrame.h"

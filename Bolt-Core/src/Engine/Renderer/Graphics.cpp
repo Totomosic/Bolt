@@ -12,7 +12,7 @@ namespace Bolt
 	}
 
 	Graphics::Graphics(Window* window)
-		: m_Window(window), m_State()
+		: m_Window(window), m_State(), m_Renderer()
 	{
 	
 	}
@@ -30,6 +30,16 @@ namespace Bolt
 	GLState& Graphics::GetState()
 	{
 		return m_State;
+	}
+
+	const Renderer& Graphics::GetRenderer() const
+	{
+		return m_Renderer;
+	}
+
+	Renderer& Graphics::GetRenderer()
+	{
+		return m_Renderer;
 	}
 
 	void Graphics::RenderScene()

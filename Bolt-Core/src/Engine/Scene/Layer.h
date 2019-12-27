@@ -1,6 +1,7 @@
 #pragma once
 #include "SystemRegistry.h"
 #include "Systems/RenderingSystem.h"
+#include "EntityFactory.h"
 
 namespace Bolt
 {
@@ -16,6 +17,8 @@ namespace Bolt
 
 	public:
 		Layer();
+
+		EntityFactory GetFactory();
 
 		const EntityManager& Entities() const;
 		EntityManager& Entities();

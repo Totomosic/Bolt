@@ -5,7 +5,7 @@
 #include "Meshes/Materials/Material.h"
 #include "Textures/Fonts/Font.h"
 
-#include "MaterialDefs/PBRMaterials.h"
+#include "Meshes/Materials/MaterialDefs/PBRMaterials.h"
 
 namespace Bolt
 {
@@ -29,7 +29,7 @@ namespace Bolt
 		MaterialManager(ResourceManager* manager);
 
 		std::unique_ptr<Material> Default(const Color& baseColor = Color::White) const;
-		std::unique_ptr<Material> Texture(const ResourcePtr<Texture2D>& texture) const;
+		std::unique_ptr<Material> Texture(ResourcePtr<Texture2D> texture) const;
 		std::unique_ptr<Material> Font(const ResourcePtr<Bolt::Font>& font, const Color& baseColor = Color::White) const;
 		std::unique_ptr<Material> DefaultLighting(const Color& color = Color::White) const;
 		std::unique_ptr<Material> TextureLighting() const;

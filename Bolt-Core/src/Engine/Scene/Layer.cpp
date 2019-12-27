@@ -14,6 +14,11 @@ namespace Bolt
 		m_RenderingSystem = m_Systems.Register<RenderingSystem>();
 	}
 
+	EntityFactory Layer::GetFactory()
+	{
+		return EntityFactory(*this);
+	}
+
 	const EntityManager& Layer::Entities() const
 	{
 		return m_Entities;

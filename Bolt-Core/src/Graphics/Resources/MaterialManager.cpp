@@ -29,10 +29,10 @@ namespace Bolt
 		return material;
 	}
 
-	std::unique_ptr<Material> MaterialManager::Texture(const ResourcePtr<Texture2D>& texture) const
+	std::unique_ptr<Material> MaterialManager::Texture(ResourcePtr<Texture2D> texture) const
 	{
 		std::unique_ptr<Material> material = m_TextureGraph.GetMaterial();
-		material->GetLinkContext().Link("Texture", texture);
+		material->GetLinkContext().Link("Texture", std::move(texture));
 		return material;
 	}
 

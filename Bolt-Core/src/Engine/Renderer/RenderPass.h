@@ -1,5 +1,5 @@
 #pragma once
-#include "RenderGroup.h"
+#include "RenderData.h"
 #include "Graphics/Framebuffer.h"
 
 namespace Bolt
@@ -8,8 +8,8 @@ namespace Bolt
 	struct BLT_API RenderPass
 	{
 	public:
-		const Framebuffer* RenderTarget;
-		std::vector<RenderGroup> RenderGroups = std::vector<RenderGroup>();
+		const Framebuffer* RenderTarget = nullptr;
+		std::vector<RenderGroup> RenderGroups;
 	};
 
 }

@@ -1,5 +1,5 @@
 #pragma once
-#include "../Meshes/Materials/Material.h"
+#include "../Material.h"
 
 namespace Bolt
 {
