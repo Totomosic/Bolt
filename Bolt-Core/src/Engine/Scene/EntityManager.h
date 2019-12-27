@@ -4,6 +4,8 @@
 #include "Entity.h"
 #include "Pool.h"
 
+#include "Components/Transform.h"
+
 /*
 	Implementation of entity component system
 	Heavily influenced by: https://github.com/alecthomas/entityx
@@ -80,6 +82,8 @@ namespace Bolt
 		bool IsValid() const;
 
 		void Destroy();
+
+		ComponentHandle<Transform> GetTransform() const;
 		
 		template<typename T>
 		bool HasComponent() const
@@ -124,7 +128,7 @@ namespace Bolt
 		}
 
 		template<typename ... T>
-		std::tuple<ComponentHandle<T>...> GetComponents()
+		std::tuple<ComponentHandle<T>...> GetComponents() const
 		{
 			BLT_ASSERT(IsValid(), "Entity is not valid");
 			return m_Manager->GetComponents<T...>(m_Entity);

@@ -7,9 +7,73 @@ namespace Bolt
 {
 
 	Transform::Transform(Vector3f position, Quaternion orientation, Vector3f scale)
-		: m_LocalPosition(position), m_LocalOrientation(orientation), m_LocalScale(scale), m_TransformMatrix(Matrix4f::Identity()), m_InverseTransformMatrix(Matrix4f::Identity()), m_IsValid(false), m_UpdateOnInvalidate(false)
+		: m_LocalPosition(position), m_LocalOrientation(orientation), m_LocalScale(scale), m_Parent(nullptr), m_Children(),
+		m_TransformMatrix(Matrix4f::Identity()), m_InverseTransformMatrix(Matrix4f::Identity()), m_IsValid(false), m_UpdateOnInvalidate(false)
 	{
 		RecalculateMatrix();
+	}
+
+	Transform::Transform(const Transform& other)
+		: m_LocalPosition(other.m_LocalPosition), m_LocalOrientation(other.m_LocalOrientation), m_LocalScale(other.m_LocalScale), m_Parent(nullptr), m_Children(),
+		m_TransformMatrix(other.m_TransformMatrix), m_InverseTransformMatrix(other.m_InverseTransformMatrix), m_IsValid(other.m_IsValid), m_UpdateOnInvalidate(other.m_UpdateOnInvalidate)
+	{
+		SetParent(other.m_Parent);
+	}
+
+	Transform& Transform::operator=(const Transform& other)
+	{
+		m_LocalPosition = other.m_LocalPosition;
+		m_LocalOrientation = other.m_LocalOrientation;
+		m_LocalScale = other.m_LocalScale;
+		m_TransformMatrix = other.m_TransformMatrix;
+		m_InverseTransformMatrix = other.m_InverseTransformMatrix;
+		m_IsValid = other.m_IsValid;
+		m_UpdateOnInvalidate = other.m_UpdateOnInvalidate;
+		SetParent(other.m_Parent);
+		return *this;
+	}
+
+	Transform::Transform(Transform&& other) noexcept
+		: m_LocalPosition(other.m_LocalPosition), m_LocalOrientation(other.m_LocalOrientation), m_LocalScale(other.m_LocalScale), m_Parent(nullptr), m_Children(std::move(other.m_Children)),
+		m_TransformMatrix(other.m_TransformMatrix), m_InverseTransformMatrix(other.m_InverseTransformMatrix), m_IsValid(other.m_IsValid), m_UpdateOnInvalidate(other.m_UpdateOnInvalidate)
+	{
+		SetParent(other.m_Parent);
+		for (Transform* child : m_Children)
+		{
+			child->m_Parent = this;
+		}
+	}
+
+	Transform& Transform::operator=(Transform&& other) noexcept
+	{
+		for (Transform* child : other.m_Children)
+		{
+			child->SetParent(nullptr);
+		}
+		m_LocalPosition = other.m_LocalPosition;
+		m_LocalOrientation = other.m_LocalOrientation;
+		m_LocalScale = other.m_LocalScale;
+		m_Children = std::move(other.m_Children);
+		m_TransformMatrix = other.m_TransformMatrix;
+		m_InverseTransformMatrix = other.m_InverseTransformMatrix;
+		m_IsValid = other.m_IsValid;
+		m_UpdateOnInvalidate = other.m_UpdateOnInvalidate;
+		SetParent(other.m_Parent);
+		other.m_Children.clear();
+		for (Transform* child : m_Children)
+		{
+			child->SetParent(this);
+		}
+		return *this;
+	}
+
+	Transform::~Transform()
+	{
+		SetParent(nullptr);
+		for (Transform* child : m_Children)
+		{
+			child->SetParent(nullptr);
+		}
 	}
 
 	bool Transform::GetUpdateOnInvalidate() const
@@ -20,6 +84,36 @@ namespace Bolt
 	void Transform::SetUpdateOnInvalidate(bool update)
 	{
 		m_UpdateOnInvalidate = update;
+	}
+
+	bool Transform::HasParent() const
+	{
+		return m_Parent != nullptr;
+	}
+
+	const Transform& Transform::GetParent() const
+	{
+		return *m_Parent;
+	}
+
+	void Transform::SetParent(const Transform* transform)
+	{
+		if (m_Parent == transform)
+			return;
+		if (m_Parent != nullptr)
+		{
+			auto it = std::find(m_Parent->m_Children.begin(), m_Parent->m_Children.end(), this);
+			if (it != m_Parent->m_Children.end())
+			{
+				m_Parent->m_Children.erase(it);
+			}
+		}
+		m_Parent = transform;
+		Invalidate();
+		if (m_Parent != nullptr)
+		{
+			m_Parent->m_Children.push_back(this);
+		}
 	}
 
 	const Vector3f& Transform::LocalPosition() const
@@ -46,13 +140,13 @@ namespace Bolt
 	Quaternion Transform::Orientation() const
 	{
 		CheckRecalculate();
-		return m_LocalOrientation;
+		return Quaternion::FromRotationMat(m_TransformMatrix);
 	}
 
 	Vector3f Transform::Scale() const
 	{
 		CheckRecalculate();
-		return m_LocalScale;
+		return { m_TransformMatrix.Element(0, 0), m_TransformMatrix.Element(1, 1), m_TransformMatrix.Element(2, 2) };
 	}
 
 	const Matrix4f& Transform::TransformMatrix() const
@@ -206,6 +300,10 @@ namespace Bolt
 	void Transform::RecalculateMatrix() const
 	{
 		m_TransformMatrix = Matrix4f::Translation(m_LocalPosition) * m_LocalOrientation.ToMatrix4f() * Matrix4f::Scale(m_LocalScale);
+		if (HasParent())
+		{
+			m_TransformMatrix = GetParent().TransformMatrix() * m_TransformMatrix;
+		}
 		m_InverseTransformMatrix = m_TransformMatrix.Inverse();
 		m_IsValid = true;
 	}
@@ -216,6 +314,10 @@ namespace Bolt
 		if (m_UpdateOnInvalidate)
 		{
 			RecalculateMatrix();
+		}
+		for (Transform* child : m_Children)
+		{
+			child->Invalidate();
 		}
 	}
 

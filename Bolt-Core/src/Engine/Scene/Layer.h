@@ -11,7 +11,6 @@ namespace Bolt
 	private:
 		EntityManager m_Entities;
 		SystemRegistry m_Systems;
-		EntityHandle m_ActiveCamera;
 
 		SystemRegistry::SystemPtr<RenderingSystem> m_RenderingSystem;
 
@@ -24,10 +23,6 @@ namespace Bolt
 		EntityManager& Entities();
 		const SystemRegistry& Systems() const;
 		SystemRegistry& Systems();
-
-		bool HasCamera() const;
-		EntityHandle GetCamera() const;
-		void SetCamera(const EntityHandle& entity);
 
 		void Update(TimeDelta delta);
 		void Render(TimeDelta delta);

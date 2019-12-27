@@ -18,6 +18,9 @@ namespace Bolt
 		Quaternion m_LocalOrientation;
 		Vector3f m_LocalScale;
 
+		const Transform* m_Parent;
+		mutable std::vector<Transform*> m_Children;
+
 		mutable Matrix4f m_TransformMatrix;
 		mutable Matrix4f m_InverseTransformMatrix;
 		mutable bool m_IsValid;
@@ -25,9 +28,18 @@ namespace Bolt
 
 	public:
 		Transform(Vector3f position = Vector3f(0.0f), Quaternion orientation = Quaternion::Identity(), Vector3f scale = Vector3f(1.0f));
+		Transform(const Transform& other);
+		Transform& operator=(const Transform& other);
+		Transform(Transform&& other) noexcept;
+		Transform& operator=(Transform&& other) noexcept;
+		~Transform();
 
 		bool GetUpdateOnInvalidate() const;
 		void SetUpdateOnInvalidate(bool update);
+
+		bool HasParent() const;
+		const Transform& GetParent() const;
+		void SetParent(const Transform* transform);
 
 		const Vector3f& LocalPosition() const;
 		const Quaternion& LocalOrientation() const;

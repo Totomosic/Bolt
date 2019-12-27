@@ -52,6 +52,7 @@ namespace Bolt
 		ModelMatrix,
 		ViewMatrix,
 		ProjectionMatrix,
+		NormalMatrix,
 		Time,
 		CameraPosition,
 		CameraDirection,
@@ -61,6 +62,7 @@ namespace Bolt
 		LightColors,
 		LightDirections,
 		LightAmbients,
+		LightAmbientColors,
 		LightAttenuations,
 		LightIntensities
 	};
@@ -82,6 +84,8 @@ namespace Bolt
 			return ValueType::Matrix4f;
 		case RendererUniform::ProjectionMatrix:
 			return ValueType::Matrix4f;
+		case RendererUniform::NormalMatrix:
+			return ValueType::Matrix4f;
 		case RendererUniform::Time:
 			return ValueType::Float;
 		case RendererUniform::CameraPosition:
@@ -100,6 +104,8 @@ namespace Bolt
 			return ValueType::Vector3f;
 		case RendererUniform::LightAmbients:
 			return ValueType::Float;
+		case RendererUniform::LightAmbientColors:
+			return ValueType::Vector4f;
 		case RendererUniform::LightAttenuations:
 			return ValueType::Vector3f;
 		case RendererUniform::LightIntensities:
@@ -119,6 +125,8 @@ namespace Bolt
 			return ValueTypeDim::Single;
 		case RendererUniform::ProjectionMatrix:
 			return ValueTypeDim::Single;
+		case RendererUniform::NormalMatrix:
+			return ValueTypeDim::Single;
 		case RendererUniform::Time:
 			return ValueTypeDim::Single;
 		case RendererUniform::CameraPosition:
@@ -136,6 +144,8 @@ namespace Bolt
 		case RendererUniform::LightDirections:
 			return ValueTypeDim::Array;
 		case RendererUniform::LightAmbients:
+			return ValueTypeDim::Array;
+		case RendererUniform::LightAmbientColors:
 			return ValueTypeDim::Array;
 		case RendererUniform::LightAttenuations:
 			return ValueTypeDim::Array;
@@ -159,6 +169,8 @@ namespace Bolt
 		case RendererUniform::LightDirections:
 			return 10;
 		case RendererUniform::LightAmbients:
+			return 10;
+		case RendererUniform::LightAmbientColors:
 			return 10;
 		case RendererUniform::LightIntensities:
 			return 10;

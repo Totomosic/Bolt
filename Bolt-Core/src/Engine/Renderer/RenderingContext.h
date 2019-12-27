@@ -1,5 +1,5 @@
 #pragma once
-#include "../Scene/LightSource.h"
+#include "../Scene/Components/LightSource.h"
 
 namespace Bolt
 {
@@ -14,7 +14,7 @@ namespace Bolt
 	struct BLT_API RenderingContext
 	{
 	public:
-		std::vector<LightSource> LightSources;
+		std::vector<LightSourceInstance> LightSources;
 	};
 
 }

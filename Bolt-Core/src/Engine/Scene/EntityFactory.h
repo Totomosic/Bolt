@@ -22,6 +22,7 @@ namespace Bolt
 		EntityFactory(Layer& layer);
 
 		EntityHandle Empty() const;
+		EntityHandle CreateTransform(Transform transform = Transform()) const;
 
 		EntityHandle Camera(const Matrix4f& projection, Transform transform = Transform()) const;
 		EntityHandle Camera(Transform transform = Transform()) const;

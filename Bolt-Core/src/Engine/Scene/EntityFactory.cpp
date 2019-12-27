@@ -25,6 +25,13 @@ namespace Bolt
 		return m_Manager->Create();
 	}
 
+	EntityHandle EntityFactory::CreateTransform(Transform transform) const
+	{
+		EntityHandle entity = Empty();
+		entity.Assign<Transform>(std::move(transform));
+		return entity;
+	}
+
 	EntityHandle EntityFactory::Camera(const Matrix4f& projection, Transform transform) const
 	{
 		EntityHandle camera = Empty();

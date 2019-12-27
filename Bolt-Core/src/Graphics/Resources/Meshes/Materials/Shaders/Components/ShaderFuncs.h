@@ -61,6 +61,7 @@ namespace Bolt
 		
 		static ShaderFuncResultPtr Matrix2(ShaderValuePtr r0, ShaderValuePtr r1);
 		static ShaderFuncResultPtr Matrix3(ShaderValuePtr r0, ShaderValuePtr r1, ShaderValuePtr r2);
+		static ShaderFuncResultPtr Matrix3(ShaderValuePtr mat4);
 		static ShaderFuncResultPtr Matrix4(ShaderValuePtr r0, ShaderValuePtr r1, ShaderValuePtr r2, ShaderValuePtr r3);
 
 		static ShaderFuncResultPtr SampleTexture(ShaderValuePtr texture, ShaderValuePtr texCoords);

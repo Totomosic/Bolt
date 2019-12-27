@@ -8,23 +8,33 @@
 namespace Bolt
 {
 
-	// Applies Renderer Uniforms and returns the location of RendererUniform::ModelMatrix
-	RendererUniformLocation ApplyRendererUniforms(const ShaderInstance& shaderInstance, const Matrix4f& viewMatrix, const Matrix4f& projectionMatrix, const RenderingContext& context)
+	struct UniformLocations
+	{
+	public:
+		const RendererUniformLocation* ModelMatrix = nullptr;
+		const RendererUniformLocation* NormalMatrix = nullptr;
+	};
+
+	// Applies Renderer Uniforms and returns the location of RendererUniform::ModelMatrix and RendererUniform::NormalMatrix
+	UniformLocations ApplyRendererUniforms(const ShaderInstance& shaderInstance, const Matrix4f& viewMatrix, const Matrix4f& projectionMatrix, const RenderingContext& context)
 	{
 		const Shader& shader = shaderInstance.GetShader();
-		RendererUniformLocation modelMatrixLocation;
+		UniformLocations locations;
 		for (const RendererUniformLocation& uniform : shaderInstance.GetRendererUniforms())
 		{
 			switch (uniform.Uniform)
 			{
 			case RendererUniform::ModelMatrix:
-				modelMatrixLocation = uniform;
+				locations.ModelMatrix = &uniform;
 				break;
 			case RendererUniform::ViewMatrix:
 				shader.SetUniform(uniform.Location, viewMatrix);
 				break;
 			case RendererUniform::ProjectionMatrix:
 				shader.SetUniform(uniform.Location, projectionMatrix);
+				break;
+			case RendererUniform::NormalMatrix:
+				locations.NormalMatrix = &uniform;
 				break;
 			case RendererUniform::Time:
 				shader.SetUniform(uniform.Location, Time::Get().RenderingTimeline().CurrentTime());
@@ -47,25 +57,31 @@ namespace Bolt
 			case RendererUniform::LightColors:
 				if (uniform.Index < context.LightSources.size())
 				{
-					shader.SetUniform(uniform.Location, context.LightSources.at(uniform.Index).Color);
+					shader.SetUniform(uniform.Location, context.LightSources.at(uniform.Index).LightData.Color);
 				}
 				break;
 			case RendererUniform::LightAmbients:
 				if (uniform.Index < context.LightSources.size())
 				{
-					shader.SetUniform(uniform.Location, context.LightSources.at(uniform.Index).Ambient);
+					shader.SetUniform(uniform.Location, context.LightSources.at(uniform.Index).LightData.Ambient);
+				}
+				break;
+			case RendererUniform::LightAmbientColors:
+				if (uniform.Index < context.LightSources.size())
+				{
+					shader.SetUniform(uniform.Location, context.LightSources.at(uniform.Index).LightData.AmbientColor);
 				}
 				break;
 			case RendererUniform::LightIntensities:
 				if (uniform.Index < context.LightSources.size())
 				{
-					shader.SetUniform(uniform.Location, context.LightSources.at(uniform.Index).Intensity);
+					shader.SetUniform(uniform.Location, context.LightSources.at(uniform.Index).LightData.Intensity);
 				}
 				break;
 			case RendererUniform::LightAttenuations:
 				if (uniform.Index < context.LightSources.size())
 				{
-					shader.SetUniform(uniform.Location, context.LightSources.at(uniform.Index).Attenuation);
+					shader.SetUniform(uniform.Location, context.LightSources.at(uniform.Index).LightData.Attenuation);
 				}
 				break;
 			case RendererUniform::LightCount:
@@ -73,14 +89,14 @@ namespace Bolt
 				break;
 			}
 		}
-		return modelMatrixLocation;
+		return locations;
 	}
 
 	void RenderRoutine::operator()(const RenderGroup& group, const Matrix4f& viewMatrix, const Matrix4f& projectionMatrix, const RenderingContext& context, RendererStats& stats)
 	{
 		const ShaderInstance& shader = *group.Shader;
 		shader.GetShader().Bind();
-		RendererUniformLocation modelMatrixLocation = ApplyRendererUniforms(shader, viewMatrix, projectionMatrix, context);
+		UniformLocations locations = ApplyRendererUniforms(shader, viewMatrix, projectionMatrix, context);
 		for (const MaterialPair& pair : group.RenderData)
 		{
 			const Material& material = *pair.Material;
@@ -89,7 +105,14 @@ namespace Bolt
 			for (const RenderData& data : pair.Renderables)
 			{
 				uint32_t renderCount = std::min((uint32_t)data.Indices->IndexCount(), data.IndexCount);
-				shader.GetShader().SetUniform(modelMatrixLocation.Location, data.Transform);
+				if (locations.ModelMatrix != nullptr)
+				{
+					shader.GetShader().SetUniform(locations.ModelMatrix->Location, data.Transform);
+				}
+				if (locations.NormalMatrix != nullptr)
+				{
+					shader.GetShader().SetUniform(locations.NormalMatrix->Location, data.Transform.Inverse().Transpose());
+				}
 				data.Vertices->Bind();
 				data.Indices->Bind();
 				stats.DrawCalls += 1;

@@ -36,6 +36,11 @@ namespace Bolt
 		m_Manager = nullptr;
 	}
 
+	ComponentHandle<Transform> EntityHandle::GetTransform() const
+	{
+		return GetComponent<Transform>();
+	}
+
 	// ==================================================================================================================
 	// ENTITY MANAGER
 	// ==================================================================================================================

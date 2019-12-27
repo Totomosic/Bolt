@@ -35,15 +35,21 @@ namespace Bolt
 		{
 			Matrix4f fullTransform = transform * modelGroup.Transform;
 			const ModelData& data = modelGroup.Model->Data();
-			for (int i = 0; i < data.Indices->IndexBufferCount(); i++)
+			if (data.Indices != nullptr && data.Vertices != nullptr)
 			{
-				const Material* material = mesh.Materials[modelGroup.MaterialIndices[i]].get();
-				const ShaderInstance* shader = &material->GetLinkContext().GetShaderInstance();
-				RenderData renderData;
-				renderData.Transform = fullTransform;
-				renderData.Vertices = data.Vertices.get();
-				renderData.Indices = data.Indices->GetIndexBuffer(i).get();
-				AddRenderData(shader, material, renderData);
+				if (!data.Vertices->IsMapped() && !data.Indices->IsMapped())
+				{
+					for (int i = 0; i < data.Indices->IndexBufferCount(); i++)
+					{
+						const Material* material = mesh.Materials[modelGroup.MaterialIndices[i]].get();
+						const ShaderInstance* shader = &material->GetLinkContext().GetShaderInstance();
+						RenderData renderData;
+						renderData.Transform = fullTransform;
+						renderData.Vertices = data.Vertices.get();
+						renderData.Indices = data.Indices->GetIndexBuffer(i).get();
+						AddRenderData(shader, material, renderData);
+					}
+				}
 			}
 		}
 	}

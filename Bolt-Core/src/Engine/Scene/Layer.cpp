@@ -9,7 +9,7 @@ namespace Bolt
 {
 
 	Layer::Layer()
-		: m_Entities(), m_Systems(m_Entities), m_ActiveCamera(), m_RenderingSystem()
+		: m_Entities(), m_Systems(m_Entities), m_RenderingSystem()
 	{
 		m_RenderingSystem = m_Systems.Register<RenderingSystem>();
 	}
@@ -37,22 +37,6 @@ namespace Bolt
 	SystemRegistry& Layer::Systems()
 	{
 		return m_Systems;
-	}
-
-	bool Layer::HasCamera() const
-	{
-		return m_ActiveCamera.IsValid();
-	}
-
-	EntityHandle Layer::GetCamera() const
-	{
-		return m_ActiveCamera;
-	}
-
-	void Layer::SetCamera(const EntityHandle& entity)
-	{
-		BLT_ASSERT(ValidateCamera(entity), "Entity is not a valid camera");
-		m_ActiveCamera = entity;
 	}
 
 	void Layer::Update(TimeDelta delta)
