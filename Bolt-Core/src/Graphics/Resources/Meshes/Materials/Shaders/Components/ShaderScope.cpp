@@ -182,7 +182,7 @@ namespace Bolt
 
 	int ShaderScope::GetNextOpIndex() const
 	{
-		return m_Operations.size();
+		return (int)m_Operations.size();
 	}
 
 	ShaderOp& ShaderScope::GetOpAtIndex(int index) const

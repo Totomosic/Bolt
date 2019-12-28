@@ -1,4 +1,5 @@
 #pragma once
+#include "Component.h"
 #include "Core/Math/Vectors/Vector3.h"
 #include "Core/Color.h"
 
@@ -12,7 +13,7 @@ namespace Bolt
 		Spotlight
 	};
 
-	struct BLT_API LightSource
+	struct BLT_API LightSource : public Component<LightSource>
 	{
 	public:
 		LightType Type = LightType::Point;

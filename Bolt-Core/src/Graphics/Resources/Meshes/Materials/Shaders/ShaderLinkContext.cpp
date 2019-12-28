@@ -35,6 +35,16 @@ namespace Bolt
 		return *this;
 	}
 
+	std::vector<blt::string> ShaderLinkContext::GetLinkNames() const
+	{
+		std::vector<blt::string> result;
+		for (const auto& pair : m_UserUniformLinks)
+		{
+			result.push_back(pair.first);
+		}
+		return result;
+	}
+
 	const ShaderInstance& ShaderLinkContext::GetShaderInstance() const
 	{
 		return *m_Shader;

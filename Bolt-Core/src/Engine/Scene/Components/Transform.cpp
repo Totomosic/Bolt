@@ -22,6 +22,12 @@ namespace Bolt
 
 	Transform& Transform::operator=(const Transform& other)
 	{
+		SetParent(nullptr);
+		for (Transform* child : other.m_Children)
+		{
+			child->SetParent(nullptr);
+		}
+		m_Children.clear();
 		m_LocalPosition = other.m_LocalPosition;
 		m_LocalOrientation = other.m_LocalOrientation;
 		m_LocalScale = other.m_LocalScale;
@@ -46,6 +52,7 @@ namespace Bolt
 
 	Transform& Transform::operator=(Transform&& other) noexcept
 	{
+		SetParent(nullptr);
 		for (Transform* child : other.m_Children)
 		{
 			child->SetParent(nullptr);

@@ -18,7 +18,14 @@ namespace Bolt
 
 	void Scene::RemoveLayer(Layer& layer)
 	{
-		
+		auto it = std::find_if(m_Layers.begin(), m_Layers.end(), [&layer](const std::unique_ptr<Layer>& l)
+			{
+				return &layer == l.get();
+			});
+		if (it != m_Layers.end())
+		{
+			m_Layers.erase(it);
+		}
 	}
 
 	void Scene::Load()

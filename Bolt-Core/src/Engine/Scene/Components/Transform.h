@@ -27,7 +27,7 @@ namespace Bolt
 		mutable bool m_UpdateOnInvalidate;
 
 	public:
-		Transform(Vector3f position = Vector3f(0.0f), Quaternion orientation = Quaternion::Identity(), Vector3f scale = Vector3f(1.0f));
+		Transform(Vector3f position = {}, Quaternion orientation = Quaternion::Identity(), Vector3f scale = Vector3f(1.0f));
 		Transform(const Transform& other);
 		Transform& operator=(const Transform& other);
 		Transform(Transform&& other) noexcept;

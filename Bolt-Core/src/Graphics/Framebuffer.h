@@ -66,7 +66,8 @@ namespace Bolt
 		RenderBuffer CreateColorRenderBuffer(ColorBuffer buffer = ColorBuffer::Color0);
 		RenderBuffer CreateDepthRenderBuffer();
 
-		void CopyToFramebuffer(const Framebuffer* frameBuffer, ClearBuffer buffer = ClearBuffer::Color | ClearBuffer::Depth, Filter filter = Filter::Nearest, ColorBuffer readBuffer = ColorBuffer::Color0, ColorBuffer drawBuffer = ColorBuffer::Color0) const;
+		void CopyToFramebuffer(const Framebuffer* frameBuffer, ClearBuffer buffer = ClearBuffer::Color | ClearBuffer::Depth, Filter filter = Filter::Nearest, 
+			ColorBuffer readBuffer = ColorBuffer::Color0, ColorBuffer drawBuffer = ColorBuffer::Color0) const;
 
 		void Bind() const;
 		void Unbind() const;

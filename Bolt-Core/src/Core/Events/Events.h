@@ -23,7 +23,7 @@ namespace Bolt
 		uint32_t OnHoverEntry = 101;
 		uint32_t OnHover = 102;
 		uint32_t OnHoverExit = 103;
-		uint32_t OnClicked = 104;
+		uint32_t OnClick = 104;
 		uint32_t OnFocus = 105;
 		uint32_t OnFocusLost = 106;
 		uint32_t OnMouseDown = 107;

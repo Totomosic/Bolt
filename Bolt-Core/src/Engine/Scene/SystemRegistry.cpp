@@ -12,7 +12,7 @@ namespace Bolt
 
 	int SystemRegistry::GetSystemCount() const
 	{
-		return m_SystemOrder.size();
+		return (int)m_SystemOrder.size();
 	}
 
 	void SystemRegistry::Configure() const

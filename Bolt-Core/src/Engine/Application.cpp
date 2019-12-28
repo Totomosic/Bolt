@@ -51,7 +51,7 @@ namespace Bolt
 
 	int Application::ChildCount() const
 	{
-		return m_ChildApps.size();
+		return (int)m_ChildApps.size();
 	}
 
 	id_t Application::GetAppId() const

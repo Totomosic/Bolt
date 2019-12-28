@@ -225,7 +225,6 @@ namespace Bolt
 		public:
 			View(const EntityManager* manager) : BaseView(manager, manager->GetComponentMask<T...>())
 			{
-			
 			}
 		};
 

@@ -36,6 +36,8 @@ namespace Bolt
 		ShaderLinkContext& operator=(ShaderLinkContext&& other) = default;
 		~ShaderLinkContext() = default;
 
+		std::vector<blt::string> GetLinkNames() const;
+
 		const ShaderInstance& GetShaderInstance() const;
 		// Return a unique identifier for the link represented by linkName (use index when linking array)
 		id_t GetLinkId(const blt::string& linkName, int index = -1) const;
