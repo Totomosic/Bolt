@@ -17,7 +17,7 @@ namespace Bolt
 		uint32_t CharPressed = 8;
 	};
 
-	struct BLT_API UIEvents
+	struct BLT_API UIInputEvents
 	{
 	public:
 		uint32_t OnHoverEntry = 101;
@@ -65,7 +65,7 @@ namespace Bolt
 		static constexpr uint32_t MIN_USER_ID = 10000;
 		
 		static constexpr InputEvents Input = InputEvents();
-		static constexpr UIEvents UI = UIEvents();
+		static constexpr UIInputEvents UI = UIInputEvents();
 		static constexpr WindowEvents Window = WindowEvents();
 		static constexpr SceneEvents Scene = SceneEvents();
 		static constexpr InternalEvents Internal = InternalEvents();
