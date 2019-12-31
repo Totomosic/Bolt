@@ -20,12 +20,12 @@ namespace Bolt
 		result.Indices = std::make_unique<IndexArray>();
 		int vertexCount = xVertices * zVertices;
 		result.Indices->AddIndexBuffer(std::make_unique<IndexBuffer>((xVertices - 1) * (zVertices - 1) * 6));		
-		result.Bounds.MinX = -Width / 2;
-		result.Bounds.MaxX = Width / 2;
-		result.Bounds.MinY = 0;
-		result.Bounds.MaxY = 0;
-		result.Bounds.MinZ = -Depth / 2;
-		result.Bounds.MaxZ = Depth / 2;
+		result.Bounds.Min.x = -Width / 2;
+		result.Bounds.Max.x = Width / 2;
+		result.Bounds.Min.y = 0;
+		result.Bounds.Max.y = 0;
+		result.Bounds.Min.z = -Depth / 2;
+		result.Bounds.Max.z = Depth / 2;
 
 		BufferLayout layout = BufferLayout::Default();
 		result.Vertices->CreateVertexBuffer(vertexCount * layout.Size(), layout);

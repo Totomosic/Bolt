@@ -29,6 +29,8 @@ namespace Bolt
 		Mesh& operator=(Mesh&& other);
 		~Mesh() = default;
 
+		Cuboid ComputeBoundingBox(const Matrix4f& transform = Matrix4f::Identity()) const;
+
 	};
 
 }

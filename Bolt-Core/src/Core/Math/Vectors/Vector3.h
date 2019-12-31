@@ -433,12 +433,12 @@ namespace Bolt
 
 	};
 
-	typedef Vector3<float> Vector3f;
-	typedef Vector3<int> Vector3i;
-	typedef Vector3<double> Vector3d;
+	using Vector3f = Vector3<float>;
+	using Vector3i = Vector3<int>;
+	using Vector3d = Vector3<double>;
 
-	typedef Vector3<float&, float> Vector3fr;
-	typedef Vector3<int&, int> Vector3ir;
-	typedef Vector3<double&, double> Vector3dr;
+	using Vector3fr = Vector3<float&, float>;
+	using Vector3ir = Vector3<int&, int>;
+	using Vector3dr = Vector3<double&, double>;
 
 }

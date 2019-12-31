@@ -441,7 +441,7 @@ namespace Bolt
 
 	};
 
-	typedef Matrix3<float, float> Matrix3f;
-	typedef Matrix3<int, int> Matrix3i;
+	using Matrix3f = Matrix3<float>;
+	using Matrix3i = Matrix3<int>;
 
 }

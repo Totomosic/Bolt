@@ -21,13 +21,13 @@ namespace Bolt
 		uint32_t indices[2] = { 0, 1 };
 		result.Indices->AddIndexBuffer(std::make_unique<IndexBuffer>(indices, 2));
 		Vector3f half = Direction * Length / 2.0f;
-		result.Bounds.MinX = -abs(half.x);
-		result.Bounds.MaxX = abs(half.x);
-		result.Bounds.MinY = -abs(half.y);
-		result.Bounds.MaxY = abs(half.y);
-		result.Bounds.MinZ = -abs(half.z);
-		result.Bounds.MaxZ = abs(half.z);
-
+		result.Bounds.Min.x = -abs(half.x);
+		result.Bounds.Max.x = abs(half.x);
+		result.Bounds.Min.y = -abs(half.y);
+		result.Bounds.Max.y = abs(half.y);
+		result.Bounds.Min.z = -abs(half.z);
+		result.Bounds.Max.z = abs(half.z);
+						 
 		BufferLayout layout = BufferLayout::Default();
 		result.Vertices->CreateVertexBuffer(2 * layout.Size(), layout);
 

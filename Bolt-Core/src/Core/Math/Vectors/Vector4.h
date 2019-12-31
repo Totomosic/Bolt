@@ -418,11 +418,11 @@ namespace Bolt
 
 	};
 
-	typedef Vector4<float> Vector4f;
-	typedef Vector4<int> Vector4i;
-	typedef Vector4<double> Vector4d;
+	using Vector4f = Vector4<float>;
+	using Vector4i = Vector4<int>;
+	using Vector4d = Vector4<double>;
 
-	typedef Vector4<float&, float> Vector4fr;
-	typedef Vector4<int&, int> Vector4ir;
-	typedef Vector4<double&, double> Vector4dr;
+	using Vector4fr = Vector4<float&, float>;
+	using Vector4ir = Vector4<int&, int>;
+	using Vector4dr = Vector4<double&, double>;
 }

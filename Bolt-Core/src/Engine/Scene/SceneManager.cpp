@@ -54,21 +54,23 @@ namespace Bolt
 		return *m_CurrentScene;
 	}
 
-	void SceneManager::SetCurrentScene(Scene& scene)
+	void SceneManager::SetCurrentScene(Scene& scene, const std::any& loadData, const std::any& unloadData)
 	{
-		SetCurrentScenePtr(&scene);
+		SetCurrentScenePtr(&scene, loadData, unloadData);
 	}
 
-	void SceneManager::SetCurrentScenePtr(Scene* scene)
+	void SceneManager::SetCurrentScenePtr(Scene* scene, const std::any& loadData, const std::any& unloadData)
 	{
 		if (m_CurrentScene != nullptr)
 		{
-			m_CurrentScene->Unload();
+			m_CurrentScene->SetIsActive(false);
+			m_CurrentScene->Unload(unloadData);
 		}
 		m_CurrentScene = scene;
 		if (m_CurrentScene != nullptr)
 		{
-			m_CurrentScene->Load();
+			m_CurrentScene->Load(loadData);
+			m_CurrentScene->SetIsActive(true);
 		}
 	}
 

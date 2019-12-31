@@ -5,15 +5,41 @@ namespace Bolt
 {
 
 	Scene::Scene()
-		: m_Layers()
+		: m_Layers(), m_IsLoaded(false), m_IsActive(false),
+		m_Bus(std::make_unique<EventBus>()), m_OnLoad(m_Bus->GetEmitter<SceneLoadEvent>(Events::Scene.SceneLoaded)), m_OnUnload(m_Bus->GetEmitter<SceneUnloadEvent>(Events::Scene.SceneUnloaded))
 	{
+	}
+
+	const EventEmitter<SceneLoadEvent>& Scene::OnLoad() const
+	{
+		return m_OnLoad;
+	}
+
+	const EventEmitter<SceneUnloadEvent>& Scene::OnUnload() const
+	{
+		return m_OnUnload;
+	}
+
+	EventEmitter<SceneLoadEvent>& Scene::OnLoad()
+	{
+		return m_OnLoad;
+	}
+
+	EventEmitter<SceneUnloadEvent>& Scene::OnUnload()
+	{
+		return m_OnUnload;
 	}
 
 	Layer& Scene::AddLayer()
 	{
 		size_t index = m_Layers.size();
 		m_Layers.push_back(std::make_unique<Layer>());
-		return *m_Layers.at(index);
+		Layer& layer = *m_Layers.at(index);
+		if (!IsActive())
+		{
+			layer.Disable();
+		}
+		return layer;
 	}
 
 	void Scene::RemoveLayer(Layer& layer)
@@ -28,27 +54,69 @@ namespace Bolt
 		}
 	}
 
-	void Scene::Load()
+	bool Scene::IsLoaded() const
 	{
+		return m_IsLoaded;
 	}
 
-	void Scene::Unload()
+	bool Scene::IsActive() const
 	{
+		return m_IsActive && IsLoaded();
+	}
+
+	void Scene::SetIsActive(bool isActive)
+	{
+		if (m_IsActive != isActive)
+		{
+			m_IsActive = isActive;
+		}
+	}
+
+	void Scene::Load(const std::any& data)
+	{
+		if (!IsLoaded())
+		{
+			OnLoad().Emit({ *this, data });
+			m_IsLoaded = true;
+			for (auto& layer : m_Layers)
+			{
+				layer->Enable();
+			}
+		}
+	}
+
+	void Scene::Unload(const std::any& data)
+	{
+		if (IsLoaded())
+		{
+			OnUnload().Emit({ *this, data });
+			m_IsLoaded = false;
+			for (auto& layer : m_Layers)
+			{
+				layer->Disable();
+			}
+		}
 	}
 
 	void Scene::Update(TimeDelta delta)
 	{
-		for (const std::unique_ptr<Layer>& layer : m_Layers)
+		if (IsActive())
 		{
-			layer->Update(delta);
+			for (const std::unique_ptr<Layer>& layer : m_Layers)
+			{
+				layer->Update(delta);
+			}
 		}
 	}
 
 	void Scene::Render(TimeDelta delta)
 	{
-		for (const std::unique_ptr<Layer>& layer : m_Layers)
+		if (IsActive())
 		{
-			layer->Render(delta);
+			for (const std::unique_ptr<Layer>& layer : m_Layers)
+			{
+				layer->Render(delta);
+			}
 		}
 	}
 

@@ -123,14 +123,14 @@ namespace Bolt
 		None = BLT_BIT(10)
 	};
 
-	struct BLT_API KeyPressedEvent
+	struct BLT_API KeyDownEvent
 	{
 	public:
 		Keycode KeyCode;
 		bool IsRepeat;
 	};
 
-	struct BLT_API KeyReleasedEvent
+	struct BLT_API KeyUpEvent
 	{
 	public:
 		Keycode KeyCode;
@@ -145,7 +145,7 @@ namespace Bolt
 		float relY;
 	};
 
-	struct BLT_API MousePressedEvent
+	struct BLT_API MouseDownEvent
 	{
 	public:
 		MouseButton Button;
@@ -154,7 +154,7 @@ namespace Bolt
 		float y;
 	};
 
-	struct BLT_API MouseReleasedEvent
+	struct BLT_API MouseUpEvent
 	{
 	public:
 		MouseButton Button;

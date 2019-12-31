@@ -45,4 +45,34 @@ namespace Bolt
 		return *this;
 	}
 
+	Cuboid Mesh::ComputeBoundingBox(const Matrix4f& transform) const
+	{
+		Cuboid result;
+		float minX = +INFINITY;
+		float maxX = -INFINITY;
+		float minY = +INFINITY;
+		float maxY = -INFINITY;
+		float minZ = +INFINITY;
+		float maxZ = -INFINITY;
+		for (const ModelGroup& group : Models)
+		{
+			Matrix4f completeTransform = transform * group.Transform;
+			const Model& model = *group.Model;
+			const ModelData& data = model.Data();
+			const Cuboid& bounds = data.Bounds;
+			Cuboid transformedBounds;
+			transformedBounds.Min = (completeTransform * Vector4f(bounds.Min, 1.0f)).xyz();
+			transformedBounds.Max = (completeTransform * Vector4f(bounds.Max, 1.0f)).xyz();
+			minX = std::min({ transformedBounds.Min.x, transformedBounds.Max.x, minX });
+			maxX = std::max({ transformedBounds.Min.x, transformedBounds.Max.x, maxX });
+			minY = std::min({ transformedBounds.Min.y, transformedBounds.Max.y, minY });
+			maxY = std::max({ transformedBounds.Min.y, transformedBounds.Max.y, maxY });
+			minZ = std::min({ transformedBounds.Min.z, transformedBounds.Max.z, minZ });
+			maxZ = std::max({ transformedBounds.Min.z, transformedBounds.Max.z, maxZ });
+		}
+		result.Min = { minX, minY, minZ };
+		result.Max = { maxX, maxY, maxZ };
+		return result;
+	}
+
 }

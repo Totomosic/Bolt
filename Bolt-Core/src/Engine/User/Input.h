@@ -76,10 +76,10 @@ namespace Bolt
 		std::vector<MouseInstance::Button> m_ChangedButtons;
 
 	public:
-		EventEmitter<KeyPressedEvent> OnKeyPressed;
-		EventEmitter<KeyReleasedEvent> OnKeyReleased;
-		EventEmitter<MousePressedEvent> OnMousePressed;
-		EventEmitter<MouseReleasedEvent> OnMouseReleased;
+		EventEmitter<KeyDownEvent> OnKeyDown;
+		EventEmitter<KeyUpEvent> OnKeyUp;
+		EventEmitter<MouseDownEvent> OnMouseDown;
+		EventEmitter<MouseUpEvent> OnMouseUp;
 		EventEmitter<MouseMovedEvent> OnMouseMoved;
 		EventEmitter<MouseScrolledEvent> OnMouseScrolled;
 		EventEmitter<MouseClickEvent> OnMouseClicked;

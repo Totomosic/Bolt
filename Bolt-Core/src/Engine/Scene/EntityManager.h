@@ -134,6 +134,9 @@ namespace Bolt
 			return m_Manager->GetComponents<T...>(m_Entity);
 		}
 
+		bool operator==(const EntityHandle& other) const;
+		bool operator!=(const EntityHandle& other) const;
+
 	};
 
 	// ==================================================================================================================

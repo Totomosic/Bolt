@@ -15,18 +15,16 @@ namespace Bolt
 	ModelData SphereFactory::GenerateVertices() const
 	{
 		BLT_PROFILE_FUNCTION();
-		float w = Radius / 2.0f;
-		float h = Radius / 2.0f;
 		ModelData result;
 		result.Vertices = std::make_unique<VertexArray>();
 		result.Indices = std::make_unique<IndexArray>();
 		result.Indices->AddIndexBuffer(std::make_unique<IndexBuffer>(6 * (SectorCount * (SectorCount - 1))));
-		result.Bounds.MinX = -w;
-		result.Bounds.MaxX = w;
-		result.Bounds.MinY = -h;
-		result.Bounds.MaxY = h;
-		result.Bounds.MinZ = 0;
-		result.Bounds.MaxZ = 0;
+		result.Bounds.Min.x = -Radius;
+		result.Bounds.Max.x = Radius;
+		result.Bounds.Min.y = -Radius;
+		result.Bounds.Max.y = Radius;
+		result.Bounds.Min.z = -Radius;
+		result.Bounds.Max.z = Radius;
 
 		BufferLayout layout = BufferLayout::Default();
 		result.Vertices->AddVertexBuffer(std::make_unique<VertexBuffer>(((SectorCount + 1) * (SectorCount + 1)) * layout.Stride(), layout));

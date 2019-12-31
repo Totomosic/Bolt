@@ -10,10 +10,10 @@ namespace Bolt
 
 	Input::Input(Window* window)
 		: m_EventBus(), m_Mouse(), m_Keyboard(), m_Window(window), m_MouseDownLast(), m_PressedCharacters(), m_ChangedKeys(), m_ChangedButtons(), 
-		OnKeyPressed(m_EventBus.GetEmitter<KeyPressedEvent>(Events::Input.KeyPressed)), 
-		OnKeyReleased(m_EventBus.GetEmitter<KeyReleasedEvent>(Events::Input.KeyReleased)),
-		OnMousePressed(m_EventBus.GetEmitter<MousePressedEvent>(Events::Input.MousePressed)),
-		OnMouseReleased(m_EventBus.GetEmitter<MouseReleasedEvent>(Events::Input.MouseReleased)),
+		OnKeyDown(m_EventBus.GetEmitter<KeyDownEvent>(Events::Input.KeyDown)), 
+		OnKeyUp(m_EventBus.GetEmitter<KeyUpEvent>(Events::Input.KeyUp)),
+		OnMouseDown(m_EventBus.GetEmitter<MouseDownEvent>(Events::Input.MouseDown)),
+		OnMouseUp(m_EventBus.GetEmitter<MouseUpEvent>(Events::Input.MouseUp)),
 		OnMouseMoved(m_EventBus.GetEmitter<MouseMovedEvent>(Events::Input.MouseMoved)),
 		OnMouseScrolled(m_EventBus.GetEmitter<MouseScrolledEvent>(Events::Input.MouseScrolled)),
 		OnMouseClicked(m_EventBus.GetEmitter<MouseClickEvent>(Events::Input.MouseClicked)),
@@ -320,12 +320,12 @@ namespace Bolt
 			}
 			if (action == (int)ButtonState::Pressed || action == GLFW_REPEAT)
 			{
-				MousePressedEvent args;
+				MouseDownEvent args;
 				args.Button = (MouseButton)button;
 				args.IsRepeat = action == GLFW_REPEAT;
 				args.x = m_Mouse.X;
 				args.y = m_Mouse.Y;
-				OnMousePressed.Emit(std::move(args));
+				OnMouseDown.Emit(std::move(args));
 				if (action != GLFW_REPEAT)
 				{
 					m_MouseDownLast = { true, { m_Mouse.X, m_Mouse.Y }, std::chrono::high_resolution_clock::now() };
@@ -333,11 +333,11 @@ namespace Bolt
 			}
 			else
 			{
-				MouseReleasedEvent args;
+				MouseUpEvent args;
 				args.Button = (MouseButton)button;
 				args.x = m_Mouse.X;
 				args.y = m_Mouse.Y;
-				OnMouseReleased.Emit(std::move(args));
+				OnMouseUp.Emit(std::move(args));
 				if (m_MouseDownLast.IsValid)
 				{
 					float dx = std::abs(m_Mouse.X - m_MouseDownLast.MouseDownPosition.x);
@@ -367,16 +367,16 @@ namespace Bolt
 			}
 			if (action == (int)ButtonState::Pressed || action == GLFW_REPEAT)
 			{
-				KeyPressedEvent args;
+				KeyDownEvent args;
 				args.KeyCode = (Keycode)key;
 				args.IsRepeat = action == GLFW_REPEAT;
-				OnKeyPressed.Emit(std::move(args));
+				OnKeyDown.Emit(std::move(args));
 			}
 			else
 			{
-				KeyReleasedEvent args;
+				KeyUpEvent args;
 				args.KeyCode = (Keycode)key;
-				OnKeyReleased.Emit(std::move(args));
+				OnKeyUp.Emit(std::move(args));
 			}
 		}
 	}

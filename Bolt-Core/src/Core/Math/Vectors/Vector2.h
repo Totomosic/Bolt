@@ -336,12 +336,12 @@ namespace Bolt
 		}
 	};
 
-	typedef Vector2<float> Vector2f;
-	typedef Vector2<int> Vector2i;
-	typedef Vector2<double> Vector2d;
+	using Vector2f = Vector2<float>;
+	using Vector2i = Vector2<int>;
+	using Vector2d = Vector2<double>;
 
-	typedef Vector2<float&, float> Vector2fr;
-	typedef Vector2<int&, int> Vector2ir;
-	typedef Vector2<double&, double> Vector2dr;
+	using Vector2fr = Vector2<float&, float>;
+	using Vector2ir = Vector2<int&, int>;
+	using Vector2dr = Vector2<double&, double>;
 
 }

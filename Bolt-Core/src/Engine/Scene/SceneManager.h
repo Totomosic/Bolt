@@ -21,8 +21,8 @@ namespace Bolt
 
 		bool HasCurrentScene() const;
 		Scene& GetCurrentScene() const;
-		void SetCurrentScene(Scene& scene);
-		void SetCurrentScenePtr(Scene* scene);
+		void SetCurrentScene(Scene& scene, const std::any& loadData = {}, const std::any& unloadData = {});
+		void SetCurrentScenePtr(Scene* scene, const std::any& loadData = {}, const std::any& unloadData = {});
 	};
 
 }

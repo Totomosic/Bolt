@@ -433,7 +433,7 @@ namespace Bolt
 		template<typename Other, typename OtherBase>
 		friend Vector3<OtherBase> operator*(const Matrix4<T, Base>& left, const Vector3<Other, OtherBase>& right)
 		{	
-			Vector4<OtherBase> result = left * Vector4<OtherBase>(right, (OtherBase)1);	
+			Vector4<OtherBase> result = left * Vector4<OtherBase>(right, (OtherBase)0);	
 			return result.xyz(); 
 		}	
 				
@@ -693,7 +693,7 @@ namespace Bolt
 
 	};
 
-	typedef Matrix4<float> Matrix4f;
-	typedef Matrix4<int> Matrix4i;
+	using Matrix4f = Matrix4<float>;
+	using Matrix4i = Matrix4<int>;
 
 }

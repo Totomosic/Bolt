@@ -10,10 +10,10 @@ namespace Bolt
 		struct BLT_API InputEvents
 		{
 		public:
-			uint32_t KeyPressed = 1;
-			uint32_t KeyReleased = 2;
-			uint32_t MousePressed = 3;
-			uint32_t MouseReleased = 4;
+			uint32_t KeyDown = 1;
+			uint32_t KeyUp = 2;
+			uint32_t MouseDown = 3;
+			uint32_t MouseUp = 4;
 			uint32_t MouseScrolled = 5;
 			uint32_t MouseMoved = 6;
 			uint32_t MouseClicked = 7;
@@ -51,8 +51,6 @@ namespace Bolt
 		public:
 			uint32_t SceneLoaded = 301;
 			uint32_t SceneUnloaded = 302;
-			uint32_t GameObjectInstantiated = 303;
-			uint32_t GameObjectDestroyed = 304;
 		};
 
 		struct BLT_API InternalEvents

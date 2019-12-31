@@ -41,6 +41,16 @@ namespace Bolt
 		return GetComponent<Transform>();
 	}
 
+	bool EntityHandle::operator==(const EntityHandle& other) const
+	{
+		return m_Entity.Id == other.m_Entity.Id && m_Manager == other.m_Manager;
+	}
+
+	bool EntityHandle::operator!=(const EntityHandle& other) const
+	{
+		return !(*this == other);
+	}
+
 	// ==================================================================================================================
 	// ENTITY MANAGER
 	// ==================================================================================================================

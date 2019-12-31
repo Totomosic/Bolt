@@ -12,6 +12,7 @@
 #include "BoltDefines.h"
 
 #include <algorithm>
+#include <any>
 #include <bitset>
 #include <chrono>
 #include <cstdlib>
