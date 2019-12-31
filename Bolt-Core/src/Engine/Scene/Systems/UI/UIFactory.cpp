@@ -5,6 +5,7 @@
 
 #include "UIElement.h"
 #include "UIText.h"
+#include "UITextInput.h"
 #include "Shapes/UIRectangle.h"
 
 namespace Bolt
@@ -43,6 +44,26 @@ namespace Bolt
 	UIText& UIFactory::CreateText(const blt::string& text, const Color& color, Transform transform, AlignH horizontal, AlignV vertical)
 	{
 		return CreateText(text, ResourceManager::Get().Fonts().Default(), color, std::move(transform), horizontal, vertical);
+	}
+
+	UITextInput& UIFactory::CreateTextInput(float width, float height, const ResourcePtr<Font>& font, const Color& fontColor, std::unique_ptr<Material>&& backgroundMaterial, Transform transform)
+	{
+		return (UITextInput&)m_ParentElement.AddChild(std::make_unique<UITextInput>(m_Manager, &m_ParentElement, width, height, font, fontColor, std::move(backgroundMaterial), std::move(transform)));
+	}
+
+	UITextInput& UIFactory::CreateTextInput(float width, float height, const Color& fontColor, std::unique_ptr<Material>&& backgroundMaterial, Transform transform)
+	{
+		return CreateTextInput(width, height, ResourceManager::Get().Fonts().Default(), fontColor, std::move(backgroundMaterial), std::move(transform));
+	}
+
+	UITextInput& UIFactory::CreateTextInput(float width, float height, const ResourcePtr<Font>& font, const Color& fontColor, const Color& backgroundColor, Transform transform)
+	{
+		return CreateTextInput(width, height, font, fontColor, ResourceManager::Get().Materials().Default(backgroundColor), std::move(transform));
+	}
+
+	UITextInput& UIFactory::CreateTextInput(float width, float height, const Color& fontColor, const Color& backgroundColor, Transform transform)
+	{
+		return CreateTextInput(width, height, ResourceManager::Get().Fonts().Default(), fontColor, ResourceManager::Get().Materials().Default(backgroundColor), std::move(transform));
 	}
 
 }

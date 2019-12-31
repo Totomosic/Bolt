@@ -37,6 +37,7 @@
 
 #include "Engine/Scene/Systems/UI/Shapes/UIRectangle.h"
 #include "Engine/Scene/Systems/UI/UIText.h"
+#include "Engine/Scene/Systems/UI/UITextInput.h"
 
 #include "Engine/Scene/Components/Transform.h"
 #include "Engine/Scene/Components/Camera.h"

@@ -86,6 +86,7 @@ namespace blt
 		iterator insert(const_iterator pos, char c);
 
 		void reserve(uint32_t new_capacity);
+		void resize(uint32_t n, char c = {});
 		void clear();
 
 		friend string operator+(const string& left, const string& right);

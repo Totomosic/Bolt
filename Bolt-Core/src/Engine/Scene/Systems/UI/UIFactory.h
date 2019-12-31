@@ -11,6 +11,7 @@ namespace Bolt
 	class UIElement;
 	class UIRectangle;
 	class UIText;
+	class UITextInput;
 
 	class BLT_API UIFactory
 	{
@@ -30,6 +31,12 @@ namespace Bolt
 			Transform transform = Transform(), AlignH horizontal = AlignH::Center, AlignV vertical = AlignV::Center);
 		UIText& CreateText(const blt::string& text, const Color& color,
 			Transform transform = Transform(), AlignH horizontal = AlignH::Center, AlignV vertical = AlignV::Center);
+
+		UITextInput& CreateTextInput(float width, float height, const ResourcePtr<Font>& font, const Color& fontColor, std::unique_ptr<Material>&& backgroundMaterial, Transform transform = Transform());
+		UITextInput& CreateTextInput(float width, float height, const Color& fontColor, std::unique_ptr<Material>&& backgroundMaterial, Transform transform = Transform());
+		UITextInput& CreateTextInput(float width, float height, const ResourcePtr<Font>& font, const Color& fontColor, const Color& backgroundColor, Transform transform = Transform());
+		UITextInput& CreateTextInput(float width, float height, const Color& fontColor, const Color& backgroundColor, Transform transform = Transform());
+
 	};
 
 }

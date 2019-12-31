@@ -56,6 +56,12 @@ namespace Bolt
 			result.y = proj.y;
 			return result;
 		}
+
+		template<typename T>
+		void EmitEvent(UIElement& element, EventEmitter<UI<T>>& emitter, const T& data) const
+		{
+			emitter.Emit({ element, data });
+		}
 	};
 
 }

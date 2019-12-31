@@ -45,13 +45,13 @@ namespace Bolt
 		if (m_FocusedElement != nullptr)
 		{
 			UIFocusLost e;
-			m_FocusedElement->Events().OnFocusLost().Emit(e);
+			EmitEvent(GetFocusedElement(), GetFocusedElement().Events().OnFocusLost(), e);
 		}
 		m_FocusedElement = element;
 		if (m_FocusedElement != nullptr)
 		{
 			UIFocus e;
-			m_FocusedElement->Events().OnFocus().Emit(e);
+			EmitEvent(GetFocusedElement(), GetFocusedElement().Events().OnFocus(), e);
 		}
 	}
 
@@ -106,7 +106,7 @@ namespace Bolt
 		{
 			if (HasFocusedElement())
 			{
-				GetFocusedElement().Events().OnClick().Emit(ReprojectEventData(e.Data));
+				EmitEvent(GetFocusedElement(), GetFocusedElement().Events().OnClick(), ReprojectEventData(e.Data));
 			}
 		}
 	}
@@ -129,7 +129,7 @@ namespace Bolt
 
 			if (HasFocusedElement())
 			{
-				GetFocusedElement().Events().OnMouseDown().Emit(ReprojectEventData(e.Data));
+				EmitEvent(GetFocusedElement(), GetFocusedElement().Events().OnMouseDown(), ReprojectEventData(e.Data));
 			}
 		}
 	}
@@ -140,7 +140,7 @@ namespace Bolt
 		{
 			if (HasFocusedElement())
 			{
-				GetFocusedElement().Events().OnMouseUp().Emit(ReprojectEventData(e.Data));
+				EmitEvent(GetFocusedElement(), GetFocusedElement().Events().OnMouseUp(), ReprojectEventData(e.Data));
 			}
 		}
 	}
@@ -151,7 +151,7 @@ namespace Bolt
 		{
 			if (HasFocusedElement())
 			{
-				GetFocusedElement().Events().OnKeyDown().Emit(e.Data);
+				EmitEvent(GetFocusedElement(), GetFocusedElement().Events().OnKeyDown(), e.Data);
 			}
 		}
 	}
@@ -162,7 +162,7 @@ namespace Bolt
 		{
 			if (HasFocusedElement())
 			{
-				GetFocusedElement().Events().OnKeyUp().Emit(e.Data);
+				EmitEvent(GetFocusedElement(), GetFocusedElement().Events().OnKeyUp(), e.Data);
 			}
 		}
 	}
@@ -173,7 +173,7 @@ namespace Bolt
 		{
 			if (HasFocusedElement())
 			{
-				GetFocusedElement().Events().OnCharPressed().Emit(e.Data);
+				EmitEvent(GetFocusedElement(), GetFocusedElement().Events().OnCharPressed(), e.Data);
 			}
 		}
 	}

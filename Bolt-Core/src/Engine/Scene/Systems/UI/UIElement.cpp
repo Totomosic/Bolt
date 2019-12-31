@@ -12,7 +12,7 @@ namespace Bolt
 	}
 
 	UIElement::UIElement(UIManager* manager, UIElement* parent, const EntityHandle& entity)
-		: m_Manager(manager), m_Entity(), m_IsFocused(false), m_Parent(nullptr), m_Children()
+		: m_Manager(manager), m_Entity(), m_IsFocused(false), m_Parent(nullptr), m_Children(), m_CompoundElement(nullptr)
 	{
 		SetParent(parent);
 		SetEntity(entity);
@@ -107,6 +107,7 @@ namespace Bolt
 	{
 		UIElement& child = *element;
 		m_Children.push_back(std::move(element));
+		child.SetParent(this);
 		return child;
 	}
 
@@ -125,6 +126,21 @@ namespace Bolt
 	void UIElement::ClearChildren()
 	{
 		m_Children.clear();
+	}
+
+	bool UIElement::HasCompoundElement() const
+	{
+		return m_CompoundElement != nullptr;
+	}
+
+	UIElement& UIElement::GetCompoundElement() const
+	{
+		return *m_CompoundElement;
+	}
+
+	void UIElement::SetCompoundElement(UIElement* element)
+	{
+		m_CompoundElement = element;
 	}
 
 	void UIElement::Remove()
@@ -180,14 +196,30 @@ namespace Bolt
 			m_Entity.Assign<UIEvents>();
 		}
 		UIEvents& events = *m_Entity.GetComponent<UIEvents>();
-		events.OnFocus().AddEventListener([this](Event<UIFocus>& e)
+		// Update is focused
+		events.OnFocus().AddEventListener([this](Event<UI<UIFocus>>& e)
 			{
 				m_IsFocused = true;
 			});
-		events.OnFocusLost().AddEventListener([this](Event<UIFocusLost>& e)
+		events.OnFocusLost().AddEventListener([this](Event<UI<UIFocusLost>>& e)
 			{
 				m_IsFocused = false;
 			});
+		// Stop focus events propagating if no compound element
+		events.OnFocus().AddEventListener([this](Event<UI<UIFocus>>& e)
+			{
+				if (!HasCompoundElement())
+				{
+					e.StopPropagation();
+				}
+			}, ListenerPriority::Low);
+		events.OnFocusLost().AddEventListener([this](Event<UI<UIFocusLost>>& e)
+			{
+				if (!HasCompoundElement())
+				{
+					e.StopPropagation();
+				}
+			}, ListenerPriority::Low);
 		SetupEntity(m_Entity);
 		return m_Entity;
 	}
@@ -201,6 +233,7 @@ namespace Bolt
 	{
 		if (parent == m_Parent)
 			return;
+		BLT_ASSERT(m_Parent == nullptr, "Cannot change UI element's parent");
 		m_Parent = parent;
 		if (m_Entity.IsValid())
 		{

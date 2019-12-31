@@ -293,6 +293,25 @@ namespace blt
 		test_size(new_capacity - 1);
 	}
 
+	void string::resize(uint32_t n, char c)
+	{
+		if (n < size())
+		{
+			while (size() != n)
+			{
+				pop_back();
+			}
+		}
+		else
+		{
+			reserve(n + 1);
+			while (size() != n)
+			{
+				append(c);
+			}
+		}
+	}
+
 	void string::clear()
 	{
 		m_Size = 0;

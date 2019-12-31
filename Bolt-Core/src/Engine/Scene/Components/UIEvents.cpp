@@ -7,25 +7,16 @@ namespace Bolt
 
 	UIEvents::UIEvents()
 		: m_Bus(std::make_shared<EventBus>()), 
-		m_OnClick(m_Bus->GetEmitter<MouseClickEvent>(Events::UI.OnClick)),
-		m_OnMouseDown(m_Bus->GetEmitter<MouseDownEvent>(Events::UI.OnMouseDown)),
-		m_OnMouseUp(m_Bus->GetEmitter<MouseUpEvent>(Events::UI.OnMouseUp)),
-		m_OnKeyDown(m_Bus->GetEmitter<KeyDownEvent>(Events::UI.OnKeyDown)),
-		m_OnKeyUp(m_Bus->GetEmitter<KeyUpEvent>(Events::UI.OnKeyUp)),
-		m_OnCharPressed(m_Bus->GetEmitter<CharPressedEvent>(Events::UI.OnCharPressed)),
-		m_OnFocus(m_Bus->GetEmitter<UIFocus>(Events::UI.OnFocus)),
-		m_OnFocusLost(m_Bus->GetEmitter<UIFocusLost>(Events::UI.OnFocusLost))
+		m_OnClick(m_Bus->GetEmitter<UI<MouseClickEvent>>(Events::UI.OnClick)),
+		m_OnMouseDown(m_Bus->GetEmitter<UI<MouseDownEvent>>(Events::UI.OnMouseDown)),
+		m_OnMouseUp(m_Bus->GetEmitter<UI<MouseUpEvent>>(Events::UI.OnMouseUp)),
+		m_OnKeyDown(m_Bus->GetEmitter<UI<KeyDownEvent>>(Events::UI.OnKeyDown)),
+		m_OnKeyUp(m_Bus->GetEmitter<UI<KeyUpEvent>>(Events::UI.OnKeyUp)),
+		m_OnCharPressed(m_Bus->GetEmitter<UI<CharPressedEvent>>(Events::UI.OnCharPressed)),
+		m_OnFocus(m_Bus->GetEmitter<UI<UIFocus>>(Events::UI.OnFocus)),
+		m_OnFocusLost(m_Bus->GetEmitter<UI<UIFocusLost>>(Events::UI.OnFocusLost))
 	{
 		m_Bus->SetImmediateMode(true);
-		// Stop focus events from propagating
-		m_OnFocus.AddEventListener([](Event<UIFocus>& e)
-			{
-				e.StopPropagation();
-			}, ListenerPriority::Low);
-		m_OnFocusLost.AddEventListener([](Event<UIFocusLost>& e)
-			{
-				e.StopPropagation();
-			}, ListenerPriority::Low);
 	}
 
 	const EventBus& UIEvents::Bus() const
@@ -38,82 +29,82 @@ namespace Bolt
 		return *m_Bus;
 	}
 
-	const EventEmitter<MouseClickEvent>& UIEvents::OnClick() const
+	const EventEmitter<UI<MouseClickEvent>>& UIEvents::OnClick() const
 	{
 		return m_OnClick;
 	}
 
-	const EventEmitter<MouseDownEvent>& UIEvents::OnMouseDown() const
+	const EventEmitter<UI<MouseDownEvent>>& UIEvents::OnMouseDown() const
 	{
 		return m_OnMouseDown;
 	}
 
-	const EventEmitter<MouseUpEvent>& UIEvents::OnMouseUp() const
+	const EventEmitter<UI<MouseUpEvent>>& UIEvents::OnMouseUp() const
 	{
 		return m_OnMouseUp;
 	}
 
-	const EventEmitter<KeyDownEvent>& UIEvents::OnKeyDown() const
+	const EventEmitter<UI<KeyDownEvent>>& UIEvents::OnKeyDown() const
 	{
 		return m_OnKeyDown;
 	}
 
-	const EventEmitter<KeyUpEvent>& UIEvents::OnKeyUp() const
+	const EventEmitter<UI<KeyUpEvent>>& UIEvents::OnKeyUp() const
 	{
 		return m_OnKeyUp;
 	}
 
-	const EventEmitter<CharPressedEvent>& UIEvents::OnCharPressed() const
+	const EventEmitter<UI<CharPressedEvent>>& UIEvents::OnCharPressed() const
 	{
 		return m_OnCharPressed;
 	}
 
-	const EventEmitter<UIFocus>& UIEvents::OnFocus() const
+	const EventEmitter<UI<UIFocus>>& UIEvents::OnFocus() const
 	{
 		return m_OnFocus;
 	}
 
-	const EventEmitter<UIFocusLost>& UIEvents::OnFocusLost() const
+	const EventEmitter<UI<UIFocusLost>>& UIEvents::OnFocusLost() const
 	{
 		return m_OnFocusLost;
 	}
 
-	EventEmitter<MouseClickEvent>& UIEvents::OnClick()
+	EventEmitter<UI<MouseClickEvent>>& UIEvents::OnClick()
 	{
 		return m_OnClick;
 	}
 
-	EventEmitter<MouseDownEvent>& UIEvents::OnMouseDown()
+	EventEmitter<UI<MouseDownEvent>>& UIEvents::OnMouseDown()
 	{
 		return m_OnMouseDown;
 	}
 
-	EventEmitter<MouseUpEvent>& UIEvents::OnMouseUp()
+	EventEmitter<UI<MouseUpEvent>>& UIEvents::OnMouseUp()
 	{
 		return m_OnMouseUp;
 	}
 
-	EventEmitter<KeyDownEvent>& UIEvents::OnKeyDown()
+	EventEmitter<UI<KeyDownEvent>>& UIEvents::OnKeyDown()
 	{
 		return m_OnKeyDown;
 	}
 
-	EventEmitter<KeyUpEvent>& UIEvents::OnKeyUp()
+	EventEmitter<UI<KeyUpEvent>>& UIEvents::OnKeyUp()
 	{
 		return m_OnKeyUp;
 	}
 
-	EventEmitter<CharPressedEvent>& UIEvents::OnCharPressed()
+	EventEmitter<UI<CharPressedEvent>>& UIEvents::OnCharPressed()
 	{
 		return m_OnCharPressed;
 	}
 
-	EventEmitter<UIFocus>& UIEvents::OnFocus()
+	EventEmitter<UI<UIFocus>>& UIEvents::OnFocus()
 	{
 		return m_OnFocus;
 	}
 
-	EventEmitter<UIFocusLost>& UIEvents::OnFocusLost()
+	EventEmitter<UI<UIFocusLost>>& UIEvents::OnFocusLost()
 	{
 		return m_OnFocusLost;
 	}

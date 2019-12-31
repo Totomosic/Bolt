@@ -18,6 +18,7 @@ namespace Bolt
 
 		UIElement* m_Parent;
 		std::vector<std::unique_ptr<UIElement>> m_Children;
+		UIElement* m_CompoundElement;
 
 	public:
 		UIElement(UIManager* manager, UIElement* parent);
@@ -46,6 +47,10 @@ namespace Bolt
 		UIElement& AddChild(std::unique_ptr<UIElement>&& element);
 		void RemoveChild(UIElement& element);
 		void ClearChildren();
+
+		bool HasCompoundElement() const;
+		UIElement& GetCompoundElement() const;
+		void SetCompoundElement(UIElement* element);
 
 		// Removes this element
 		void Remove();
