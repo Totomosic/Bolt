@@ -10,7 +10,7 @@
 namespace Bolt
 {
 
-	Image LoadTexture(const Filepath& file, bool flipVertically, bool flipHorizontally)
+	Image LoadTexture(const FilePath& file, bool flipVertically, bool flipHorizontally)
 	{
 		BLT_PROFILE_FUNCTION();
 		BLT_ASSERT(Filesystem::FileExists(file), "Unable to find Image with path " + file.Path());

@@ -34,7 +34,7 @@ namespace Bolt
 		const TextureManager& Textures() const;
 		const BasicModels& Models() const;
 
-		void LoadPack(const Filepath& resourcePack, std::function<void(const ResourcePack&)> callback);
+		void LoadPack(const FilePath& resourcePack, std::function<void(const ResourcePack&)> callback);
 
 		bool ResourceExists(const ResourceID& id);
 

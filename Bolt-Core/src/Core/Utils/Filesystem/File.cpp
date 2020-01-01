@@ -6,7 +6,7 @@
 namespace Bolt
 {
 
-	File::File(const Filepath& path)
+	File::File(const FilePath& path)
 		: m_Path(path), m_Stream(), m_Mode(OpenMode::None)
 	{
 	
@@ -22,7 +22,7 @@ namespace Bolt
 		return m_Path.Path();
 	}
 
-	const Filepath& File::Path() const
+	const FilePath& File::Path() const
 	{
 		return m_Path;
 	}

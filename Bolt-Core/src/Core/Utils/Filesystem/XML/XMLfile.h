@@ -15,7 +15,7 @@ namespace Bolt
 
 	public:
 		XMLfile();
-		XMLfile(const Filepath& filename);
+		XMLfile(const FilePath& filename);
 
 		void BeginXML(const blt::string& name, const std::unordered_map<blt::string, blt::string>& attributes = std::unordered_map<blt::string, blt::string>()) const;
 		void EndXML() const;

@@ -166,21 +166,21 @@ namespace Bolt
 		return nullptr;
 	}
 
-	std::unique_ptr<Shader> Shader::FromFile(const Filepath& shaderFile)
+	std::unique_ptr<Shader> Shader::FromFile(const FilePath& shaderFile)
 	{
 		File f = Filesystem::Open(shaderFile, OpenMode::Read);
 		blt::string fileData = f.ReadText();
 		return FromSource(fileData);
 	}
 
-	std::unique_ptr<Shader> Shader::FromFile(const Filepath& vertexFile, const Filepath& fragmentFile)
+	std::unique_ptr<Shader> Shader::FromFile(const FilePath& vertexFile, const FilePath& fragmentFile)
 	{
 		File v = Filesystem::Open(vertexFile, OpenMode::Read);
 		File f = Filesystem::Open(fragmentFile, OpenMode::Read);
 		return FromSource(v.ReadText(), f.ReadText());
 	}
 
-	std::unique_ptr<Shader> Shader::FromFile(const Filepath& vertexFile, const Filepath& geometryFile, const Filepath& fragmentFile)
+	std::unique_ptr<Shader> Shader::FromFile(const FilePath& vertexFile, const FilePath& geometryFile, const FilePath& fragmentFile)
 	{
 		File v = Filesystem::Open(vertexFile, OpenMode::Read);
 		File g = Filesystem::Open(geometryFile, OpenMode::Read);

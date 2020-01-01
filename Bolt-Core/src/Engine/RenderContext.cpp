@@ -32,9 +32,4 @@ namespace Bolt
 		return m_Resources;
 	}
 
-	SceneManager& RenderContext::GetSceneManager()
-	{
-		return m_SceneManager;
-	}
-
 }

@@ -10,18 +10,18 @@ namespace Bolt
 
 	}
 
-	MaterialFileReader::MaterialFileReader(const Filepath& shaderFile) : MaterialFileReader()
+	MaterialFileReader::MaterialFileReader(const FilePath& shaderFile) : MaterialFileReader()
 	{
 		m_Reader.SetShaderFile(shaderFile);
 	}
 
-	MaterialFileReader::MaterialFileReader(const Filepath& vertexFile, const Filepath& fragmentFile) : MaterialFileReader()
+	MaterialFileReader::MaterialFileReader(const FilePath& vertexFile, const FilePath& fragmentFile) : MaterialFileReader()
 	{
 		m_Reader.SetVertexFile(vertexFile);
 		m_Reader.SetFragmentFile(fragmentFile);
 	}
 
-	MaterialFileReader::MaterialFileReader(const Filepath& vertexFile, const Filepath& geometryFile, const Filepath& fragmentFile) : MaterialFileReader()
+	MaterialFileReader::MaterialFileReader(const FilePath& vertexFile, const FilePath& geometryFile, const FilePath& fragmentFile) : MaterialFileReader()
 	{
 		m_Reader.SetVertexFile(vertexFile);
 		m_Reader.SetGeometryFile(geometryFile);

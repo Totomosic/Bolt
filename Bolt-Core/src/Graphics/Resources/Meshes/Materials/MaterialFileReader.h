@@ -13,9 +13,9 @@ namespace Bolt
 
 	public:
 		MaterialFileReader();
-		MaterialFileReader(const Filepath& shaderFile);
-		MaterialFileReader(const Filepath& vertexFile, const Filepath& fragmentFile);
-		MaterialFileReader(const Filepath& vertexFile, const Filepath& geometryFile, const Filepath& fragmentFile);
+		MaterialFileReader(const FilePath& shaderFile);
+		MaterialFileReader(const FilePath& vertexFile, const FilePath& fragmentFile);
+		MaterialFileReader(const FilePath& vertexFile, const FilePath& geometryFile, const FilePath& fragmentFile);
 
 		const ShaderFileReader& GetShaderReader() const;
 		bool IsTransparent() const;

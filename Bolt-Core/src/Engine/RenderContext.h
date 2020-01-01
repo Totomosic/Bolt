@@ -17,7 +17,6 @@ namespace Bolt
 		Window m_Window;
 		ResourceManager m_Resources;
 		Graphics m_Graphics;
-		SceneManager m_SceneManager;
 
 	public:
 		RenderContext(AppContext* context, const WindowCreateInfo& createInfo);
@@ -26,7 +25,6 @@ namespace Bolt
 		Graphics& GetGraphics();
 		Input& GetInput();
 		ResourceManager& GetResourceManager();
-		SceneManager& GetSceneManager();
 
 	};
 

@@ -11,18 +11,18 @@ namespace Bolt
 
 	}
 
-	ShaderFileReader::ShaderFileReader(const Filepath& shaderFile) : ShaderFileReader()
+	ShaderFileReader::ShaderFileReader(const FilePath& shaderFile) : ShaderFileReader()
 	{
 		SetShaderFile(shaderFile);
 	}
 
-	ShaderFileReader::ShaderFileReader(const Filepath& vertexFile, const Filepath& fragmentFile) : ShaderFileReader()
+	ShaderFileReader::ShaderFileReader(const FilePath& vertexFile, const FilePath& fragmentFile) : ShaderFileReader()
 	{
 		SetVertexFile(vertexFile);
 		SetFragmentFile(fragmentFile);
 	}
 
-	ShaderFileReader::ShaderFileReader(const Filepath& vertexFile, const Filepath& geometryFile, const Filepath& fragmentFile) : ShaderFileReader()
+	ShaderFileReader::ShaderFileReader(const FilePath& vertexFile, const FilePath& geometryFile, const FilePath& fragmentFile) : ShaderFileReader()
 	{
 		SetVertexFile(vertexFile);
 		SetGeometryFile(geometryFile);
@@ -59,25 +59,25 @@ namespace Bolt
 		return m_FragmentSource;
 	}
 
-	void ShaderFileReader::SetVertexFile(const Filepath& file)
+	void ShaderFileReader::SetVertexFile(const FilePath& file)
 	{
 		File f = Filesystem::Open(file, OpenMode::Read);
 		SetVertexSource(f.ReadText());
 	}
 
-	void ShaderFileReader::SetGeometryFile(const Filepath& file)
+	void ShaderFileReader::SetGeometryFile(const FilePath& file)
 	{
 		File f = Filesystem::Open(file, OpenMode::Read);
 		SetGeometrySource(f.ReadText());
 	}
 
-	void ShaderFileReader::SetFragmentFile(const Filepath& file)
+	void ShaderFileReader::SetFragmentFile(const FilePath& file)
 	{
 		File f = Filesystem::Open(file, OpenMode::Read);
 		SetFragmentSource(f.ReadText());
 	}
 
-	void ShaderFileReader::SetShaderFile(const Filepath& file)
+	void ShaderFileReader::SetShaderFile(const FilePath& file)
 	{
 		blt::string vertexSource;
 		blt::string geometrySource;

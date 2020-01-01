@@ -128,7 +128,10 @@ namespace Bolt
 	{
 		BLT_PROFILE_FUNCTION();
 		m_IsGraphicsEnabled = createRenderContext;
-		m_Context = std::make_unique<AppContext>(createRenderContext, createInfo);
+		if (createRenderContext)
+			m_Context = std::make_unique<AppContext>(createInfo);
+		else
+			m_Context = std::make_unique<AppContext>();
 		Engine::Instance().SetCurrentContext(m_Context.get());
 		if (createRenderContext)
 		{
@@ -190,6 +193,11 @@ namespace Bolt
 		{
 			BLT_PROFILE_SCOPE("Update()");
 			Update();
+		}
+		TimeDelta delta = Time::Get().RenderingTimeline().DeltaTime();
+		if (SceneManager::Get().HasCurrentScene())
+		{
+			SceneManager::Get().GetCurrentScene().Update(delta);
 		}
 		Time::Get().Update();
 		EventManager::Get().FlushAll(); // Flush #2 (likely other scene/app events)

@@ -8,7 +8,7 @@ namespace Bolt
 
 	SceneManager& SceneManager::Get()
 	{
-		return Engine::Instance().CurrentContext().GetRenderContext().GetSceneManager();
+		return Engine::Instance().CurrentContext().GetSceneManager();
 	}
 
 	SceneManager::SceneManager()

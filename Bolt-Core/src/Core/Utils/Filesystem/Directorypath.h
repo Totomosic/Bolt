@@ -4,9 +4,9 @@
 namespace Bolt
 {
 
-	struct Filepath;
+	struct FilePath;
 
-	struct BLT_API Directorypath
+	struct BLT_API DirectoryPath
 	{
 	public:
 		static constexpr char DIRECTORY_DELIMITER = '/';
@@ -15,26 +15,26 @@ namespace Bolt
 		blt::string m_Path;
 
 	public:
-		Directorypath();
-		Directorypath(const blt::string& path);
-		Directorypath(const char* path);
+		DirectoryPath();
+		DirectoryPath(const blt::string& path);
+		DirectoryPath(const char* path);
 
 		const blt::string& Path() const;
 		bool HasParent() const;
-		Directorypath Parent() const;
+		DirectoryPath Parent() const;
 		bool IsRelative() const;
 		bool IsAbsolute() const;
 
-		void MakeAbsolute(const Directorypath& root);
+		void MakeAbsolute(const DirectoryPath& root);
 
-		bool operator==(const Directorypath& other) const;
-		bool operator!=(const Directorypath& other) const;
+		bool operator==(const DirectoryPath& other) const;
+		bool operator!=(const DirectoryPath& other) const;
 
-		friend std::ostream& operator<<(std::ostream& stream, const Directorypath& path);
-		friend struct Filepath;
+		friend std::ostream& operator<<(std::ostream& stream, const DirectoryPath& path);
+		friend struct FilePath;
 
 	public:
-		static Directorypath Combine(const Directorypath& left, const Directorypath& right);
+		static DirectoryPath Combine(const DirectoryPath& left, const DirectoryPath& right);
 
 	private:
 		static void StandardizePath(blt::string& directorypath);

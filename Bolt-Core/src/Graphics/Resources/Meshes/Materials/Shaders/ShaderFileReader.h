@@ -35,9 +35,9 @@ namespace Bolt
 
 	public:
 		ShaderFileReader();
-		ShaderFileReader(const Filepath& shaderFile);
-		ShaderFileReader(const Filepath& vertexFile, const Filepath& fragmentFile);
-		ShaderFileReader(const Filepath& vertexFile, const Filepath& geometryFile, const Filepath& fragmentFile);
+		ShaderFileReader(const FilePath& shaderFile);
+		ShaderFileReader(const FilePath& vertexFile, const FilePath& fragmentFile);
+		ShaderFileReader(const FilePath& vertexFile, const FilePath& geometryFile, const FilePath& fragmentFile);
 
 		bool HasVertexSource() const;
 		bool HasGeometrySource() const;
@@ -47,10 +47,10 @@ namespace Bolt
 		const blt::string& GetGeometrySource() const;
 		const blt::string& GetFragmentSource() const;
 
-		void SetVertexFile(const Filepath& file);
-		void SetGeometryFile(const Filepath& file);
-		void SetFragmentFile(const Filepath& file);
-		void SetShaderFile(const Filepath& file);
+		void SetVertexFile(const FilePath& file);
+		void SetGeometryFile(const FilePath& file);
+		void SetFragmentFile(const FilePath& file);
+		void SetShaderFile(const FilePath& file);
 
 		// Manually set the vertex source to use while building
 		void SetVertexSource(const blt::string& source);

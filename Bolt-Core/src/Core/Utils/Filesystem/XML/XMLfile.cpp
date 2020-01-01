@@ -10,7 +10,7 @@ namespace Bolt
 	
 	}
 
-	XMLfile::XMLfile(const Filepath& filename) : File(filename),
+	XMLfile::XMLfile(const FilePath& filename) : File(filename),
 		m_CurrentTags(), m_AddedData(true), m_WasLastEndTag(false), m_CurrentString()
 	{
 	

@@ -1,7 +1,7 @@
 #pragma once
 #include "bltpch.h"
 #include "Image.h"
-#include "Utils/Filesystem/Filepath.h"
+#include "Utils/Filesystem/FilePath.h"
 
 namespace Bolt
 {
@@ -40,6 +40,6 @@ namespace Bolt
 		return result;
 	}
 
-	Image LoadTexture(const Filepath& file, bool flipVertically = true, bool flipHorizontally = false);
+	Image LoadTexture(const FilePath& file, bool flipVertically = true, bool flipHorizontally = false);
 
 }

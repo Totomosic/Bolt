@@ -7,19 +7,19 @@
 namespace Bolt
 {
 
-	Directorypath Filesystem::s_WorkingDirectory = Directorypath();
+	DirectoryPath Filesystem::s_WorkingDirectory = DirectoryPath();
 
-	const Directorypath& Filesystem::WorkingDirectory()
+	const DirectoryPath& Filesystem::WorkingDirectory()
 	{
 		return s_WorkingDirectory;
 	}
 
-	bool Filesystem::FileExists(const Filepath& filepath)
+	bool Filesystem::FileExists(const FilePath& filepath)
 	{
 		return std::filesystem::exists(filepath.Path().c_str());
 	}
 
-	File Filesystem::Open(const Filepath& filepath, OpenMode mode)
+	File Filesystem::Open(const FilePath& filepath, OpenMode mode)
 	{
 		BLT_ASSERT(mode != OpenMode::Read || FileExists(filepath), "No file with path " + filepath.Path());
 		File f(filepath);
@@ -39,7 +39,7 @@ namespace Bolt
 		file.m_Stream.close();
 	}
 
-	XMLfile Filesystem::OpenXML(const Filepath& filepath, OpenMode mode)
+	XMLfile Filesystem::OpenXML(const FilePath& filepath, OpenMode mode)
 	{
 		BLT_ASSERT(mode != OpenMode::Read || FileExists(filepath), "No file with path " + filepath.Path());
 		XMLfile f(filepath);
@@ -48,7 +48,7 @@ namespace Bolt
 		return f;
 	}
 
-	void Filesystem::WatchFile(const Filepath& filepath, std::function<bool(const Filepath&)> callback)
+	void Filesystem::WatchFile(const FilePath& filepath, std::function<bool(const FilePath&)> callback)
 	{
 		
 	}
@@ -58,7 +58,7 @@ namespace Bolt
 		BLT_PROFILE_FUNCTION();
 		char buff[FILENAME_MAX];
 		auto result = BLT_GET_CURRENT_DIRECTORY(buff, FILENAME_MAX);
-		s_WorkingDirectory = Directorypath(blt::string(buff) + Directorypath::DIRECTORY_DELIMITER);
+		s_WorkingDirectory = DirectoryPath(blt::string(buff) + DirectoryPath::DIRECTORY_DELIMITER);
 	}
 
 }

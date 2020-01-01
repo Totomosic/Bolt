@@ -19,9 +19,11 @@ namespace Bolt
 		Time m_Time;
 		EventManager m_Events;
 		std::unique_ptr<RenderContext> m_RenderContext;
+		SceneManager m_SceneManager;
 
 	public:
-		AppContext(bool createRenderContext, const WindowCreateInfo& createInfo);
+		AppContext(const WindowCreateInfo& createInfo);
+		AppContext();
 
 		bool HasRenderContext() const;
 		const RenderContext& GetRenderContext() const;
@@ -29,6 +31,7 @@ namespace Bolt
 
 		EventManager& GetEventManager();
 		Time& GetTime();
+		SceneManager& GetSceneManager();
 
 	};
 

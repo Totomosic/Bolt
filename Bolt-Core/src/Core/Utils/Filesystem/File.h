@@ -1,6 +1,6 @@
 #pragma once
 #include "bltpch.h"
-#include "Filepath.h"
+#include "FilePath.h"
 
 namespace Bolt
 {
@@ -16,16 +16,16 @@ namespace Bolt
 	class BLT_API File
 	{
 	private:
-		Filepath m_Path;
+		FilePath m_Path;
 		mutable std::fstream m_Stream;
 		mutable OpenMode m_Mode;
 
 	public:
 		File();
-		File(const Filepath& filepath);
+		File(const FilePath& filepath);
 
 		const blt::string& Filename() const;
-		const Filepath& Path() const;
+		const FilePath& Path() const;
 		bool IsOpen() const;
 		uint32_t GetSize() const;
 		bool IsReadable() const;

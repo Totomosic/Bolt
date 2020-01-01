@@ -4,7 +4,7 @@
 namespace Bolt
 {
 
-	FontFactory::FontFactory(const Filepath& fontFile)
+	FontFactory::FontFactory(const FilePath& fontFile)
 		: m_FontFile(fontFile)
 	{
 		

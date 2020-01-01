@@ -48,9 +48,9 @@ namespace Bolt
 		friend class ShaderInstance;
 
 	public:
-		static std::unique_ptr<Shader> FromFile(const Filepath& shaderFile);
-		static std::unique_ptr<Shader> FromFile(const Filepath& vertexFile, const Filepath& fragmentFile);
-		static std::unique_ptr<Shader> FromFile(const Filepath& vertexFile, const Filepath& geometryFile, const Filepath& fragmentFile);
+		static std::unique_ptr<Shader> FromFile(const FilePath& shaderFile);
+		static std::unique_ptr<Shader> FromFile(const FilePath& vertexFile, const FilePath& fragmentFile);
+		static std::unique_ptr<Shader> FromFile(const FilePath& vertexFile, const FilePath& geometryFile, const FilePath& fragmentFile);
 		static std::unique_ptr<Shader> FromSource(const blt::string& source);
 		static std::unique_ptr<Shader> FromSource(const blt::string& vertexSource, const blt::string& fragmentSource);
 		static std::unique_ptr<Shader> FromSource(const blt::string& vertexSource, const blt::string& geometrySource, const blt::string& fragmentSource);

@@ -44,7 +44,7 @@ namespace Bolt
 		return m_Models;
 	}
 
-	void ResourceManager::LoadPack(const Filepath& resourcePack, std::function<void(const ResourcePack&)> callback)
+	void ResourceManager::LoadPack(const FilePath& resourcePack, std::function<void(const ResourcePack&)> callback)
 	{
 		XMLfile file = Filesystem::OpenXML(resourcePack);
 		XMLnode root = file.LoadXML();

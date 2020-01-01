@@ -28,7 +28,7 @@ namespace Bolt
 		std::unique_ptr<texture_font_t, std::function<void(texture_font_t*)>> m_TextureFont;
 
 	public:
-		Font(const Filepath& fontFile, float fontSize, int textureWidth = 512, int textureHeight = 512);
+		Font(const FilePath& fontFile, float fontSize, int textureWidth = 512, int textureHeight = 512);
 
 		float FontSize() const;
 		std::vector<FontCharacter> GetCharacters(const blt::string& str) const;

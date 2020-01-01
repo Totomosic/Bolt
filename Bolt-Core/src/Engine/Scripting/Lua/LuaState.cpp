@@ -30,7 +30,7 @@ namespace Bolt
 		return CheckLuaError(luaL_dostring(GetNativeState(), command.c_str()));
 	}
 
-	bool LuaState::ExecuteFile(const Filepath& file) const
+	bool LuaState::ExecuteFile(const FilePath& file) const
 	{
 		return CheckLuaError(luaL_dofile(GetNativeState(), file.Path().c_str()));
 	}
