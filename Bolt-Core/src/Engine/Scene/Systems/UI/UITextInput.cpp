@@ -16,7 +16,7 @@ namespace Bolt
 	{
 		SetEntity(GetEntityFactory().CreateTransform(std::move(transform)));
 		m_Background = &AddChild(std::move(backgroundElement));
-		m_Text = &GetFactory().CreateText(m_String, font, fontColor, Transform({ 0, 0, 1 }), AlignH::Center, AlignV::Center);
+		m_Text = &CreateText(m_String, font, fontColor, Transform({ 0, 0, 1 }), AlignH::Center, AlignV::Center);
 		m_Background->SetCompoundElement(this);
 		m_Text->SetCompoundElement(this);
 

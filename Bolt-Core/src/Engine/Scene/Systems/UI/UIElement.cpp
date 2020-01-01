@@ -11,8 +11,8 @@ namespace Bolt
 		
 	}
 
-	UIElement::UIElement(UIManager* manager, UIElement* parent, const EntityHandle& entity)
-		: m_Manager(manager), m_Entity(), m_IsFocused(false), m_Parent(nullptr), m_Children(), m_CompoundElement(nullptr)
+	UIElement::UIElement(UIManager* manager, UIElement* parent, const EntityHandle& entity) : UIFactory(manager, *this),
+		m_Manager(manager), m_Entity(), m_IsFocused(false), m_Parent(nullptr), m_Children(), m_CompoundElement(nullptr)
 	{
 		SetParent(parent);
 		SetEntity(entity);
@@ -61,11 +61,6 @@ namespace Bolt
 	{
 		BLT_ASSERT(m_Entity.IsValid(), "Entity is not valid");
 		return *m_Entity.GetComponent<UIEvents>();
-	}
-
-	UIFactory UIElement::GetFactory()
-	{
-		return UIFactory(m_Manager, *this);
 	}
 
 	const Transform& UIElement::GetTransform() const

@@ -9,7 +9,7 @@ namespace Bolt
 
 	class UIManager;
 
-	class BLT_API UIElement
+	class BLT_API UIElement : public UIFactory
 	{
 	private:
 		UIManager* m_Manager;
@@ -35,7 +35,6 @@ namespace Bolt
 		EntityHandle GetEntity() const;
 		const UIEvents& Events() const;
 		UIEvents& Events();
-		UIFactory GetFactory();
 
 		const Transform& GetTransform() const;
 		Transform& GetTransform();
