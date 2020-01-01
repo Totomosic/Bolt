@@ -29,6 +29,9 @@ namespace Bolt
 
 		UIManager& GetUI();
 
+		const EntityHandle& GetActiveCamera() const;
+		void SetActiveCamera(const EntityHandle& entity);
+
 		bool IsEnabled() const;
 		void Enable();
 		void Disable();

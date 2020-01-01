@@ -10,14 +10,27 @@
 
 namespace Bolt
 {
+	RenderingSystem::RenderingSystem()
+		: m_ActiveCamera()
+	{
+	}
+
+	const EntityHandle& RenderingSystem::GetActiveCamera() const
+	{
+		return m_ActiveCamera;
+	}
+
+	void RenderingSystem::SetActiveCamera(const EntityHandle& camera)
+	{
+		m_ActiveCamera = camera;
+	}
 
 	void RenderingSystem::Update(EntityManager& manager, TimeDelta delta)
 	{
-		EntityHandle camera = *manager.GetEntitiesWith<Transform, Camera>().begin();
-		if (camera.IsValid())
+		if (m_ActiveCamera.IsValid())
 		{
-			ComponentHandle<Transform> cameraTransform = camera.GetComponent<Transform>();
-			ComponentHandle<Camera> cameraComponent = camera.GetComponent<Camera>();
+			ComponentHandle<Transform> cameraTransform = m_ActiveCamera.GetComponent<Transform>();
+			ComponentHandle<Camera> cameraComponent = m_ActiveCamera.GetComponent<Camera>();
 			RenderCamera c;
 			c.ProjectionMatrix = cameraComponent->GetProjectionMatrix();
 			c.ViewMatrix = cameraTransform->InverseTransformMatrix();

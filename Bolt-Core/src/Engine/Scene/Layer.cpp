@@ -52,6 +52,17 @@ namespace Bolt
 		return *m_UISystem;
 	}
 
+	const EntityHandle& Layer::GetActiveCamera() const
+	{
+		return m_RenderingSystem->GetActiveCamera();
+	}
+
+	void Layer::SetActiveCamera(const EntityHandle& entity)
+	{
+		BLT_ASSERT(ValidateCamera(entity), "Entity is not a valid camera. Entity requires a Transform and Camera component");
+		m_RenderingSystem->SetActiveCamera(entity);
+	}
+
 	bool Layer::IsEnabled() const
 	{
 		return m_IsActive;

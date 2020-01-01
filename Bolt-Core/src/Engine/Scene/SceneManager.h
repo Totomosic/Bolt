@@ -7,7 +7,7 @@ namespace Bolt
 	class BLT_API SceneManager
 	{
 	private:
-		std::vector<Scene> m_Scenes;
+		std::vector<std::unique_ptr<Scene>> m_Scenes;
 		Scene* m_CurrentScene;
 
 	public:

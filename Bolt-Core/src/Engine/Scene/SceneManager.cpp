@@ -19,8 +19,8 @@ namespace Bolt
 	Scene& SceneManager::AddScene()
 	{
 		size_t index = m_Scenes.size();
-		m_Scenes.push_back(Scene());
-		Scene& scene = m_Scenes[index];
+		m_Scenes.push_back(std::make_unique<Scene>());
+		Scene& scene = *m_Scenes[index];
 		if (!HasCurrentScene())
 		{
 			SetCurrentScene(scene);
@@ -30,13 +30,13 @@ namespace Bolt
 
 	void SceneManager::RemoveScene(Scene& scene)
 	{
-		auto it = std::find_if(m_Scenes.begin(), m_Scenes.end(), [&scene](const Scene& s)
+		auto it = std::find_if(m_Scenes.begin(), m_Scenes.end(), [&scene](const std::unique_ptr<Scene>& s)
 			{
-				return &scene == &s;
+				return &scene == s.get();
 			});
 		if (it != m_Scenes.end())
 		{
-			if (&*it == &GetCurrentScene())
+			if ((*it).get() == &GetCurrentScene())
 			{
 				SetCurrentScenePtr(nullptr);
 			}
