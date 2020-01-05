@@ -1,6 +1,8 @@
 #pragma once
 #include "Components/Component.h"
 #include "Core/Events/IdManager.h"
+#include "Core/Events/EventBus.h"
+#include "Core/Events/EventEmitter.h"
 #include "Entity.h"
 #include "Pool.h"
 
@@ -167,6 +169,22 @@ namespace Bolt
 	};
 
 	// ==================================================================================================================
+	// EVENTS
+	// ==================================================================================================================
+
+	struct BLT_API EntityCreated
+	{
+	public:
+		EntityHandle Entity;
+	};
+
+	struct BLT_API EntityDestroyed
+	{
+	public:
+		EntityHandle Entity;
+	};
+
+	// ==================================================================================================================
 	// ENTITY MANAGER
 	// ==================================================================================================================
 
@@ -239,9 +257,16 @@ namespace Bolt
 		std::vector<std::unique_ptr<BasePool>> m_ComponentPools;
 		std::vector<std::unique_ptr<BaseComponentHelper>> m_ComponentHelpers;
 
+		std::unique_ptr<EventBus> m_Bus;
+		EventEmitter<EntityCreated> m_OnEntityCreated;
+		EventEmitter<EntityDestroyed> m_OnEntityDestroyed;
+
 	public:
 		EntityManager();
 		~EntityManager();
+
+		EventEmitter<EntityCreated>& OnEntityCreated();
+		EventEmitter<EntityDestroyed>& OnEntityDestroyed();
 
 		size_t EntityCount() const;
 		size_t EntityCapacity() const;
@@ -357,6 +382,8 @@ namespace Bolt
 		}
 
 	private:
+		void DestroyInternal(const Entity& entity);
+
 		template<typename T>
 		ComponentMask GetComponentMask() const
 		{

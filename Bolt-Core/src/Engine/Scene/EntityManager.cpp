@@ -56,8 +56,16 @@ namespace Bolt
 	// ==================================================================================================================
 
 	EntityManager::EntityManager()
-		: m_IndexCounter(0), m_FreeList(), m_ComponentMasks(), m_ComponentPools()
+		: m_IndexCounter(0), m_FreeList(), m_ComponentMasks(), m_ComponentPools(),
+		m_Bus(std::make_unique<EventBus>()), m_OnEntityCreated(m_Bus->GetEmitter<EntityCreated>(Events::Scene.EntityCreated)), m_OnEntityDestroyed(m_Bus->GetEmitter<EntityDestroyed>(Events::Scene.EntityDestroyed))
 	{
+		m_OnEntityDestroyed.AddEventListener([this](Event<EntityDestroyed>& e)
+			{
+				if (e.Data.Entity.IsValid())
+				{
+					DestroyInternal(e.Data.Entity);
+				}
+			}, ListenerPriority::Low);
 	}
 
 	EntityManager::~EntityManager()
@@ -66,6 +74,16 @@ namespace Bolt
 		{
 			entity.Destroy();
 		}
+	}
+
+	EventEmitter<EntityCreated>& EntityManager::OnEntityCreated()
+	{
+		return m_OnEntityCreated;
+	}
+
+	EventEmitter<EntityDestroyed>& EntityManager::OnEntityDestroyed()
+	{
+		return m_OnEntityDestroyed;
 	}
 
 	size_t EntityManager::EntityCount() const
@@ -114,6 +132,11 @@ namespace Bolt
 
 	void EntityManager::Destroy(const Entity& entity)
 	{
+		OnEntityDestroyed().Emit({ Get(entity) });
+	}
+
+	void EntityManager::DestroyInternal(const Entity& entity)
+	{
 		BLT_ASSERT(ValidEntity(entity), "Invalid entity");
 		size_t index = GetEntityIndex(entity);
 		auto& mask = m_ComponentMasks[index];
@@ -156,7 +179,7 @@ namespace Bolt
 
 	bool EntityManager::ValidEntity(const Entity& entity) const
 	{
-		return entity.Id != Entity::InvalidId && GetEntityIndex(entity) < m_ComponentMasks.size();
+		return entity.Id != Entity::InvalidId && GetEntityIndex(entity) < m_ComponentMasks.size() && std::find(m_FreeList.begin(), m_FreeList.end(), entity.Id) == m_FreeList.end();
 	}
 
 	EntityManager::EntityId EntityManager::GetNextEntityId()

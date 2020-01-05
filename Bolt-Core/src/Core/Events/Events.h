@@ -51,6 +51,8 @@ namespace Bolt
 		public:
 			uint32_t SceneLoaded = 301;
 			uint32_t SceneUnloaded = 302;
+			uint32_t EntityCreated = 303;
+			uint32_t EntityDestroyed = 304;
 		};
 
 		struct BLT_API InternalEvents

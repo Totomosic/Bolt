@@ -6,6 +6,12 @@
 namespace Bolt
 {
 
+	BLT_API enum class TaskStatus
+	{
+		Ready,
+		Timeout
+	};
+
 	template<class TResult>
 	class BLT_API Task
 	{
@@ -28,7 +34,7 @@ namespace Bolt
 		{
 			m_Result = LaunchAsync<TResult>(std::function<TResult()>([taskResult = std::move(taskResult.m_Result), del = std::move(func)]() mutable -> TResult
 			{
-				TaskResult<int>& tResult = *(TaskResult<int>*)&taskResult;
+				TaskResult<int>& tResult = (TaskResult<int>&)taskResult;
 				tResult.Get();
 				return del();
 			}));
@@ -44,11 +50,6 @@ namespace Bolt
 			}));
 		}
 
-		bool IsComplete() const
-		{
-			return m_Result.m_State->IsFinished.load();
-		}
-
 		TResult Result()
 		{
 			return m_Result.Get();
@@ -56,7 +57,17 @@ namespace Bolt
 
 		void Wait()
 		{
-			Result();
+			m_Result.Wait();
+		}
+
+		TaskStatus WaitFor(double seconds)
+		{
+			std::future_status status = m_Result.WaitFor(seconds);
+			if (status == std::future_status::ready)
+			{
+				return TaskStatus::Ready;
+			}
+			return TaskStatus::Timeout;
 		}
 
 		template<typename DelegateT, typename TNewResult = std::result_of<DelegateT(TResult)>::type>
@@ -117,11 +128,6 @@ namespace Bolt
 				del();
 				return 0;
 			}));
-		}
-
-		bool IsComplete() const
-		{
-			return m_Result.m_State->IsFinished.load();
 		}
 
 		void Wait()

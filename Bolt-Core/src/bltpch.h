@@ -26,6 +26,7 @@
 #include <memory>
 #include <mutex>
 #include <numeric>
+#include <optional>
 #include <ratio>
 #include <sstream>
 #include <stdio.h>
