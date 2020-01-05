@@ -5,6 +5,12 @@
 namespace Bolt
 {
 
+	VertexMapping::VertexMapping()
+		: m_Array(nullptr), m_MappedPtrs(), m_Attributes()
+	{
+	
+	}
+
 	VertexMapping::VertexMapping(const std::vector<VertexMapping::MappingPtr>& mappedPtrs)
 		: m_Array(nullptr), m_MappedPtrs(mappedPtrs), m_Attributes()
 	{

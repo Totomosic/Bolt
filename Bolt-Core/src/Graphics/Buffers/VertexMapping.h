@@ -39,7 +39,7 @@ namespace Bolt
 		mutable std::unordered_map<int, AttributeInfo> m_Attributes;
 
 	public:
-		VertexMapping() = default;
+		VertexMapping();
 		VertexMapping(const std::vector<MappingPtr>& mappedPtrs);
 		VertexMapping(const VertexMapping& other) = delete;
 		VertexMapping& operator=(const VertexMapping& other) = delete;
