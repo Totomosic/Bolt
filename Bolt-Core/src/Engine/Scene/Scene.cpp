@@ -72,6 +72,11 @@ namespace Bolt
 		}
 	}
 
+	void Scene::Clear()
+	{
+		m_Layers.clear();
+	}
+
 	void Scene::Load(const std::any& data)
 	{
 		if (!IsLoaded())

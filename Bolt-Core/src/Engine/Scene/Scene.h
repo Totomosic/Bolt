@@ -46,6 +46,7 @@ namespace Bolt
 		bool IsActive() const;
 
 		void SetIsActive(bool isActive);
+		void Clear();
 
 		void Load(const std::any& data = {});
 		void Unload(const std::any& data = {});
