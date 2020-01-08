@@ -8,13 +8,13 @@ namespace Bolt
 {
 
 	template<typename T>
-	static void UploadShaderValue(const Shader& shader, int location, const T& value, int index)
+	inline void UploadShaderValue(const Shader& shader, int location, const T& value, int index)
 	{
 		shader.SetUniform(location, value);
 	}
 
 	template<>
-	static void UploadShaderValue(const Shader& shader, int location, const ResourcePtr<Texture2D>& value, int index)
+	inline void UploadShaderValue(const Shader& shader, int location, const ResourcePtr<Texture2D>& value, int index)
 	{
 		if (value != nullptr)
 		{
@@ -24,7 +24,7 @@ namespace Bolt
 	}
 
 	template<>
-	static void UploadShaderValue(const Shader& shader, int location, const ResourcePtr<Font>& value, int index)
+	inline void UploadShaderValue(const Shader& shader, int location, const ResourcePtr<Font>& value, int index)
 	{
 		if (value != nullptr)
 		{
@@ -34,7 +34,7 @@ namespace Bolt
 	}
 
 	template<typename T>
-	static void UploadShaderValue(const Shader& shader, int location, const std::function<T()>& value, int index)
+	inline void UploadShaderValue(const Shader& shader, int location, const std::function<T()>& value, int index)
 	{
 		if (value)
 		{

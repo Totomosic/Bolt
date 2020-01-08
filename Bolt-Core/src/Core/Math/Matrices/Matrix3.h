@@ -63,25 +63,25 @@ namespace Bolt
 		Vector3<T, Base> Column(int index) const
 		{
 			BLT_ASSERT(index < 3, "Index out of range");
-			return Vector3<T, Base>(values[i * 3 + 0], values[i * 3 + 1], values[i * 3 + 2]);
+			return Vector3<T, Base>(values[index * 3 + 0], values[index * 3 + 1], values[index * 3 + 2]);
 		}
 
 		Vector3<T&, Base> Column(int index)
 		{
 			BLT_ASSERT(index < 3, "Index out of range");
-			return Vector3<T&, Base>(values[i * 3 + 0], values[i * 3 + 1], values[i * 3 + 2]);
+			return Vector3<T&, Base>(values[index * 3 + 0], values[index * 3 + 1], values[index * 3 + 2]);
 		}
 
 		Vector3<T, Base> Row(int index) const
 		{
 			BLT_ASSERT(index < 3, "Index out of range");
-			return Vector3<T, Base>(values[0 * 3 + i], values[1 * 3 + i], values[2 * 3 + i]);
+			return Vector3<T, Base>(values[0 * 3 + index], values[1 * 3 + index], values[2 * 3 + index]);
 		}
 
 		Vector3<T&, Base> Row(int index)
 		{
 			BLT_ASSERT(index < 3, "Index out of range");
-			return Vector3<T&, Base>(values[0 * 3 + i], values[1 * 3 + i], values[2 * 3 + i]);
+			return Vector3<T&, Base>(values[0 * 3 + index], values[1 * 3 + index], values[2 * 3 + index]);
 		}
 
 		const T Element(int index) const

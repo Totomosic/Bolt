@@ -10,7 +10,7 @@ namespace Bolt
 		float Width;
 		float Height;
 		float Depth;
-		Color Color;
+		Bolt::Color Color;
 
 	public:
 		CuboidFactory(float width = 1.0f, float height = 1.0f, float depth = 1.0f, const Bolt::Color& color = Color::White);

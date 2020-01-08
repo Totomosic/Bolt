@@ -48,7 +48,7 @@ namespace Bolt
 		inline T* Get() const
 		{
 			BLT_ASSERT(IsValid(), "Component handle is not valid");
-			return m_Manager->GetComponentPtr<T>(m_Entity);
+			return m_Manager->template GetComponentPtr<T>(m_Entity);
 		}
 
 		T& operator*() const
@@ -88,53 +88,25 @@ namespace Bolt
 		ComponentHandle<Transform> GetTransform() const;
 		
 		template<typename T>
-		bool HasComponent() const
-		{
-			BLT_ASSERT(IsValid(), "Entity is not valid");
-			return m_Manager->HasComponent<T>(m_Entity);
-		}
+		bool HasComponent() const;
 
 		template<typename T1, typename ... T>
-		bool HasComponents() const
-		{
-			BLT_ASSERT(IsValid(), "Entity is not valid");
-			return m_Manager->HasComponents<T1, T...>(m_Entity);
-		}
+		bool HasComponents() const;
 
 		template<typename T, typename ... Args>
-		ComponentHandle<T> Assign(Args&& ... args) const
-		{
-			BLT_ASSERT(IsValid(), "Entity is not valid");
-			return m_Manager->Assign<T, Args...>(m_Entity, std::forward<Args>(args)...);
-		}
+		ComponentHandle<T> Assign(Args&& ... args) const;
 
 		template<typename T>
-		ComponentHandle<T> AssignFromCopy(const T& other) const
-		{
-			BLT_ASSERT(IsValid(), "Entity is not Valid");
-			return m_Manager->Assign<T>(m_Entity, std::forward<const T&>(other));
-		}
+		ComponentHandle<T> AssignFromCopy(const T& other) const;
 
 		template<typename T>
-		void Remove() const
-		{
-			BLT_ASSERT(IsValid(), "Entity is not valid");
-			return m_Manager->Remove<T>(m_Entity);
-		}
+		void Remove() const;
 
 		template<typename T>
-		ComponentHandle<T> GetComponent() const
-		{
-			BLT_ASSERT(IsValid(), "Entity is not valid");
-			return m_Manager->GetComponent<T>(m_Entity);
-		}
+		ComponentHandle<T> GetComponent() const;
 
 		template<typename ... T>
-		std::tuple<ComponentHandle<T>...> GetComponents() const
-		{
-			BLT_ASSERT(IsValid(), "Entity is not valid");
-			return m_Manager->GetComponents<T...>(m_Entity);
-		}
+		std::tuple<ComponentHandle<T>...> GetComponents() const;
 
 		bool operator==(const EntityHandle& other) const;
 		bool operator!=(const EntityHandle& other) const;
@@ -354,7 +326,7 @@ namespace Bolt
 		template<typename ... T>
 		std::tuple<ComponentHandle<const T, const EntityManager>...> GetComponents(const Entity& entity) const
 		{
-			return std::make_tuple(GetComponent<const Components>(entity)...);
+			return std::make_tuple(GetComponent<const T>(entity)...);
 		}
 
 		template<typename ... T>
@@ -458,5 +430,56 @@ namespace Bolt
 		friend class ComponentHandle;
 
 	};
+
+	// ENTITY HANDLE TEMPLATE IMPLEMENTATION
+
+	template<typename T>
+	inline bool EntityHandle::HasComponent() const
+	{
+		BLT_ASSERT(IsValid(), "Entity is not valid");
+		return m_Manager->template HasComponent<T>(m_Entity);
+	}
+
+	template<typename T1, typename ... T>
+	inline bool EntityHandle::HasComponents() const
+	{
+		BLT_ASSERT(IsValid(), "Entity is not valid");
+		return m_Manager->template HasComponents<T1, T...>(m_Entity);
+	}
+
+	template<typename T, typename ... Args>
+	inline ComponentHandle<T> EntityHandle::Assign(Args&& ... args) const
+	{
+		BLT_ASSERT(IsValid(), "Entity is not valid");
+		return m_Manager->template Assign<T, Args...>(m_Entity, std::forward<Args>(args)...);
+	}
+
+	template<typename T>
+	inline ComponentHandle<T> EntityHandle::AssignFromCopy(const T& other) const
+	{
+		BLT_ASSERT(IsValid(), "Entity is not Valid");
+		return m_Manager->template Assign<T>(m_Entity, std::forward<const T&>(other));
+	}
+
+	template<typename T>
+	inline void EntityHandle::Remove() const
+	{
+		BLT_ASSERT(IsValid(), "Entity is not valid");
+		return m_Manager->template Remove<T>(m_Entity);
+	}
+
+	template<typename T>
+	inline ComponentHandle<T> EntityHandle::GetComponent() const
+	{
+		BLT_ASSERT(IsValid(), "Entity is not valid");
+		return m_Manager->template GetComponent<T>(m_Entity);
+	}
+
+	template<typename ... T>
+	inline std::tuple<ComponentHandle<T>...> EntityHandle::GetComponents() const
+	{
+		BLT_ASSERT(IsValid(), "Entity is not valid");
+		return m_Manager->template GetComponents<T...>(m_Entity);
+	}
 
 }

@@ -7,7 +7,6 @@
 #include "lua.hpp"
 
 #include "Core/BoltTL/string.h"
-#include "Core/BoltTL/basic_string.h"
 #include "Core/BoltTL/array2d.h"
 #include "BoltDefines.h"
 
@@ -17,7 +16,11 @@
 #include <chrono>
 #include <cstdlib>
 #include <deque>
+
+#ifdef BLT_PLATFORM_WINDOWS
 #include <direct.h>
+#endif
+
 #include <fstream>
 #include <functional>
 #include <future>
@@ -36,9 +39,14 @@
 #include <typeinfo>
 #include <type_traits>
 
+#ifdef BLT_PLATFORM_WINDOWS
 #define SCK_VERSION 0x0202
 #include <WinSock2.h>
 #include <WS2tcpip.h>
+#elif BLT_PLATFORM_LINUX
+#include <sys/types.h>
+#include <sys/socket.h>
+#endif
 
 #define _USE_MATH_DEFINES
 #include <math.h>

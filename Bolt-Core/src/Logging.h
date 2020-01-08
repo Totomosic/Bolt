@@ -11,8 +11,14 @@
 #else
 #define BLT_API __declspec(dllimport)
 #endif
+#elif BLT_PLATFORM_LINUX
+#ifdef BLT_BUILD_STATIC
+#define BLT_API
+#elif BLT_BUILD_DLL
+#define BLT_API
+#endif
 #else
-#error Only Supports Windows
+#error Only Supports Windows and Linux
 #endif
 
 namespace Bolt
@@ -75,7 +81,11 @@ namespace Bolt
 	#define BLT_LUA_ERROR(...) ::Bolt::Log::GetLuaLogger()->error(__VA_ARGS__)
 	#define BLT_LUA_FATAL(...) ::Bolt::Log::GetLuaLogger()->critical(__VA_ARGS__)
 
-	#define BLT_ASSERT(arg, ...) { if (!(arg)) { BLT_CORE_FATAL(__VA_ARGS__); __debugbreak(); } }
+	#ifdef BLT_PLATFORM_WINDOWS
+		#define BLT_ASSERT(arg, ...) { if (!(arg)) { BLT_CORE_FATAL(__VA_ARGS__); __debugbreak(); } }
+	#else
+		#define BLT_ASSERT(arg, ...)
+	#endif
 
 	#define BLT_DEBUG_ONLY(x) x
 #endif
