@@ -46,6 +46,7 @@
 #elif BLT_PLATFORM_LINUX
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <netinet/in.h> 
 #endif
 
 #define _USE_MATH_DEFINES

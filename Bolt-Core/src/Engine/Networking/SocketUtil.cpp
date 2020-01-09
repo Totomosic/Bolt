@@ -26,6 +26,7 @@ namespace Bolt
 	std::vector<uint32_t> SocketUtil::GetIP4Addresses()
 	{
 		std::vector<uint32_t> result;
+#ifdef BLT_PLATFORM_WINDOWS
 		char name[255];
 		if (gethostname(name, sizeof(name)) == 0)
 		{
@@ -41,6 +42,7 @@ namespace Bolt
 				}
 			}
 		}
+#endif
 		return result;
 	}
 

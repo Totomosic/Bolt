@@ -63,6 +63,11 @@ project "Bolt-Core"
             "GLEW_STATIC"
         }
 
+        links 
+        {
+            "stdc++fs"
+        }
+
     filter "configurations:Debug"
         defines "BLT_DEBUG"
         runtime "Debug"

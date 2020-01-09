@@ -8,10 +8,10 @@ namespace Bolt
 	class BLT_API TCPsocket
 	{
 	private:
-		SOCKET m_Socket;
+		SocketHandle m_Socket;
 
 	public:
-		TCPsocket(SOCKET socket);
+		TCPsocket(SocketHandle socket);
 		TCPsocket(AddressFamily addressFamily = AddressFamily::INET);
 		TCPsocket(const TCPsocket& other) = delete;
 		TCPsocket& operator=(const TCPsocket& other) = delete;

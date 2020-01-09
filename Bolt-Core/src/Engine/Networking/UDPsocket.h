@@ -8,10 +8,10 @@ namespace Bolt
 	class BLT_API UDPsocket
 	{
 	private:
-		SOCKET m_Socket;
+		SocketHandle m_Socket;
 
 	public:
-		UDPsocket(SOCKET socket);
+		UDPsocket(SocketHandle socket);
 		UDPsocket(AddressFamily addressFamily = AddressFamily::INET);
 		UDPsocket(const UDPsocket& other) = delete;
 		UDPsocket& operator=(const UDPsocket& other) = delete;

@@ -4,12 +4,12 @@
 namespace Bolt
 {
 
-#ifdef BLT_PLATFORM_WINDOWS
+#ifndef BLT_PLATFORM_WINDOWS
 
 	TCPsocket::TCPsocket(SocketHandle socket)
 		: m_Socket(socket)
 	{
-	
+
 	}
 
 	TCPsocket::TCPsocket(AddressFamily addressFamily) : TCPsocket(socket((int)addressFamily, SOCK_STREAM, IPPROTO_TCP))
@@ -49,12 +49,6 @@ namespace Bolt
 	{
 		BLT_ASSERT(IsValid(), "Cannot Bind invalid Socket");
 		int err = bind(m_Socket, &address.m_SockAddr, address.GetSize());
-		if (err != NO_ERROR)
-		{
-			int errorCode = WSAGetLastError();
-			BLT_CORE_ERROR("Socket Bind Error: " + std::to_string(errorCode));
-			return -errorCode;
-		}
 		return NO_ERROR;
 	}
 
@@ -62,19 +56,13 @@ namespace Bolt
 	{
 		BLT_ASSERT(IsValid(), "Cannot Listen on invalid Socket");
 		int err = listen(m_Socket, backlog);
-		if (err != NO_ERROR)
-		{
-			int errorCode = WSAGetLastError();
-			BLT_CORE_ERROR("Socket Listen Error: " + std::to_string(errorCode));
-			return -errorCode;
-		}
 		return NO_ERROR;
 	}
 
 	TCPsocket TCPsocket::Accept(SocketAddress* outAddress)
 	{
 		BLT_ASSERT(IsValid(), "Cannot Accept on invalid Socket");
-		int length = SocketAddress::GetSize();
+		socklen_t length = SocketAddress::GetSize();
 		SocketHandle newSocket = BLT_INVALID_SOCKET;
 		if (outAddress != nullptr)
 		{
@@ -97,16 +85,6 @@ namespace Bolt
 	{
 		BLT_ASSERT(IsValid(), "Cannot Connect invalid Socket");
 		int err = connect(m_Socket, &address.m_SockAddr, address.GetSize());
-		if (err < 0)
-		{
-			int error = WSAGetLastError();
-			if (error == WSAEWOULDBLOCK)
-			{
-				return 0;
-			}
-			BLT_CORE_ERROR("Socket Connect Error: " + std::to_string(error));
-			return -error;
-		}
 		return NO_ERROR;
 	}
 
@@ -114,16 +92,6 @@ namespace Bolt
 	{
 		BLT_ASSERT(IsValid(), "Cannot Send with invalid Socket");
 		int bytesSent = send(m_Socket, static_cast<const char*>(data), (int)length, 0);
-		if (bytesSent < 0)
-		{
-			int error = WSAGetLastError();
-			if (error == WSAEWOULDBLOCK)
-			{
-				return 0;
-			}
-			BLT_CORE_ERROR("Socket Send Error: " + std::to_string(error));
-			return -error;
-		}
 		return bytesSent;
 	}
 
@@ -131,41 +99,21 @@ namespace Bolt
 	{
 		BLT_ASSERT(IsValid(), "Cannot Recv from invalid Socket");
 		int bytesReceived = recv(m_Socket, static_cast<char*>(buffer), (int)length, 0);
-		if (bytesReceived < 0)
-		{
-			int error = WSAGetLastError();
-			if (error == WSAEWOULDBLOCK)
-			{
-				return 0;
-			}
-			BLT_CORE_ERROR("Socket Recv Error: " + std::to_string(error));
-			return -error;
-		}
 		return bytesReceived;
 	}
 
 	int TCPsocket::Shutdown()
 	{
 		BLT_ASSERT(IsValid(), "Cannot Shutdown invalid Socket");
-		int err = shutdown(m_Socket, SD_BOTH);
-		if (err != NO_ERROR)
-		{
-			int errorCode = WSAGetLastError();
-			BLT_CORE_ERROR("Socket Shutdown Error: " + std::to_string(errorCode));
-		}
+		int err = shutdown(m_Socket, SHUT_RDWR);
 		return err;
 	}
 
 	int TCPsocket::Close()
 	{
 		BLT_ASSERT(IsValid(), "Cannot Close invalid Socket");
-		int err = closesocket(m_Socket);
+		int err = close(m_Socket);
 		m_Socket = BLT_INVALID_SOCKET;
-		if (err != NO_ERROR)
-		{
-			int errorCode = WSAGetLastError();
-			BLT_CORE_ERROR("Socket Close Error: " + std::to_string(errorCode));
-		}
 		return err;
 	}
 

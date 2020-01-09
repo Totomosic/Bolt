@@ -10,8 +10,10 @@ namespace Bolt
 	void Destructor::Run()
 	{
 		BLT_PROFILE_FUNCTION();
+#ifdef BLT_PLATFORM_WINDOWS
 		WSACleanup();
 		BLT_CORE_INFO("Socket Terminated");
+#endif
 	}
 
 }

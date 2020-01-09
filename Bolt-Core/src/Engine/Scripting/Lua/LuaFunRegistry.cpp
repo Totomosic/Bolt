@@ -16,10 +16,4 @@ namespace Bolt
 		return m_State;
 	}
 
-	int LuaFunRegistry::LuaDispatcher(lua_State* state)
-	{
-		LuaFunBase* func = (LuaFunBase*)lua_touserdata(state, lua_upvalueindex(1));
-		return func->Execute(state);
-	}
-
 }

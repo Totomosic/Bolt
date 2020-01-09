@@ -84,7 +84,7 @@ namespace Bolt
 	#ifdef BLT_PLATFORM_WINDOWS
 		#define BLT_ASSERT(arg, ...) { if (!(arg)) { BLT_CORE_FATAL(__VA_ARGS__); __debugbreak(); } }
 	#else
-		#define BLT_ASSERT(arg, ...)
+		#define BLT_ASSERT(arg, ...) { if (!(arg)) { BLT_CORE_FATAL(__VA_ARGS__); } }
 	#endif
 
 	#define BLT_DEBUG_ONLY(x) x

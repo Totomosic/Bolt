@@ -47,9 +47,6 @@ namespace Bolt
 			return lua_help::_check_get<Ret>(m_State, -1);
 		}
 
-	public:
-		static int LuaDispatcher(lua_State* state);
-
 	};
 
 }
