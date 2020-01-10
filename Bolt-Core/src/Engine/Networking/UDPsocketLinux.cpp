@@ -49,6 +49,10 @@ namespace Bolt
 	{
 		BLT_ASSERT(IsValid(), "Cannot Bind invalid Socket");
 		int err = bind(m_Socket, &address.m_SockAddr, address.GetSize());
+		if (err != 0)
+		{
+			BLT_CORE_ERROR("Socket Bind Failed");
+		}
 		return err;
 	}
 

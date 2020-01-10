@@ -7,6 +7,7 @@ namespace Bolt
 #ifdef BLT_PLATFORM_WINDOWS
 
 	SocketAddress::SocketAddress(uint32_t inAddress, uint16_t inPort)
+		: m_SockAddr()
 	{
 		GetAsSockAddrIn()->sin_family = AF_INET;
 		GetAsSockAddrIn()->sin_addr.S_un.S_addr = htonl(inAddress);
@@ -18,6 +19,7 @@ namespace Bolt
 	}
 
 	SocketAddress::SocketAddress(const blt::string& inAddress, const blt::string& inPort)
+		: m_SockAddr()
 	{
 		addrinfo hint;
 		memset(&hint, 0, sizeof(addrinfo));
@@ -43,8 +45,11 @@ namespace Bolt
 			{
 				BLT_ERROR("SocketAddress Hostname Error");
 			}
-			memcpy(&m_SockAddr, result->ai_addr, sizeof(sockaddr));
-			GetAsSockAddrIn()->sin_family = AF_INET;
+			else
+			{
+				memcpy(&m_SockAddr, result->ai_addr, sizeof(sockaddr));
+				GetAsSockAddrIn()->sin_family = AF_INET;
+			}
 		}		
 		freeaddrinfo(result);
 	}
