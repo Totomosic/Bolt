@@ -163,7 +163,7 @@ namespace Bolt
 	{
 		resourceFile.Id = RegisterGetId(std::make_unique<Model>(ModelData()));
 		Model* ptr = (Model*)m_Resources[resourceFile.Id].get();
-		Task t = TaskManager::Run([resourceFile{ std::move(resourceFile) }]()
+		Task t = TaskManager::Get().Run([resourceFile{ std::move(resourceFile) }]()
 			{
 				int vertexDimension = std::stoi(resourceFile.Attributes.GetChild("vertices").Attributes.at("dim").c_str());
 				std::vector<blt::string> verticesS = resourceFile.Attributes.GetChild("vertices").Data.split(' ');

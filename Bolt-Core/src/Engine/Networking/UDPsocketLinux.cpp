@@ -45,13 +45,26 @@ namespace Bolt
 		return m_Socket != BLT_INVALID_SOCKET;
 	}
 
+	int UDPsocket::Connect(const SocketAddress& address)
+	{
+		BLT_ASSERT(IsValid(), "Cannot Connect invalid Socket");
+		int err = connect(m_Socket, &address.m_SockAddr, address.GetSize());
+		if (err < 0)
+		{
+			perror("Socket Connect Error");
+			return err;
+		}
+		return err;
+	}
+
 	int UDPsocket::Bind(const SocketAddress& address)
 	{
 		BLT_ASSERT(IsValid(), "Cannot Bind invalid Socket");
 		int err = bind(m_Socket, &address.m_SockAddr, address.GetSize());
-		if (err != 0)
+		if (err < 0)
 		{
-			BLT_CORE_ERROR("Socket Bind Failed");
+			perror("Socket Bind Error");
+			return err;
 		}
 		return err;
 	}
@@ -60,6 +73,11 @@ namespace Bolt
 	{
 		BLT_ASSERT(IsValid(), "Cannot SendTo invalid Socket");
 		int bytes = sendto(m_Socket, (const char*)data, length, 0, &address.m_SockAddr, address.GetSize());
+		if (bytes < 0)
+		{
+			perror("Socket SendTo Error");
+			return bytes;
+		}
 		return bytes;
 	}
 
@@ -69,6 +87,11 @@ namespace Bolt
 		SocketAddress outAddr;
 		socklen_t fromLength = outAddr.GetSize();
 		int bytes = recvfrom(m_Socket, (char*)buffer, length, 0, (outAddress == nullptr) ? &outAddr.m_SockAddr : &outAddress->m_SockAddr, &fromLength);
+		if (bytes < 0)
+		{
+			perror("Socket RecvFrom Error");
+			return bytes;
+		}
 		BLT_ASSERT(fromLength == outAddr.GetSize(), "Size mismatch error");
 		return bytes;
 	}
@@ -77,6 +100,11 @@ namespace Bolt
 	{
 		BLT_ASSERT(IsValid(), "Cannot Shutdown invalid Socket");
 		int err = shutdown(m_Socket, SHUT_RDWR);
+		if (err < 0)
+		{
+			perror("Socket Shutdown Error");
+			return err;
+		}
 		return err;
 	}
 
@@ -84,6 +112,11 @@ namespace Bolt
 	{
 		BLT_ASSERT(IsValid(), "Cannot Close invalid Socket");
 		int err = close(m_Socket);
+		if (err < 0)
+		{
+			perror("Socket Close Error");
+			return err;
+		}
 		m_Socket = BLT_INVALID_SOCKET;
 		return err;
 	}

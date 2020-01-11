@@ -49,14 +49,24 @@ namespace Bolt
 	{
 		BLT_ASSERT(IsValid(), "Cannot Bind invalid Socket");
 		int err = bind(m_Socket, &address.m_SockAddr, address.GetSize());
-		return NO_ERROR;
+		if (err < 0)
+		{
+			perror("Socket Bind Error");
+			return err;
+		}
+		return err;
 	}
 
 	int TCPsocket::Listen(int backlog)
 	{
 		BLT_ASSERT(IsValid(), "Cannot Listen on invalid Socket");
 		int err = listen(m_Socket, backlog);
-		return NO_ERROR;
+		if (err < 0)
+		{
+			perror("Socket Listen Error");
+			return err;
+		}
+		return err;
 	}
 
 	TCPsocket TCPsocket::Accept(SocketAddress* outAddress)
@@ -77,7 +87,7 @@ namespace Bolt
 		{
 			return TCPsocket(newSocket);
 		}
-		BLT_CORE_ERROR("Socket Accept Error");
+		perror("Socket Accept Error");
 		return TCPsocket(BLT_INVALID_SOCKET);
 	}
 
@@ -85,13 +95,23 @@ namespace Bolt
 	{
 		BLT_ASSERT(IsValid(), "Cannot Connect invalid Socket");
 		int err = connect(m_Socket, &address.m_SockAddr, address.GetSize());
-		return NO_ERROR;
+		if (err < 0)
+		{
+			perror("Socket Connect Error");
+			return err;
+		}
+		return err;
 	}
 
 	int TCPsocket::Send(const void* data, uint32_t length)
 	{
 		BLT_ASSERT(IsValid(), "Cannot Send with invalid Socket");
 		int bytesSent = send(m_Socket, static_cast<const char*>(data), (int)length, 0);
+		if (bytesSent < 0)
+		{
+			perror("Socket Send Error");
+			return bytesSent;
+		}
 		return bytesSent;
 	}
 
@@ -99,6 +119,11 @@ namespace Bolt
 	{
 		BLT_ASSERT(IsValid(), "Cannot Recv from invalid Socket");
 		int bytesReceived = recv(m_Socket, static_cast<char*>(buffer), (int)length, 0);
+		if (bytesReceived < 0)
+		{
+			perror("Socket Recv Error");
+			return bytesReceived;
+		}
 		return bytesReceived;
 	}
 

@@ -44,6 +44,19 @@ namespace Bolt
 		return m_Socket != BLT_INVALID_SOCKET;
 	}
 
+	int UDPsocket::Connect(const SocketAddress& address)
+	{
+		BLT_ASSERT(IsValid(), "Cannot Connect invalid socket");
+		int err = connect(m_Socket, &address.m_SockAddr, address.GetSize());
+		if (err != NO_ERROR)
+		{
+			int errorCode = WSAGetLastError();
+			BLT_CORE_ERROR("Socket Connect Error: " + std::to_string(errorCode));
+			return errorCode;
+		}
+		return err;
+	}
+
 	int UDPsocket::Bind(const SocketAddress& address)
 	{
 		BLT_ASSERT(IsValid(), "Cannot Bind invalid Socket");

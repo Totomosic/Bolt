@@ -1,6 +1,7 @@
 #pragma once
 #include "Core/Time/Time.h"
 #include "Core/Events/EventManager.h"
+#include "Core/Tasks/TaskManager.h"
 #include "RenderContext.h"
 
 namespace Bolt
@@ -18,6 +19,7 @@ namespace Bolt
 		ContextManager m_Context;
 		Time m_Time;
 		EventManager m_Events;
+		TaskManager m_TaskManager;
 		std::unique_ptr<RenderContext> m_RenderContext;
 		SceneManager m_SceneManager;
 
@@ -29,6 +31,7 @@ namespace Bolt
 		const RenderContext& GetRenderContext() const;
 		RenderContext& GetRenderContext();
 
+		TaskManager& GetTaskManager();
 		EventManager& GetEventManager();
 		Time& GetTime();
 		SceneManager& GetSceneManager();

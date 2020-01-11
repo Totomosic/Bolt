@@ -16,10 +16,6 @@ namespace Bolt
 	EventManager::EventManager()
 		: m_EventBuses(), m_GlobalBus(std::make_unique<GenericEventBus<uint32_t>>(false))
 	{
-		m_GlobalBus->AddEventListener<TaskCompletedEvent>(Events::Internal.AsyncTaskCompleted, [](Event<TaskCompletedEvent>& e)
-			{
-				e.Data.Execute();
-			});
 		AddEventBus((EventBusBase*)m_GlobalBus.get());
 	}
 
