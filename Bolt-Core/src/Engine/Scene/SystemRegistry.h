@@ -33,7 +33,7 @@ namespace Bolt
 		{
 			BLT_ASSERT(HasSystem<T>(), "System does not exist");
 			const BaseSystem::Family family = GetSystemFamily<T>();
-			return m_Systems[family];
+			return m_Systems.at(family);
 		}
 
 		template<typename T>

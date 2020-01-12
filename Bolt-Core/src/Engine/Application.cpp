@@ -189,6 +189,7 @@ namespace Bolt
 
 	bool Application::UpdateNoGraphics()
 	{
+		EventManager::Get().FlushAll();
 		BLT_PROFILE_FUNCTION();
 		{
 			BLT_PROFILE_SCOPE("Update()");
@@ -200,7 +201,6 @@ namespace Bolt
 			SceneManager::Get().GetCurrentScene().Update(delta);
 		}
 		Time::Get().Update();
-		EventManager::Get().FlushAll(); // Flush #2 (likely other scene/app events)
 		return true;
 	}
 

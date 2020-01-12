@@ -322,7 +322,7 @@ namespace Bolt
 		template<typename Other, typename OtherBase>
 		static Vector2<Base> Dot(const Vector2<T, Base>& left, const Vector2<Other, OtherBase>& right)
 		{
-			return left.Dot(other);
+			return left.Dot(right);
 		}
 						
 		static Vector2<Base> Right()

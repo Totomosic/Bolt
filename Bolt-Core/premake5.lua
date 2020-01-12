@@ -53,6 +53,22 @@ project "Bolt-Core"
             "GLEW_STATIC"
         }
 
+    filter "system:linux"
+        systemversion "latest"
+
+        defines
+        {
+            "BLT_PLATFORM_LINUX",
+            "BLT_BUILD_STATIC",
+            "_CRT_SECURE_NO_WARNINGS",
+            "GLEW_STATIC"
+        }
+
+        links 
+        {
+            "stdc++fs"
+        }
+
     filter "configurations:Debug"
         defines "BLT_DEBUG"
         runtime "Debug"

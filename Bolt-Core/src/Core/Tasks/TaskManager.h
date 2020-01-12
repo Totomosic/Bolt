@@ -1,5 +1,6 @@
 #pragma once
 #include "Task.h"
+#include "Core/Events/EventBus.h"
 #include "SharedFunction.h"
 
 namespace Bolt
@@ -8,11 +9,31 @@ namespace Bolt
 	class BLT_API TaskManager
 	{
 	public:
-		template<typename DelegateT, typename TResult = std::result_of<DelegateT()>::type>
-		static Task<TResult> Run(DelegateT func)
+		static TaskManager& Get();
+
+	private:
+		EventBus& m_Bus;
+		ScopedEventListener m_Listener;
+
+	public:
+		TaskManager(EventBus& bus);
+
+		EventBus& Bus() const;
+
+		template<typename DelegateT, typename TResult = typename std::result_of<DelegateT()>::type>
+		Task<TResult> Run(DelegateT func)
 		{
-			Task<TResult> task(std::move(func));
+			Task<TResult> task(Bus(), std::move(func));
 			return task;
+		}
+
+		template<typename DelegateT>
+		void RunOnMainThread(DelegateT func)
+		{
+			m_Bus.Emit(Events::Internal.AsyncTaskCompleted, TaskCompleted<int>(0, [func{ std::move(func) }](int ignore) mutable
+			{
+				func();
+			}));
 		}
 
 	};

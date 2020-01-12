@@ -32,3 +32,4 @@ bin-int/
 #Nuget packages folder
 packages/
 *.pem
+Makefile

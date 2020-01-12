@@ -11,6 +11,7 @@ namespace Bolt
 
 	public:
 		SocketAddress(uint32_t inAddress, uint16_t inPort);
+		SocketAddress(byte b0, byte b1, byte b2, byte b3, uint16_t inPort);
 		SocketAddress(const blt::string& inAddress, const blt::string& inPort);
 		SocketAddress(const blt::string& inAddress, uint16_t inPort);
 		SocketAddress(const sockaddr& inSockAddr);
@@ -32,6 +33,7 @@ namespace Bolt
 		sockaddr_in* GetAsSockAddrIn();
 		const uint32_t& GetIP4Ref() const;
 		uint32_t& GetIP4Ref();
+		static uint32_t CreateAddress(byte b0, byte b1, byte b2, byte b3);
 
 	};
 

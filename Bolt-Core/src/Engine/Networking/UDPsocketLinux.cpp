@@ -4,11 +4,12 @@
 namespace Bolt
 {
 
-#ifdef BLT_PLATFORM_WINDOWS
+#ifndef BLT_PLATFORM_WINDOWS
 
-	UDPsocket::UDPsocket(SocketHandle socket) : m_Socket(socket)
+	UDPsocket::UDPsocket(SocketHandle socket) 
+		: m_Socket(socket)
 	{
-	
+
 	}
 
 	UDPsocket::UDPsocket(AddressFamily addressFamily) : UDPsocket(socket((int)addressFamily, SOCK_DGRAM, IPPROTO_UDP))
@@ -46,13 +47,12 @@ namespace Bolt
 
 	int UDPsocket::Connect(const SocketAddress& address)
 	{
-		BLT_ASSERT(IsValid(), "Cannot Connect invalid socket");
+		BLT_ASSERT(IsValid(), "Cannot Connect invalid Socket");
 		int err = connect(m_Socket, &address.m_SockAddr, address.GetSize());
-		if (err != NO_ERROR)
+		if (err < 0)
 		{
-			int errorCode = WSAGetLastError();
-			BLT_CORE_ERROR("Socket Connect Error: " + std::to_string(errorCode));
-			return errorCode;
+			perror("Socket Connect Error");
+			return err;
 		}
 		return err;
 	}
@@ -61,11 +61,10 @@ namespace Bolt
 	{
 		BLT_ASSERT(IsValid(), "Cannot Bind invalid Socket");
 		int err = bind(m_Socket, &address.m_SockAddr, address.GetSize());
-		if (err != NO_ERROR)
+		if (err < 0)
 		{
-			int errorCode = WSAGetLastError();
-			BLT_CORE_ERROR("Socket Bind Error: " + std::to_string(errorCode));
-			return errorCode;
+			perror("Socket Bind Error");
+			return err;
 		}
 		return err;
 	}
@@ -76,13 +75,8 @@ namespace Bolt
 		int bytes = sendto(m_Socket, (const char*)data, length, 0, &address.m_SockAddr, address.GetSize());
 		if (bytes < 0)
 		{
-			int errorCode = WSAGetLastError();
-			if (errorCode == WSAEWOULDBLOCK)
-			{
-				return 0;
-			}
-			BLT_CORE_ERROR("Socket Send Error: " + std::to_string(errorCode));
-			return -errorCode;
+			perror("Socket SendTo Error");
+			return bytes;
 		}
 		return bytes;
 	}
@@ -91,17 +85,12 @@ namespace Bolt
 	{
 		BLT_ASSERT(IsValid(), "Cannot RecvFrom invalid Socket");
 		SocketAddress outAddr;
-		int fromLength = outAddr.GetSize();
+		socklen_t fromLength = outAddr.GetSize();
 		int bytes = recvfrom(m_Socket, (char*)buffer, length, 0, (outAddress == nullptr) ? &outAddr.m_SockAddr : &outAddress->m_SockAddr, &fromLength);
 		if (bytes < 0)
 		{
-			int errorCode = WSAGetLastError();
-			if (errorCode == WSAEWOULDBLOCK)
-			{
-				return 0;
-			}
-			BLT_CORE_ERROR("Socket Recv Error: " + std::to_string(errorCode));
-			return -errorCode;
+			perror("Socket RecvFrom Error");
+			return bytes;
 		}
 		BLT_ASSERT(fromLength == outAddr.GetSize(), "Size mismatch error");
 		return bytes;
@@ -110,11 +99,11 @@ namespace Bolt
 	int UDPsocket::Shutdown()
 	{
 		BLT_ASSERT(IsValid(), "Cannot Shutdown invalid Socket");
-		int err = shutdown(m_Socket, SD_BOTH);
-		if (err != NO_ERROR)
+		int err = shutdown(m_Socket, SHUT_RDWR);
+		if (err < 0)
 		{
-			int errorCode = WSAGetLastError();
-			BLT_CORE_ERROR("Socket Shutdown Error: " + std::to_string(errorCode));
+			perror("Socket Shutdown Error");
+			return err;
 		}
 		return err;
 	}
@@ -122,20 +111,19 @@ namespace Bolt
 	int UDPsocket::Close()
 	{
 		BLT_ASSERT(IsValid(), "Cannot Close invalid Socket");
-		int err = closesocket(m_Socket);
-		m_Socket = BLT_INVALID_SOCKET;
-		if (err != NO_ERROR)
+		int err = close(m_Socket);
+		if (err < 0)
 		{
-			int errorCode = WSAGetLastError();
-			BLT_CORE_ERROR("Socket Close Error: " + std::to_string(errorCode));
+			perror("Socket Close Error");
+			return err;
 		}
+		m_Socket = BLT_INVALID_SOCKET;
 		return err;
 	}
 
 	void UDPsocket::SetBlocking(bool isBlocking)
 	{
-		u_long mode = (isBlocking) ? 0 : 1;
-		int result = ioctlsocket(m_Socket, FIONBIO, &mode);
+		
 	}
 
 #endif

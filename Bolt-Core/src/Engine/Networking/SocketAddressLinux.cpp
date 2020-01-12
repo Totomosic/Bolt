@@ -1,16 +1,23 @@
 #include "bltpch.h"
 #include "SocketAddress.h"
 
+#ifndef BLT_PLATFORM_WINDOWS
+
+#include <netdb.h>
+#include <arpa/inet.h>
+
+#endif
+
 namespace Bolt
 {
 
-#ifdef BLT_PLATFORM_WINDOWS
+#ifndef BLT_PLATFORM_WINDOWS
 
 	SocketAddress::SocketAddress(uint32_t inAddress, uint16_t inPort)
 		: m_SockAddr()
 	{
 		GetAsSockAddrIn()->sin_family = AF_INET;
-		GetAsSockAddrIn()->sin_addr.S_un.S_addr = htonl(inAddress);
+		GetAsSockAddrIn()->sin_addr.s_addr = htonl(inAddress);
 		GetAsSockAddrIn()->sin_port = htons(inPort);
 	}
 
@@ -18,45 +25,35 @@ namespace Bolt
 	{
 	}
 
-	SocketAddress::SocketAddress(const blt::string& inAddress, const blt::string& inPort)
+	SocketAddress::SocketAddress(const blt::string& inAddress, const blt::string& inPort) : SocketAddress(inAddress, std::stoi(inPort.c_str()))
+	{
+		
+	}
+
+	SocketAddress::SocketAddress(const blt::string& inAddress, uint16_t inPort)
 		: m_SockAddr()
 	{
-		addrinfo hint;
-		memset(&hint, 0, sizeof(addrinfo));
-		hint.ai_family = AF_INET;
+		GetAsSockAddrIn()->sin_family = AF_INET;
+		GetAsSockAddrIn()->sin_port = htons(inPort);
 
-		addrinfo* result = BLT_NEW addrinfo();
-		int error = getaddrinfo(inAddress.c_str(), inPort.c_str(), &hint, &result);
-		if (error != 0 && result != nullptr)
+		struct hostent* he;
+		struct in_addr** addr_list;
+
+		if ((he = gethostbyname(inAddress.c_str())) == NULL)
 		{
-			BLT_ERROR("SocketAddress Hostname Error");
-		}
-		else if (error != 0)
-		{
-			BLT_ERROR("SocketAddress Hostname Error");
+			BLT_CORE_ERROR("Get host failed for hostname {}", inAddress);
 		}
 		else
 		{
-			while (!result->ai_addr && result->ai_next)
+			addr_list = (struct in_addr**)he->h_addr_list;
+			struct in_addr* addr = nullptr;
+			for (int i = 0; addr_list[i] != nullptr; i++)
 			{
-				result = result->ai_next;
+				addr = addr_list[i];
+				break;
 			}
-			if (!result->ai_addr)
-			{
-				BLT_ERROR("SocketAddress Hostname Error");
-			}
-			else
-			{
-				memcpy(&m_SockAddr, result->ai_addr, sizeof(sockaddr));
-				GetAsSockAddrIn()->sin_family = AF_INET;
-			}
-		}		
-		freeaddrinfo(result);
-	}
-
-	SocketAddress::SocketAddress(const blt::string& inAddress, uint16_t inPort) : SocketAddress(inAddress, std::to_string(inPort))
-	{
-
+			GetAsSockAddrIn()->sin_addr = *addr;
+		}
 	}
 
 	SocketAddress::SocketAddress(const sockaddr& inSockAddr)
@@ -83,7 +80,7 @@ namespace Bolt
 	{
 		const sockaddr_in* s = GetAsSockAddrIn();
 		uint16_t port = ntohs(s->sin_port);
-		uint32_t addr = ((GetAsSockAddrIn()->sin_addr.S_un.S_addr));
+		uint32_t addr = ((GetAsSockAddrIn()->sin_addr.s_addr));
 		byte* bytes = (byte*)&addr;
 		return std::to_string((int)bytes[0]) + "." + std::to_string((int)bytes[1]) + "." + std::to_string((int)bytes[2]) + "." + std::to_string((int)bytes[3]) + ":" + std::to_string(port);
 	}
@@ -116,12 +113,12 @@ namespace Bolt
 
 	const uint32_t& SocketAddress::GetIP4Ref() const
 	{
-		return *reinterpret_cast<const uint32_t*>(&GetAsSockAddrIn()->sin_addr.S_un.S_addr);
+		return *reinterpret_cast<const uint32_t*>(&GetAsSockAddrIn()->sin_addr.s_addr);
 	}
 
 	uint32_t& SocketAddress::GetIP4Ref()
 	{
-		return *reinterpret_cast<uint32_t*>(&GetAsSockAddrIn()->sin_addr.S_un.S_addr);
+		return *reinterpret_cast<uint32_t*>(&GetAsSockAddrIn()->sin_addr.s_addr);
 	}
 
 	uint32_t SocketAddress::CreateAddress(byte b0, byte b1, byte b2, byte b3)
@@ -137,7 +134,7 @@ namespace Bolt
 		ip[1] = b2;
 		ip[2] = b1;
 		ip[3] = b0;
-		return addr.S_un.S_addr;
+		return addr.s_addr;
 	}
 
 #endif

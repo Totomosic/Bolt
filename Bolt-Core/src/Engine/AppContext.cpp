@@ -12,12 +12,12 @@ namespace Bolt
 	}
 
 	AppContext::AppContext(const WindowCreateInfo& createInfo)
-		: m_Context(this), m_Time(), m_Events(), m_RenderContext(std::make_unique<RenderContext>(this, createInfo)), m_SceneManager()
+		: m_Context(this), m_Time(), m_Events(), m_TaskManager(m_Events.Bus()), m_RenderContext(std::make_unique<RenderContext>(this, createInfo)), m_SceneManager()
 	{
 	}
 
 	AppContext::AppContext()
-		: m_Context(this), m_Time(), m_Events(), m_RenderContext(nullptr), m_SceneManager()
+		: m_Context(this), m_Time(), m_Events(), m_TaskManager(m_Events.Bus()), m_RenderContext(nullptr), m_SceneManager()
 	{
 	}
 
@@ -34,6 +34,11 @@ namespace Bolt
 	RenderContext& AppContext::GetRenderContext()
 	{
 		return *m_RenderContext;
+	}
+
+	TaskManager& AppContext::GetTaskManager()
+	{
+		return m_TaskManager;
 	}
 
 	EventManager& AppContext::GetEventManager()

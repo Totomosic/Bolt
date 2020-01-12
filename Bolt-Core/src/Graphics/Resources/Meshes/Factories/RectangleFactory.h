@@ -9,7 +9,7 @@ namespace Bolt
 	public:
 		float Width;
 		float Height;
-		Color Color;
+		Bolt::Color Color;
 
 	public:
 		RectangleFactory(float width = 1.0f, float height = 1.0f, const Bolt::Color& color = Color::White);

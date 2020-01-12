@@ -1,5 +1,5 @@
 #pragma once
-#include "Core\Utils\Filesystem\XML\XMLfile.h"
+#include "Core/Utils/Filesystem/XML/XMLfile.h"
 
 namespace Bolt
 {

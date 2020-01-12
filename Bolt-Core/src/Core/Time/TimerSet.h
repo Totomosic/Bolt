@@ -7,7 +7,7 @@ namespace Bolt
 	struct BLT_API TimerInfo
 	{
 	public:
-		std::unique_ptr<Timer> Timer;
+		std::unique_ptr<Bolt::Timer> Timer;
 		int InvokesLeft;
 	};
 

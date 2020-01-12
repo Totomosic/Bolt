@@ -58,7 +58,6 @@ project "FreeType"
     defines
     {
         "FT2_BUILD_LIBRARY",
-        "WIN32",
         "_LIB",
         "NDEBUG",
         "_CRT_SECURE_NO_WARNINGS",
@@ -68,6 +67,11 @@ project "FreeType"
     
     filter "system:windows"
         systemversion "latest"
+
+        defines
+        {
+            "WIN32"
+        }
         
     filter "configurations:Debug"
         runtime "Debug"

@@ -20,6 +20,9 @@ project "FreeType-GL"
     
     filter "system:windows"
         systemversion "latest"
+
+    filter "system:windows"
+        systemversion "latest"
         
     filter "configurations:Debug"
         runtime "Debug"

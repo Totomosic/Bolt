@@ -33,12 +33,14 @@ namespace Bolt
 		if (createInfo.UseSockets)
 		{
 			BLT_PROFILE_SCOPE("InitSockets()");
+#ifdef BLT_PLATFORM_WINDOWS
 			WSADATA data;
 			if (WSAStartup(MAKEWORD(2, 2), &data) != 0)
 			{
 				BLT_ASSERT(false, "Failed to Initialize WinSock2");
 			}
 			BLT_CORE_INFO("Socket Initialized");
+#endif
 		}
 		else
 		{
