@@ -20,11 +20,6 @@ project "BoltLib"
         "src"
     }
 
-    links
-    {
-        "spdlog"
-    }
-
     filter "system:windows"
         systemversion "latest"
 
