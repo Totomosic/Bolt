@@ -8,7 +8,7 @@
 #include "Renderer/Graphics.h"
 #include "Renderer/GLState.h"
 
-#include "Core/Profiling/Profiling.h"
+#include "BoltLib/Profiling/Profiling.h"
 
 namespace Bolt
 {

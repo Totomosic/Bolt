@@ -1,7 +1,7 @@
 #pragma once
 #include "Graphics/Buffers/VertexArray.h"
 #include "Graphics/Buffers/IndexArray.h"
-#include "Core/Math/Shapes/Cuboid.h"
+#include "BoltLib/Math/Shapes/Cuboid.h"
 
 namespace Bolt
 {

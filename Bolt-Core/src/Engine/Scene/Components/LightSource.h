@@ -1,7 +1,7 @@
 #pragma once
 #include "Component.h"
-#include "Core/Math/Vectors/Vector3.h"
-#include "Core/Color.h"
+#include "BoltLib/Math/Vectors/Vector3.h"
+#include "BoltLib/Color.h"
 
 namespace Bolt
 {

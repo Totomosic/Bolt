@@ -7,7 +7,7 @@
 #include "Renderer/GLState.h"
 #include "Engine/Initialization/Destructor.h"
 
-#include "Core/Profiling/Profiling.h"
+#include "BoltLib/Profiling/Profiling.h"
 
 namespace Bolt
 {

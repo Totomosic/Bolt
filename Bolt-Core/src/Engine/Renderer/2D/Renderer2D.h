@@ -1,5 +1,5 @@
 #pragma once
-#include "Core/Math/Matrices/Matrix4.h"
+#include "BoltLib/Math/Matrices/Matrix4.h"
 #include "Graphics/Buffers/VertexArray.h"
 #include "Graphics/Buffers/IndexBuffer.h"
 #include "Graphics/Resources/Textures/Texture2D.h"

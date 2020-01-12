@@ -1,6 +1,6 @@
 #pragma once
 #include "InputEvents.h"
-#include "Core/Math/Maths.h"
+#include "BoltLib/Math/Maths.h"
 #include "Graphics/Window.h"
 
 #define BLT_MAX_KEYS 512

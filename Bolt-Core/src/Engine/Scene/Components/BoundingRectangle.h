@@ -1,6 +1,6 @@
 #pragma once
 #include "Component.h"
-#include "Core/Math/Vectors/Vector2.h"
+#include "BoltLib/Math/Vectors/Vector2.h"
 
 namespace Bolt
 {

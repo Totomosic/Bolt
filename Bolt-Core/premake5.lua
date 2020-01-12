@@ -26,6 +26,7 @@ project "Bolt-Core"
         "../%{IncludeDirs.FreeTypeGL}",
         "../%{IncludeDirs.FreeType}",
         "../%{IncludeDirs.Lua}",
+        "../%{IncludeDirs.BoltLib}",
         "src"
     }
 
@@ -60,7 +61,6 @@ project "Bolt-Core"
         {
             "BLT_PLATFORM_LINUX",
             "BLT_BUILD_STATIC",
-            "_CRT_SECURE_NO_WARNINGS",
             "GLEW_STATIC"
         }
 

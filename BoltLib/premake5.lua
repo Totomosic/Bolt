@@ -16,7 +16,13 @@ project "BoltLib"
     
     includedirs
     {
+        "../%{IncludeDirs.spdlog}",
         "src"
+    }
+
+    links
+    {
+        "spdlog"
     }
 
     filter "system:windows"
@@ -29,6 +35,21 @@ project "BoltLib"
             "_CRT_SECURE_NO_WARNINGS",
             "NOMINMAX",
             "GLEW_STATIC"
+        }
+
+    filter "system:linux"
+        systemversion "latest"
+
+        defines
+        {
+            "BLT_PLATFORM_LINUX",
+            "BLT_BUILD_STATIC",
+            "GLEW_STATIC"
+        }
+
+        links 
+        {
+            "stdc++fs"
         }
 
     filter "configurations:Debug"

@@ -1,7 +1,7 @@
 #pragma once
 #include "bltpch.h"
-#include "Core/Math/Maths.h"
-#include "Core/Color.h"
+#include "BoltLib/Math/Maths.h"
+#include "BoltLib/Color.h"
 
 namespace Bolt
 {

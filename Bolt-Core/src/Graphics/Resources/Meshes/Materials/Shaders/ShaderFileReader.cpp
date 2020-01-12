@@ -1,6 +1,6 @@
 #include "bltpch.h"
 #include "ShaderFileReader.h"
-#include "Core/Functions.h"
+#include "BoltLib/Functions.h"
 
 namespace Bolt
 {

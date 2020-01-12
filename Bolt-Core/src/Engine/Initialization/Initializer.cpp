@@ -5,7 +5,7 @@
 #include "../Renderer/Graphics.h"
 #include "Core/Utils/Filesystem/Filesystem.h"
 
-#include "Core/Profiling/Profiling.h"
+#include "BoltLib/Profiling/Profiling.h"
 
 namespace Bolt
 {

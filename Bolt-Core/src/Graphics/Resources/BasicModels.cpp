@@ -8,7 +8,7 @@
 #include "Graphics/Resources/Meshes/Factories/EllipseFactory.h"
 #include "Graphics/Resources/Meshes/Factories/SphereFactory.h"
 
-#include "Core/Profiling/Profiling.h"
+#include "BoltLib/Profiling/Profiling.h"
 
 namespace Bolt
 {

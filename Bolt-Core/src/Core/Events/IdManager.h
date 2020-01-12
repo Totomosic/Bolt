@@ -1,8 +1,8 @@
 #pragma once
 #include "bltpch.h"
-#include "../Functions.h"
+#include "BoltLib/Functions.h"
 
-#include "Core/Profiling/Profiling.h"
+#include "BoltLib/Profiling/Profiling.h"
 
 namespace Bolt
 {

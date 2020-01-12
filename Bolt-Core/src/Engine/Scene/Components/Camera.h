@@ -1,6 +1,6 @@
 #pragma once
 #include "Component.h"
-#include "Core/Math/Matrices/Matrix4.h"
+#include "BoltLib/Math/Matrices/Matrix4.h"
 
 namespace Bolt
 {

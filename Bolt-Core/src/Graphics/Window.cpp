@@ -4,7 +4,7 @@
 #include "Engine/User/Input.h"
 #include "Engine/AppContext.h"
 
-#include "Core/Profiling/Profiling.h"
+#include "BoltLib/Profiling/Profiling.h"
 
 namespace Bolt
 {

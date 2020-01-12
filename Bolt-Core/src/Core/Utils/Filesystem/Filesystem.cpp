@@ -6,7 +6,7 @@
 #else
 #include <experimental/filesystem>
 #endif
-#include "Core/Profiling/Profiling.h"
+#include "BoltLib/Profiling/Profiling.h"
 
 namespace Bolt
 {

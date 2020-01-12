@@ -1,7 +1,7 @@
 #pragma once
 #include "EntityManager.h"
 #include "Components/Transform.h"
-#include "Core/Color.h"
+#include "BoltLib/Color.h"
 
 #include "Graphics/Resources/Meshes/Materials/Material.h"
 #include "Graphics/Resources/Meshes/Mesh.h"

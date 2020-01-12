@@ -1,5 +1,5 @@
 #pragma once
-#include "Core/Color.h"
+#include "BoltLib/Color.h"
 #include "Structs/Viewport.h"
 #include "Resources/Textures/Texture2D.h"
 #include "RenderBuffer.h"

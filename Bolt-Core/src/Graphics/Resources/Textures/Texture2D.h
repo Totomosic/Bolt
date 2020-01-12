@@ -2,7 +2,7 @@
 #include "Texture.h"
 #include "TextureBounds.h"
 #include "TextureCreateOptions.h"
-#include "Core/Color.h"
+#include "BoltLib/Color.h"
 
 namespace Bolt
 {

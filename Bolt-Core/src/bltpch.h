@@ -6,8 +6,8 @@
 #include "imgui.h"
 #include "lua.hpp"
 
-#include "Core/BoltTL/string.h"
-#include "Core/BoltTL/array2d.h"
+#include "BoltLib/Functions.h"
+#include "BoltLib/BoltTL/string.h"
 #include "BoltDefines.h"
 
 #include <algorithm>
@@ -56,13 +56,33 @@
 namespace Bolt
 {
 
-	using byte = uint8_t;
-	using id_t = uint32_t;
-
 	template<typename T>
 	using Scope = std::unique_ptr<T>;
 
 	template<typename T>
 	using Ref = std::shared_ptr<T>;
 
+	inline const char* ConvertError(uint32_t error)
+	{
+		switch (error)
+		{
+		case 0x0500: return "GL_INVALID_ENUM";
+		case 0x0501: return "GL_INVALID_VALUE";
+		case 0x0502: return "GL_INVALID_OPERATION";
+		case 0x0503: return "GL_STACK_OVERFLOW";
+		case 0x0504: return "GL_STACK_UNDERFLOW";
+		case 0x0505: return "GL_OUT_OF_MEMORY";
+		case 0x0506: return "GL_INVALID_FRAMEBUFFER_OPERATION";
+		case 0x0507: return "GL_CONTEXT_LOST";
+		case 0x8031: return "GL_TABLE_TOO_LARGE";
+		}
+		return "Unknown error";
+	}
+
 }
+
+#ifndef BLT_DIST
+#define GL_CALL(call) call; { int result = glGetError(); BLT_ASSERT(result == GL_NO_ERROR, "OPENGL ERROR : {0} ({1})", ::Bolt::ConvertError(result), result); }
+#else
+#define GL_CALL(call) call;
+#endif

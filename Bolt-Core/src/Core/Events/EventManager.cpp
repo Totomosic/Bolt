@@ -3,7 +3,7 @@
 #include "EventBus.h"
 
 #include "Engine/Engine.h"
-#include "Core/Profiling/Profiling.h"
+#include "BoltLib/Profiling/Profiling.h"
 
 namespace Bolt
 {

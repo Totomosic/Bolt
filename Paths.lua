@@ -10,10 +10,11 @@ SolutionDir = "../../"
 -- Include directories relative to solution directory
 IncludeDirs = {}
 IncludeDirs["Bolt"] =       BoltCoreDir .. "src"
+IncludeDirs["BoltLib"] =    BoltLibDir .. "src"
 IncludeDirs["GLFW"] =       BoltCoreDir .. "vendor/GLFW/include"
 IncludeDirs["Glad"] =       BoltCoreDir .. "vendor/Glad/include"
 IncludeDirs["ImGui"] =      BoltCoreDir .. "vendor/ImGui"
-IncludeDirs["spdlog"] =     BoltCoreDir .. "vendor/spdlog/include"
+IncludeDirs["spdlog"] =     BoltLibDir .. "vendor/spdlog/include"
 IncludeDirs["FreeTypeGL"] = BoltCoreDir .. "vendor/FreeType-GL"
 IncludeDirs["FreeType"] =   BoltCoreDir .. "vendor/FreeType/include"
 IncludeDirs["Lua"] =        BoltCoreDir .. "vendor/Lua/src"
