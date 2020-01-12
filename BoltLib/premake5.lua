@@ -1,16 +1,13 @@
-project "Bolt-Core"
+project "BoltLib"
     location ""
     kind "StaticLib"
     language "C++"
     cppdialect "C++17"
     staticruntime "on"
     
-    targetdir ("../bin/" .. outputdir .. "/Bolt-Core")
-    objdir ("../bin-int/" .. outputdir .. "/Bolt-Core")
+    targetdir ("../bin/" .. outputdir .. "/BoltLib")
+    objdir ("../bin-int/" .. outputdir .. "/BoltLib")
 
-    pchheader "bltpch.h"
-    pchsource "src/bltpch.cpp"
-    
     files
     {
         "src/**.h",
@@ -19,26 +16,7 @@ project "Bolt-Core"
     
     includedirs
     {
-        "../%{IncludeDirs.GLFW}",
-        "../%{IncludeDirs.Glad}",
-		"../%{IncludeDirs.ImGui}",
-        "../%{IncludeDirs.spdlog}",
-        "../%{IncludeDirs.FreeTypeGL}",
-        "../%{IncludeDirs.FreeType}",
-        "../%{IncludeDirs.Lua}",
         "src"
-    }
-
-    links
-    {
-        "ws2_32.lib",
-        "GLFW",
-        "Glad",
-        "ImGui",
-        "FreeType",
-        "FreeType-GL",
-        "Lua",
-        "BoltLib"
     }
 
     filter "system:windows"

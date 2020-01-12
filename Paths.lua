@@ -2,6 +2,7 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 -- Bolt Directory
 BoltCoreDir = "Bolt-Core/"
+BoltLibDir = "BoltLib/"
 -- Resources Directory
 ResourcesDir = "Bolt-Resources/"
 SolutionDir = "../../"
