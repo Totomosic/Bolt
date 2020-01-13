@@ -5,8 +5,8 @@ project "Resource-Converter"
     cppdialect "C++17"
     staticruntime "on"
     
-    targetdir ("../../bin/" .. outputdir .. "/Resource-Converter")
-    objdir ("../../bin-int/" .. outputdir .. "/Resource-Converter")
+    targetdir ("../bin/" .. outputdir .. "/Resource-Converter")
+    objdir ("../bin-int/" .. outputdir .. "/Resource-Converter")
     
     files
     {
@@ -18,7 +18,14 @@ project "Resource-Converter"
     {
         "src",
         "vendor",
-        "../../%{IncludeDirs.spdlog}"
+        "../%{IncludeDirs.spdlog}",
+        "../%{IncludeDirs.BoltLib}",
+        "../%{IncludeDirs.ResourcesLib}",
+    }
+
+    links
+    {
+        "ResourcesLib"
     }
 
     filter "system:windows"
@@ -28,6 +35,16 @@ project "Resource-Converter"
         {
             "_CRT_SECURE_NO_WARNINGS",
             "BLT_PLATFORM_WINDOWS",
+            "BLT_BUILD_STATIC"
+        }
+
+    filter "system:linux"
+        systemversion "latest"
+
+        defines
+        {
+            "BLT_PLATFORM_LINUX",
+            "BLT_BUILD_STATIC"
         }
 
     filter "configurations:Debug"

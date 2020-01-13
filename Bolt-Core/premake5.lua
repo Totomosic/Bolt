@@ -27,6 +27,7 @@ project "Bolt-Core"
         "../%{IncludeDirs.FreeType}",
         "../%{IncludeDirs.Lua}",
         "../%{IncludeDirs.BoltLib}",
+        "../%{IncludeDirs.ResourcesLib}",
         "src"
     }
 
@@ -39,7 +40,8 @@ project "Bolt-Core"
         "FreeType",
         "FreeType-GL",
         "Lua",
-        "BoltLib"
+        "BoltLib",
+        "ResourcesLib"
     }
 
     filter "system:windows"

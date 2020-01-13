@@ -1,12 +1,12 @@
-project "BoltLib"
+project "ResourcesLib"
     location ""
     kind "StaticLib"
     language "C++"
     cppdialect "C++17"
     staticruntime "on"
     
-    targetdir ("../bin/" .. outputdir .. "/BoltLib")
-    objdir ("../bin-int/" .. outputdir .. "/BoltLib")
+    targetdir ("../bin/" .. outputdir .. "/ResourcesLib")
+    objdir ("../bin-int/" .. outputdir .. "/ResourcesLib")
 
     files
     {
@@ -17,7 +17,13 @@ project "BoltLib"
     includedirs
     {
         "../%{IncludeDirs.spdlog}",
+        "../%{IncludeDirs.BoltLib}",
         "src"
+    }
+
+    links
+    {
+        "BoltLib"
     }
 
     filter "system:windows"
@@ -28,6 +34,8 @@ project "BoltLib"
             "BLT_PLATFORM_WINDOWS",
             "BLT_BUILD_STATIC",
             "_CRT_SECURE_NO_WARNINGS",
+            "NOMINMAX",
+            "GLEW_STATIC"
         }
 
     filter "system:linux"
@@ -36,7 +44,8 @@ project "BoltLib"
         defines
         {
             "BLT_PLATFORM_LINUX",
-            "BLT_BUILD_STATIC"
+            "BLT_BUILD_STATIC",
+            "GLEW_STATIC"
         }
 
         links 
