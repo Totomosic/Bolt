@@ -15,15 +15,15 @@ namespace Bolt
 	{
 		builder.Write("if (");
 		m_Condition->Build(builder);
-		builder.Write(')');
+		builder.Write(")");
 		builder.NextLine();
-		builder.Write('{');
+		builder.Write("{");
 		builder.SetScopeIndex(m_ScopeIndex);
 		builder.NextLine();
 		BuildOperations(builder);
 		builder.SetScopeIndex(m_ScopeIndex - 1);
 		builder.NextLine();
-		builder.Write('}');
+		builder.Write("}");
 	}
 
 	std::unique_ptr<ShaderScope> IfScope::Clone() const

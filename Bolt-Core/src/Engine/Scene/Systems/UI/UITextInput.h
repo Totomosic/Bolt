@@ -10,7 +10,7 @@ namespace Bolt
 	private:
 		UIText* m_Text;
 		UIElement* m_Background;
-		blt::string m_String;
+		std::string m_String;
 		bool m_Obfuscate;
 
 	public:
@@ -21,12 +21,12 @@ namespace Bolt
 		UIText& GetTextElement() const;
 		UIElement& GetBackgroundElement() const;
 
-		const blt::string& GetText() const;
-		blt::string GetTextRepresentation() const;
+		const std::string& GetText() const;
+		std::string GetTextRepresentation() const;
 		bool IsObfuscated() const;
 		void SetObfuscated(bool enabled);
 
-		void SetText(const blt::string& text);
+		void SetText(const std::string& text);
 	};
 
 }

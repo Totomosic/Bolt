@@ -13,20 +13,20 @@ namespace Bolt
 		static constexpr char NODE_DELIMETER = '/';
 
 	private:
-		mutable blt::string m_Path;
+		mutable std::string m_Path;
 		mutable std::vector<int> m_ChildrenIndices;
 		mutable const XMLnode* m_CurrentNode;
 		mutable bool m_IsValid;
 
 	public:
 		XMLNodePath();
-		XMLNodePath(const blt::string& path);
+		XMLNodePath(const std::string& path);
 		XMLNodePath(const char* path);
 
-		const blt::string& AsString() const;
+		const std::string& AsString() const;
 		const std::vector<int>& ChildIndices() const;
 
-		void SetPath(const blt::string& path);
+		void SetPath(const std::string& path);
 		void CachePath(const XMLnode* node) const;
 
 	private:

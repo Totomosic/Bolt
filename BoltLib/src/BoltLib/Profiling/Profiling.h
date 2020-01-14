@@ -8,7 +8,7 @@ namespace Bolt
 
 	struct BLT_API ProfileResult
 	{
-		blt::string Name;
+		std::string Name;
 		int64_t Start;
 		int64_t End;
 		uint32_t ThreadId;
@@ -16,7 +16,7 @@ namespace Bolt
 
 	struct BLT_API InstrumentationSession
 	{
-		blt::string Name;
+		std::string Name;
 	};
 
 	class BLT_API Instrumentor
@@ -33,7 +33,7 @@ namespace Bolt
 	public:
 		Instrumentor();
 
-		void BeginSession(const blt::string& name, const blt::string& filepath = "results.json");
+		void BeginSession(const std::string& name, const std::string& filepath = "results.json");
 		void EndSession();
 
 		void WriteProfile(const ProfileResult& result);

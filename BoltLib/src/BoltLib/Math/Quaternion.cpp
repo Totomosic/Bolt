@@ -208,7 +208,7 @@ namespace Bolt
 		return !(q1 == q2);
 	}
 
-	blt::string Quaternion::ToString() const
+	std::string Quaternion::ToString() const
 	{
 		return "Quaternion(" + std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z) + ", " + std::to_string(w) + ")";
 	}

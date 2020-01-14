@@ -60,7 +60,7 @@ namespace Bolt
 		m_AlphaThreshold->SetValue(connection);
 	}
 
-	void PBRMaterialGraph::FinaliseBuild(const std::unordered_map<blt::string, ShaderValuePtr>& masterNodeValues)
+	void PBRMaterialGraph::FinaliseBuild(const std::unordered_map<std::string, ShaderValuePtr>& masterNodeValues)
 	{
 		VertexShader& vertex = GetBuilder().GetBuilder().Factory().Vertex();
 		ShaderVariablePtr modelMatrix = vertex.RendererUniform(RendererUniform::ModelMatrix);

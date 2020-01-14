@@ -35,9 +35,9 @@ namespace Bolt
 		return *this;
 	}
 
-	std::vector<blt::string> ShaderLinkContext::GetLinkNames() const
+	std::vector<std::string> ShaderLinkContext::GetLinkNames() const
 	{
-		std::vector<blt::string> result;
+		std::vector<std::string> result;
 		for (const auto& pair : m_UserUniformLinks)
 		{
 			result.push_back(pair.first);
@@ -50,7 +50,7 @@ namespace Bolt
 		return *m_Shader;
 	}
 
-	id_t ShaderLinkContext::GetLinkId(const blt::string& linkName, int index) const
+	id_t ShaderLinkContext::GetLinkId(const std::string& linkName, int index) const
 	{
 		if (index >= 0)
 		{
@@ -62,12 +62,12 @@ namespace Bolt
 		return id.LinkIndex;
 	}
 
-	const UniformLinkContainer& ShaderLinkContext::GetLink(const blt::string& linkName, int index) const
+	const UniformLinkContainer& ShaderLinkContext::GetLink(const std::string& linkName, int index) const
 	{		
 		return GetLink(GetLinkId(linkName, index));
 	}
 
-	UniformLinkContainer& ShaderLinkContext::GetLink(const blt::string& linkName, int index)
+	UniformLinkContainer& ShaderLinkContext::GetLink(const std::string& linkName, int index)
 	{
 		return GetLink(GetLinkId(linkName, index));
 	}
@@ -82,7 +82,7 @@ namespace Bolt
 		return *m_Links.at(linkId);
 	}
 
-	bool ShaderLinkContext::IsLinked(const blt::string& linkName, int index) const
+	bool ShaderLinkContext::IsLinked(const std::string& linkName, int index) const
 	{
 		if (index >= 0)
 		{
@@ -92,7 +92,7 @@ namespace Bolt
 		return m_UserUniformLinks.at(linkName).IsLinked;
 	}
 
-	bool ShaderLinkContext::HasLink(const blt::string& linkName, int index) const
+	bool ShaderLinkContext::HasLink(const std::string& linkName, int index) const
 	{
 		if (index >= 0)
 		{
@@ -120,13 +120,13 @@ namespace Bolt
 		}
 	}
 
-	const UserUniformLocation& ShaderLinkContext::GetUniformLocation(const blt::string& linkName) const
+	const UserUniformLocation& ShaderLinkContext::GetUniformLocation(const std::string& linkName) const
 	{
 		BLT_ASSERT(m_UserUniformLinks.find(linkName) != m_UserUniformLinks.end(), "No link exists with name {}", linkName);
 		return m_Shader->GetUserUniforms().at(m_UserUniformLinks.at(linkName).UniformIndex);
 	}
 
-	UniformLinkContainer& ShaderLinkContext::AddLink(const blt::string& linkName, std::unique_ptr<UniformLinkContainer>&& linkValue)
+	UniformLinkContainer& ShaderLinkContext::AddLink(const std::string& linkName, std::unique_ptr<UniformLinkContainer>&& linkValue)
 	{
 		UniformLinkContainer* ptr = linkValue.get();
 		LinkId& id = m_UserUniformLinks.at(linkName);

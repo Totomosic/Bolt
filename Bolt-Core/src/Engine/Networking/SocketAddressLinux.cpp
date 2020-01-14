@@ -25,12 +25,12 @@ namespace Bolt
 	{
 	}
 
-	SocketAddress::SocketAddress(const blt::string& inAddress, const blt::string& inPort) : SocketAddress(inAddress, std::stoi(inPort.c_str()))
+	SocketAddress::SocketAddress(const std::string& inAddress, const std::string& inPort) : SocketAddress(inAddress, std::stoi(inPort.c_str()))
 	{
 		
 	}
 
-	SocketAddress::SocketAddress(const blt::string& inAddress, uint16_t inPort)
+	SocketAddress::SocketAddress(const std::string& inAddress, uint16_t inPort)
 		: m_SockAddr()
 	{
 		GetAsSockAddrIn()->sin_family = AF_INET;
@@ -76,7 +76,7 @@ namespace Bolt
 		return (GetIP4Ref()) | ((static_cast<uint32_t>(GetAsSockAddrIn()->sin_port)) << 13) | m_SockAddr.sa_family;
 	}
 
-	blt::string SocketAddress::ToString() const
+	std::string SocketAddress::ToString() const
 	{
 		const sockaddr_in* s = GetAsSockAddrIn();
 		uint16_t port = ntohs(s->sin_port);

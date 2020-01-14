@@ -7,18 +7,18 @@ namespace Bolt
 	struct BLT_API FilePath
 	{
 	private:
-		blt::string m_Path;
+		std::string m_Path;
 
 	public:
 		FilePath();
-		FilePath(const blt::string& path);
+		FilePath(const std::string& path);
 		FilePath(const char* path);
 
-		const blt::string& Path() const;
+		const std::string& Path() const;
 		DirectoryPath Directory() const;
-		blt::string Filename() const;
-		blt::string SimpleFilename() const;
-		blt::string Extension() const;
+		std::string Filename() const;
+		std::string SimpleFilename() const;
+		std::string Extension() const;
 		bool IsRelative() const;
 		bool IsAbsolute() const;
 
@@ -30,7 +30,7 @@ namespace Bolt
 		static FilePath Combine(const DirectoryPath& directory, const FilePath& file);
 
 	private:
-		static void StandardizePath(blt::string& filepath);
+		static void StandardizePath(std::string& filepath);
 
 	};
 

@@ -13,18 +13,18 @@ namespace Bolt
 		
 	}
 
-	DirectoryPath::DirectoryPath(const blt::string& path)
+	DirectoryPath::DirectoryPath(const std::string& path)
 		: m_Path(path)
 	{
 		StandardizePath(m_Path);
 	}
 
-	DirectoryPath::DirectoryPath(const char* path) : DirectoryPath(blt::string(path))
+	DirectoryPath::DirectoryPath(const char* path) : DirectoryPath(std::string(path))
 	{
 	
 	}
 
-	const blt::string& DirectoryPath::Path() const
+	const std::string& DirectoryPath::Path() const
 	{
 		return m_Path;
 	}
@@ -36,7 +36,7 @@ namespace Bolt
 
 	DirectoryPath DirectoryPath::Parent() const
 	{
-		uint32_t index = m_Path.find_last_of(DIRECTORY_DELIMITER, m_Path.length() - 2);
+		size_t index = m_Path.find_last_of(DIRECTORY_DELIMITER, m_Path.length() - 2);
 		return m_Path.substr(0, index);
 	}
 
@@ -78,21 +78,21 @@ namespace Bolt
 	{
 		BLT_ASSERT(!(left.IsAbsolute() && right.IsAbsolute()), "Unable to combine 2 absolute paths");
 		BLT_ASSERT(right.IsRelative(), "Right path must be relative in order to combine");
-		blt::string leftPath = left.Path();
-		blt::string rightPath = right.Path();
+		std::string leftPath = left.Path();
+		std::string rightPath = right.Path();
 		return DirectoryPath(leftPath + rightPath);
 	}
 
-	void DirectoryPath::StandardizePath(blt::string& directorypath)
+	void DirectoryPath::StandardizePath(std::string& directorypath)
 	{
-		directorypath.replace_all('\\', DIRECTORY_DELIMITER);
+		blt::replace_all(directorypath, '\\', DIRECTORY_DELIMITER);
 		if (directorypath.front() == DIRECTORY_DELIMITER)
 		{
-			directorypath = directorypath.substr(1);
+			directorypath.erase(directorypath.begin());
 		}
 		if (directorypath.back() != DIRECTORY_DELIMITER)
 		{
-			directorypath.append(DIRECTORY_DELIMITER);
+			directorypath += DIRECTORY_DELIMITER;
 		}
 	}
 

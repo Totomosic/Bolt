@@ -14,10 +14,10 @@ namespace Bolt
 	{
 	}
 
-	void Instrumentor::BeginSession(const blt::string& name, const blt::string& filepath)
+	void Instrumentor::BeginSession(const std::string& name, const std::string& filepath)
 	{
 		std::scoped_lock<std::mutex> lock(m_Mutex);
-		m_OutputStream.open(filepath.cpp_str());
+		m_OutputStream.open(filepath);
 		WriteHeader();
 		m_CurrentSession = std::make_unique<InstrumentationSession>(InstrumentationSession{ name });
 	}
@@ -39,7 +39,7 @@ namespace Bolt
 			m_OutputStream << ",";
 		}
 
-		blt::string name = result.Name;
+		std::string name = result.Name;
 		std::replace(name.begin(), name.end(), '"', '\'');
 
 		m_OutputStream << "{";

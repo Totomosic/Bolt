@@ -12,14 +12,14 @@ namespace Bolt
 		static constexpr char DIRECTORY_DELIMITER = '/';
 
 	private:
-		blt::string m_Path;
+		std::string m_Path;
 
 	public:
 		DirectoryPath();
-		DirectoryPath(const blt::string& path);
+		DirectoryPath(const std::string& path);
 		DirectoryPath(const char* path);
 
-		const blt::string& Path() const;
+		const std::string& Path() const;
 		bool HasParent() const;
 		DirectoryPath Parent() const;
 		bool IsRelative() const;
@@ -37,7 +37,7 @@ namespace Bolt
 		static DirectoryPath Combine(const DirectoryPath& left, const DirectoryPath& right);
 
 	private:
-		static void StandardizePath(blt::string& directorypath);
+		static void StandardizePath(std::string& directorypath);
 
 	};
 

@@ -13,9 +13,9 @@ namespace Bolt
 	public:
 		GlobalScope();
 
-		bool HasFunction(const blt::string& name) const;
-		FunctionScope& GetFunction(const blt::string& name) const;
-		FunctionScope& DefineFunction(const blt::string& name, const ValueTypeInfo& returnType, const std::vector<ValueTypeInfo>& inputs);
+		bool HasFunction(const std::string& name) const;
+		FunctionScope& GetFunction(const std::string& name) const;
+		FunctionScope& DefineFunction(const std::string& name, const ValueTypeInfo& returnType, const std::vector<ValueTypeInfo>& inputs);
 
 		void Build(ShaderBuilder& builder) const override;
 		BLT_DEFAULT_SHADERSCOPE_CLONE(GlobalScope);

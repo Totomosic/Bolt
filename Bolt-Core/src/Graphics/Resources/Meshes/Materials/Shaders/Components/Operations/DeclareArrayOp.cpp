@@ -5,7 +5,7 @@
 namespace Bolt
 {
 
-	DeclareArrayOp::DeclareArrayOp(const ShaderVariablePtr& arr, const ShaderLiteralPtr& length, const blt::string& meta) : ShaderOp(),
+	DeclareArrayOp::DeclareArrayOp(const ShaderVariablePtr& arr, const ShaderLiteralPtr& length, const std::string& meta) : ShaderOp(),
 		m_Variable(arr), m_Length(length), m_MetaData(meta)
 	{
 		BLT_ASSERT(arr->TypeDimension() == ValueTypeDim::Array, "Input 0 must be an array");
@@ -21,7 +21,7 @@ namespace Bolt
 		m_Variable->SetVarName(builder.GetVariableName());
 		builder.Write(ValueTypeToGLSLString(m_Variable->Type()) + ' ' + m_Variable->GetVarName() + '[');
 		m_Length->Build(builder);
-		builder.Write(']');
+		builder.Write("]");
 	}
 
 }

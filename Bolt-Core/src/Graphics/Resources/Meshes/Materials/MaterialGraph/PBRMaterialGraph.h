@@ -29,7 +29,7 @@ namespace Bolt
 		void SetAlphaThreshold(const NodeConnection& connection);
 
 	protected:
-		virtual void FinaliseBuild(const std::unordered_map<blt::string, ShaderValuePtr>& masterNodeValues) override;
+		virtual void FinaliseBuild(const std::unordered_map<std::string, ShaderValuePtr>& masterNodeValues) override;
 
 	};
 

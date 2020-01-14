@@ -67,7 +67,7 @@ namespace Bolt
 		BLT_PROFILE_FUNCTION();
 		char buff[FILENAME_MAX];
 		auto result = BLT_GET_CURRENT_DIRECTORY(buff, FILENAME_MAX);
-		s_WorkingDirectory = DirectoryPath(blt::string(buff) + DirectoryPath::DIRECTORY_DELIMITER);
+		s_WorkingDirectory = DirectoryPath(std::string(buff) + DirectoryPath::DIRECTORY_DELIMITER);
 		#endif
 	}
 

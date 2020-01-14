@@ -10,7 +10,7 @@ namespace Bolt
 	class BLT_API ShaderLValue : public ShaderValue
 	{
 	protected:
-		mutable blt::string m_Name;
+		mutable std::string m_Name;
 
 	public:
 		ShaderLValue();

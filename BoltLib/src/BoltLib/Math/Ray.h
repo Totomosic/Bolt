@@ -14,7 +14,7 @@ namespace Bolt
 		Ray(const Vector3f& origin, const Vector3f& direction);
 		Ray();
 
-		blt::string ToString() const;
+		std::string ToString() const;
 		friend std::ostream& operator<<(std::ostream& stream, const Ray& ray);
 	};
 

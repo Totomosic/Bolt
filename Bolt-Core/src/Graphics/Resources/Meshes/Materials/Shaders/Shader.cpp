@@ -22,7 +22,7 @@ namespace Bolt
 	#define BLT_SHADER_VALIDATE_VALUE(...)
 #endif
 
-	Shader::Shader(const blt::string& vertexSource, const blt::string& fragmentSource) : Resource(),
+	Shader::Shader(const std::string& vertexSource, const std::string& fragmentSource) : Resource(),
 		m_Id(0)
 	{
 		Create();
@@ -32,7 +32,7 @@ namespace Bolt
 		Finalise(arr, 2);
 	}
 
-	Shader::Shader(const blt::string& vertexSource, const blt::string& geometrySource, const blt::string& fragmentSource) : Resource(),
+	Shader::Shader(const std::string& vertexSource, const std::string& geometrySource, const std::string& fragmentSource) : Resource(),
 		m_Id(0)
 	{
 		Create();
@@ -169,7 +169,7 @@ namespace Bolt
 	std::unique_ptr<Shader> Shader::FromFile(const FilePath& shaderFile)
 	{
 		File f = Filesystem::Open(shaderFile, OpenMode::Read);
-		blt::string fileData = f.ReadText();
+		std::string fileData = f.ReadText();
 		return FromSource(fileData);
 	}
 
@@ -188,7 +188,7 @@ namespace Bolt
 		return FromSource(v.ReadText(), g.ReadText(), f.ReadText());
 	}
 
-	std::unique_ptr<Shader> Shader::FromSource(const blt::string& source)
+	std::unique_ptr<Shader> Shader::FromSource(const std::string& source)
 	{
 		constexpr int NONE_SHADER_TYPE = -1;
 		constexpr int VERTEX_SHADER_TYPE = 0;
@@ -199,21 +199,21 @@ namespace Bolt
 		int currentType = NONE_SHADER_TYPE;
 		bool isGeometryShader = false;
 
-		blt::string fileData = source;
-		std::vector<blt::string> lines = fileData.split('\n');
-		for (blt::string& line : lines)
+		std::string fileData = source;
+		std::vector<std::string_view> lines = blt::split_view(fileData, '\n');
+		for (std::string_view& line : lines)
 		{
-			if (line.find("#shader") != blt::string::npos)
+			if (line.find("#shader") != std::string::npos)
 			{
-				if (line.find("vertex") != blt::string::npos)
+				if (line.find("vertex") != std::string::npos)
 				{
 					currentType = VERTEX_SHADER_TYPE;
 				}
-				else if (line.find("fragment") != blt::string::npos)
+				else if (line.find("fragment") != std::string::npos)
 				{
 					currentType = FRAGMENT_SHADER_TYPE;
 				}
-				else if (line.find("geometry") != blt::string::npos)
+				else if (line.find("geometry") != std::string::npos)
 				{
 					currentType = GEOMETRY_SHADER_TYPE;
 					isGeometryShader = true;
@@ -224,16 +224,16 @@ namespace Bolt
 				ss[currentType] << line << '\n';
 			}
 		}
-		blt::string sources[3] = { ss[0].str(), ss[1].str(), ss[2].str() };
+		std::string sources[3] = { ss[0].str(), ss[1].str(), ss[2].str() };
 		return (isGeometryShader) ? FromSource(sources[0], sources[1], sources[2]) : FromSource(sources[0], sources[2]);
 	}
 
-	std::unique_ptr<Shader> Shader::FromSource(const blt::string& vertexSource, const blt::string& fragmentSource)
+	std::unique_ptr<Shader> Shader::FromSource(const std::string& vertexSource, const std::string& fragmentSource)
 	{
 		return std::make_unique<Shader>(vertexSource, fragmentSource);
 	}
 
-	std::unique_ptr<Shader> Shader::FromSource(const blt::string& vertexSource, const blt::string& geometrySource, const blt::string& fragmentSource)
+	std::unique_ptr<Shader> Shader::FromSource(const std::string& vertexSource, const std::string& geometrySource, const std::string& fragmentSource)
 	{
 		return std::make_unique<Shader>(vertexSource, geometrySource, fragmentSource);
 	}
@@ -254,7 +254,7 @@ namespace Bolt
 			GL_CALL(glGetProgramiv(m_Id, GL_INFO_LOG_LENGTH, &length));
 			std::vector<char> error(length);
 			GL_CALL(glGetProgramInfoLog(m_Id, length, &length, &error[0]));
-			blt::string errorMsg(&error[0]);
+			std::string errorMsg(&error[0]);
 			BLT_CORE_ERROR("Shader Failed To Link");
 			BLT_CORE_ERROR(errorMsg);
 		}
@@ -265,7 +265,7 @@ namespace Bolt
 		}
 	}
 
-	id_t Shader::AddShader(const blt::string& source, GLenum shaderType)
+	id_t Shader::AddShader(const std::string& source, GLenum shaderType)
 	{
 		id_t shader = GL_CALL(glCreateShader(shaderType));
 		const char* str = source.c_str();
@@ -280,7 +280,7 @@ namespace Bolt
 			GL_CALL(glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length));
 			std::vector<char> error(length);
 			GL_CALL(glGetShaderInfoLog(shader, length, &length, &error[0]));
-			blt::string errorMessage(&error[0]);
+			std::string errorMessage(&error[0]);
 			GL_CALL(glDeleteShader(shader));
 			BLT_CORE_ERROR(errorMessage);
 			return 0;
@@ -289,7 +289,7 @@ namespace Bolt
 		return shader;
 	}
 
-	int Shader::GetUniformLocation(const blt::string& location) const
+	int Shader::GetUniformLocation(const std::string& location) const
 	{
 		Bind();
 		int loc = GL_CALL(glGetUniformLocation(m_Id, location.c_str()));

@@ -17,7 +17,7 @@ namespace Bolt
 	
 	}
 
-	const blt::string& File::Filename() const
+	const std::string& File::Filename() const
 	{
 		return m_Path.Path();
 	}
@@ -65,23 +65,23 @@ namespace Bolt
 		m_Stream.write((const char*)data, size);
 	}
 
-	void File::ReadText(blt::string* outString, uint32_t size) const
+	void File::ReadText(std::string* outString, uint32_t size) const
 	{
 		uint32_t realSize = std::min(size, GetSize());
 		char* buffer = BLT_NEW char[realSize];
 		Read(buffer, size);
-		*outString = blt::string(buffer, realSize);
+		*outString = std::string(buffer, realSize);
 		BLT_DELETE_ARR buffer;
 	}
 
-	blt::string File::ReadText(uint32_t size) const
+	std::string File::ReadText(uint32_t size) const
 	{
-		blt::string result;
+		std::string result;
 		ReadText(&result, size);
 		return result;
 	}
 
-	void File::WriteText(const blt::string& string) const
+	void File::WriteText(const std::string& string) const
 	{
 		Write(string.data(), string.size());
 	}

@@ -74,9 +74,9 @@ namespace Bolt
 		void DrawSprite(float x, float y, float width, float height, const Color& color = Color::White, float rotation = 0, const ResourcePtr<Texture2D>& texture = nullptr, const TextureFrame& frame = {});
 		void DrawRectangle(float x, float y, float width, float height, const Color& color = Color::White, float rotation = 0);
 		void DrawTexture(float x, float y, float width, float height, const ResourcePtr<Texture2D>& texture, float rotation = 0, const TextureFrame& frame = {});
-		void DrawString(const blt::string& string, const ResourcePtr<Font>& font, float x, float y, const Color& color = Color::White);
+		void DrawString(const std::string& string, const ResourcePtr<Font>& font, float x, float y, const Color& color = Color::White);
 		// Draws string with the default font
-		void DrawString(const blt::string& string, float x, float y, const Color& color = Color::White);
+		void DrawString(const std::string& string, float x, float y, const Color& color = Color::White);
 		void DrawEllipse(float x, float y, float width, float height, const Color& color = Color::White, const ResourcePtr<Texture2D>& texture = nullptr, const TextureFrame& frame = {});
 		void DrawLine(float x0, float y0, float x1, float y1, float width = 1, const Color & color = Color::White);
 

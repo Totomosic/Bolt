@@ -8,7 +8,7 @@ namespace Bolt
 	struct BLT_API UserUniformLocation
 	{
 	public:
-		blt::string LinkName;
+		std::string LinkName;
 		int Location;
 		ValueType Type;
 		bool RequiresLink;
@@ -33,9 +33,9 @@ namespace Bolt
 		std::vector<UserUniformLocation> m_UserUniforms;
 
 	public:
-		blt::string VertexSource;
-		blt::string GeometrySource;
-		blt::string FragmentSource;
+		std::string VertexSource;
+		std::string GeometrySource;
+		std::string FragmentSource;
 
 	public:
 		ShaderInstance(const CompiledShaderProgram& vertex, const CompiledShaderProgram& fragment);

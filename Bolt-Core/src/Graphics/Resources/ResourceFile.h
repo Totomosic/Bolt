@@ -18,7 +18,7 @@ namespace Bolt
 	{
 	public:
 		ResourceType Type = ResourceType::Unknown;
-		blt::string Name = "";
+		std::string Name = "";
 		id_t Id = (id_t)-1;
 		XMLnode Attributes;
 

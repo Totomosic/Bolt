@@ -27,9 +27,9 @@ namespace Bolt
 		UIRectangle& CreateRectangle(float width, float height, const Color& color, Transform transform = Transform());
 		UIRectangle& CreateImage(float width, float height, const ResourcePtr<Texture2D>& image, Transform transform = Transform());
 
-		UIText& CreateText(const blt::string& text, const ResourcePtr<Font>& font, const Color& color, 
+		UIText& CreateText(const std::string& text, const ResourcePtr<Font>& font, const Color& color, 
 			Transform transform = Transform(), AlignH horizontal = AlignH::Center, AlignV vertical = AlignV::Center);
-		UIText& CreateText(const blt::string& text, const Color& color,
+		UIText& CreateText(const std::string& text, const Color& color,
 			Transform transform = Transform(), AlignH horizontal = AlignH::Center, AlignV vertical = AlignV::Center);
 
 		UITextInput& CreateTextInput(float width, float height, const ResourcePtr<Font>& font, const Color& fontColor, std::unique_ptr<Material>&& backgroundMaterial, Transform transform = Transform());

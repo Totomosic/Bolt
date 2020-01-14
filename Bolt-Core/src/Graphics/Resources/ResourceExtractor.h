@@ -10,7 +10,7 @@ namespace Bolt
 		struct BLT_API ResourceInfo
 		{
 		public:
-			blt::string Name;
+			std::string Name;
 			id_t Id;
 			ResourceType Type;
 		};
@@ -23,11 +23,11 @@ namespace Bolt
 		ResourceExtractor(const ResourcePack& resources);
 		
 		const ResourcePack& GetPack() const;		
-		id_t GetResourceId(const blt::string& name) const;
+		id_t GetResourceId(const std::string& name) const;
 		std::vector<ResourceInfo> GetResources() const;
 
 		template<typename T>
-		ResourcePtr<T> GetResourcePtr(const blt::string& name) const
+		ResourcePtr<T> GetResourcePtr(const std::string& name) const
 		{
 			return ResourceManager::Get().GetResource<T>(m_Resources.GetResourceId(name));
 		}

@@ -18,6 +18,7 @@ project "ResourcesLib"
     {
         "../%{IncludeDirs.spdlog}",
         "../%{IncludeDirs.BoltLib}",
+        "vendor",
         "src"
     }
 

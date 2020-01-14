@@ -6,14 +6,14 @@
 namespace Bolt
 {
 
-	UIText::UIText(UIManager* manager, UIElement* parent, const blt::string& text, const ResourcePtr<Font>& font, const Color& color, Transform transform, AlignH horizontal, AlignV vertical)
+	UIText::UIText(UIManager* manager, UIElement* parent, const std::string& text, const ResourcePtr<Font>& font, const Color& color, Transform transform, AlignH horizontal, AlignV vertical)
 		: UIElement(manager, parent), m_Text(text), m_Color(color), m_Font(font), m_Horizontal(horizontal), m_Vertical(vertical)
 	{
 		EntityHandle entity = GetEntityFactory().Text(text, font, color, std::move(transform), horizontal, vertical);
 		SetEntity(entity);
 	}
 
-	const blt::string& UIText::GetText() const
+	const std::string& UIText::GetText() const
 	{
 		return m_Text;
 	}
@@ -34,7 +34,7 @@ namespace Bolt
 		UpdateMaterial();
 	}
 
-	void UIText::SetText(const blt::string& text)
+	void UIText::SetText(const std::string& text)
 	{
 		m_Text = text;
 		UpdateModel();

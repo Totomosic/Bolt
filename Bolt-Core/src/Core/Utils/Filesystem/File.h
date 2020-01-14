@@ -24,7 +24,7 @@ namespace Bolt
 		File();
 		File(const FilePath& filepath);
 
-		const blt::string& Filename() const;
+		const std::string& Filename() const;
 		const FilePath& Path() const;
 		bool IsOpen() const;
 		uint32_t GetSize() const;
@@ -34,9 +34,9 @@ namespace Bolt
 		void Read(void* data, uint32_t size) const;
 		void Write(const void* data, uint32_t size) const;
 
-		void ReadText(blt::string* outString, uint32_t size = (uint32_t)-1) const;
-		blt::string ReadText(uint32_t size = (uint32_t)-1) const;
-		void WriteText(const blt::string& string) const;
+		void ReadText(std::string* outString, uint32_t size = (uint32_t)-1) const;
+		std::string ReadText(uint32_t size = (uint32_t)-1) const;
+		void WriteText(const std::string& string) const;
 
 		friend class Filesystem;
 

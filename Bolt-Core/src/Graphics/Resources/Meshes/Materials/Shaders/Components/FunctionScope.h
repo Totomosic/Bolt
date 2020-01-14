@@ -10,14 +10,14 @@ namespace Bolt
 	private:
 		ValueTypeInfo m_ReturnType;
 		std::vector<ShaderVariablePtr> m_Inputs;
-		blt::string m_Name;
+		std::string m_Name;
 
 	public:
-		FunctionScope(int scopeIndex, const blt::string& name, const ValueTypeInfo& returnType, const std::vector<ValueTypeInfo>& inputs);
+		FunctionScope(int scopeIndex, const std::string& name, const ValueTypeInfo& returnType, const std::vector<ValueTypeInfo>& inputs);
 
 		const ValueTypeInfo& GetReturnType() const;
 		std::vector<ValueTypeInfo> GetInputs() const;
-		const blt::string& GetName() const;
+		const std::string& GetName() const;
 
 		ShaderVariablePtr GetArgument(int index) const;
 		void Return(const ShaderValuePtr& value = nullptr);

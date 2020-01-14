@@ -10,13 +10,13 @@ namespace Bolt
 	class BLT_API ShaderVariable : public ShaderLValue
 	{
 	protected:
-		mutable blt::string m_Name;
+		mutable std::string m_Name;
 
 	public:
 		ShaderVariable(ValueType type, ValueTypeDim dim = ValueTypeDim::Single);
 
-		const blt::string& GetVarName() const;
-		void SetVarName(const blt::string& varName);
+		const std::string& GetVarName() const;
+		void SetVarName(const std::string& varName);
 
 		virtual void Build(ShaderBuilder& builder) const override;
 

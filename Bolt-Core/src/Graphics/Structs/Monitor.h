@@ -11,7 +11,7 @@ namespace Bolt
 		const GLFWvidmode* VideoMode = nullptr;
 		int Width;
 		int Height;
-		blt::string Name;
+		std::string Name;
 
 		int RedBits;
 		int GreenBits;

@@ -56,7 +56,7 @@ namespace Bolt
 		m_AlphaThreshold->SetValue(connection);
 	}
 
-	void LitMaterialGraph::FinaliseBuild(const std::unordered_map<blt::string, ShaderValuePtr>& masterNodeValues)
+	void LitMaterialGraph::FinaliseBuild(const std::unordered_map<std::string, ShaderValuePtr>& masterNodeValues)
 	{
 		// Scale the light intensity to more closely match the PBR lighting
 		constexpr float LIGHT_INTENSITY_SCALE = 0.05f;

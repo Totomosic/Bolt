@@ -12,14 +12,14 @@ namespace Bolt
 	public:
 		SocketAddress(uint32_t inAddress, uint16_t inPort);
 		SocketAddress(byte b0, byte b1, byte b2, byte b3, uint16_t inPort);
-		SocketAddress(const blt::string& inAddress, const blt::string& inPort);
-		SocketAddress(const blt::string& inAddress, uint16_t inPort);
+		SocketAddress(const std::string& inAddress, const std::string& inPort);
+		SocketAddress(const std::string& inAddress, uint16_t inPort);
 		SocketAddress(const sockaddr& inSockAddr);
 		SocketAddress();
 
 		static uint32_t GetSize();
 		uint32_t GetHash() const;
-		blt::string ToString() const;
+		std::string ToString() const;
 
 		bool operator==(const SocketAddress& other) const;
 		bool operator!=(const SocketAddress& other) const;

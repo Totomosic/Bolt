@@ -47,18 +47,18 @@ namespace Bolt
 		return *m_Background;
 	}
 
-	const blt::string& UITextInput::GetText() const
+	const std::string& UITextInput::GetText() const
 	{
 		return m_String;
 	}
 
-	blt::string UITextInput::GetTextRepresentation() const
+	std::string UITextInput::GetTextRepresentation() const
 	{
 		if (!m_Obfuscate)
 		{
 			return GetText();
 		}
-		blt::string result;
+		std::string result;
 		result.resize(m_String.size(), '*');
 		return result;
 	}
@@ -77,7 +77,7 @@ namespace Bolt
 		}
 	}
 
-	void UITextInput::SetText(const blt::string& text)
+	void UITextInput::SetText(const std::string& text)
 	{
 		if (text != m_String)
 		{

@@ -5,13 +5,13 @@
 namespace Bolt
 {
 
-	ShaderLiteral::ShaderLiteral(const blt::string& valueString, ValueType type, ValueTypeDim dim) : ShaderValue(type, dim),
+	ShaderLiteral::ShaderLiteral(const std::string& valueString, ValueType type, ValueTypeDim dim) : ShaderValue(type, dim),
 		m_ValueString(valueString)
 	{
 	
 	}
 
-	const blt::string& ShaderLiteral::GetValueString() const
+	const std::string& ShaderLiteral::GetValueString() const
 	{
 		return m_ValueString;
 	}

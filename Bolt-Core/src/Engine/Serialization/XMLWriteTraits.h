@@ -8,7 +8,7 @@ namespace Bolt
 	struct BLT_API XMLWriteTraits
 	{
 	public:
-		static void Transfer(const blt::string& name, T* value, XMLnode& xmlNode, Backend& backend)
+		static void Transfer(const std::string& name, T* value, XMLnode& xmlNode, Backend& backend)
 		{
 			id_t id = backend.AddSerializedValue(value);
 			XMLnode& child = xmlNode.AddChild(name, { { "id", std::to_string(id) } });
@@ -17,7 +17,7 @@ namespace Bolt
 			backend.SetOutputNode(xmlNode);
 		}
 
-		static void TransferArray(const blt::string& name, T* value, uint32_t length, XMLnode& xmlNode, Backend& backend)
+		static void TransferArray(const std::string& name, T* value, uint32_t length, XMLnode& xmlNode, Backend& backend)
 		{
 			id_t id = backend.AddSerializedValue(value);
 			XMLnode& child = xmlNode.AddChild(name, { { "id", std::to_string(id) }, { "type", "array" }, { "size", std::to_string(length) } });
@@ -34,7 +34,7 @@ namespace Bolt
 	struct BLT_API XMLWriteTraits<int, Backend>
 	{
 	public:
-		static void Transfer(const blt::string& name, int* value, XMLnode& xmlNode, Backend& backend)
+		static void Transfer(const std::string& name, int* value, XMLnode& xmlNode, Backend& backend)
 		{
 			id_t id = backend.AddSerializedValue(value);
 			XMLnode& child = xmlNode.AddChild(name, { { "type", "int" }, { "id", std::to_string(id) } });
@@ -46,7 +46,7 @@ namespace Bolt
 	struct BLT_API XMLWriteTraits<unsigned int, Backend>
 	{
 	public:
-		static void Transfer(const blt::string& name, unsigned int* value, XMLnode& xmlNode, Backend& backend)
+		static void Transfer(const std::string& name, unsigned int* value, XMLnode& xmlNode, Backend& backend)
 		{
 			id_t id = backend.AddSerializedValue(value);
 			XMLnode& child = xmlNode.AddChild(name, { { "type", "uint32_t" }, { "id", std::to_string(id) } });
@@ -58,7 +58,7 @@ namespace Bolt
 	struct BLT_API XMLWriteTraits<char, Backend>
 	{
 	public:
-		static void Transfer(const blt::string& name, char* value, XMLnode& xmlNode, Backend& backend)
+		static void Transfer(const std::string& name, char* value, XMLnode& xmlNode, Backend& backend)
 		{
 			id_t id = backend.AddSerializedValue(value);
 			XMLnode& child = xmlNode.AddChild(name, { { "type", "char" }, { "id", std::to_string(id) } });
@@ -70,7 +70,7 @@ namespace Bolt
 	struct BLT_API XMLWriteTraits<byte, Backend>
 	{
 	public:
-		static void Transfer(const blt::string& name, byte* value, XMLnode& xmlNode, Backend& backend)
+		static void Transfer(const std::string& name, byte* value, XMLnode& xmlNode, Backend& backend)
 		{
 			id_t id = backend.AddSerializedValue(value);
 			XMLnode& child = xmlNode.AddChild(name, { { "type", "byte" }, { "id", std::to_string(id) } });
@@ -82,7 +82,7 @@ namespace Bolt
 	struct BLT_API XMLWriteTraits<int64_t, Backend>
 	{
 	public:
-		static void Transfer(const blt::string& name, int64_t* value, XMLnode& xmlNode, Backend& backend)
+		static void Transfer(const std::string& name, int64_t* value, XMLnode& xmlNode, Backend& backend)
 		{
 			id_t id = backend.AddSerializedValue(value);
 			XMLnode& child = xmlNode.AddChild(name, { { "type", "long" }, { "id", std::to_string(id) } });
@@ -94,7 +94,7 @@ namespace Bolt
 	struct BLT_API XMLWriteTraits<float, Backend>
 	{
 	public:
-		static void Transfer(const blt::string& name, float* value, XMLnode& xmlNode, Backend& backend)
+		static void Transfer(const std::string& name, float* value, XMLnode& xmlNode, Backend& backend)
 		{
 			id_t id = backend.AddSerializedValue(value);
 			XMLnode& child = xmlNode.AddChild(name, { { "type", "float" }, { "id", std::to_string(id) } });
@@ -106,7 +106,7 @@ namespace Bolt
 	struct BLT_API XMLWriteTraits<double, Backend>
 	{
 	public:
-		static void Transfer(const blt::string& name, double* value, XMLnode& xmlNode, Backend& backend)
+		static void Transfer(const std::string& name, double* value, XMLnode& xmlNode, Backend& backend)
 		{
 			id_t id = backend.AddSerializedValue(value);
 			XMLnode& child = xmlNode.AddChild(name, { { "type", "double" }, { "id", std::to_string(id) } });
@@ -118,7 +118,7 @@ namespace Bolt
 	struct BLT_API XMLWriteTraits<std::vector<T>, Backend>
 	{
 	public:
-		static void Transfer(const blt::string& name, std::vector<T>* value, XMLnode& xmlNode, Backend& backend)
+		static void Transfer(const std::string& name, std::vector<T>* value, XMLnode& xmlNode, Backend& backend)
 		{
 			id_t id = backend.AddSerializedValue(value);
 			XMLnode& child = xmlNode.AddChild(name, { { "type", "vector" }, { "size", std::to_string(value->size()) }, { "id", std::to_string(id) } });
@@ -136,7 +136,7 @@ namespace Bolt
 	struct BLT_API XMLWriteTraits<std::unordered_map<TKey, TVal>, Backend>
 	{
 	public:
-		static void Transfer(const blt::string& name, std::unordered_map<TKey, TVal>* value, XMLnode& xmlNode, Backend& backend)
+		static void Transfer(const std::string& name, std::unordered_map<TKey, TVal>* value, XMLnode& xmlNode, Backend& backend)
 		{
 			id_t id = backend.AddSerializedValue(value);
 			XMLnode& child = xmlNode.AddChild(name, { { "type", "unordered_map" }, { "size", std::to_string(value->size()) }, { "id", std::to_string(id) } });
@@ -149,10 +149,10 @@ namespace Bolt
 	};
 
 	template<typename TVal, typename Backend>
-	struct BLT_API XMLWriteTraits<std::unordered_map<blt::string, TVal>, Backend>
+	struct BLT_API XMLWriteTraits<std::unordered_map<std::string, TVal>, Backend>
 	{
 	public:
-		static void Transfer(const blt::string& name, std::unordered_map<blt::string, TVal>* value, XMLnode& xmlNode, Backend& backend)
+		static void Transfer(const std::string& name, std::unordered_map<std::string, TVal>* value, XMLnode& xmlNode, Backend& backend)
 		{
 			id_t id = backend.AddSerializedValue(value);
 			XMLnode& child = xmlNode.AddChild(name, { { "type", "unordered_map" }, { "size", std::to_string(value->size()) }, { "id", std::to_string(id) } });
@@ -168,7 +168,7 @@ namespace Bolt
 	struct BLT_API XMLWriteTraits<T*, Backend>
 	{
 	public:
-		static void Transfer(const blt::string& name, T** value, XMLnode& xmlNode, Backend& backend)
+		static void Transfer(const std::string& name, T** value, XMLnode& xmlNode, Backend& backend)
 		{
 			if (backend.HasSerializedValue((void*)*value))
 			{
@@ -179,7 +179,7 @@ namespace Bolt
 			}
 			else
 			{
-				blt::string id = "null";
+				std::string id = "null";
 				XMLnode* currentNode = &xmlNode;
 				if (*value != nullptr)
 				{
@@ -198,7 +198,7 @@ namespace Bolt
 	struct BLT_API XMLWriteTraits<std::unique_ptr<T>, Backend>
 	{
 	public:
-		static void Transfer(const blt::string& name, std::unique_ptr<T>* value, XMLnode& xmlNode, Backend& backend)
+		static void Transfer(const std::string& name, std::unique_ptr<T>* value, XMLnode& xmlNode, Backend& backend)
 		{
 			XMLWriteTraits<T, Backend>::Transfer(name, value->get(), xmlNode, backend);
 		}

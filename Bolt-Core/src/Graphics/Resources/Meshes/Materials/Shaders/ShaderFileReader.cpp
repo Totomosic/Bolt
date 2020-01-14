@@ -44,17 +44,17 @@ namespace Bolt
 		return !m_FragmentSource.empty();
 	}
 
-	const blt::string& ShaderFileReader::GetVertexSource() const
+	const std::string& ShaderFileReader::GetVertexSource() const
 	{
 		return m_VertexSource;
 	}
 
-	const blt::string& ShaderFileReader::GetGeometrySource() const
+	const std::string& ShaderFileReader::GetGeometrySource() const
 	{
 		return m_GeometrySource;
 	}
 
-	const blt::string& ShaderFileReader::GetFragmentSource() const
+	const std::string& ShaderFileReader::GetFragmentSource() const
 	{
 		return m_FragmentSource;
 	}
@@ -79,9 +79,9 @@ namespace Bolt
 
 	void ShaderFileReader::SetShaderFile(const FilePath& file)
 	{
-		blt::string vertexSource;
-		blt::string geometrySource;
-		blt::string fragmentSource;
+		std::string vertexSource;
+		std::string geometrySource;
+		std::string fragmentSource;
 		File f = Filesystem::Open(file, OpenMode::Read);
 		ParseShaderFile(f.ReadText(), vertexSource, geometrySource, fragmentSource);
 		SetVertexSource(vertexSource);
@@ -89,19 +89,19 @@ namespace Bolt
 		SetFragmentSource(fragmentSource);
 	}
 
-	void ShaderFileReader::SetVertexSource(const blt::string& source)
+	void ShaderFileReader::SetVertexSource(const std::string& source)
 	{
 		m_VertexSource = source;
 		m_IsDirty = true;
 	}
 
-	void ShaderFileReader::SetGeometrySource(const blt::string& source)
+	void ShaderFileReader::SetGeometrySource(const std::string& source)
 	{
 		m_GeometrySource = source;
 		m_IsDirty = true;
 	}
 
-	void ShaderFileReader::SetFragmentSource(const blt::string& source)
+	void ShaderFileReader::SetFragmentSource(const std::string& source)
 	{
 		m_FragmentSource = source;
 		m_IsDirty = true;
@@ -125,9 +125,9 @@ namespace Bolt
 	{
 		BLT_ASSERT(HasVertexSource() && HasFragmentSource(), "Invalid shader, must have a vertex and fragment shader");
 		m_IsDirty = false;
-		blt::string vSource = m_VertexSource;
-		blt::string gSource = m_GeometrySource;
-		blt::string fSource = m_FragmentSource;
+		std::string vSource = m_VertexSource;
+		std::string gSource = m_GeometrySource;
+		std::string fSource = m_FragmentSource;
 		std::vector<UniformInfo> vertexUniforms = ProcessShaderSource(vSource);
 		std::vector<UniformInfo> geometryUniforms = ProcessShaderSource(gSource);
 		std::vector<UniformInfo> fragmentUniforms = ProcessShaderSource(fSource);
@@ -154,24 +154,24 @@ namespace Bolt
 		}
 	}
 
-	void ShaderFileReader::ParseShaderFile(const blt::string& source, blt::string& outVertexSource, blt::string& outGeometrySource, blt::string& outFragmentSource)
+	void ShaderFileReader::ParseShaderFile(const std::string& source, std::string& outVertexSource, std::string& outGeometrySource, std::string& outFragmentSource)
 	{
-		blt::string shaderSources[3];
+		std::string shaderSources[3];
 
 		const char* typeToken = "#type";
-		uint32_t typeTokenLength = (uint32_t)strlen(typeToken);
-		uint32_t pos = source.find(typeToken, 0);
-		while (pos != blt::string::npos)
+		size_t typeTokenLength = strlen(typeToken);
+		size_t pos = source.find(typeToken, 0);
+		while (pos != std::string::npos)
 		{
-			uint32_t eol = source.find_first_of("\r\n", pos);
-			BLT_ASSERT(eol != blt::string::npos, "Syntax error");
-			uint32_t begin = pos + typeTokenLength + 1;
-			blt::string type = source.substr(begin, eol - begin);
+			size_t eol = source.find_first_of("\r\n", pos);
+			BLT_ASSERT(eol != std::string::npos, "Syntax error");
+			size_t begin = pos + typeTokenLength + 1;
+			std::string type = source.substr(begin, eol - begin);
 			BLT_ASSERT(ShaderTypeFromString(type) != -1, "Invalid shader type specified");
 
-			uint32_t nextLinePos = source.find_first_not_of("\r\n", eol);
+			size_t nextLinePos = source.find_first_not_of("\r\n", eol);
 			pos = source.find(typeToken, nextLinePos);
-			shaderSources[ShaderTypeFromString(type)] = source.substr(nextLinePos, pos - (nextLinePos == blt::string::npos ? source.size() - 1 : nextLinePos));
+			shaderSources[ShaderTypeFromString(type)] = source.substr(nextLinePos, pos - (nextLinePos == std::string::npos ? source.size() - 1 : nextLinePos));
 		}
 
 		outVertexSource = shaderSources[0];
@@ -179,7 +179,7 @@ namespace Bolt
 		outFragmentSource = shaderSources[2];
 	}
 
-	int ShaderFileReader::ShaderTypeFromString(const blt::string& str)
+	int ShaderFileReader::ShaderTypeFromString(const std::string& str)
 	{
 		if (str == "vertex")
 		{
@@ -196,50 +196,50 @@ namespace Bolt
 		return -1;
 	}
 
-	std::vector<Bolt::ShaderFileReader::UniformInfo> ShaderFileReader::ProcessShaderSource(blt::string& source)
+	std::vector<Bolt::ShaderFileReader::UniformInfo> ShaderFileReader::ProcessShaderSource(std::string& source)
 	{
-		std::unordered_map<blt::string, UniformInfo> uniformMap;
-		uint32_t uniformIndex = source.find("uniform");
-		while (uniformIndex != blt::string::npos)
+		std::unordered_map<std::string, UniformInfo> uniformMap;
+		size_t uniformIndex = source.find("uniform");
+		while (uniformIndex != std::string::npos)
 		{
-			uint32_t eol = source.find(';', uniformIndex);
-			BLT_ASSERT(eol != blt::string::npos, "Syntax error");
-			blt::string line = source.substr(uniformIndex, eol - uniformIndex);
-			std::vector<blt::string> parts = line.split(' ');
+			size_t eol = source.find(';', uniformIndex);
+			BLT_ASSERT(eol != std::string::npos, "Syntax error");
+			std::string line = source.substr(uniformIndex, eol - uniformIndex);
+			std::vector<std::string_view> parts = blt::split_view(line, ' ');
 			BLT_ASSERT(parts.size() >= 3, "Syntax error");
-			blt::string& type = parts[1];
-			blt::string& name = parts[2];
+			std::string_view& type = parts[1];
+			std::string_view& name = parts[2];
 			bool isArray = false;
 			int length = 0;
-			if (name.contains('['))
+			if (name.find('[') != std::string::npos)
 			{
-				uint32_t start = name.find('[');
-				uint32_t end = name.find(']', start);
-				BLT_ASSERT(end != blt::string::npos, "Invalid syntax");
-				blt::string lengthString = name.substr(start + 1, end - start - 1);
+				size_t start = name.find('[');
+				size_t end = name.find(']', start);
+				BLT_ASSERT(end != std::string::npos, "Invalid syntax");
+				std::string_view lengthString = name.substr(start + 1, end - start - 1);
 				name = name.substr(0, start);				
-				length = ReadGlslConstInt(lengthString, source);
+				length = ReadGlslConstInt(std::string(lengthString), source);
 				isArray = true;
 				BLT_CORE_INFO("ARRAY LENGTH {}", length);
 			}
-			UniformInfo& uniform = uniformMap[name];
+			UniformInfo& uniform = uniformMap[std::string(name)];
 			uniform.Dimension = (isArray) ? ValueTypeDim::Array : ValueTypeDim::Single;
 			uniform.VariableName = name;
-			uniform.Type = GLSLStringToValueType(type);
+			uniform.Type = GLSLStringToValueType(std::string(type));
 			uniform.Length = length;
 			uniformIndex = source.find("uniform", eol);
 		}
 
-		uint32_t linkIndex = source.find("#link");
-		while (linkIndex != blt::string::npos)
+		size_t linkIndex = source.find("#link");
+		while (linkIndex != std::string::npos)
 		{
-			uint32_t start = source.find('[', linkIndex);
-			uint32_t eol = source.find(']', start);
-			BLT_ASSERT(start != blt::string::npos && eol != blt::string::npos, "Syntax Error");
-			blt::string line = source.substr(start + 1, eol - start - 1);
-			blt::string type = ReadValue(line, "Type");
-			blt::string varname = ReadStringValue(line, "Name");
-			blt::string linkName = ReadStringValue(line, "Link");
+			size_t start = source.find('[', linkIndex);
+			size_t eol = source.find(']', start);
+			BLT_ASSERT(start != std::string::npos && eol != std::string::npos, "Syntax Error");
+			std::string line = source.substr(start + 1, eol - start - 1);
+			std::string type = ReadValue(line, "Type");
+			std::string varname = ReadStringValue(line, "Name");
+			std::string linkName = ReadStringValue(line, "Link");
 
 			BLT_ASSERT(uniformMap.find(varname) != uniformMap.end(), "Uniform with name {} does not exist", varname);
 			UniformInfo& info = uniformMap[varname];
@@ -265,37 +265,37 @@ namespace Bolt
 		return uniforms;
 	}
 
-	blt::string ShaderFileReader::ReadValue(const blt::string& line, const blt::string& key)
+	std::string ShaderFileReader::ReadValue(const std::string& line, const std::string& key)
 	{
-		uint32_t start = line.find(key);
-		BLT_ASSERT(start != blt::string::npos, "No value with key {} exists", key);
-		uint32_t equals = line.find('=', start);
-		BLT_ASSERT(equals != blt::string::npos, "Invalid syntax");
-		uint32_t end = line.find(',', equals);
-		if (end == blt::string::npos)
+		size_t start = line.find(key);
+		BLT_ASSERT(start != std::string::npos, "No value with key {} exists", key);
+		size_t equals = line.find('=', start);
+		BLT_ASSERT(equals != std::string::npos, "Invalid syntax");
+		size_t end = line.find(',', equals);
+		if (end == std::string::npos)
 		{
 			end = line.find(']', equals);
 		}
-		BLT_ASSERT(end != blt::string::npos, "Invalid syntax");
+		BLT_ASSERT(end != std::string::npos, "Invalid syntax");
 		start = line.find_first_not_of(" \t=", equals);
-		BLT_ASSERT(start != blt::string::npos, "Invalid syntax");
+		BLT_ASSERT(start != std::string::npos, "Invalid syntax");
 		return line.substr(start, end - start);
 	}
 
-	blt::string ShaderFileReader::ReadStringValue(const blt::string& line, const blt::string& key)
+	std::string ShaderFileReader::ReadStringValue(const std::string& line, const std::string& key)
 	{
-		uint32_t start = line.find(key);
-		BLT_ASSERT(start != blt::string::npos, "No value with key {} exists", key);
-		uint32_t equals = line.find('=', start);
-		BLT_ASSERT(equals != blt::string::npos, "Invalid syntax");
+		size_t start = line.find(key);
+		BLT_ASSERT(start != std::string::npos, "No value with key {} exists", key);
+		size_t equals = line.find('=', start);
+		BLT_ASSERT(equals != std::string::npos, "Invalid syntax");
 		start = line.find('\"', equals);
-		BLT_ASSERT(start != blt::string::npos, "Invalid syntax");
-		uint32_t end = line.find('\"', start + 1);
-		BLT_ASSERT(end != blt::string::npos, "Invalid syntax");
+		BLT_ASSERT(start != std::string::npos, "Invalid syntax");
+		size_t end = line.find('\"', start + 1);
+		BLT_ASSERT(end != std::string::npos, "Invalid syntax");
 		return line.substr(start + 1, end - start - 1);
 	}
 
-	int ShaderFileReader::ReadGlslConstInt(const blt::string& value, const blt::string& source)
+	int ShaderFileReader::ReadGlslConstInt(const std::string& value, const std::string& source)
 	{
 		int i = std::atoi(value.c_str());
 		if (i > 0)
@@ -303,14 +303,14 @@ namespace Bolt
 			return i;
 		}
 		// value represents a const-int variable
-		uint32_t location = source.find("const int " + value);
-		BLT_ASSERT(location != blt::string::npos, "Invalid syntax, could not find const int variable {}", value);
-		uint32_t equals = source.find('=', location);
-		BLT_ASSERT(equals != blt::string::npos, "Invalid syntax");
-		uint32_t end = source.find(';', equals);
-		BLT_ASSERT(end != blt::string::npos, "Invalid syntax");
-		blt::string newValue = source.substr(equals + 1, end - equals - 1);
-		newValue.remove_all(" \r\t\n");
+		size_t location = source.find("const int " + value);
+		BLT_ASSERT(location != std::string::npos, "Invalid syntax, could not find const int variable {}", value);
+		size_t equals = source.find('=', location);
+		BLT_ASSERT(equals != std::string::npos, "Invalid syntax");
+		size_t end = source.find(';', equals);
+		BLT_ASSERT(end != std::string::npos, "Invalid syntax");
+		std::string newValue = source.substr(equals + 1, end - equals - 1);
+		blt::remove_all(newValue, " \r\t\n");
 		return ReadGlslConstInt(newValue, source);
 	}
 

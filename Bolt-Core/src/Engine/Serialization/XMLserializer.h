@@ -8,7 +8,7 @@ namespace Bolt
 	class BLT_API XMLserializer
 	{
 	public:
-		static const blt::string POINTER_VALUES_CHILD;
+		static const std::string POINTER_VALUES_CHILD;
 
 	private:
 		XMLnode* m_OutputNode;
@@ -35,7 +35,7 @@ namespace Bolt
 		}
 
 		template<typename T>
-		void Write(const blt::string& name, T& object)
+		void Write(const std::string& name, T& object)
 		{
 			BLT_ASSERT(IsWriting(), "Must have a valid output file set to write");
 			id_t id = AddSerializedValue((void*)&object);
@@ -49,7 +49,7 @@ namespace Bolt
 
 		// Should only called from an Object's Transfer<>() function
 		template<typename T>
-		void Transfer(const blt::string& name, T* value)
+		void Transfer(const std::string& name, T* value)
 		{
 			if (IsWriting())
 			{
@@ -62,7 +62,7 @@ namespace Bolt
 		}
 
 		template<typename T>
-		void TransferArray(const blt::string& name, T* value, uint32_t length)
+		void TransferArray(const std::string& name, T* value, uint32_t length)
 		{
 			if (IsWriting())
 			{

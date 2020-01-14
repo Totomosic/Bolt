@@ -297,7 +297,7 @@ namespace Bolt
 			return Vector2<T, Base>(-x, -y);	
 		}	
 						
-		blt::string ToString() const
+		std::string ToString() const
 		{	
 			return "Vector2(" + std::to_string(x) + ", " + std::to_string(y) + ")";	
 		}	

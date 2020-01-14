@@ -16,7 +16,7 @@ namespace Bolt
 	
 	}
 
-	void XMLfile::BeginXML(const blt::string& name, const std::unordered_map<blt::string, blt::string>& attributes) const
+	void XMLfile::BeginXML(const std::string& name, const std::unordered_map<std::string, std::string>& attributes) const
 	{
 		if (!m_AddedData)
 		{
@@ -39,7 +39,7 @@ namespace Bolt
 
 	void XMLfile::EndXML() const
 	{
-		blt::string currentTag = m_CurrentTags.back();
+		std::string currentTag = m_CurrentTags.back();
 		m_CurrentTags.pop_back();
 		if (m_WasLastEndTag)
 		{
@@ -53,7 +53,7 @@ namespace Bolt
 		m_WasLastEndTag = true;
 	}
 
-	void XMLfile::WriteXMLData(const blt::string& text) const
+	void XMLfile::WriteXMLData(const std::string& text) const
 	{
 		m_CurrentString += text;
 		m_AddedData = true;
@@ -62,7 +62,7 @@ namespace Bolt
 
 	void XMLfile::WriteXMLData(const void* data, uint32_t length) const
 	{
-		blt::string text((const char*)data, length);
+		std::string text((const char*)data, length);
 		WriteXMLData(text);
 	}
 
@@ -82,14 +82,14 @@ namespace Bolt
 	void XMLfile::WriteXML(const XMLnode& node) const
 	{
 		int tabCount = 0;
-		blt::string data;
+		std::string data;
 		WriteXMLnode(node, tabCount, data);
 		WriteText(data);
 	}
 	
 	XMLnode XMLfile::LoadXML() const
 	{
-		blt::string data = ReadText();
+		std::string data = ReadText();
 		XMLnode root;
 
 		ProcessTags(data, &root);
@@ -100,11 +100,11 @@ namespace Bolt
 		return root;
 	}
 
-	std::pair<blt::string, std::unordered_map<blt::string, blt::string>> XMLfile::GetNameAndAttributesFromTag(const blt::string& tag) const
+	std::pair<std::string, std::unordered_map<std::string, std::string>> XMLfile::GetNameAndAttributesFromTag(const std::string& tag) const
 	{
-		std::pair<blt::string, std::unordered_map<blt::string, blt::string>> result;
+		std::pair<std::string, std::unordered_map<std::string, std::string>> result;
 		id_t firstSpace = tag.find_first_of(' ');
-		if (firstSpace == blt::string::npos)
+		if (firstSpace == std::string::npos)
 		{
 			// The tag contains no attributes and only contains the name
 			result.first = tag;
@@ -112,18 +112,18 @@ namespace Bolt
 		else
 		{
 			result.first = tag.substr(0, firstSpace);
-			while (firstSpace != blt::string::npos)
+			while (firstSpace != std::string::npos)
 			{
 				id_t begin = firstSpace + 1;
 				id_t equals = tag.find_first_of('=', begin);
 				id_t firstQuote = tag.find_first_of('"', equals);
 				id_t secondQuote = tag.find_first_of('"', firstQuote + 1);
-				if (equals == blt::string::npos || firstQuote == blt::string::npos || secondQuote == blt::string::npos)
+				if (equals == std::string::npos || firstQuote == std::string::npos || secondQuote == std::string::npos)
 				{
 					return { "", {} };
 				}
-				blt::string key = tag.substr(begin, equals - begin);
-				blt::string value = tag.substr(firstQuote + 1, secondQuote - firstQuote - 1);
+				std::string key = tag.substr(begin, equals - begin);
+				std::string value = tag.substr(firstQuote + 1, secondQuote - firstQuote - 1);
 				result.second[key] = value;
 				firstSpace = tag.find_first_of(' ', secondQuote);
 			}
@@ -131,7 +131,7 @@ namespace Bolt
 		return result;
 	}
 
-	void XMLfile::WriteXMLnode(const XMLnode& node, int tabCount, blt::string& currentString) const
+	void XMLfile::WriteXMLnode(const XMLnode& node, int tabCount, std::string& currentString) const
 	{
 		AddTabs(tabCount, currentString);
 		currentString += '<' + node.Name;
@@ -153,7 +153,7 @@ namespace Bolt
 		currentString += "</" + node.Name + '>';
 	}
 
-	void XMLfile::AddTabs(int tabCount, blt::string& currentString) const
+	void XMLfile::AddTabs(int tabCount, std::string& currentString) const
 	{
 		for (int i = 0; i < tabCount; i++)
 		{
@@ -161,26 +161,26 @@ namespace Bolt
 		}
 	}
 
-	void XMLfile::ProcessTags(const blt::string& data, XMLnode* parent) const
+	void XMLfile::ProcessTags(const std::string& data, XMLnode* parent) const
 	{
 		id_t begin = data.find_first_of('<', 0);
 		bool hadChild = false;
-		while (begin != blt::string::npos)
+		while (begin != std::string::npos)
 		{
 			id_t beginTagEnd = data.find_first_of('>', begin);
-			if (beginTagEnd == blt::string::npos)
+			if (beginTagEnd == std::string::npos)
 			{
 				break;
 			}
-			blt::string beginTagData = data.substr(begin + 1, beginTagEnd - begin - 1);
+			std::string beginTagData = data.substr(begin + 1, beginTagEnd - begin - 1);
 			auto nameAttributes = GetNameAndAttributesFromTag(beginTagData);
-			blt::string endTagName = "</" + nameAttributes.first + '>';
+			std::string endTagName = "</" + nameAttributes.first + '>';
 			id_t end = data.find(endTagName, beginTagEnd);
-			if (end != blt::string::npos)
+			if (end != std::string::npos)
 			{
 				hadChild = true;
 				XMLnode& node = parent->AddChild(nameAttributes.first, nameAttributes.second);
-				blt::string nodeData = data.substr(beginTagEnd + 1, end - beginTagEnd - 1);
+				std::string nodeData = data.substr(beginTagEnd + 1, end - beginTagEnd - 1);
 				ProcessTags(nodeData, &node);
 				begin = data.find_first_of('<', end + 1);
 			}

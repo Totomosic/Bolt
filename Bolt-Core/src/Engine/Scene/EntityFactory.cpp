@@ -101,14 +101,14 @@ namespace Bolt
 		return Ellipse(radius * 2, radius * 2, std::move(material), std::move(transform));
 	}
 
-	EntityHandle EntityFactory::Text(const blt::string& text, ResourcePtr<Font> font, const Color& color, Transform transform, AlignH horizontal, AlignV vertical) const
+	EntityHandle EntityFactory::Text(const std::string& text, ResourcePtr<Font> font, const Color& color, Transform transform, AlignH horizontal, AlignV vertical) const
 	{
 		ModelData data = TextFactory(text, font, Color::White, horizontal, vertical).GenerateVertices();
 		ResourcePtr<const Model> model = ResourcePtr<const Model>(new Model(std::move(data), false), true);
 		return CreateMesh(std::move(model), ResourceManager::Get().Materials().Font(font, color), Matrix4f::Identity(), std::move(transform));
 	}
 
-	EntityHandle EntityFactory::Text(const blt::string& text, const Color& color, Transform transform, AlignH horizontal, AlignV vertical) const
+	EntityHandle EntityFactory::Text(const std::string& text, const Color& color, Transform transform, AlignH horizontal, AlignV vertical) const
 	{
 		return Text(text, ResourceManager::Get().Fonts().Default(), color, std::move(transform), horizontal, vertical);
 	}

@@ -98,7 +98,7 @@ namespace Bolt
 	private:
 		Ref<ShaderInstance> m_Shader;
 		std::vector<std::unique_ptr<UniformLinkContainer>> m_Links;
-		std::unordered_map<blt::string, LinkId> m_UserUniformLinks;
+		std::unordered_map<std::string, LinkId> m_UserUniformLinks;
 
 	public:
 		ShaderLinkContext(const Ref<ShaderInstance>& shaderInstance);
@@ -108,35 +108,35 @@ namespace Bolt
 		ShaderLinkContext& operator=(ShaderLinkContext&& other) = default;
 		~ShaderLinkContext() = default;
 
-		std::vector<blt::string> GetLinkNames() const;
+		std::vector<std::string> GetLinkNames() const;
 
 		const ShaderInstance& GetShaderInstance() const;
 		// Return a unique identifier for the link represented by linkName (use index when linking array)
-		id_t GetLinkId(const blt::string& linkName, int index = -1) const;
+		id_t GetLinkId(const std::string& linkName, int index = -1) const;
 		// Returns the container with the value for the link with linkName (use index when referring to array)
-		const UniformLinkContainer& GetLink(const blt::string& linkName, int index = -1) const;
+		const UniformLinkContainer& GetLink(const std::string& linkName, int index = -1) const;
 		// Returns the container with the value for the link with linkName (use index when referring to array)
-		UniformLinkContainer& GetLink(const blt::string& linkName, int index = -1);
+		UniformLinkContainer& GetLink(const std::string& linkName, int index = -1);
 		// Returns the container with the value for the link with id linkId
 		const UniformLinkContainer& GetLink(id_t linkId) const;
 		// Returns the container with the value for the link with id linkId
 		UniformLinkContainer& GetLink(id_t linkId);
 		// Returns whether the link with linkName has a value linked to it (use index when referring to array)
-		bool IsLinked(const blt::string& linkName, int index = -1) const;
+		bool IsLinked(const std::string& linkName, int index = -1) const;
 		// Returns whether a link exists called linkName (use index when referring to array)
-		bool HasLink(const blt::string& linkName, int index = -1) const;
+		bool HasLink(const std::string& linkName, int index = -1) const;
 
 		// Upload link values to the correct uniforms in shader
 		void ApplyLinks() const;
 
 		template<typename T>
-		const UniformLink<T>& GetLink(const blt::string& linkName, int index = -1) const
+		const UniformLink<T>& GetLink(const std::string& linkName, int index = -1) const
 		{
 			return GetLink<T>(GetLinkId(linkName, index));
 		}
 
 		template<typename T>
-		UniformLink<T>& GetLink(const blt::string& linkName, int index = -1)
+		UniformLink<T>& GetLink(const std::string& linkName, int index = -1)
 		{
 			return GetLink<T>(GetLinkId(linkName, index));
 		}
@@ -153,7 +153,7 @@ namespace Bolt
 			return (UniformLink<T>&)GetLink(linkId);
 		}
 
-		inline UniformLink<int>& Link(const blt::string& linkName, const int& value, int index = -1)
+		inline UniformLink<int>& Link(const std::string& linkName, const int& value, int index = -1)
 		{
 			if (index >= 0)
 			{
@@ -164,7 +164,7 @@ namespace Bolt
 			return (UniformLink<int>&)AddLink(linkName, std::make_unique<UniformLink<int>>(m_Shader->GetShader().Id(), uniform.Location, value));
 		}
 
-		inline UniformLink<float>& Link(const blt::string& linkName, const float& value, int index = -1)
+		inline UniformLink<float>& Link(const std::string& linkName, const float& value, int index = -1)
 		{
 			if (index >= 0)
 			{
@@ -175,7 +175,7 @@ namespace Bolt
 			return (UniformLink<float>&)AddLink(linkName, std::make_unique<UniformLink<float>>(m_Shader->GetShader().Id(), uniform.Location, value));
 		}
 
-		inline UniformLink<Vector2f>& Link(const blt::string& linkName, const Vector2f& value, int index = -1)
+		inline UniformLink<Vector2f>& Link(const std::string& linkName, const Vector2f& value, int index = -1)
 		{
 			if (index >= 0)
 			{
@@ -186,7 +186,7 @@ namespace Bolt
 			return (UniformLink<Vector2f>&)AddLink(linkName, std::make_unique<UniformLink<Vector2f>>(m_Shader->GetShader().Id(), uniform.Location, value));
 		}
 
-		inline UniformLink<Vector3f>& Link(const blt::string& linkName, const Vector3f& value, int index = -1)
+		inline UniformLink<Vector3f>& Link(const std::string& linkName, const Vector3f& value, int index = -1)
 		{
 			if (index >= 0)
 			{
@@ -197,7 +197,7 @@ namespace Bolt
 			return (UniformLink<Vector3f>&)AddLink(linkName, std::make_unique<UniformLink<Vector3f>>(m_Shader->GetShader().Id(), uniform.Location, value));
 		}
 
-		inline UniformLink<Vector4f>& Link(const blt::string& linkName, const Vector4f& value, int index = -1)
+		inline UniformLink<Vector4f>& Link(const std::string& linkName, const Vector4f& value, int index = -1)
 		{
 			if (index >= 0)
 			{
@@ -208,7 +208,7 @@ namespace Bolt
 			return (UniformLink<Vector4f>&)AddLink(linkName, std::make_unique<UniformLink<Vector4f>>(m_Shader->GetShader().Id(), uniform.Location, value));
 		}
 
-		inline UniformLink<Color>& Link(const blt::string& linkName, const Color& value, int index = -1)
+		inline UniformLink<Color>& Link(const std::string& linkName, const Color& value, int index = -1)
 		{
 			if (index >= 0)
 			{
@@ -219,7 +219,7 @@ namespace Bolt
 			return (UniformLink<Color>&)AddLink(linkName, std::make_unique<UniformLink<Color>>(m_Shader->GetShader().Id(), uniform.Location, value));
 		}
 
-		inline UniformLink<Matrix2f>& Link(const blt::string& linkName, const Matrix2f& value, int index = -1)
+		inline UniformLink<Matrix2f>& Link(const std::string& linkName, const Matrix2f& value, int index = -1)
 		{
 			if (index >= 0)
 			{
@@ -230,7 +230,7 @@ namespace Bolt
 			return (UniformLink<Matrix2f>&)AddLink(linkName, std::make_unique<UniformLink<Matrix2f>>(m_Shader->GetShader().Id(), uniform.Location, value));
 		}
 
-		inline UniformLink<Matrix3f>& Link(const blt::string& linkName, const Matrix3f& value, int index = -1)
+		inline UniformLink<Matrix3f>& Link(const std::string& linkName, const Matrix3f& value, int index = -1)
 		{
 			if (index >= 0)
 			{
@@ -241,7 +241,7 @@ namespace Bolt
 			return (UniformLink<Matrix3f>&)AddLink(linkName, std::make_unique<UniformLink<Matrix3f>>(m_Shader->GetShader().Id(), uniform.Location, value));
 		}
 
-		inline UniformLink<Matrix4f>& Link(const blt::string& linkName, const Matrix4f& value, int index = -1)
+		inline UniformLink<Matrix4f>& Link(const std::string& linkName, const Matrix4f& value, int index = -1)
 		{
 			if (index >= 0)
 			{
@@ -252,7 +252,7 @@ namespace Bolt
 			return (UniformLink<Matrix4f>&)AddLink(linkName, std::make_unique<UniformLink<Matrix4f>>(m_Shader->GetShader().Id(), uniform.Location, value));
 		}
 
-		inline UniformLink<ResourcePtr<Texture2D>>& Link(const blt::string& linkName, const ResourcePtr<Texture2D>& value, int index = -1)
+		inline UniformLink<ResourcePtr<Texture2D>>& Link(const std::string& linkName, const ResourcePtr<Texture2D>& value, int index = -1)
 		{
 			if (index >= 0)
 			{
@@ -263,7 +263,7 @@ namespace Bolt
 			return (UniformLink<ResourcePtr<Texture2D>>&)AddLink(linkName, std::make_unique<UniformLink<ResourcePtr<Texture2D>>>(m_Shader->GetShader().Id(), uniform.Location, value));
 		}
 
-		inline UniformLink<ResourcePtr<Font>>& Link(const blt::string& linkName, const ResourcePtr<Font>& value, int index = -1)
+		inline UniformLink<ResourcePtr<Font>>& Link(const std::string& linkName, const ResourcePtr<Font>& value, int index = -1)
 		{
 			if (index >= 0)
 			{
@@ -275,7 +275,7 @@ namespace Bolt
 		}
 
 		template<typename FuncT, typename R = typename std::result_of<FuncT()>::type>
-		UniformLink<std::function<R()>>& Link(const blt::string& linkName, const FuncT& value, int index = -1)
+		UniformLink<std::function<R()>>& Link(const std::string& linkName, const FuncT& value, int index = -1)
 		{
 			if (index >= 0)
 			{
@@ -287,7 +287,7 @@ namespace Bolt
 		}
 
 		template<typename T>
-		UniformLink<T>& LinkIndexed(const blt::string& linkName, const T& value, int index)
+		UniformLink<T>& LinkIndexed(const std::string& linkName, const T& value, int index)
 		{
 			BLT_ASSERT(HasLink(linkName, 0), "Uniform {} is not an array", linkName);
 			BLT_ASSERT(HasLink(linkName, index), "Uniform index {} out of range", index);
@@ -295,7 +295,7 @@ namespace Bolt
 		}
 
 		template<typename FuncT, typename R = typename std::result_of<FuncT()>::type>
-		UniformLink<std::function<R()>>& LinkIndexedFunction(const blt::string& linkName, const FuncT& value, int index)
+		UniformLink<std::function<R()>>& LinkIndexedFunction(const std::string& linkName, const FuncT& value, int index)
 		{
 			BLT_ASSERT(HasLink(linkName, 0), "Uniform {} is not an array", linkName);
 			BLT_ASSERT(HasLink(linkName, index), "Uniform index {} out of range", index);
@@ -303,8 +303,8 @@ namespace Bolt
 		}
 
 	private:
-		const UserUniformLocation& GetUniformLocation(const blt::string& linkName) const;
-		UniformLinkContainer& AddLink(const blt::string& linkName, std::unique_ptr<UniformLinkContainer>&& link);
+		const UserUniformLocation& GetUniformLocation(const std::string& linkName) const;
+		UniformLinkContainer& AddLink(const std::string& linkName, std::unique_ptr<UniformLinkContainer>&& link);
 		void CopyLinksTo(ShaderLinkContext& other) const;
 	};
 

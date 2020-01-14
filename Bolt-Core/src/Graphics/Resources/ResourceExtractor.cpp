@@ -15,7 +15,7 @@ namespace Bolt
 		return m_Resources;
 	}
 
-	id_t ResourceExtractor::GetResourceId(const blt::string& name) const
+	id_t ResourceExtractor::GetResourceId(const std::string& name) const
 	{
 		return m_Resources.GetResourceId(name);
 	}

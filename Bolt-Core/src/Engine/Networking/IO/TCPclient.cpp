@@ -20,12 +20,12 @@ namespace Bolt
 		return m_Socket;
 	}
 
-	const GenericEventBus<blt::string>& TCPclient::Bus() const
+	const GenericEventBus<std::string>& TCPclient::Bus() const
 	{
 		return m_Events;
 	}
 
-	GenericEventBus<blt::string>& TCPclient::Bus()
+	GenericEventBus<std::string>& TCPclient::Bus()
 	{
 		return m_Events;
 	}
@@ -60,7 +60,7 @@ namespace Bolt
 			}).detach();
 	}
 
-	void TCPclient::Emit(const blt::string& type, const void* data, uint32_t length)
+	void TCPclient::Emit(const std::string& type, const void* data, uint32_t length)
 	{
 		OutputMemoryStream stream;
 		stream.Write((uint32_t)type.length() + 1);
@@ -70,12 +70,12 @@ namespace Bolt
 		m_Socket.Send(stream.GetBufferPtr(), stream.GetRemainingDataSize());
 	}
 
-	void TCPclient::Emit(const blt::string& type, const blt::string& data)
+	void TCPclient::Emit(const std::string& type, const std::string& data)
 	{
 		Emit(type, data.data(), data.length() + 1);
 	}
 
-	void TCPclient::Emit(const blt::string& type)
+	void TCPclient::Emit(const std::string& type)
 	{
 		Emit(type, "");
 	}

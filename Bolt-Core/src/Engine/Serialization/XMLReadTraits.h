@@ -8,7 +8,7 @@ namespace Bolt
 	struct BLT_API XMLReadTraits
 	{
 	public:
-		static void Transfer(const blt::string& name, T* value, XMLnode& xmlNode, Backend& backend)
+		static void Transfer(const std::string& name, T* value, XMLnode& xmlNode, Backend& backend)
 		{
 			BLT_ASSERT(xmlNode.HasChild(name), "Unable to find node with name " + name);
 			XMLnode& child = xmlNode.GetChild(name);
@@ -22,10 +22,10 @@ namespace Bolt
 	struct BLT_API XMLReadTraits<int, Backend>
 	{
 	public:
-		static void Transfer(const blt::string& name, int* value, XMLnode& xmlNode, Backend& backend)
+		static void Transfer(const std::string& name, int* value, XMLnode& xmlNode, Backend& backend)
 		{
 			BLT_ASSERT(xmlNode.HasChild(name), "Unable to find node with name " + name);
-			blt::string data = xmlNode.GetChild(name).Data;
+			std::string data = xmlNode.GetChild(name).Data;
 			*value = std::stoi(data.c_str());
 		}
 	};
@@ -34,10 +34,10 @@ namespace Bolt
 	struct BLT_API XMLReadTraits<unsigned int, Backend>
 	{
 	public:
-		static void Transfer(const blt::string& name, unsigned int* value, XMLnode& xmlNode, Backend& backend)
+		static void Transfer(const std::string& name, unsigned int* value, XMLnode& xmlNode, Backend& backend)
 		{
 			BLT_ASSERT(xmlNode.HasChild(name), "Unable to find node with name " + name);
-			blt::string data = xmlNode.GetChild(name).Data;
+			std::string data = xmlNode.GetChild(name).Data;
 			*value = std::stoi(data.c_str());
 		}
 	};
@@ -46,10 +46,10 @@ namespace Bolt
 	struct BLT_API XMLReadTraits<char, Backend>
 	{
 	public:
-		static void Transfer(const blt::string& name, char* value, XMLnode& xmlNode, Backend& backend)
+		static void Transfer(const std::string& name, char* value, XMLnode& xmlNode, Backend& backend)
 		{
 			BLT_ASSERT(xmlNode.HasChild(name), "Unable to find node with name " + name);
-			blt::string data = xmlNode.GetChild(name).Data;
+			std::string data = xmlNode.GetChild(name).Data;
 			*value = std::stoi(data.c_str());
 		}
 	};
@@ -58,10 +58,10 @@ namespace Bolt
 	struct BLT_API XMLReadTraits<byte, Backend>
 	{
 	public:
-		static void Transfer(const blt::string& name, byte* value, XMLnode& xmlNode, Backend& backend)
+		static void Transfer(const std::string& name, byte* value, XMLnode& xmlNode, Backend& backend)
 		{
 			BLT_ASSERT(xmlNode.HasChild(name), "Unable to find node with name " + name);
-			blt::string data = xmlNode.GetChild(name).Data;
+			std::string data = xmlNode.GetChild(name).Data;
 			*value = std::stoi(data.c_str());
 		}
 	};
@@ -70,10 +70,10 @@ namespace Bolt
 	struct BLT_API XMLReadTraits<int64_t, Backend>
 	{
 	public:
-		static void Transfer(const blt::string& name, int64_t* value, XMLnode& xmlNode, Backend& backend)
+		static void Transfer(const std::string& name, int64_t* value, XMLnode& xmlNode, Backend& backend)
 		{
 			BLT_ASSERT(xmlNode.HasChild(name), "Unable to find node with name " + name);
-			blt::string data = xmlNode.GetChild(name).Data;
+			std::string data = xmlNode.GetChild(name).Data;
 			*value = std::stoi(data.c_str());
 		}
 	};
@@ -82,10 +82,10 @@ namespace Bolt
 	struct BLT_API XMLReadTraits<float, Backend>
 	{
 	public:
-		static void Transfer(const blt::string& name, float* value, XMLnode& xmlNode, Backend& backend)
+		static void Transfer(const std::string& name, float* value, XMLnode& xmlNode, Backend& backend)
 		{
 			BLT_ASSERT(xmlNode.HasChild(name), "Unable to find node with name " + name);
-			blt::string data = xmlNode.GetChild(name).Data;
+			std::string data = xmlNode.GetChild(name).Data;
 			*value = std::stof(data.c_str());
 		}
 	};
@@ -94,10 +94,10 @@ namespace Bolt
 	struct BLT_API XMLReadTraits<double, Backend>
 	{
 	public:
-		static void Transfer(const blt::string& name, double* value, XMLnode& xmlNode, Backend& backend)
+		static void Transfer(const std::string& name, double* value, XMLnode& xmlNode, Backend& backend)
 		{
 			BLT_ASSERT(xmlNode.HasChild(name), "Unable to find node with name " + name);
-			blt::string data = xmlNode.GetChild(name).Data;
+			std::string data = xmlNode.GetChild(name).Data;
 			*value = std::stod(data.c_str());
 		}
 	};
@@ -106,7 +106,7 @@ namespace Bolt
 	struct BLT_API XMLReadTraits<std::vector<T>, Backend>
 	{
 	public:
-		static void Transfer(const blt::string& name, std::vector<T>* value, XMLnode& xmlNode, Backend& backend)
+		static void Transfer(const std::string& name, std::vector<T>* value, XMLnode& xmlNode, Backend& backend)
 		{
 			BLT_ASSERT(xmlNode.HasChild(name), "Unable to find node with name " + name);
 			value->clear();
@@ -129,17 +129,17 @@ namespace Bolt
 	struct BLT_API XMLReadTraits<std::unordered_map<TKey, TVal>, Backend>
 	{
 	public:
-		static void Transfer(const blt::string& name, std::unordered_map<TKey, TVal>* value, XMLnode& xmlNode, Backend& backend)
+		static void Transfer(const std::string& name, std::unordered_map<TKey, TVal>* value, XMLnode& xmlNode, Backend& backend)
 		{
 			
 		}
 	};
 
 	template<typename TVal, typename Backend>
-	struct BLT_API XMLReadTraits<std::unordered_map<blt::string, TVal>, Backend>
+	struct BLT_API XMLReadTraits<std::unordered_map<std::string, TVal>, Backend>
 	{
 	public:
-		static void Transfer(const blt::string& name, std::unordered_map<blt::string, TVal>* value, XMLnode& xmlNode, Backend& backend)
+		static void Transfer(const std::string& name, std::unordered_map<std::string, TVal>* value, XMLnode& xmlNode, Backend& backend)
 		{
 			BLT_ASSERT(xmlNode.HasChild(name), "Unable to find node with name " + name);
 			value->clear();
@@ -160,7 +160,7 @@ namespace Bolt
 	struct BLT_API XMLReadTraits<T*, Backend>
 	{
 	public:
-		static void Transfer(const blt::string& name, T** value, XMLnode& xmlNode, Backend& backend)
+		static void Transfer(const std::string& name, T** value, XMLnode& xmlNode, Backend& backend)
 		{
 			
 		}

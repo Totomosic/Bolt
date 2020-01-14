@@ -9,7 +9,7 @@ namespace Bolt
 	
 	void RegisterBaseMethods(LuaEnvironment& env)
 	{
-		env.Register("Bolt_Log", [](blt::string msg)
+		env.Register("Bolt_Log", [](std::string msg)
 			{
 				BLT_LUA_TRACE(msg);
 			});
@@ -25,20 +25,20 @@ namespace Bolt
 			{
 				return Time::Get().RenderingTimeline().DeltaTime();
 			});
-		env.Register("Bolt_ReadTextFile", [](blt::string filename)
+		env.Register("Bolt_ReadTextFile", [](std::string filename)
 			{
 				File f = Filesystem::Open(filename, OpenMode::Read);
-				blt::string data = f.ReadText();
+				std::string data = f.ReadText();
 				Filesystem::Close(f);
 				return data;
 			});
-		env.Register("Bolt_WriteTextFile", [](blt::string filename, blt::string data)
+		env.Register("Bolt_WriteTextFile", [](std::string filename, std::string data)
 			{
 				File f = Filesystem::Open(filename, OpenMode::Write);
 				f.WriteText(data);
 				Filesystem::Close(f);
 			});
-		env.Register("Bolt_AppendTextFile", [](blt::string filename, blt::string data)
+		env.Register("Bolt_AppendTextFile", [](std::string filename, std::string data)
 			{
 				File f = Filesystem::Open(filename, OpenMode::Append);
 				f.WriteText(data);

@@ -36,12 +36,12 @@ namespace Bolt
 		return CreateRectangle(width, height, ResourceManager::Get().Materials().Texture(image), std::move(transform));
 	}
 
-	UIText& UIFactory::CreateText(const blt::string& text, const ResourcePtr<Font>& font, const Color& color, Transform transform, AlignH horizontal, AlignV vertical)
+	UIText& UIFactory::CreateText(const std::string& text, const ResourcePtr<Font>& font, const Color& color, Transform transform, AlignH horizontal, AlignV vertical)
 	{
 		return (UIText&)m_ParentElement.AddChild(std::make_unique<UIText>(m_Manager, &m_ParentElement, text, font, color, std::move(transform), horizontal, vertical));
 	}
 
-	UIText& UIFactory::CreateText(const blt::string& text, const Color& color, Transform transform, AlignH horizontal, AlignV vertical)
+	UIText& UIFactory::CreateText(const std::string& text, const Color& color, Transform transform, AlignH horizontal, AlignV vertical)
 	{
 		return CreateText(text, ResourceManager::Get().Fonts().Default(), color, std::move(transform), horizontal, vertical);
 	}

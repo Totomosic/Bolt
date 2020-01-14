@@ -25,11 +25,11 @@ namespace Bolt
 
 	private:
 		function_t m_Function;
-		blt::string m_Name;
+		std::string m_Name;
 		lua_State* m_State;
 
 	public:
-		LuaFun(lua_State* l, const blt::string& name, function_t func)
+		LuaFun(lua_State* l, const std::string& name, function_t func)
 			: m_Function(std::move(func)), m_Name(name), m_State(l)
 		{
 			lua_pushlightuserdata(m_State, (void*)static_cast<LuaFunBase*>(this));

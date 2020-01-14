@@ -14,8 +14,8 @@ namespace Bolt
 		id_t m_Id;
 
 	public:
-		Shader(const blt::string& vertexSource, const blt::string& fragmentSource);
-		Shader(const blt::string& vertexSource, const blt::string& geometrySource, const blt::string& fragmentSource);
+		Shader(const std::string& vertexSource, const std::string& fragmentSource);
+		Shader(const std::string& vertexSource, const std::string& geometrySource, const std::string& fragmentSource);
 		Shader(const Shader& other) = delete;
 		Shader& operator=(const Shader& other) = delete;
 		Shader(Shader&& other) noexcept;
@@ -52,15 +52,15 @@ namespace Bolt
 		static std::unique_ptr<Shader> FromFile(const FilePath& shaderFile);
 		static std::unique_ptr<Shader> FromFile(const FilePath& vertexFile, const FilePath& fragmentFile);
 		static std::unique_ptr<Shader> FromFile(const FilePath& vertexFile, const FilePath& geometryFile, const FilePath& fragmentFile);
-		static std::unique_ptr<Shader> FromSource(const blt::string& source);
-		static std::unique_ptr<Shader> FromSource(const blt::string& vertexSource, const blt::string& fragmentSource);
-		static std::unique_ptr<Shader> FromSource(const blt::string& vertexSource, const blt::string& geometrySource, const blt::string& fragmentSource);
+		static std::unique_ptr<Shader> FromSource(const std::string& source);
+		static std::unique_ptr<Shader> FromSource(const std::string& vertexSource, const std::string& fragmentSource);
+		static std::unique_ptr<Shader> FromSource(const std::string& vertexSource, const std::string& geometrySource, const std::string& fragmentSource);
 
 	private:
 		void Create();
 		void Finalise(id_t* shaders, int count);
-		id_t AddShader(const blt::string& shaderSource, GLenum shaderType);
-		int GetUniformLocation(const blt::string& location) const;
+		id_t AddShader(const std::string& shaderSource, GLenum shaderType);
+		int GetUniformLocation(const std::string& location) const;
 
 	};
 

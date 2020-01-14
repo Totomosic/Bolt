@@ -31,8 +31,8 @@ namespace Bolt
 		Font(const FilePath& fontFile, float fontSize, int textureWidth = 512, int textureHeight = 512);
 
 		float FontSize() const;
-		std::vector<FontCharacter> GetCharacters(const blt::string& str) const;
-		Vector2f SizeOfText(const blt::string& text) const;
+		std::vector<FontCharacter> GetCharacters(const std::string& str) const;
+		Vector2f SizeOfText(const std::string& text) const;
 
 	};
 

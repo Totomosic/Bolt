@@ -12,13 +12,13 @@ namespace Bolt
 		public:
 			bool IsRenderer = false;
 			RendererUniform Uniform;
-			blt::string LinkName;
+			std::string LinkName;
 		};
 
 		struct BLT_API UniformInfo
 		{
 		public:
-			blt::string VariableName;
+			std::string VariableName;
 			ValueType Type = ValueType::Void;
 			ValueTypeDim Dimension = ValueTypeDim::Single;
 			UniformMetadata Meta;
@@ -26,9 +26,9 @@ namespace Bolt
 		};
 
 	private:
-		blt::string m_VertexSource;
-		blt::string m_GeometrySource;
-		blt::string m_FragmentSource;
+		std::string m_VertexSource;
+		std::string m_GeometrySource;
+		std::string m_FragmentSource;
 
 		mutable bool m_IsDirty;
 		mutable Ref<ShaderInstance> m_ShaderInstance;
@@ -43,9 +43,9 @@ namespace Bolt
 		bool HasGeometrySource() const;
 		bool HasFragmentSource() const;
 
-		const blt::string& GetVertexSource() const;
-		const blt::string& GetGeometrySource() const;
-		const blt::string& GetFragmentSource() const;
+		const std::string& GetVertexSource() const;
+		const std::string& GetGeometrySource() const;
+		const std::string& GetFragmentSource() const;
 
 		void SetVertexFile(const FilePath& file);
 		void SetGeometryFile(const FilePath& file);
@@ -53,23 +53,23 @@ namespace Bolt
 		void SetShaderFile(const FilePath& file);
 
 		// Manually set the vertex source to use while building
-		void SetVertexSource(const blt::string& source);
+		void SetVertexSource(const std::string& source);
 		// Manually set the geometry source to use while building
-		void SetGeometrySource(const blt::string& source);
+		void SetGeometrySource(const std::string& source);
 		// Manually set the fragment source to use while building
-		void SetFragmentSource(const blt::string& source);
+		void SetFragmentSource(const std::string& source);
 
 		const Ref<ShaderInstance>& GetShader() const;
 		ShaderLinkContext GetLinkContext() const;
 		void Recompile() const;
 
 	private:
-		static void ParseShaderFile(const blt::string& shaderSource, blt::string& outVertexSource, blt::string& outGeometrySource, blt::string& outFragmentSource);
-		static int ShaderTypeFromString(const blt::string& str);
-		static std::vector<UniformInfo> ProcessShaderSource(blt::string& source);
-		static blt::string ReadValue(const blt::string& line, const blt::string& key);
-		static blt::string ReadStringValue(const blt::string& line, const blt::string& key);
-		static int ReadGlslConstInt(const blt::string& value, const blt::string& source);
+		static void ParseShaderFile(const std::string& shaderSource, std::string& outVertexSource, std::string& outGeometrySource, std::string& outFragmentSource);
+		static int ShaderTypeFromString(const std::string& str);
+		static std::vector<UniformInfo> ProcessShaderSource(std::string& source);
+		static std::string ReadValue(const std::string& line, const std::string& key);
+		static std::string ReadStringValue(const std::string& line, const std::string& key);
+		static int ReadGlslConstInt(const std::string& value, const std::string& source);
 		static void PopulateShaderUniforms(CompiledShaderProgram& program, const std::vector<UniformInfo>& uniforms);
 	};
 

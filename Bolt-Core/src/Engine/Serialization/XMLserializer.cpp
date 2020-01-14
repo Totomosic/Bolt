@@ -4,7 +4,7 @@
 namespace Bolt
 {
 
-	const blt::string XMLserializer::POINTER_VALUES_CHILD = "pointer_values";
+	const std::string XMLserializer::POINTER_VALUES_CHILD = "pointer_values";
 
 	XMLserializer::XMLserializer()
 		: m_OutputNode(nullptr), m_InputNode(nullptr), m_SerializedValues(), m_SerializedCount(0)

@@ -61,7 +61,7 @@ namespace Bolt
 			z += q.z * 0.5f;
 		}
 
-		blt::string ToString() const;
+		std::string ToString() const;
 
 	public:
 		static Quaternion Log(const Quaternion& q);

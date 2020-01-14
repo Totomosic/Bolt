@@ -391,7 +391,7 @@ namespace Bolt
 	ShaderFuncResultPtr ShaderFuncs::Call(const FunctionScope& func, const std::vector<ShaderValuePtr>& inputs)
 	{
 		BLT_ASSERT(func.GetInputs().size() == inputs.size(), "Number of arguments does not match arguments of function, required inputs {0}", func.GetInputs().size());
-		blt::string cmd = func.GetName() + '(';
+		std::string cmd = func.GetName() + '(';
 		if (inputs.size() > 0)
 		{
 			cmd += "@0";

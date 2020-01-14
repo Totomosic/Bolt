@@ -9,10 +9,10 @@ namespace Bolt
 	private:
 		ShaderVariablePtr m_InVar;
 		ShaderVariablePtr m_OutVar;
-		blt::string m_MetaData;
+		std::string m_MetaData;
 
 	public:
-		DeclarePassInOp(const ShaderVariablePtr& inVar, const ShaderVariablePtr& outVar, const blt::string& meta = "");
+		DeclarePassInOp(const ShaderVariablePtr& inVar, const ShaderVariablePtr& outVar, const std::string& meta = "");
 
 		void Build(ShaderBuilder& builder) const override;
 		BLT_DEFAULT_SHADEROP_CLONE(DeclarePassInOp);

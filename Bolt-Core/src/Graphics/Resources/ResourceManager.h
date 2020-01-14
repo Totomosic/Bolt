@@ -56,7 +56,7 @@ namespace Bolt
 
 	private:
 		id_t FindNextId();
-		ResourceType StringToType(const blt::string& str);
+		ResourceType StringToType(const std::string& str);
 
 		void LoadFile(ResourceFile& resourceFile);
 		void LoadTexture2DFile(ResourceFile& resourceFile);

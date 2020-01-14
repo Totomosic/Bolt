@@ -65,14 +65,14 @@ namespace Bolt
 		}
 
 		template<>
-		inline blt::string _check_get(lua_State* l, int index)
+		inline std::string _check_get(lua_State* l, int index)
 		{
 			if (!lua_isstring(l, index))
 			{
 				BLT_ASSERT(false, "Value at index {} was not a string", index);
 				return "";
 			}
-			return blt::string(lua_tostring(l, index));
+			return std::string(lua_tostring(l, index));
 		}
 
 		template<>
@@ -123,7 +123,7 @@ namespace Bolt
 		}
 
 		template<>
-		inline void _push(lua_State* l, blt::string value)
+		inline void _push(lua_State* l, std::string value)
 		{
 			_push(l, value.c_str());
 		}

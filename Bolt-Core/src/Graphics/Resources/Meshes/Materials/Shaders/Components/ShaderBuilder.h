@@ -10,7 +10,7 @@ namespace Bolt
 	{
 	private:
 		ShaderStage m_ShaderStage;
-		blt::string m_Source;
+		std::string m_Source;
 
 		GlobalScope m_GlobalScope;
 		MainScope m_MainScope;
@@ -25,7 +25,7 @@ namespace Bolt
 		ShaderBuilder(ShaderStage shaderType);
 
 		ShaderStage GetShaderStage() const;
-		const blt::string& GetSource() const;
+		const std::string& GetSource() const;
 
 		const GlobalScope& GetGlobalScope() const;
 		GlobalScope& GetGlobalScope();
@@ -37,17 +37,17 @@ namespace Bolt
 		void SetScopeIndex(int index);
 		void NextLine();
 
-		blt::string GetVariableName() const;
-		blt::string GetPassName() const;
+		std::string GetVariableName() const;
+		std::string GetPassName() const;
 
-		void Write(const blt::string& str);
+		void Write(const std::string& str);
 		void Indent();
 
-		blt::string Build();
+		std::string Build();
 		void Reset();
 
 	private:
-		blt::string GetShaderStageString() const;
+		std::string GetShaderStageString() const;
 
 	};
 

@@ -14,13 +14,13 @@ namespace Bolt
 	{
 		builder.Write("void main()");
 		builder.NextLine();
-		builder.Write('{');
+		builder.Write("{");
 		builder.SetScopeIndex(m_ScopeIndex);
 		builder.NextLine();
 		BuildOperations(builder);
 		builder.SetScopeIndex(m_ScopeIndex - 1);
 		builder.NextLine();
-		builder.Write('}');
+		builder.Write("}");
 	}
 
 }

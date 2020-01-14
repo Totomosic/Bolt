@@ -14,9 +14,9 @@ namespace Bolt
 	void ShaderArrayValue::Build(ShaderBuilder& builder) const
 	{
 		m_Array->Build(builder);
-		builder.Write('[');
+		builder.Write("[");
 		m_Index->Build(builder);
-		builder.Write(']');
+		builder.Write("]");
 	}
 
 }

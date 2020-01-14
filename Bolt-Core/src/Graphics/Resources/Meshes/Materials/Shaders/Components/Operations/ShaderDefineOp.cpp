@@ -5,7 +5,7 @@
 namespace Bolt
 {
 
-	ShaderDefineOp::ShaderDefineOp(const ShaderVariablePtr& var, const ShaderValuePtr& value, const blt::string& meta) : ShaderOp(),
+	ShaderDefineOp::ShaderDefineOp(const ShaderVariablePtr& var, const ShaderValuePtr& value, const std::string& meta) : ShaderOp(),
 		m_Variable(var), m_Value(value), m_MetaData(meta)
 	{
 		BLT_ASSERT(m_Variable->Type() == m_Value->Type(), "Type of value must match variable");

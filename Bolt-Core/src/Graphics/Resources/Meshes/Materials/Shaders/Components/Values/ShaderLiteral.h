@@ -10,12 +10,12 @@ namespace Bolt
 	class BLT_API ShaderLiteral : public ShaderValue
 	{
 	private:
-		blt::string m_ValueString;
+		std::string m_ValueString;
 
 	public:
-		ShaderLiteral(const blt::string& valueString, ValueType type, ValueTypeDim dim = ValueTypeDim::Single);
+		ShaderLiteral(const std::string& valueString, ValueType type, ValueTypeDim dim = ValueTypeDim::Single);
 
-		const blt::string& GetValueString() const;
+		const std::string& GetValueString() const;
 
 		virtual void Build(ShaderBuilder& builder) const override;
 

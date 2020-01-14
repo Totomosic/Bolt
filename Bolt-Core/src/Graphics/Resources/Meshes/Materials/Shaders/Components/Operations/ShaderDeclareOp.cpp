@@ -5,7 +5,7 @@
 namespace Bolt
 {
 
-	ShaderDeclareOp::ShaderDeclareOp(const ShaderVariablePtr& var, const blt::string& meta) : ShaderOp(),
+	ShaderDeclareOp::ShaderDeclareOp(const ShaderVariablePtr& var, const std::string& meta) : ShaderOp(),
 		m_Variable(var), m_MetaData(meta)
 	{
 

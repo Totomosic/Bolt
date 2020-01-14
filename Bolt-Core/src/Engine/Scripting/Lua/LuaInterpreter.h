@@ -15,7 +15,7 @@ namespace Bolt
 		const LuaEnvironment& Environment() const;
 		LuaEnvironment& Environment();
 
-		bool ExecuteString(const blt::string& line) const;
+		bool ExecuteString(const std::string& line) const;
 
 		void Reset();
 

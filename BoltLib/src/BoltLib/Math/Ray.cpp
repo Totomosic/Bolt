@@ -14,7 +14,7 @@ namespace Bolt
 		
 	}
 
-	blt::string Ray::ToString() const
+	std::string Ray::ToString() const
 	{
 		return "Ray(" + Origin.ToString() + ", " + Direction.ToString() + ")";
 	}

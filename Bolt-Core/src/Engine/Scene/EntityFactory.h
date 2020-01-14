@@ -39,8 +39,8 @@ namespace Bolt
 		EntityHandle Circle(float radius, const Color& color, Transform transform = Transform()) const;
 		EntityHandle Circle(float radius, std::unique_ptr<Material>&& material, Transform transform = Transform()) const;
 
-		EntityHandle Text(const blt::string& text, ResourcePtr<Font> font, const Color& color, Transform transform = Transform(), AlignH horizontal = AlignH::Center, AlignV vertical = AlignV::Center) const;
-		EntityHandle Text(const blt::string& text, const Color& color, Transform transform = Transform(), AlignH horizontal = AlignH::Center, AlignV vertical = AlignV::Center) const;
+		EntityHandle Text(const std::string& text, ResourcePtr<Font> font, const Color& color, Transform transform = Transform(), AlignH horizontal = AlignH::Center, AlignV vertical = AlignV::Center) const;
+		EntityHandle Text(const std::string& text, const Color& color, Transform transform = Transform(), AlignH horizontal = AlignH::Center, AlignV vertical = AlignV::Center) const;
 
 		EntityHandle Cuboid(float width, float height, float depth, const Color& color, Transform transform = Transform()) const;
 		EntityHandle Cuboid(float width, float height, float depth, std::unique_ptr<Material>&& material, Transform transform = Transform()) const;
