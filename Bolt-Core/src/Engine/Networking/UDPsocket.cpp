@@ -136,6 +136,11 @@ namespace Bolt
 	{
 		u_long mode = (isBlocking) ? 0 : 1;
 		int result = ioctlsocket(m_Socket, FIONBIO, &mode);
+		if (result != NO_ERROR)
+		{
+			int errorCode = WSAGetLastError();
+			BLT_CORE_ERROR("Socket SetBlocking Error: " + std::to_string(errorCode));
+		}
 	}
 
 #endif

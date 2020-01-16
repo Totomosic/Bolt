@@ -14,6 +14,7 @@ namespace blt
 			result.push_back(token);
 			s = s.substr(pos + delimiter.length());
 		}
+		result.push_back(s);
 		return result;
 	}
 
@@ -38,6 +39,7 @@ namespace blt
 			result.push_back(token);
 			s = s.substr(pos + delimiter.length());
 		}
+		result.push_back(s);
 		return result;
 	}
 

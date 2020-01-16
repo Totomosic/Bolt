@@ -11,13 +11,6 @@
 namespace Bolt
 {
 
-	DirectoryPath Filesystem::s_WorkingDirectory = DirectoryPath();
-
-	const DirectoryPath& Filesystem::WorkingDirectory()
-	{
-		return s_WorkingDirectory;
-	}
-
 	bool Filesystem::FileExists(const FilePath& filepath)
 	{
 #ifdef BLT_PLATFORM_WINDOWS
@@ -63,12 +56,7 @@ namespace Bolt
 
 	void Filesystem::Initialize()
 	{
-		#ifdef BLT_PLATFORM_WINDOWS
-		BLT_PROFILE_FUNCTION();
-		char buff[FILENAME_MAX];
-		auto result = BLT_GET_CURRENT_DIRECTORY(buff, FILENAME_MAX);
-		s_WorkingDirectory = DirectoryPath(std::string(buff) + DirectoryPath::DIRECTORY_DELIMITER);
-		#endif
+
 	}
 
 }

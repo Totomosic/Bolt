@@ -4,20 +4,13 @@
 #include "FilePath.h"
 #include "XML/XMLfile.h"
 
-#define BLT_GET_CURRENT_DIRECTORY _getcwd
-
 namespace Bolt
 {
 
 	class BLT_API Filesystem
 	{
-	private:
-		static DirectoryPath s_WorkingDirectory;
-
 	public:
 		Filesystem() = delete;
-
-		static const DirectoryPath& WorkingDirectory();
 
 		static bool FileExists(const FilePath& filepath);
 

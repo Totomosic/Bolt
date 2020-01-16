@@ -47,6 +47,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h> 
+#include <fcntl.h>
 #endif
 
 #define _USE_MATH_DEFINES

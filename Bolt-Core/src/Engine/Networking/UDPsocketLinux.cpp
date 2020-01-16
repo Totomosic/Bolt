@@ -123,7 +123,12 @@ namespace Bolt
 
 	void UDPsocket::SetBlocking(bool isBlocking)
 	{
-		
+		int nonBlocking = (isBlocking) ? 0 : 1;
+		int err = fcntl(m_Socket, F_SETFL, O_NONBLOCK, nonBlocking);
+		if (err < 0)
+		{
+			perror("Socket SetBlocking Error");
+		}
 	}
 
 #endif
