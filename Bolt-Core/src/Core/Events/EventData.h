@@ -31,13 +31,7 @@ namespace Bolt
 		T Data;
 
 	public:
-		Event(const T& data)
-			: Data(data)
-		{
-		
-		}
-
-		Event(T&& data)
+		Event(T data)
 			: Data(std::move(data))
 		{
 		
