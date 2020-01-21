@@ -3,7 +3,7 @@
 
 # Supported Platforms:
 ##### ![](https://img.shields.io/badge/Windows-Supported-green.svg)
-##### ![](https://img.shields.io/badge/Linux-Not%20Supported-red.svg)
+##### ![](https://img.shields.io/badge/Linux-Supported-green.svg)
 ##### ![](https://img.shields.io/badge/MacOS-Not%20Supported-red.svg)
 ##### ![](https://img.shields.io/badge/Android-Not%20Supported-red.svg)
 ##### ![](https://img.shields.io/badge/IOS-Not%20Supported-red.svg)
