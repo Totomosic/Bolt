@@ -1,36 +1,36 @@
 #pragma once
-#include "Directorypath.h"
+#include "DirectoryPath.h"
 
 namespace Bolt
 {
 
-	struct BLT_API Filepath
+	struct BLT_API FilePath
 	{
 	private:
-		blt::string m_Path;
+		std::string m_Path;
 
 	public:
-		Filepath();
-		Filepath(const blt::string& path);
-		Filepath(const char* path);
+		FilePath();
+		FilePath(const std::string& path);
+		FilePath(const char* path);
 
-		const blt::string& Path() const;
-		Directorypath Directory() const;
-		blt::string Filename() const;
-		blt::string SimpleFilename() const;
-		blt::string Extension() const;
+		const std::string& Path() const;
+		DirectoryPath Directory() const;
+		std::string Filename() const;
+		std::string SimpleFilename() const;
+		std::string Extension() const;
 		bool IsRelative() const;
 		bool IsAbsolute() const;
 
-		void MakeAbsolute(const Directorypath& root);
+		void MakeAbsolute(const DirectoryPath& root);
 		
-		friend std::ostream& operator<<(std::ostream& stream, const Filepath& path);
+		friend std::ostream& operator<<(std::ostream& stream, const FilePath& path);
 
 	public:
-		static Filepath Combine(const Directorypath& directory, const Filepath& file);
+		static FilePath Combine(const DirectoryPath& directory, const FilePath& file);
 
 	private:
-		static void StandardizePath(blt::string& filepath);
+		static void StandardizePath(std::string& filepath);
 
 	};
 

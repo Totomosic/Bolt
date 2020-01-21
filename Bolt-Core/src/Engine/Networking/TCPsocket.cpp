@@ -1,11 +1,12 @@
 #include "bltpch.h"
-
 #include "TCPsocket.h"
 
 namespace Bolt
 {
 
-	TCPsocket::TCPsocket(SOCKET socket)
+#ifdef BLT_PLATFORM_WINDOWS
+
+	TCPsocket::TCPsocket(SocketHandle socket)
 		: m_Socket(socket)
 	{
 	
@@ -19,12 +20,12 @@ namespace Bolt
 	TCPsocket::TCPsocket(TCPsocket&& other)
 		: m_Socket(other.m_Socket)
 	{
-		other.m_Socket = INVALID_SOCKET;
+		other.m_Socket = BLT_INVALID_SOCKET;
 	}
 
 	TCPsocket& TCPsocket::operator=(TCPsocket&& other)
 	{
-		SOCKET sock = m_Socket;
+		SocketHandle sock = m_Socket;
 		m_Socket = other.m_Socket;
 		other.m_Socket = sock;
 		return *this;
@@ -41,7 +42,7 @@ namespace Bolt
 
 	bool TCPsocket::IsValid() const
 	{
-		return m_Socket != INVALID_SOCKET;
+		return m_Socket != BLT_INVALID_SOCKET;
 	}
 
 	int TCPsocket::Bind(const SocketAddress& address)
@@ -74,7 +75,7 @@ namespace Bolt
 	{
 		BLT_ASSERT(IsValid(), "Cannot Accept on invalid Socket");
 		int length = SocketAddress::GetSize();
-		SOCKET newSocket = INVALID_SOCKET;
+		SocketHandle newSocket = BLT_INVALID_SOCKET;
 		if (outAddress != nullptr)
 		{
 			newSocket = accept(m_Socket, &outAddress->m_SockAddr, &length);
@@ -84,12 +85,12 @@ namespace Bolt
 			SocketAddress addr;
 			newSocket = accept(m_Socket, &addr.m_SockAddr, &length);
 		}
-		if (newSocket != INVALID_SOCKET)
+		if (newSocket != BLT_INVALID_SOCKET)
 		{
 			return TCPsocket(newSocket);
 		}
 		BLT_CORE_ERROR("Socket Accept Error");
-		return TCPsocket(INVALID_SOCKET);
+		return TCPsocket(BLT_INVALID_SOCKET);
 	}
 
 	int TCPsocket::Connect(const SocketAddress& address)
@@ -159,7 +160,7 @@ namespace Bolt
 	{
 		BLT_ASSERT(IsValid(), "Cannot Close invalid Socket");
 		int err = closesocket(m_Socket);
-		m_Socket = INVALID_SOCKET;
+		m_Socket = BLT_INVALID_SOCKET;
 		if (err != NO_ERROR)
 		{
 			int errorCode = WSAGetLastError();
@@ -167,5 +168,7 @@ namespace Bolt
 		}
 		return err;
 	}
+
+#endif
 
 }

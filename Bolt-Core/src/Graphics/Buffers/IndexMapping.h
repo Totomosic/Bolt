@@ -23,6 +23,7 @@ namespace Bolt
 		std::vector<MappingPtr> m_MappedPtrs;
 
 	public:
+		IndexMapping();
 		IndexMapping(const std::vector<MappingPtr>& mappedPtrs);
 		IndexMapping(const IndexMapping& other) = delete;
 		IndexMapping& operator=(const IndexMapping& other) = delete;

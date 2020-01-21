@@ -15,7 +15,7 @@ namespace Bolt
 		return m_ShaderStage;
 	}
 
-	const blt::string& ShaderBuilder::GetSource() const
+	const std::string& ShaderBuilder::GetSource() const
 	{
 		return m_Source;
 	}
@@ -63,17 +63,17 @@ namespace Bolt
 #endif
 	}
 
-	blt::string ShaderBuilder::GetVariableName() const
+	std::string ShaderBuilder::GetVariableName() const
 	{
 		return "v" + GetShaderStageString() + std::to_string(m_VarCount++);
 	}
 
-	blt::string ShaderBuilder::GetPassName() const
+	std::string ShaderBuilder::GetPassName() const
 	{
 		return "p" + GetShaderStageString() + std::to_string(m_PassCount++);
 	}
 
-	void ShaderBuilder::Write(const blt::string& str)
+	void ShaderBuilder::Write(const std::string& str)
 	{
 		m_Source.insert(m_CurrentCursor, str);
 		m_CurrentCursor += str.size();
@@ -81,7 +81,7 @@ namespace Bolt
 
 	void ShaderBuilder::Indent()
 	{
-		blt::string tabs = "";
+		std::string tabs = "";
 		for (int i = 0; i < m_CurrentScopeIndex; i++)
 		{
 			tabs += '\t';
@@ -89,16 +89,16 @@ namespace Bolt
 		Write(tabs);
 	}
 
-	blt::string ShaderBuilder::Build()
+	std::string ShaderBuilder::Build()
 	{
 		GetGlobalScope().Build(*this);
 		GetMainScope().Build(*this);
-		blt::string source = GetSource();
+		std::string source = GetSource();
 		Reset();
 		return source;
 	}
 
-	blt::string ShaderBuilder::GetShaderStageString() const
+	std::string ShaderBuilder::GetShaderStageString() const
 	{
 		switch (m_ShaderStage)
 		{

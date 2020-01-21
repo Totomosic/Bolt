@@ -4,7 +4,7 @@
 #include "EventEmitter.h"
 #include "IdManager.h"
 
-#include "Core/Profiling/Profiling.h"
+#include "BoltLib/Profiling/Profiling.h"
 
 namespace Bolt
 {
@@ -444,6 +444,20 @@ namespace Bolt
 	template<typename EventIdT>
 	void GenericEventBus<EventIdT>::PushEventListenerLow(std::vector<std::unique_ptr<EventListenerContainer>>& vector, std::unique_ptr<EventListenerContainer>&& listener)
 	{
+		if (vector.size() == 0)
+		{
+			vector.push_back(std::move(listener));
+			return;
+		}
+		for (int i = 0; i < vector.size(); i++)
+		{
+			EventListenerContainer& container = *vector.at(i);
+			if (container.GetPriority() == ListenerPriority::Low)
+			{
+				vector.insert(vector.begin() + i, std::move(listener));
+				return;
+			}
+		}
 		vector.push_back(std::move(listener));
 	}
 

@@ -60,12 +60,13 @@ namespace Bolt
 		m_AlphaThreshold->SetValue(connection);
 	}
 
-	void PBRMaterialGraph::FinaliseBuild(const std::unordered_map<blt::string, ShaderValuePtr>& masterNodeValues)
+	void PBRMaterialGraph::FinaliseBuild(const std::unordered_map<std::string, ShaderValuePtr>& masterNodeValues)
 	{
 		VertexShader& vertex = GetBuilder().GetBuilder().Factory().Vertex();
 		ShaderVariablePtr modelMatrix = vertex.RendererUniform(RendererUniform::ModelMatrix);
 		ShaderVariablePtr viewMatrix = vertex.RendererUniform(RendererUniform::ViewMatrix);
 		ShaderVariablePtr projectionMatrix = vertex.RendererUniform(RendererUniform::ProjectionMatrix);
+		ShaderVariablePtr normalMatrix = vertex.RendererUniform(RendererUniform::NormalMatrix);
 		ShaderPassVariablePtr outWorldPos = vertex.DeclarePassOut(ValueType::Vector3f);
 		ShaderPassVariablePtr outWorldNormal = vertex.DeclarePassOut(ValueType::Vector3f);
 		ShaderPassVariablePtr outTBNMatrix = vertex.DeclarePassOut(ValueType::Matrix3f);
@@ -75,7 +76,7 @@ namespace Bolt
 		ShaderVariablePtr viewPosition = vertex.DefineVar(ShaderFuncs::Mul(viewMatrix, worldPosition));
 		ShaderVariablePtr screenPosition = vertex.DefineVar(ShaderFuncs::Mul(projectionMatrix, viewPosition));
 
-		ShaderVariablePtr worldNormal = vertex.DefineVar(ShaderFuncs::xyz(ShaderFuncs::Mul(modelMatrix, ShaderFuncs::Vec4(vertex.Stream(BufferLayout::NORMAL_INDEX), ShaderLiteral::FromFloat(0.0f)))));
+		ShaderVariablePtr worldNormal = vertex.DefineVar(ShaderFuncs::Mul(ShaderFuncs::Matrix3(normalMatrix), vertex.Stream(BufferLayout::NORMAL_INDEX)));
 
 		ShaderVariablePtr tangent = vertex.DefineVar(ShaderFuncs::xyz(ShaderFuncs::Mul(modelMatrix, ShaderFuncs::Vec4(vertex.Stream(BufferLayout::TANGENT_INDEX), ShaderLiteral::FromFloat(0.0f)))));
 		ShaderVariablePtr bitangent = vertex.DefineVar(ShaderFuncs::Cross(worldNormal, tangent));
@@ -94,6 +95,7 @@ namespace Bolt
 		ShaderVariablePtr lightPositions = fragment.RendererUniform(RendererUniform::LightPositions);
 		ShaderVariablePtr lightColors = fragment.RendererUniform(RendererUniform::LightColors);
 		ShaderVariablePtr lightAmbients = fragment.RendererUniform(RendererUniform::LightAmbients);
+		ShaderVariablePtr lightAmbientColors = fragment.RendererUniform(RendererUniform::LightAmbientColors);
 		ShaderVariablePtr lightIntensities = fragment.RendererUniform(RendererUniform::LightIntensities);
 		ShaderVariablePtr lightAttenuations = fragment.RendererUniform(RendererUniform::LightAttenuations);
 		ShaderVariablePtr lightCount = fragment.RendererUniform(RendererUniform::LightCount);
@@ -178,7 +180,7 @@ namespace Bolt
 		ShaderVariablePtr kD = loop.DefineVar(ShaderFuncs::Sub(ShaderLiteral::FromVec3({ 1.0f, 1.0f, 1.0f }), kS));
 		loop.MulAssign(kD, ShaderFuncs::Sub(ShaderLiteral::FromFloat(1.0f), metallic));
 		loop.AddAssign(Lo, ShaderFuncs::Mul(ShaderFuncs::Mul(ShaderFuncs::Add(ShaderFuncs::Div(ShaderFuncs::Mul(kD, albedo), ShaderLiteral::Pi()), specular), radiance), maxNdotL));
-		loop.AddAssign(totalAmbient, lightAmbient);
+		loop.AddAssign(totalAmbient, ShaderFuncs::xyz(ShaderFuncs::Mul(ShaderFuncs::Index(lightAmbientColors, counter), lightAmbient)));
 
 		ShaderVariablePtr color = fragment.DefineVar(ShaderFuncs::Add(ShaderFuncs::Mul(ShaderFuncs::Mul(totalAmbient, albedo), ao), Lo));
 		fragment.SetVariable(color, ShaderFuncs::Div(color, ShaderFuncs::Add(color, ShaderLiteral::FromVec3({ 1.0f, 1.0f, 1.0f }))));

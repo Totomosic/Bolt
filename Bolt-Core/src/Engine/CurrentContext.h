@@ -13,7 +13,6 @@ namespace Bolt
 		static RenderContext& GetRenderContext();
 
 		static Window& GetWindow();
-		static SceneManager& GetSceneManager();
 	};
 
 }

@@ -1,7 +1,7 @@
 #include "bltpch.h"
 #include "CuboidFactory.h"
 
-#include "Core/Profiling/Profiling.h"
+#include "BoltLib/Profiling/Profiling.h"
 
 namespace Bolt
 {
@@ -24,12 +24,12 @@ namespace Bolt
 		result.Indices = std::make_unique<IndexArray>();
 		uint32_t indices[6 * 6] = { 0, 1, 2, 0, 2, 3,  11, 10, 13, 11, 13, 12,  4, 5, 6, 4, 6, 7,  15, 14, 9, 15, 9, 8,  23, 16, 19, 23, 19, 20,  17, 22, 21, 17, 21, 18 };
 		result.Indices->AddIndexBuffer(std::make_unique<IndexBuffer>(indices, 6 * 6));
-		result.Bounds.MinX = -w;
-		result.Bounds.MaxX = w;
-		result.Bounds.MinY = -h;
-		result.Bounds.MaxY = h;
-		result.Bounds.MinZ = -d;
-		result.Bounds.MaxZ = d;
+		result.Bounds.Min.x = -w;
+		result.Bounds.Max.x = w;
+		result.Bounds.Min.y = -h;
+		result.Bounds.Max.y = h;
+		result.Bounds.Min.z = -d;
+		result.Bounds.Max.z = d;
 
 		BufferLayout layout = BufferLayout::Default();
 		VertexBuffer& buffer = result.Vertices->CreateVertexBuffer(24 * layout.Size(), layout);

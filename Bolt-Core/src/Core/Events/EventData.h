@@ -1,6 +1,6 @@
 #pragma once
 #include "bltpch.h"
-#include "Core/Profiling/Profiling.h"
+#include "BoltLib/Profiling/Profiling.h"
 
 namespace Bolt
 {
@@ -31,13 +31,7 @@ namespace Bolt
 		T Data;
 
 	public:
-		Event(const T& data)
-			: Data(data)
-		{
-		
-		}
-
-		Event(T&& data)
+		Event(T data)
 			: Data(std::move(data))
 		{
 		

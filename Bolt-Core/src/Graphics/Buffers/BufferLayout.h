@@ -1,7 +1,7 @@
 #pragma once
 #include "bltpch.h"
-#include "Core/Math/Maths.h"
-#include "Core/Color.h"
+#include "BoltLib/Math/Maths.h"
+#include "BoltLib/Color.h"
 
 namespace Bolt
 {
@@ -80,109 +80,13 @@ namespace Bolt
 		template<typename T>
 		void AddAttribute(int count, bool normalized = false)
 		{
-			BLT_ASSERT(false, "Unrecognised type T");
-		}
-
-		template<>
-		void AddAttribute<int>(int count, bool normalized)
-		{
-			AddAttribute(count, DataType::Int, normalized);
-		}
-
-		template<>
-		void AddAttribute<byte>(int count, bool normalized)
-		{
-			AddAttribute(count, DataType::UByte, normalized);
-		}
-
-		template<>
-		void AddAttribute<unsigned int>(int count, bool normalized)
-		{
-			AddAttribute(count, DataType::UInt, normalized);
-		}
-
-		template<>
-		void AddAttribute<float>(int count, bool normalized)
-		{
-			AddAttribute(count, DataType::Float, normalized);
-		}
-
-		template<>
-		void AddAttribute<Vector2f>(int count, bool normalized)
-		{
-			AddAttribute<float>(2 * count, normalized);
-		}
-
-		template<>
-		void AddAttribute<Vector3f>(int count, bool normalized)
-		{
-			AddAttribute<float>(3 * count, normalized);
-		}
-
-		template<>
-		void AddAttribute<Vector4f>(int count, bool normalized)
-		{
-			AddAttribute<float>(4 * count, normalized);
-		}
-
-		template<>
-		void AddAttribute<Color>(int count, bool normalized)
-		{
-			AddAttribute<Vector4f>(count, normalized);
+			BLT_ASSERT(false, "Invalid Type");
 		}
 
 		template<typename T>
 		void AddAttribute(int index, int count, bool normalized = false)
 		{
-			BLT_ASSERT(false, "Unrecognised type T");
-		}
-
-		template<>
-		void AddAttribute<int>(int index, int count, bool normalized)
-		{
-			AddAttribute(index, count, DataType::Int, normalized);
-		}
-
-		template<>
-		void AddAttribute<byte>(int index, int count, bool normalized)
-		{
-			AddAttribute(index, count, DataType::UByte, normalized);
-		}
-
-		template<>
-		void AddAttribute<unsigned int>(int index, int count, bool normalized)
-		{
-			AddAttribute(index, count, DataType::UInt, normalized);
-		}
-
-		template<>
-		void AddAttribute<float>(int index, int count, bool normalized)
-		{
-			AddAttribute(index, count, DataType::Float, normalized);
-		}
-
-		template<>
-		void AddAttribute<Vector2f>(int index, int count, bool normalized)
-		{
-			AddAttribute<float>(index, 2 * count, normalized);
-		}
-
-		template<>
-		void AddAttribute<Vector3f>(int index, int count, bool normalized)
-		{
-			AddAttribute<float>(index, 3 * count, normalized);
-		}
-
-		template<>
-		void AddAttribute<Vector4f>(int index, int count, bool normalized)
-		{
-			AddAttribute<float>(index, 4 * count, normalized);
-		}
-
-		template<>
-		void AddAttribute<Color>(int index, int count, bool normalized)
-		{
-			AddAttribute<Vector4f>(index, count, normalized);
+			BLT_ASSERT(false, "Invalid Type");
 		}
 
 		friend class VertexArray;
@@ -195,5 +99,101 @@ namespace Bolt
 		static BufferLayout Default();
 
 	};
+
+	template<>
+	inline void BufferLayout::AddAttribute<int>(int count, bool normalized)
+	{
+		AddAttribute(count, DataType::Int, normalized);
+	}
+
+	template<>
+	inline void BufferLayout::AddAttribute<byte>(int count, bool normalized)
+	{
+		AddAttribute(count, DataType::UByte, normalized);
+	}
+
+	template<>
+	inline void BufferLayout::AddAttribute<unsigned int>(int count, bool normalized)
+	{
+		AddAttribute(count, DataType::UInt, normalized);
+	}
+
+	template<>
+	inline void BufferLayout::AddAttribute<float>(int count, bool normalized)
+	{
+		AddAttribute(count, DataType::Float, normalized);
+	}
+
+	template<>
+	inline void BufferLayout::AddAttribute<Vector2f>(int count, bool normalized)
+	{
+		AddAttribute<float>(2 * count, normalized);
+	}
+
+	template<>
+	inline void BufferLayout::AddAttribute<Vector3f>(int count, bool normalized)
+	{
+		AddAttribute<float>(3 * count, normalized);
+	}
+
+	template<>
+	inline void BufferLayout::AddAttribute<Vector4f>(int count, bool normalized)
+	{
+		AddAttribute<float>(4 * count, normalized);
+	}
+
+	template<>
+	inline void BufferLayout::AddAttribute<Color>(int count, bool normalized)
+	{
+		AddAttribute<Vector4f>(count, normalized);
+	}
+
+	template<>
+	inline void BufferLayout::AddAttribute<int>(int index, int count, bool normalized)
+	{
+		AddAttribute(index, count, DataType::Int, normalized);
+	}
+
+	template<>
+	inline void BufferLayout::AddAttribute<byte>(int index, int count, bool normalized)
+	{
+		AddAttribute(index, count, DataType::UByte, normalized);
+	}
+
+	template<>
+	inline void BufferLayout::AddAttribute<unsigned int>(int index, int count, bool normalized)
+	{
+		AddAttribute(index, count, DataType::UInt, normalized);
+	}
+
+	template<>
+	inline void BufferLayout::AddAttribute<float>(int index, int count, bool normalized)
+	{
+		AddAttribute(index, count, DataType::Float, normalized);
+	}
+
+	template<>
+	inline void BufferLayout::AddAttribute<Vector2f>(int index, int count, bool normalized)
+	{
+		AddAttribute<float>(index, 2 * count, normalized);
+	}
+
+	template<>
+	inline void BufferLayout::AddAttribute<Vector3f>(int index, int count, bool normalized)
+	{
+		AddAttribute<float>(index, 3 * count, normalized);
+	}
+
+	template<>
+	inline void BufferLayout::AddAttribute<Vector4f>(int index, int count, bool normalized)
+	{
+		AddAttribute<float>(index, 4 * count, normalized);
+	}
+
+	template<>
+	inline void BufferLayout::AddAttribute<Color>(int index, int count, bool normalized)
+	{
+		AddAttribute<Vector4f>(index, count, normalized);
+	}
 
 }

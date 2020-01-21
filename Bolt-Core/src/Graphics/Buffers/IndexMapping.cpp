@@ -5,6 +5,12 @@
 namespace Bolt
 {
 
+	IndexMapping::IndexMapping()
+		: m_Array(nullptr), m_MappedPtrs()
+	{
+	
+	}
+
 	IndexMapping::IndexMapping(const std::vector<IndexMapping::MappingPtr>& mappedPtrs)
 		: m_Array(nullptr), m_MappedPtrs(mappedPtrs)
 	{

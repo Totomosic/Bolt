@@ -233,12 +233,12 @@ namespace Bolt
 		DrawSprite(x, y, width, height, Color::White, rotation, texture, frame);
 	}
 
-	void Renderer2D::DrawString(const blt::string& string, const ResourcePtr<Font>& font, float x, float y, const Color& color)
+	void Renderer2D::DrawString(const std::string& string, const ResourcePtr<Font>& font, float x, float y, const Color& color)
 	{
 
 	}
 
-	void Renderer2D::DrawString(const blt::string& string, float x, float y, const Color& color)
+	void Renderer2D::DrawString(const std::string& string, float x, float y, const Color& color)
 	{
 
 	}

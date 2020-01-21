@@ -1,30 +1,31 @@
 #include "bltpch.h"
 
 #include "Filesystem.h"
+#ifdef BLT_PLATFORM_WINDOWS
 #include <filesystem>
-#include "Core/Profiling/Profiling.h"
+#else
+#include <experimental/filesystem>
+#endif
+#include "BoltLib/Profiling/Profiling.h"
 
 namespace Bolt
 {
 
-	Directorypath Filesystem::s_WorkingDirectory = Directorypath();
-
-	const Directorypath& Filesystem::WorkingDirectory()
+	bool Filesystem::FileExists(const FilePath& filepath)
 	{
-		return s_WorkingDirectory;
-	}
-
-	bool Filesystem::FileExists(const Filepath& filepath)
-	{
+#ifdef BLT_PLATFORM_WINDOWS
 		return std::filesystem::exists(filepath.Path().c_str());
+#else
+		return std::experimental::filesystem::exists(filepath.Path().c_str());
+#endif
 	}
 
-	File Filesystem::Open(const Filepath& filepath, OpenMode mode)
+	File Filesystem::Open(const FilePath& filepath, OpenMode mode)
 	{
 		BLT_ASSERT(mode != OpenMode::Read || FileExists(filepath), "No file with path " + filepath.Path());
 		File f(filepath);
 		f.SetOpenMode(mode);
-		f.m_Stream.open(filepath.Path().c_str(), f.FlagsToValue(mode));
+		f.m_Stream.open(filepath.Path().c_str(), (std::ios_base::openmode)f.FlagsToValue(mode));
 		if (f.m_Stream.fail())
 		{
 			BLT_CORE_ERROR("Failed to open file {}", filepath.Path());
@@ -39,26 +40,23 @@ namespace Bolt
 		file.m_Stream.close();
 	}
 
-	XMLfile Filesystem::OpenXML(const Filepath& filepath, OpenMode mode)
+	XMLfile Filesystem::OpenXML(const FilePath& filepath, OpenMode mode)
 	{
 		BLT_ASSERT(mode != OpenMode::Read || FileExists(filepath), "No file with path " + filepath.Path());
 		XMLfile f(filepath);
 		f.SetOpenMode(mode);
-		f.m_Stream.open(filepath.Path().c_str(), f.FlagsToValue(mode));
+		f.m_Stream.open(filepath.Path().c_str(), (std::ios_base::openmode)f.FlagsToValue(mode));
 		return f;
 	}
 
-	void Filesystem::WatchFile(const Filepath& filepath, std::function<bool(const Filepath&)> callback)
+	void Filesystem::WatchFile(const FilePath& filepath, std::function<bool(const FilePath&)> callback)
 	{
 		
 	}
 
 	void Filesystem::Initialize()
 	{
-		BLT_PROFILE_FUNCTION();
-		char buff[FILENAME_MAX];
-		auto result = BLT_GET_CURRENT_DIRECTORY(buff, FILENAME_MAX);
-		s_WorkingDirectory = Directorypath(blt::string(buff) + Directorypath::DIRECTORY_DELIMITER);
+
 	}
 
 }

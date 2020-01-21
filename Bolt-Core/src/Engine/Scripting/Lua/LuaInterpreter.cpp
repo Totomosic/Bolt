@@ -20,7 +20,7 @@ namespace Bolt
 		return m_Environment;
 	}
 
-	bool LuaInterpreter::ExecuteString(const blt::string& line) const
+	bool LuaInterpreter::ExecuteString(const std::string& line) const
 	{
 		if (m_Environment.ExecuteString(line))
 		{

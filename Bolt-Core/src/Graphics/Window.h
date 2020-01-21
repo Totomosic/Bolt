@@ -21,7 +21,7 @@ namespace Bolt
 		AppContext* m_Context;
 		GLFWwindow* m_WindowHandle;
 		Framebuffer m_Framebuffer;
-		blt::string m_Title;
+		std::string m_Title;
 		bool m_IsDecorated;
 		bool m_IsFocused;
 	};
@@ -54,7 +54,7 @@ namespace Bolt
 		int Height() const;
 		float Aspect() const;
 		Vector2i Size() const;
-		const blt::string& Title() const;
+		const std::string& Title() const;
 		const Color& ClearColor() const;
 		Color& ClearColor();
 		bool IsFocused() const;
@@ -78,7 +78,7 @@ namespace Bolt
 		void SetSize(int width, int height);
 		void SetWidth(int width);
 		void SetHeight(int height);
-		void SetTitle(const blt::string& title);
+		void SetTitle(const std::string& title);
 		void SetClearColor(const Color& clearColor);
 		void SetPosition(const Vector2i& position);
 		void SetPosition(int x, int y);

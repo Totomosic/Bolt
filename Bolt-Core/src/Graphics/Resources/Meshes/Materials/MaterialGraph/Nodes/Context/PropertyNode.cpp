@@ -5,14 +5,14 @@
 namespace Bolt
 {
 
-	PropertyNode::PropertyNode(const blt::string& propertyName, ValueType type, const std::shared_ptr<UniformValueContainer>& defaultValue) : MaterialNode(ShaderStageCompatibility::All, 0, 1),
+	PropertyNode::PropertyNode(const std::string& propertyName, ValueType type, const std::shared_ptr<UniformValueContainer>& defaultValue) : MaterialNode(ShaderStageCompatibility::All, 0, 1),
 		m_PropertyName(propertyName), m_Type(type), m_DefaultValue(defaultValue)
 	{
 		OutputPort port(type);
 		SetOutput(0, port);
 	}
 
-	const blt::string& PropertyNode::GetName() const
+	const std::string& PropertyNode::GetName() const
 	{
 		return m_PropertyName;
 	}

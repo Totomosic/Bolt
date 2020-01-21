@@ -9,7 +9,7 @@ namespace Bolt
 	public:
 		float Radius;
 		int SectorCount;
-		Color Color;
+		Bolt::Color Color;
 
 	public:
 		SphereFactory(float radius, int sectorCount = 360, const Bolt::Color& color = Color::White);

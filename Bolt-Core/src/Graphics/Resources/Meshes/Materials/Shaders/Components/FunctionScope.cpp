@@ -5,7 +5,7 @@
 namespace Bolt
 {
 
-	FunctionScope::FunctionScope(int scopeIndex, const blt::string& name, const ValueTypeInfo& returnType, const std::vector<ValueTypeInfo>& inputs) : ShaderScope(scopeIndex),
+	FunctionScope::FunctionScope(int scopeIndex, const std::string& name, const ValueTypeInfo& returnType, const std::vector<ValueTypeInfo>& inputs) : ShaderScope(scopeIndex),
 		m_ReturnType(returnType), m_Inputs(), m_Name(name)
 	{
 		for (int i = 0; i < inputs.size(); i++)
@@ -33,7 +33,7 @@ namespace Bolt
 		return result;
 	}
 
-	const blt::string& FunctionScope::GetName() const
+	const std::string& FunctionScope::GetName() const
 	{
 		return m_Name;
 	}
@@ -63,15 +63,15 @@ namespace Bolt
 				builder.Write(", " + ValueTypeToGLSLString(arg->Type()) + ' ' + arg->GetVarName());
 			}
 		}
-		builder.Write(')');
+		builder.Write(")");
 		builder.NextLine();
-		builder.Write('{');
+		builder.Write("{");
 		builder.SetScopeIndex(m_ScopeIndex);
 		builder.NextLine();
 		BuildOperations(builder);
 		builder.SetScopeIndex(m_ScopeIndex - 1);
 		builder.NextLine();
-		builder.Write('}');
+		builder.Write("}");
 	}
 
 }

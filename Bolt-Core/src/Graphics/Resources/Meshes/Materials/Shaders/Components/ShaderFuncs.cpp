@@ -359,6 +359,13 @@ namespace Bolt
 		return result;
 	}
 
+	ShaderFuncResultPtr ShaderFuncs::Matrix3(ShaderValuePtr mat4)
+	{
+		BLT_ASSERT(mat4->Type() == ValueType::Matrix4f, "Arg must be a Matrix4f");
+		ShaderFuncResultPtr result = std::make_shared<ShaderFuncResult>("mat3(@0)", std::vector<ShaderValuePtr>{ std::move(mat4) }, ValueType::Matrix3f);
+		return result;
+	}
+
 	ShaderFuncResultPtr ShaderFuncs::Matrix4(ShaderValuePtr r0, ShaderValuePtr r1, ShaderValuePtr r2, ShaderValuePtr r3)
 	{
 		BLT_ASSERT(r0->Type() == ValueType::Vector4f && r1->Type() == ValueType::Vector4f && r2->Type() == ValueType::Vector4f && r3->Type() == ValueType::Vector4f, "Rows must be Vector4f");
@@ -384,7 +391,7 @@ namespace Bolt
 	ShaderFuncResultPtr ShaderFuncs::Call(const FunctionScope& func, const std::vector<ShaderValuePtr>& inputs)
 	{
 		BLT_ASSERT(func.GetInputs().size() == inputs.size(), "Number of arguments does not match arguments of function, required inputs {0}", func.GetInputs().size());
-		blt::string cmd = func.GetName() + '(';
+		std::string cmd = func.GetName() + '(';
 		if (inputs.size() > 0)
 		{
 			cmd += "@0";

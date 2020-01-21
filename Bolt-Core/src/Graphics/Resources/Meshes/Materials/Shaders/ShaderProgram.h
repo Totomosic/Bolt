@@ -13,8 +13,8 @@ namespace Bolt
 	struct BLT_API UserUniformInfo
 	{
 	public:
-		blt::string LinkName;
-		blt::string VarName;
+		std::string LinkName;
+		std::string VarName;
 		ValueType Type;
 		ValueTypeDim Dimension;
 		int Length;
@@ -24,7 +24,7 @@ namespace Bolt
 	struct BLT_API UserUniformPtr
 	{
 	public:
-		blt::string LinkName;
+		std::string LinkName;
 		const ShaderVariable* Var;
 		int Length;
 		std::shared_ptr<UniformValueContainer> DefaultValue = nullptr;
@@ -33,7 +33,7 @@ namespace Bolt
 	struct BLT_API RendererUniformInfo
 	{
 	public:
-		blt::string VarName;
+		std::string VarName;
 		RendererUniform Uniform;
 		int Length;
 	};
@@ -49,7 +49,7 @@ namespace Bolt
 	struct BLT_API CompiledShaderProgram
 	{
 	public:
-		blt::string Source;
+		std::string Source;
 		std::vector<UserUniformInfo> UserUniforms;
 		std::vector<RendererUniformInfo> RendererUniforms;
 	};
@@ -77,8 +77,8 @@ namespace Bolt
 		const MainScope& GetMainScope() const;
 		MainScope& GetMainScope();
 
-		ShaderVariablePtr Uniform(const blt::string& linkName, ValueType type, std::shared_ptr<UniformValueContainer> defaultValue = nullptr);
-		ShaderVariablePtr UniformArray(const blt::string& linkName, ValueType type, uint32_t length);
+		ShaderVariablePtr Uniform(const std::string& linkName, ValueType type, std::shared_ptr<UniformValueContainer> defaultValue = nullptr);
+		ShaderVariablePtr UniformArray(const std::string& linkName, ValueType type, uint32_t length);
 		ShaderVariablePtr RendererUniform(Bolt::RendererUniform uniform);
 		ShaderVariablePtr DeclareVar(ValueType type);
 		ShaderVariablePtr DefineVar(const ShaderValuePtr& value);
@@ -93,19 +93,19 @@ namespace Bolt
 		}
 
 		template<typename T>
-		ShaderVariablePtr Uniform(const blt::string& linkName)
+		ShaderVariablePtr Uniform(const std::string& linkName)
 		{
 			return Uniform(linkName, GetValueType<T>());
 		}
 
 		template<typename T>
-		ShaderVariablePtr Uniform(const blt::string& linkName, const T& defaultValue)
+		ShaderVariablePtr Uniform(const std::string& linkName, const T& defaultValue)
 		{
 			return Uniform(linkName, GetValueType<T>(), std::make_shared<UniformValue<T>>(defaultValue));
 		}
 
 		template<typename T>
-		ShaderVariablePtr UniformArray(const blt::string& linkName, uint32_t length)
+		ShaderVariablePtr UniformArray(const std::string& linkName, uint32_t length)
 		{
 			return UniformArray(linkName, GetValueType<T>(), length);
 		}
@@ -129,9 +129,9 @@ namespace Bolt
 		void DivAssign(const ShaderLValuePtr& var, const ShaderValuePtr& value);
 		ForLoopScope& For(const ShaderVariablePtr& counter, const ShaderValuePtr& initial, const ShaderValuePtr& condition, std::unique_ptr<ShaderOp>&& iteration);
 		IfScope& If(const ShaderValuePtr& condition);
-		FunctionScope& DefineFunction(const blt::string& name, const ValueTypeInfo& returnType, const std::vector<ValueTypeInfo>& inputs);
-		bool HasFunction(const blt::string& name) const;
-		FunctionScope& GetFunction(const blt::string& name) const;
+		FunctionScope& DefineFunction(const std::string& name, const ValueTypeInfo& returnType, const std::vector<ValueTypeInfo>& inputs);
+		bool HasFunction(const std::string& name) const;
+		FunctionScope& GetFunction(const std::string& name) const;
 
 		virtual CompiledShaderProgram Compile() const = 0;
 		virtual void Reset();
@@ -150,7 +150,7 @@ namespace Bolt
 		}
 
 		template<typename Ret, typename... Args>
-		FunctionScope& DefineFunction(const blt::string& name)
+		FunctionScope& DefineFunction(const std::string& name)
 		{
 			std::vector<ValueTypeInfo> v;
 			v.reserve(sizeof...(Args));

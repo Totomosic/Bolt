@@ -1,98 +1,98 @@
 #include "bltpch.h"
 
-#include "Directorypath.h"
+#include "DirectoryPath.h"
 #include "Filesystem.h"
-#include "Filepath.h"
+#include "FilePath.h"
 
 namespace Bolt
 {
 
-	Directorypath::Directorypath()
+	DirectoryPath::DirectoryPath()
 		: m_Path()
 	{
 		
 	}
 
-	Directorypath::Directorypath(const blt::string& path)
+	DirectoryPath::DirectoryPath(const std::string& path)
 		: m_Path(path)
 	{
 		StandardizePath(m_Path);
 	}
 
-	Directorypath::Directorypath(const char* path) : Directorypath(blt::string(path))
+	DirectoryPath::DirectoryPath(const char* path) : DirectoryPath(std::string(path))
 	{
 	
 	}
 
-	const blt::string& Directorypath::Path() const
+	const std::string& DirectoryPath::Path() const
 	{
 		return m_Path;
 	}
 
-	bool Directorypath::HasParent() const
+	bool DirectoryPath::HasParent() const
 	{
 		return !Parent().Path().empty();
 	}
 
-	Directorypath Directorypath::Parent() const
+	DirectoryPath DirectoryPath::Parent() const
 	{
-		uint32_t index = m_Path.find_last_of(DIRECTORY_DELIMITER, m_Path.length() - 2);
+		size_t index = m_Path.find_last_of(DIRECTORY_DELIMITER, m_Path.length() - 2);
 		return m_Path.substr(0, index);
 	}
 
-	bool Directorypath::IsRelative() const
+	bool DirectoryPath::IsRelative() const
 	{
 		return !IsAbsolute();
 	}
 
-	bool Directorypath::IsAbsolute() const
+	bool DirectoryPath::IsAbsolute() const
 	{
 		return m_Path.size() > 1 && m_Path[1] == ':';
 	}
 
-	void Directorypath::MakeAbsolute(const Directorypath& root)
+	void DirectoryPath::MakeAbsolute(const DirectoryPath& root)
 	{
 		if (IsRelative())
 		{
-			m_Path = Directorypath::Combine(root, *this).Path();
+			m_Path = DirectoryPath::Combine(root, *this).Path();
 		}
 	}
 
-	bool Directorypath::operator==(const Directorypath& other) const
+	bool DirectoryPath::operator==(const DirectoryPath& other) const
 	{
 		return other.Path() == Path();
 	}
 
-	bool Directorypath::operator!=(const Directorypath& other) const
+	bool DirectoryPath::operator!=(const DirectoryPath& other) const
 	{
 		return !(*this == other);
 	}
 
-	std::ostream& operator<<(std::ostream& stream, const Directorypath& path)
+	std::ostream& operator<<(std::ostream& stream, const DirectoryPath& path)
 	{
 		stream << path.Path();
 		return stream;
 	}
 
-	Directorypath Directorypath::Combine(const Directorypath& left, const Directorypath& right)
+	DirectoryPath DirectoryPath::Combine(const DirectoryPath& left, const DirectoryPath& right)
 	{
 		BLT_ASSERT(!(left.IsAbsolute() && right.IsAbsolute()), "Unable to combine 2 absolute paths");
 		BLT_ASSERT(right.IsRelative(), "Right path must be relative in order to combine");
-		blt::string leftPath = left.Path();
-		blt::string rightPath = right.Path();
-		return Directorypath(leftPath + rightPath);
+		std::string leftPath = left.Path();
+		std::string rightPath = right.Path();
+		return DirectoryPath(leftPath + rightPath);
 	}
 
-	void Directorypath::StandardizePath(blt::string& directorypath)
+	void DirectoryPath::StandardizePath(std::string& directorypath)
 	{
-		directorypath.replace_all('\\', DIRECTORY_DELIMITER);
+		blt::replace_all(directorypath, '\\', DIRECTORY_DELIMITER);
 		if (directorypath.front() == DIRECTORY_DELIMITER)
 		{
-			directorypath = directorypath.substr(1);
+			directorypath.erase(directorypath.begin());
 		}
 		if (directorypath.back() != DIRECTORY_DELIMITER)
 		{
-			directorypath.append(DIRECTORY_DELIMITER);
+			directorypath += DIRECTORY_DELIMITER;
 		}
 	}
 

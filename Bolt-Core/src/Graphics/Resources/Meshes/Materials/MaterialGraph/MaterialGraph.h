@@ -18,7 +18,7 @@ namespace Bolt
 	private:
 		ResourceManager* m_Resources;
 
-		std::unordered_map<blt::string, std::unique_ptr<MasterNode>> m_MasterNodes;
+		std::unordered_map<std::string, std::unique_ptr<MasterNode>> m_MasterNodes;
 		std::vector<std::unique_ptr<MaterialNode>> m_Nodes;
 		MaterialGraphBuilder m_Builder;
 		bool m_IsBuilt;
@@ -28,7 +28,7 @@ namespace Bolt
 		virtual ~MaterialGraph() {}
 
 		ResourceManager& GetResourceManager() const;
-		const std::unordered_map<blt::string, std::unique_ptr<MasterNode>>& GetMasterNodes() const;
+		const std::unordered_map<std::string, std::unique_ptr<MasterNode>>& GetMasterNodes() const;
 		const std::vector<std::unique_ptr<MaterialNode>>& GetNodes() const;
 		const MaterialGraphBuilder& GetBuilder() const;
 		MaterialGraphBuilder& GetBuilder();
@@ -47,7 +47,7 @@ namespace Bolt
 		}
 
 		template<typename T>
-		PropertyNode& AddProperty(const blt::string& propertyName, const T& defaultValue = T())
+		PropertyNode& AddProperty(const std::string& propertyName, const T& defaultValue = T())
 		{
 			return (PropertyNode&)AddNode(PropertyNode::Create<T>(propertyName, defaultValue));
 		}
@@ -63,8 +63,8 @@ namespace Bolt
 
 	protected:
 		MaterialNode& AddNode(std::unique_ptr<MaterialNode>&& node);
-		MasterNode& AddMasterNode(const blt::string& name, std::unique_ptr<MasterNode>&& masterNode);
-		virtual void FinaliseBuild(const std::unordered_map<blt::string, ShaderValuePtr>& masterNodeValues) = 0;
+		MasterNode& AddMasterNode(const std::string& name, std::unique_ptr<MasterNode>&& masterNode);
+		virtual void FinaliseBuild(const std::unordered_map<std::string, ShaderValuePtr>& masterNodeValues) = 0;
 
 	};
 

@@ -9,7 +9,7 @@ namespace Bolt
 	public:
 		float Width;
 		float Height;
-		Color Color;
+		Bolt::Color Color;
 		int VerticesPerRev;
 
 	public:

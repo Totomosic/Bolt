@@ -41,10 +41,10 @@ namespace Bolt
 		return m_Builder.GetMainScope();
 	}
 
-	ShaderVariablePtr ShaderProgram::Uniform(const blt::string& linkName, ValueType type, std::shared_ptr<UniformValueContainer> defaultValue)
+	ShaderVariablePtr ShaderProgram::Uniform(const std::string& linkName, ValueType type, std::shared_ptr<UniformValueContainer> defaultValue)
 	{
 		ShaderVariablePtr var = GetGlobalScope().DeclareVar(type, "uniform");
-		blt::string name = linkName;
+		std::string name = linkName;
 		if (name == NAMELESS_UNIFORM)
 		{
 			name = "uniform_" + std::to_string(m_UserUniforms.size());
@@ -53,7 +53,7 @@ namespace Bolt
 		return var;
 	}
 
-	ShaderVariablePtr ShaderProgram::UniformArray(const blt::string& linkName, ValueType type, uint32_t length)
+	ShaderVariablePtr ShaderProgram::UniformArray(const std::string& linkName, ValueType type, uint32_t length)
 	{
 		ShaderVariablePtr var = GetGlobalScope().DeclareArray(type, ShaderLiteral::FromInt((int)length), "uniform");
 		m_UserUniforms.push_back({ linkName, var.get(), (int)length });
@@ -137,17 +137,17 @@ namespace Bolt
 		return AddScope<IfScope>(condition);
 	}
 
-	bool ShaderProgram::HasFunction(const blt::string& name) const
+	bool ShaderProgram::HasFunction(const std::string& name) const
 	{
 		return GetGlobalScope().HasFunction(name);
 	}
 
-	FunctionScope& ShaderProgram::GetFunction(const blt::string& name) const
+	FunctionScope& ShaderProgram::GetFunction(const std::string& name) const
 	{
 		return GetGlobalScope().GetFunction(name);
 	}
 
-	FunctionScope& ShaderProgram::DefineFunction(const blt::string& name, const ValueTypeInfo& returnType, const std::vector<ValueTypeInfo>& inputs)
+	FunctionScope& ShaderProgram::DefineFunction(const std::string& name, const ValueTypeInfo& returnType, const std::vector<ValueTypeInfo>& inputs)
 	{
 		return GetGlobalScope().DefineFunction(name, returnType, inputs);
 	}

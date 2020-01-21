@@ -11,7 +11,7 @@ namespace Bolt
 	
 	}
 
-	bool GlobalScope::HasFunction(const blt::string& name) const
+	bool GlobalScope::HasFunction(const std::string& name) const
 	{
 		auto it = std::find_if(m_FunctionIndices.begin(), m_FunctionIndices.end(), [this, &name](int opIndex)
 			{
@@ -20,7 +20,7 @@ namespace Bolt
 		return it != m_FunctionIndices.end();
 	}
 
-	FunctionScope& GlobalScope::GetFunction(const blt::string& name) const
+	FunctionScope& GlobalScope::GetFunction(const std::string& name) const
 	{
 		BLT_ASSERT(HasFunction(name), "No function exists with name {}", name);
 		auto it = std::find_if(m_FunctionIndices.begin(), m_FunctionIndices.end(), [this, &name](int opIndex)
@@ -30,7 +30,7 @@ namespace Bolt
 		return GetFunctionByIndex(*it);
 	}
 
-	FunctionScope& GlobalScope::DefineFunction(const blt::string& name, const ValueTypeInfo& returnType, const std::vector<ValueTypeInfo>& inputs)
+	FunctionScope& GlobalScope::DefineFunction(const std::string& name, const ValueTypeInfo& returnType, const std::vector<ValueTypeInfo>& inputs)
 	{
 		int index = GetNextOpIndex();
 		FunctionScope& scope = AddScope<FunctionScope>(m_ScopeIndex + 1, name, returnType, inputs);

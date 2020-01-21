@@ -19,7 +19,7 @@ namespace Bolt
 	}
 
 	ResourceManager::ResourceManager()
-		: m_Resources(), m_Fonts(this), m_Textures(this), m_Materials(this)
+		: m_Resources(), m_Fonts(this), m_Textures(this), m_Materials(this), m_Models(this)
 	{
 	
 	}
@@ -39,7 +39,12 @@ namespace Bolt
 		return m_Textures;
 	}
 
-	void ResourceManager::LoadPack(const Filepath& resourcePack, std::function<void(const ResourcePack&)> callback)
+	const BasicModels& ResourceManager::Models() const
+	{
+		return m_Models;
+	}
+
+	void ResourceManager::LoadPack(const FilePath& resourcePack, std::function<void(const ResourcePack&)> callback)
 	{
 		XMLfile file = Filesystem::OpenXML(resourcePack);
 		XMLnode root = file.LoadXML();
@@ -96,7 +101,7 @@ namespace Bolt
 		return id;
 	}
 
-	ResourceType ResourceManager::StringToType(const blt::string& str)
+	ResourceType ResourceManager::StringToType(const std::string& str)
 	{
 		if (str == "TEXTURE2D")
 		{
@@ -131,11 +136,11 @@ namespace Bolt
 		int height = std::stoi(resourceFile.Attributes.GetChild("height").Data.c_str());
 		resourceFile.Id = RegisterGetId(std::make_unique<Texture2D>(width, height));
 		Texture2D* ptr = (Texture2D*)m_Resources[resourceFile.Id].get();
-		blt::string data = resourceFile.Attributes.GetChild("data").Data;
-		const blt::string& magString = resourceFile.Attributes.GetChild("options").Attributes.at("magnification");
-		const blt::string& minString = resourceFile.Attributes.GetChild("options").Attributes.at("minification");
-		const blt::string& mipmapString = resourceFile.Attributes.GetChild("options").Attributes.at("mipmaps");
-		const blt::string& wrapString = resourceFile.Attributes.GetChild("options").Attributes.at("wrap");
+		std::string data = resourceFile.Attributes.GetChild("data").Data;
+		const std::string& magString = resourceFile.Attributes.GetChild("options").Attributes.at("magnification");
+		const std::string& minString = resourceFile.Attributes.GetChild("options").Attributes.at("minification");
+		const std::string& mipmapString = resourceFile.Attributes.GetChild("options").Attributes.at("mipmaps");
+		const std::string& wrapString = resourceFile.Attributes.GetChild("options").Attributes.at("wrap");
 		BLT_ASSERT(magString == "Nearest" || magString == "Linear", "Invalid Mag Option");
 		BLT_ASSERT(minString == "Nearest" || minString == "Linear", "Invalid Min Option");
 		BLT_ASSERT(mipmapString == "Enabled" || mipmapString == "Disabled", "Invalid Mipmap Option");
@@ -158,13 +163,13 @@ namespace Bolt
 	{
 		resourceFile.Id = RegisterGetId(std::make_unique<Model>(ModelData()));
 		Model* ptr = (Model*)m_Resources[resourceFile.Id].get();
-		Task t = TaskManager::Run([resourceFile{ std::move(resourceFile) }]()
+		Task t = TaskManager::Get().Run([resourceFile{ std::move(resourceFile) }]()
 			{
 				int vertexDimension = std::stoi(resourceFile.Attributes.GetChild("vertices").Attributes.at("dim").c_str());
-				std::vector<blt::string> verticesS = resourceFile.Attributes.GetChild("vertices").Data.split(' ');
-				std::vector<blt::string> normalsS = resourceFile.Attributes.GetChild("normals").Data.split(' ');
-				std::vector<blt::string> texcoordsS = resourceFile.Attributes.GetChild("uvs").Data.split(' ');
-				std::vector<blt::string> indicesS = resourceFile.Attributes.GetChild("indices").Data.split(' ');
+				std::vector<std::string_view> verticesS = blt::split_view(resourceFile.Attributes.GetChild("vertices").Data, ' ');
+				std::vector<std::string_view> normalsS = blt::split_view(resourceFile.Attributes.GetChild("normals").Data, ' ');
+				std::vector<std::string_view> texcoordsS = blt::split_view(resourceFile.Attributes.GetChild("uvs").Data, ' ');
+				std::vector<std::string_view> indicesS = blt::split_view(resourceFile.Attributes.GetChild("indices").Data, ' ');
 				std::vector<float> vertices;
 				std::vector<float> normals;
 				std::vector<float> texcoords;
@@ -173,17 +178,17 @@ namespace Bolt
 				normals.resize(normalsS.size());
 				texcoords.resize(texcoordsS.size());
 				indices.resize(indicesS.size());
-				std::transform(verticesS.begin(), verticesS.end(), vertices.begin(), [](const blt::string& str) {
-					return std::stof(str.c_str());
+				std::transform(verticesS.begin(), verticesS.end(), vertices.begin(), [](const std::string_view& str) {
+					return std::stof(str.data());
 					});
-				std::transform(normalsS.begin(), normalsS.end(), normals.begin(), [](const blt::string& str) {
-					return std::stof(str.c_str());
+				std::transform(normalsS.begin(), normalsS.end(), normals.begin(), [](const std::string_view& str) {
+					return std::stof(str.data());
 					});
-				std::transform(texcoordsS.begin(), texcoordsS.end(), texcoords.begin(), [](const blt::string& str) {
-					return std::stof(str.c_str());
+				std::transform(texcoordsS.begin(), texcoordsS.end(), texcoords.begin(), [](const std::string_view& str) {
+					return std::stof(str.data());
 					});
-				std::transform(indicesS.begin(), indicesS.end(), indices.begin(), [](const blt::string& str) {
-					return (uint32_t)std::stoi(str.c_str());
+				std::transform(indicesS.begin(), indicesS.end(), indices.begin(), [](const std::string_view& str) {
+					return (uint32_t)std::stoi(str.data());
 					});
 				return std::tuple<std::vector<float>, std::vector<float>, std::vector<float>, std::vector<uint32_t>>{ std::move(vertices), std::move(normals), std::move(texcoords), std::move(indices) };
 			});
@@ -199,7 +204,7 @@ namespace Bolt
 				data.Indices->AddIndexBuffer(std::make_unique<IndexBuffer>(indices.data(), indices.size()));
 				data.Vertices = std::make_unique<VertexArray>();
 				BufferLayout layout = BufferLayout::Default();
-				VertexBuffer& buffer = data.Vertices->CreateVertexBuffer(vertices.size() / vertexDimension * layout.Size(), layout);
+				VertexBuffer& buffer = data.Vertices->CreateVertexBuffer((uint32_t)vertices.size() / vertexDimension * layout.Size(), layout);
 				data.Vertices->MapAsync(make_shared_function([vertices{ std::move(vertices) }, normals{ std::move(normals) }, texcoords{ std::move(texcoords) }, indices{ std::move(indices) }, vertexDimension](const VertexMapping& mapping) mutable
 				{
 					VertexIterator it = mapping.Begin();

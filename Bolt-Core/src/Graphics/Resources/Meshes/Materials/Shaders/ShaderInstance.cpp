@@ -1,6 +1,6 @@
 #include "bltpch.h"
 #include "ShaderInstance.h"
-#include "Core/Functions.h"
+#include "BoltLib/Functions.h"
 
 namespace Bolt
 {
@@ -48,7 +48,7 @@ namespace Bolt
 			{
 				for (int i = 0; i < uniform.Length; i++)
 				{
-					blt::string arrPart = '[' + std::to_string(i) + ']';
+					std::string arrPart = '[' + std::to_string(i) + ']';
 					RendererUniformLocation loc = { shader.GetUniformLocation(uniform.VarName + arrPart), uniform.Uniform, false, i };
 					if (loc.Location == -1)
 					{
@@ -88,7 +88,7 @@ namespace Bolt
 			{
 				for (int i = 0; i < uniform.Length; i++)
 				{
-					blt::string arrPart = '[' + std::to_string(i) + ']';
+					std::string arrPart = '[' + std::to_string(i) + ']';
 					UserUniformLocation loc = { uniform.LinkName + arrPart, shader.GetUniformLocation(uniform.VarName + arrPart), uniform.Type, false, textureCount, uniform.DefaultValue };
 					if (loc.Location == -1)
 					{

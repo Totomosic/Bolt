@@ -1,78 +1,46 @@
 #pragma once
-#include "ObjectCollection.h"
-#include "Query/SGQuery.h"
-#include "LayerEvents.h"
-#include "UI/UIManager.h"
+#include "SystemRegistry.h"
+#include "Systems/RenderingSystem.h"
+#include "Systems/UIManager.h"
+#include "EntityFactory.h"
 
 namespace Bolt
 {
 
-	struct BLT_API Layer
+	class BLT_API Layer
 	{
 	private:
-		struct BLT_API TempGameObject
-		{
-		public:
-			GameObject* Object;
-			float TimeToDelete;
-		};
-
-	private:
-		id_t m_Id;		
-		ObjectCollection m_GameObjects;
-		bool m_Enabled;
+		EntityManager m_Entities;
+		SystemRegistry m_Systems;
 		bool m_IsActive;
-		Camera* m_ActiveCamera;
 
-		std::vector<TempGameObject> m_TemporaryObjects;
-		UIManager m_UIManager;
+		SystemRegistry::SystemPtr<RenderingSystem> m_RenderingSystem;
+		SystemRegistry::SystemPtr<UIManager> m_UISystem;
 
 	public:
 		Layer();
-		Layer(const Layer& other) = delete;
-		Layer& operator=(const Layer& other) = delete;
-		Layer(Layer&& other) = default;
-		Layer& operator=(Layer&& other) = default;
-		~Layer() = default;
 
-		const ObjectCollection& GameObjects() const;
-		ObjectCollection& GameObjects();
-		Camera* ActiveCamera() const;
-		id_t Id() const;
-		const UIManager& UI() const;
-		UIManager& UI();
+		EntityFactory GetFactory();
+
+		const EntityManager& Entities() const;
+		EntityManager& Entities();
+		const SystemRegistry& Systems() const;
+		SystemRegistry& Systems();
+
+		UIManager& GetUI();
+
+		const EntityHandle& GetActiveCamera() const;
+		void SetActiveCamera(const EntityHandle& entity);
 
 		bool IsEnabled() const;
-		bool IsActive() const;
 		void Enable();
 		void Disable();
-		void SetEnabled(bool isEnabled);
-		void SetActiveCamera(Camera* camera);
 
-		GameObject* AddGameObject(GameObject&& object);
-		void RemoveGameObject(GameObject* object);
-		void RemoveGameObject(id_t id);
-		void Clear();
-
-		void Update();
-		void UpdateTemporaryObjects();
-
-		void Transfer(XMLserializer& backend, bool isWriting);
-
-		// Deletes given object after timeToDelete seconds. Will not be deleted instantly.
-		friend void BLT_API Destroy(GameObject* object, float timeToDelete = 0.0f);
-
-		friend struct Scene;
-		friend class Graphics;
-		friend class Component;
+		void Update(TimeDelta delta);
+		void Render(TimeDelta delta);
 
 	private:
-		GameObject* AddTemporaryGameObject(GameObject&& object);
-		void MarkGameObjectForDelete(GameObject* object, float timeToDelete = 0.0f);
-		void Create(id_t id, int maxGameObjects);
-
-		void SetIsActive(bool isActive);
-
+		bool ValidateCamera(const EntityHandle& entity) const;
 	};
 
 }

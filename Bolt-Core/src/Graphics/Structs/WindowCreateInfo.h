@@ -1,5 +1,5 @@
 #pragma once
-#include "Core/Color.h"
+#include "BoltLib/Color.h"
 
 namespace Bolt
 {
@@ -9,7 +9,7 @@ namespace Bolt
 	public:
 		int Width = 1280;
 		int Height = 720;
-		blt::string Title = "Bolt";
+		std::string Title = "Bolt";
 		Color ClearColor = Color::Black;
 
 		bool Fullscreen = false;

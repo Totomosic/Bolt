@@ -5,13 +5,13 @@
 namespace Bolt
 {
 
-	ShaderLiteral::ShaderLiteral(const blt::string& valueString, ValueType type, ValueTypeDim dim) : ShaderValue(type, dim),
+	ShaderLiteral::ShaderLiteral(const std::string& valueString, ValueType type, ValueTypeDim dim) : ShaderValue(type, dim),
 		m_ValueString(valueString)
 	{
 	
 	}
 
-	const blt::string& ShaderLiteral::GetValueString() const
+	const std::string& ShaderLiteral::GetValueString() const
 	{
 		return m_ValueString;
 	}
@@ -53,17 +53,17 @@ namespace Bolt
 
 	ShaderLiteralPtr ShaderLiteral::FromVec2(const Vector2f& value)
 	{
-		return std::make_shared<ShaderLiteral>("vec2(" + std::to_string(value.x) + ", " + std::to_string(value.y) + ')', ValueType::Vector2f);
+		return std::make_shared<ShaderLiteral>("vec2(" + std::to_string(value.x) + "," + std::to_string(value.y) + ')', ValueType::Vector2f);
 	}
 
 	ShaderLiteralPtr ShaderLiteral::FromVec3(const Vector3f& value)
 	{
-		return std::make_shared<ShaderLiteral>("vec3(" + std::to_string(value.x) + ", " + std::to_string(value.y) + ", " + std::to_string(value.z) + ')', ValueType::Vector3f);
+		return std::make_shared<ShaderLiteral>("vec3(" + std::to_string(value.x) + "," + std::to_string(value.y) + "," + std::to_string(value.z) + ')', ValueType::Vector3f);
 	}
 
 	ShaderLiteralPtr ShaderLiteral::FromVec4(const Vector4f& value)
 	{
-		return std::make_shared<ShaderLiteral>("vec4(" + std::to_string(value.x) + ", " + std::to_string(value.y) + ", " + std::to_string(value.z) + ", " + std::to_string(value.w) + ')', ValueType::Vector4f);
+		return std::make_shared<ShaderLiteral>("vec4(" + std::to_string(value.x) + "," + std::to_string(value.y) + "," + std::to_string(value.z) + "," + std::to_string(value.w) + ')', ValueType::Vector4f);
 	}
 
 }

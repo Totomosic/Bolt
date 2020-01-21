@@ -9,7 +9,7 @@ namespace Bolt
 	public:
 		Vector3f Direction;
 		float Length;
-		Color Color;
+		Bolt::Color Color;
 
 	public:
 		LineFactory(const Vector3f& direction, float length, const Bolt::Color& color = Color::White);

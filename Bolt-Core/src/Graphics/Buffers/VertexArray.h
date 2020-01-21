@@ -57,7 +57,7 @@ namespace Bolt
 		template<typename FuncT0>
 		void MapAsync(FuncT0 callback) const
 		{
-			Task t = TaskManager::Run(make_shared_function([mapping{ Map() }, callback{ std::move(callback) }]() mutable
+			Task t = TaskManager::Get().Run(make_shared_function([mapping{ Map() }, callback{ std::move(callback) }]() mutable
 			{
 				callback(mapping);
 				return std::move(mapping);

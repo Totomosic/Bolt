@@ -27,11 +27,11 @@ namespace Bolt
 		int GetScopeIndex() const;
 		bool IsDefinedInThisScope(const ShaderVariable* var) const;
 
-		ShaderVariablePtr DefineVar(const ShaderValuePtr& value, const blt::string& meta = "");
-		ShaderVariablePtr DeclareVar(ValueType type, const blt::string& meta = "");
-		ShaderPassVariablePtr DeclarePassIn(const ShaderPassVariablePtr& outVar, const blt::string& meta = "");
-		ShaderPassVariablePtr DeclarePassOut(ValueType type, PassType passType,  const blt::string& meta = "");
-		ShaderVariablePtr DeclareArray(ValueType type, const ShaderLiteralPtr& length, const blt::string& meta = "");
+		ShaderVariablePtr DefineVar(const ShaderValuePtr& value, const std::string& meta = "");
+		ShaderVariablePtr DeclareVar(ValueType type, const std::string& meta = "");
+		ShaderPassVariablePtr DeclarePassIn(const ShaderPassVariablePtr& outVar, const std::string& meta = "");
+		ShaderPassVariablePtr DeclarePassOut(ValueType type, PassType passType,  const std::string& meta = "");
+		ShaderVariablePtr DeclareArray(ValueType type, const ShaderLiteralPtr& length, const std::string& meta = "");
 		void AddOperation(std::unique_ptr<ShaderOp>&& op);
 		void InsertOperation(int index, std::unique_ptr<ShaderOp>&& op);
 		ShaderScope& AddScope(std::unique_ptr<ShaderScope>&& scope);

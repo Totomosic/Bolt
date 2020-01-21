@@ -5,7 +5,7 @@
 namespace Bolt
 {
 
-	DeclarePassOutOp::DeclarePassOutOp(const ShaderVariablePtr& outVar, const blt::string& meta) : ShaderOp(),
+	DeclarePassOutOp::DeclarePassOutOp(const ShaderVariablePtr& outVar, const std::string& meta) : ShaderOp(),
 		m_OutVar(outVar), m_MetaData(meta)
 	{
 

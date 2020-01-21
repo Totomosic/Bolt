@@ -8,8 +8,14 @@ namespace Bolt
 	class BLT_API TaskState
 	{
 	public:
-		std::unique_ptr<T> Data;
-		std::atomic<bool> IsFinished;
+		std::promise<T> Promise;
+		std::future<T> Future;
+
+	public:
+		TaskState()
+			: Promise(), Future(Promise.get_future())
+		{
+		}
 	};
 
 	template<typename T>
@@ -22,17 +28,22 @@ namespace Bolt
 		TaskResult()
 			: m_State(std::make_shared<TaskState<T>>())
 		{
-			m_State->IsFinished.store(false);
+			
 		}
 
 		T Get()
 		{
-			while (!m_State->IsFinished.load())
-			{
-				std::this_thread::yield();
-			}
-			T data = std::move(*m_State->Data);
-			return data;
+			return m_State->Future.get();
+		}
+
+		void Wait()
+		{
+			m_State->Future.wait();
+		}
+
+		std::future_status WaitFor(double seconds)
+		{
+			return m_State->Future.wait_for(std::chrono::nanoseconds((size_t)(seconds * 1e9)));
 		}
 
 	};
@@ -41,10 +52,9 @@ namespace Bolt
 	TaskResult<TResult> LaunchAsync(std::function<TFuncResult()> func)
 	{
 		TaskResult<TResult> result;
-		std::thread t([statePtr = result.m_State, func = std::move(func)]()
+		std::thread t([statePtr{ result.m_State }, func{ std::move(func) }]()
 		{
-			statePtr->Data = std::make_unique<TFuncResult>(func());
-			statePtr->IsFinished = true;
+			statePtr->Promise.set_value(func());
 		});
 		t.detach();
 		return result;

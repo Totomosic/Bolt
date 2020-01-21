@@ -49,7 +49,7 @@ namespace Bolt
 		BlendSrc BlendSrcFunc = BlendSrc::SrcAlpha;
 		BlendDst BlendDstFunc = BlendDst::OneMinusSrcAlpha;
 		CullFace CulledFaces = CullFace::Back;
-		PolygonMode PolygonMode = PolygonMode::Fill;
+		Bolt::PolygonMode PolygonMode = Bolt::PolygonMode::Fill;
 		bool RenderToDepthBuffer = true;
 
 	public:

@@ -1,5 +1,5 @@
 #pragma once
-#include "Core/Color.h"
+#include "BoltLib/Color.h"
 
 namespace Bolt
 {

@@ -22,7 +22,7 @@ namespace Bolt
 		return *m_Resources;
 	}
 
-	const std::unordered_map<blt::string, std::unique_ptr<MasterNode>>& MaterialGraph::GetMasterNodes() const
+	const std::unordered_map<std::string, std::unique_ptr<MasterNode>>& MaterialGraph::GetMasterNodes() const
 	{
 		return m_MasterNodes;
 	}
@@ -61,7 +61,7 @@ namespace Bolt
 		m_Builder.Reset();
 		m_Builder.GetBuilder().SetIsTransparent(isTransparent);
 		m_IsBuilt = true;
-		std::unordered_map<blt::string, ShaderValuePtr> masterNodeResults;
+		std::unordered_map<std::string, ShaderValuePtr> masterNodeResults;
 		for (const auto& pair : m_MasterNodes)
 		{
 			masterNodeResults[pair.first] = m_Builder.BuildNode(*pair.second);
@@ -69,7 +69,7 @@ namespace Bolt
 		FinaliseBuild(masterNodeResults);
 	}
 
-	MasterNode& MaterialGraph::AddMasterNode(const blt::string& name, std::unique_ptr<MasterNode>&& masterNode)
+	MasterNode& MaterialGraph::AddMasterNode(const std::string& name, std::unique_ptr<MasterNode>&& masterNode)
 	{
 		BLT_ASSERT(m_MasterNodes.find(name) == m_MasterNodes.end(), "Master node with name {0} already exists", name);
 		MasterNode* ptr = masterNode.get();

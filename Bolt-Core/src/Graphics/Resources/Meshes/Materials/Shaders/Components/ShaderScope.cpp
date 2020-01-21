@@ -65,7 +65,7 @@ namespace Bolt
 		return true;
 	}
 
-	ShaderVariablePtr ShaderScope::DefineVar(const ShaderValuePtr& value, const blt::string& meta)
+	ShaderVariablePtr ShaderScope::DefineVar(const ShaderValuePtr& value, const std::string& meta)
 	{
 		ShaderVariablePtr var = std::make_shared<ShaderVariable>(value->Type());
 		AddOperation(std::make_unique<ShaderDefineOp>(var, value, meta));
@@ -73,7 +73,7 @@ namespace Bolt
 		return var;
 	}
 
-	ShaderVariablePtr ShaderScope::DeclareVar(ValueType type, const blt::string& meta)
+	ShaderVariablePtr ShaderScope::DeclareVar(ValueType type, const std::string& meta)
 	{
 		ShaderVariablePtr var = std::make_shared<ShaderVariable>(type);
 		AddOperation(std::make_unique<ShaderDeclareOp>(var, meta));
@@ -81,7 +81,7 @@ namespace Bolt
 		return var;
 	}
 
-	ShaderPassVariablePtr ShaderScope::DeclarePassIn(const ShaderPassVariablePtr& outVar, const blt::string& meta)
+	ShaderPassVariablePtr ShaderScope::DeclarePassIn(const ShaderPassVariablePtr& outVar, const std::string& meta)
 	{
 		ShaderPassVariablePtr var = std::make_shared<ShaderPassVariable>(outVar->Type(), ValueTypeDim::Single, outVar->GetPassType());
 		AddOperation(std::make_unique<DeclarePassInOp>(var, outVar, meta));
@@ -89,7 +89,7 @@ namespace Bolt
 		return var;
 	}
 
-	ShaderPassVariablePtr ShaderScope::DeclarePassOut(ValueType type, PassType passType, const blt::string& meta)
+	ShaderPassVariablePtr ShaderScope::DeclarePassOut(ValueType type, PassType passType, const std::string& meta)
 	{
 		ShaderPassVariablePtr var = std::make_shared<ShaderPassVariable>(type, ValueTypeDim::Single, passType);
 		AddOperation(std::make_unique<DeclarePassOutOp>(var, meta));
@@ -97,7 +97,7 @@ namespace Bolt
 		return var;
 	}
 
-	ShaderVariablePtr ShaderScope::DeclareArray(ValueType type, const ShaderLiteralPtr& length, const blt::string& meta)
+	ShaderVariablePtr ShaderScope::DeclareArray(ValueType type, const ShaderLiteralPtr& length, const std::string& meta)
 	{
 		ShaderVariablePtr var = std::make_shared<ShaderVariable>(type, ValueTypeDim::Array);
 		AddOperation(std::make_unique<DeclareArrayOp>(var, length, meta));
@@ -166,7 +166,7 @@ namespace Bolt
 			op->Build(builder);
 			if (!op->IsCreateScopeOp())
 			{
-				builder.Write(';');
+				builder.Write(";");
 			}
 			if (i != m_Operations.size() - 1)
 			{
@@ -182,7 +182,7 @@ namespace Bolt
 
 	int ShaderScope::GetNextOpIndex() const
 	{
-		return m_Operations.size();
+		return (int)m_Operations.size();
 	}
 
 	ShaderOp& ShaderScope::GetOpAtIndex(int index) const

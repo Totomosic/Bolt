@@ -1,5 +1,6 @@
 #pragma once
 #include "bltpch.h"
+#include "Core/Utils/Filesystem/Filesystem.h"
 
 namespace Bolt
 {
@@ -36,5 +37,7 @@ namespace Bolt
 		Image ResizeLinear(int width, int height) const;		
 
 	};
+
+	Image LoadTexture(const FilePath& file, bool flipVertically = true, bool flipHorizontally = false);
 
 }

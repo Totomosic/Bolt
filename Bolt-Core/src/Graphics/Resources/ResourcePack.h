@@ -9,15 +9,15 @@ namespace Bolt
 	struct BLT_API ResourcePack
 	{
 	private:
-		std::unordered_map<blt::string, ResourceFile> m_Resources;
+		std::unordered_map<std::string, ResourceFile> m_Resources;
 
 	public:
 		ResourcePack();
 
-		const ResourceFile& GetResourceFile(const blt::string& resourceName) const;
-		ResourceFile& GetResourceFile(const blt::string& resourceName);
-		id_t GetResourceId(const blt::string& resourceName) const;
-		bool ResourceExists(const blt::string& resourceName) const;
+		const ResourceFile& GetResourceFile(const std::string& resourceName) const;
+		ResourceFile& GetResourceFile(const std::string& resourceName);
+		id_t GetResourceId(const std::string& resourceName) const;
+		bool ResourceExists(const std::string& resourceName) const;
 
 		friend class ResourceManager;
 		friend class ResourceExtractor;

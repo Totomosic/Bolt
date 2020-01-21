@@ -10,12 +10,12 @@ namespace Bolt
 	
 	}
 
-	const GenericEventBus<blt::string>& TCPserver::Bus() const
+	const GenericEventBus<std::string>& TCPserver::Bus() const
 	{
 		return m_Events;
 	}
 
-	GenericEventBus<blt::string>& TCPserver::Bus()
+	GenericEventBus<std::string>& TCPserver::Bus()
 	{
 		return m_Events;
 	}
@@ -66,17 +66,17 @@ namespace Bolt
 			}).detach();
 	}
 
-	void TCPserver::Broadcast(const blt::string& type, const void* data, uint32_t length)
+	void TCPserver::Broadcast(const std::string& type, const void* data, uint32_t length)
 	{
 	
 	}
 
-	void TCPserver::Broadcast(const blt::string& type, const blt::string& data)
+	void TCPserver::Broadcast(const std::string& type, const std::string& data)
 	{
 	
 	}
 
-	void TCPserver::Broadcast(const blt::string& type)
+	void TCPserver::Broadcast(const std::string& type)
 	{
 	
 	}

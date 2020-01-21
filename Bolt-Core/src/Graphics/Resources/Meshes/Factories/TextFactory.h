@@ -24,13 +24,13 @@ namespace Bolt
 	{
 	public:
 		ResourcePtr<Font> TextFont;
-		blt::string Text;
+		std::string Text;
 		Bolt::Color Color;
 		AlignH HorizontalAlign;
 		AlignV VerticalAlign;
 
 	public:
-		TextFactory(const blt::string& text, const ResourcePtr<Font>& font, const Bolt::Color& color = Color::White, AlignH horizontalAlignment = AlignH::Center, AlignV verticalAlignment = AlignV::Center);
+		TextFactory(const std::string& text, const ResourcePtr<Font>& font, const Bolt::Color& color = Color::White, AlignH horizontalAlignment = AlignH::Center, AlignV verticalAlignment = AlignV::Center);
 
 		ModelData GenerateVertices() const override;
 

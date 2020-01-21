@@ -52,6 +52,7 @@ namespace Bolt
 		ModelMatrix,
 		ViewMatrix,
 		ProjectionMatrix,
+		NormalMatrix,
 		Time,
 		CameraPosition,
 		CameraDirection,
@@ -61,6 +62,7 @@ namespace Bolt
 		LightColors,
 		LightDirections,
 		LightAmbients,
+		LightAmbientColors,
 		LightAttenuations,
 		LightIntensities
 	};
@@ -82,6 +84,8 @@ namespace Bolt
 			return ValueType::Matrix4f;
 		case RendererUniform::ProjectionMatrix:
 			return ValueType::Matrix4f;
+		case RendererUniform::NormalMatrix:
+			return ValueType::Matrix4f;
 		case RendererUniform::Time:
 			return ValueType::Float;
 		case RendererUniform::CameraPosition:
@@ -100,6 +104,8 @@ namespace Bolt
 			return ValueType::Vector3f;
 		case RendererUniform::LightAmbients:
 			return ValueType::Float;
+		case RendererUniform::LightAmbientColors:
+			return ValueType::Vector4f;
 		case RendererUniform::LightAttenuations:
 			return ValueType::Vector3f;
 		case RendererUniform::LightIntensities:
@@ -119,6 +125,8 @@ namespace Bolt
 			return ValueTypeDim::Single;
 		case RendererUniform::ProjectionMatrix:
 			return ValueTypeDim::Single;
+		case RendererUniform::NormalMatrix:
+			return ValueTypeDim::Single;
 		case RendererUniform::Time:
 			return ValueTypeDim::Single;
 		case RendererUniform::CameraPosition:
@@ -136,6 +144,8 @@ namespace Bolt
 		case RendererUniform::LightDirections:
 			return ValueTypeDim::Array;
 		case RendererUniform::LightAmbients:
+			return ValueTypeDim::Array;
+		case RendererUniform::LightAmbientColors:
 			return ValueTypeDim::Array;
 		case RendererUniform::LightAttenuations:
 			return ValueTypeDim::Array;
@@ -160,6 +170,8 @@ namespace Bolt
 			return 10;
 		case RendererUniform::LightAmbients:
 			return 10;
+		case RendererUniform::LightAmbientColors:
+			return 10;
 		case RendererUniform::LightIntensities:
 			return 10;
 		case RendererUniform::LightAttenuations:
@@ -173,7 +185,7 @@ namespace Bolt
 	case ValueType::type:	\
 		return str;
 
-	inline blt::string ValueTypeToGLSLString(ValueType type)
+	inline std::string ValueTypeToGLSLString(ValueType type)
 	{
 		switch (type)
 		{
@@ -203,7 +215,7 @@ namespace Bolt
 #define BLT_GLSL_STRING_TO_VALUE_TYPE_HELPER(type, str)	\
 	if (glslStr == str) { return ValueType::type; }
 
-	inline ValueType GLSLStringToValueType(const blt::string& glslStr)
+	inline ValueType GLSLStringToValueType(const std::string& glslStr)
 	{
 		BLT_GLSL_STRING_TO_VALUE_TYPE_HELPER(Void, "void");
 		BLT_GLSL_STRING_TO_VALUE_TYPE_HELPER(Bool, "bool");
@@ -230,7 +242,7 @@ namespace Bolt
 #define BLT_RENDERER_UNIFORM_FROM_STRING_HELPER(uniform)	\
 	if (str == #uniform) { return RendererUniform::uniform; }
 
-	inline RendererUniform GetRendererUniformFromString(const blt::string& str)
+	inline RendererUniform GetRendererUniformFromString(const std::string& str)
 	{
 		BLT_RENDERER_UNIFORM_FROM_STRING_HELPER(ModelMatrix);
 		BLT_RENDERER_UNIFORM_FROM_STRING_HELPER(ViewMatrix);
@@ -251,7 +263,7 @@ namespace Bolt
 	}
 #undef BLT_RENDERER_UNIFORM_FROM_STRING_HELPER
 
-	inline blt::string GetGLSLStringFromPassType(PassType type)
+	inline std::string GetGLSLStringFromPassType(PassType type)
 	{
 		switch (type)
 		{
@@ -316,7 +328,7 @@ namespace Bolt
 	template<typename T>
 	inline ValueType GetValueType()
 	{
-		BLT_ASSERT(false, blt::string("Unable to determine type of ") + typeid(T).name());
+		BLT_ASSERT(false, std::string("Unable to determine type of ") + typeid(T).name());
 		return ValueType::Void;
 	}
 

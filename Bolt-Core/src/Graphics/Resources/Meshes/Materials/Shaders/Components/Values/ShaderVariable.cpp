@@ -14,12 +14,12 @@ namespace Bolt
 	
 	}
 
-	const blt::string& ShaderVariable::GetVarName() const
+	const std::string& ShaderVariable::GetVarName() const
 	{
 		return m_Name;
 	}
 
-	void ShaderVariable::SetVarName(const blt::string& varName)
+	void ShaderVariable::SetVarName(const std::string& varName)
 	{ 
 		m_Name = varName;
 	}

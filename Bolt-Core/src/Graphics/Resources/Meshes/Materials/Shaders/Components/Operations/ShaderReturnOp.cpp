@@ -16,7 +16,7 @@ namespace Bolt
 		builder.Write("return");
 		if (m_Value != nullptr)
 		{
-			builder.Write(' ');
+			builder.Write(" ");
 			m_Value->Build(builder);
 		}
 	}

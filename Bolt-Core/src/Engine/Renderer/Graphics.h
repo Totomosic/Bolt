@@ -1,6 +1,7 @@
 #pragma once
 #include "GLState.h"
 #include "Graphics/Window.h"
+#include "Renderer.h"
 
 namespace Bolt
 {
@@ -13,6 +14,7 @@ namespace Bolt
 	private:
 		Window* m_Window;
 		GLState m_State;
+		Renderer m_Renderer;
 
 	public:
 		Graphics(Window* window);
@@ -20,6 +22,8 @@ namespace Bolt
 		const Framebuffer* DefaultFramebuffer();
 		const GLState& GetState() const;
 		GLState& GetState();
+		const Renderer& GetRenderer() const;
+		Renderer& GetRenderer();
 
 		void RenderScene();
 

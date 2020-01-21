@@ -1,5 +1,6 @@
 #pragma once
 #include "Events.h"
+#include "EventData.h"
 
 namespace Bolt
 {
@@ -41,14 +42,14 @@ namespace Bolt
 			return *m_EventBus;
 		}
 
-		uint32_t AddEventListener(const typename callback_t& callback, ListenerPriority priority = ListenerPriority::Medium)
+		uint32_t AddEventListener(const typename GenericEventEmitter<T, EventIdT>::callback_t& callback, ListenerPriority priority = ListenerPriority::Medium)
 		{
-			return m_EventBus->AddEventListener<T>(m_EventId, callback, priority);
+			return m_EventBus->template AddEventListener<T>(m_EventId, callback, priority);
 		}
 
-		GenericScopedEventListener<EventIdT> AddScopedEventListener(const typename callback_t& callback, ListenerPriority priority = ListenerPriority::Medium)
+		GenericScopedEventListener<EventIdT> AddScopedEventListener(const typename GenericEventEmitter<T, EventIdT>::callback_t& callback, ListenerPriority priority = ListenerPriority::Medium)
 		{
-			return m_EventBus->AddScopedEventListener<T>(m_EventId, callback, priority);
+			return m_EventBus->template AddScopedEventListener<T>(m_EventId, callback, priority);
 		}
 
 		void RemoveEventListener(uint32_t listenerId) override

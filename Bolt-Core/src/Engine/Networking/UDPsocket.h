@@ -8,10 +8,10 @@ namespace Bolt
 	class BLT_API UDPsocket
 	{
 	private:
-		SOCKET m_Socket;
+		SocketHandle m_Socket;
 
 	public:
-		UDPsocket(SOCKET socket);
+		UDPsocket(SocketHandle socket);
 		UDPsocket(AddressFamily addressFamily = AddressFamily::INET);
 		UDPsocket(const UDPsocket& other) = delete;
 		UDPsocket& operator=(const UDPsocket& other) = delete;
@@ -21,6 +21,7 @@ namespace Bolt
 
 		bool IsValid() const;
 
+		int Connect(const SocketAddress& address);
 		int Bind(const SocketAddress& address);
 		int SendTo(const SocketAddress& address, const void* data, uint32_t length);
 		int RecvFrom(void* buffer, uint32_t length, SocketAddress* outAddress);

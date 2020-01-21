@@ -1,100 +1,77 @@
 #include "bltpch.h"
 #include "SceneManager.h"
-#include "Engine/Engine.h"
 
-#include "Core/Profiling/Profiling.h"
+#include "Engine/Engine.h"
 
 namespace Bolt
 {
 
 	SceneManager& SceneManager::Get()
 	{
-		return Engine::Instance().CurrentContext().GetRenderContext().GetSceneManager();
+		return Engine::Instance().CurrentContext().GetSceneManager();
 	}
 
 	SceneManager::SceneManager()
-		: m_Scenes(), m_SceneMap(), m_CurrentScene(nullptr)
+		: m_Scenes(), m_CurrentScene(nullptr)
 	{
-		
 	}
 
-	Scene& SceneManager::CurrentScene()
+	Scene& SceneManager::AddScene()
+	{
+		size_t index = m_Scenes.size();
+		m_Scenes.push_back(std::make_unique<Scene>());
+		Scene& scene = *m_Scenes[index];
+		if (!HasCurrentScene())
+		{
+			SetCurrentScene(scene);
+		}
+		return scene;
+	}
+
+	void SceneManager::RemoveScene(Scene& scene)
+	{
+		auto it = std::find_if(m_Scenes.begin(), m_Scenes.end(), [&scene](const std::unique_ptr<Scene>& s)
+			{
+				return &scene == s.get();
+			});
+		if (it != m_Scenes.end())
+		{
+			if ((*it).get() == &GetCurrentScene())
+			{
+				SetCurrentScenePtr(nullptr);
+			}
+			m_Scenes.erase(it);
+		}
+	}
+
+	bool SceneManager::HasCurrentScene() const
+	{
+		return m_CurrentScene != nullptr;
+	}
+
+	Scene& SceneManager::GetCurrentScene() const
 	{
 		return *m_CurrentScene;
 	}
 
-	Scene& SceneManager::GetSceneById(id_t id)
+	void SceneManager::SetCurrentScene(Scene& scene, const std::any& loadData, const std::any& unloadData)
 	{
-		return *m_Scenes[id].get();
+		SetCurrentScenePtr(&scene, loadData, unloadData);
 	}
 
-	Scene& SceneManager::GetSceneByName(const blt::string& name)
+	void SceneManager::SetCurrentScenePtr(Scene* scene, const std::any& loadData, const std::any& unloadData)
 	{
-		BLT_PROFILE_FUNCTION();
-		auto it = m_SceneMap.find(name);
-		if (it != m_SceneMap.end())
-		{
-			return *(*it).second;
-		}
-		BLT_ASSERT(false, "No scene with name " + name + " was found");
-		return *(Scene*)nullptr;
-	}
-
-	Scene& SceneManager::CreateScene(int layerCount, const blt::string& name)
-	{
-		BLT_PROFILE_FUNCTION();
-		id_t index = m_Scenes.size();
-		std::unique_ptr<Scene> s = std::make_unique<Scene>(layerCount);
-		Scene* ptr = s.get();
-		m_Scenes.push_back(std::move(s));
-		ptr->m_Id = index;
-		if (!name.empty())
-		{
-			m_SceneMap[name] = ptr;
-		}
-		if (m_CurrentScene == nullptr)
-		{
-			m_CurrentScene = ptr;
-			m_CurrentScene->SetIsActive(true);
-		}
-		return *ptr;
-	}
-
-	void SceneManager::DisableCurrentScene()
-	{
-		BLT_CORE_WARN("No Current Scene");
-		SetCurrentScene(*(Scene*)nullptr);
-	}
-
-	void SceneManager::SetCurrentScene(Scene& scene)
-	{
-		BLT_PROFILE_FUNCTION();
 		if (m_CurrentScene != nullptr)
 		{
-			SceneUnloadedEvent e;
-			e.UnloadedScene = m_CurrentScene;
 			m_CurrentScene->SetIsActive(false);
-			m_CurrentScene->OnUnload.Emit(std::move(e));
+			m_CurrentScene->Unload(unloadData);
 		}
-		m_CurrentScene = &scene;
+		m_CurrentScene = scene;
 		if (m_CurrentScene != nullptr)
 		{
-			SceneLoadedEvent e;
-			e.LoadedScene = m_CurrentScene;
-			e.LoadData = nullptr;
+			m_CurrentScene->Load(loadData);
 			m_CurrentScene->SetIsActive(true);
-			m_CurrentScene->OnLoad.Emit(std::move(e));
 		}
-	}
-
-	void SceneManager::SetCurrentSceneById(id_t id)
-	{
-		SetCurrentScene(GetSceneById(id));
-	}
-
-	void SceneManager::SetCurrentSceneByName(const blt::string& name)
-	{
-		SetCurrentScene(GetSceneByName(name));
 	}
 
 }

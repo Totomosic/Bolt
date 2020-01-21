@@ -27,13 +27,4 @@ namespace Bolt
 		return *(Window*)nullptr;
 	}
 
-	SceneManager& CurrentContext::GetSceneManager()
-	{
-		if (&GetRenderContext() != nullptr)
-		{
-			return GetRenderContext().GetSceneManager();
-		}
-		return *(SceneManager*)nullptr;
-	}
-
 }

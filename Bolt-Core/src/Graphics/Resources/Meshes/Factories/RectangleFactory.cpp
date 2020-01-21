@@ -1,7 +1,7 @@
 #include "bltpch.h"
 #include "RectangleFactory.h"
 
-#include "Core/Profiling/Profiling.h"
+#include "BoltLib/Profiling/Profiling.h"
 
 namespace Bolt
 {
@@ -23,12 +23,12 @@ namespace Bolt
 		result.Indices = std::make_unique<IndexArray>();
 		uint32_t indices[6] = { 0, 1, 2, 0, 2, 3 };
 		result.Indices->AddIndexBuffer(std::make_unique<IndexBuffer>(indices, 6));
-		result.Bounds.MinX = -w;
-		result.Bounds.MaxX = w;
-		result.Bounds.MinY = -h;
-		result.Bounds.MaxY = h;
-		result.Bounds.MinZ = 0;
-		result.Bounds.MaxZ = 0;
+		result.Bounds.Min.x = -w;
+		result.Bounds.Max.x = w;
+		result.Bounds.Min.y = -h;
+		result.Bounds.Max.y = h;
+		result.Bounds.Min.z = 0;
+		result.Bounds.Max.z = 0;
 
 		BufferLayout layout = BufferLayout::Default();
 		result.Vertices->CreateVertexBuffer(4 * layout.Size(), layout);

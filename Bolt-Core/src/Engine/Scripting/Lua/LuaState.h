@@ -1,5 +1,5 @@
 #pragma once
-#include "Core/Utils/Filesystem/Filepath.h"
+#include "Core/Utils/Filesystem/FilePath.h"
 
 namespace Bolt
 {
@@ -16,8 +16,8 @@ namespace Bolt
 
 		lua_State* GetNativeState() const;
 
-		bool ExecuteString(const blt::string& command) const;
-		bool ExecuteFile(const Filepath& file) const;
+		bool ExecuteString(const std::string& command) const;
+		bool ExecuteFile(const FilePath& file) const;
 
 	protected:
 		bool CheckLuaError(int result) const;

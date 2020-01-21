@@ -29,10 +29,10 @@ namespace Bolt
 		return material;
 	}
 
-	std::unique_ptr<Material> MaterialManager::Texture(const ResourcePtr<Texture2D>& texture) const
+	std::unique_ptr<Material> MaterialManager::Texture(ResourcePtr<Texture2D> texture) const
 	{
 		std::unique_ptr<Material> material = m_TextureGraph.GetMaterial();
-		material->GetLinkContext().Link("Texture", texture);
+		material->GetLinkContext().Link("Texture", std::move(texture));
 		return material;
 	}
 
@@ -44,16 +44,16 @@ namespace Bolt
 		return material;
 	}
 
-	std::unique_ptr<Material> MaterialManager::DefaultLighting(const Color& color) const
+	std::unique_ptr<DefaultLightingMaterial> MaterialManager::DefaultLighting(const Color& color) const
 	{
-		std::unique_ptr<Material> material = m_DefaultLightingGraph.GetMaterial();
+		std::unique_ptr<DefaultLightingMaterial> material = m_DefaultLightingGraph.GetMaterial<DefaultLightingMaterial>();
 		material->GetLinkContext().Link("Color", color);
 		return material;
 	}
 
-	std::unique_ptr<Material> MaterialManager::TextureLighting() const
+	std::unique_ptr<TextureLightingMaterial> MaterialManager::TextureLighting() const
 	{
-		std::unique_ptr<Material> material = m_TextureLightingGraph.GetMaterial();
+		std::unique_ptr<TextureLightingMaterial> material = m_TextureLightingGraph.GetMaterial<TextureLightingMaterial>();
 		return material;
 	}
 
@@ -120,6 +120,10 @@ namespace Bolt
 		SplitVec4Node& splitter = graph.AddNode<SplitVec4Node>();
 		splitter.SetInput(color.GetValue());
 		graph.SetRGB(splitter.GetRGB());
+		PropertyNode& specularColor = graph.AddProperty("SpecularColor", Color::White);
+		SplitVec4Node& specularSplitter = graph.AddNode<SplitVec4Node>();
+		specularSplitter.SetInput(specularColor.GetValue());
+		graph.SetSpecularRGB(specularSplitter.GetRGB());
 		PropertyNode& shininess = graph.AddProperty("Shininess", 0.0f);
 		graph.SetShininess(shininess.GetValue());
 		PropertyNode& shineDamper = graph.AddProperty("ShineDamper", 10.0f);
@@ -134,6 +138,10 @@ namespace Bolt
 		SampleTextureNode& sampler = graph.AddNode<SampleTextureNode>();
 		sampler.SetTexture(color.GetValue());
 		graph.SetRGB(sampler.GetRGB());
+		PropertyNode& specularColor = graph.AddProperty("SpecularColor", Color::White);
+		SplitVec4Node& specularSplitter = graph.AddNode<SplitVec4Node>();
+		specularSplitter.SetInput(specularColor.GetValue());
+		graph.SetSpecularRGB(specularSplitter.GetRGB());
 		PropertyNode& shininess = graph.AddProperty("Shininess", 0.0f);
 		graph.SetShininess(shininess.GetValue());
 		PropertyNode& shineDamper = graph.AddProperty("ShineDamper", 10.0f);

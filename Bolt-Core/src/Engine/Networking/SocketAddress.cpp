@@ -4,14 +4,22 @@
 namespace Bolt
 {
 
+#ifdef BLT_PLATFORM_WINDOWS
+
 	SocketAddress::SocketAddress(uint32_t inAddress, uint16_t inPort)
+		: m_SockAddr()
 	{
 		GetAsSockAddrIn()->sin_family = AF_INET;
 		GetAsSockAddrIn()->sin_addr.S_un.S_addr = htonl(inAddress);
 		GetAsSockAddrIn()->sin_port = htons(inPort);
 	}
 
-	SocketAddress::SocketAddress(const blt::string& inAddress, const blt::string& inPort)
+	SocketAddress::SocketAddress(byte b0, byte b1, byte b2, byte b3, uint16_t inPort) : SocketAddress(CreateAddress(b0, b1, b2, b3), inPort)
+	{
+	}
+
+	SocketAddress::SocketAddress(const std::string& inAddress, const std::string& inPort)
+		: m_SockAddr()
 	{
 		addrinfo hint;
 		memset(&hint, 0, sizeof(addrinfo));
@@ -37,13 +45,16 @@ namespace Bolt
 			{
 				BLT_ERROR("SocketAddress Hostname Error");
 			}
-			memcpy(&m_SockAddr, result->ai_addr, sizeof(sockaddr));
-			GetAsSockAddrIn()->sin_family = AF_INET;
+			else
+			{
+				memcpy(&m_SockAddr, result->ai_addr, sizeof(sockaddr));
+				GetAsSockAddrIn()->sin_family = AF_INET;
+			}
 		}		
 		freeaddrinfo(result);
 	}
 
-	SocketAddress::SocketAddress(const blt::string& inAddress, uint16_t inPort) : SocketAddress(inAddress, std::to_string(inPort))
+	SocketAddress::SocketAddress(const std::string& inAddress, uint16_t inPort) : SocketAddress(inAddress, std::to_string(inPort))
 	{
 
 	}
@@ -68,7 +79,7 @@ namespace Bolt
 		return (GetIP4Ref()) | ((static_cast<uint32_t>(GetAsSockAddrIn()->sin_port)) << 13) | m_SockAddr.sa_family;
 	}
 
-	blt::string SocketAddress::ToString() const
+	std::string SocketAddress::ToString() const
 	{
 		const sockaddr_in* s = GetAsSockAddrIn();
 		uint16_t port = ntohs(s->sin_port);
@@ -112,5 +123,23 @@ namespace Bolt
 	{
 		return *reinterpret_cast<uint32_t*>(&GetAsSockAddrIn()->sin_addr.S_un.S_addr);
 	}
+
+	uint32_t SocketAddress::CreateAddress(byte b0, byte b1, byte b2, byte b3)
+	{
+		struct in_addr addr;
+		unsigned char* ip;
+
+		//have ip point to s_addr
+		ip = (unsigned char*)&(addr.s_addr);
+
+		//set the bytes for "10.4.32.41"
+		ip[0] = b3;
+		ip[1] = b2;
+		ip[2] = b1;
+		ip[3] = b0;
+		return addr.S_un.S_addr;
+	}
+
+#endif
 
 }

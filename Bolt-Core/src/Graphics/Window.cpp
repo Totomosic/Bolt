@@ -4,7 +4,7 @@
 #include "Engine/User/Input.h"
 #include "Engine/AppContext.h"
 
-#include "Core/Profiling/Profiling.h"
+#include "BoltLib/Profiling/Profiling.h"
 
 namespace Bolt
 {
@@ -136,7 +136,7 @@ namespace Bolt
 		return Vector2i(Width(), Height());
 	}
 
-	const blt::string& Window::Title() const
+	const std::string& Window::Title() const
 	{
 		return m_Data.m_Title;
 	}
@@ -258,7 +258,7 @@ namespace Bolt
 		SetSize(Width(), height);
 	}
 
-	void Window::SetTitle(const blt::string& text)
+	void Window::SetTitle(const std::string& text)
 	{
 		m_Data.m_Title = text;
 		glfwSetWindowTitle((GLFWwindow*)GetNativeWindow(), Title().c_str());

@@ -62,7 +62,7 @@ namespace Bolt
 
 	}
 
-	bool XMLnode::HasAttribute(const blt::string& attributeName) const
+	bool XMLnode::HasAttribute(const std::string& attributeName) const
 	{
 		return Attributes.find(attributeName) != Attributes.end();
 	}
@@ -82,7 +82,7 @@ namespace Bolt
 		return ChildCount() != 0;
 	}
 
-	bool XMLnode::HasChild(const blt::string& name) const
+	bool XMLnode::HasChild(const std::string& name) const
 	{
 		for (const XMLnode& child : Children)
 		{
@@ -121,11 +121,11 @@ namespace Bolt
 
 	XMLNodePath XMLnode::GetPath() const
 	{
-		blt::string pathString = "";
+		std::string pathString = "";
 		if (Parent != nullptr)
 		{
 			int index = Parent->IndexOfName(*this);
-			blt::string name = Name;
+			std::string name = Name;
 			if (index != 0)
 			{
 				name += '{' + std::to_string(index) + '}';
@@ -135,7 +135,7 @@ namespace Bolt
 			while (currentNode->Parent != nullptr)
 			{
 				int index = currentNode->Parent->IndexOfName(*currentNode);
-				blt::string name = currentNode->Name;
+				std::string name = currentNode->Name;
 				if (index != 0)
 				{
 					name += '{' + std::to_string(index) + '}';
@@ -148,7 +148,7 @@ namespace Bolt
 		return path;
 	}
 
-	const XMLnode& XMLnode::GetChild(const blt::string& name) const
+	const XMLnode& XMLnode::GetChild(const std::string& name) const
 	{
 		for (const XMLnode& child : Children)
 		{
@@ -161,7 +161,7 @@ namespace Bolt
 		return *(const XMLnode*)nullptr;
 	}
 
-	XMLnode& XMLnode::GetChild(const blt::string& name)
+	XMLnode& XMLnode::GetChild(const std::string& name)
 	{
 		for (XMLnode& child : Children)
 		{
@@ -196,7 +196,7 @@ namespace Bolt
 		return *currentNode;
 	}
 
-	std::vector<const XMLnode*> XMLnode::GetChildren(const blt::string& name) const
+	std::vector<const XMLnode*> XMLnode::GetChildren(const std::string& name) const
 	{
 		std::vector<const XMLnode*> result;
 		for (const XMLnode& child : Children)
@@ -209,7 +209,7 @@ namespace Bolt
 		return result;
 	}
 
-	std::vector<XMLnode*> XMLnode::GetChildren(const blt::string& name)
+	std::vector<XMLnode*> XMLnode::GetChildren(const std::string& name)
 	{
 		std::vector<XMLnode*> result;
 		for (XMLnode& child : Children)
@@ -242,7 +242,7 @@ namespace Bolt
 		return *currentNode;
 	}
 
-	XMLnode& XMLnode::AddChild(const blt::string& name, const std::unordered_map<blt::string, blt::string>& attributes)
+	XMLnode& XMLnode::AddChild(const std::string& name, const std::unordered_map<std::string, std::string>& attributes)
 	{
 		id_t index = Children.size();
 		Children.push_back(XMLnode());
@@ -253,14 +253,14 @@ namespace Bolt
 		return child;
 	}
 
-	void XMLnode::AddData(const blt::string& data)
+	void XMLnode::AddData(const std::string& data)
 	{
 		Data += data;
 	}
 
 	void XMLnode::AddData(const void* data, uint32_t length)
 	{
-		blt::string s((const char*)data, length);
+		std::string s((const char*)data, length);
 		AddData(s);
 	}
 

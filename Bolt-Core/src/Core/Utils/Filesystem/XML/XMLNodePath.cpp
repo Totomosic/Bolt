@@ -12,18 +12,18 @@ namespace Bolt
 
 	}
 
-	XMLNodePath::XMLNodePath(const blt::string& path)
+	XMLNodePath::XMLNodePath(const std::string& path)
 		: m_Path(path), m_IsValid(false)
 	{
 
 	}
 
-	XMLNodePath::XMLNodePath(const char* path) : XMLNodePath(blt::string(path))
+	XMLNodePath::XMLNodePath(const char* path) : XMLNodePath(std::string(path))
 	{
 	
 	}
 
-	const blt::string& XMLNodePath::AsString() const
+	const std::string& XMLNodePath::AsString() const
 	{
 		return m_Path;
 	}
@@ -33,7 +33,7 @@ namespace Bolt
 		return m_ChildrenIndices;
 	}
 
-	void XMLNodePath::SetPath(const blt::string& path)
+	void XMLNodePath::SetPath(const std::string& path)
 	{
 		m_Path = path;
 		m_IsValid = false;
@@ -54,27 +54,27 @@ namespace Bolt
 		m_ChildrenIndices.clear();
 		if (m_Path.front() == NODE_DELIMETER)
 		{
-			m_Path.pop_front();
+			m_Path.erase(m_Path.begin());
 		}
 		if (m_Path.back() == NODE_DELIMETER)
 		{
 			m_Path.pop_back();
 		}
-		if (m_Path.contains(NODE_DELIMETER))
+		if (m_Path.find(NODE_DELIMETER) != std::string::npos)
 		{
-			std::vector<blt::string> nodeNames = m_Path.split(NODE_DELIMETER);
+			std::vector<std::string_view> nodeNames = blt::split_view(m_Path, NODE_DELIMETER);
 			const XMLnode* currentNode = node;
-			for (blt::string node : nodeNames)
+			for (std::string_view& node : nodeNames)
 			{
 				int index = 0;
-				if (node.contains('{') && node.contains('}'))
+				if (node.find('{') != std::string::npos && node.find('}') != std::string::npos)
 				{
-					uint32_t leftBrace = node.find_first_of('{');
-					uint32_t rightBrace = node.find_first_of('}');
-					blt::string indexString = node.substr(leftBrace + 1, rightBrace - leftBrace - 1);
+					size_t leftBrace = node.find_first_of('{');
+					size_t rightBrace = node.find_first_of('}');
+					std::string_view indexString = node.substr(leftBrace + 1, rightBrace - leftBrace - 1);
 					node = node.substr(0, leftBrace);
 				}
-				const XMLnode* childNode = currentNode->GetChildren(node).at(index);
+				const XMLnode* childNode = currentNode->GetChildren(std::string(node)).at(index);
 				m_ChildrenIndices.push_back(currentNode->IndexOf(*childNode));
 				currentNode = childNode;
 			}

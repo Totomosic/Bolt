@@ -1,12 +1,12 @@
 #include "bltpch.h"
 #include "Font.h"
 
-#include "Core/Profiling/Profiling.h"
+#include "BoltLib/Profiling/Profiling.h"
 
 namespace Bolt
 {
 
-	Font::Font(const Filepath& fontFile, float fontSize, int textureWidth, int textureHeight) : Texture2D(textureWidth, textureHeight, TextureFormat::R, { WrapMode::ClampToEdge, MagFilter::Linear, MinFilter::Linear, Mipmaps::Disabled }),
+	Font::Font(const FilePath& fontFile, float fontSize, int textureWidth, int textureHeight) : Texture2D(textureWidth, textureHeight, TextureFormat::R, { WrapMode::ClampToEdge, MagFilter::Linear, MinFilter::Linear, Mipmaps::Disabled }),
 		m_FontSize(fontSize)
 	{
 		BLT_PROFILE_FUNCTION();
@@ -23,7 +23,7 @@ namespace Bolt
 		return m_FontSize;
 	}
 
-	std::vector<Font::FontCharacter> Font::GetCharacters(const blt::string& str) const
+	std::vector<Font::FontCharacter> Font::GetCharacters(const std::string& str) const
 	{
 		BLT_PROFILE_FUNCTION();
 		std::vector<FontCharacter> result;
@@ -43,7 +43,7 @@ namespace Bolt
 		return result;
 	}
 
-	Vector2f Font::SizeOfText(const blt::string& text) const
+	Vector2f Font::SizeOfText(const std::string& text) const
 	{
 		BLT_PROFILE_FUNCTION();
 		std::vector<Font::FontCharacter> characters = GetCharacters(text);

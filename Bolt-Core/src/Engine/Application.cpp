@@ -7,9 +7,8 @@
 #include "User/Input.h"
 #include "Renderer/Graphics.h"
 #include "Renderer/GLState.h"
-#include "Scene/SceneManager.h"
 
-#include "Core/Profiling/Profiling.h"
+#include "BoltLib/Profiling/Profiling.h"
 
 namespace Bolt
 {
@@ -52,7 +51,7 @@ namespace Bolt
 
 	int Application::ChildCount() const
 	{
-		return m_ChildApps.size();
+		return (int)m_ChildApps.size();
 	}
 
 	id_t Application::GetAppId() const
@@ -129,7 +128,10 @@ namespace Bolt
 	{
 		BLT_PROFILE_FUNCTION();
 		m_IsGraphicsEnabled = createRenderContext;
-		m_Context = std::make_unique<AppContext>(createRenderContext, createInfo);
+		if (createRenderContext)
+			m_Context = std::make_unique<AppContext>(createInfo);
+		else
+			m_Context = std::make_unique<AppContext>();
 		Engine::Instance().SetCurrentContext(m_Context.get());
 		if (createRenderContext)
 		{
@@ -164,39 +166,41 @@ namespace Bolt
 	bool Application::UpdateGraphics()
 	{
 		BLT_PROFILE_FUNCTION();
-		Scene* scene = &SceneManager::Get().CurrentScene();
 		EventManager::Get().FlushAll(); // Flush #1 (likely input events)
+		TimeDelta delta = Time::Get().RenderingTimeline().DeltaTime();
 		{
 			BLT_PROFILE_SCOPE("Update()");
 			Update();
 		}
-		if (scene != nullptr)
+		if (SceneManager::Get().HasCurrentScene())
 		{
-			scene->Update();
+			SceneManager::Get().GetCurrentScene().Update(delta);
 		}
 		{
 			BLT_PROFILE_SCOPE("Render()");
 			Render();
 		}
+		Graphics::Get().GetRenderer().Flush();
 		GetWindow().SwapBuffers();
 		Time::Get().Update();
 		EventManager::Get().FlushAll(); // Flush #2 (likely other scene/app events)
-		if (scene != nullptr)
-		{
-			scene->UpdateTemporaryObjects();
-		}
 		return true;
 	}
 
 	bool Application::UpdateNoGraphics()
 	{
+		EventManager::Get().FlushAll();
 		BLT_PROFILE_FUNCTION();
 		{
 			BLT_PROFILE_SCOPE("Update()");
 			Update();
 		}
+		TimeDelta delta = Time::Get().RenderingTimeline().DeltaTime();
+		if (SceneManager::Get().HasCurrentScene())
+		{
+			SceneManager::Get().GetCurrentScene().Update(delta);
+		}
 		Time::Get().Update();
-		EventManager::Get().FlushAll(); // Flush #2 (likely other scene/app events)
 		return true;
 	}
 

@@ -7,7 +7,7 @@ namespace Bolt
 	class BLT_API TaskCompletedEvent
 	{
 	public:
-		virtual void Execute() = 0;
+		virtual void Execute() {};
 	};
 
 	template<typename T>

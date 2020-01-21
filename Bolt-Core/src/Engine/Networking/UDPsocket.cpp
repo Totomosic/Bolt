@@ -4,7 +4,9 @@
 namespace Bolt
 {
 
-	UDPsocket::UDPsocket(SOCKET socket) : m_Socket(socket)
+#ifdef BLT_PLATFORM_WINDOWS
+
+	UDPsocket::UDPsocket(SocketHandle socket) : m_Socket(socket)
 	{
 	
 	}
@@ -17,12 +19,12 @@ namespace Bolt
 	UDPsocket::UDPsocket(UDPsocket&& other)
 		: m_Socket(other.m_Socket)
 	{
-		other.m_Socket = INVALID_SOCKET;
+		other.m_Socket = BLT_INVALID_SOCKET;
 	}
 
 	UDPsocket& UDPsocket::operator=(UDPsocket&& other)
 	{
-		SOCKET mySocket = m_Socket;
+		SocketHandle mySocket = m_Socket;
 		m_Socket = other.m_Socket;
 		other.m_Socket = mySocket;
 		return *this;
@@ -39,7 +41,20 @@ namespace Bolt
 
 	bool UDPsocket::IsValid() const
 	{
-		return m_Socket != INVALID_SOCKET;
+		return m_Socket != BLT_INVALID_SOCKET;
+	}
+
+	int UDPsocket::Connect(const SocketAddress& address)
+	{
+		BLT_ASSERT(IsValid(), "Cannot Connect invalid socket");
+		int err = connect(m_Socket, &address.m_SockAddr, address.GetSize());
+		if (err != NO_ERROR)
+		{
+			int errorCode = WSAGetLastError();
+			BLT_CORE_ERROR("Socket Connect Error: " + std::to_string(errorCode));
+			return errorCode;
+		}
+		return err;
 	}
 
 	int UDPsocket::Bind(const SocketAddress& address)
@@ -108,7 +123,7 @@ namespace Bolt
 	{
 		BLT_ASSERT(IsValid(), "Cannot Close invalid Socket");
 		int err = closesocket(m_Socket);
-		m_Socket = INVALID_SOCKET;
+		m_Socket = BLT_INVALID_SOCKET;
 		if (err != NO_ERROR)
 		{
 			int errorCode = WSAGetLastError();
@@ -121,6 +136,13 @@ namespace Bolt
 	{
 		u_long mode = (isBlocking) ? 0 : 1;
 		int result = ioctlsocket(m_Socket, FIONBIO, &mode);
+		if (result != NO_ERROR)
+		{
+			int errorCode = WSAGetLastError();
+			BLT_CORE_ERROR("Socket SetBlocking Error: " + std::to_string(errorCode));
+		}
 	}
+
+#endif
 
 }

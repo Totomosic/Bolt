@@ -4,6 +4,8 @@
 namespace Bolt
 {
 
+	int LuaDispatcher(lua_State* state);
+
 	class BLT_API LuaFunBase
 	{
 	public:
@@ -18,16 +20,20 @@ namespace Bolt
 		using function_t = std::function<Ret(Args...)>;
 
 	private:
+		template<typename T>
+		struct identity {};
+
+	private:
 		function_t m_Function;
-		blt::string m_Name;
+		std::string m_Name;
 		lua_State* m_State;
 
 	public:
-		LuaFun(lua_State* l, const blt::string& name, function_t func)
+		LuaFun(lua_State* l, const std::string& name, function_t func)
 			: m_Function(std::move(func)), m_Name(name), m_State(l)
 		{
 			lua_pushlightuserdata(m_State, (void*)static_cast<LuaFunBase*>(this));
-			lua_pushcclosure(m_State, &LuaFunRegistry::LuaDispatcher, 1);
+			lua_pushcclosure(m_State, &LuaDispatcher, 1);
 			lua_setglobal(m_State, m_Name.c_str());
 		}
 
@@ -50,20 +56,26 @@ namespace Bolt
 		template<typename RetType>
 		int ExecuteAs(lua_State* state)
 		{
+			return ExecuteAs(state, identity<RetType>());
+		}
+
+	private:
+		template<typename RetType>
+		int ExecuteAs(lua_State* state, identity<RetType>)
+		{
 			std::tuple<Args...> args = lua_help::_get_args<Args...>(state);
 			Ret value = lua_help::_lift(m_Function, std::move(args));
 			lua_help::_push(state, std::forward<Ret>(value));
 			return (int)N;
 		}
 
-		template<>
-		int ExecuteAs<void>(lua_State* state)
+		int ExecuteAs(lua_State* state, identity<void>)
 		{
 			std::tuple<Args...> args = lua_help::_get_args<Args...>(state);
 			lua_help::_lift(m_Function, std::move(args));
 			return (int)N;
 		}
 
-	};
+	};	
 
 }

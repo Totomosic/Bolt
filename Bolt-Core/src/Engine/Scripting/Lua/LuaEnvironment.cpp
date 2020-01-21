@@ -34,7 +34,7 @@ namespace Bolt
 		RegisterAllMethods(*this);
 	}
 
-	bool LuaEnvironment::HasGlobal(const blt::string& name) const
+	bool LuaEnvironment::HasGlobal(const std::string& name) const
 	{
 		lua_getglobal(GetNativeState(), name.c_str());
 		bool result = !lua_isnil(GetNativeState(), -1);

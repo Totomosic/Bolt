@@ -26,6 +26,8 @@ project "Bolt-Core"
         "../%{IncludeDirs.FreeTypeGL}",
         "../%{IncludeDirs.FreeType}",
         "../%{IncludeDirs.Lua}",
+        "../%{IncludeDirs.BoltLib}",
+        "../%{IncludeDirs.ResourcesLib}",
         "src"
     }
 
@@ -38,6 +40,8 @@ project "Bolt-Core"
         "FreeType",
         "FreeType-GL",
         "Lua",
+        "BoltLib",
+        "ResourcesLib"
     }
 
     filter "system:windows"
@@ -49,9 +53,22 @@ project "Bolt-Core"
             "BLT_BUILD_STATIC",
             "_CRT_SECURE_NO_WARNINGS",
             "NOMINMAX",
-            "GLEW_STATIC",
-            "LAYERS_PER_SCENE=4",
-            "GAMEOBJECTS_PER_LAYER=2000"
+            "GLEW_STATIC"
+        }
+
+    filter "system:linux"
+        systemversion "latest"
+
+        defines
+        {
+            "BLT_PLATFORM_LINUX",
+            "BLT_BUILD_STATIC",
+            "GLEW_STATIC"
+        }
+
+        links 
+        {
+            "stdc++fs"
         }
 
     filter "configurations:Debug"

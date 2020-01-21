@@ -12,7 +12,7 @@ namespace Bolt
 		struct BLT_API ModelGroup
 		{
 		public:
-			ResourcePtr<const Model> Model = nullptr;
+			ResourcePtr<const Bolt::Model> Model = nullptr;
 			Matrix4f Transform = Matrix4f::Identity();
 			std::vector<int> MaterialIndices = { 0 }; // size should equal the number of index buffers that the model has
 		};
@@ -28,6 +28,8 @@ namespace Bolt
 		Mesh(Mesh&& other);
 		Mesh& operator=(Mesh&& other);
 		~Mesh() = default;
+
+		Cuboid ComputeBoundingBox(const Matrix4f& transform = Matrix4f::Identity()) const;
 
 	};
 
