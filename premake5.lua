@@ -8,6 +8,11 @@ workspace "Bolt"
         "Dist"
     }
 
+    flags
+    {
+        "MultiProcessorCompile"
+    }
+
 include ("Paths.lua")
 
 group ("Bolt/Vendor")
