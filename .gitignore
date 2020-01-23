@@ -34,3 +34,4 @@ packages/
 *.pem
 Makefile
 !vendor/bin/
+*.xcodeproj/
