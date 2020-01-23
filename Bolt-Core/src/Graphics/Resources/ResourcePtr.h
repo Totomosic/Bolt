@@ -84,9 +84,9 @@ namespace Bolt
 		T* operator->() const { return m_Ptr; }
 
 		bool operator==(const ResourcePtr<T>& other) const { return m_Ptr == other.m_Ptr; }
-		bool operator==(nullptr_t ptr) const { return m_Ptr == ptr; }
+		bool operator==(std::nullptr_t ptr) const { return m_Ptr == ptr; }
 		bool operator!=(const ResourcePtr<T>& other) const { return !(*this == other); }
-		bool operator!=(nullptr_t ptr) const { return !(*this == ptr); }
+		bool operator!=(std::nullptr_t ptr) const { return !(*this == ptr); }
 
 		template<typename>
 		friend class ResourcePtr;

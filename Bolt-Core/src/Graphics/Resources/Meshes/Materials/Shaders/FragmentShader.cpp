@@ -31,6 +31,7 @@ namespace Bolt
 		CompiledShaderProgram result;
 		result.Source = m_Builder.Build();
 		CompileUniformVariables(result);
+		m_Builder.Reset();
 		return result;
 	}
 

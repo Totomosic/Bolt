@@ -87,6 +87,8 @@ namespace Bolt
 			case RendererUniform::LightCount:
 				shader.SetUniform(uniform.Location, (int)context.LightSources.size());
 				break;
+			default:
+				break;
 			}
 		}
 		return locations;

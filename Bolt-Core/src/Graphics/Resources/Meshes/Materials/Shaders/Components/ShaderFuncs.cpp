@@ -423,6 +423,8 @@ namespace Bolt
 			case ValueType::Matrix2f:
 				resultType = ValueType::Vector2f;
 				break;
+			default:
+				break;
 			}
 			ShaderArrayValuePtr result = std::make_shared<ShaderArrayValue>(arr, index, resultType);
 			return result;

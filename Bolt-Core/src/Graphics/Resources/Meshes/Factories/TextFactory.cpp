@@ -58,6 +58,8 @@ namespace Bolt
 			case AlignH::Right:
 				currentX = -w * 2.0f;
 				break;
+			default:
+				break;
 			}
 			switch (VerticalAlign)
 			{
@@ -66,6 +68,8 @@ namespace Bolt
 				break;
 			case AlignV::Top:
 				currentY = h * 2.0f;
+				break;
+			default:
 				break;
 			}
 			for (int i = 0; i < characters.size(); i++)

@@ -22,7 +22,6 @@
 
 #include "Engine/Application.h"
 #include "Engine/Engine.h"
-#include "Engine/CurrentContext.h"
 #include "Engine/Scripting/Lua/LuaScriptingEnv.h"
 
 #include "Engine/Networking/SocketUtil.h"

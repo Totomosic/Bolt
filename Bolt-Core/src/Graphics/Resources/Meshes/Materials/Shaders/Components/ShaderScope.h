@@ -22,7 +22,7 @@ namespace Bolt
 		ShaderScope& operator=(const ShaderScope& other);
 		ShaderScope(ShaderScope&& other) = default;
 		ShaderScope& operator=(ShaderScope&& other) = default;
-		~ShaderScope() = default;
+		virtual ~ShaderScope() = default;
 
 		int GetScopeIndex() const;
 		bool IsDefinedInThisScope(const ShaderVariable* var) const;

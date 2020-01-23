@@ -1,8 +1,8 @@
 #include "bltpch.h"
 
-#include "DirectoryPath.h"
+#include "Directorypath.h"
 #include "Filesystem.h"
-#include "FilePath.h"
+#include "Filepath.h"
 
 namespace Bolt
 {

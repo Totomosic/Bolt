@@ -94,7 +94,6 @@ namespace Bolt
 		GetGlobalScope().Build(*this);
 		GetMainScope().Build(*this);
 		std::string source = GetSource();
-		Reset();
 		return source;
 	}
 
@@ -108,6 +107,8 @@ namespace Bolt
 			return "g";
 		case ShaderStage::Fragment:
 			return "f";
+		default:
+			break;
 		}
 		BLT_ASSERT(false, "Unable to determine string for shader type");
 		return "";

@@ -126,6 +126,8 @@ namespace Bolt
 			return LoadTexture2DFile(resourceFile);
 		case ResourceType::Model:
 			return LoadModelFile(resourceFile);
+		default:
+			break;
 		}
 		BLT_ASSERT(false, "Unable to load Resource File " + resourceFile.Name);
 	}

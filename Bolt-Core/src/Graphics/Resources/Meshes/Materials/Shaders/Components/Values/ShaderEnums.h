@@ -110,6 +110,8 @@ namespace Bolt
 			return ValueType::Vector3f;
 		case RendererUniform::LightIntensities:
 			return ValueType::Float;
+		default:
+			break;
 		}
 		BLT_ASSERT(false, "Unable to determine uniform type");
 		return ValueType::Void;
@@ -151,6 +153,8 @@ namespace Bolt
 			return ValueTypeDim::Array;
 		case RendererUniform::LightIntensities:
 			return ValueTypeDim::Array;
+		default:
+			break;
 		}
 		BLT_ASSERT(false, "Unable to determine uniform dimension");
 		return ValueTypeDim::Single;
@@ -176,6 +180,8 @@ namespace Bolt
 			return 10;
 		case RendererUniform::LightAttenuations:
 			return 10;
+		default:
+			break;
 		}
 		BLT_ASSERT(false, "Unable to determine uniform length");
 		return 0;
@@ -206,6 +212,9 @@ namespace Bolt
 			BLT_VALUE_TYPE_TO_GLSL_STRING_HELPER(Texture2D, "sampler2D")
 			BLT_VALUE_TYPE_TO_GLSL_STRING_HELPER(Texture3D, "sampler3D")
 			BLT_VALUE_TYPE_TO_GLSL_STRING_HELPER(TextureCube, "samplerCube")
+
+		default:
+			break;
 		}
 		BLT_ASSERT(false, "Invalid type");
 		return "ERROR_TYPE";
@@ -273,6 +282,8 @@ namespace Bolt
 			return "flat";
 		case PassType::Varying:
 			return "varying";
+		default:
+			break;
 		}
 		BLT_ASSERT(false, "Invalid PassType {}", (int)type);
 		return "";
@@ -320,6 +331,8 @@ namespace Bolt
 			return 9;
 		case ValueType::Matrix4f:
 			return 16;
+		default:
+			break;
 		}
 		BLT_ASSERT(false, "Invalid ValueType");
 		return 0;

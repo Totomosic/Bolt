@@ -43,10 +43,10 @@ namespace Bolt
 
 }
 
-void* operator new(size_t size);
-void operator delete(void* block);
-void* operator new[](size_t size);
-void operator delete[](void* block);
+void* operator new(size_t size) noexcept(false);
+void operator delete(void* block) noexcept(true);
+void* operator new[](size_t size) noexcept(false);
+void operator delete[](void* block) noexcept(true);
 
-void* operator new(size_t size, const char* file, int line);
-void* operator new[](size_t size, const char* file, int line);
+void* operator new(size_t size, const char* file, int line) noexcept(false);
+void* operator new[](size_t size, const char* file, int line) noexcept(false);

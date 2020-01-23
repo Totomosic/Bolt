@@ -29,7 +29,7 @@ namespace Bolt
 		{
 			return false;
 		}
-		if (required == ShaderStageCompatibility::VertexOnly || required == ShaderStageCompatibility::FragmentOnly && compatibility == ShaderStageCompatibility::VertexFragment)
+		if ((required == ShaderStageCompatibility::VertexOnly || required == ShaderStageCompatibility::FragmentOnly) && compatibility == ShaderStageCompatibility::VertexFragment)
 		{
 			return true;
 		}

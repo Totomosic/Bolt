@@ -339,6 +339,8 @@ namespace Bolt
 			case RendererUniform::ProjectionMatrix:
 				s.SetUniform(uniform.Location, projectionMatrix);
 				break;
+			default:
+				break;
 			}
 		}
 	}

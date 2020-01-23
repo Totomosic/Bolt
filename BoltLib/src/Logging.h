@@ -15,14 +15,14 @@
 #else
 #define BLT_API __declspec(dllimport)
 #endif
-#elif BLT_PLATFORM_LINUX
+#elif defined(BLT_PLATFORM_LINUX) || defined(BLT_PLATFORM_MAC)
 #ifdef BLT_BUILD_STATIC
 #define BLT_API
 #elif BLT_BUILD_DLL
 #define BLT_API
 #endif
 #else
-#error Only Supports Windows and Linux
+#error Only Supports Windows, Linux and Mac
 #endif
 
 namespace Bolt

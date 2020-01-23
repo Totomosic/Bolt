@@ -71,32 +71,32 @@ namespace Bolt
 
 }
 
-void* operator new(size_t size)
+void* operator new(size_t size) noexcept(false)
 {
 	return BLT_DEBUG_SWITCH(Bolt::CustomAllocator::AllocateDebug(size, "Unknown", 0), Bolt::CustomAllocator::Allocate(size));
 }
 
-void operator delete(void* block)
+void operator delete(void* block) noexcept(true)
 {
 	return BLT_DEBUG_SWITCH(Bolt::CustomAllocator::FreeDebug(block), Bolt::CustomAllocator::Free(block));
 }
 
-void* operator new[](size_t size)
+void* operator new[](size_t size) noexcept(false)
 {
 	return BLT_DEBUG_SWITCH(Bolt::CustomAllocator::AllocateDebug(size, "Unknown", 0), Bolt::CustomAllocator::Allocate(size));
 }
 
-void operator delete[](void* block)
+void operator delete[](void* block) noexcept(true)
 {
 	return BLT_DEBUG_SWITCH(Bolt::CustomAllocator::FreeDebug(block), Bolt::CustomAllocator::Free(block));
 }
 
-void* operator new(size_t size, const char* file, int line)
+void* operator new(size_t size, const char* file, int line) noexcept(false)
 {
 	return BLT_DEBUG_SWITCH(Bolt::CustomAllocator::AllocateDebug(size, file, line), Bolt::CustomAllocator::Allocate(size));
 }
 
-void* operator new[](size_t size, const char* file, int line)
+void* operator new[](size_t size, const char* file, int line) noexcept(false)
 {
 	return BLT_DEBUG_SWITCH(Bolt::CustomAllocator::AllocateDebug(size, file, line), Bolt::CustomAllocator::Allocate(size));
 }

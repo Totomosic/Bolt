@@ -9,15 +9,18 @@ namespace Bolt
 
 	class AppContext;
 
-	struct BLT_API WindowData
+	struct BLT_API WindowEvents
 	{
 	public:
-		EventBus m_EventBus;
 		EventEmitter<WindowResizeEvent> m_OnResize;
 		EventEmitter<WindowMovedEvent> m_OnMoved;
 		EventEmitter<WindowFocusedEvent> m_OnFocused;
 		EventEmitter<WindowClosedEvent> m_OnClosed;
+	};
 
+	struct BLT_API WindowData
+	{
+	public:
 		AppContext* m_Context;
 		GLFWwindow* m_WindowHandle;
 		Framebuffer m_Framebuffer;
@@ -32,6 +35,8 @@ namespace Bolt
 		static bool s_IsGLADInitialized;
 
 	private:
+		EventBus m_EventBus;
+		WindowEvents m_Events;
 		WindowData m_Data;
 
 	public:
@@ -42,11 +47,11 @@ namespace Bolt
 		Window& operator=(Window&& other) = delete;
 		~Window();
 
-		inline EventBus& Events() { return m_Data.m_EventBus; }
-		inline EventEmitter<WindowResizeEvent>& OnResize() { return m_Data.m_OnResize; }
-		inline EventEmitter<WindowMovedEvent>& OnMoved() { return m_Data.m_OnMoved; }
-		inline EventEmitter<WindowFocusedEvent>& OnFocused() { return m_Data.m_OnFocused; }
-		inline EventEmitter<WindowClosedEvent>& OnClose() { return m_Data.m_OnClosed; }
+		inline EventBus& Events() { return m_EventBus; }
+		inline EventEmitter<WindowResizeEvent>& OnResize() { return m_Events.m_OnResize; }
+		inline EventEmitter<WindowMovedEvent>& OnMoved() { return m_Events.m_OnMoved; }
+		inline EventEmitter<WindowFocusedEvent>& OnFocused() { return m_Events.m_OnFocused; }
+		inline EventEmitter<WindowClosedEvent>& OnClose() { return m_Events.m_OnClosed; }
 
 		AppContext& GetContext() const;
 		const Framebuffer& GetFramebuffer() const;

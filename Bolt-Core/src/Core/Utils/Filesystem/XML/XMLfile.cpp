@@ -103,7 +103,7 @@ namespace Bolt
 	std::pair<std::string, std::unordered_map<std::string, std::string>> XMLfile::GetNameAndAttributesFromTag(const std::string& tag) const
 	{
 		std::pair<std::string, std::unordered_map<std::string, std::string>> result;
-		id_t firstSpace = tag.find_first_of(' ');
+		size_t firstSpace = tag.find_first_of(' ');
 		if (firstSpace == std::string::npos)
 		{
 			// The tag contains no attributes and only contains the name
@@ -114,10 +114,10 @@ namespace Bolt
 			result.first = tag.substr(0, firstSpace);
 			while (firstSpace != std::string::npos)
 			{
-				id_t begin = firstSpace + 1;
-				id_t equals = tag.find_first_of('=', begin);
-				id_t firstQuote = tag.find_first_of('"', equals);
-				id_t secondQuote = tag.find_first_of('"', firstQuote + 1);
+				size_t begin = firstSpace + 1;
+				size_t equals = tag.find_first_of('=', begin);
+				size_t firstQuote = tag.find_first_of('"', equals);
+				size_t secondQuote = tag.find_first_of('"', firstQuote + 1);
 				if (equals == std::string::npos || firstQuote == std::string::npos || secondQuote == std::string::npos)
 				{
 					return { "", {} };
@@ -163,11 +163,11 @@ namespace Bolt
 
 	void XMLfile::ProcessTags(const std::string& data, XMLnode* parent) const
 	{
-		id_t begin = data.find_first_of('<', 0);
+		size_t begin = data.find_first_of('<', 0);
 		bool hadChild = false;
 		while (begin != std::string::npos)
 		{
-			id_t beginTagEnd = data.find_first_of('>', begin);
+			size_t beginTagEnd = data.find_first_of('>', begin);
 			if (beginTagEnd == std::string::npos)
 			{
 				break;
@@ -175,7 +175,7 @@ namespace Bolt
 			std::string beginTagData = data.substr(begin + 1, beginTagEnd - begin - 1);
 			auto nameAttributes = GetNameAndAttributesFromTag(beginTagData);
 			std::string endTagName = "</" + nameAttributes.first + '>';
-			id_t end = data.find(endTagName, beginTagEnd);
+			size_t end = data.find(endTagName, beginTagEnd);
 			if (end != std::string::npos)
 			{
 				hadChild = true;

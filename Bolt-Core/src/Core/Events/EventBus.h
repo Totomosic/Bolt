@@ -398,6 +398,8 @@ namespace Bolt
 		case ListenerPriority::High:
 			PushEventListenerHigh(vector, std::move(listener));
 			break;
+		default:
+			break;
 		}
 	}
 
@@ -468,7 +470,8 @@ namespace Bolt
 	// ============================================================================================================================================================================
 
 	template<typename EventIdT>
-	GenericScopedEventListener<EventIdT>::GenericScopedEventListener() : GenericScopedEventListener(*(GenericEventBus<EventIdT>*)nullptr, 0)
+	GenericScopedEventListener<EventIdT>::GenericScopedEventListener()
+		: m_EventBus(nullptr), m_ListenerId(0)
 	{
 
 	}

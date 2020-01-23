@@ -71,6 +71,21 @@ project "Bolt-Core"
             "stdc++fs"
         }
 
+    filter "system:macosx"
+        systemversion "latest"
+
+        defines
+        {
+            "BLT_PLATFORM_MAC",
+            "BLT_BUILD_STATIC",
+            "GLEW_STATIC"
+        }
+
+        links 
+        {
+            "stdc++fs"
+        }
+
     filter "configurations:Debug"
         defines "BLT_DEBUG"
         runtime "Debug"

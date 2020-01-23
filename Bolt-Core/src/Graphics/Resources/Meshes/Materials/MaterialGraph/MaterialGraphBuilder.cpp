@@ -98,6 +98,8 @@ namespace Bolt
 			return m_BuiltVertexNodes.find(node) != m_BuiltVertexNodes.end();
 		case ShaderStage::Fragment:
 			return m_BuiltFragmentNodes.find(node) != m_BuiltFragmentNodes.end();
+		default:
+			break;
 		}
 		BLT_ASSERT(false, "Invalid shader stage");
 		return false;
@@ -111,6 +113,8 @@ namespace Bolt
 			return m_BuiltVertexNodes.at(node);
 		case ShaderStage::Fragment:
 			return m_BuiltFragmentNodes.at(node);
+		default:
+			break;
 		}
 		BLT_ASSERT(false, "Invalid shader stage");
 		return m_BuiltVertexNodes.at(node);
@@ -124,6 +128,8 @@ namespace Bolt
 			return m_BuiltVertexNodes.at(node);
 		case ShaderStage::Fragment:
 			return m_BuiltFragmentNodes.at(node);
+		default:
+			break;
 		}
 		BLT_ASSERT(false, "Invalid shader stage");
 		return m_BuiltVertexNodes.at(node);
@@ -139,6 +145,8 @@ namespace Bolt
 		case ShaderStage::Fragment:
 			m_BuiltFragmentNodes[node] = std::move(builtNode);
 			return m_BuiltFragmentNodes.at(node);
+		default:
+			break;
 		}
 		BLT_ASSERT(false, "Invalid shader stage");
 		return m_BuiltVertexNodes.at(node);

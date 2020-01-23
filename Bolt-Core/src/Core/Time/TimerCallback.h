@@ -7,6 +7,7 @@ namespace Bolt
 	class TimerCallbackContainer
 	{
 	public:
+		virtual ~TimerCallbackContainer() {}
 		virtual void operator()() = 0;
 	};
 

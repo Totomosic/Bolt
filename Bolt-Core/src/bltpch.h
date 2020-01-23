@@ -43,7 +43,7 @@
 #define SCK_VERSION 0x0202
 #include <WinSock2.h>
 #include <WS2tcpip.h>
-#elif BLT_PLATFORM_LINUX
+#elif defined(BLT_PLATFORM_LINUX) || defined(BLT_PLATFORM_MAC)
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h> 

@@ -12,11 +12,12 @@ namespace Bolt
 	bool Window::s_IsGLADInitialized = false;
 
 	Window::Window(AppContext* context, const WindowCreateInfo& info)
-		: m_Data{ {}, m_Data.m_EventBus.GetEmitter<WindowResizeEvent>(Events::Window.WindowResized),
-					  m_Data.m_EventBus.GetEmitter<WindowMovedEvent>(Events::Window.WindowMoved),
-					  m_Data.m_EventBus.GetEmitter<WindowFocusedEvent>(Events::Window.WindowFocused),
-					  m_Data.m_EventBus.GetEmitter<WindowClosedEvent>(Events::Window.WindowClosed), 
-		context, nullptr, Framebuffer(), info.Title, info.Decorated, true }
+		: m_EventBus(), m_Events{
+			m_EventBus.GetEmitter<WindowResizeEvent>(Events::Window.WindowResized),
+			m_EventBus.GetEmitter<WindowMovedEvent>(Events::Window.WindowMoved),
+			m_EventBus.GetEmitter<WindowFocusedEvent>(Events::Window.WindowFocused),
+			m_EventBus.GetEmitter<WindowClosedEvent>(Events::Window.WindowClosed),
+		}, m_Data { context, nullptr, Framebuffer(), info.Title, info.Decorated, true }
 	{
 		m_Data.m_Framebuffer.GetViewport().Width = info.Width;
 		m_Data.m_Framebuffer.GetViewport().Height = info.Height;
