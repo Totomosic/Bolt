@@ -9,13 +9,13 @@ namespace Bolt
 		
 	}
 
-	InputMemoryStream::InputMemoryStream(uint32_t capacity)
+	InputMemoryStream::InputMemoryStream(size_t capacity)
 		: m_Buffer(std::make_unique<byte[]>(capacity)), m_Capacity(capacity), m_Head(0)
 	{
 		
 	}
 
-	byte* InputMemoryStream::GetBufferPtr() const
+	void* InputMemoryStream::GetBufferPtr() const
 	{
 		return m_Buffer.get() + m_Head;
 	}
@@ -25,16 +25,21 @@ namespace Bolt
 		return m_Capacity - m_Head;
 	}
 
-	void InputMemoryStream::Reset(int to)
+	void InputMemoryStream::Reset(size_t to)
 	{
 		m_Head = to;
 	}
 
-	void InputMemoryStream::Read(void* buffer, uint32_t length)
+	void InputMemoryStream::Read(void* buffer, size_t length)
 	{
 		BLT_ASSERT(length <= GetRemainingDataSize(), "Not enough data left in Input Stream");
 		memcpy(buffer, GetBufferPtr(), length);
 		m_Head += length;
+	}
+
+	void InputMemoryStream::Skip(size_t nbytes)
+	{
+		m_Head += nbytes;
 	}
 
 }
