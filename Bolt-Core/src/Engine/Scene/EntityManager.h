@@ -81,6 +81,7 @@ namespace Bolt
 		EntityHandle();
 
 		operator Entity() const;
+		operator bool() const;
 		bool IsValid() const;
 
 		void Destroy();

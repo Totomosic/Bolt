@@ -24,6 +24,11 @@ namespace Bolt
 		return m_Entity;
 	}
 
+	EntityHandle::operator bool() const
+	{
+		return IsValid();
+	}
+
 	bool EntityHandle::IsValid() const
 	{
 		return m_Manager != nullptr && m_Manager->IsValid(m_Entity);
