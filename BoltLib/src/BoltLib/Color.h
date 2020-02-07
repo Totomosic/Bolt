@@ -106,3 +106,18 @@ namespace Bolt
 	};
 
 }
+
+namespace std
+{
+
+	template<>
+	struct hash<Bolt::Color>
+	{
+	public:
+		size_t operator()(const Bolt::Color& color) const
+		{
+			return (size_t)color.ToInt();
+		}
+	};
+
+}

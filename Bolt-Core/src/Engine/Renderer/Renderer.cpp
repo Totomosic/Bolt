@@ -7,7 +7,7 @@ namespace Bolt
 {
 
 	Renderer::Renderer()
-		: m_Scenes(), m_CurrentScene(nullptr)
+		: m_Scenes(), m_CurrentScene(nullptr), m_Stats()
 	{
 	}
 
@@ -25,6 +25,7 @@ namespace Bolt
 		scene.Camera = camera;
 		scene.Context = context;
 		scene.Pass.RenderTarget = renderTarget;
+		scene.Pass.RenderTarget->Clear(ClearBuffer::Depth);
 		m_CurrentScene = &scene;
 	}
 
@@ -58,6 +59,11 @@ namespace Bolt
 	{
 		BLT_ASSERT(m_CurrentScene != nullptr, "Current scene has not been started");
 		m_CurrentScene = nullptr;
+
+		if (m_Stats.DrawCalls > 1000)
+		{
+			BLT_WARN("High number of Draw Calls in last frame: {}", m_Stats.DrawCalls);
+		}
 	}
 
 	void Renderer::Flush()
@@ -81,6 +87,7 @@ namespace Bolt
 	{
 		m_Stats.SceneCount = 0;
 		m_Stats.RenderGroupCount = 0;
+		m_Stats.ShaderBinds = 0;
 		m_Stats.DrawCalls = 0;
 	}
 

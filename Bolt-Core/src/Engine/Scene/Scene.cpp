@@ -6,7 +6,7 @@ namespace Bolt
 
 	Scene::Scene()
 		: m_Layers(), m_IsLoaded(false), m_IsActive(false),
-		m_Bus(std::make_unique<EventBus>()), m_OnLoad(m_Bus->GetEmitter<SceneLoadEvent>(Events::Scene.SceneLoaded)), m_OnUnload(m_Bus->GetEmitter<SceneUnloadEvent>(Events::Scene.SceneUnloaded))
+		m_SharedEntities(), m_Systems(m_SharedEntities), m_OnLoad(m_SharedEntities.Bus().GetEmitter<SceneLoadEvent>(Events::Scene.SceneLoaded)), m_OnUnload(m_SharedEntities.Bus().GetEmitter<SceneUnloadEvent>(Events::Scene.SceneUnloaded))
 	{
 	}
 
@@ -28,6 +28,31 @@ namespace Bolt
 	EventEmitter<SceneUnloadEvent>& Scene::OnUnload()
 	{
 		return m_OnUnload;
+	}
+
+	const EntityManager& Scene::SharedEntities() const
+	{
+		return m_SharedEntities;
+	}
+
+	EntityManager& Scene::SharedEntities()
+	{
+		return m_SharedEntities;
+	}
+
+	const SystemRegistry& Scene::Systems() const
+	{
+		return m_Systems;
+	}
+
+	SystemRegistry& Scene::Systems()
+	{
+		return m_Systems;
+	}
+
+	EntityFactory Scene::GetFactory()
+	{
+		return EntityFactory(m_SharedEntities);
 	}
 
 	Layer& Scene::AddLayer()
@@ -75,6 +100,7 @@ namespace Bolt
 	void Scene::Clear()
 	{
 		m_Layers.clear();
+		m_SharedEntities.Clear();
 	}
 
 	void Scene::Load(const std::any& data)

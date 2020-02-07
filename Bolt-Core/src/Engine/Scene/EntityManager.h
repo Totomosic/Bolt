@@ -241,6 +241,8 @@ namespace Bolt
 		EventEmitter<EntityCreated>& OnEntityCreated();
 		EventEmitter<EntityDestroyed>& OnEntityDestroyed();
 
+		const EventBus& Bus() const;
+		EventBus& Bus();
 		size_t EntityCount() const;
 		size_t EntityCapacity() const;
 		bool IsValid(const Entity& entity) const;
@@ -250,6 +252,7 @@ namespace Bolt
 		EntityHandle Create();
 		EntityHandle CreateFrom(const EntityHandle& other);
 		void Destroy(const Entity& entity);
+		void Clear();
 
 		template<typename T, typename ... Args>
 		ComponentHandle<T> Assign(const Entity& entity, Args&&... args)

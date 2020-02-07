@@ -103,7 +103,8 @@ namespace Bolt
 		{
 			const Material& material = *pair.Material;
 			Graphics::Get().GetState().ApplySettings(material.GetRenderSettings());
-			material.GetLinkContext().ApplyLinks();			
+			material.GetLinkContext().ApplyLinks();
+			stats.ShaderBinds += 1;
 			for (const RenderData& data : pair.Renderables)
 			{
 				uint32_t renderCount = std::min((uint32_t)data.Indices->IndexCount(), data.IndexCount);

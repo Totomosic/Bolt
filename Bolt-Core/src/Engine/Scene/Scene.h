@@ -27,7 +27,8 @@ namespace Bolt
 		bool m_IsLoaded;
 		bool m_IsActive;
 
-		std::unique_ptr<EventBus> m_Bus;
+		EntityManager m_SharedEntities;
+		SystemRegistry m_Systems;
 		EventEmitter<SceneLoadEvent> m_OnLoad;
 		EventEmitter<SceneUnloadEvent> m_OnUnload;
 		
@@ -38,6 +39,12 @@ namespace Bolt
 		const EventEmitter<SceneUnloadEvent>& OnUnload() const;
 		EventEmitter<SceneLoadEvent>& OnLoad();
 		EventEmitter<SceneUnloadEvent>& OnUnload();
+
+		const EntityManager& SharedEntities() const;
+		EntityManager& SharedEntities();
+		const SystemRegistry& Systems() const;
+		SystemRegistry& Systems();
+		EntityFactory GetFactory();
 
 		Layer& AddLayer();
 		void RemoveLayer(Layer& layer);

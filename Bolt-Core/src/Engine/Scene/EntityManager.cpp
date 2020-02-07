@@ -91,6 +91,16 @@ namespace Bolt
 		return m_OnEntityDestroyed;
 	}
 
+	const EventBus& EntityManager::Bus() const
+	{
+		return *m_Bus;
+	}
+
+	EventBus& EntityManager::Bus()
+	{
+		return *m_Bus;
+	}
+
 	size_t EntityManager::EntityCount() const
 	{
 		return m_ComponentMasks.size() - m_FreeList.size();
@@ -138,6 +148,15 @@ namespace Bolt
 	void EntityManager::Destroy(const Entity& entity)
 	{
 		OnEntityDestroyed().Emit({ Get(entity) });
+	}
+
+	void EntityManager::Clear()
+	{
+		m_IndexCounter = 0;
+		m_FreeList.clear();
+		m_ComponentMasks.clear();
+		m_ComponentPools.clear();
+		m_ComponentHelpers.clear();
 	}
 
 	void EntityManager::DestroyInternal(const Entity& entity)

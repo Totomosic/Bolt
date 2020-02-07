@@ -9,6 +9,7 @@ namespace Bolt
 	public:
 		int SceneCount;
 		int RenderGroupCount;
+		int ShaderBinds;
 		int DrawCalls;
 	};
 

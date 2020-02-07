@@ -125,7 +125,7 @@ namespace Bolt
 
 	bool Color::operator==(const Color& other) const
 	{
-		return (r == other.r && g == other.g && b == other.b && a == other.a);
+		return ToInt() == other.ToInt();
 	}
 
 	bool Color::operator!=(const Color& other) const
