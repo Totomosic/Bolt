@@ -42,7 +42,7 @@ namespace Bolt
 		return IsOpen() && (m_Mode == OpenMode::Append || m_Mode == OpenMode::Write);
 	}
 
-	uint32_t File::GetSize() const
+	size_t File::GetSize() const
 	{
 		BLT_ASSERT(IsOpen(), "File must be open to read size");
 		std::streampos begin = m_Stream.tellg();
@@ -53,19 +53,19 @@ namespace Bolt
 		return size;
 	}
 
-	void File::Read(void* data, uint32_t size) const
+	void File::Read(void* data, size_t size) const
 	{
 		BLT_ASSERT(IsReadable(), "Unable to read file when not opened for reading");
 		m_Stream.read((char*)data, std::min(size, GetSize()));
 	}
 
-	void File::Write(const void* data, uint32_t size) const
+	void File::Write(const void* data, size_t size) const
 	{
 		BLT_ASSERT(IsWritable(), "Unable to write to file when not opened for writing");
 		m_Stream.write((const char*)data, size);
 	}
 
-	void File::ReadText(std::string* outString, uint32_t size) const
+	void File::ReadText(std::string* outString, size_t size) const
 	{
 		uint32_t realSize = std::min(size, GetSize());
 		char* buffer = BLT_NEW char[realSize];
@@ -74,7 +74,7 @@ namespace Bolt
 		BLT_DELETE_ARR buffer;
 	}
 
-	std::string File::ReadText(uint32_t size) const
+	std::string File::ReadText(size_t size) const
 	{
 		std::string result;
 		ReadText(&result, size);
