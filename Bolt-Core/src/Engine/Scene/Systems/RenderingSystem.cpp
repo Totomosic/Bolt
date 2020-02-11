@@ -11,7 +11,7 @@
 namespace Bolt
 {
 	RenderingSystem::RenderingSystem()
-		: m_ActiveCamera()
+		: m_ActiveCamera(), m_Framebuffer(nullptr)
 	{
 	}
 
@@ -23,6 +23,20 @@ namespace Bolt
 	void RenderingSystem::SetActiveCamera(const EntityHandle& camera)
 	{
 		m_ActiveCamera = camera;
+	}
+
+	const Framebuffer* RenderingSystem::GetRenderTarget() const
+	{
+		if (m_Framebuffer == nullptr)
+		{
+			return Graphics::Get().DefaultFramebuffer();
+		}
+		return m_Framebuffer;
+	}
+
+	void RenderingSystem::SetRenderTarget(const Framebuffer* renderTarget)
+	{
+		m_Framebuffer = renderTarget;
 	}
 
 	void RenderingSystem::Update(EntityManager& manager, TimeDelta delta)
@@ -54,7 +68,7 @@ namespace Bolt
 			}
 
 			Renderer& renderer = Graphics::Get().GetRenderer();
-			renderer.BeginScene(Graphics::Get().DefaultFramebuffer(), c, context);
+			renderer.BeginScene(GetRenderTarget(), c, context);
 
 			for (const EntityHandle& entity : manager.GetEntitiesWith<Transform, Mesh>())
 			{

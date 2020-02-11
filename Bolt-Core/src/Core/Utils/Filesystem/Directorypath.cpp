@@ -37,25 +37,11 @@ namespace Bolt
 	DirectoryPath DirectoryPath::Parent() const
 	{
 		size_t index = m_Path.find_last_of(DIRECTORY_DELIMITER, m_Path.length() - 2);
-		return m_Path.substr(0, index);
-	}
-
-	bool DirectoryPath::IsRelative() const
-	{
-		return !IsAbsolute();
-	}
-
-	bool DirectoryPath::IsAbsolute() const
-	{
-		return m_Path.size() > 1 && m_Path[1] == ':';
-	}
-
-	void DirectoryPath::MakeAbsolute(const DirectoryPath& root)
-	{
-		if (IsRelative())
+		if (index != std::string::npos)
 		{
-			m_Path = DirectoryPath::Combine(root, *this).Path();
+			return m_Path.substr(0, index);
 		}
+		return "";
 	}
 
 	bool DirectoryPath::operator==(const DirectoryPath& other) const
@@ -76,24 +62,18 @@ namespace Bolt
 
 	DirectoryPath DirectoryPath::Combine(const DirectoryPath& left, const DirectoryPath& right)
 	{
-		BLT_ASSERT(!(left.IsAbsolute() && right.IsAbsolute()), "Unable to combine 2 absolute paths");
-		BLT_ASSERT(right.IsRelative(), "Right path must be relative in order to combine");
-		std::string leftPath = left.Path();
-		std::string rightPath = right.Path();
-		return DirectoryPath(leftPath + rightPath);
+		const std::string& leftPath = left.Path();
+		const std::string& rightPath = right.Path();
+		if (leftPath.back() == DIRECTORY_DELIMITER || rightPath.front() == DIRECTORY_DELIMITER)
+		{
+			return DirectoryPath(leftPath + rightPath);
+		}
+		return DirectoryPath(leftPath + DIRECTORY_DELIMITER + rightPath);
 	}
 
 	void DirectoryPath::StandardizePath(std::string& directorypath)
 	{
 		blt::replace_all(directorypath, '\\', DIRECTORY_DELIMITER);
-		if (directorypath.front() == DIRECTORY_DELIMITER)
-		{
-			directorypath.erase(directorypath.begin());
-		}
-		if (directorypath.back() != DIRECTORY_DELIMITER)
-		{
-			directorypath += DIRECTORY_DELIMITER;
-		}
 	}
 
 }

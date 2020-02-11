@@ -22,10 +22,6 @@ namespace Bolt
 		const std::string& Path() const;
 		bool HasParent() const;
 		DirectoryPath Parent() const;
-		bool IsRelative() const;
-		bool IsAbsolute() const;
-
-		void MakeAbsolute(const DirectoryPath& root);
 
 		bool operator==(const DirectoryPath& other) const;
 		bool operator!=(const DirectoryPath& other) const;

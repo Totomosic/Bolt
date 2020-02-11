@@ -32,45 +32,48 @@ namespace Bolt
 	DirectoryPath FilePath::Directory() const
 	{
 		size_t index = m_Path.find_last_of(DirectoryPath::DIRECTORY_DELIMITER);
-		DirectoryPath directory = Path().substr(0, index);
-		return directory;
+		if (index != std::string::npos)
+		{
+			DirectoryPath directory = Path().substr(0, index);
+			return directory;
+		}
+		return "";
 	}
 
 	std::string FilePath::Filename() const
 	{
 		size_t index = m_Path.find_last_of(DirectoryPath::DIRECTORY_DELIMITER);
-		return m_Path.substr(index + 1, m_Path.length() - index - 1);
+		if (index != std::string::npos)
+		{
+			return m_Path.substr(index + 1, m_Path.length() - index - 1);
+		}
+		return m_Path;
 	}
 
 	std::string FilePath::SimpleFilename() const
 	{
 		size_t index = m_Path.find_last_of(DirectoryPath::DIRECTORY_DELIMITER);
-		size_t extIndex = m_Path.find_last_of('.');
-		return m_Path.substr(index + 1, index - extIndex - 1);
+		std::string_view path = m_Path;
+		if (index != std::string::npos)
+		{
+			path = path.substr(index + 1);
+		}
+		size_t extIndex = path.find_last_of('.');
+		if (extIndex != std::string_view::npos)
+		{
+			return std::string(path.substr(index + 1, index - extIndex - 1));
+		}
+		return std::string(path);
 	}
 	
 	std::string FilePath::Extension() const
 	{
 		size_t index = m_Path.find_last_of('.');
-		return m_Path.substr(index + 1, m_Path.length() - index - 1);
-	}
-
-	bool FilePath::IsRelative() const
-	{
-		return !IsAbsolute();
-	}
-
-	bool FilePath::IsAbsolute() const
-	{
-		return m_Path.size() > 1 && m_Path[1] == ':';
-	}
-
-	void FilePath::MakeAbsolute(const DirectoryPath& root)
-	{
-		if (IsRelative())
+		if (index != std::string::npos)
 		{
-			m_Path = FilePath::Combine(root, *this).Path();
+			return m_Path.substr(index + 1, m_Path.length() - index - 1);
 		}
+		return "";
 	}
 
 	std::ostream& operator<<(std::ostream& stream, const FilePath& path)
@@ -81,11 +84,13 @@ namespace Bolt
 
 	FilePath FilePath::Combine(const DirectoryPath& directory, const FilePath& file)
 	{
-		BLT_ASSERT(!(directory.IsAbsolute() && file.IsAbsolute()), "Unable to combine 2 absolute paths");
-		BLT_ASSERT(file.IsRelative(), "Right path must be relative in order to combine");
-		std::string leftPath = directory.Path();
-		std::string rightPath = file.Path();
-		return FilePath(leftPath + rightPath);
+		const std::string& leftPath = directory.Path();
+		const std::string& rightPath = file.Path();
+		if (leftPath.back() == DirectoryPath::DIRECTORY_DELIMITER || rightPath.front() == DirectoryPath::DIRECTORY_DELIMITER)
+		{
+			return FilePath(leftPath + rightPath);
+		}
+		return FilePath(leftPath + DirectoryPath::DIRECTORY_DELIMITER + rightPath);
 	}
 
 	void FilePath::StandardizePath(std::string& filepath)

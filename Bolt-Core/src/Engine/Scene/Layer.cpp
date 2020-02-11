@@ -52,6 +52,11 @@ namespace Bolt
 		return *m_UISystem;
 	}
 
+	RenderingSystem& Layer::GetRenderer()
+	{
+		return *m_RenderingSystem;
+	}
+
 	const EntityHandle& Layer::GetActiveCamera() const
 	{
 		return m_RenderingSystem->GetActiveCamera();

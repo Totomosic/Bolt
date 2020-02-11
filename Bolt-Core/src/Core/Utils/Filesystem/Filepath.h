@@ -19,10 +19,6 @@ namespace Bolt
 		std::string Filename() const;
 		std::string SimpleFilename() const;
 		std::string Extension() const;
-		bool IsRelative() const;
-		bool IsAbsolute() const;
-
-		void MakeAbsolute(const DirectoryPath& root);
 		
 		friend std::ostream& operator<<(std::ostream& stream, const FilePath& path);
 

@@ -28,6 +28,7 @@ namespace Bolt
 		SystemRegistry& Systems();
 
 		UIManager& GetUI();
+		RenderingSystem& GetRenderer();
 
 		const EntityHandle& GetActiveCamera() const;
 		void SetActiveCamera(const EntityHandle& entity);
