@@ -59,11 +59,6 @@ namespace Bolt
 	{
 		BLT_ASSERT(m_CurrentScene != nullptr, "Current scene has not been started");
 		m_CurrentScene = nullptr;
-
-		if (m_Stats.DrawCalls > 1000)
-		{
-			BLT_WARN("High number of Draw Calls in last frame: {}", m_Stats.DrawCalls);
-		}
 	}
 
 	void Renderer::Flush()
