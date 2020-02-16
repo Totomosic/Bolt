@@ -59,7 +59,6 @@ namespace Bolt
 		std::vector<EventInfo> m_Events;
 		IdManager<uint32_t> m_ListenerIds;
 		mutable EventBusMount<EventIdT> m_MountManager;
-		std::vector<EventEmitterBase*> m_EventEmitters;
 
 		bool m_ImmediateMode;
 
