@@ -297,6 +297,10 @@ namespace Bolt
 			m_ListenerLocations.erase(id);
 			m_ListenerIds.ReleaseId(id);
 		}
+		else
+		{
+			BLT_CORE_WARN("Failed to remove event listener");
+		}
 	}
 
 	template<typename EventIdT>
@@ -362,10 +366,13 @@ namespace Bolt
 				const std::vector<std::unique_ptr<EventListenerContainer>>& listeners = m_Listeners.at(e.Id);
 				for (const std::unique_ptr<EventListenerContainer>& listener : listeners)
 				{
-					listener->Emit(*e.Event);
-					if (e.Event->Handled)
+					if (listener)
 					{
-						break;
+						listener->Emit(*e.Event);
+						if (e.Event->Handled)
+						{
+							break;
+						}
 					}
 				}
 			}
