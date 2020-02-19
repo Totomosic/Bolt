@@ -6,6 +6,7 @@
 #include "Core/Utils/Filesystem/Filesystem.h"
 #include "BoltLib/Math/Random/NoiseFunctions/SimplexNoise.h"
 #include "BoltLib/Profiling/Profiling.h"
+#include "BoltLib/DebugTimer.h"
 
 #include "Graphics/Window.h"
 #include "Graphics/Resources/ResourceManager.h"
