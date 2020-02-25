@@ -44,6 +44,8 @@ namespace Bolt
 
 		}
 
+		inline operator bool() const { return IsValid(); }
+
 		inline bool IsValid() const { return m_Manager != nullptr && m_Manager->IsValid(m_Entity); }
 		inline T* Get() const
 		{
