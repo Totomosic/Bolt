@@ -37,9 +37,4 @@ namespace Bolt
 		m_Head += length;
 	}
 
-	void InputMemoryStream::Skip(size_t nbytes)
-	{
-		m_Head += nbytes;
-	}
-
 }

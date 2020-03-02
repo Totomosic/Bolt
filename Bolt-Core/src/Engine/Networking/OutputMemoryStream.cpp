@@ -27,21 +27,16 @@ namespace Bolt
 
 	void OutputMemoryStream::Write(const void* data, size_t length)
 	{
-		if (m_Capacity < m_Head + length)
-		{
-			ReallocBuffer(std::max(m_Capacity * 2, m_Head + length));
-		}
-		memcpy((char*)GetBufferPtr() + m_Head, data, length);
+		TestRealloc(length);
+		memcpy(GetHeadPtr(), data, length);
 		m_Head += length;
 	}
 
-	void OutputMemoryStream::Skip(size_t nbytes)
+	void OutputMemoryStream::WriteFromStream(InputMemoryStream& stream, size_t length)
 	{
-		if (m_Capacity < m_Head + nbytes)
-		{
-			ReallocBuffer(std::max(m_Capacity * 2, m_Head + nbytes));
-		}
-		m_Head += nbytes;
+		TestRealloc(length);
+		stream.Read(GetHeadPtr(), length);
+		m_Head += length;
 	}
 
 	void OutputMemoryStream::ReallocBuffer(size_t capacity)
@@ -52,6 +47,19 @@ namespace Bolt
 		memcpy(m_Buffer.get(), data, GetRemainingDataSize());
 		m_Capacity = capacity;
 		BLT_DELETE_ARR data;
+	}
+
+	void OutputMemoryStream::TestRealloc(size_t length)
+	{
+		if (m_Capacity < m_Head + length)
+		{
+			ReallocBuffer(std::max(m_Capacity * 2, m_Head + length));
+		}
+	}
+
+	void* OutputMemoryStream::GetHeadPtr()
+	{
+		return (void*)((char*)GetBufferPtr() + m_Head);
 	}
 
 }

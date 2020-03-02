@@ -1,5 +1,6 @@
 #pragma once
 #include "bltpch.h"
+#include "InputMemoryStream.h"
 
 namespace Bolt
 {
@@ -19,6 +20,7 @@ namespace Bolt
 		void Reset(size_t to = 0);
 
 		void Write(const void* data, size_t length);
+		void WriteFromStream(InputMemoryStream& stream, size_t length);
 
 		template<typename T>
 		void Write(const T& value)
@@ -26,10 +28,10 @@ namespace Bolt
 			Write(&value, sizeof(T));
 		}
 
-		void Skip(size_t nbytes);
-
 	private:
 		void ReallocBuffer(size_t capacity);
+		void TestRealloc(size_t length);
+		void* GetHeadPtr();
 
 	};
 

@@ -26,9 +26,6 @@ namespace Bolt
 		{
 			Read((void*)outValue, sizeof(T));
 		}
-
-		void Skip(size_t nbytes);
-
 	};
 
 }
