@@ -1,5 +1,6 @@
 #include "bltpch.h"
 #include "OutputMemoryStream.h"
+#include "InputMemoryStream.h"
 
 namespace Bolt
 {
@@ -37,6 +38,13 @@ namespace Bolt
 		TestRealloc(length);
 		stream.Read(GetHeadPtr(), length);
 		m_Head += length;
+	}
+
+	OutputMemoryStream OutputMemoryStream::Clone() const
+	{
+		OutputMemoryStream result(GetRemainingDataSize());
+		result.Write(GetBufferPtr(), GetRemainingDataSize());
+		return result;
 	}
 
 	void OutputMemoryStream::ReallocBuffer(size_t capacity)

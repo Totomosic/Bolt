@@ -8,8 +8,8 @@ project "Dukglue"
 
     files
     {
-        "duktape/*.h",
-        "duktape/*.c",
+        "include/*.h",
+        "include/*.c",
         "include/dukglue/*.h"
     }
 

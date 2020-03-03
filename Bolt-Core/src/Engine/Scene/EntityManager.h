@@ -128,8 +128,11 @@ namespace Bolt
 		virtual void CopyTo(const EntityHandle& from, const EntityHandle& to) = 0;
 	};
 
+	template<typename T, typename Enable = void>
+	class BLT_API ComponentHelper;
+
 	template<typename T>
-	class BLT_API ComponentHelper : public BaseComponentHelper
+	class BLT_API ComponentHelper<T, typename std::enable_if_t<std::is_copy_constructible_v<T>>> : public BaseComponentHelper
 	{
 	public:
 		void RemoveComponent(const EntityHandle& entity) override
@@ -140,6 +143,21 @@ namespace Bolt
 		void CopyTo(const EntityHandle& from, const EntityHandle& to) override
 		{
 			to.AssignFromCopy<T>(*from.GetComponent<T>());
+		}
+	};
+
+	template<typename T>
+	class BLT_API ComponentHelper<T, typename std::enable_if_t<!std::is_copy_constructible_v<T>>> : public BaseComponentHelper
+	{
+	public:
+		void RemoveComponent(const EntityHandle& entity) override
+		{
+			entity.Remove<T>();
+		}
+
+		void CopyTo(const EntityHandle& from, const EntityHandle& to) override
+		{
+			BLT_ASSERT(false, "Attempted to copy component with no copy constructor");
 		}
 	};
 
@@ -459,7 +477,7 @@ namespace Bolt
 	inline ComponentHandle<T> EntityHandle::Assign(Args&& ... args) const
 	{
 		BLT_ASSERT(IsValid(), "Entity is not valid");
-		return m_Manager->template Assign<T, Args...>(m_Entity, std::forward<Args>(args)...);
+		return m_Manager->template Assign<T>(m_Entity, std::forward<Args>(args)...);
 	}
 
 	template<typename T>

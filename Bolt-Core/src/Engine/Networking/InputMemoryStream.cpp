@@ -37,4 +37,18 @@ namespace Bolt
 		m_Head += length;
 	}
 
+	InputMemoryStream InputMemoryStream::Clone() const
+	{
+		InputMemoryStream result(GetRemainingDataSize());
+		memcpy(result.GetBufferPtr(), GetBufferPtr(), GetRemainingDataSize());
+		return result;
+	}
+
+	InputMemoryStream InputMemoryStream::FromStream(const OutputMemoryStream& stream)
+	{
+		InputMemoryStream result(stream.GetRemainingDataSize());
+		memcpy(result.GetBufferPtr(), stream.GetBufferPtr(), stream.GetRemainingDataSize());
+		return result;
+	}
+
 }

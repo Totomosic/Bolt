@@ -1,9 +1,10 @@
 #pragma once
 #include "bltpch.h"
-#include "InputMemoryStream.h"
 
 namespace Bolt
 {
+
+	class InputMemoryStream;
 
 	class BLT_API OutputMemoryStream
 	{
@@ -27,6 +28,8 @@ namespace Bolt
 		{
 			Write(&value, sizeof(T));
 		}
+
+		OutputMemoryStream Clone() const;
 
 	private:
 		void ReallocBuffer(size_t capacity);

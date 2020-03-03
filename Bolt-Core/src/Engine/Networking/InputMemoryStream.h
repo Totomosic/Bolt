@@ -1,5 +1,6 @@
 #pragma once
 #include "bltpch.h"
+#include "OutputMemoryStream.h"
 
 namespace Bolt
 {
@@ -26,6 +27,11 @@ namespace Bolt
 		{
 			Read((void*)outValue, sizeof(T));
 		}
+
+		InputMemoryStream Clone() const;
+
+	public:
+		static InputMemoryStream FromStream(const OutputMemoryStream& stream);
 	};
 
 }
