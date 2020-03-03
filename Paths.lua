@@ -20,6 +20,7 @@ IncludeDirs["spdlog"] =         BoltLibDir .. "vendor/spdlog/include"
 IncludeDirs["FreeTypeGL"] =     BoltCoreDir .. "vendor/FreeType-GL"
 IncludeDirs["FreeType"] =       BoltCoreDir .. "vendor/FreeType/include"
 IncludeDirs["Lua"] =            BoltCoreDir .. "vendor/Lua/src"
+IncludeDirs["Dukglue"] =        BoltCoreDir .. "vendor/Dukglue/include"
 
 -- Library directories relative to solution directory
 LibraryDirs = {}

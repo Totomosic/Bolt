@@ -26,6 +26,7 @@ project "Bolt-Core"
         "../%{IncludeDirs.FreeTypeGL}",
         "../%{IncludeDirs.FreeType}",
         "../%{IncludeDirs.Lua}",
+        "../%{IncludeDirs.Dukglue}",
         "../%{IncludeDirs.BoltLib}",
         "../%{IncludeDirs.ResourcesLib}",
         "src"
@@ -40,6 +41,7 @@ project "Bolt-Core"
         "FreeType",
         "FreeType-GL",
         "Lua",
+        "Dukglue",
         "BoltLib",
         "ResourcesLib"
     }

@@ -41,3 +41,5 @@
 
 #include "Engine/Scene/Components/Transform.h"
 #include "Engine/Scene/Components/Camera.h"
+
+#include "Engine/Scripting/JavaScript/JSContext.h"
