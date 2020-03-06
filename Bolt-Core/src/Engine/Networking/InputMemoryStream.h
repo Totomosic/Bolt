@@ -1,11 +1,11 @@
 #pragma once
-#include "bltpch.h"
+#include "MemoryStream.h"
 #include "OutputMemoryStream.h"
 
 namespace Bolt
 {
 
-	class BLT_API InputMemoryStream
+	class BLT_API InputMemoryStream : public MemoryStream
 	{
 	private:
 		std::unique_ptr<byte[]> m_Buffer;

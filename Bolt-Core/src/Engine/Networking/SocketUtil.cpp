@@ -26,23 +26,25 @@ namespace Bolt
 	std::vector<uint32_t> SocketUtil::GetIP4Addresses()
 	{
 		std::vector<uint32_t> result;
-#ifdef BLT_PLATFORM_WINDOWS
 		char name[255];
 		if (gethostname(name, sizeof(name)) == 0)
 		{
-			PHOSTENT hostinfo;
+			hostent* hostinfo;
 			if ((hostinfo = gethostbyname(name)) != NULL)
 			{
 				int nCount = 0;
-				while (hostinfo->h_addr_list[nCount])
+				while (hostinfo->h_addr_list[nCount] != NULL)
 				{
 					in_addr addr = *(struct in_addr*)hostinfo->h_addr_list[nCount++];
+#ifdef BLT_PLATFORM_WINDOWS
 					uint32_t a = ntohl(addr.S_un.S_addr);
+#elif defined(BLT_PLATFORM_LINUX)
+					uint32_t a = ntohl(addr.s_addr);
+#endif
 					result.push_back(a);
 				}
 			}
 		}
-#endif
 		return result;
 	}
 

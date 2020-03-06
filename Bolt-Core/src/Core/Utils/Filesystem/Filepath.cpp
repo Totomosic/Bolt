@@ -86,6 +86,10 @@ namespace Bolt
 	{
 		const std::string& leftPath = directory.Path();
 		const std::string& rightPath = file.Path();
+		if (leftPath.size() == 0)
+			return FilePath(rightPath);
+		if (rightPath.size() == 0)
+			return FilePath(leftPath);
 		if (leftPath.back() == DirectoryPath::DIRECTORY_DELIMITER || rightPath.front() == DirectoryPath::DIRECTORY_DELIMITER)
 		{
 			return FilePath(leftPath + rightPath);

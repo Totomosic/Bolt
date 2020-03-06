@@ -9,8 +9,8 @@ namespace Bolt
 		
 	}
 
-	InputMemoryStream::InputMemoryStream(size_t capacity)
-		: m_Buffer(std::make_unique<byte[]>(capacity)), m_Capacity(capacity), m_Head(0)
+	InputMemoryStream::InputMemoryStream(size_t capacity) : MemoryStream(),
+		m_Buffer(std::make_unique<byte[]>(capacity)), m_Capacity(capacity), m_Head(0)
 	{
 		
 	}

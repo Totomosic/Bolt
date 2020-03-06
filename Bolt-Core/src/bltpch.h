@@ -48,6 +48,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h> 
 #include <fcntl.h>
+#include <netdb.h>
 #endif
 
 #define _USE_MATH_DEFINES

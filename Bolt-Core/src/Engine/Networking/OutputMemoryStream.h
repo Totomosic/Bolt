@@ -1,12 +1,12 @@
 #pragma once
-#include "bltpch.h"
+#include "MemoryStream.h"
 
 namespace Bolt
 {
 
 	class InputMemoryStream;
 
-	class BLT_API OutputMemoryStream
+	class BLT_API OutputMemoryStream : public MemoryStream
 	{
 	private:
 		std::unique_ptr<byte[]> m_Buffer;
@@ -35,7 +35,6 @@ namespace Bolt
 		void ReallocBuffer(size_t capacity);
 		void TestRealloc(size_t length);
 		void* GetHeadPtr();
-
 	};
 
 }
