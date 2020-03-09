@@ -5,10 +5,12 @@
 namespace Bolt
 {
 
+	class Layer;
+
 	class BLT_API UIManager : public System<UIManager>
 	{
 	private:
-		EntityManager* m_Manager;
+		Layer* m_Layer;
 		EntityFactory m_Factory;
 		mutable UIElement* m_FocusedElement;
 		std::unique_ptr<UIElement> m_Root;	
@@ -21,7 +23,7 @@ namespace Bolt
 		ScopedEventListener m_CharPressedListener;
 
 	public:
-		UIManager(EntityManager* manager);
+		UIManager(Layer* layer);
 
 		const EntityFactory& GetFactory() const;
 		UIElement& GetRoot() const;

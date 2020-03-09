@@ -1,11 +1,13 @@
 #include "bltpch.h"
 #include "UIManager.h"
+#include "../Layer.h"
+#include "../Components/Camera.h"
 
 namespace Bolt
 {
 
-	UIManager::UIManager(EntityManager* manager)
-		: m_Manager(manager), m_Factory(*m_Manager), m_Root(nullptr), m_FocusedElement(nullptr),
+	UIManager::UIManager(Layer* layer)
+		: m_Layer(layer), m_Factory(layer->GetFactory()), m_Root(nullptr), m_FocusedElement(nullptr),
 		m_ClickListener(), m_MouseDownListener(), m_MouseUpListener(), m_KeyDownListener(), m_KeyUpListener(), m_CharPressedListener()
 	{
 		m_Root = std::make_unique<UIElement>(this, nullptr, GetFactory().CreateTransform());
@@ -65,6 +67,18 @@ namespace Bolt
 
 	Vector2f UIManager::ReprojectPoint(const Vector2f& point) const
 	{
+		EntityHandle camera = m_Layer->GetActiveCamera();
+		if (camera && camera.HasComponent<Transform>() && camera.HasComponent<Camera>())
+		{
+			ComponentHandle transform = camera.GetTransform();
+			ComponentHandle c = camera.GetComponent<Camera>();
+			Window& window = Input::Get().GetWindow();
+			Frustum& viewFrustum = window.GetFramebuffer().ViewFrustum();
+			Vector4f ndc = { Map(point.x, 0.0f, viewFrustum.Width(), -1.0f, 1.0f), Map(point.y, 0.0f, viewFrustum.Height(), -1.0f, 1.0f), 0.0f, 1.0f };
+			Vector4f model = c->GetProjectionMatrix().Inverse() * ndc;
+			Vector4f world = transform->TransformMatrix() * model;
+			return { world.x, world.y };
+		}
 		return point;
 	}
 

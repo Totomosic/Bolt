@@ -63,6 +63,11 @@ namespace Bolt
 		return m_PressedCharacters;
 	}
 
+	Window& Input::GetWindow() const
+	{
+		return *m_Window;
+	}
+
 	Vector3f Input::MousePosition()
 	{
 		return Vector3f(m_Mouse.X, m_Mouse.Y, 0);

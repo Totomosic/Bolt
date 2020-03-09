@@ -43,7 +43,7 @@ namespace Bolt
 	{
 		if (m_UISystem == nullptr)
 		{
-			m_UISystem = Systems().Register<UIManager>(&m_Entities);
+			m_UISystem = Systems().Register<UIManager>(this);
 			if (!m_IsActive)
 			{
 				m_UISystem->Disable();

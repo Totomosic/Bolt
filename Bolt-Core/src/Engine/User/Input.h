@@ -95,6 +95,7 @@ namespace Bolt
 		const KeyboardInstance& Keyboard();
 
 		const std::vector<char>& PressedCharacters();
+		Window& GetWindow() const;
 
 		// Mouse position relative to the bottom left of the window
 		Vector3f MousePosition();
