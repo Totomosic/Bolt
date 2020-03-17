@@ -29,7 +29,7 @@ namespace Bolt
 		m_EventBuses.push_back(bus);
 	}
 
-	void EventManager::AddEventBus(EventBus* bus)
+	void EventManager::AddEventBus(GenericEventBus<uint32_t>* bus)
 	{
 		AddEventBus((EventBusBase*)bus);
 		m_GlobalBus->MountOn(*bus);

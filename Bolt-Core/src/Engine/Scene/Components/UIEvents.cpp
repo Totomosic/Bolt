@@ -1,20 +1,19 @@
 #include "bltpch.h"
 #include "UIEvents.h"
-#include "Core/Events/Events.h"
 
 namespace Bolt
 {
 
 	UIEvents::UIEvents()
 		: m_Bus(std::make_shared<EventBus>()), 
-		m_OnClick(m_Bus->GetEmitter<UI<MouseClickEvent>>(Events::UI.OnClick)),
-		m_OnMouseDown(m_Bus->GetEmitter<UI<MouseDownEvent>>(Events::UI.OnMouseDown)),
-		m_OnMouseUp(m_Bus->GetEmitter<UI<MouseUpEvent>>(Events::UI.OnMouseUp)),
-		m_OnKeyDown(m_Bus->GetEmitter<UI<KeyDownEvent>>(Events::UI.OnKeyDown)),
-		m_OnKeyUp(m_Bus->GetEmitter<UI<KeyUpEvent>>(Events::UI.OnKeyUp)),
-		m_OnCharPressed(m_Bus->GetEmitter<UI<CharPressedEvent>>(Events::UI.OnCharPressed)),
-		m_OnFocus(m_Bus->GetEmitter<UI<UIFocus>>(Events::UI.OnFocus)),
-		m_OnFocusLost(m_Bus->GetEmitter<UI<UIFocusLost>>(Events::UI.OnFocusLost))
+		m_OnClick(m_Bus->GetEmitter<UI<MouseClickEvent>>()),
+		m_OnMouseDown(m_Bus->GetEmitter<UI<MouseDownEvent>>()),
+		m_OnMouseUp(m_Bus->GetEmitter<UI<MouseUpEvent>>()),
+		m_OnKeyDown(m_Bus->GetEmitter<UI<KeyDownEvent>>()),
+		m_OnKeyUp(m_Bus->GetEmitter<UI<KeyUpEvent>>()),
+		m_OnCharPressed(m_Bus->GetEmitter<UI<CharPressedEvent>>()),
+		m_OnFocus(m_Bus->GetEmitter<UI<UIFocus>>()),
+		m_OnFocusLost(m_Bus->GetEmitter<UI<UIFocusLost>>())
 	{
 		m_Bus->SetImmediateMode(true);
 	}

@@ -18,6 +18,9 @@ project "Dukglue"
         "include/duktape",
         "include"
     }
+
+    filter "system:windows"
+        systemversion "latest"
     
     filter "configurations:Debug"
         runtime "Debug"

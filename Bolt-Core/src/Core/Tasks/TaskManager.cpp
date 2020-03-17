@@ -14,7 +14,7 @@ namespace Bolt
 	TaskManager::TaskManager(EventBus& bus)
 		: m_Bus(bus), m_Listener()
 	{
-		m_Listener = m_Bus.AddScopedEventListener<TaskCompletedEvent>(Events::Internal.AsyncTaskCompleted, [](Event<TaskCompletedEvent>& e)
+		m_Listener = m_Bus.AddScopedEventListener<TaskCompletedEvent>(TaskBase::TaskEventId, [](Event<TaskCompletedEvent>& e)
 			{
 				e.Data.Execute();
 				e.StopPropagation();

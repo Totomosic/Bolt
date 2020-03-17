@@ -62,7 +62,7 @@ namespace Bolt
 
 	EntityManager::EntityManager()
 		: m_IndexCounter(0), m_FreeList(), m_ComponentMasks(), m_ComponentPools(),
-		m_Bus(std::make_unique<EventBus>()), m_OnEntityCreated(m_Bus->GetEmitter<EntityCreated>(Events::Scene.EntityCreated)), m_OnEntityDestroyed(m_Bus->GetEmitter<EntityDestroyed>(Events::Scene.EntityDestroyed))
+		m_Bus(std::make_unique<EventBus>()), m_OnEntityCreated(m_Bus->GetEmitter<EntityCreated>()), m_OnEntityDestroyed(m_Bus->GetEmitter<EntityDestroyed>())
 	{
 		m_OnEntityDestroyed.AddEventListener([this](Event<EntityDestroyed>& e)
 			{

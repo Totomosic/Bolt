@@ -13,10 +13,10 @@ namespace Bolt
 
 	Window::Window(AppContext* context, const WindowCreateInfo& info)
 		: m_EventBus(), m_Events{
-			m_EventBus.GetEmitter<WindowResizeEvent>(Events::Window.WindowResized),
-			m_EventBus.GetEmitter<WindowMovedEvent>(Events::Window.WindowMoved),
-			m_EventBus.GetEmitter<WindowFocusedEvent>(Events::Window.WindowFocused),
-			m_EventBus.GetEmitter<WindowClosedEvent>(Events::Window.WindowClosed),
+			m_EventBus.GetEmitter<WindowResizeEvent>(),
+			m_EventBus.GetEmitter<WindowMovedEvent>(),
+			m_EventBus.GetEmitter<WindowFocusedEvent>(),
+			m_EventBus.GetEmitter<WindowClosedEvent>(),
 		}, m_Data { context, nullptr, Framebuffer(), info.Title, info.Decorated, true }
 	{
 		m_Data.m_Framebuffer.GetViewport().Width = info.Width;

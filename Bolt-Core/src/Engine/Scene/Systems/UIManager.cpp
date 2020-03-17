@@ -73,7 +73,7 @@ namespace Bolt
 			ComponentHandle transform = camera.GetTransform();
 			ComponentHandle c = camera.GetComponent<Camera>();
 			Window& window = Input::Get().GetWindow();
-			Frustum& viewFrustum = window.GetFramebuffer().ViewFrustum();
+			Frustum viewFrustum = window.GetFramebuffer().ViewFrustum();
 			Vector4f ndc = { Map(point.x, 0.0f, viewFrustum.Width(), -1.0f, 1.0f), Map(point.y, 0.0f, viewFrustum.Height(), -1.0f, 1.0f), 0.0f, 1.0f };
 			Vector4f model = c->GetProjectionMatrix().Inverse() * ndc;
 			Vector4f world = transform->TransformMatrix() * model;

@@ -30,7 +30,7 @@ namespace Bolt
 		template<typename DelegateT>
 		void RunOnMainThread(DelegateT func)
 		{
-			m_Bus.Emit(Events::Internal.AsyncTaskCompleted, TaskCompleted<int>(0, [func{ std::move(func) }](int ignore) mutable
+			m_Bus.Emit(TaskBase::TaskEventId, TaskCompleted<int>(0, [func{ std::move(func) }](int ignore) mutable
 			{
 				func();
 			}));

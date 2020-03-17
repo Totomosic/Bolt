@@ -6,7 +6,7 @@ namespace Bolt
 
 	Scene::Scene()
 		: m_Layers(), m_IsLoaded(false), m_IsActive(false),
-		m_SharedEntities(), m_Systems(m_SharedEntities), m_OnLoad(m_SharedEntities.Bus().GetEmitter<SceneLoadEvent>(Events::Scene.SceneLoaded)), m_OnUnload(m_SharedEntities.Bus().GetEmitter<SceneUnloadEvent>(Events::Scene.SceneUnloaded))
+		m_SharedEntities(), m_Systems(m_SharedEntities), m_OnLoad(m_SharedEntities.Bus().GetEmitter<SceneLoadEvent>()), m_OnUnload(m_SharedEntities.Bus().GetEmitter<SceneUnloadEvent>())
 	{
 	}
 

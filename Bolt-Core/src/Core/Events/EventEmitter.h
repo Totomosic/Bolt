@@ -1,5 +1,4 @@
 #pragma once
-#include "Events.h"
 #include "EventData.h"
 
 namespace Bolt

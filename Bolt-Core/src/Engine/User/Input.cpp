@@ -10,14 +10,14 @@ namespace Bolt
 
 	Input::Input(Window* window)
 		: m_EventBus(), m_Mouse(), m_Keyboard(), m_Window(window), m_MouseDownLast(), m_PressedCharacters(), m_ChangedKeys(), m_ChangedButtons(), 
-		OnKeyDown(m_EventBus.GetEmitter<KeyDownEvent>(Events::Input.KeyDown)), 
-		OnKeyUp(m_EventBus.GetEmitter<KeyUpEvent>(Events::Input.KeyUp)),
-		OnMouseDown(m_EventBus.GetEmitter<MouseDownEvent>(Events::Input.MouseDown)),
-		OnMouseUp(m_EventBus.GetEmitter<MouseUpEvent>(Events::Input.MouseUp)),
-		OnMouseMoved(m_EventBus.GetEmitter<MouseMovedEvent>(Events::Input.MouseMoved)),
-		OnMouseScrolled(m_EventBus.GetEmitter<MouseScrolledEvent>(Events::Input.MouseScrolled)),
-		OnMouseClicked(m_EventBus.GetEmitter<MouseClickEvent>(Events::Input.MouseClicked)),
-		OnCharPressed(m_EventBus.GetEmitter<CharPressedEvent>(Events::Input.CharPressed))
+		OnKeyDown(m_EventBus.GetEmitter<KeyDownEvent>()), 
+		OnKeyUp(m_EventBus.GetEmitter<KeyUpEvent>()),
+		OnMouseDown(m_EventBus.GetEmitter<MouseDownEvent>()),
+		OnMouseUp(m_EventBus.GetEmitter<MouseUpEvent>()),
+		OnMouseMoved(m_EventBus.GetEmitter<MouseMovedEvent>()),
+		OnMouseScrolled(m_EventBus.GetEmitter<MouseScrolledEvent>()),
+		OnMouseClicked(m_EventBus.GetEmitter<MouseClickEvent>()),
+		OnCharPressed(m_EventBus.GetEmitter<CharPressedEvent>())
 	{
 		for (int i = 0; i < BLT_MAX_KEYS; i++)
 		{

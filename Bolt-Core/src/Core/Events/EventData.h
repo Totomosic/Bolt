@@ -15,6 +15,9 @@ namespace Bolt
 
 	class BLT_API EventContainer
 	{
+	protected:
+		static uint32_t s_EventTypeCounter;
+
 	public:
 		bool Handled = false;
 
@@ -27,6 +30,13 @@ namespace Bolt
 	template<typename T>
 	class BLT_API Event : public EventContainer
 	{
+	public:
+		static uint32_t GetEventId()
+		{
+			static uint32_t id = s_EventTypeCounter++;
+			return id;
+		}
+
 	public:
 		T Data;
 
@@ -41,7 +51,12 @@ namespace Bolt
 	template<>
 	class BLT_API Event<void> : public EventContainer
 	{
-
+	public:
+		static uint32_t GetEventId()
+		{
+			static uint32_t id = s_EventTypeCounter++;
+			return id;
+		}
 	};
 
 	class BLT_API EventListenerContainer

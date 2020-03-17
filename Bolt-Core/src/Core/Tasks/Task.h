@@ -12,8 +12,14 @@ namespace Bolt
 		Timeout
 	};
 
+	class BLT_API TaskBase
+	{
+	public:
+		inline static uint32_t TaskEventId = EventBus::GetMinEventId() - 1;
+	};
+
 	template<class TResult>
-	class BLT_API Task
+	class BLT_API Task : public TaskBase
 	{
 	private:
 		EventBus& m_Bus;
@@ -45,7 +51,7 @@ namespace Bolt
 	};
 
 	template<>
-	class BLT_API Task<void>
+	class BLT_API Task<void> : public TaskBase
 	{
 	private:
 		EventBus& m_Bus;
@@ -106,7 +112,7 @@ namespace Bolt
 			EventBus& bus = m_Bus;
 			ContinueWith([&bus, func{ std::move(func) }]() mutable
 			{
-				bus.Emit(Events::Internal.AsyncTaskCompleted, TaskCompleted<int>(0, [func{ std::move(func) }](int ignore) mutable
+				bus.Emit(TaskEventId, TaskCompleted<int>(0, [func{ std::move(func) }](int ignore) mutable
 				{
 					func();
 				}));
@@ -193,7 +199,7 @@ namespace Bolt
 		EventBus& bus = m_Bus;
 		ContinueWith([&bus, func{ std::move(func) }](T value) mutable
 		{
-			bus.Emit(Events::Internal.AsyncTaskCompleted, TaskCompleted<T>(std::move(value), std::move(func)));
+			bus.Emit(TaskEventId, TaskCompleted<T>(std::move(value), std::move(func)));
 		});
 	}
 

@@ -63,6 +63,10 @@ namespace Bolt
 		bool m_ImmediateMode;
 
 	public:
+		template<typename EIdT = EventIdT>
+		static std::enable_if_t<std::is_same_v<EIdT, uint32_t>, uint32_t> GetMinEventId();
+
+	public:
 		GenericEventBus(bool addToEventManager = true);
 		GenericEventBus(const GenericEventBus<EventIdT>& other) = delete;
 		GenericEventBus<EventIdT>& operator=(const GenericEventBus<EventIdT>& other) = delete;
@@ -75,13 +79,19 @@ namespace Bolt
 
 		template<typename T>
 		GenericEventEmitter<T, EventIdT> GetEmitter(const EventIdT& eventId);
+		template<typename T, typename EIdT = EventIdT>
+		std::enable_if_t<std::is_same_v<EIdT, uint32_t>, GenericEventEmitter<T, EventIdT>> GetEmitter();
 		EventBusMount<EventIdT>* GetMount() const;
 
 		void MountOn(GenericEventBus<EventIdT>& bus) const;
 		template<typename T>
 		uint32_t AddEventListener(const EventIdT& eventId, const typename EventListener<T>::callback_t& callback, ListenerPriority priority = ListenerPriority::Medium);
+		template<typename T, typename EIdT = EventIdT>
+		std::enable_if_t<std::is_same_v<EIdT, uint32_t>, uint32_t> AddEventListener(const typename EventListener<T>::callback_t& callback, ListenerPriority priority = ListenerPriority::Medium);
 		template<typename T>
 		GenericScopedEventListener<EventIdT> AddScopedEventListener(const EventIdT& eventId, const typename EventListener<T>::callback_t& callback, ListenerPriority priority = ListenerPriority::Medium);
+		template<typename T, typename EIdT = EventIdT>
+		std::enable_if_t<std::is_same_v<EIdT, uint32_t>, GenericScopedEventListener<EventIdT>> AddScopedEventListener(const typename EventListener<T>::callback_t& callback, ListenerPriority priority = ListenerPriority::Medium);
 
 		int GetListenerPriorityIndex(uint32_t id) const;
 		void SetListenerPriorityIndex(uint32_t id, int priorityIndex);
@@ -92,6 +102,12 @@ namespace Bolt
 		template<typename T>
 		void Emit(const EventIdT& eventId, T&& data);
 		void Emit(const EventIdT& eventId);
+		template<typename T, typename EIdT = EventIdT>
+		std::enable_if_t<std::is_same_v<EIdT, uint32_t>, void> Emit(const T& data);
+		template<typename T, typename EIdT = EventIdT>
+		std::enable_if_t<std::is_same_v<EIdT, uint32_t>, void> Emit(T&& data);
+		template<typename T, typename EIdT = EventIdT>
+		std::enable_if_t<std::is_same_v<EIdT, uint32_t>, void> Emit();
 		virtual void Flush() override;
 
 	private:
@@ -196,10 +212,24 @@ namespace Bolt
 	}
 
 	template<typename EventIdT>
+	template<typename EIdT>
+	inline std::enable_if_t<std::is_same_v<EIdT, uint32_t>, uint32_t> GenericEventBus<EventIdT>::GetMinEventId()
+	{
+		return 100000;
+	}
+
+	template<typename EventIdT>
 	template<typename T>
 	GenericEventEmitter<T, EventIdT> GenericEventBus<EventIdT>::GetEmitter(const EventIdT& eventId)
 	{
 		return GenericEventEmitter<T, EventIdT>(eventId, *this);
+	}
+
+	template<typename EventIdT>
+	template<typename T, typename EIdT>
+	std::enable_if_t<std::is_same_v<EIdT, uint32_t>, GenericEventEmitter<T, EventIdT>> GenericEventBus<EventIdT>::GetEmitter()
+	{
+		return GetEmitter<T>(Event<T>::GetEventId());
 	}
 
 	template<typename EventIdT>
@@ -231,10 +261,24 @@ namespace Bolt
 	}
 
 	template<typename EventIdT>
+	template<typename T, typename EIdT>
+	std::enable_if_t<std::is_same_v<EIdT, uint32_t>, uint32_t> GenericEventBus<EventIdT>::AddEventListener(const typename EventListener<T>::callback_t& callback, ListenerPriority priority)
+	{
+		return AddEventListener<T>(Event<T>::GetEventId(), callback, priority);
+	}
+
+	template<typename EventIdT>
 	template<typename T>
 	GenericScopedEventListener<EventIdT> GenericEventBus<EventIdT>::AddScopedEventListener(const EventIdT& eventId, const typename EventListener<T>::callback_t& callback, ListenerPriority priority)
 	{
 		return GenericScopedEventListener<EventIdT>(*this, AddEventListener<T>(eventId, callback, priority));
+	}
+
+	template<typename EventIdT>
+	template<typename T, typename EIdT>
+	std::enable_if_t<std::is_same_v<EIdT, uint32_t>, GenericScopedEventListener<EventIdT>> GenericEventBus<EventIdT>::AddScopedEventListener(const typename EventListener<T>::callback_t& callback, ListenerPriority priority)
+	{
+		return AddScopedEventListener<T>(Event<T>::GetEventId(), callback, priority);
 	}
 
 	template<typename EventIdT>
@@ -315,6 +359,27 @@ namespace Bolt
 	void GenericEventBus<EventIdT>::Emit(const EventIdT& eventId, T&& data)
 	{
 		EmitEvent(eventId, std::make_unique<Event<T>>(std::move(data)));
+	}
+
+	template<typename EventIdT>
+	template<typename T, typename EIdT>
+	std::enable_if_t<std::is_same_v<EIdT, uint32_t>, void> GenericEventBus<EventIdT>::Emit(const T& data)
+	{
+		return Emit(Event<T>::GetEventId(), data);
+	}
+
+	template<typename EventIdT>
+	template<typename T, typename EIdT>
+	std::enable_if_t<std::is_same_v<EIdT, uint32_t>, void> GenericEventBus<EventIdT>::Emit(T&& data)
+	{
+		return Emit(Event<T>::GetEventId(), std::move(data));
+	}
+
+	template<typename EventIdT>
+	template<typename T, typename EIdT>
+	std::enable_if_t<std::is_same_v<EIdT, uint32_t>, void> GenericEventBus<EventIdT>::Emit()
+	{
+		return Emit(Event<T>::GetEventId());
 	}
 
 	template<typename EventIdT>
