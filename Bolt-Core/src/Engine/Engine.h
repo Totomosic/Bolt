@@ -30,13 +30,21 @@ namespace Bolt
 		AppContext& CurrentContext() const;
 
 		void UpdateApplication();
-		void SetApplication(std::unique_ptr<Application>&& app);
 		void Run();
 
-		template<typename T>
-		void SetApplication()
+		template<typename T, typename ... Args>
+		void SetApplication(Args&& ... args)
 		{
-			SetApplication(std::make_unique<T>());
+			BLT_PROFILE_FUNCTION();
+			std::unique_ptr<AppContext> context;
+			if (m_CreateInfo.UseGraphics)
+				context = std::make_unique<AppContext>(m_CreateInfo.WindowInfo);
+			else
+				context = std::make_unique<AppContext>();
+			ApplyCurrentContext(context.get());
+			m_RootApplication = std::make_unique<T>(std::forward<Args>(args)...);
+			m_RootApplication->SetContext(std::move(context));
+			m_RootApplication->Start();
 		}
 
 		friend class Application;

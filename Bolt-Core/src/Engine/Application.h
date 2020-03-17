@@ -24,7 +24,7 @@ namespace Bolt
 		bool m_ShouldExit;
 		std::unique_ptr<AppContext> m_Context;
 		std::vector<std::unique_ptr<Application>> m_ChildApps;
-		std::vector<NewAppInfo> m_NewApps;
+		std::vector<std::unique_ptr<Application>> m_NewApps;
 
 	public:
 		Application();
@@ -32,7 +32,6 @@ namespace Bolt
 
 		const AppContext& GetContext() const;
 		AppContext& GetContext();
-		//const Window& GetWindow() const;
 		Window& GetWindow();
 		Application& GetChildApp(int index) const;
 		int ChildCount() const;
@@ -45,10 +44,17 @@ namespace Bolt
 
 		void Start();
 
-		template<typename T>
-		void PushApp(const WindowCreateInfo& info = WindowCreateInfo())
+		template<typename T, typename ... Args>
+		void PushApp(const WindowCreateInfo& info, Args&& ... args)
 		{
-			m_NewApps.push_back(NewAppInfo{ std::make_unique<T>(), info });
+			AppContext* currentContext = GetCurrentContext();
+			std::unique_ptr<AppContext> context = std::make_unique<AppContext>(info);
+			SetActiveContext(context.get());
+			std::unique_ptr<T> app = std::make_unique<T>(std::forward<Args>(args)...);
+			app->SetContext(std::move(context));
+			app->m_AppId = m_AppId + m_ChildApps.size() + m_NewApps.size() + 1;
+			m_NewApps.push_back(std::move(app));
+			SetActiveContext(currentContext);
 		}
 
 		template<typename T>
@@ -66,7 +72,9 @@ namespace Bolt
 		friend class Engine;
 
 	private:
-		void CreateContext(bool createRenderContext, const WindowCreateInfo& createInfo);
+		AppContext* GetCurrentContext() const;
+		void SetActiveContext(AppContext* context) const;
+		void SetContext(std::unique_ptr<AppContext>&& context);
 		bool UpdatePrivate();
 		bool UpdateGraphics();
 		bool UpdateNoGraphics();
@@ -76,7 +84,6 @@ namespace Bolt
 		void UpdateInput();
 
 		void PushNewApps();
-		void PushNewApp(NewAppInfo& app);
 
 	};
 

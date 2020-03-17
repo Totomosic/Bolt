@@ -56,14 +56,6 @@ namespace Bolt
 		m_RootApplication->UpdatePrivate();
 	}
 
-	void Engine::SetApplication(std::unique_ptr<Application>&& app)
-	{
-		BLT_PROFILE_FUNCTION();
-		m_RootApplication = std::move(app);
-		m_RootApplication->CreateContext(m_CreateInfo.UseGraphics, m_CreateInfo.WindowInfo);
-		m_RootApplication->Start();
-	}
-
 	void Engine::Run()
 	{
 		BLT_PROFILE_END_SESSION();

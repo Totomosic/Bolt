@@ -124,16 +124,22 @@ namespace Bolt
 		m_ShouldExit = true;
 	}
 
-	void Application::CreateContext(bool createRenderContext, const WindowCreateInfo& createInfo)
+	AppContext* Application::GetCurrentContext() const
+	{
+		return &Engine::Instance().CurrentContext();
+	}
+
+	void Application::SetActiveContext(AppContext* context) const
+	{
+		Engine::Instance().ApplyCurrentContext(context);
+	}
+
+	void Application::SetContext(std::unique_ptr<AppContext>&& context)
 	{
 		BLT_PROFILE_FUNCTION();
-		m_IsGraphicsEnabled = createRenderContext;
-		if (createRenderContext)
-			m_Context = std::make_unique<AppContext>(createInfo);
-		else
-			m_Context = std::make_unique<AppContext>();
-		Engine::Instance().SetCurrentContext(m_Context.get());
-		if (createRenderContext)
+		m_IsGraphicsEnabled = context->HasRenderContext();
+		m_Context = std::move(context);
+		if (m_IsGraphicsEnabled)
 		{
 			m_Context->GetRenderContext().GetWindow().OnClose().AddEventListener([this](Event<WindowClosedEvent>& e)
 				{
@@ -229,21 +235,13 @@ namespace Bolt
 	void Application::PushNewApps()
 	{
 		BLT_PROFILE_FUNCTION();
-		for (NewAppInfo& app : m_NewApps)
+		for (std::unique_ptr<Application>& app : m_NewApps)
 		{
-			PushNewApp(app);
+			Engine::Instance().ApplyCurrentContext(&app->GetContext());
+			app->Start();
+			m_ChildApps.push_back(std::move(app));
 		}
 		m_NewApps.clear();
-	}
-
-	void Application::PushNewApp(Application::NewAppInfo& app)
-	{
-		BLT_PROFILE_FUNCTION();
-		Application* ptr = app.App.get();
-		ptr->m_AppId = m_ChildApps.size() + 1;
-		m_ChildApps.push_back(std::move(app.App));
-		ptr->CreateContext(m_IsGraphicsEnabled, app.Info);
-		ptr->Start();
 	}
 
 }
