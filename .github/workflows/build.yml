@@ -14,9 +14,8 @@ jobs:
         run: sudo apt-get install -y libx11-dev
       - name: Checkout Bolt
         uses: actions/checkout@v2
-      - run: cd Scripts
       - name: Generate makefiles
         run: ./Linux-GenProjects.sh
-      - run: cd ..
+        working-directory: Scripts
       - name: Make Bolt-Core
         run: make Bolt-Core
