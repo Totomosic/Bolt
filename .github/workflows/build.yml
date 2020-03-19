@@ -3,22 +3,25 @@ name: Build
 on: push
 
 jobs:
+
   build:
+
     runs-on: ubuntu-latest
+
     steps:
       - name: Update
       run: sudo apt-get update -y
-      -name: Install make
+      - name: Install make
       run: sudo apt-get install -y make
-      -name: Install X11
+      - name: Install X11
       run: sudo apt-get install -y libx11-dev
-      -name: Checkout code
+      - name: Checkout code
       uses: actions/checkout@v2
-      -name: cd
+      - name: cd
       run: cd Scripts
-      -name: Generate Makefiles
+      - name: Generate Makefiles
       run: ./Linux-GenProjects.sh
-      -name: cd
+      - name: cd
       run: cd ..
-      -name: Build
+      - name: Build
       run: make Bolt-Core
