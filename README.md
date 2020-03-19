@@ -1,5 +1,5 @@
 # Bolt
-3D/2D C++ OpenGL Graphics/Game Engine
+3D/2D C++ OpenGL Graphics/Game Engine.
 
 # Supported Platforms:
 ##### ![](https://img.shields.io/badge/Windows-Supported-green.svg)
