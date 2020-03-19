@@ -9,19 +9,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      -name: Apt update
-      run: sudo apt-get update -y
-      -name: Install make
-      run: sudo apt-get install -y make
-      -name: Install X11
-      run: sudo apt-get install -y libx11-dev
-      -name: Checkout code
-      uses: actions/checkout@v2
-      -name: cd
-      run: cd Scripts
-      -name: Generate Makefiles
-      run: ./Linux-GenProjects.sh
-      -name: cd
-      run: cd ..
-      -name: Build
-      run: make Bolt-Core
+      -run: sudo apt-get update -y
+      -run: sudo apt-get install -y make
+      -run: sudo apt-get install -y libx11-dev
+      -uses: actions/checkout@v2
+      -run: cd Scripts
+      -run: ./Linux-GenProjects.sh
+      -run: cd ..
+      -run: make Bolt-Core
