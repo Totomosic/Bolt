@@ -6,10 +6,6 @@ jobs:
   build-linux:
     runs-on: ubuntu-latest
     steps:
-      - name: Update
-        run: sudo apt-get update -y
-      - name: Install make
-        run: sudo apt-get install -y make
       - name: Install X11
         run: sudo apt-get install -y libx11-dev libgl1-mesa-dev xorg-dev
       - name: Checkout Bolt
@@ -18,7 +14,7 @@ jobs:
         run: ./Linux-GenProjects.sh
         working-directory: Scripts
       - name: Make Bolt-Core
-        run: make -j2 Bolt-Core
+        run: make -j8 Bolt-Core
 
   build-windows:
     runs-on: windows-latest
