@@ -24,9 +24,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout Bolt
-        run: actions/checkout@v2
-        with:
-          - shell: cmd
+        uses: actions/checkout@v2
       - name: Generate projects
         run: ./Win-GenProjects.bat
         working-directory: Scripts
