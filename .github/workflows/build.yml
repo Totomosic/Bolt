@@ -25,8 +25,8 @@ jobs:
     steps:
       - name: Checkout Bolt
         run: actions/checkout@v2
-      -name: Generate projects
+      - name: Generate projects
         run: ./Win-GenProjects.bat
         working-directory: Scripts
-      -name: Build Bolt
+      - name: Build Bolt
         run: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\MSBuild\\Current\\Bin\\MSBuild.exe" Bolt.sln -m
