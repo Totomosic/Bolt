@@ -1,0 +1,15 @@
+name: Build-Windows
+on: push
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Bolt
+        uses: actions/checkout@v2
+      - name: Generate projects
+        run: ./Win-GenProjects.bat
+        working-directory: Scripts
+        shell: cmd
+      - name: Build Bolt
+        run: '"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\MSBuild\\Current\\Bin\\MSBuild.exe" Bolt.sln -m'
+        shell: cmd
