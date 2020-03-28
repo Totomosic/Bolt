@@ -26,6 +26,7 @@ Currently supports both Windows and Linux, untested on MacOS and plans to suppor
 2. Build outputs are located in the `bin` directory.
 
 ## Building on Linux:
-1. Run `Scripts/Linux-GenProjects.sh` to generate the Makefiles.
-2. Run `make -j<number_of_cores> Bolt-Core` to build the core library.
-3. Build outputs are located in the `bin` directory.
+1. Ensure the required dependencies are installed `sudo apt-get install libx11-dev libgl1-mesa-dev xorg-dev`
+2. Run `Scripts/Linux-GenProjects.sh` to generate the Makefiles.
+3. Run `make -j<number_of_cores> Bolt-Core` to build the core library.
+4. Build outputs are located in the `bin` directory.
