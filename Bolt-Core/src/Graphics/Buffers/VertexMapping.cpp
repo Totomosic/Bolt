@@ -1,6 +1,7 @@
 #include "bltpch.h"
 #include "VertexMapping.h"
 #include "VertexArray.h"
+#include "BoltLib/DebugTimer.h"
 
 namespace Bolt
 {
@@ -63,6 +64,8 @@ namespace Bolt
 
 	bool VertexMapping::HasAttribute(int attributeIndex) const
 	{
+		if (m_Attributes.find(attributeIndex) != m_Attributes.end())
+			return true;
 		auto it = std::find_if(m_MappedPtrs.begin(), m_MappedPtrs.end(), [attributeIndex](const MappingPtr& ptr)
 			{
 				auto it = std::find_if(ptr.Attributes.begin(), ptr.Attributes.end(), [attributeIndex](const MappingAttribute& attr)
@@ -108,7 +111,6 @@ namespace Bolt
 
 	void* VertexMapping::GetAttributePtr(int attributeIndex, int vertexIndex) const
 	{
-		BLT_ASSERT(HasAttribute(attributeIndex), "Attribute with index {} does not exist", attributeIndex);
 		const AttributeInfo& info = GetAttribute(attributeIndex);
 		void* ptr = (void*)(((byte*)info.BasePtr) + (intptr_t)((intptr_t)vertexIndex * (intptr_t)info.Stride));
 		return ptr;

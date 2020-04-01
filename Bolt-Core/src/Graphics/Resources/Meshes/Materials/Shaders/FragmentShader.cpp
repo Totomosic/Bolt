@@ -8,7 +8,7 @@ namespace Bolt
 	FragmentShader::FragmentShader() : ShaderProgram(ShaderStage::Fragment),
 		m_FragColor(nullptr)
 	{
-		m_FragColor = GetGlobalScope().DeclareVar(ValueType::Vector4f, "layout(location = 0) out");
+		m_FragColor = GetGlobalScope().DeclareVar(ValueType::Vector4f, "layout(location=0) out");
 	}
 
 	const ShaderVariablePtr& FragmentShader::FragColor() const

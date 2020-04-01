@@ -16,6 +16,7 @@
 #include <chrono>
 #include <cstdlib>
 #include <deque>
+#include <queue>
 
 #ifdef BLT_PLATFORM_WINDOWS
 #include <direct.h>

@@ -34,6 +34,7 @@ namespace Bolt
 
 	VertexArray::~VertexArray()
 	{
+		BLT_ASSERT(!IsMapped(), "Cannot delete mapped VertexArray");
 		if (m_Id != 0)
 		{
 			GL_CALL(glDeleteVertexArrays(1, &m_Id));

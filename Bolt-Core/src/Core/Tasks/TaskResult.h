@@ -48,16 +48,4 @@ namespace Bolt
 
 	};
 
-	template<typename TFuncResult, typename TResult = TFuncResult>
-	TaskResult<TResult> LaunchAsync(std::function<TFuncResult()> func)
-	{
-		TaskResult<TResult> result;
-		std::thread t([statePtr{ result.m_State }, func{ std::move(func) }]()
-		{
-			statePtr->Promise.set_value(func());
-		});
-		t.detach();
-		return result;
-	}
-
 }

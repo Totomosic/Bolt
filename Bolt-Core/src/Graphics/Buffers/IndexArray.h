@@ -20,7 +20,7 @@ namespace Bolt
 		IndexArray& operator=(const IndexArray& other) = delete;
 		IndexArray(IndexArray&& other) noexcept;
 		IndexArray& operator=(IndexArray&& other) noexcept;
-		~IndexArray() = default;
+		~IndexArray();
 
 		const std::vector<std::unique_ptr<IndexBuffer>>& GetIndexBuffers() const;
 		int IndexBufferCount() const;

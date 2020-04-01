@@ -29,6 +29,11 @@ namespace Bolt
 		return *this;
 	}
 
+	IndexArray::~IndexArray()
+	{
+		BLT_ASSERT(!IsMapped(), "Cannot delete mapped IndexArray");
+	}
+
 	const std::vector<std::unique_ptr<IndexBuffer>>& IndexArray::GetIndexBuffers() const
 	{
 		return m_IndexBuffers;

@@ -14,7 +14,7 @@ namespace Bolt
 	void MulAssignOp::Build(ShaderBuilder& builder) const
 	{
 		m_Variable->Build(builder);
-		builder.Write(" *= ");
+		builder.Write("*=");
 		m_Value->Build(builder);
 	}
 

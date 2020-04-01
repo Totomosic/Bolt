@@ -13,7 +13,7 @@ namespace Bolt
 
 	void IfScope::Build(ShaderBuilder& builder) const
 	{
-		builder.Write("if (");
+		builder.Write("if(");
 		m_Condition->Build(builder);
 		builder.Write(")");
 		builder.NextLine();

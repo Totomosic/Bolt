@@ -52,7 +52,7 @@ namespace Bolt
 			}
 			else
 			{
-				dataPtr = pair.second->Map(Access::ReadWrite);
+				dataPtr = pair.second->Map(Access::Write);
 				bufferPtrs[pair.second] = dataPtr;
 			}
 			mappingPtr.Stride = (int)layout.Stride();

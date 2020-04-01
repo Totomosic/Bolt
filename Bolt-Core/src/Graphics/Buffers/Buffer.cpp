@@ -1,6 +1,7 @@
 #include "bltpch.h"
 
 #include "Buffer.h"
+#include "BoltLib/DebugTimer.h"
 
 namespace Bolt
 {
@@ -83,7 +84,7 @@ namespace Bolt
 			return nullptr;
 		}		
 		Bind();	
-		void* result = GL_CALL(glMapBuffer((GLenum)m_Target, (GLenum)access));		
+		void* result = GL_CALL(glMapBufferRange((GLenum)m_Target, 0, Size(), (GLenum)access));
 		return result;
 	}
 

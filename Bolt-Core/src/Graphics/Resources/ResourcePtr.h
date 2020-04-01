@@ -49,10 +49,13 @@ namespace Bolt
 
 		ResourcePtr<T>& operator=(ResourcePtr<T>&& other)
 		{
-			DecrementRefCount();
+			T* ptr = m_Ptr;
+			int* ref = m_RefCount;
 			m_Ptr = other.m_Ptr;
 			m_RefCount = other.m_RefCount;
-			IncrementRefCount();
+			other.m_Ptr = ptr;
+			other.m_RefCount = ref;
+			TestRefCount();
 			return *this;
 		}
 
@@ -111,7 +114,7 @@ namespace Bolt
 
 		void TestRefCount()
 		{
-			if (m_RefCount != nullptr && *m_RefCount < 0 && m_Ptr != nullptr)
+			if (m_RefCount != nullptr && (*m_RefCount) <= 0 && m_Ptr != nullptr)
 			{
 				BLT_DELETE m_Ptr;
 			}

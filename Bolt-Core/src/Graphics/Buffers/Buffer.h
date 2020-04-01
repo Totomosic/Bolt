@@ -25,9 +25,9 @@ namespace Bolt
 
 	BLT_API enum class Access
 	{
-		Read = GL_READ_ONLY,
-		Write = GL_WRITE_ONLY,
-		ReadWrite = GL_READ_WRITE
+		Read = GL_MAP_READ_BIT,
+		Write = GL_MAP_WRITE_BIT,
+		ReadWrite = GL_MAP_READ_BIT | GL_MAP_WRITE_BIT
 	};
 
 	class BLT_API Buffer

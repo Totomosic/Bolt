@@ -29,7 +29,7 @@ namespace Bolt
 			IndexMapping::MappingPtr ptr;
 			ptr.MinIndex = buffer.Range.Min;
 			ptr.MaxIndex = buffer.Range.Max;
-			ptr.Ptr = buffer.Ptr->Map(Access::ReadWrite);
+			ptr.Ptr = buffer.Ptr->Map(Access::Write);
 			mappedPtrs.push_back(ptr);
 		}
 		return IndexMapping(mappedPtrs);

@@ -14,7 +14,7 @@ namespace Bolt
 	Model::Model(ModelData&& data, bool calculateTangents) : Resource(),
 		m_Data(std::move(data))
 	{
-		if (calculateTangents && m_Data.Vertices && m_Data.Indices)
+		if (calculateTangents && m_Data.Vertices && m_Data.Indices && !m_Data.Vertices->IsMapped() && !m_Data.Indices->IsMapped())
 		{
 			ModelMapping mapping = Map();
 			CalculateTangents(mapping);

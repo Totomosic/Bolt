@@ -1,10 +1,28 @@
 #pragma once
+#include "ThreadPool.h"
 #include "TaskResult.h"
 #include "TaskEvents.h"
 #include "Core/Events/EventManager.h"
 
 namespace Bolt
 {
+
+	struct TaskLauncher
+	{
+	public:
+		ThreadPool& Pool;
+	public:
+		template<typename TFuncResult, typename TResult = TFuncResult>
+		TaskResult<TResult> LaunchAsync(std::function<TFuncResult()> func) const
+		{
+			TaskResult<TResult> result;
+			Pool.Enqueue([statePtr{ result.m_State }, func{ std::move(func) }]()
+			{
+				statePtr->Promise.set_value(func());
+			});
+			return result;
+		}
+	};
 
 	BLT_API enum class TaskStatus
 	{
@@ -23,18 +41,19 @@ namespace Bolt
 	{
 	private:
 		EventBus& m_Bus;
+		TaskLauncher m_Launcher;
 		TaskResult<TResult> m_Result;
 
 	private:
 		template<typename DelegateT, typename TaskResultT>
-		Task(EventBus& bus, DelegateT func, Task<TaskResultT>& taskResult);
+		Task(const TaskLauncher& launcher, EventBus& bus, DelegateT func, Task<TaskResultT>& taskResult);
 
 		template<typename DelegateT>
-		Task(EventBus& bus, DelegateT func, Task<void>& taskResult);
+		Task(const TaskLauncher& launcher, EventBus& bus, DelegateT func, Task<void>& taskResult);
 
 	public:
 		template<typename DelegateT>
-		Task(EventBus& bus, DelegateT func);
+		Task(const TaskLauncher& launcher, EventBus& bus, DelegateT func);
 
 		TResult Result();
 		void Wait();
@@ -55,14 +74,15 @@ namespace Bolt
 	{
 	private:
 		EventBus& m_Bus;
+		TaskLauncher m_Launcher;
 		TaskResult<int> m_Result;
 
 	private:
 		template<typename DelegateT, typename TaskResultT>
-		Task(EventBus& bus, DelegateT func, Task<TaskResultT>& taskResult)
-			: m_Bus(bus), m_Result()
+		Task(const TaskLauncher& launcher, EventBus& bus, DelegateT func, Task<TaskResultT>& taskResult)
+			: m_Bus(bus), m_Launcher(launcher), m_Result()
 		{
-			m_Result = LaunchAsync<int>(std::function<int()>([taskResult = std::move(taskResult.m_Result), del = std::move(func)]() mutable -> int
+			m_Result = m_Launcher.LaunchAsync<int>(std::function<int()>([taskResult = std::move(taskResult.m_Result), del = std::move(func)]() mutable -> int
 			{
 				TaskResult<TaskResultT>& tResult = (TaskResult<TaskResultT>&)taskResult;				
 				del(tResult.Get());
@@ -71,10 +91,10 @@ namespace Bolt
 		}
 
 		template<typename DelegateT>
-		Task(EventBus& bus, DelegateT func, Task<void>& taskResult)
-			: m_Bus(bus), m_Result()
+		Task(const TaskLauncher& launcher, EventBus& bus, DelegateT func, Task<void>& taskResult)
+			: m_Bus(bus), m_Launcher(launcher), m_Result()
 		{
-			m_Result = LaunchAsync<int>(std::function<int()>([taskResult = std::move(taskResult.m_Result), del = std::move(func)]() mutable -> int
+			m_Result = m_Launcher.LaunchAsync<int>(std::function<int()>([taskResult = std::move(taskResult.m_Result), del = std::move(func)]() mutable -> int
 			{
 				TaskResult<int>& tResult = (TaskResult<int>&)taskResult;
 				tResult.Get();
@@ -85,10 +105,10 @@ namespace Bolt
 
 	public:
 		template<typename DelegateT>
-		Task(EventBus& bus, DelegateT func)
-			: m_Bus(bus), m_Result()
+		Task(const TaskLauncher& launcher, EventBus& bus, DelegateT func)
+			: m_Bus(bus), m_Launcher(launcher), m_Result()
 		{
-			m_Result = LaunchAsync<int>(std::function<int()>([del = std::move(func)]() mutable -> int
+			m_Result = m_Launcher.LaunchAsync<int>(std::function<int()>([del = std::move(func)]() mutable -> int
 			{
 				del();
 				return 0;
@@ -103,7 +123,7 @@ namespace Bolt
 		template<typename DelegateT, typename TNewResult = typename std::result_of<DelegateT()>::type>
 		Task<TNewResult> ContinueWith(DelegateT func)
 		{
-			return Task<TNewResult>(m_Bus, std::move(func), *this);
+			return Task<TNewResult>(m_Launcher, m_Bus, std::move(func), *this);
 		}
 
 		template<typename DelegateT>
@@ -128,10 +148,10 @@ namespace Bolt
 
 	template<typename T>
 	template<typename DelegateT, typename TaskResultT>
-	Task<T>::Task(EventBus& bus, DelegateT func, Task<TaskResultT>& taskResult)
-		: m_Bus(bus), m_Result()
+	Task<T>::Task(const TaskLauncher& launcher, EventBus& bus, DelegateT func, Task<TaskResultT>& taskResult)
+		: m_Bus(bus), m_Launcher(launcher), m_Result()
 	{
-		m_Result = LaunchAsync<T>(std::function<T()>([taskResult = std::move(taskResult.m_Result), del = std::move(func)]() mutable-> T
+		m_Result = m_Launcher.LaunchAsync<T>(std::function<T()>([taskResult = std::move(taskResult.m_Result), del = std::move(func)]() mutable-> T
 		{
 			TaskResult<TaskResultT>& tResult = (TaskResult<TaskResultT>&)taskResult;
 			return del(tResult.Get());
@@ -140,10 +160,10 @@ namespace Bolt
 
 	template<typename T>
 	template<typename DelegateT>
-	Task<T>::Task(EventBus& bus, DelegateT func, Task<void>& taskResult)
-		: m_Bus(bus), m_Result()
+	Task<T>::Task(const TaskLauncher& launcher, EventBus& bus, DelegateT func, Task<void>& taskResult)
+		: m_Bus(bus), m_Launcher(launcher), m_Result()
 	{
-		m_Result = LaunchAsync<T>(std::function<T()>([taskResult = std::move(taskResult.m_Result), del = std::move(func)]() mutable-> T
+		m_Result = m_Launcher.LaunchAsync<T>(std::function<T()>([taskResult = std::move(taskResult.m_Result), del = std::move(func)]() mutable-> T
 		{
 			TaskResult<int>& tResult = (TaskResult<int>&)taskResult;
 			tResult.Get();
@@ -153,10 +173,10 @@ namespace Bolt
 
 	template<typename T>
 	template<typename DelegateT>
-	Task<T>::Task(EventBus& bus, DelegateT func)
-		: m_Bus(bus), m_Result()
+	Task<T>::Task(const TaskLauncher& launcher, EventBus& bus, DelegateT func)
+		: m_Bus(bus), m_Launcher(launcher), m_Result()
 	{
-		m_Result = LaunchAsync<T>(std::function<T()>([del = std::move(func)]() mutable-> T
+		m_Result = m_Launcher.LaunchAsync<T>(std::function<T()>([del = std::move(func)]() mutable-> T
 		{
 			return del();
 		}));
@@ -189,7 +209,7 @@ namespace Bolt
 	template<typename DelegateT, typename TNewResult>
 	Task<TNewResult> Task<T>::ContinueWith(DelegateT func)
 	{
-		return Task<TNewResult>(m_Bus, std::move(func), *this);
+		return Task<TNewResult>(m_Launcher, m_Bus, std::move(func), *this);
 	}
 
 	template<typename T>

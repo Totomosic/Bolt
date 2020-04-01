@@ -278,6 +278,10 @@ namespace Bolt
 		ComponentHandle<T> Assign(const Entity& entity, Args&&... args)
 		{
 			BLT_ASSERT(ValidEntity(entity), "Invalid Entity");
+			if (HasComponent<T>(entity))
+			{
+				Remove<T>(entity);
+			}
 			const BaseComponent::Family family = GetComponentFamily<T>();
 			Pool<T>* pool = AccomodateComponent<T>();
 			// Use placement new to put component into pool

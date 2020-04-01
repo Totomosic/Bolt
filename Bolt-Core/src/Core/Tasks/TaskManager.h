@@ -13,17 +13,19 @@ namespace Bolt
 
 	private:
 		EventBus& m_Bus;
+		ThreadPool m_Pool;
 		ScopedEventListener m_Listener;
 
 	public:
 		TaskManager(EventBus& bus);
 
 		EventBus& Bus() const;
+		ThreadPool& GetThreadPool();
 
 		template<typename DelegateT, typename TResult = typename std::result_of<DelegateT()>::type>
 		Task<TResult> Run(DelegateT func)
 		{
-			Task<TResult> task(Bus(), std::move(func));
+			Task<TResult> task(TaskLauncher{ m_Pool }, Bus(), std::move(func));
 			return task;
 		}
 

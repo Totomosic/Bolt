@@ -50,7 +50,7 @@ namespace Bolt
 
 	ShaderVariablePtr VertexShader::PrivateStream(int streamIndex)
 	{
-		return GetGlobalScope().DeclareVar(GetTypeOfShaderStream(streamIndex), "layout(location = " + std::to_string((int)streamIndex) + ") in");
+		return GetGlobalScope().DeclareVar(GetTypeOfShaderStream(streamIndex), "layout(location=" + std::to_string((int)streamIndex) + ") in");
 	}
 
 	ValueType VertexShader::GetTypeOfShaderStream(int streamIndex) const
