@@ -44,13 +44,17 @@ namespace Bolt
 			int Offset;
 		};
 
-		static constexpr struct {
-			int Position = 0;
-			int Normal = 1;
-			int TexCoord = 2;
-			int Color = 3;
-			int Tangent = 4;
-		} DefaultIndices = {};
+		struct BLT_API DefaultLayoutStructure
+		{
+		public:
+			static constexpr int Position = 0;
+			static constexpr int Normal = 1;
+			static constexpr int TexCoord = 2;
+			static constexpr int Color = 3;
+			static constexpr int Tangent = 4;
+		};
+
+		static constexpr DefaultLayoutStructure DefaultIndices = {};
 
 	private:
 		std::vector<VertexAttribute> m_Attributes;
