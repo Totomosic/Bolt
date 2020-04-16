@@ -37,58 +37,12 @@ namespace Bolt
 		return m_Attributes.at(attributeIndex);
 	}
 
-	VertexMapping ArrayDescriptor::GetMapping() const
-	{
-		std::vector<VertexMapping::MappingPtr> mappedPtrs;
-		std::unordered_map<const VertexBuffer*, void*> bufferPtrs;
-		for (const auto& pair : m_Attributes)
-		{
-			VertexMapping::MappingPtr mappingPtr;
-			const BufferLayout& layout = pair.second->Layout();
-			void* dataPtr = nullptr;
-			if (bufferPtrs.find(pair.second) != bufferPtrs.end())
-			{
-				dataPtr = bufferPtrs.at(pair.second);
-			}
-			else
-			{
-				dataPtr = pair.second->Map(Access::Write);
-				bufferPtrs[pair.second] = dataPtr;
-			}
-			mappingPtr.Stride = (int)layout.Stride();
-			mappingPtr.Ptr = dataPtr;
-			for (const BufferLayout::VertexAttribute& attrib : layout.GetAttributes())
-			{
-				VertexMapping::MappingAttribute attribute;
-				attribute.Index = attrib.Index;
-				attribute.Offset = attrib.Offset;
-				attribute.Size = attrib.Count * GetSizeofDatatype(attrib.Type);
-				mappingPtr.Attributes.push_back(attribute);
-			}
-			mappedPtrs.push_back(mappingPtr);
-		}
-		return VertexMapping(mappedPtrs);
-	}
-
 	void ArrayDescriptor::AddVertexBuffer(VertexBuffer* buffer)
 	{
 		const BufferLayout& layout = buffer->Layout();
 		for (const BufferLayout::VertexAttribute& attrib : layout.GetAttributes())
 		{
 			m_Attributes[attrib.Index] = buffer;
-		}
-	}
-
-	void ArrayDescriptor::UnmapAll() const
-	{
-		std::vector<const VertexBuffer*> unmappedBuffers;
-		for (const auto& pair : m_Attributes)
-		{
-			if (std::find(unmappedBuffers.begin(), unmappedBuffers.end(), pair.second) == unmappedBuffers.end())
-			{
-				pair.second->Unmap();
-				unmappedBuffers.push_back(pair.second);
-			}			
 		}
 	}
 

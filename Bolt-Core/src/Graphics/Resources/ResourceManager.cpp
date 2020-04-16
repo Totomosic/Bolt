@@ -207,21 +207,19 @@ namespace Bolt
 				data.Vertices = std::make_unique<VertexArray>();
 				BufferLayout layout = BufferLayout::Default();
 				VertexBuffer& buffer = data.Vertices->CreateVertexBuffer((uint32_t)vertices.size() / vertexDimension * layout.Size(), layout);
-				data.Vertices->MapAsync(make_shared_function([vertices{ std::move(vertices) }, normals{ std::move(normals) }, texcoords{ std::move(texcoords) }, indices{ std::move(indices) }, vertexDimension](const VertexMapping& mapping) mutable
+				ScopedVertexMap vertexMap = buffer.MapScoped(Access::Write);
+				DefaultVertexIterator it = vertexMap.DefaultBegin();
+				for (int vertex = 0; vertex < vertices.size() / vertexDimension; vertex++)
 				{
-					VertexIterator it = mapping.Begin();
-					for (int vertex = 0; vertex < vertices.size() / vertexDimension; vertex++)
-					{
-						int vIndex = vertex * vertexDimension;
-						int nIndex = vertex * 3;
-						int tIndex = vertex * 2;
-						it[0] = Vector3f(vertices[vIndex + 0], vertices[vIndex + 1], vertices[vIndex + 2]);
-						it[1] = Vector3f(normals[nIndex + 0], normals[nIndex + 1], normals[nIndex + 2]);
-						it[2] = Vector2f(texcoords[tIndex + 0], texcoords[tIndex + 1]);
-						it[3] = Color::White.ToBytes();
-						it++;
-					}
-				}));
+					int vIndex = vertex * vertexDimension;
+					int nIndex = vertex * 3;
+					int tIndex = vertex * 2;
+					it[0] = Vector3f(vertices[vIndex + 0], vertices[vIndex + 1], vertices[vIndex + 2]);
+					it[1] = Vector3f(normals[nIndex + 0], normals[nIndex + 1], normals[nIndex + 2]);
+					it[2] = Vector2f(texcoords[tIndex + 0], texcoords[tIndex + 1]);
+					it[3] = Color::White.ToBytes();
+					it++;
+				}
 				ptr->Data() = std::move(data);
 			});		
 	}

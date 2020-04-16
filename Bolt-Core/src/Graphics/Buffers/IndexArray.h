@@ -1,7 +1,6 @@
 #pragma once
 #include "IndexBuffer.h"
 #include "IArrayDescriptor.h"
-#include "IndexMapping.h"
 #include "Core/Tasks/TaskManager.h"
 
 namespace Bolt
@@ -12,7 +11,6 @@ namespace Bolt
 	private:
 		std::vector<std::unique_ptr<IndexBuffer>> m_IndexBuffers;
 		IArrayDescriptor m_Descriptor;
-		mutable bool m_IsMapped;
 
 	public:
 		IndexArray();
@@ -33,29 +31,9 @@ namespace Bolt
 		bool IsMapped() const;
 
 		IndexBuffer& AddIndexBuffer(std::unique_ptr<IndexBuffer>&& buffer);
-		IndexMapping Map() const;
-
-		template<typename FuncT0>
-		void MapAsync(FuncT0 callback)
-		{
-			Task t = TaskManager::Get().Run(make_shared_function([mapping{ Map() }, callback{ std::move(callback) }]() mutable
-			{
-				callback(mapping);
-				return std::move(mapping);
-			}));
-			t.ContinueWithOnMainThread([](IndexMapping mapping)
-			{
-				
-			});
-		}
-
 		std::unique_ptr<IndexArray> Clone() const;
 
 		friend class IndexMapping;
-
-	private:
-		void SetMapped(bool isMapped) const;
-
 	};
 
 }

@@ -4,42 +4,99 @@
 namespace Bolt
 {
 
-	class IndexMapping;
-
+	template<typename T>
 	class BLT_API IndexIterator
 	{
 	public:
-		const IndexMapping* m_Mapping;
-		void* m_Ptr;
-		int m_CurrentIndex;
+		T* m_Buffer;
 
 	public:
-		IndexIterator();
-		IndexIterator(const IndexMapping* mapping, int currentIndex);
+		IndexIterator() : IndexIterator(nullptr) {}
+		IndexIterator(T* buffer)
+			: m_Buffer(buffer)
+		{
+		}
 
-		const uint32_t* Get() const;
-		uint32_t* Get();
-		const uint32_t* operator->() const;
-		uint32_t* operator->();
-		const uint32_t& operator*() const;
-		uint32_t& operator*();
+		inline const T* Get() const { return m_Buffer; }
+		inline T* Get() { return m_Buffer; }
+		inline const T* operator->() const { return m_Buffer; }
+		inline T* operator->() { return m_Buffer; }
+		inline const T& operator*() const { return *m_Buffer; }
+		inline T& operator*() { return *m_Buffer; }
 
-		IndexIterator& operator+=(int amount);
-		IndexIterator& operator-=(int amount);
-		IndexIterator& operator++();
-		IndexIterator& operator--();
-		IndexIterator operator++(int);
-		IndexIterator operator--(int);
+		IndexIterator<T>& operator+=(int amount)
+		{
+			m_Buffer += amount;
+			return *this;
+		}
 
-		friend IndexIterator operator+(const IndexIterator& left, int right);
-		friend IndexIterator operator-(const IndexIterator& left, int right);
+		IndexIterator<T>& operator-=(int amount)
+		{
+			m_Buffer -= amount;
+			return *this;
+		}
 
-		bool operator==(const IndexIterator& other) const;
-		bool operator!=(const IndexIterator& other) const;
-		bool operator<(const IndexIterator& other) const;
-		bool operator<=(const IndexIterator& other) const;
-		bool operator>(const IndexIterator& other) const;
-		bool operator>=(const IndexIterator& other) const;
+		IndexIterator<T>& operator++()
+		{
+			return ((*this) += 1);
+		}
+
+		IndexIterator<T>& operator--()
+		{
+			return ((*this) -= 1);
+		}
+
+		IndexIterator<T> operator++(int)
+		{
+			(*this) += 1;
+			return (*this) - 1;
+		}
+
+		IndexIterator<T> operator--(int)
+		{
+			(*this) -= 1;
+			return (*this) + 1;
+		}
+
+		friend IndexIterator<T> operator+(const IndexIterator<T>& left, int right)
+		{
+			return IndexIterator<T>(left.m_Buffer + right);
+		}
+
+		friend IndexIterator<T> operator-(const IndexIterator<T>& left, int right)
+		{
+			return IndexIterator<T>(left.m_Buffer - right);
+		}
+
+		bool operator==(const IndexIterator<T>& other) const
+		{
+			return m_Buffer == other.m_Buffer;
+		}
+
+		bool operator!=(const IndexIterator<T>& other) const
+		{
+			return !((*this) == other);
+		}
+
+		bool operator<(const IndexIterator<T>& other) const
+		{
+			return m_Buffer < other.m_Buffer;
+		}
+
+		bool operator<=(const IndexIterator<T>& other) const
+		{
+			return m_Buffer <= other.m_Buffer;
+		}
+
+		bool operator>(const IndexIterator<T>& other) const
+		{
+			return m_Buffer > other.m_Buffer;
+		}
+
+		bool operator>=(const IndexIterator<T>& other) const
+		{
+			return m_Buffer >= other.m_Buffer;
+		}
 
 	};
 

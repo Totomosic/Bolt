@@ -11,10 +11,10 @@ namespace Bolt
 		: m_Layout(), m_TexturesPerDraw(0), m_SpritesPerDraw(10000), m_Batches(), m_TextureBatches(), m_CurrentBatchIndex(0), m_CurrentTextureBatchIndex(0), m_DefaultShader(), m_TextureShader()
 	{
 		GL_CALL(glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &m_TexturesPerDraw));
-		m_Layout.AddAttribute<Vector3f>(POSITION_ATTRIBUTE_INDEX, 1);
-		m_Layout.AddAttribute<Vector2f>(TEXCOORD_ATTRIBUTE_INDEX, 1);
-		m_Layout.AddAttribute<byte>(COLOR_ATTRIBUTE_INDEX, 4, true);
-		m_Layout.AddAttribute<int>(TEXTUREID_ATTRIBUTE_INDEX, 1);
+		m_Layout.AddAttribute<Vector3f>(1);
+		m_Layout.AddAttribute<Vector2f>(1);
+		m_Layout.AddAttribute<byte>(4, true);
+		m_Layout.AddAttribute<int>(1);
 
 		CreateDefaultShader();
 		CreateTextureShader();

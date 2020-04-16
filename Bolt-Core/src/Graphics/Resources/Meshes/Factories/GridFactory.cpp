@@ -19,7 +19,7 @@ namespace Bolt
 		result.Vertices = std::make_unique<VertexArray>(RenderMode::Triangles);
 		result.Indices = std::make_unique<IndexArray>();
 		int vertexCount = xVertices * zVertices;
-		result.Indices->AddIndexBuffer(std::make_unique<IndexBuffer>((xVertices - 1) * (zVertices - 1) * 6));		
+		IndexBuffer& indexBuffer = result.Indices->AddIndexBuffer(std::make_unique<IndexBuffer>((xVertices - 1) * (zVertices - 1) * 6));		
 		result.Bounds.Min.x = -Width / 2;
 		result.Bounds.Max.x = Width / 2;
 		result.Bounds.Min.y = 0;
@@ -28,7 +28,7 @@ namespace Bolt
 		result.Bounds.Max.z = Depth / 2;
 
 		BufferLayout layout = BufferLayout::Default();
-		result.Vertices->CreateVertexBuffer(vertexCount * layout.Size(), layout);
+		VertexBuffer& buffer = result.Vertices->CreateVertexBuffer(vertexCount * layout.Size(), layout);
 
 		float cellWidth = Width / (xVertices - 1);
 		float cellDepth = Depth / (zVertices - 1);
@@ -36,10 +36,10 @@ namespace Bolt
 		Vector4<byte> color = Color.ToBytes();
 
 		{
-			VertexMapping vMapping = result.Vertices->Map();
-			IndexMapping iMapping = result.Indices->Map();
-			VertexIterator iterator = vMapping.Begin();
-			IndexIterator indices = iMapping.Begin();
+			ScopedVertexMap vMapping = buffer.MapScoped(Access::Write);
+			ScopedIndexMap iMapping = indexBuffer.MapScoped(Access::Write);
+			DefaultVertexIterator iterator = vMapping.DefaultBegin();
+			IndexIterator<uint32_t> indices = iMapping.Begin<uint32_t>();
 			for (int z = 0; z < zVertices; z++)
 			{
 				for (int x = 0; x < xVertices; x++)

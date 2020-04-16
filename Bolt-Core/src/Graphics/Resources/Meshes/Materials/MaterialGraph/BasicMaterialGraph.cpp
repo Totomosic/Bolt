@@ -51,7 +51,7 @@ namespace Bolt
 		ShaderVariablePtr viewPos = vertex.DefineVar(ShaderFuncs::Mul(viewMatrix, worldPos));
 		ShaderVariablePtr screenPos = vertex.DefineVar(ShaderFuncs::Mul(projectionMatrix, viewPos));
 		vertex.SetVertexPosition(screenPos);
-		vertex.SetVariable(outColor, vertex.Stream(BufferLayout::COLOR_INDEX));
+		vertex.SetVariable(outColor, vertex.Stream(BufferLayout::DefaultIndices.Color));
 
 		FragmentShader& fragment = GetBuilder().GetBuilder().Factory().Fragment();
 		ShaderPassVariablePtr inColor = fragment.DeclarePassIn(outColor);

@@ -6,7 +6,7 @@ namespace Bolt
 {
 
 	MaterialGraphContext::MaterialGraphContext()
-		: m_VertexPosition(BufferLayout::POSITION_INDEX), m_VertexNormal(BufferLayout::NORMAL_INDEX), m_VertexTexCoord(BufferLayout::TEXCOORD_INDEX)
+		: m_VertexPosition(BufferLayout::DefaultIndices.Position), m_VertexNormal(BufferLayout::DefaultIndices.Normal), m_VertexTexCoord(BufferLayout::DefaultIndices.TexCoord)
 	{
 		
 	}

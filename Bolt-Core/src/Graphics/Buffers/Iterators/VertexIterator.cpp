@@ -1,101 +1,69 @@
 #include "bltpch.h"
 #include "VertexIterator.h"
-#include "../VertexMapping.h"
 
 namespace Bolt
 {
 
-	VertexIterator::VertexIterator()
-		: m_Mapping(nullptr), m_VertexIndex(-1)
+	VertexIterator::VertexIterator() : VertexIterator(nullptr, {})
 	{
 	
 	}
 	
-	VertexIterator::VertexIterator(const VertexMapping* mapping, int vertexIndex)
-		: m_Mapping(mapping), m_VertexIndex(vertexIndex)
+	VertexIterator::VertexIterator(void* buffer, const BufferLayout* layout)
+		: m_Buffer(buffer), m_Layout(layout)
 	{
 		
 	}
 
-	int VertexIterator::VertexIndex() const
-	{
-		return m_VertexIndex;
-	}
-
 	AttributeSetter VertexIterator::operator[](int attributeIndex) const
 	{
-		return Seek(attributeIndex);
+		return GetSetter(attributeIndex);
 	}
 
-	AttributeSetter VertexIterator::Seek(int attributeIndex) const
+	AttributeSetter VertexIterator::GetSetter(int attributeIndex) const
 	{
-		return AttributeSetter(m_Mapping->GetAttributePtr(attributeIndex, m_VertexIndex), attributeIndex);
-	}
-
-	Vector3f& VertexIterator::Position() const
-	{
-		return Seek(BufferLayout::POSITION_INDEX).Read<Vector3f>();
-	}
-
-	Vector3f& VertexIterator::Normal() const
-	{
-		return Seek(BufferLayout::NORMAL_INDEX).Read<Vector3f>();
-	}
-
-	Vector2f& VertexIterator::TexCoord() const
-	{
-		return Seek(BufferLayout::TEXCOORD_INDEX).Read<Vector2f>();
-	}
-
-	Vector4<byte>& VertexIterator::Color() const
-	{
-		return Seek(BufferLayout::COLOR_INDEX).Read<Vector4<byte>>();
-	}
-
-	Vector3f& VertexIterator::Tangent() const
-	{
-		return Seek(BufferLayout::TANGENT_INDEX).Read<Vector3f>();
+		return AttributeSetter((uint8_t*)m_Buffer + m_Layout->OffsetOf(attributeIndex), attributeIndex);
 	}
 
 	VertexIterator& VertexIterator::operator++()
 	{
-		m_VertexIndex++;
+		(*this) += 1;
 		return *this;
 	}
 
 	VertexIterator& VertexIterator::operator--()
 	{
-		m_VertexIndex--;
+		(*this) -= 1;
 		return *this;
 	}
 
 	VertexIterator VertexIterator::operator++(int)
 	{
-		m_VertexIndex++;
+		(*this) += 1;
 		return (*this - 1);
 	}
 
 	VertexIterator VertexIterator::operator--(int)
 	{
-		m_VertexIndex--;
+		(*this) -= 1;
 		return (*this + 1);
 	}
 
 	VertexIterator& VertexIterator::operator+=(int amount)
 	{
-		m_VertexIndex += amount;
+		m_Buffer = (void*)((uint8_t*)m_Buffer + m_Layout->Size() * amount);
 		return *this;
 	}
 
 	VertexIterator& VertexIterator::operator-=(int amount)
 	{
-		m_VertexIndex -= amount;
+		m_Buffer = (void*)((uint8_t*)m_Buffer - m_Layout->Size() * amount);
 		return *this;
 	}
 
 	VertexIterator operator+(const VertexIterator& left, int right)
 	{
-		return VertexIterator(left.m_Mapping, left.m_VertexIndex + right);
+		return VertexIterator((uint8_t*)left.m_Buffer + left.m_Layout->Size() * right, left.m_Layout);
 	}
 
 	VertexIterator operator-(const VertexIterator& left, int right)
@@ -105,7 +73,7 @@ namespace Bolt
 
 	bool VertexIterator::operator==(const VertexIterator& other) const
 	{
-		return (m_VertexIndex == other.m_VertexIndex);
+		return (m_Buffer == other.m_Buffer);
 	}
 
 	bool VertexIterator::operator!=(const VertexIterator& other) const
@@ -115,22 +83,22 @@ namespace Bolt
 
 	bool VertexIterator::operator<(const VertexIterator& other) const
 	{
-		return (m_VertexIndex < other.m_VertexIndex);
+		return (m_Buffer < other.m_Buffer);
 	}
 
 	bool VertexIterator::operator<=(const VertexIterator& other) const
 	{
-		return (m_VertexIndex <= other.m_VertexIndex);
+		return (m_Buffer <= other.m_Buffer);
 	}
 
 	bool VertexIterator::operator>(const VertexIterator& other) const
 	{
-		return (m_VertexIndex > other.m_VertexIndex);
+		return (m_Buffer > other.m_Buffer);
 	}
 
 	bool VertexIterator::operator>=(const VertexIterator& other) const
 	{
-		return (m_VertexIndex >= other.m_VertexIndex);
+		return (m_Buffer >= other.m_Buffer);
 	}
 
 }

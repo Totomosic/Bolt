@@ -68,9 +68,9 @@ namespace Bolt
 	{
 	}
 
-	UniformLink<ResourcePtr<Texture2D>>& TextureLightingMaterial::LinkColor(const ResourcePtr<Texture2D>& albedo)
+	UniformLink<ResourcePtr<Texture2D>>& TextureLightingMaterial::LinkTexture(const ResourcePtr<Texture2D>& albedo)
 	{
-		return GetLinkContext().Link("Color", albedo);
+		return GetLinkContext().Link("Texture", albedo);
 	}
 
 	UniformLink<Color>& TextureLightingMaterial::LinkSpecularColor(const Color& specularRGB)

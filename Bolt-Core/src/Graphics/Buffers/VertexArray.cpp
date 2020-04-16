@@ -5,28 +5,27 @@ namespace Bolt
 {
 
 	VertexArray::VertexArray(RenderMode mode)
-		: m_Id(0), m_Vertices(), m_RenderMode(mode), m_Descriptor(), m_IsMapped(false)
+		: m_Id(0), m_Vertices(), m_RenderMode(mode), m_Descriptor()
 	{
 		Create();
 	}
 
 	VertexArray::VertexArray(VertexArray&& other) noexcept
-		: m_Id(other.m_Id), m_Vertices(std::move(other.m_Vertices)), m_RenderMode(other.m_RenderMode), m_Descriptor(std::move(other.m_Descriptor)), m_IsMapped(false)
+		: m_Id(other.m_Id), m_Vertices(std::move(other.m_Vertices)), m_RenderMode(other.m_RenderMode), m_Descriptor(std::move(other.m_Descriptor))
 	{
-		BLT_ASSERT(!other.m_IsMapped, "Cannot move mapped array");
+		BLT_ASSERT(!other.IsMapped(), "Cannot move mapped array");
 		other.m_Id = 0;
 	}
 
 	VertexArray& VertexArray::operator=(VertexArray&& other) noexcept
 	{
-		BLT_ASSERT(!other.m_IsMapped, "Cannot move mapped array");
+		BLT_ASSERT(!other.IsMapped(), "Cannot move mapped array");
 		std::vector<std::unique_ptr<VertexBuffer>> tempVector = std::move(m_Vertices);
 		id_t tempID = m_Id;
 		m_Id = other.m_Id;
 		m_RenderMode = other.m_RenderMode;
 		m_Vertices = std::move(other.m_Vertices);
 		m_Descriptor = other.m_Descriptor;
-		m_IsMapped = false;
 		other.m_Id = tempID;
 		other.m_Vertices = std::move(tempVector);
 		return *this;
@@ -69,7 +68,10 @@ namespace Bolt
 
 	bool VertexArray::IsMapped() const
 	{
-		return m_IsMapped;
+		for (const auto& ptr : m_Vertices)
+			if (ptr->IsMapped())
+				return true;
+		return false;
 	}
 
 	void VertexArray::Bind() const
@@ -94,16 +96,16 @@ namespace Bolt
 		const BufferLayout& layout = thisBuffer.Layout();
 		Bind();
 		thisBuffer.Bind();
-		for (const auto& pair : layout.GetAttributesMap())
+		for (const BufferLayout::VertexAttribute& attribute : layout.GetAttributes())
 		{
-			GL_CALL(glEnableVertexAttribArray(pair.first));
-			if (pair.second.Type == DataType::UInt || pair.second.Type == DataType::Int)
+			GL_CALL(glEnableVertexAttribArray(attribute.Index));
+			if (attribute.Type == DataType::UInt || attribute.Type == DataType::Int)
 			{
-				glVertexAttribIPointer(pair.second.Index, pair.second.Count, (GLenum)pair.second.Type, layout.Stride(), (const GLvoid*)pair.second.Offset);
+				glVertexAttribIPointer(attribute.Index, attribute.Count, (GLenum)attribute.Type, layout.Stride(), (const GLvoid*)attribute.Offset);
 			}
 			else
 			{
-				glVertexAttribPointer(pair.second.Index, pair.second.Count, (GLenum)pair.second.Type, pair.second.Normalised, layout.Stride(), (const GLvoid*)pair.second.Offset);
+				glVertexAttribPointer(attribute.Index, attribute.Count, (GLenum)attribute.Type, attribute.Normalised, layout.Stride(), (const GLvoid*)attribute.Offset);
 			}	
 		}
 		thisBuffer.Unbind();
@@ -111,12 +113,12 @@ namespace Bolt
 		return thisBuffer;
 	}
 
-	VertexBuffer& VertexArray::CreateVertexBuffer(uint32_t size, const BufferLayout& layout, BufferUsage usage)
+	VertexBuffer& VertexArray::CreateVertexBuffer(size_t size, const BufferLayout& layout, BufferUsage usage)
 	{
 		return CreateVertexBuffer(nullptr, size, layout, usage);
 	}
 
-	VertexBuffer& VertexArray::CreateVertexBuffer(const void* data, uint32_t size, const BufferLayout& layout, BufferUsage usage)
+	VertexBuffer& VertexArray::CreateVertexBuffer(const void* data, size_t size, const BufferLayout& layout, BufferUsage usage)
 	{
 		std::unique_ptr<VertexBuffer> buffer = std::make_unique<VertexBuffer>(data, size, layout, usage);
 		return AddVertexBuffer(std::move(buffer));
@@ -131,15 +133,6 @@ namespace Bolt
 	void VertexArray::SetRenderMode(RenderMode mode)
 	{
 		m_RenderMode = mode;
-	}
-
-	VertexMapping VertexArray::Map() const
-	{
-		BLT_ASSERT(!m_IsMapped, "Cannot Map Mapped array");
-		SetMapped(true);
-		VertexMapping mapping = m_Descriptor.GetMapping();
-		mapping.SetVertexArray(this);
-		return mapping;
 	}
 
 	std::unique_ptr<VertexArray> VertexArray::Clone() const
@@ -161,15 +154,6 @@ namespace Bolt
 	{
 		const BufferLayout::VertexAttribute& attrib =  m_Descriptor.GetAttribute(attribIndex)->Layout().GetAttribute(attribIndex);
 		return attrib.Type == type && attrib.Count == count;
-	}
-
-	void VertexArray::SetMapped(bool isMapped) const
-	{
-		m_IsMapped = isMapped;
-		if (!isMapped)
-		{
-			m_Descriptor.UnmapAll();
-		}
 	}
 
 }

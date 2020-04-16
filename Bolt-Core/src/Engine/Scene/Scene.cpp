@@ -133,6 +133,7 @@ namespace Bolt
 	{
 		if (IsActive())
 		{
+			Systems().UpdateAll(delta);
 			for (const std::unique_ptr<Layer>& layer : m_Layers)
 			{
 				layer->Update(delta);

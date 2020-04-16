@@ -24,7 +24,7 @@ namespace Bolt
 		ModelData result;
 		result.Vertices = std::make_unique<VertexArray>();
 		result.Indices = std::make_unique<IndexArray>();
-		result.Indices->AddIndexBuffer(std::make_unique<IndexBuffer>(6 * characters.size()));
+		IndexBuffer& indexBuffer = result.Indices->AddIndexBuffer(std::make_unique<IndexBuffer>(6 * characters.size()));
 		result.Bounds.Min.x = -w;
 		result.Bounds.Max.x = w;
 		result.Bounds.Min.y = h;
@@ -33,7 +33,7 @@ namespace Bolt
 		result.Bounds.Max.z = 0;
 
 		BufferLayout layout = BufferLayout::Default();
-		result.Vertices->CreateVertexBuffer(4 * characters.size() * layout.Size(), layout);
+		VertexBuffer& buffer = result.Vertices->CreateVertexBuffer(4 * characters.size() * layout.Size(), layout);
 
 		Vector4<byte> color = Color.ToBytes();
 
@@ -43,10 +43,10 @@ namespace Bolt
 		}
 
 		{
-			VertexMapping vMapping = result.Vertices->Map();
-			IndexMapping iMapping = result.Indices->Map();
-			VertexIterator iterator = vMapping.Begin();
-			IndexIterator indices = iMapping.Begin();
+			ScopedVertexMap vMapping = buffer.MapScoped(Access::Write);
+			ScopedIndexMap iMapping = indexBuffer.MapScoped(Access::Write);
+			DefaultVertexIterator iterator = vMapping.DefaultBegin();
+			IndexIterator<uint32_t> indices = iMapping.Begin<uint32_t>();
 			
 			float currentX = -w;
 			float currentY = h;

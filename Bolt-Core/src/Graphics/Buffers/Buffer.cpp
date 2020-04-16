@@ -11,7 +11,7 @@ namespace Bolt
 		
 	}
 
-	Buffer::Buffer(const void* data, uint32_t size, BufferTarget target, BufferUsage usage)
+	Buffer::Buffer(const void* data, size_t size, BufferTarget target, BufferUsage usage)
 		: m_Id(0), m_Size(size), m_Usage(usage), m_Target(target), m_IsMapped(false)
 	{
 		Create(data);
@@ -45,7 +45,7 @@ namespace Bolt
 		}
 	}
 
-	uint32_t Buffer::Size() const
+	size_t Buffer::Size() const
 	{
 		return m_Size;
 	}
@@ -65,6 +65,11 @@ namespace Bolt
 		return m_Id;
 	}
 
+	bool Buffer::IsMapped() const
+	{
+		return m_IsMapped;
+	}
+
 	void Buffer::Bind() const
 	{
 		GL_CALL(glBindBuffer((GLenum)m_Target, m_Id));
@@ -77,20 +82,25 @@ namespace Bolt
 
 	void* Buffer::Map(Access access) const
 	{
-		BLT_ASSERT(!m_IsMapped, "Cannot Map Mapped buffer");
+		return MapRange(0, Size(), access);
+	}
+
+	void* Buffer::MapRange(size_t offset, size_t length, Access access) const
+	{
+		BLT_ASSERT(!m_IsMapped && (offset + length <= Size()), "Cannot Map already mapped buffer");
 		m_IsMapped = true;
-		if (Size() == 0)
+		if (length == 0)
 		{
 			return nullptr;
-		}		
-		Bind();	
-		void* result = GL_CALL(glMapBufferRange((GLenum)m_Target, 0, Size(), (GLenum)access));
+		}
+		Bind();
+		void* result = GL_CALL(glMapBufferRange((GLenum)m_Target, offset, length, (GLenum)access));
 		return result;
 	}
 
 	bool Buffer::Unmap() const
 	{
-		BLT_ASSERT(m_IsMapped, "Cannot Unmap Unmapped buffer");
+		BLT_ASSERT(m_IsMapped, "Cannot Unmap buffer that is not mapped");
 		m_IsMapped = false;
 		if (Size() == 0)
 		{
@@ -101,14 +111,14 @@ namespace Bolt
 		return result;
 	}
 
-	void Buffer::Upload(const void* data, uint32_t size, uint32_t offset) const
+	void Buffer::Upload(const void* data, size_t size, size_t offset) const
 	{
 		BLT_ASSERT(size + offset <= Size(), "Could not upload: " + std::to_string(size) + " as buffer is not large enough");
 		Bind();
 		GL_CALL(glBufferSubData((GLenum)m_Target, (GLintptr)offset, (GLsizeiptr)size, (const GLvoid*)data));
 	}
 
-	void Buffer::Download(void* data, uint32_t size, uint32_t offset) const
+	void Buffer::Download(void* data, size_t size, size_t offset) const
 	{
 		BLT_ASSERT(size + offset <= Size(), "Could not download: " + std::to_string(size) + " as buffer does not contain that many bytes");
 		Bind();
@@ -120,7 +130,7 @@ namespace Bolt
 		Download(data, Size(), 0);
 	}
 
-	void Buffer::Resize(uint32_t newSize)
+	/*void Buffer::Resize(uint32_t newSize)
 	{
 		m_Size = newSize;
 		GL_CALL(glBufferData((GLenum)m_Target, (GLsizeiptr)Size(), (const GLvoid*)nullptr, (GLenum)Usage()));
@@ -182,7 +192,7 @@ namespace Bolt
 		Upload(data, dataSize, position);
 		BLT_DELETE_ARR data;
 		m_Size = oldSize - count;
-	}
+	}*/
 
 	void Buffer::Create(const void* data)
 	{

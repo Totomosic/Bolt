@@ -76,9 +76,9 @@ namespace Bolt
 		ShaderVariablePtr viewPosition = vertex.DefineVar(ShaderFuncs::Mul(viewMatrix, worldPosition));
 		ShaderVariablePtr screenPosition = vertex.DefineVar(ShaderFuncs::Mul(projectionMatrix, viewPosition));
 
-		ShaderVariablePtr worldNormal = vertex.DefineVar(ShaderFuncs::Mul(ShaderFuncs::Matrix3(normalMatrix), vertex.Stream(BufferLayout::NORMAL_INDEX)));
+		ShaderVariablePtr worldNormal = vertex.DefineVar(ShaderFuncs::Mul(ShaderFuncs::Matrix3(normalMatrix), vertex.Stream(BufferLayout::DefaultIndices.Normal)));
 
-		ShaderVariablePtr tangent = vertex.DefineVar(ShaderFuncs::xyz(ShaderFuncs::Mul(modelMatrix, ShaderFuncs::Vec4(vertex.Stream(BufferLayout::TANGENT_INDEX), ShaderLiteral::FromFloat(0.0f)))));
+		ShaderVariablePtr tangent = vertex.DefineVar(ShaderFuncs::xyz(ShaderFuncs::Mul(modelMatrix, ShaderFuncs::Vec4(vertex.Stream(BufferLayout::DefaultIndices.Tangent), ShaderLiteral::FromFloat(0.0f)))));
 		ShaderVariablePtr bitangent = vertex.DefineVar(ShaderFuncs::Cross(worldNormal, tangent));
 		// We want a matrix that transforms from tangent space to world space
 		vertex.SetVariable(outTBNMatrix, ShaderFuncs::Matrix3(tangent, bitangent, worldNormal));

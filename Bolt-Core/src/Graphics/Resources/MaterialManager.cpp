@@ -51,9 +51,10 @@ namespace Bolt
 		return material;
 	}
 
-	std::unique_ptr<TextureLightingMaterial> MaterialManager::TextureLighting() const
+	std::unique_ptr<TextureLightingMaterial> MaterialManager::TextureLighting(const ResourcePtr<Texture2D>& texture) const
 	{
 		std::unique_ptr<TextureLightingMaterial> material = m_TextureLightingGraph.GetMaterial<TextureLightingMaterial>();
+		material->LinkTexture(texture);
 		return material;
 	}
 
@@ -98,13 +99,13 @@ namespace Bolt
 		ShaderPassVariablePtr outColor = vertex.DeclarePassOut<Color>();
 		ShaderPassVariablePtr outTexCoord = vertex.DeclarePassOut<Vector2f>();
 
-		ShaderVariablePtr position = vertex.DefineVar(ShaderFuncs::Vec4(vertex.Stream(BufferLayout::POSITION_INDEX), ShaderLiteral::FromFloat(1.0f)));
+		ShaderVariablePtr position = vertex.DefineVar(ShaderFuncs::Vec4(vertex.Stream(BufferLayout::DefaultIndices.Position), ShaderLiteral::FromFloat(1.0f)));
 		ShaderVariablePtr worldPos = vertex.DefineVar(ShaderFuncs::Mul(modelMatrix, position));
 		ShaderVariablePtr viewPos = vertex.DefineVar(ShaderFuncs::Mul(viewMatrix, worldPos));
 		ShaderVariablePtr screenPos = vertex.DefineVar(ShaderFuncs::Mul(projectionMatrix, viewPos));
 		vertex.SetVertexPosition(screenPos);
-		vertex.SetVariable(outColor, vertex.Stream(BufferLayout::COLOR_INDEX));
-		vertex.SetVariable(outTexCoord, vertex.Stream(BufferLayout::TEXCOORD_INDEX));
+		vertex.SetVariable(outColor, vertex.Stream(BufferLayout::DefaultIndices.Color));
+		vertex.SetVariable(outTexCoord, vertex.Stream(BufferLayout::DefaultIndices.TexCoord));
 
 		FragmentShader& fragment = builder.Factory().Fragment();
 		ShaderPassVariablePtr inColor = fragment.DeclarePassIn(outColor);

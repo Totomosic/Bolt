@@ -27,7 +27,7 @@ namespace Bolt
 		TextureLightingMaterial(ShaderLinkContext&& shader, bool isTransparent);
 		TextureLightingMaterial(const ShaderLinkContext& shader, bool isTransparent);
 
-		UniformLink<ResourcePtr<Texture2D>>& LinkColor(const ResourcePtr<Texture2D>& albedo);
+		UniformLink<ResourcePtr<Texture2D>>& LinkTexture(const ResourcePtr<Texture2D>& albedo);
 		UniformLink<Color>& LinkSpecularColor(const Color& specularRGB);
 		UniformLink<float>& LinkShininess(float shininess);
 		UniformLink<float>& LinkShineDamper(float shineDamper);

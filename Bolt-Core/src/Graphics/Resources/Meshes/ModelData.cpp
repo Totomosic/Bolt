@@ -4,9 +4,4 @@
 namespace Bolt
 {
 
-	ModelMapping ModelData::Map() const
-	{
-		return { Vertices->Map(), Indices->Map() };
-	}
-
 }

@@ -44,14 +44,16 @@ namespace Bolt
 			int Offset;
 		};
 
-		static constexpr int POSITION_INDEX = 0;
-		static constexpr int NORMAL_INDEX = 1;
-		static constexpr int TEXCOORD_INDEX = 2;
-		static constexpr int COLOR_INDEX = 3;
-		static constexpr int TANGENT_INDEX = 4;
+		static constexpr struct {
+			int Position = 0;
+			int Normal = 1;
+			int TexCoord = 2;
+			int Color = 3;
+			int Tangent = 4;
+		} DefaultIndices = {};
 
 	private:
-		std::unordered_map<int, VertexAttribute> m_Attributes;
+		std::vector<VertexAttribute> m_Attributes;
 		uint32_t m_Stride;
 
 	public:
@@ -63,16 +65,9 @@ namespace Bolt
 		int AttributeCount() const;
 		bool HasAttribute(int index) const;
 		const VertexAttribute& GetAttribute(int index) const;
-		std::vector<VertexAttribute> GetAttributes() const;
+		const std::vector<VertexAttribute>& GetAttributes() const;
 
 		void AddAttribute(int count, DataType type = DataType::Float, bool normalized = false);
-		void AddAttribute(int index, int count, DataType type = DataType::Float, bool normalized = false);
-
-		int GetPostionIndex() const;
-		int GetNormalIndex() const;
-		int GetTexCoordIndex() const;
-		int GetColorIndex() const;
-		int GetTangentIndex() const;
 
 		bool operator==(const BufferLayout& other) const;
 		bool operator!=(const BufferLayout& other) const;
@@ -83,20 +78,13 @@ namespace Bolt
 			BLT_ASSERT(false, "Invalid Type");
 		}
 
-		template<typename T>
-		void AddAttribute(int index, int count, bool normalized = false)
-		{
-			BLT_ASSERT(false, "Invalid Type");
-		}
-
 		friend class VertexArray;
-
-	private:
-		void AddAttribute(const VertexAttribute& attribute);
-		const std::unordered_map<int, VertexAttribute>& GetAttributesMap() const;
 
 	public:
 		static BufferLayout Default();
+
+	private:
+		void AddAttribute(const VertexAttribute& attribute);
 
 	};
 
@@ -146,54 +134,6 @@ namespace Bolt
 	inline void BufferLayout::AddAttribute<Color>(int count, bool normalized)
 	{
 		AddAttribute<Vector4f>(count, normalized);
-	}
-
-	template<>
-	inline void BufferLayout::AddAttribute<int>(int index, int count, bool normalized)
-	{
-		AddAttribute(index, count, DataType::Int, normalized);
-	}
-
-	template<>
-	inline void BufferLayout::AddAttribute<byte>(int index, int count, bool normalized)
-	{
-		AddAttribute(index, count, DataType::UByte, normalized);
-	}
-
-	template<>
-	inline void BufferLayout::AddAttribute<unsigned int>(int index, int count, bool normalized)
-	{
-		AddAttribute(index, count, DataType::UInt, normalized);
-	}
-
-	template<>
-	inline void BufferLayout::AddAttribute<float>(int index, int count, bool normalized)
-	{
-		AddAttribute(index, count, DataType::Float, normalized);
-	}
-
-	template<>
-	inline void BufferLayout::AddAttribute<Vector2f>(int index, int count, bool normalized)
-	{
-		AddAttribute<float>(index, 2 * count, normalized);
-	}
-
-	template<>
-	inline void BufferLayout::AddAttribute<Vector3f>(int index, int count, bool normalized)
-	{
-		AddAttribute<float>(index, 3 * count, normalized);
-	}
-
-	template<>
-	inline void BufferLayout::AddAttribute<Vector4f>(int index, int count, bool normalized)
-	{
-		AddAttribute<float>(index, 4 * count, normalized);
-	}
-
-	template<>
-	inline void BufferLayout::AddAttribute<Color>(int index, int count, bool normalized)
-	{
-		AddAttribute<Vector4f>(index, count, normalized);
 	}
 
 }

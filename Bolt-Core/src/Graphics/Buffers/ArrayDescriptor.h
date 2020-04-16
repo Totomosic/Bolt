@@ -1,6 +1,5 @@
 #pragma once
 #include "VertexBuffer.h"
-#include "VertexMapping.h"
 
 namespace Bolt
 {
@@ -18,13 +17,10 @@ namespace Bolt
 		bool HasAttribute(int index) const;
 		VertexBuffer* GetAttribute(int attributeIndex) const;
 
-		VertexMapping GetMapping() const;
-
 		friend class VertexArray;
 
 	private:
 		void AddVertexBuffer(VertexBuffer* buffer);
-		void UnmapAll() const;
 
 	};
 

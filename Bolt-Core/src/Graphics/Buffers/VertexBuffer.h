@@ -1,6 +1,7 @@
 #pragma once
 #include "Buffer.h"
 #include "BufferLayout.h"
+#include "ScopedVertexMap.h"
 
 namespace Bolt
 {
@@ -11,16 +12,15 @@ namespace Bolt
 		BufferLayout m_Layout;
 		
 	public:
-		VertexBuffer(uint32_t size, const BufferLayout& layout, BufferUsage usage = BufferUsage::StaticDraw);
-		VertexBuffer(const void* data, uint32_t size, const BufferLayout& layout, BufferUsage usage = BufferUsage::StaticDraw);
+		VertexBuffer(size_t size, const BufferLayout& layout, BufferUsage usage = BufferUsage::StaticDraw);
+		VertexBuffer(const void* data, size_t size, const BufferLayout& layout, BufferUsage usage = BufferUsage::StaticDraw);
 
 		const BufferLayout& Layout() const;
-		int VertexCount() const;
-
+		size_t VertexCount() const;
 		std::unique_ptr<VertexBuffer> Clone() const;
 
-		friend class VertexArray;
-
+		ScopedVertexMap MapScoped(Access bufferAccess) const;
+		ScopedVertexMap MapScopedRange(size_t startVertexIndex, size_t vertexCount, Access bufferAccess) const;
 	};
 
 }

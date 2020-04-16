@@ -4,15 +4,17 @@
 namespace Bolt
 {
 
-	template<uint32_t VCount>
+	template<uint32_t VCount, typename IteratorT = VertexIterator>
 	struct BLT_API Face
 	{
 	public:
-		VertexIterator Vertices[VCount];
+		IteratorT Vertices[VCount];
 	};
 
-	typedef Face<2> Line;
-	typedef Face<3> Triangle;
-	typedef Face<4> Quad;
+	template<typename IteratorT = VertexIterator>
+	using Triangle = Face<3, IteratorT>;
+
+	template<typename IteratorT = VertexIterator>
+	using Quad = Face<4, IteratorT>;
 
 }

@@ -25,7 +25,6 @@ namespace Bolt
 		std::vector<std::unique_ptr<VertexBuffer>> m_Vertices;
 		RenderMode m_RenderMode;
 		ArrayDescriptor m_Descriptor;
-		mutable bool m_IsMapped;
 
 	public:
 		VertexArray(RenderMode mode = RenderMode::Triangles);
@@ -47,37 +46,17 @@ namespace Bolt
 
 		// VertexBuffer must have same VertexCount() as all other VertexBuffers, if this is the first then no constraint
 		VertexBuffer& AddVertexBuffer(std::unique_ptr<VertexBuffer>&& buffer);
-		VertexBuffer& CreateVertexBuffer(uint32_t size, const BufferLayout& layout, BufferUsage usage = BufferUsage::StaticDraw);
-		VertexBuffer& CreateVertexBuffer(const void* data, uint32_t size, const BufferLayout& layout, BufferUsage usage = BufferUsage::StaticDraw);
+		VertexBuffer& CreateVertexBuffer(size_t size, const BufferLayout& layout, BufferUsage usage = BufferUsage::StaticDraw);
+		VertexBuffer& CreateVertexBuffer(const void* data, size_t size, const BufferLayout& layout, BufferUsage usage = BufferUsage::StaticDraw);
 		VertexBuffer& GetVertexBuffer(int index);
 		void SetRenderMode(RenderMode mode);
-
-		VertexMapping Map() const;
-
-		template<typename FuncT0>
-		void MapAsync(FuncT0 callback) const
-		{
-			Task t = TaskManager::Get().Run(make_shared_function([mapping{ Map() }, callback{ std::move(callback) }]() mutable
-			{
-				callback(mapping);
-				return std::move(mapping);
-			}));
-			t.ContinueWithOnMainThread([](VertexMapping mapping)
-			{
-
-			});
-		}
-
 		std::unique_ptr<VertexArray> Clone() const;
 
 		friend class VertexMapping;
 
 	private:
 		void Create();
-		bool ValidateAttribute(int attribIndex, DataType type, int count) const;
-
-		void SetMapped(bool isMapped) const;
-		
+		bool ValidateAttribute(int attribIndex, DataType type, int count) const;		
 	};
 
 }

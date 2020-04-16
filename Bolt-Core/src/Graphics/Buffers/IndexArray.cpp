@@ -7,13 +7,13 @@ namespace Bolt
 {
 
 	IndexArray::IndexArray()
-		: m_IndexBuffers(), m_Descriptor(), m_IsMapped(false)
+		: m_IndexBuffers(), m_Descriptor()
 	{
 	
 	}
 
 	IndexArray::IndexArray(IndexArray&& other) noexcept
-		: m_IndexBuffers(std::move(other.m_IndexBuffers)), m_Descriptor(std::move(other.m_Descriptor)), m_IsMapped(false)
+		: m_IndexBuffers(std::move(other.m_IndexBuffers)), m_Descriptor(std::move(other.m_Descriptor))
 	{
 		BLT_ASSERT(!other.IsMapped(), "Cannot move mapped array");
 	}
@@ -24,7 +24,6 @@ namespace Bolt
 		std::vector<std::unique_ptr<IndexBuffer>> tempIndexBuffers = std::move(m_IndexBuffers);
 		m_IndexBuffers = std::move(other.m_IndexBuffers);
 		m_Descriptor = other.m_Descriptor;
-		m_IsMapped = false;
 		other.m_IndexBuffers = std::move(tempIndexBuffers);
 		return *this;
 	}
@@ -76,7 +75,10 @@ namespace Bolt
 
 	bool IndexArray::IsMapped() const
 	{
-		return m_IsMapped;
+		for (const auto& ptr : m_IndexBuffers)
+			if (ptr->IsMapped())
+				return true;
+		return false;
 	}
 
 	IndexBuffer& IndexArray::AddIndexBuffer(std::unique_ptr<IndexBuffer>&& buffer)
@@ -87,15 +89,6 @@ namespace Bolt
 		return *ptr;
 	}
 
-	IndexMapping IndexArray::Map() const
-	{
-		BLT_ASSERT(!IsMapped(), "Cannot Map Mapped array");
-		SetMapped(true);
-		IndexMapping mapping = m_Descriptor.GetMapping();
-		mapping.SetIndexArray(this);
-		return mapping;
-	}
-
 	std::unique_ptr<IndexArray> IndexArray::Clone() const
 	{
 		std::unique_ptr<IndexArray> result = std::make_unique<IndexArray>();
@@ -104,15 +97,6 @@ namespace Bolt
 			result->AddIndexBuffer(buffer->Clone());
 		}
 		return result;
-	}
-
-	void IndexArray::SetMapped(bool isMapped) const
-	{
-		m_IsMapped = isMapped;
-		if (!isMapped)
-		{
-			m_Descriptor.UnmapAll();
-		}
 	}
 
 }

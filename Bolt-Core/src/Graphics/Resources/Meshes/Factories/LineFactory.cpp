@@ -29,13 +29,13 @@ namespace Bolt
 		result.Bounds.Max.z = abs(half.z);
 						 
 		BufferLayout layout = BufferLayout::Default();
-		result.Vertices->CreateVertexBuffer(2 * layout.Size(), layout);
+		VertexBuffer& buffer = result.Vertices->CreateVertexBuffer(2 * layout.Size(), layout);
 
 		Vector4<byte> color = Color.ToBytes();
 
 		{
-			VertexMapping mapping = result.Vertices->Map();
-			VertexIterator iterator = mapping.Begin();
+			ScopedVertexMap mapping = buffer.MapScoped(Access::Write);
+			DefaultVertexIterator iterator = mapping.DefaultBegin();
 			iterator.Position() = -half;
 			iterator.Normal() = Vector3f(0, 0, 1);
 			iterator.TexCoord() = Vector2f(0, 1);

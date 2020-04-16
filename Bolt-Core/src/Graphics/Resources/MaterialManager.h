@@ -33,7 +33,7 @@ namespace Bolt
 		std::unique_ptr<Material> Texture(ResourcePtr<Texture2D> texture) const;
 		std::unique_ptr<Material> Font(const ResourcePtr<Bolt::Font>& font, const Color& baseColor = Color::White) const;
 		std::unique_ptr<DefaultLightingMaterial> DefaultLighting(const Color& color = Color::White) const;
-		std::unique_ptr<TextureLightingMaterial> TextureLighting() const;
+		std::unique_ptr<TextureLightingMaterial> TextureLighting(const ResourcePtr<Texture2D>& texture) const;
 		std::unique_ptr<PBRMaterial> PBR() const;
 		std::unique_ptr<PBRTextureMaterial> PBRTexture() const;
 

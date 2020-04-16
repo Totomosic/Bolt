@@ -27,7 +27,7 @@ namespace Bolt
 
 	bool BufferLayout::HasAttribute(int index) const
 	{
-		return m_Attributes.find(index) != m_Attributes.end();
+		return index < m_Attributes.size();
 	}
 
 	int BufferLayout::AttributeCount() const
@@ -40,55 +40,20 @@ namespace Bolt
 		return m_Attributes.at(index);
 	}
 
-	std::vector<BufferLayout::VertexAttribute> BufferLayout::GetAttributes() const
+	const std::vector<BufferLayout::VertexAttribute>& BufferLayout::GetAttributes() const
 	{
-		std::vector<VertexAttribute> result;
-		for (const auto& pair : m_Attributes)
-		{
-			result.push_back(pair.second);
-		}
-		return result;
+		return m_Attributes;
 	}
 
 	void BufferLayout::AddAttribute(int count, DataType type, bool normalized)
 	{
-		AddAttribute(m_Attributes.size(), count, type, normalized);
-	}
-
-	void BufferLayout::AddAttribute(int index, int count, DataType type, bool normalized)
-	{
 		VertexAttribute attrib;
-		attrib.Index = index;
+		attrib.Index = m_Attributes.size();
 		attrib.Count = count;
 		attrib.Type = type;
 		attrib.Normalised = normalized;
 		attrib.Offset = m_Stride;
 		AddAttribute(attrib);
-	}
-
-	int BufferLayout::GetPostionIndex() const
-	{
-		return POSITION_INDEX;
-	}
-
-	int BufferLayout::GetNormalIndex() const
-	{
-		return NORMAL_INDEX;
-	}
-
-	int BufferLayout::GetTexCoordIndex() const
-	{
-		return TEXCOORD_INDEX;
-	}
-
-	int BufferLayout::GetColorIndex() const
-	{
-		return COLOR_INDEX;
-	}
-
-	int BufferLayout::GetTangentIndex() const
-	{
-		return TANGENT_INDEX;
 	}
 
 	bool BufferLayout::operator==(const BufferLayout& other) const
@@ -108,24 +73,19 @@ namespace Bolt
 
 	void BufferLayout::AddAttribute(const VertexAttribute& attribute)
 	{
-		m_Attributes[attribute.Index] = attribute;
+		m_Attributes.push_back(attribute);
 		int dataTypeSize = (attribute.Type == DataType::UByte) ? sizeof(byte) : sizeof(float);
 		m_Stride += attribute.Count * dataTypeSize;
-	}
-
-	const std::unordered_map<int, BufferLayout::VertexAttribute>& BufferLayout::GetAttributesMap() const
-	{
-		return m_Attributes;
 	}
 
 	BufferLayout BufferLayout::Default()
 	{
 		BufferLayout layout;
-		layout.AddAttribute<Vector3f>(POSITION_INDEX, 1);
-		layout.AddAttribute<Vector3f>(NORMAL_INDEX, 1);
-		layout.AddAttribute<Vector2f>(TEXCOORD_INDEX, 1);
-		layout.AddAttribute<byte>(COLOR_INDEX, 4, true);
-		layout.AddAttribute<Vector3f>(TANGENT_INDEX, 1);
+		layout.AddAttribute<Vector3f>(1);
+		layout.AddAttribute<Vector3f>(1);
+		layout.AddAttribute<Vector2f>(1);
+		layout.AddAttribute<byte>(4, true);
+		layout.AddAttribute<Vector3f>(1);
 		return layout;
 	}
 

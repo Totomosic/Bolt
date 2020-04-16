@@ -1,6 +1,5 @@
 #pragma once
 #include "IndexBuffer.h"
-#include "IndexMapping.h"
 
 namespace Bolt
 {
@@ -55,13 +54,10 @@ namespace Bolt
 		int IndexBufferCount() const;
 		int IndexCount() const;
 
-		IndexMapping GetMapping() const;
-
 		friend class IndexArray;
 		
 	private:
 		void AddIndexBuffer(IndexBuffer* buffer);
-		void UnmapAll() const;
 
 	};
 

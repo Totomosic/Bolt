@@ -1,32 +1,24 @@
 #pragma once
 #include "bltpch.h"
 #include "AttributeSetter.h"
+#include "../BufferLayout.h"
 
 namespace Bolt
 {
 
-	class VertexMapping;
-
 	class BLT_API VertexIterator
 	{
-	private:
-		const VertexMapping* m_Mapping;
-		int m_VertexIndex;
+	protected:
+		void* m_Buffer;
+		const BufferLayout* m_Layout;
 
 	public:
 		VertexIterator();
-		VertexIterator(const VertexMapping* mapping, int vertexIndex);
-
-		int VertexIndex() const;
+		VertexIterator(void* buffer, const BufferLayout* layout);
+		virtual ~VertexIterator() {}
 
 		AttributeSetter operator[](int attributeIndex) const;
-		AttributeSetter Seek(int attributeIndex) const;
-
-		Vector3f& Position() const;
-		Vector3f& Normal() const;
-		Vector2f& TexCoord() const;
-		Vector4<byte>& Color() const;
-		Vector3f& Tangent() const;
+		AttributeSetter GetSetter(int attributeIndex) const;
 
 		VertexIterator& operator++();
 		VertexIterator& operator--();

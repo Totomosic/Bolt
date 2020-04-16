@@ -30,29 +30,14 @@ namespace Bolt
 		return indexBuffer;
 	}
 
-	void IndexBuffer::MapIterator() const
+	ScopedIndexMap IndexBuffer::MapScoped(Access bufferAccess) const
 	{
-		m_MappedIterators++;
+		return ScopedIndexMap(this, bufferAccess, 0, Size());
 	}
 
-	void IndexBuffer::FreeIterator() const
+	ScopedIndexMap IndexBuffer::MapScopedRange(size_t startIndex, size_t indexCount, Access bufferAccess) const
 	{
-		m_MappedIterators--;
-		if (m_MappedIterators <= 0)
-		{
-			Buffer::Unmap();
-			m_MappedIterators = 0;
-		}
-	}
-
-	void* IndexBuffer::PrivateMap(Access access) const
-	{
-		return Buffer::Map(access);
-	}
-
-	bool IndexBuffer::PrivateUnmap() const
-	{
-		return Buffer::Unmap();
+		return ScopedIndexMap(this, bufferAccess, startIndex * sizeof(uint32_t), indexCount * sizeof(uint32_t));
 	}
 
 }

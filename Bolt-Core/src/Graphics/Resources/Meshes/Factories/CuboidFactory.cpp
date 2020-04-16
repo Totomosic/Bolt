@@ -37,8 +37,8 @@ namespace Bolt
 		Vector4<byte> color = Color.ToBytes();
 
 		{
-			VertexMapping mapping = result.Vertices->Map();
-			VertexIterator iterator = mapping.Begin();
+			ScopedVertexMap vertexMap = buffer.MapScoped(Access::Write);
+			DefaultVertexIterator iterator = vertexMap.DefaultBegin();
 			iterator.Position() = Vector3f(-w, h, d);
 			iterator.Normal() = Vector3f(0, 0, 1);
 			iterator.TexCoord() = Vector2f(0, 1);
