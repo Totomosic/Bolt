@@ -2,12 +2,12 @@
 #include "BoltLib/Math/Matrices/Matrix4.h"
 #include "Graphics/Buffers/VertexArray.h"
 #include "Graphics/Buffers/IndexBuffer.h"
-#include "Graphics/Resources/Textures/Texture2D.h"
-#include "Graphics/Resources/ResourcePtr.h"
+#include "Graphics/Assets/Textures/Texture2D.h"
+#include "Graphics/Assets/AssetHandle.h"
 #include "Graphics/Framebuffer.h"
 #include "../RenderingContext.h"
 
-#include "Graphics/Resources/Meshes/Materials/Shaders/ShaderLinkContext.h"
+#include "Graphics/Assets/Meshes/Materials/Shaders/ShaderLinkContext.h"
 #include "TextureFrame.h"
 
 namespace Bolt
@@ -30,7 +30,7 @@ namespace Bolt
 		public:
 			std::unique_ptr<VertexArray> Vertices = nullptr;
 			std::unique_ptr<IndexBuffer> Indices = nullptr;
-			std::unordered_map<ResourcePtr<Texture2D>, int> Textures;
+			std::unordered_map<AssetHandle<Texture2D>, int> Textures;
 			int SpriteCount = 0;
 
 			void* VerticesPtr = nullptr;
@@ -71,13 +71,13 @@ namespace Bolt
 		void EndScene();
 		void Flush();
 
-		void DrawSprite(float x, float y, float width, float height, const Color& color = Color::White, float rotation = 0, const ResourcePtr<Texture2D>& texture = nullptr, const TextureFrame& frame = {});
+		void DrawSprite(float x, float y, float width, float height, const Color& color = Color::White, float rotation = 0, const AssetHandle<Texture2D>& texture = nullptr, const TextureFrame& frame = {});
 		void DrawRectangle(float x, float y, float width, float height, const Color& color = Color::White, float rotation = 0);
-		void DrawTexture(float x, float y, float width, float height, const ResourcePtr<Texture2D>& texture, float rotation = 0, const TextureFrame& frame = {});
-		void DrawString(const std::string& string, const ResourcePtr<Font>& font, float x, float y, const Color& color = Color::White);
+		void DrawTexture(float x, float y, float width, float height, const AssetHandle<Texture2D>& texture, float rotation = 0, const TextureFrame& frame = {});
+		void DrawString(const std::string& string, const AssetHandle<Font>& font, float x, float y, const Color& color = Color::White);
 		// Draws string with the default font
 		void DrawString(const std::string& string, float x, float y, const Color& color = Color::White);
-		void DrawEllipse(float x, float y, float width, float height, const Color& color = Color::White, const ResourcePtr<Texture2D>& texture = nullptr, const TextureFrame& frame = {});
+		void DrawEllipse(float x, float y, float width, float height, const Color& color = Color::White, const AssetHandle<Texture2D>& texture = nullptr, const TextureFrame& frame = {});
 		void DrawLine(float x0, float y0, float x1, float y1, float width = 1, const Color & color = Color::White);
 
 	private:

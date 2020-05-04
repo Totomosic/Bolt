@@ -1,7 +1,7 @@
 #pragma once
 #include "../../Components/Transform.h"
-#include "Graphics/Resources/Meshes/Mesh.h"
-#include "Graphics/Resources/Meshes/Factories/TextFactory.h"
+#include "Graphics/Assets/Meshes/Mesh.h"
+#include "Graphics/Assets/Meshes/Factories/TextFactory.h"
 
 namespace Bolt
 {
@@ -25,16 +25,16 @@ namespace Bolt
 		UIElement& CreateElement(Transform transform = Transform());
 		UIRectangle& CreateRectangle(float width, float height, std::unique_ptr<Material>&& material, Transform transform = Transform());
 		UIRectangle& CreateRectangle(float width, float height, const Color& color, Transform transform = Transform());
-		UIRectangle& CreateImage(float width, float height, const ResourcePtr<Texture2D>& image, Transform transform = Transform());
+		UIRectangle& CreateImage(float width, float height, const AssetHandle<Texture2D>& image, Transform transform = Transform());
 
-		UIText& CreateText(const std::string& text, const ResourcePtr<Font>& font, const Color& color, 
+		UIText& CreateText(const std::string& text, const AssetHandle<Font>& font, const Color& color, 
 			Transform transform = Transform(), AlignH horizontal = AlignH::Center, AlignV vertical = AlignV::Center);
 		UIText& CreateText(const std::string& text, const Color& color,
 			Transform transform = Transform(), AlignH horizontal = AlignH::Center, AlignV vertical = AlignV::Center);
 
-		UITextInput& CreateTextInput(float width, float height, const ResourcePtr<Font>& font, const Color& fontColor, std::unique_ptr<Material>&& backgroundMaterial, Transform transform = Transform());
+		UITextInput& CreateTextInput(float width, float height, const AssetHandle<Font>& font, const Color& fontColor, std::unique_ptr<Material>&& backgroundMaterial, Transform transform = Transform());
 		UITextInput& CreateTextInput(float width, float height, const Color& fontColor, std::unique_ptr<Material>&& backgroundMaterial, Transform transform = Transform());
-		UITextInput& CreateTextInput(float width, float height, const ResourcePtr<Font>& font, const Color& fontColor, const Color& backgroundColor, Transform transform = Transform());
+		UITextInput& CreateTextInput(float width, float height, const AssetHandle<Font>& font, const Color& fontColor, const Color& backgroundColor, Transform transform = Transform());
 		UITextInput& CreateTextInput(float width, float height, const Color& fontColor, const Color& backgroundColor, Transform transform = Transform());
 
 	};

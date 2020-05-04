@@ -1,7 +1,7 @@
 #include "bltpch.h"
 
 #include "RenderRoutine.h"
-#include "Graphics/Resources/Meshes/Materials/Material.h"
+#include "Graphics/Assets/Meshes/Materials/Material.h"
 #include "Core/Time/Time.h"
 #include "Graphics.h"
 

@@ -3,7 +3,7 @@
 
 #include "../Components/Transform.h"
 #include "../Components/Camera.h"
-#include "Graphics/Resources/Meshes/Mesh.h"
+#include "Graphics/Assets/Meshes/Mesh.h"
 
 #include "Engine/Renderer/Renderer.h"
 #include "Engine/Renderer/Graphics.h"

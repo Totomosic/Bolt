@@ -2,7 +2,7 @@
 #include "BoltLib/Math/Matrices/Matrix4.h"
 #include "Graphics/Buffers/VertexArray.h"
 #include "Graphics/Buffers/IndexBuffer.h"
-#include "Graphics/Resources/Meshes/Materials/Material.h"
+#include "Graphics/Assets/Meshes/Materials/Material.h"
 
 namespace Bolt
 {

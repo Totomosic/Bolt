@@ -1,7 +1,7 @@
 #include "bltpch.h"
 #include "UIFactory.h"
 #include "../UIManager.h"
-#include "Graphics/Resources/ResourceManager.h"
+#include "Graphics/Assets/AssetManager.h"
 
 #include "UIElement.h"
 #include "UIText.h"
@@ -28,42 +28,42 @@ namespace Bolt
 
 	UIRectangle& UIFactory::CreateRectangle(float width, float height, const Color& color, Transform transform)
 	{
-		return CreateRectangle(width, height, ResourceManager::Get().Materials().Default(color), std::move(transform));
+		return CreateRectangle(width, height, AssetManager::Get().Materials().Default(color), std::move(transform));
 	}
 
-	UIRectangle& UIFactory::CreateImage(float width, float height, const ResourcePtr<Texture2D>& image, Transform transform)
+	UIRectangle& UIFactory::CreateImage(float width, float height, const AssetHandle<Texture2D>& image, Transform transform)
 	{
-		return CreateRectangle(width, height, ResourceManager::Get().Materials().Texture(image), std::move(transform));
+		return CreateRectangle(width, height, AssetManager::Get().Materials().Texture(image), std::move(transform));
 	}
 
-	UIText& UIFactory::CreateText(const std::string& text, const ResourcePtr<Font>& font, const Color& color, Transform transform, AlignH horizontal, AlignV vertical)
+	UIText& UIFactory::CreateText(const std::string& text, const AssetHandle<Font>& font, const Color& color, Transform transform, AlignH horizontal, AlignV vertical)
 	{
 		return (UIText&)m_ParentElement.AddChild(std::make_unique<UIText>(m_Manager, &m_ParentElement, text, font, color, std::move(transform), horizontal, vertical));
 	}
 
 	UIText& UIFactory::CreateText(const std::string& text, const Color& color, Transform transform, AlignH horizontal, AlignV vertical)
 	{
-		return CreateText(text, ResourceManager::Get().Fonts().Default(), color, std::move(transform), horizontal, vertical);
+		return CreateText(text, AssetManager::Get().Fonts().Default(), color, std::move(transform), horizontal, vertical);
 	}
 
-	UITextInput& UIFactory::CreateTextInput(float width, float height, const ResourcePtr<Font>& font, const Color& fontColor, std::unique_ptr<Material>&& backgroundMaterial, Transform transform)
+	UITextInput& UIFactory::CreateTextInput(float width, float height, const AssetHandle<Font>& font, const Color& fontColor, std::unique_ptr<Material>&& backgroundMaterial, Transform transform)
 	{
 		return (UITextInput&)m_ParentElement.AddChild(std::make_unique<UITextInput>(m_Manager, &m_ParentElement, width, height, font, fontColor, std::move(backgroundMaterial), std::move(transform)));
 	}
 
 	UITextInput& UIFactory::CreateTextInput(float width, float height, const Color& fontColor, std::unique_ptr<Material>&& backgroundMaterial, Transform transform)
 	{
-		return CreateTextInput(width, height, ResourceManager::Get().Fonts().Default(), fontColor, std::move(backgroundMaterial), std::move(transform));
+		return CreateTextInput(width, height, AssetManager::Get().Fonts().Default(), fontColor, std::move(backgroundMaterial), std::move(transform));
 	}
 
-	UITextInput& UIFactory::CreateTextInput(float width, float height, const ResourcePtr<Font>& font, const Color& fontColor, const Color& backgroundColor, Transform transform)
+	UITextInput& UIFactory::CreateTextInput(float width, float height, const AssetHandle<Font>& font, const Color& fontColor, const Color& backgroundColor, Transform transform)
 	{
-		return CreateTextInput(width, height, font, fontColor, ResourceManager::Get().Materials().Default(backgroundColor), std::move(transform));
+		return CreateTextInput(width, height, font, fontColor, AssetManager::Get().Materials().Default(backgroundColor), std::move(transform));
 	}
 
 	UITextInput& UIFactory::CreateTextInput(float width, float height, const Color& fontColor, const Color& backgroundColor, Transform transform)
 	{
-		return CreateTextInput(width, height, ResourceManager::Get().Fonts().Default(), fontColor, ResourceManager::Get().Materials().Default(backgroundColor), std::move(transform));
+		return CreateTextInput(width, height, AssetManager::Get().Fonts().Default(), fontColor, AssetManager::Get().Materials().Default(backgroundColor), std::move(transform));
 	}
 
 }

@@ -122,37 +122,37 @@ namespace Bolt
 	const Texture2D* Framebuffer::CreateColorBuffer(ColorBuffer buffer)
 	{
 		TextureCreateOptions createOptions = { WrapMode::Repeat, MagFilter::Linear, MinFilter::Linear, Mipmaps::Disabled };
-		return CreateColorBuffer(ResourcePtr<Texture2D>(BLT_NEW Texture2D(Width(), Height(), createOptions), true), buffer);
+		return CreateColorBuffer(AssetHandle<Texture2D>(BLT_NEW Texture2D(Width(), Height(), createOptions), true), buffer);
 	}
 
 	const Texture2D* Framebuffer::CreateDepthBuffer()
 	{
 		TextureCreateOptions createOptions = { WrapMode::Repeat, MagFilter::Linear, MinFilter::Linear, Mipmaps::Disabled };
-		return CreateDepthBuffer(ResourcePtr<Texture2D>(BLT_NEW Texture2D(Width(), Height(), createOptions), true));
+		return CreateDepthBuffer(AssetHandle<Texture2D>(BLT_NEW Texture2D(Width(), Height(), createOptions), true));
 	}
 
-	const Texture2D* Framebuffer::CreateColorBuffer(const ResourcePtr<Texture2D>& texture, ColorBuffer buffer)
+	const Texture2D* Framebuffer::CreateColorBuffer(const AssetHandle<Texture2D>& texture, ColorBuffer buffer)
 	{
 		CreateColorTexture(texture, buffer);
 		m_Textures[buffer] = texture;
 		return m_Textures[buffer].Get();
 	}
 
-	const Texture2D* Framebuffer::CreateDepthBuffer(const ResourcePtr<Texture2D>& texture)
+	const Texture2D* Framebuffer::CreateDepthBuffer(const AssetHandle<Texture2D>& texture)
 	{
 		CreateDepthTexture(texture);
 		m_Textures[ColorBuffer::Depth] = texture;
 		return m_Textures[ColorBuffer::Depth].Get();
 	}
 
-	const Texture2D* Framebuffer::CreateColorBuffer(ResourcePtr<Texture2D>&& texture, ColorBuffer buffer)
+	const Texture2D* Framebuffer::CreateColorBuffer(AssetHandle<Texture2D>&& texture, ColorBuffer buffer)
 	{
 		CreateColorTexture(texture, buffer);
 		m_Textures[buffer] = std::move(texture);
 		return m_Textures[buffer].Get();
 	}
 
-	const Texture2D* Framebuffer::CreateDepthBuffer(ResourcePtr<Texture2D>&& texture)
+	const Texture2D* Framebuffer::CreateDepthBuffer(AssetHandle<Texture2D>&& texture)
 	{
 		CreateDepthTexture(texture);
 		m_Textures[ColorBuffer::Depth] = std::move(texture);
@@ -252,7 +252,7 @@ namespace Bolt
 		GL_CALL(glGenFramebuffers(1, &m_Id));
 	}
 
-	void Framebuffer::CreateColorTexture(const ResourcePtr<Texture2D>& texture, ColorBuffer buffer)
+	void Framebuffer::CreateColorTexture(const AssetHandle<Texture2D>& texture, ColorBuffer buffer)
 	{
 		BLT_ASSERT(!HasTextureBuffer(buffer), "RenderBuffer is already attached at buffer " + std::to_string((int)buffer));
 		BLT_ASSERT(!IsMultisampled(), "Multisampled Framebuffer cannot have texture attachments");
@@ -266,7 +266,7 @@ namespace Bolt
 		GL_CALL(glDrawBuffer((GLenum)buffer));
 	}
 
-	void Framebuffer::CreateDepthTexture(const ResourcePtr<Texture2D>& texture)
+	void Framebuffer::CreateDepthTexture(const AssetHandle<Texture2D>& texture)
 	{
 		BLT_ASSERT(!HasTextureBuffer(ColorBuffer::Depth), "RenderBuffer is already attached at buffer " + std::to_string((int)ColorBuffer::Depth));
 		BLT_ASSERT(!IsMultisampled(), "Multisampled Framebuffer cannot have texture attachments");

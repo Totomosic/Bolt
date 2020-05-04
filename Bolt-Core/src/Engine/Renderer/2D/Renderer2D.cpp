@@ -1,7 +1,7 @@
 #include "bltpch.h"
 #include "Renderer2D.h"
-#include "Graphics/Resources/Meshes/Materials/Shaders/ShaderFactory.h"
-#include "Graphics/Resources/Meshes/Materials/Shaders/Components/ShaderFuncs.h"
+#include "Graphics/Assets/Meshes/Materials/Shaders/ShaderFactory.h"
+#include "Graphics/Assets/Meshes/Materials/Shaders/Components/ShaderFuncs.h"
 #include "../Graphics.h"
 
 namespace Bolt
@@ -128,7 +128,7 @@ namespace Bolt
 		}
 	}
 
-	void Renderer2D::DrawSprite(float x0, float y0, float width, float height, const Color& color, float rotation, const ResourcePtr<Texture2D>& texture, const TextureFrame& frame)
+	void Renderer2D::DrawSprite(float x0, float y0, float width, float height, const Color& color, float rotation, const AssetHandle<Texture2D>& texture, const TextureFrame& frame)
 	{
 		SpriteBatch* currentBatch = nullptr;
 		bool isTextured = texture != nullptr;
@@ -228,12 +228,12 @@ namespace Bolt
 		DrawSprite(x, y, width, height, color, rotation);
 	}
 
-	void Renderer2D::DrawTexture(float x, float y, float width, float height, const ResourcePtr<Texture2D>& texture, float rotation, const TextureFrame& frame)
+	void Renderer2D::DrawTexture(float x, float y, float width, float height, const AssetHandle<Texture2D>& texture, float rotation, const TextureFrame& frame)
 	{
 		DrawSprite(x, y, width, height, Color::White, rotation, texture, frame);
 	}
 
-	void Renderer2D::DrawString(const std::string& string, const ResourcePtr<Font>& font, float x, float y, const Color& color)
+	void Renderer2D::DrawString(const std::string& string, const AssetHandle<Font>& font, float x, float y, const Color& color)
 	{
 
 	}
@@ -243,7 +243,7 @@ namespace Bolt
 
 	}
 
-	void Renderer2D::DrawEllipse(float x, float y, float width, float height, const Color& color, const ResourcePtr<Texture2D>& texture, const TextureFrame& frame)
+	void Renderer2D::DrawEllipse(float x, float y, float width, float height, const Color& color, const AssetHandle<Texture2D>& texture, const TextureFrame& frame)
 	{
 
 	}

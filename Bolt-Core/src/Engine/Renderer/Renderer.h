@@ -1,6 +1,6 @@
 #pragma once
 #include "RenderingContext.h"
-#include "Graphics/Resources/Meshes/Mesh.h"
+#include "Graphics/Assets/Meshes/Mesh.h"
 #include "Graphics/Framebuffer.h"
 #include "RenderPass.h"
 #include "RenderRoutine.h"

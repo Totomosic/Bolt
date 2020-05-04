@@ -6,7 +6,7 @@ namespace Bolt
 
 	struct XMLnode;
 
-	// Class that represents the path to a child node, use optional {index} if multiple children exist with same name. Eg. Resources/Textures/Texture{0}/Width
+	// Class that represents the path to a child node, use optional {index} if multiple children exist with same name. Eg. Assets/Textures/Texture{0}/Width
 	class BLT_API XMLNodePath
 	{
 	public:

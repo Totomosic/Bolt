@@ -14,9 +14,9 @@ namespace Bolt
 		bool m_Obfuscate;
 
 	public:
-		UITextInput(UIManager* manager, UIElement* parent, float width, float height, const ResourcePtr<Font>& font, const Color& fontColor,
+		UITextInput(UIManager* manager, UIElement* parent, float width, float height, const AssetHandle<Font>& font, const Color& fontColor,
 			std::unique_ptr<Material>&& backgroundMaterial, Transform transform = Transform());
-		UITextInput(UIManager* manager, UIElement* parent, std::unique_ptr<UIElement>&& backgroundElement, const ResourcePtr<Font>& font, const Color& fontColor, Transform transform = Transform());
+		UITextInput(UIManager* manager, UIElement* parent, std::unique_ptr<UIElement>&& backgroundElement, const AssetHandle<Font>& font, const Color& fontColor, Transform transform = Transform());
 
 		UIText& GetTextElement() const;
 		UIElement& GetBackgroundElement() const;

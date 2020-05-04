@@ -5,13 +5,13 @@
 namespace Bolt
 {
 
-	UITextInput::UITextInput(UIManager* manager, UIElement* parent, float width, float height, const ResourcePtr<Font>& font, const Color& fontColor, std::unique_ptr<Material>&& backgroundMaterial, Transform transform)
+	UITextInput::UITextInput(UIManager* manager, UIElement* parent, float width, float height, const AssetHandle<Font>& font, const Color& fontColor, std::unique_ptr<Material>&& backgroundMaterial, Transform transform)
 		: UITextInput(manager, parent, std::make_unique<UIRectangle>(manager, nullptr, width, height, std::move(backgroundMaterial)), font, fontColor, std::move(transform))
 	{
 		
 	}
 
-	UITextInput::UITextInput(UIManager* manager, UIElement* parent, std::unique_ptr<UIElement>&& backgroundElement, const ResourcePtr<Font>& font, const Color& fontColor, Transform transform)
+	UITextInput::UITextInput(UIManager* manager, UIElement* parent, std::unique_ptr<UIElement>&& backgroundElement, const AssetHandle<Font>& font, const Color& fontColor, Transform transform)
 		: UIElement(manager, parent), m_Text(nullptr), m_Background(nullptr), m_String(""), m_Obfuscate(false)
 	{
 		SetEntity(GetEntityFactory().CreateTransform(std::move(transform)));
