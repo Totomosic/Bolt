@@ -32,7 +32,7 @@ namespace Bolt
 		const MaterialManager& Materials() const;
 		const FontManager& Fonts() const;
 		const TextureManager& Textures() const;
-		const BasicModels& Models() const;
+		const BasicModels& Meshes() const;
 
 		void LoadPack(const FilePath& resourcePack, std::function<void(const ResourcePack&)> callback);
 

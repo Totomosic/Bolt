@@ -14,7 +14,7 @@ namespace Bolt
 	public:
 		RectangleFactory(float width = 1.0f, float height = 1.0f, const Bolt::Color& color = Color::White);
 
-		ModelData GenerateVertices() const override;
+		MeshData GenerateVertices() const override;
 
 	};
 

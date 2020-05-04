@@ -12,10 +12,10 @@ namespace Bolt
 
 	}
 
-	ModelData LineFactory::GenerateVertices() const
+	MeshData LineFactory::GenerateVertices() const
 	{
 		BLT_PROFILE_FUNCTION();
-		ModelData result;
+		MeshData result;
 		result.Vertices = std::make_unique<VertexArray>(RenderMode::Lines);
 		result.Indices = std::make_unique<IndexArray>();
 		uint32_t indices[2] = { 0, 1 };

@@ -12,13 +12,13 @@ namespace Bolt
 		
 	}
 
-	ModelData RectangleFactory::GenerateVertices() const
+	MeshData RectangleFactory::GenerateVertices() const
 	{
 		BLT_PROFILE_FUNCTION();
 		float w = Width / 2.0f;
 		float h = Height / 2.0f;
 
-		ModelData result;
+		MeshData result;
 		result.Vertices = std::make_unique<VertexArray>();
 		result.Indices = std::make_unique<IndexArray>();
 		uint32_t indices[6] = { 0, 1, 2, 0, 2, 3 };

@@ -1,6 +1,6 @@
 #pragma once
 #include "../../Components/Transform.h"
-#include "Graphics/Assets/Meshes/Mesh.h"
+#include "Graphics/Assets/Meshes/Model.h"
 #include "Graphics/Assets/Meshes/Factories/TextFactory.h"
 
 namespace Bolt

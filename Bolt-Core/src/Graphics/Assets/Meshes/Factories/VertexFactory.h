@@ -1,5 +1,5 @@
 #pragma once
-#include "../ModelData.h"
+#include "../MeshData.h"
 
 namespace Bolt
 {
@@ -7,7 +7,7 @@ namespace Bolt
 	struct BLT_API VertexFactory
 	{
 	public:
-		virtual ModelData GenerateVertices() const = 0;
+		virtual MeshData GenerateVertices() const = 0;
 
 	};
 

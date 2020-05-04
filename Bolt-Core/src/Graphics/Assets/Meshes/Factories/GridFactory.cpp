@@ -12,10 +12,10 @@ namespace Bolt
 
 	}
 
-	ModelData GridFactory::GenerateVertices() const
+	MeshData GridFactory::GenerateVertices() const
 	{
 		BLT_PROFILE_FUNCTION();
-		ModelData result;
+		MeshData result;
 		result.Vertices = std::make_unique<VertexArray>(RenderMode::Triangles);
 		result.Indices = std::make_unique<IndexArray>();
 		int vertexCount = xVertices * zVertices;

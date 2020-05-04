@@ -49,14 +49,14 @@ namespace Bolt
 
 	void UIText::UpdateModel()
 	{
-		Model* model = new Model(TextFactory(m_Text, m_Font, Color::White, m_Horizontal, m_Vertical), false);
-		GetMesh().Models[0].Model = AssetHandle<Model>(model, true);
+		Mesh* mesh = new Mesh(TextFactory(m_Text, m_Font, Color::White, m_Horizontal, m_Vertical), false);
+		GetModel().Meshes[0].Mesh = AssetHandle<Mesh>(mesh, true);
 	}
 
 	void UIText::UpdateMaterial()
 	{
 		std::unique_ptr<Material> material = AssetManager::Get().Materials().Font(m_Font, m_Color);
-		GetMesh().Materials[0] = std::move(material);
+		GetModel().Materials[0] = std::move(material);
 	}
 
 }

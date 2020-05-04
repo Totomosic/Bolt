@@ -14,7 +14,7 @@ namespace Bolt
 	public:
 		SphereFactory(float radius, int sectorCount = 360, const Bolt::Color& color = Color::White);
 
-		ModelData GenerateVertices() const override;
+		MeshData GenerateVertices() const override;
 
 	};
 

@@ -16,10 +16,10 @@ namespace Bolt
 	BasicModels::BasicModels(AssetManager* manager)
 	{
 		BLT_PROFILE_FUNCTION();
-		m_SquareModel = manager->Register(std::make_unique<Model>(RectangleFactory(1, 1, Color::White)));
-		m_CircleModel = manager->Register(std::make_unique<Model>(EllipseFactory(2, 2, 360, Color::White)));
-		m_CubeModel = manager->Register(std::make_unique<Model>(CuboidFactory(1, 1, 1, Color::White)));
-		m_SphereModel = manager->Register(std::make_unique<Model>(SphereFactory(1, 100, Color::White)));
+		m_SquareModel = manager->Register(std::make_unique<Mesh>(RectangleFactory(1, 1, Color::White)));
+		m_CircleModel = manager->Register(std::make_unique<Mesh>(EllipseFactory(2, 2, 360, Color::White)));
+		m_CubeModel = manager->Register(std::make_unique<Mesh>(CuboidFactory(1, 1, 1, Color::White)));
+		m_SphereModel = manager->Register(std::make_unique<Mesh>(SphereFactory(1, 100, Color::White)));
 	}
 
 	const AssetHandle<Model>& BasicModels::Square() const

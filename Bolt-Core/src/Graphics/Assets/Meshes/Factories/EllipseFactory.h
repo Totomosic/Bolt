@@ -15,7 +15,7 @@ namespace Bolt
 	public:
 		EllipseFactory(float width = 1.0f, float height = 1.0f, int verticesPerRev = 360, const Bolt::Color& color = Color::White);
 
-		ModelData GenerateVertices() const override;
+		MeshData GenerateVertices() const override;
 
 	};
 

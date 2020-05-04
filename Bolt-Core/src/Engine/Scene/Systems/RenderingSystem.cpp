@@ -70,11 +70,11 @@ namespace Bolt
 			Renderer& renderer = Graphics::Get().GetRenderer();
 			renderer.BeginScene(GetRenderTarget(), c, context);
 
-			for (const EntityHandle& entity : manager.GetEntitiesWith<Transform, Mesh>())
+			for (const EntityHandle& entity : manager.GetEntitiesWith<Transform, Model>())
 			{
 				ComponentHandle<Transform> transform = entity.GetComponent<Transform>();
-				ComponentHandle<Mesh> mesh = entity.GetComponent<Mesh>();
-				renderer.Submit(*mesh, transform->TransformMatrix());
+				ComponentHandle<Model> model = entity.GetComponent<Model>();
+				renderer.Submit(*model, transform->TransformMatrix());
 			}
 
 			renderer.EndScene();

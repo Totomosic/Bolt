@@ -81,16 +81,16 @@ namespace Bolt
 		return m_Entity.HasComponent<Mesh>();
 	}
 
-	const Mesh& UIElement::GetMesh() const
+	const Model& UIElement::GetModel() const
 	{
 		BLT_ASSERT(m_Entity.IsValid(), "Entity is not valid");
-		return *m_Entity.GetComponent<Mesh>();
+		return *m_Entity.GetComponent<Model>();
 	}
 
-	Mesh& UIElement::GetMesh()
+	Model& UIElement::GetModel()
 	{
 		BLT_ASSERT(m_Entity.IsValid(), "Entity is not valid");
-		return *m_Entity.GetComponent<Mesh>();
+		return *m_Entity.GetComponent<Model>();
 	}
 
 	bool UIElement::HasFocus() const
@@ -165,9 +165,9 @@ namespace Bolt
 		{
 			return false;
 		}
-		const Mesh& mesh = GetMesh();
+		const Model& model = GetModel();
 		const Transform& transform = GetTransform();
-		Cuboid bounds = mesh.ComputeBoundingBox(transform.TransformMatrix());
+		Cuboid bounds = model.ComputeBoundingBox(transform.TransformMatrix());
 		return point.x >= bounds.Min.x && point.x <= bounds.Max.x && point.y >= bounds.Min.y && point.y <= bounds.Max.y;
 	}
 

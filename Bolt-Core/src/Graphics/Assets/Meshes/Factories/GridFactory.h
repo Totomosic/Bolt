@@ -16,7 +16,7 @@ namespace Bolt
 	public:
 		GridFactory(float width, float depth, int xVertices = 2, int zVertices = 2, const Bolt::Color& color = Color::White);
 
-		ModelData GenerateVertices() const override;
+		MeshData GenerateVertices() const override;
 
 	};
 

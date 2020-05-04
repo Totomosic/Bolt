@@ -1,33 +1,35 @@
 #pragma once
-#include "Factories/VertexFactory.h"
-#include "../Resource.h"
-#include "Face.h"
+#include "Materials/Material.h"
+#include "Mesh.h"
+#include "../AssetHandle.h"
 
 namespace Bolt
 {
 
-	class BLT_API Model : public Resource
+	struct BLT_API Model
 	{
-	private:
-		ModelData m_Data;
+	public:
+		struct BLT_API MeshGroup
+		{
+		public:
+			AssetHandle<Bolt::Mesh> Mesh = nullptr;
+			Matrix4f Transform = Matrix4f::Identity();
+			std::vector<int> MaterialIndices = { 0 }; // size should equal the number of index buffers that the mesh has
+		};
 
 	public:
-		Model(const VertexFactory& factory, bool calculateTangents = true);
-		Model(ModelData&& data, bool calculateTangents = true);
+		std::vector<MeshGroup> Meshes;
+		std::vector<std::unique_ptr<Material>> Materials;
 
-		const ModelData& Data() const;
-		ModelData& Data();
-		int VertexCount() const;
-		int IndexCount() const;
-		int IndexBufferCount() const;
-		int TriangleCount() const;
+	public:
+		Model();
+		Model(const Model& other);
+		Model& operator=(const Model& other);
+		Model(Model&& other);
+		Model& operator=(Model&& other);
+		~Model() = default;
 
-		std::unique_ptr<Resource> Clone() const override;
-
-		void CalculateTangents(ScopedVertexMap& vertices, ScopedIndexMap& indices) const;
-
-	private:
-		int CalculateBufferIndex(int triangleIndex) const;
+		Cuboid ComputeBoundingBox(const Matrix4f& transform = Matrix4f::Identity()) const;
 
 	};
 

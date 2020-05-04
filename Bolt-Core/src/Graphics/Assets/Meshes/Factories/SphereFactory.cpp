@@ -12,10 +12,10 @@ namespace Bolt
 	
 	}
 
-	ModelData SphereFactory::GenerateVertices() const
+	MeshData SphereFactory::GenerateVertices() const
 	{
 		BLT_PROFILE_FUNCTION();
-		ModelData result;
+		MeshData result;
 		result.Vertices = std::make_unique<VertexArray>();
 		result.Indices = std::make_unique<IndexArray>();
 		IndexBuffer& indexBuffer = result.Indices->AddIndexBuffer(std::make_unique<IndexBuffer>(6 * (SectorCount * (SectorCount - 1))));

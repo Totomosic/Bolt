@@ -6,7 +6,7 @@
 namespace Bolt
 {
 
-	struct BLT_API ModelData
+	struct BLT_API MeshData
 	{
 	public:
 		std::unique_ptr<VertexArray> Vertices;

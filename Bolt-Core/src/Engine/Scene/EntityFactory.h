@@ -4,7 +4,7 @@
 #include "BoltLib/Color.h"
 
 #include "Graphics/Assets/Meshes/Materials/Material.h"
-#include "Graphics/Assets/Meshes/Mesh.h"
+#include "Graphics/Assets/Meshes/Model.h"
 #include "Graphics/Assets/Meshes/Factories/TextFactory.h"
 
 namespace Bolt
@@ -27,8 +27,8 @@ namespace Bolt
 		EntityHandle Camera(const Matrix4f& projection, Transform transform = Transform()) const;
 		EntityHandle Camera(Transform transform = Transform()) const;
 
-		EntityHandle CreateMesh(Mesh mesh, Transform transform = Transform()) const;
-		EntityHandle CreateMesh(AssetHandle<const Model> model, std::unique_ptr<Material>&& material, const Matrix4f& transformMatrix = Matrix4f::Identity(), Transform transform = Transform()) const;
+		EntityHandle CreateModel(Model model, Transform transform = Transform()) const;
+		EntityHandle CreateModel(AssetHandle<Mesh> mesh, std::unique_ptr<Material>&& material, const Matrix4f& transformMatrix = Matrix4f::Identity(), Transform transform = Transform()) const;
 
 		EntityHandle Rectangle(float width, float height, const Color& color, Transform transform = Transform()) const;
 		EntityHandle Rectangle(float width, float height, std::unique_ptr<Material>&& material, Transform transform = Transform()) const;

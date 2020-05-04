@@ -39,7 +39,7 @@ namespace Bolt
 		return m_Textures;
 	}
 
-	const BasicModels& AssetManager::Models() const
+	const BasicModels& AssetManager::Meshes() const
 	{
 		return m_Models;
 	}
@@ -163,8 +163,8 @@ namespace Bolt
 
 	void AssetManager::LoadModelFile(ResourceFile& resourceFile)
 	{
-		resourceFile.Id = RegisterGetId(std::make_unique<Model>(ModelData()));
-		Model* ptr = (Model*)m_Resources[resourceFile.Id].get();
+		resourceFile.Id = RegisterGetId(std::make_unique<Mesh>(MeshData()));
+		Mesh* ptr = (Mesh*)m_Resources[resourceFile.Id].get();
 		Task t = TaskManager::Get().Run([resourceFile{ std::move(resourceFile) }]()
 			{
 				int vertexDimension = std::stoi(resourceFile.Attributes.GetChild("vertices").Attributes.at("dim").c_str());
@@ -201,7 +201,7 @@ namespace Bolt
 				std::vector<float>& texcoords = std::get<2>(result);
 				std::vector<uint32_t>& indices = std::get<3>(result);
 				int vertexDimension = 3;
-				ModelData data;
+				MeshData data;
 				data.Indices = std::make_unique<IndexArray>();
 				data.Indices->AddIndexBuffer(std::make_unique<IndexBuffer>(indices.data(), indices.size()));
 				data.Vertices = std::make_unique<VertexArray>();

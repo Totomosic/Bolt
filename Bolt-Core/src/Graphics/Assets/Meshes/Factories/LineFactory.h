@@ -14,7 +14,7 @@ namespace Bolt
 	public:
 		LineFactory(const Vector3f& direction, float length, const Bolt::Color& color = Color::White);
 
-		ModelData GenerateVertices() const override;
+		MeshData GenerateVertices() const override;
 
 	};
 

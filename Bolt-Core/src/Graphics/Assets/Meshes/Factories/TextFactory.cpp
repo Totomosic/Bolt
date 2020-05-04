@@ -12,7 +12,7 @@ namespace Bolt
 
 	}
 
-	ModelData TextFactory::GenerateVertices() const
+	MeshData TextFactory::GenerateVertices() const
 	{
 		BLT_PROFILE_FUNCTION();
 		std::vector<Font::FontCharacter> characters = TextFont->GetCharacters(Text);
@@ -21,7 +21,7 @@ namespace Bolt
 		float w = size.x / 2.0f;
 		float h = -height / 2.0f;
 
-		ModelData result;
+		MeshData result;
 		result.Vertices = std::make_unique<VertexArray>();
 		result.Indices = std::make_unique<IndexArray>();
 		IndexBuffer& indexBuffer = result.Indices->AddIndexBuffer(std::make_unique<IndexBuffer>(6 * characters.size()));

@@ -32,7 +32,7 @@ namespace Bolt
 	public:
 		TextFactory(const std::string& text, const AssetHandle<Font>& font, const Bolt::Color& color = Color::White, AlignH horizontalAlignment = AlignH::Center, AlignV verticalAlignment = AlignV::Center);
 
-		ModelData GenerateVertices() const override;
+		MeshData GenerateVertices() const override;
 
 	};
 

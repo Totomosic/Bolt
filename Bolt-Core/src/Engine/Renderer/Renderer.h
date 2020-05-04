@@ -1,6 +1,6 @@
 #pragma once
 #include "RenderingContext.h"
-#include "Graphics/Assets/Meshes/Mesh.h"
+#include "Graphics/Assets/Meshes/Model.h"
 #include "Graphics/Framebuffer.h"
 #include "RenderPass.h"
 #include "RenderRoutine.h"
@@ -46,7 +46,7 @@ namespace Bolt
 		const RendererStats& GetStats() const;
 
 		void BeginScene(const Framebuffer* renderTarget, const RenderCamera& camera, const RenderingContext& context);
-		void Submit(const Mesh& mesh, const Matrix4f& transform);
+		void Submit(const Model& model, const Matrix4f& transform);
 		void EndScene();
 
 		void Flush();

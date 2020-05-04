@@ -45,20 +45,20 @@ namespace Bolt
 		return Camera(Matrix4f::Identity(), std::move(transform));
 	}
 
-	EntityHandle EntityFactory::CreateMesh(Mesh mesh, Transform transform) const
+	EntityHandle EntityFactory::CreateModel(Model model, Transform transform) const
 	{
 		EntityHandle entity = Empty();
-		entity.Assign<Mesh>(std::move(mesh));
+		entity.Assign<Model>(std::move(model));
 		entity.Assign<Transform>(std::move(transform));
 		return entity;
 	}
 
-	EntityHandle EntityFactory::CreateMesh(AssetHandle<const Model> model, std::unique_ptr<Material>&& material, const Matrix4f& transformMatrix, Transform transform) const
+	EntityHandle EntityFactory::CreateModel(AssetHandle<Mesh> mesh, std::unique_ptr<Material>&& material, const Matrix4f& transformMatrix, Transform transform) const
 	{
-		Mesh mesh;
-		mesh.Models.push_back({ std::move(model), transformMatrix, { 0 } });
-		mesh.Materials.push_back(std::move(material));
-		return CreateMesh(std::move(mesh), std::move(transform));
+		Model model;
+		model.Meshes.push_back({ std::move(mesh), transformMatrix, { 0 } });
+		model.Materials.push_back(std::move(material));
+		return CreateModel(std::move(model), std::move(transform));
 	}
 
 	EntityHandle EntityFactory::Rectangle(float width, float height, const Color& color, Transform transform) const
@@ -68,7 +68,7 @@ namespace Bolt
 
 	EntityHandle EntityFactory::Rectangle(float width, float height, std::unique_ptr<Material>&& material, Transform transform) const
 	{
-		return CreateMesh(AssetManager::Get().Models().Square(), std::move(material), Matrix4f::Scale(width, height, 1), std::move(transform));
+		return CreateModel(AssetManager::Get().Meshes().Square(), std::move(material), Matrix4f::Scale(width, height, 1), std::move(transform));
 	}
 
 	EntityHandle EntityFactory::Image(float width, float height, AssetHandle<Texture2D> image, Transform transform) const
@@ -83,7 +83,7 @@ namespace Bolt
 
 	EntityHandle EntityFactory::Ellipse(float width, float height, std::unique_ptr<Material>&& material, Transform transform) const
 	{
-		return CreateMesh(AssetManager::Get().Models().Circle(), std::move(material), Matrix4f::Scale(width / 2.0f, height / 2.0f, 1), std::move(transform));
+		return CreateModel(AssetManager::Get().Meshes().Circle(), std::move(material), Matrix4f::Scale(width / 2.0f, height / 2.0f, 1), std::move(transform));
 	}
 
 	EntityHandle EntityFactory::EllipseImage(float width, float height, AssetHandle<Texture2D> image, Transform transform) const
@@ -103,9 +103,9 @@ namespace Bolt
 
 	EntityHandle EntityFactory::Text(const std::string& text, AssetHandle<Font> font, const Color& color, Transform transform, AlignH horizontal, AlignV vertical) const
 	{
-		ModelData data = TextFactory(text, font, Color::White, horizontal, vertical).GenerateVertices();
-		AssetHandle<const Model> model = AssetHandle<const Model>(new Model(std::move(data), false), true);
-		return CreateMesh(std::move(model), AssetManager::Get().Materials().Font(font, color), Matrix4f::Identity(), std::move(transform));
+		MeshData data = TextFactory(text, font, Color::White, horizontal, vertical).GenerateVertices();
+		AssetHandle<Mesh> mesh = AssetHandle<Mesh>(new Mesh(std::move(data), false), true);
+		return CreateModel(std::move(mesh), AssetManager::Get().Materials().Font(font, color), Matrix4f::Identity(), std::move(transform));
 	}
 
 	EntityHandle EntityFactory::Text(const std::string& text, const Color& color, Transform transform, AlignH horizontal, AlignV vertical) const
@@ -120,7 +120,7 @@ namespace Bolt
 
 	EntityHandle EntityFactory::Cuboid(float width, float height, float depth, std::unique_ptr<Material>&& material, Transform transform) const
 	{
-		return CreateMesh(AssetManager::Get().Models().Cube(), std::move(material), Matrix4f::Scale(width, height, depth), std::move(transform));
+		return CreateModel(AssetManager::Get().Meshes().Cube(), std::move(material), Matrix4f::Scale(width, height, depth), std::move(transform));
 	}
 
 	EntityHandle EntityFactory::Ellipsoid(float width, float height, float depth, const Color& color, Transform transform) const
@@ -130,7 +130,7 @@ namespace Bolt
 
 	EntityHandle EntityFactory::Ellipsoid(float width, float height, float depth, std::unique_ptr<Material>&& material, Transform transform) const
 	{
-		return CreateMesh(AssetManager::Get().Models().Sphere(), std::move(material), Matrix4f::Scale(width / 2.0f, height / 2.0f, depth / 2.0f), std::move(transform));
+		return CreateModel(AssetManager::Get().Meshes().Sphere(), std::move(material), Matrix4f::Scale(width / 2.0f, height / 2.0f, depth / 2.0f), std::move(transform));
 	}
 
 	EntityHandle EntityFactory::Sphere(float radius, const Color& color, Transform transform) const
@@ -150,9 +150,9 @@ namespace Bolt
 
 	EntityHandle EntityFactory::Grid(float width, float height, int xVertices, int yVertices, std::unique_ptr<Material>&& material, Transform transform) const
 	{
-		ModelData data = GridFactory(1.0f, 1.0f, xVertices, yVertices, Color::White).GenerateVertices();
-		AssetHandle<const Model> model = AssetHandle<const Model>(new Model(std::move(data), true), true);
-		return CreateMesh(std::move(model), std::move(material), Matrix4f::Scale(width, 1.0f, height), std::move(transform));
+		MeshData data = GridFactory(1.0f, 1.0f, xVertices, yVertices, Color::White).GenerateVertices();
+		AssetHandle<Mesh> mesh = AssetHandle<Mesh>(new Mesh(std::move(data), true), true);
+		return CreateModel(std::move(mesh), std::move(material), Matrix4f::Scale(width, 1.0f, height), std::move(transform));
 	}
 
 }

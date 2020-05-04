@@ -12,13 +12,13 @@ namespace Bolt
 	
 	}
 
-	ModelData EllipseFactory::GenerateVertices() const
+	MeshData EllipseFactory::GenerateVertices() const
 	{
 		BLT_PROFILE_FUNCTION();
 		float w = Width / 2;
 		float h = Height / 2;
 
-		ModelData result;
+		MeshData result;
 		result.Vertices = std::make_unique<VertexArray>();
 		result.Indices = std::make_unique<IndexArray>();
 		IndexBuffer& indexBuffer = result.Indices->AddIndexBuffer(std::make_unique<IndexBuffer>(3 * VerticesPerRev));
