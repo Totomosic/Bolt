@@ -34,7 +34,6 @@ namespace Bolt
 		const uint32_t& GetIP4Ref() const;
 		uint32_t& GetIP4Ref();
 		static uint32_t CreateAddress(byte b0, byte b1, byte b2, byte b3);
-
 	};
 
 }

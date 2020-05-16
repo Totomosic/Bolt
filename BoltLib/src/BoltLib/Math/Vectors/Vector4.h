@@ -21,13 +21,13 @@ namespace Bolt
 		}
 
 		template<typename Other, typename OtherBase>
-		Vector4(const Vector3<Other, OtherBase> xyz, T w) : Vector4(xyz.x, xyz.y, xyz.z, w)
+		Vector4(const Vector3<Other, OtherBase>& xyz, T w) : Vector4(xyz.x, xyz.y, xyz.z, w)
 		{
 
 		}
 
 		template<typename Other, typename OtherBase>
-		Vector4(Vector3<Other, OtherBase> xyz) : Vector4(xyz.x, xyz.y, xyz.z, (T)1)
+		Vector4(const Vector3<Other, OtherBase>& xyz) : Vector4(xyz.x, xyz.y, xyz.z, (T)1)
 		{
 
 		}
@@ -103,6 +103,7 @@ namespace Bolt
 				return w;
 			default:
 				BLT_ASSERT(false, "Index out of range");
+				return x;
 			}
 		}
 

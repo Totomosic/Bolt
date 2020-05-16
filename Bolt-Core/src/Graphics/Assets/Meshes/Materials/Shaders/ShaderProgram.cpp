@@ -65,14 +65,15 @@ namespace Bolt
 		if (GetTypeDimOfRendererUniform(uniform) == ValueTypeDim::Single)
 		{
 			ShaderVariablePtr var = GetGlobalScope().DeclareVar(GetTypeOfRendererUniform(uniform), "uniform");
-			m_RendererUniforms.push_back({ uniform, var.get(), 0 });
+			RendererUniformPtr ptr;
+			m_RendererUniforms.push_back({ var.get(), 0, uniform });
 			return var;
 		}
 		else
 		{
 			int length = GetArrayLengthOfRendererUniform(uniform);
 			ShaderVariablePtr var = GetGlobalScope().DeclareArray(GetTypeOfRendererUniform(uniform), ShaderLiteral::FromInt(length), "uniform");
-			m_RendererUniforms.push_back({ uniform, var.get(), length });
+			m_RendererUniforms.push_back({ var.get(), length, uniform  });
 			return var;
 		}
 	}

@@ -44,7 +44,7 @@ namespace Bolt
 			iterator.Normal() = Vector3f(0, 0, 1);
 			iterator.TexCoord() = Vector2f(0.5f, 0.5f);
 			iterator.Color() = color;
-			iterator++;
+			++iterator;
 			for (int i = 0; i < VerticesPerRev; i++)
 			{
 				float a = (float)PI * 2 / VerticesPerRev * i;
@@ -54,22 +54,22 @@ namespace Bolt
 				iterator.Normal() = Vector3f(0, 0, 1);
 				iterator.TexCoord() = Vector2f((x + 1) / 2, (y + 1) / 2);
 				iterator.Color() = color;
-				iterator++;
+				++iterator;
 
 				if (i != VerticesPerRev - 1)
 				{
 					*indices = 0;
-					indices++;
+					++indices;
 					*indices = i + 1;
-					indices++;
+					++indices;
 					*indices = i + 2;
-					indices++;
+					++indices;
 				}
 			}
 			*indices = 0;
-			indices++;
+			++indices;
 			*indices = VerticesPerRev;
-			indices++;
+			++indices;
 			*indices = 1;
 		}
 

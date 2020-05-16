@@ -1,5 +1,6 @@
 #include "bltpch.h"
-#include "ZoomAnimator.h"
+
+#include "ZoomAnimator.h"
 
 namespace Bolt
 {

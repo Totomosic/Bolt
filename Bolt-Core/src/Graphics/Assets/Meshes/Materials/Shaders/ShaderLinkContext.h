@@ -90,9 +90,9 @@ namespace Bolt
 		{
 		public:
 			bool IsLinked = false;
+			bool RequiresLink = true;
 			id_t UniformIndex = 0;
 			id_t LinkIndex = 0;
-			bool RequiresLink = true;
 		};
 
 	private:

@@ -10,10 +10,10 @@ namespace Bolt
 	struct BLT_API Matrix4
 	{
 	public:
-		// Values stored in column major ie column 0 = 0, 1, 2, 3
+		// Values stored in column major ie Column(0) = [values[0], values[1], values[2], values[3]]
 		union
 		{
-			T values[16];
+			T values[16]{ 0 };
 			struct
 			{
 				T m00;
@@ -57,11 +57,8 @@ namespace Bolt
 				
 		Matrix4()
 			: values()
-		{	
-			for (int i = 0; i < 16; i++)	
-			{	
-				values[i] = (T)0;	
-			}	
+		{
+
 		}	
 
 		template<typename Other, typename OtherBase>
@@ -80,49 +77,49 @@ namespace Bolt
 				
 		Vector4<T> Column(int index) const	
 		{	
-			BLT_ASSERT(index < 4, "Index out of range");	
+			BLT_ASSERT(index >= 0 && index < 4, "Index out of range");
 			return Vector4<T>(values[4 * index + 0], values[4 * index + 1], values[4 * index + 2], values[4 * index + 3]);	
 		}	
 
 		Vector4<T&, T> Column(int index)
 		{
-			BLT_ASSERT(index < 4, "Index out of range");
+			BLT_ASSERT(index >= 0 && index < 4, "Index out of range");
 			return Vector4<T&, T>(values[4 * index + 0], values[4 * index + 1], values[4 * index + 2], values[4 * index + 3]);
 		}
 				
 		Vector4<T> Row(int index) const	
 		{	
-			BLT_ASSERT(index < 4, "Index out of range");	
+			BLT_ASSERT(index >= 0 && index < 4, "Index out of range");
 			return Vector4<T>(values[4 * 0 + index], values[4 * 1 + index], values[4 * 2 + index], values[4 * 3 + index]);	
 		}	
 
 		Vector4<T&, T> Row(int index)
 		{
-			BLT_ASSERT(index < 4, "Index out of range");
+			BLT_ASSERT(index >= 0 && index < 4, "Index out of range");
 			return Vector4<T&, T>(values[4 * 0 + index], values[4 * 1 + index], values[4 * 2 + index], values[4 * 3 + index]);
 		}
 				
 		const T Element(int index) const	
 		{	
-			BLT_ASSERT(index < 16, "Index out of range");	
+			BLT_ASSERT(index >= 0 && index < 16, "Index out of range");
 			return values[index];	
 		}	
 				
 		T& Element(int index)	
 		{	
-			BLT_ASSERT(index < 16, "Index out of range");	
+			BLT_ASSERT(index >= 0 && index < 16, "Index out of range");	
 			return values[index];	
 		}	
 				
 		const T Element(int row, int col) const	
 		{	
-			BLT_ASSERT(row < 4 && col < 4, "Index out of range");	
+			BLT_ASSERT(row >= 0 && row < 4 && col >= 0 && col < 4, "Index out of range");
 			return values[4 * col + row];	
 		}	
 				
 		T& Element(int row, int col)	
 		{	
-			BLT_ASSERT(row < 4 && col < 4, "Index out of range");	
+			BLT_ASSERT(row >= 0 && row < 4 && col >= 0 && col < 4, "Index out of range");	
 			return values[4 * col + row];	
 		}	
 				

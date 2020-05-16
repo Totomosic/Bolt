@@ -40,7 +40,7 @@ namespace Bolt
 			iterator.Normal() = Vector3f(0, 0, 1);
 			iterator.TexCoord() = Vector2f(0, 1);
 			iterator.Color() = color;
-			iterator++;
+			++iterator;
 			iterator.Position() = half;
 			iterator.Normal() = Vector3f(0, 0, 1);
 			iterator.TexCoord() = Vector2f(0, 0);

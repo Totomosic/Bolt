@@ -19,9 +19,9 @@ namespace Bolt
 	struct BLT_API RendererUniformLocation
 	{
 	public:
-		int Location;
+		int Location{};
 		RendererUniform Uniform;
-		bool RequiresLink;
+		bool RequiresLink{ false };
 		int Index = -1;
 	};
 

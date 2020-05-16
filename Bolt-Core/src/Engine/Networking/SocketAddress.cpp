@@ -35,7 +35,7 @@ namespace Bolt
 		{
 			BLT_ERROR("SocketAddress Hostname Error");
 		}
-		else
+		else if (result != nullptr)
 		{
 			while (!result->ai_addr && result->ai_next)
 			{

@@ -173,13 +173,13 @@ namespace Bolt
 	{
 		BLT_PROFILE_FUNCTION();
 		EventManager::Get().FlushAll(); // Flush #1 (likely input events)
-		TimeDelta delta = Time::Get().RenderingTimeline().DeltaTime();
 		{
 			BLT_PROFILE_SCOPE("Update()");
 			Update();
 		}
 		if (SceneManager::Get().HasCurrentScene())
 		{
+			TimeDelta delta = Time::Get().RenderingTimeline().DeltaTime();
 			SceneManager::Get().GetCurrentScene().Update(delta);
 		}
 		{
@@ -201,9 +201,9 @@ namespace Bolt
 			BLT_PROFILE_SCOPE("Update()");
 			Update();
 		}
-		TimeDelta delta = Time::Get().RenderingTimeline().DeltaTime();
 		if (SceneManager::Get().HasCurrentScene())
 		{
+			TimeDelta delta = Time::Get().RenderingTimeline().DeltaTime();
 			SceneManager::Get().GetCurrentScene().Update(delta);
 		}
 		Time::Get().Update();

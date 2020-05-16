@@ -133,15 +133,15 @@ namespace Bolt
 		std::vector<UniformInfo> fragmentUniforms = ProcessShaderSource(fSource);
 
 		CompiledShaderProgram vertexShader;
-		vertexShader.Source = vSource;
+		vertexShader.Source = std::move(vSource);
 		PopulateShaderUniforms(vertexShader, vertexUniforms);
 
 		CompiledShaderProgram geometryShader;
-		geometryShader.Source = gSource;
+		geometryShader.Source = std::move(gSource);
 		PopulateShaderUniforms(geometryShader, geometryUniforms);
 
 		CompiledShaderProgram fragmentShader;
-		fragmentShader.Source = fSource;
+		fragmentShader.Source = std::move(fSource);
 		PopulateShaderUniforms(fragmentShader, fragmentUniforms);
 		
 		if (HasGeometrySource())
@@ -251,7 +251,7 @@ namespace Bolt
 			}
 			else
 			{
-				info.Meta.LinkName = linkName;
+				info.Meta.LinkName = std::move(linkName);
 			}
 			source.erase(linkIndex, eol - linkIndex + 1);
 			linkIndex = source.find("#link", linkIndex);

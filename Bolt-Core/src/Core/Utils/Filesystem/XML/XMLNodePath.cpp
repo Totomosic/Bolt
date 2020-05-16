@@ -7,13 +7,13 @@ namespace Bolt
 {
 
 	XMLNodePath::XMLNodePath()
-		: m_IsValid(false)
+		: m_IsValid(false), m_CurrentNode()
 	{
 
 	}
 
 	XMLNodePath::XMLNodePath(const std::string& path)
-		: m_Path(path), m_IsValid(false)
+		: m_Path(path), m_IsValid(false), m_CurrentNode()
 	{
 
 	}
@@ -71,7 +71,6 @@ namespace Bolt
 				{
 					size_t leftBrace = node.find_first_of('{');
 					size_t rightBrace = node.find_first_of('}');
-					std::string_view indexString = node.substr(leftBrace + 1, rightBrace - leftBrace - 1);
 					node = node.substr(0, leftBrace);
 				}
 				const XMLnode* childNode = currentNode->GetChildren(std::string(node)).at(index);

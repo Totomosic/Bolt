@@ -15,18 +15,18 @@ namespace Bolt
 	public:
 		std::string LinkName;
 		std::string VarName;
-		ValueType Type;
-		ValueTypeDim Dimension;
-		int Length;
+		ValueType Type{};
+		ValueTypeDim Dimension{};
+		int Length{};
 		std::shared_ptr<UniformValueContainer> DefaultValue;
 	};
 
 	struct BLT_API UserUniformPtr
 	{
 	public:
-		std::string LinkName;
-		const ShaderVariable* Var;
-		int Length;
+		std::string LinkName{};
+		const ShaderVariable* Var = nullptr;
+		int Length{};
 		std::shared_ptr<UniformValueContainer> DefaultValue = nullptr;
 	};
 
@@ -41,9 +41,9 @@ namespace Bolt
 	struct BLT_API RendererUniformPtr
 	{
 	public:
-		RendererUniform Uniform;
 		const ShaderVariable* Var;
 		int Length;
+		RendererUniform Uniform;
 	};
 
 	struct BLT_API CompiledShaderProgram

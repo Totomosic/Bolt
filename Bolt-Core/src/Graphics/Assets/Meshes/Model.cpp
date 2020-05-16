@@ -22,12 +22,15 @@ namespace Bolt
 
 	Model& Model::operator=(const Model& other)
 	{
-		Meshes = other.Meshes;
-		Materials.clear();
-		Materials.resize(other.Materials.size());
-		for (const auto& material : other.Materials)
+		if (this != &other)
 		{
-			Materials.push_back(material->Clone());
+			Meshes = other.Meshes;
+			Materials.clear();
+			Materials.resize(other.Materials.size());
+			for (const auto& material : other.Materials)
+			{
+				Materials.push_back(material->Clone());
+			}
 		}
 		return *this;
 	}
@@ -40,8 +43,11 @@ namespace Bolt
 
 	Model& Model::operator=(Model&& other)
 	{
-		Meshes = std::move(other.Meshes);
-		Materials = std::move(other.Materials);
+		if (this != &other)
+		{
+			Meshes = std::move(other.Meshes);
+			Materials = std::move(other.Materials);
+		}
 		return *this;
 	}
 

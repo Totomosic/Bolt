@@ -42,15 +42,15 @@ namespace Bolt
 	struct BLT_API RenderSettings
 	{
 	public:
-		bool UseDepthTest = true;
-		bool UseBlend = true;
-		bool UseCullFace = true;
 		DepthFunction DepthFunc = DepthFunction::Lequal;
 		BlendSrc BlendSrcFunc = BlendSrc::SrcAlpha;
 		BlendDst BlendDstFunc = BlendDst::OneMinusSrcAlpha;
 		CullFace CulledFaces = CullFace::Back;
 		Bolt::PolygonMode PolygonMode = Bolt::PolygonMode::Fill;
 		bool RenderToDepthBuffer = true;
+		bool UseDepthTest = true;
+		bool UseBlend = true;
+		bool UseCullFace = true;
 
 	public:
 		bool operator==(const RenderSettings& other) const;

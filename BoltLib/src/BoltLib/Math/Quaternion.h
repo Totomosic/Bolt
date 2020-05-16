@@ -16,7 +16,6 @@ namespace Bolt
 		Quaternion();
 		Quaternion(const Vector4f& values);
 		Quaternion(float x, float y, float z, float w);
-		Quaternion(const Quaternion& other);
 
 		Matrix4f ToMatrix4f() const;
 		Vector4f ToAngleAxis() const;

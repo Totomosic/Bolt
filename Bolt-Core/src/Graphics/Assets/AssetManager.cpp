@@ -139,10 +139,11 @@ namespace Bolt
 		resourceFile.Id = RegisterGetId(std::make_unique<Texture2D>(width, height));
 		Texture2D* ptr = (Texture2D*)m_Resources[resourceFile.Id].get();
 		std::string data = resourceFile.Attributes.GetChild("data").Data;
-		const std::string& magString = resourceFile.Attributes.GetChild("options").Attributes.at("magnification");
-		const std::string& minString = resourceFile.Attributes.GetChild("options").Attributes.at("minification");
-		const std::string& mipmapString = resourceFile.Attributes.GetChild("options").Attributes.at("mipmaps");
-		const std::string& wrapString = resourceFile.Attributes.GetChild("options").Attributes.at("wrap");
+		const std::unordered_map<std::string, std::string>& attributes = resourceFile.Attributes.GetChild("options").Attributes;
+		const std::string& magString = attributes.at("magnification");
+		const std::string& minString = attributes.at("minification");
+		const std::string& mipmapString = attributes.at("mipmaps");
+		const std::string& wrapString = attributes.at("wrap");
 		BLT_ASSERT(magString == "Nearest" || magString == "Linear", "Invalid Mag Option");
 		BLT_ASSERT(minString == "Nearest" || minString == "Linear", "Invalid Min Option");
 		BLT_ASSERT(mipmapString == "Enabled" || mipmapString == "Disabled", "Invalid Mipmap Option");
@@ -218,7 +219,7 @@ namespace Bolt
 					it[1] = Vector3f(normals[nIndex + 0], normals[nIndex + 1], normals[nIndex + 2]);
 					it[2] = Vector2f(texcoords[tIndex + 0], texcoords[tIndex + 1]);
 					it[3] = Color::White.ToBytes();
-					it++;
+					++it;
 				}
 				ptr->Data() = std::move(data);
 			});		

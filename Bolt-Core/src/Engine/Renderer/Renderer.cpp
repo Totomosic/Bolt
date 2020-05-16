@@ -20,7 +20,7 @@ namespace Bolt
 	{
 		BLT_ASSERT(m_CurrentScene == nullptr, "Current scene has not been ended");
 		size_t index = m_Scenes.size();
-		m_Scenes.push_back(RenderScene());
+		m_Scenes.emplace_back();
 		RenderScene& scene = m_Scenes[index];
 		scene.Camera = camera;
 		scene.Context = context;

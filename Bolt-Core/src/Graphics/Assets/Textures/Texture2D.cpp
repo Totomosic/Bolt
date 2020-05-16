@@ -53,10 +53,7 @@ namespace Bolt
 
 	Texture2D::~Texture2D()
 	{
-		if (Pixels != nullptr)
-		{
-			BLT_DELETE_ARR Pixels;
-		}
+		BLT_DELETE_ARR Pixels;
 	}
 
 	void Texture2D::LoadPixels() const

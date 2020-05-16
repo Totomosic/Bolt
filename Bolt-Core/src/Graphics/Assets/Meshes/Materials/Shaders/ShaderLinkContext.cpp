@@ -11,7 +11,7 @@ namespace Bolt
 		for (int i = 0; i < uniforms.size(); i++)
 		{
 			const UserUniformLocation& uniform = uniforms[i];
-			m_UserUniformLinks[uniform.LinkName] = { false, (id_t)i, 0, uniform.RequiresLink };
+			m_UserUniformLinks[uniform.LinkName] = { false, uniform.RequiresLink, (id_t)i, 0 };
 			if (uniform.DefaultValue != nullptr)
 			{
 				AddLink(uniform.LinkName, uniform.DefaultValue->CreateLinkContainer(m_Shader->GetShader().Id(), uniform.Location));

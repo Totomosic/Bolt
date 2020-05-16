@@ -11,7 +11,7 @@ namespace Bolt
 	}
 
 	Framebuffer::Framebuffer()
-		: m_Id(0), m_Viewport({ 0, 0, 0, 0 }), m_ClearColor(Color::Black)
+		: m_Id(0), m_Viewport({ 0, 0, 0, 0 }), m_ClearColor(Color::Black), m_Samples(0)
 	{
 
 	}

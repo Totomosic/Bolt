@@ -49,22 +49,22 @@ namespace Bolt
 					iterator.TexCoord() = Vector2f((float)x / (xVertices - 1), 1 - (float)z / (zVertices - 1));
 					iterator.Color() = color;
 					iterator.Tangent() = Vector3f(1, 0, 0);
-					iterator++;
+					++iterator;
 
 					if (x < xVertices - 1 && z < zVertices - 1)
 					{
 						*indices = x + xVertices * z;
-						indices++;
+						++indices;
 						*indices = x + xVertices * (z + 1);
-						indices++;
+						++indices;
 						*indices = (x + 1) + xVertices * (z + 1);
-						indices++;
+						++indices;
 						*indices = x + xVertices * z;
-						indices++;
+						++indices;
 						*indices = (x + 1) + xVertices * (z + 1);
-						indices++;
+						++indices;
 						*indices = (x + 1) + xVertices * z;
-						indices++;
+						++indices;
 					}
 				}
 			}

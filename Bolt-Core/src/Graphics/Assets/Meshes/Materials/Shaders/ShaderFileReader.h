@@ -10,18 +10,18 @@ namespace Bolt
 		struct BLT_API UniformMetadata
 		{
 		public:
-			bool IsRenderer = false;
-			RendererUniform Uniform;
 			std::string LinkName;
+			RendererUniform Uniform;
+			bool IsRenderer = false;
 		};
 
 		struct BLT_API UniformInfo
 		{
 		public:
+			UniformMetadata Meta;
 			std::string VariableName;
 			ValueType Type = ValueType::Void;
 			ValueTypeDim Dimension = ValueTypeDim::Single;
-			UniformMetadata Meta;
 			int Length = 0;
 		};
 

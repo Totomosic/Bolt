@@ -5,6 +5,7 @@ namespace Bolt
 {
 
 	ShaderValue::ShaderValue()
+		: m_ValueType(), m_Dimension(ValueTypeDim::Single)
 	{
 	
 	}

@@ -73,7 +73,7 @@ namespace Bolt
 					t = (float)i / SectorCount;
 					iterator.TexCoord() = Vector2f(s, t);
 					iterator.Color() = color;
-					iterator++;
+					++iterator;
 				}
 			}
 
@@ -90,22 +90,22 @@ namespace Bolt
 					if (i != 0)
 					{
 						*indices = (k1);
-						indices++;
+						++indices;
 						*indices = (k2);
-						indices++;
+						++indices;
 						*indices = (k1 + 1);
-						indices++;
+						++indices;
 					}
 
 					// k1+1 => k2 => k2+1
 					if (i != (SectorCount - 1))
 					{
 						*indices = (k1 + 1);
-						indices++;
+						++indices;
 						*indices = (k2);
-						indices++;
+						++indices;
 						*indices = (k2 + 1);
-						indices++;
+						++indices;
 					}
 				}
 			}
