@@ -9,8 +9,9 @@ namespace Bolt
 {
 
 	Layer::Layer()
-		: m_Entities(), m_Systems(m_Entities), m_IsActive(true), m_RenderingSystem(), m_UISystem()
+		: m_Entities(), m_Systems(m_Entities), m_IsActive(true), m_RenderingSystem(), m_UpdateSystem(), m_UISystem()
 	{
+		m_UpdateSystem = m_Systems.Register<UpdateSystem>();
 		m_RenderingSystem = m_Systems.Register<RenderingSystem>();
 	}
 
@@ -101,6 +102,7 @@ namespace Bolt
 	{
 		if (m_IsActive)
 		{
+			Systems().Update(m_UpdateSystem, delta);
 			m_Systems.UpdateAll(delta);
 			if (m_UISystem != nullptr)
 			{

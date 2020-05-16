@@ -1,6 +1,7 @@
 #pragma once
 #include "SystemRegistry.h"
 #include "Systems/RenderingSystem.h"
+#include "Systems/UpdateSystem.h"
 #include "Systems/UIManager.h"
 #include "EntityFactory.h"
 
@@ -15,6 +16,7 @@ namespace Bolt
 		bool m_IsActive;
 
 		SystemRegistry::SystemPtr<RenderingSystem> m_RenderingSystem;
+		SystemRegistry::SystemPtr<UpdateSystem> m_UpdateSystem;
 		SystemRegistry::SystemPtr<UIManager> m_UISystem;
 
 	public:
