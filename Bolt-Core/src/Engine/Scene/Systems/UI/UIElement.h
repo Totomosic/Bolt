@@ -39,8 +39,8 @@ namespace Bolt
 		const Transform& GetTransform() const;
 		Transform& GetTransform();
 		bool HasMesh() const;
-		const Mesh& GetMesh() const;
-		Mesh& GetMesh();
+		const Model& GetModel() const;
+		Model& GetModel();
 		bool HasFocus() const;
 
 		UIElement& AddChild(std::unique_ptr<UIElement>&& element);

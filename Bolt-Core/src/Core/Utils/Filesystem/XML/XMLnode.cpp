@@ -245,7 +245,7 @@ namespace Bolt
 	XMLnode& XMLnode::AddChild(const std::string& name, const std::unordered_map<std::string, std::string>& attributes)
 	{
 		id_t index = Children.size();
-		Children.push_back(XMLnode());
+		Children.emplace_back();
 		XMLnode& child = Children.at(index);
 		child.Name = name;
 		child.Attributes = attributes;

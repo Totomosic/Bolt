@@ -1,7 +1,7 @@
 #include "bltpch.h"
 #include "Renderer2D.h"
-#include "Graphics/Resources/Meshes/Materials/Shaders/ShaderFactory.h"
-#include "Graphics/Resources/Meshes/Materials/Shaders/Components/ShaderFuncs.h"
+#include "Graphics/Assets/Meshes/Materials/Shaders/ShaderFactory.h"
+#include "Graphics/Assets/Meshes/Materials/Shaders/Components/ShaderFuncs.h"
 #include "../Graphics.h"
 
 namespace Bolt
@@ -128,7 +128,7 @@ namespace Bolt
 		}
 	}
 
-	void Renderer2D::DrawSprite(float x0, float y0, float width, float height, const Color& color, float rotation, const ResourcePtr<Texture2D>& texture, const TextureFrame& frame)
+	void Renderer2D::DrawSprite(float x0, float y0, float width, float height, const Color& color, float rotation, const AssetHandle<Texture2D>& texture, const TextureFrame& frame)
 	{
 		SpriteBatch* currentBatch = nullptr;
 		bool isTextured = texture != nullptr;
@@ -172,7 +172,7 @@ namespace Bolt
 
 		Matrix3f matrix = Matrix3f::Rotation(rotation, Vector3f(0, 0, 1));
 		float hw = width / 2.0f;
-		float hh = width / 2.0f;
+		float hh = height / 2.0f;
 
 		vertexPtr->Position = matrix * Vector3f(-hw, hh, 0) + Vector3f(x0 + hw, y0 + hh, 0);
 		vertexPtr->TexCoord = Vector2f(frame.x, frame.y + frame.h);
@@ -228,12 +228,12 @@ namespace Bolt
 		DrawSprite(x, y, width, height, color, rotation);
 	}
 
-	void Renderer2D::DrawTexture(float x, float y, float width, float height, const ResourcePtr<Texture2D>& texture, float rotation, const TextureFrame& frame)
+	void Renderer2D::DrawTexture(float x, float y, float width, float height, const AssetHandle<Texture2D>& texture, float rotation, const TextureFrame& frame)
 	{
 		DrawSprite(x, y, width, height, Color::White, rotation, texture, frame);
 	}
 
-	void Renderer2D::DrawString(const std::string& string, const ResourcePtr<Font>& font, float x, float y, const Color& color)
+	void Renderer2D::DrawString(const std::string& string, const AssetHandle<Font>& font, float x, float y, const Color& color)
 	{
 
 	}
@@ -243,7 +243,7 @@ namespace Bolt
 
 	}
 
-	void Renderer2D::DrawEllipse(float x, float y, float width, float height, const Color& color, const ResourcePtr<Texture2D>& texture, const TextureFrame& frame)
+	void Renderer2D::DrawEllipse(float x, float y, float width, float height, const Color& color, const AssetHandle<Texture2D>& texture, const TextureFrame& frame)
 	{
 
 	}
@@ -259,7 +259,6 @@ namespace Bolt
 		SpriteBatch batch;
 		batch.Vertices = std::make_unique<VertexArray>();
 		batch.Indices = std::make_unique<IndexBuffer>(spriteCount * INDICES_PER_SPRITE, BufferUsage::DynamicDraw);
-		batch.SpriteCount = 0;
 		batch.Vertices->CreateVertexBuffer(spriteCount * VERTICES_PER_SPRITE * layout.Size(), layout, BufferUsage::DynamicDraw);
 		return batch;
 	}
@@ -270,8 +269,8 @@ namespace Bolt
 		m_TextureBatches.clear();
 		m_CurrentBatchIndex = 0;
 		m_CurrentTextureBatchIndex = 0;
-		m_Batches.push_back(CreateSpriteBatch(m_SpritesPerDraw, m_Layout));
-		m_TextureBatches.push_back(CreateSpriteBatch(m_SpritesPerDraw, m_Layout));
+		m_Batches.emplace_back(CreateSpriteBatch(m_SpritesPerDraw, m_Layout));
+		m_TextureBatches.emplace_back(CreateSpriteBatch(m_SpritesPerDraw, m_Layout));
 	}
 
 	void Renderer2D::CreateDefaultShader()

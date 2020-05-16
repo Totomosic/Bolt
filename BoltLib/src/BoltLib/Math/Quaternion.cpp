@@ -19,11 +19,6 @@ namespace Bolt
 			
 	}
 
-	Quaternion::Quaternion(const Quaternion& other) : Quaternion(other.x, other.y, other.z, other.w)
-	{
-		
-	}
-
 	Matrix4f Quaternion::ToMatrix4f() const
 	{
 		return Matrix4f::FromRows(

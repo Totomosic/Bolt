@@ -1,5 +1,5 @@
 #pragma once
-#include "Graphics/Resources/Meshes/Materials/RenderSettings.h"
+#include "Graphics/Assets/Meshes/Materials/RenderSettings.h"
 
 namespace Bolt
 {
@@ -10,12 +10,12 @@ namespace Bolt
 		bool s_DepthEnabled;
 		bool s_BlendEnabled;
 		bool s_CullFaceEnabled;
+		bool s_RenderToDepthBuffer;
 		DepthFunction s_DepthFunction;
 		BlendSrc s_BlendSrc;
 		BlendDst s_BlendDst;
 		CullFace s_CullFace;
 		PolygonMode s_PolygonMode;
-		bool s_RenderToDepthBuffer;
 
 	public:
 		GLState();

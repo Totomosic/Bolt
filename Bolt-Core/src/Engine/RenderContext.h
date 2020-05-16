@@ -1,7 +1,7 @@
 #pragma once
 #include "Engine/User/Input.h"
 #include "Graphics/Window.h"
-#include "Graphics/Resources/ResourceManager.h"
+#include "Graphics/Assets/AssetManager.h"
 #include "Engine/Renderer/Graphics.h"
 #include "Engine/Scene/SceneManager.h"
 
@@ -15,7 +15,7 @@ namespace Bolt
 	private:
 		Input m_Input;
 		Window m_Window;
-		ResourceManager m_Resources;
+		AssetManager m_Resources;
 		Graphics m_Graphics;
 
 	public:
@@ -24,7 +24,7 @@ namespace Bolt
 		Window& GetWindow();
 		Graphics& GetGraphics();
 		Input& GetInput();
-		ResourceManager& GetResourceManager();
+		AssetManager& GetAssetManager();
 
 	};
 

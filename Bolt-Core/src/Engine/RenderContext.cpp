@@ -27,7 +27,7 @@ namespace Bolt
 		return m_Input;
 	}
 
-	ResourceManager& RenderContext::GetResourceManager()
+	AssetManager& RenderContext::GetAssetManager()
 	{
 		return m_Resources;
 	}

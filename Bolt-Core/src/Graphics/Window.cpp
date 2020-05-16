@@ -169,7 +169,7 @@ namespace Bolt
 
 	void Window::Close() const
 	{
- 		glfwSetWindowShouldClose((GLFWwindow*)GetNativeWindow(), true);
+ 		glfwSetWindowShouldClose((GLFWwindow*)GetNativeWindow(), GLFW_TRUE);
 	}
 
 	void Window::Clear(ClearBuffer buffer) const

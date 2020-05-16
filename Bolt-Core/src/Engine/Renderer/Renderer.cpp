@@ -20,7 +20,7 @@ namespace Bolt
 	{
 		BLT_ASSERT(m_CurrentScene == nullptr, "Current scene has not been ended");
 		size_t index = m_Scenes.size();
-		m_Scenes.push_back(RenderScene());
+		m_Scenes.emplace_back();
 		RenderScene& scene = m_Scenes[index];
 		scene.Camera = camera;
 		scene.Context = context;
@@ -29,20 +29,20 @@ namespace Bolt
 		m_CurrentScene = &scene;
 	}
 
-	void Renderer::Submit(const Mesh& mesh, const Matrix4f& transform)
+	void Renderer::Submit(const Model& model, const Matrix4f& transform)
 	{
 		BLT_ASSERT(m_CurrentScene != nullptr, "Current scene has not been started");
-		for (const Mesh::ModelGroup& modelGroup : mesh.Models)
+		for (const Model::MeshGroup& modelGroup : model.Meshes)
 		{
 			Matrix4f fullTransform = transform * modelGroup.Transform;
-			const ModelData& data = modelGroup.Model->Data();
+			const MeshData& data = modelGroup.Mesh->Data();
 			if (data.Indices != nullptr && data.Vertices != nullptr)
 			{
 				if (!data.Vertices->IsMapped() && !data.Indices->IsMapped())
 				{
 					for (int i = 0; i < data.Indices->IndexBufferCount(); i++)
 					{
-						const Material* material = mesh.Materials[modelGroup.MaterialIndices[i]].get();
+						const Material* material = model.Materials[modelGroup.MaterialIndices[i]].get();
 						const ShaderInstance* shader = &material->GetLinkContext().GetShaderInstance();
 						RenderData renderData;
 						renderData.Transform = fullTransform;

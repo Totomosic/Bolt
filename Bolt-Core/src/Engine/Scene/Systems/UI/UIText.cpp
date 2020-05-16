@@ -1,12 +1,12 @@
 #include "bltpch.h"
 #include "UIText.h"
 
-#include "Graphics/Resources/ResourceManager.h"
+#include "Graphics/Assets/AssetManager.h"
 
 namespace Bolt
 {
 
-	UIText::UIText(UIManager* manager, UIElement* parent, const std::string& text, const ResourcePtr<Font>& font, const Color& color, Transform transform, AlignH horizontal, AlignV vertical)
+	UIText::UIText(UIManager* manager, UIElement* parent, const std::string& text, const AssetHandle<Font>& font, const Color& color, Transform transform, AlignH horizontal, AlignV vertical)
 		: UIElement(manager, parent), m_Text(text), m_Color(color), m_Font(font), m_Horizontal(horizontal), m_Vertical(vertical)
 	{
 		EntityHandle entity = GetEntityFactory().Text(text, font, color, std::move(transform), horizontal, vertical);
@@ -18,7 +18,7 @@ namespace Bolt
 		return m_Text;
 	}
 
-	const ResourcePtr<Font>& UIText::GetFont() const
+	const AssetHandle<Font>& UIText::GetFont() const
 	{
 		return m_Font;
 	}
@@ -40,7 +40,7 @@ namespace Bolt
 		UpdateModel();
 	}
 
-	void UIText::SetFont(const ResourcePtr<Font>& font)
+	void UIText::SetFont(const AssetHandle<Font>& font)
 	{
 		m_Font = font;
 		UpdateModel();
@@ -49,14 +49,14 @@ namespace Bolt
 
 	void UIText::UpdateModel()
 	{
-		Model* model = new Model(TextFactory(m_Text, m_Font, Color::White, m_Horizontal, m_Vertical), false);
-		GetMesh().Models[0].Model = ResourcePtr<Model>(model, true);
+		Mesh* mesh = new Mesh(TextFactory(m_Text, m_Font, Color::White, m_Horizontal, m_Vertical), false);
+		GetModel().Meshes[0].Mesh = AssetHandle<Mesh>(mesh, true);
 	}
 
 	void UIText::UpdateMaterial()
 	{
-		std::unique_ptr<Material> material = ResourceManager::Get().Materials().Font(m_Font, m_Color);
-		GetMesh().Materials[0] = std::move(material);
+		std::unique_ptr<Material> material = AssetManager::Get().Materials().Font(m_Font, m_Color);
+		GetModel().Materials[0] = std::move(material);
 	}
 
 }

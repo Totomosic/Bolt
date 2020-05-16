@@ -43,10 +43,7 @@ namespace Bolt
 	Image::~Image()
 	{
 		BLT_PROFILE_FUNCTION();
-		if (Pixels != nullptr)
-		{
-			BLT_DELETE_ARR Pixels;
-		}
+		BLT_DELETE_ARR Pixels;
 	}
 
 	Image Image::Resize(int width, int height, ResizeFilter filter) const
@@ -132,7 +129,7 @@ namespace Bolt
 
 	byte* Image::GetPixel(int x, int y) const
 	{
-		return Pixels + (uintptr_t)((x + y * Width) * Components);
+		return Pixels + (((uintptr_t)x + (uintptr_t)y * (uintptr_t)Width) * (uintptr_t)Components);
 	}
 
 	Image LoadTexture(const FilePath& file, bool flipVertically, bool flipHorizontally)

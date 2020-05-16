@@ -22,20 +22,23 @@ namespace Bolt
 
 	Transform& Transform::operator=(const Transform& other)
 	{
-		SetParent(nullptr);
-		for (Transform* child : other.m_Children)
+		if (this != &other)
 		{
-			child->SetParent(nullptr);
+			SetParent(nullptr);
+			for (Transform* child : other.m_Children)
+			{
+				child->SetParent(nullptr);
+			}
+			m_Children.clear();
+			m_LocalPosition = other.m_LocalPosition;
+			m_LocalOrientation = other.m_LocalOrientation;
+			m_LocalScale = other.m_LocalScale;
+			m_TransformMatrix = other.m_TransformMatrix;
+			m_InverseTransformMatrix = other.m_InverseTransformMatrix;
+			m_IsValid = other.m_IsValid;
+			m_UpdateOnInvalidate = other.m_UpdateOnInvalidate;
+			SetParent(other.m_Parent);
 		}
-		m_Children.clear();
-		m_LocalPosition = other.m_LocalPosition;
-		m_LocalOrientation = other.m_LocalOrientation;
-		m_LocalScale = other.m_LocalScale;
-		m_TransformMatrix = other.m_TransformMatrix;
-		m_InverseTransformMatrix = other.m_InverseTransformMatrix;
-		m_IsValid = other.m_IsValid;
-		m_UpdateOnInvalidate = other.m_UpdateOnInvalidate;
-		SetParent(other.m_Parent);
 		return *this;
 	}
 
@@ -52,24 +55,27 @@ namespace Bolt
 
 	Transform& Transform::operator=(Transform&& other) noexcept
 	{
-		SetParent(nullptr);
-		for (Transform* child : other.m_Children)
+		if (this != &other)
 		{
-			child->SetParent(nullptr);
-		}
-		m_LocalPosition = other.m_LocalPosition;
-		m_LocalOrientation = other.m_LocalOrientation;
-		m_LocalScale = other.m_LocalScale;
-		m_Children = std::move(other.m_Children);
-		m_TransformMatrix = other.m_TransformMatrix;
-		m_InverseTransformMatrix = other.m_InverseTransformMatrix;
-		m_IsValid = other.m_IsValid;
-		m_UpdateOnInvalidate = other.m_UpdateOnInvalidate;
-		SetParent(other.m_Parent);
-		other.m_Children.clear();
-		for (Transform* child : m_Children)
-		{
-			child->SetParent(this);
+			SetParent(nullptr);
+			for (Transform* child : other.m_Children)
+			{
+				child->SetParent(nullptr);
+			}
+			m_LocalPosition = other.m_LocalPosition;
+			m_LocalOrientation = other.m_LocalOrientation;
+			m_LocalScale = other.m_LocalScale;
+			m_Children = std::move(other.m_Children);
+			m_TransformMatrix = other.m_TransformMatrix;
+			m_InverseTransformMatrix = other.m_InverseTransformMatrix;
+			m_IsValid = other.m_IsValid;
+			m_UpdateOnInvalidate = other.m_UpdateOnInvalidate;
+			SetParent(other.m_Parent);
+			other.m_Children.clear();
+			for (Transform* child : m_Children)
+			{
+				child->SetParent(this);
+			}
 		}
 		return *this;
 	}
