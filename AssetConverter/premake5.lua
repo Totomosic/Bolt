@@ -1,13 +1,13 @@
-project "ResourcesLib"
+project "AssetConverter"
     location ""
-    kind "StaticLib"
+    kind "ConsoleApp"
     language "C++"
     cppdialect "C++17"
     staticruntime "on"
     
-    targetdir ("../bin/" .. outputdir .. "/ResourcesLib")
-    objdir ("../bin-int/" .. outputdir .. "/ResourcesLib")
-
+    targetdir ("../bin/" .. outputdir .. "/AssetConverter")
+    objdir ("../bin-int/" .. outputdir .. "/AssetConverter")
+    
     files
     {
         "src/**.h",
@@ -16,15 +16,16 @@ project "ResourcesLib"
     
     includedirs
     {
+        "src",
+        "vendor",
         "../%{IncludeDirs.spdlog}",
         "../%{IncludeDirs.BoltLib}",
-        "vendor",
-        "src"
+        "../%{IncludeDirs.AssetsLib}",
     }
 
     links
     {
-        "BoltLib"
+        "AssetsLib"
     }
 
     filter "system:windows"
@@ -32,11 +33,9 @@ project "ResourcesLib"
 
         defines
         {
-            "BLT_PLATFORM_WINDOWS",
-            "BLT_BUILD_STATIC",
             "_CRT_SECURE_NO_WARNINGS",
-            "NOMINMAX",
-            "GLEW_STATIC"
+            "BLT_PLATFORM_WINDOWS",
+            "BLT_BUILD_STATIC"
         }
 
     filter "system:linux"
@@ -45,28 +44,7 @@ project "ResourcesLib"
         defines
         {
             "BLT_PLATFORM_LINUX",
-            "BLT_BUILD_STATIC",
-            "GLEW_STATIC"
-        }
-
-        links 
-        {
-            "stdc++fs"
-        }
-
-    filter "system:macosx"
-        systemversion "latest"
-
-        defines
-        {
-            "BLT_PLATFORM_MAC",
-            "BLT_BUILD_STATIC",
-            "GLEW_STATIC"
-        }
-
-        links 
-        {
-            "stdc++fs"
+            "BLT_BUILD_STATIC"
         }
 
     filter "configurations:Debug"

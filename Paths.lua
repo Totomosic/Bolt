@@ -3,16 +3,16 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 -- Bolt Directory
 BoltCoreDir = "Bolt-Core/"
 BoltLibDir = "BoltLib/"
-ResourcesLibDir = "ResourcesLib/"
+AssetsLibDir = "AssetsLib/"
 -- Resources Directory
-ResourcesDir = "Bolt-Resources/"
+AssetsDir = "AssetConverter/"
 SolutionDir = "../../"
 
 -- Include directories relative to solution directory
 IncludeDirs = {}
 IncludeDirs["Bolt"] =           BoltCoreDir .. "src"
 IncludeDirs["BoltLib"] =        BoltLibDir .. "src"
-IncludeDirs["ResourcesLib"] =   ResourcesLibDir .. "src"
+IncludeDirs["AssetsLib"] =      AssetsLibDir .. "src"
 IncludeDirs["GLFW"] =           BoltCoreDir .. "vendor/GLFW/include"
 IncludeDirs["Glad"] =           BoltCoreDir .. "vendor/Glad/include"
 IncludeDirs["ImGui"] =          BoltCoreDir .. "vendor/ImGui"

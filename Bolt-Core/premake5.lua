@@ -28,7 +28,7 @@ project "Bolt-Core"
         "../%{IncludeDirs.Lua}",
         "../%{IncludeDirs.Dukglue}",
         "../%{IncludeDirs.BoltLib}",
-        "../%{IncludeDirs.ResourcesLib}",
+        "../%{IncludeDirs.AssetsLib}",
         "src"
     }
 
@@ -43,7 +43,7 @@ project "Bolt-Core"
         "Lua",
         "Dukglue",
         "BoltLib",
-        "ResourcesLib"
+        "AssetsLib"
     }
 
     filter "system:windows"

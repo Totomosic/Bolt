@@ -105,33 +105,41 @@ namespace Bolt
 		calcWorldNormal.Return(ShaderFuncs::Normalize(ShaderFuncs::Mul(inTBNMatrix, calcWorldNormal.GetArgument(0))));
 
 		FunctionScope& fresnelSchlick = fragment.DefineFunction<Vector3f, float, Vector3f>("fresnelSchlick");
-		ShaderVariablePtr oneTakeF = fresnelSchlick.DefineVar(ShaderFuncs::Sub(ShaderLiteral::FromFloat(1.0f), fresnelSchlick.GetArgument(1)));
-		ShaderVariablePtr oneTakeCosTheta = fresnelSchlick.DefineVar(ShaderFuncs::Sub(ShaderLiteral::FromFloat(1.0f), fresnelSchlick.GetArgument(0)));
-		fresnelSchlick.Return(ShaderFuncs::Add(fresnelSchlick.GetArgument(1), ShaderFuncs::Mul(oneTakeF, ShaderFuncs::Pow(oneTakeCosTheta, ShaderLiteral::FromFloat(5.0f)))));
+		{
+			ShaderVariablePtr oneTakeF = fresnelSchlick.DefineVar(ShaderFuncs::Sub(ShaderLiteral::FromFloat(1.0f), fresnelSchlick.GetArgument(1)));
+			ShaderVariablePtr oneTakeCosTheta = fresnelSchlick.DefineVar(ShaderFuncs::Sub(ShaderLiteral::FromFloat(1.0f), fresnelSchlick.GetArgument(0)));
+			fresnelSchlick.Return(ShaderFuncs::Add(fresnelSchlick.GetArgument(1), ShaderFuncs::Mul(oneTakeF, ShaderFuncs::Pow(oneTakeCosTheta, ShaderLiteral::FromFloat(5.0f)))));
+		}
 
 		FunctionScope& distributionGGX = fragment.DefineFunction<float, Vector3f, Vector3f, float>("DistributionGGX");
-		ShaderVariablePtr a = distributionGGX.DefineVar(ShaderFuncs::Mul(distributionGGX.GetArgument(2), distributionGGX.GetArgument(2)));
-		ShaderVariablePtr a2 = distributionGGX.DefineVar(ShaderFuncs::Mul(a, a));
-		ShaderVariablePtr nDotH = distributionGGX.DefineVar(ShaderFuncs::Max(ShaderFuncs::Dot(distributionGGX.GetArgument(0), distributionGGX.GetArgument(1)), ShaderLiteral::FromFloat(0.0f)));
-		ShaderVariablePtr nDotH2 = distributionGGX.DefineVar(ShaderFuncs::Mul(nDotH, nDotH));
-		ShaderVariablePtr dNum = distributionGGX.DefineVar(a2);
-		ShaderVariablePtr dDenom = distributionGGX.DefineVar(ShaderFuncs::Add(ShaderFuncs::Mul(nDotH2, ShaderFuncs::Sub(a2, ShaderLiteral::FromFloat(1.0f))), ShaderLiteral::FromFloat(1.0f)));
-		distributionGGX.SetVariable(dDenom, ShaderFuncs::Mul(ShaderLiteral::Pi(), ShaderFuncs::Mul(dDenom, dDenom)));
-		distributionGGX.Return(ShaderFuncs::Div(dNum, dDenom));
+		{
+			ShaderVariablePtr a = distributionGGX.DefineVar(ShaderFuncs::Mul(distributionGGX.GetArgument(2), distributionGGX.GetArgument(2)));
+			ShaderVariablePtr a2 = distributionGGX.DefineVar(ShaderFuncs::Mul(a, a));
+			ShaderVariablePtr nDotH = distributionGGX.DefineVar(ShaderFuncs::Max(ShaderFuncs::Dot(distributionGGX.GetArgument(0), distributionGGX.GetArgument(1)), ShaderLiteral::FromFloat(0.0f)));
+			ShaderVariablePtr nDotH2 = distributionGGX.DefineVar(ShaderFuncs::Mul(nDotH, nDotH));
+			ShaderVariablePtr dNum = distributionGGX.DefineVar(a2);
+			ShaderVariablePtr dDenom = distributionGGX.DefineVar(ShaderFuncs::Add(ShaderFuncs::Mul(nDotH2, ShaderFuncs::Sub(a2, ShaderLiteral::FromFloat(1.0f))), ShaderLiteral::FromFloat(1.0f)));
+			distributionGGX.SetVariable(dDenom, ShaderFuncs::Mul(ShaderLiteral::Pi(), ShaderFuncs::Mul(dDenom, dDenom)));
+			distributionGGX.Return(ShaderFuncs::Div(dNum, dDenom));
+		}
 
 		FunctionScope& geometrySchlickGGX = fragment.DefineFunction<float, float, float>("GeometrySchlickGGX");
-		ShaderVariablePtr r = geometrySchlickGGX.DefineVar(ShaderFuncs::Add(geometrySchlickGGX.GetArgument(1), ShaderLiteral::FromFloat(1.0f)));
-		ShaderVariablePtr k = geometrySchlickGGX.DefineVar(ShaderFuncs::Div(ShaderFuncs::Mul(r, r), ShaderLiteral::FromFloat(8.0f)));
-		ShaderVariablePtr gNum = geometrySchlickGGX.DefineVar(geometrySchlickGGX.GetArgument(0));
-		ShaderVariablePtr gDenom = geometrySchlickGGX.DefineVar(ShaderFuncs::Add(ShaderFuncs::Mul(gNum, ShaderFuncs::Sub(ShaderLiteral::FromFloat(1.0f), k)), k));
-		geometrySchlickGGX.Return(ShaderFuncs::Div(gNum, gDenom));
+		{
+			ShaderVariablePtr r = geometrySchlickGGX.DefineVar(ShaderFuncs::Add(geometrySchlickGGX.GetArgument(1), ShaderLiteral::FromFloat(1.0f)));
+			ShaderVariablePtr k = geometrySchlickGGX.DefineVar(ShaderFuncs::Div(ShaderFuncs::Mul(r, r), ShaderLiteral::FromFloat(8.0f)));
+			ShaderVariablePtr gNum = geometrySchlickGGX.DefineVar(geometrySchlickGGX.GetArgument(0));
+			ShaderVariablePtr gDenom = geometrySchlickGGX.DefineVar(ShaderFuncs::Add(ShaderFuncs::Mul(gNum, ShaderFuncs::Sub(ShaderLiteral::FromFloat(1.0f), k)), k));
+			geometrySchlickGGX.Return(ShaderFuncs::Div(gNum, gDenom));
+		}
 
 		FunctionScope& geometrySmith = fragment.DefineFunction<float, Vector3f, Vector3f, Vector3f, float>("GeometrySmith");
-		ShaderVariablePtr gNdotV = geometrySmith.DefineVar(ShaderFuncs::Max(ShaderFuncs::Dot(geometrySmith.GetArgument(0), geometrySmith.GetArgument(1)), ShaderLiteral::FromFloat(0.0f)));
-		ShaderVariablePtr gNdotL = geometrySmith.DefineVar(ShaderFuncs::Max(ShaderFuncs::Dot(geometrySmith.GetArgument(0), geometrySmith.GetArgument(2)), ShaderLiteral::FromFloat(0.0f)));
-		ShaderVariablePtr ggx2 = geometrySmith.DefineVar(ShaderFuncs::Call(geometrySchlickGGX, { gNdotV, geometrySmith.GetArgument(3) }));
-		ShaderVariablePtr ggx1 = geometrySmith.DefineVar(ShaderFuncs::Call(geometrySchlickGGX, { gNdotL, geometrySmith.GetArgument(3) }));
-		geometrySmith.Return(ShaderFuncs::Mul(ggx1, ggx2));
+		{
+			ShaderVariablePtr gNdotV = geometrySmith.DefineVar(ShaderFuncs::Max(ShaderFuncs::Dot(geometrySmith.GetArgument(0), geometrySmith.GetArgument(1)), ShaderLiteral::FromFloat(0.0f)));
+			ShaderVariablePtr gNdotL = geometrySmith.DefineVar(ShaderFuncs::Max(ShaderFuncs::Dot(geometrySmith.GetArgument(0), geometrySmith.GetArgument(2)), ShaderLiteral::FromFloat(0.0f)));
+			ShaderVariablePtr ggx2 = geometrySmith.DefineVar(ShaderFuncs::Call(geometrySchlickGGX, { gNdotV, geometrySmith.GetArgument(3) }));
+			ShaderVariablePtr ggx1 = geometrySmith.DefineVar(ShaderFuncs::Call(geometrySchlickGGX, { gNdotL, geometrySmith.GetArgument(3) }));
+			geometrySmith.Return(ShaderFuncs::Mul(ggx1, ggx2));
+		}
 
 		IfScope& alphaThresholdTest = fragment.If(ShaderFuncs::LessThan(masterNodeValues.at("Alpha"), masterNodeValues.at("AlphaThreshold")));
 		alphaThresholdTest.Discard();
