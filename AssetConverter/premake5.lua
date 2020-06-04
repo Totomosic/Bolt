@@ -7,6 +7,7 @@ project "AssetConverter"
     
     targetdir ("../bin/" .. outputdir .. "/AssetConverter")
     objdir ("../bin-int/" .. outputdir .. "/AssetConverter")
+    targetname ("assets")
     
     files
     {
@@ -19,7 +20,9 @@ project "AssetConverter"
         "src",
         "vendor",
         "../%{IncludeDirs.spdlog}",
+        "../%{IncludeDirs.argparse}",
         "../%{IncludeDirs.BoltLib}",
+        "../%{IncludeDirs.AssetsLib}/../vendor",
         "../%{IncludeDirs.AssetsLib}",
     }
 
