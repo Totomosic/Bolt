@@ -13,3 +13,5 @@ jobs:
         working-directory: Scripts
       - name: Make Bolt-Core
         run: make -j4 Bolt-Core
+      - name: Make Bolt-Editor
+        run: make -j4 Bolt-Editor
