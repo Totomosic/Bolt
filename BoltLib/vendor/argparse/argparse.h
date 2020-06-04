@@ -158,7 +158,7 @@ namespace argparse {
 		};
 	}  // namespace detail
 
-	static class ArgumentParser {
+	class ArgumentParser {
 	private:
 	public:
 		class Argument;
@@ -577,16 +577,16 @@ namespace argparse {
 		std::map<std::string, int> _name_map{};
 	};
 
-	static std::ostream& operator<<(std::ostream& os, const ArgumentParser::Result& r) {
+	inline std::ostream& operator<<(std::ostream& os, const ArgumentParser::Result& r) {
 		os << r.what();
 		return os;
 	}
 	template <>
-	static inline std::string ArgumentParser::Argument::get<std::string>() {
+	inline std::string ArgumentParser::Argument::get<std::string>() {
 		return detail::_join(_values.begin(), _values.end());
 	}
 	template <>
-	static inline std::vector<std::string>
+	inline std::vector<std::string>
 		ArgumentParser::Argument::get<std::vector<std::string>>() {
 		return _values;
 	}

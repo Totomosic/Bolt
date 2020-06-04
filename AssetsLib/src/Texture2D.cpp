@@ -3,7 +3,7 @@
 namespace Bolt::Assets
 {
 
-	static struct Texture2DHeader
+	struct Texture2DHeader
 	{
 	public:
 		int Width;

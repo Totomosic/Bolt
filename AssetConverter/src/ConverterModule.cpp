@@ -1,7 +1,7 @@
 #include "ConverterModule.h"
 #include "AssetHeader.h"
 #include "FileType.h"
-#include <filesystem>
+#include "filesystem.h"
 #include "argparse.h"
 
 #include "Converters/Texture2DConverter.h"
@@ -58,7 +58,7 @@ namespace Bolt::Assets
 
 		if (type == FileType::Unknown || assetType == AssetType::Unknown)
 		{
-			BLT_CORE_FATAL("Invalid file type {}", (typeString == USE_FILE_EXTENSION) ? filename.extension() : ("." + typeString));
+			BLT_CORE_FATAL("Invalid file type {}", (typeString == USE_FILE_EXTENSION) ? filename.extension().string() : ("." + typeString));
 			return 1;
 		}
 

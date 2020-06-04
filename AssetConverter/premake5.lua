@@ -44,6 +44,12 @@ project "AssetConverter"
     filter "system:linux"
         systemversion "latest"
 
+        links
+        {
+            "BoltLib",
+            "stdc++fs"
+        }
+
         defines
         {
             "BLT_PLATFORM_LINUX",
