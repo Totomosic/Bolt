@@ -48,6 +48,23 @@ project "Bolt-Editor"
     filter "system:linux"
         systemversion "latest"
 
+        links
+            {
+                "AssetsLib",
+                "BoltLib",
+                "GLFW",
+                "Glad",
+                "ImGui",
+                "Lua",
+                "Dukglue",
+                "FreeType-GL",
+                "FreeType",
+                "stdc++fs",
+                "dl",
+                "X11",
+                "pthread"
+            }
+
         defines
         {
             "BLT_PLATFORM_LINUX",

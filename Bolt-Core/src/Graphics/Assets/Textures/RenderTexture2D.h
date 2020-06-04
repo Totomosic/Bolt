@@ -16,6 +16,9 @@ namespace Bolt
 	public:
 		RenderTexture2D(int width, int height, TextureComponent component = TextureComponent::Color);
 
+		id_t TextureId() const;
+		id_t FramebufferId() const;
+
 	};
 
 }

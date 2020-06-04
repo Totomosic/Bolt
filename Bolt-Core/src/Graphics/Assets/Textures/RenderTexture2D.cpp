@@ -18,4 +18,14 @@ namespace Bolt
 		}
 	}
 
+	id_t RenderTexture2D::TextureId() const
+	{
+		return Texture2D::Id();
+	}
+
+	id_t RenderTexture2D::FramebufferId() const
+	{
+		return Framebuffer::Id();
+	}
+
 }

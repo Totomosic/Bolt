@@ -21,19 +21,16 @@ namespace Bolt
 
 			m_SceneTexture = new RenderTexture2D(GetWindow().Width(), GetWindow().Height());
 			layer.GetRenderer().SetRenderTarget(m_SceneTexture);
-			Graphics::Get().DefaultFramebuffer()->Bind();
 		}
 
 		void Update() override
 		{
-		
 		}
 
 		void Render() override
 		{		
 			m_SceneTexture->Clear();
 			Graphics::Get().RenderScene();
-			Graphics::Get().DefaultFramebuffer()->Bind();
 			static bool dockingEnabled = true;
 			if (dockingEnabled)
 			{
@@ -98,7 +95,7 @@ namespace Bolt
 
 				ImGui::SetNextWindowSizeConstraints(ImVec2{ 200, 200 }, ImGui::GetWindowContentRegionMax());
 				ImGui::Begin("Scene");
-				id_t textureID = m_SceneTexture->Texture2D::Id();
+				id_t textureID = m_SceneTexture->TextureId();
 				ImGui::Image((void*)textureID, ImGui::GetContentRegionAvail());
 				ImGui::End();
 
