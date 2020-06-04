@@ -17,6 +17,7 @@ namespace Bolt
 
 	private:
 		bool m_IsGraphicsEnabled;
+		bool m_UseImGui;
 		id_t m_AppId;
 
 		Timer* m_TickTimer;
@@ -51,6 +52,7 @@ namespace Bolt
 			std::unique_ptr<AppContext> context = std::make_unique<AppContext>(info);
 			SetActiveContext(context.get());
 			std::unique_ptr<T> app = std::make_unique<T>(std::forward<Args>(args)...);
+			app->SetUseImGui(m_UseImGui);
 			app->SetContext(std::move(context));
 			app->m_AppId = m_AppId + m_ChildApps.size() + m_NewApps.size() + 1;
 			m_NewApps.push_back(std::move(app));
@@ -79,11 +81,14 @@ namespace Bolt
 		bool UpdateGraphics();
 		bool UpdateNoGraphics();
 
+		void BeforeRender();
+		void AfterRender();
+
 		void CloseChild(int index);
-
 		void UpdateInput();
-
 		void PushNewApps();
+
+		void SetUseImGui(bool use);
 
 	};
 

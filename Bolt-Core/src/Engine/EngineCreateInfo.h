@@ -9,6 +9,7 @@ namespace Bolt
 	public:
 		bool UseGraphics = true;
 		bool UseSockets = true;
+		bool EnableImGui = false;
 		WindowCreateInfo WindowInfo;
 	};
 

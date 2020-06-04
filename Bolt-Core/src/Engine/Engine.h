@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "EngineCreateInfo.h"
 #include "AppContext.h"
+#include "ImGui/ImGui.h"
 
 namespace Bolt
 {
@@ -16,6 +17,7 @@ namespace Bolt
 		EngineCreateInfo m_CreateInfo;
 
 		AppContext* m_CurrentContext;
+		bool m_ImGuiInitialized;
 
 	public:
 		static Engine& Instance();
@@ -43,6 +45,11 @@ namespace Bolt
 				context = std::make_unique<AppContext>();
 			ApplyCurrentContext(context.get());
 			m_RootApplication = std::make_unique<T>(std::forward<Args>(args)...);
+
+			if (!m_ImGuiInitialized && m_CreateInfo.UseGraphics && m_CreateInfo.EnableImGui && context->HasRenderContext())
+				m_ImGuiInitialized = InitImGui(context->GetRenderContext().GetWindow());
+			
+			m_RootApplication->SetUseImGui(m_ImGuiInitialized);
 			m_RootApplication->SetContext(std::move(context));
 			m_RootApplication->Start();
 		}

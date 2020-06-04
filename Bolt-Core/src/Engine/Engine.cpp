@@ -26,7 +26,7 @@ namespace Bolt
 	}
 
 	Engine::Engine(EngineCreateInfo createInfo)
-		: m_RootApplication(), m_CreateInfo(createInfo), m_CurrentContext(nullptr)
+		: m_RootApplication(), m_CreateInfo(createInfo), m_CurrentContext(nullptr), m_ImGuiInitialized(false)
 	{
 		BLT_PROFILE_BEGIN_SESSION("BoltInit", "BoltInit.json");
 		s_EngineInstance = this;
@@ -38,6 +38,11 @@ namespace Bolt
 		BLT_PROFILE_BEGIN_SESSION("BoltDestroy", "BoltDestroy.json");
 		{
 			BLT_PROFILE_FUNCTION();
+			if (m_ImGuiInitialized)
+			{
+				ShutdownImGui();
+				m_ImGuiInitialized = false;
+			}
 			m_RootApplication.reset(nullptr);
 			Destructor::Run();
 		}

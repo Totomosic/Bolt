@@ -10,6 +10,10 @@
 
 #include "BoltLib/Profiling/Profiling.h"
 
+#include <imgui.h>
+#include <examples/imgui_impl_glfw.h>
+#include <examples/imgui_impl_opengl3.h>
+
 namespace Bolt
 {
 
@@ -182,12 +186,13 @@ namespace Bolt
 			TimeDelta delta = Time::Get().RenderingTimeline().DeltaTime();
 			SceneManager::Get().GetCurrentScene().Update(delta);
 		}
+		BeforeRender();
 		{
 			BLT_PROFILE_SCOPE("Render()");
 			Render();
 			Graphics::Get().GetRenderer().Flush();
 		}
-		GetWindow().SwapBuffers();
+		AfterRender();
 		Time::Get().Update();
 		EventManager::Get().FlushAll(); // Flush #2 (likely other scene/app events)
 		return true;
@@ -208,6 +213,39 @@ namespace Bolt
 		}
 		Time::Get().Update();
 		return true;
+	}
+
+	void Application::BeforeRender()
+	{
+		if (m_UseImGui)
+		{
+			ImGui_ImplOpenGL3_NewFrame();
+			ImGui_ImplGlfw_NewFrame();
+			ImGui::NewFrame();
+		}
+	}
+
+	void Application::AfterRender()
+	{
+		if (m_UseImGui)
+		{
+			Graphics::Get().DefaultFramebuffer()->Bind();
+			ImGuiIO& io = ImGui::GetIO();
+			io.DisplaySize = ImVec2((float)GetWindow().Width(), (float)GetWindow().Height());
+
+			// Rendering
+			ImGui::Render();
+			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+			if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+			{
+				GLFWwindow* currentContext = glfwGetCurrentContext();
+				ImGui::UpdatePlatformWindows();
+				ImGui::RenderPlatformWindowsDefault();
+				glfwMakeContextCurrent(currentContext);
+			}
+		}
+		GetWindow().SwapBuffers();
 	}
 
 	void Application::CloseChild(int index)
@@ -242,6 +280,11 @@ namespace Bolt
 			m_ChildApps.push_back(std::move(app));
 		}
 		m_NewApps.clear();
+	}
+
+	void Application::SetUseImGui(bool use)
+	{
+		m_UseImGui = use;
 	}
 
 }
