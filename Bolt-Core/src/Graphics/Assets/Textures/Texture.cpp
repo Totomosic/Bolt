@@ -5,14 +5,14 @@
 namespace Bolt
 {
 
-	Texture::Texture(int width, int height, TextureTarget target, TextureFormat format, Mipmaps mipmap) : Resource(),
-		m_Id(0), m_Width(width), m_Height(height), m_Target(target), m_Format(format), m_Mipmaps(mipmap)
+	Texture::Texture(int width, int height, TextureTarget target, TextureFormat format, bool generateMipmaps) : Resource(),
+		m_Id(0), m_Width(width), m_Height(height), m_Target(target), m_Format(format), m_HasMipmaps(generateMipmaps)
 	{
 		Create();
 	}
 
 	Texture::Texture(Texture&& other)
-		: m_Id(other.m_Id), m_Width(other.m_Width), m_Height(other.m_Height), m_Target(other.m_Target), m_Format(other.m_Format), m_Mipmaps(other.m_Mipmaps)
+		: m_Id(other.m_Id), m_Width(other.m_Width), m_Height(other.m_Height), m_Target(other.m_Target), m_Format(other.m_Format), m_HasMipmaps(other.m_HasMipmaps)
 	{
 		other.m_Id = 0;
 	}
@@ -26,7 +26,7 @@ namespace Bolt
 		m_Height = other.m_Height;
 		m_Target = other.m_Target;
 		m_Format = other.m_Format;
-		m_Mipmaps = other.m_Mipmaps;
+		m_HasMipmaps = other.m_HasMipmaps;
 		return *this;
 	}
 
@@ -53,19 +53,14 @@ namespace Bolt
 		return m_Id;
 	}
 
-	TextureTarget Texture::Target() const
+	Texture::TextureTarget Texture::Target() const
 	{
 		return m_Target;
 	}
 	
-	TextureFormat Texture::Format() const
+	PixelFormat Texture::Format() const
 	{
-		return m_Format;
-	}
-
-	Mipmaps Texture::MipmapMode() const
-	{
-		return m_Mipmaps;
+		return TextureFormatToPixelFormat(m_Format);
 	}
 
 	int Texture::MipmapCount() const
@@ -79,28 +74,29 @@ namespace Bolt
 
 	bool Texture::HasMipmaps() const
 	{
-		return m_Mipmaps == Mipmaps::Enabled;
+		return m_HasMipmaps;
 	}
 
-	void Texture::SetMinFilter(MinFilter filter) const
+	void Texture::SetMinFilter(PixelFilter filter) const
 	{
 		Bind();
-		GLenum value = (HasMipmaps()) ? (filter == MinFilter::Linear) ? GL_LINEAR_MIPMAP_LINEAR : GL_NEAREST_MIPMAP_LINEAR : (GLenum)filter;
+		GLenum value = (HasMipmaps()) ? ((filter == PixelFilter::Linear) ? GL_LINEAR_MIPMAP_LINEAR : GL_NEAREST_MIPMAP_LINEAR) : (GLenum)PixelFilterToFilter(filter);
 		GL_CALL(glTexParameteri((GLenum)m_Target, GL_TEXTURE_MIN_FILTER, value));
 	}
 
-	void Texture::SetMagFilter(MagFilter filter) const
+	void Texture::SetMagFilter(PixelFilter filter) const
 	{
 		Bind();
-		GL_CALL(glTexParameteri((GLenum)m_Target, GL_TEXTURE_MAG_FILTER, (GLenum)filter));
+		GL_CALL(glTexParameteri((GLenum)m_Target, GL_TEXTURE_MAG_FILTER, (GLenum)PixelFilterToFilter(filter)));
 	}
 
-	void Texture::SetWrapMode(WrapMode mode) const
+	void Texture::SetWrapMode(PixelWrap mode) const
 	{
 		Bind();
-		GL_CALL(glTexParameteri((GLenum)m_Target, GL_TEXTURE_WRAP_R, (GLenum)mode));
-		GL_CALL(glTexParameteri((GLenum)m_Target, GL_TEXTURE_WRAP_S, (GLenum)mode));
-		GL_CALL(glTexParameteri((GLenum)m_Target, GL_TEXTURE_WRAP_T, (GLenum)mode));
+		WrapMode oglMode = PixelWrapToWrapMode(mode);
+		GL_CALL(glTexParameteri((GLenum)m_Target, GL_TEXTURE_WRAP_R, (GLenum)oglMode));
+		GL_CALL(glTexParameteri((GLenum)m_Target, GL_TEXTURE_WRAP_S, (GLenum)oglMode));
+		GL_CALL(glTexParameteri((GLenum)m_Target, GL_TEXTURE_WRAP_T, (GLenum)oglMode));
 	}
 
 	void Texture::Bind(int textureBank) const
@@ -129,13 +125,13 @@ namespace Bolt
 
 	std::unique_ptr<Resource> Texture::Clone() const
 	{
-		std::unique_ptr<Texture> texture = std::make_unique<Texture>(m_Width, m_Height, m_Target, m_Format, m_Mipmaps);
+		std::unique_ptr<Texture> texture = std::make_unique<Texture>(m_Width, m_Height, m_Target, m_Format, m_HasMipmaps);
 		float* imageData = BLT_NEW float[m_Width * m_Height * 4];
 		Bind();
 		Download(imageData, StorageType::Float);
 		texture->Bind();
 		texture->Upload(imageData, 0, 0, m_Width, m_Height, StorageType::Float);
-		if (m_Mipmaps == Mipmaps::Enabled)
+		if (m_HasMipmaps)
 		{
 			texture->GenerateMipmaps();
 		}
@@ -152,26 +148,9 @@ namespace Bolt
 
 	void Texture::GenerateMipmaps() const
 	{
-		m_Mipmaps = Mipmaps::Enabled;
+		m_HasMipmaps = true;
 		Bind();
 		GL_CALL(glGenerateMipmap((GLenum)m_Target));
-	}
-
-	TextureFormat Texture::GetImageFormat(const Image& image)
-	{
-		switch (image.Components)
-		{
-		case 4:
-			return TextureFormat::RGBA;
-		case 3:
-			return TextureFormat::RGB;
-		case 2:
-			return TextureFormat::RG;
-		case 1:
-			return TextureFormat::R;
-		default:
-			return TextureFormat::RGBA;
-		}
 	}
 
 }

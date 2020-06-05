@@ -1,7 +1,6 @@
 #pragma once
+#include "Core/Utils/Filesystem/Filepath.h"
 #include "Resource.h"
-#include "ResourceFile.h"
-#include "ResourcePack.h"
 #include "AssetHandle.h"
 #include "MaterialManager.h"
 #include "FontManager.h"
@@ -11,13 +10,13 @@
 namespace Bolt
 {
 
-	typedef id_t ResourceID;
+	using ResourceId = id_t;
 	class Font;
 
 	class BLT_API AssetManager
 	{
 	private:
-		std::unordered_map<ResourceID, std::unique_ptr<Resource>> m_Resources;
+		std::unordered_map<ResourceId, std::unique_ptr<Resource>> m_Assets;
 		FontManager m_Fonts;
 		TextureManager m_Textures;
 		MaterialManager m_Materials;
@@ -34,33 +33,35 @@ namespace Bolt
 		const TextureManager& Textures() const;
 		const BasicModels& Meshes() const;
 
-		void LoadPack(const FilePath& resourcePack, std::function<void(const ResourcePack&)> callback);
-
-		bool ResourceExists(const ResourceID& id);
+		bool AssetExists(const ResourceId& id) const;
+		ResourceId LoadAsset(const FilePath& assetFile);
 
 		id_t RegisterGetId(std::unique_ptr<Resource>&& resource);
-		AssetHandle<Resource> GetResource(const ResourceID& id);
-		void FreeResource(const ResourceID& id);
+		AssetHandle<Resource> GetAsset(const ResourceId& id);
+		bool FreeAsset(const ResourceId& id);
+
+		template<typename T>
+		AssetHandle<T> LoadAsset(const FilePath& assetFile)
+		{
+			return GetAsset<T>(LoadAsset(assetFile));
+		}
 
 		template<typename T>
 		AssetHandle<T> Register(std::unique_ptr<T>&& resource)
 		{
-			return GetResource<T>(RegisterGetId(std::move(resource)));
+			return GetAsset<T>(RegisterGetId(std::move(resource)));
 		}
 
 		template<typename T>
-		AssetHandle<T> GetResource(const ResourceID& id)
+		AssetHandle<T> GetAsset(const ResourceId& id)
 		{
-			return (AssetHandle<T>)GetResource(id);
+			return (AssetHandle<T>)GetAsset(id);
 		}
 
 	private:
-		id_t FindNextId();
-		ResourceType StringToType(const std::string& str);
+		ResourceId FindNextId() const;
 
-		void LoadFile(ResourceFile& resourceFile);
-		void LoadTexture2DFile(ResourceFile& resourceFile);
-		void LoadModelFile(ResourceFile& resourceFile);
+		ResourceId LoadTexture2DAsset(const void* data, size_t length);
 
 	};
 

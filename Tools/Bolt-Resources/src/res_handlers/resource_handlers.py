@@ -1,3 +1,0 @@
-RESOURCE_HANDLERS = {
-    
-}

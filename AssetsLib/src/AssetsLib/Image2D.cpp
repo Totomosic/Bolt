@@ -1,4 +1,4 @@
-#include "Texture2D.h"
+#include "Image2D.h"
 
 namespace Bolt::Assets
 {
@@ -9,6 +9,7 @@ namespace Bolt::Assets
 		int Width;
 		int Height;
 		PixelFormat Format;
+		Image2D::Options Parameters;
 
 	public:
 		void Serialize(void* data)
@@ -19,9 +20,12 @@ namespace Bolt::Assets
 			*ptr = Height;
 			++ptr;
 			memcpy(ptr, &Format, sizeof(Format));
+			uint8_t* bytePtr = (uint8_t*)ptr;
+			bytePtr += sizeof(Format);
+			SerializeOptions(Parameters, bytePtr);
 		}
 
-		static size_t GetSize() { return sizeof(int) + sizeof(int) + sizeof(PixelFormat); }
+		static size_t GetSize() { return sizeof(int) + sizeof(int) + sizeof(PixelFormat) + GetOptionsSize(); }
 		static Texture2DHeader Deserialize(const void* data)
 		{
 			Texture2DHeader header;
@@ -31,11 +35,14 @@ namespace Bolt::Assets
 			header.Height = *ptr;
 			++ptr;
 			memcpy(&header.Format, ptr, sizeof(header.Format));
+			const uint8_t* bytePtr = (const uint8_t*)ptr;
+			bytePtr += sizeof(header.Format);
+			header.Parameters = DeserializeOptions(bytePtr);
 			return header;
 		}
 	};
 
-	ByteStream Texture2DEngine::CreateBoltFormat(const std::string& assetName, const Texture2D& texture)
+	ByteStream Texture2DEngine::CreateBoltFormat(const std::string& assetName, const Image2D& texture)
 	{
 		AssetHeader assetHeader = CreateAssetHeader(assetName);
 		Texture2DHeader header;
@@ -57,7 +64,7 @@ namespace Bolt::Assets
 		return stream;
 	}
 
-	Asset<Texture2D> Texture2DEngine::ReadBoltFormat(const void* data, size_t length)
+	Asset<Image2D> Texture2DEngine::ReadBoltFormat(const void* data, size_t length)
 	{
 		const uint8_t* ptr = (const uint8_t*)data;
 		size_t assetHeaderLength = AssetHeader::GetSize();
@@ -66,13 +73,14 @@ namespace Bolt::Assets
 			BLT_CORE_ERROR("Length of data is less than size of asset header");
 			return {};
 		}
-		Asset<Texture2D> result;
+		Asset<Image2D> result;
 		AssetHeader header = AssetHeader::Deserialize(data);
 		if (length < assetHeaderLength + header.MetadataLength)
 		{
 			BLT_CORE_ERROR("Invalid Data Format: Length of data is less than size of header");
 			return {};
 		}
+		size_t s = Texture2DHeader::GetSize();
 		Texture2DHeader textureHeader = Texture2DHeader::Deserialize(ptr + assetHeaderLength);
 		int nComponents = GetComponentCount(textureHeader.Format);
 		size_t dataLength = (size_t)textureHeader.Width * (size_t)textureHeader.Height * (size_t)nComponents;
@@ -86,7 +94,6 @@ namespace Bolt::Assets
 		result.Data.Width = textureHeader.Width;
 		result.Data.Height = textureHeader.Height;
 		result.Data.Format = textureHeader.Format;
-		result.Data.Components = nComponents;
 		result.Data.Pixels = std::shared_ptr<uint8_t>(new uint8_t[dataLength / sizeof(uint8_t)]);
 		memcpy(result.Data.Pixels.get(), ptr + assetHeaderLength + header.MetadataLength, dataLength);
 		return result;

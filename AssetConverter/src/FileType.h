@@ -1,5 +1,5 @@
 #pragma once
-#include "AssetHeader.h"
+#include "AssetsLib/AssetHeader.h"
 
 namespace Bolt::Assets
 {

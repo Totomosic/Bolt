@@ -1,8 +1,8 @@
 #pragma once
 #include "Texture.h"
 #include "TextureBounds.h"
-#include "TextureCreateOptions.h"
 #include "BoltLib/Color.h"
+#include "AssetsLib/Image2D.h"
 
 namespace Bolt
 {
@@ -13,27 +13,25 @@ namespace Bolt
 		mutable Color* Pixels;
 
 	public:
-		Texture2D(int width, int height, TextureFormat format, TextureCreateOptions options = TextureCreateOptions());
-		Texture2D(int width, int height, TextureCreateOptions options = TextureCreateOptions());
-		Texture2D(const Image& image, TextureFormat format, TextureCreateOptions options = TextureCreateOptions());
-		Texture2D(const Image& image, TextureCreateOptions options = TextureCreateOptions());
+		Texture2D(int width, int height, PixelFormat format, Image2D::Options options = {});
+		Texture2D(int width, int height, Image2D::Options options = {});
+		Texture2D(int width, int height, const void* pixels, PixelFormat format, Image2D::Options options = {});
+		Texture2D(const Image2D& image);
 		Texture2D(Texture2D&& other);
 		Texture2D& operator=(Texture2D&& other);
 		virtual ~Texture2D() override;
 
 		void LoadPixels() const;
 		void UpdatePixels(bool deletePixels = true) const;
-		Image GetImage() const;
-		Image GetImage(int x, int y, int w, int h) const;
+		Image2D GetImage() const;
+		Image2D GetImage(int x, int y, int w, int h) const;
 
 		void SetPixel(int x, int y, const Color& color);
 		void SetRegion(int x, int y, int w, int h, const Color& color);
-		void SetRegion(int x, int y, int w, int h, const Image& image);
-		void SetRegion(int x, int y, int w, int h, const Image& image, ResizeFilter filter);
-		void SetRegion(int x, int y, int w, int h, const Image& image, int ix, int iy, int iw, int ih, ResizeFilter filter);
+		void SetRegion(int x, int y, int w, int h, const Image2D& image);
 
 	protected:
-		void SetImage(const Image& image) const;
+		void SetImage(const void* pixels) const;
 		bool IsValidXY(int x, int y) const;
 
 	};

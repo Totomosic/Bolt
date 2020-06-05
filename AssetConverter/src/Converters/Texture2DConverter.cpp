@@ -3,7 +3,7 @@
 #include "stb_image.h"
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
-#include "Texture2D.h"
+#include "AssetsLib/Image2D.h"
 #include <fstream>
 
 namespace Bolt::Assets
@@ -16,8 +16,9 @@ namespace Bolt::Assets
 			BLT_CORE_ERROR("Texture file {} does not exist", filepath);
 			return 1;
 		}
-		Texture2D texture;
-		uint8_t* pixels = stbi_load(filepath.string().c_str(), &texture.Width, &texture.Height, &texture.Components, 4);
+		Image2D texture;
+		int nComponents;
+		uint8_t* pixels = stbi_load(filepath.string().c_str(), &texture.Width, &texture.Height, &nComponents, 4);
 		texture.Pixels = std::shared_ptr<uint8_t>(pixels, [](uint8_t* pixels)
 			{
 				stbi_image_free(pixels);
@@ -49,20 +50,20 @@ namespace Bolt::Assets
 		size_t size = std::filesystem::file_size(filepath);
 		char* data = new char[size];
 		file.read(data, size);
-		Asset<Texture2D> texture = Texture2DEngine::ReadBoltFormat(data, size);
+		Asset<Image2D> texture = Texture2DEngine::ReadBoltFormat(data, size);
 		delete[] data;
 		file.close();
 
 		switch (filetype)
 		{
 		case FileType::PNG:
-			stbi_write_png(output.string().c_str(), texture.Data.Width, texture.Data.Height, texture.Data.Components, texture.Data.Pixels.get(), texture.Data.Width * texture.Data.Components);
+			stbi_write_png(output.string().c_str(), texture.Data.Width, texture.Data.Height, GetComponentCount(texture.Data.Format), texture.Data.Pixels.get(), texture.Data.Width * GetComponentCount(texture.Data.Format));
 			break;
 		case FileType::JPG:
-			stbi_write_jpg(output.string().c_str(), texture.Data.Width, texture.Data.Height, texture.Data.Components, texture.Data.Pixels.get(), 1);
+			stbi_write_jpg(output.string().c_str(), texture.Data.Width, texture.Data.Height, GetComponentCount(texture.Data.Format), texture.Data.Pixels.get(), 90);
 			break;
 		case FileType::JPEG:
-			stbi_write_jpg(output.string().c_str(), texture.Data.Width, texture.Data.Height, texture.Data.Components, texture.Data.Pixels.get(), 1);
+			stbi_write_jpg(output.string().c_str(), texture.Data.Width, texture.Data.Height, GetComponentCount(texture.Data.Format), texture.Data.Pixels.get(), 90);
 			break;
 		default:
 			BLT_CORE_ERROR("Invalid file type");

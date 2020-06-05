@@ -10,7 +10,6 @@
 
 #include "Graphics/Window.h"
 #include "Graphics/Assets/AssetManager.h"
-#include "Graphics/Assets/ResourceExtractor.h"
 #include "Graphics/Assets/Meshes/Materials/MaterialGraph/Graphs.h"
 #include "Graphics/Assets/Textures/RenderTexture2D.h"
 #include "Graphics/Assets/Meshes/Materials/Shaders/ShaderFileReader.h"

@@ -6,7 +6,7 @@
 namespace Bolt
 {
 
-	Font::Font(const FilePath& fontFile, float fontSize, int textureWidth, int textureHeight) : Texture2D(textureWidth, textureHeight, TextureFormat::R, { WrapMode::ClampToEdge, MagFilter::Linear, MinFilter::Linear, Mipmaps::Disabled }),
+	Font::Font(const FilePath& fontFile, float fontSize, int textureWidth, int textureHeight) : Texture2D(textureWidth, textureHeight, PixelFormat::R, { PixelWrap::Clamp, PixelFilter::Linear, PixelFilter::Linear, false }),
 		m_FontSize(fontSize)
 	{
 		BLT_PROFILE_FUNCTION();

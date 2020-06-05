@@ -1,6 +1,6 @@
 #pragma once
 #include "FileType.h"
-#include "filesystem.h"
+#include "AssetsLib/filesystem.h"
 
 namespace Bolt::Assets
 {

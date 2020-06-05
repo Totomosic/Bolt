@@ -1,1 +1,0 @@
-call python ..\..\..\Tools\Bolt-Resources\resource_builder.py Resources

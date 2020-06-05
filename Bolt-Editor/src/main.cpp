@@ -16,8 +16,10 @@ namespace Bolt
 			EntityHandle camera = scene.GetFactory().Camera(Matrix4f::Orthographic(0, GetWindow().Width(), 0, GetWindow().Height(), -100, 100));
 			layer.SetActiveCamera(camera);
 
+			AssetHandle<Texture2D> texture = AssetManager::Get().LoadAsset<Texture2D>("res/drawgon.bltasset");
+
 			EntityFactory factory = layer.GetFactory();
-			factory.Rectangle(50, 50, Color::Red, { { 300, 300, 0 } });
+			factory.Image(300, 300, texture, { { 300, 300, 0 } });
 
 			m_SceneTexture = new RenderTexture2D(GetWindow().Width(), GetWindow().Height(), TextureComponent::Color);
 			layer.GetRenderer().SetRenderTarget(m_SceneTexture);

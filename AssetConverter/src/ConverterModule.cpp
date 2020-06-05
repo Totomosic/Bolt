@@ -1,7 +1,7 @@
 #include "ConverterModule.h"
-#include "AssetHeader.h"
+#include "AssetsLib/AssetHeader.h"
 #include "FileType.h"
-#include "filesystem.h"
+#include "AssetsLib/filesystem.h"
 #include "argparse.h"
 
 #include "Converters/Texture2DConverter.h"

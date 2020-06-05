@@ -1,5 +1,6 @@
 #pragma once
 #include "Texture.h"
+#include "AssetsLib/Image2D.h"
 
 namespace Bolt
 {
@@ -9,13 +10,15 @@ namespace Bolt
 	private:
 
 	public:
-		TextureCube(int width, int height, TextureFormat format, Mipmaps mipmaps = Mipmaps::Enabled);
-		TextureCube(int width, int height, Mipmaps mipmaps = Mipmaps::Enabled);
-		TextureCube(const Image& front, const Image& back, const Image& left, const Image& right, const Image& bottom, const Image& top, TextureFormat format, Mipmaps mipmaps = Mipmaps::Enabled);
-		TextureCube(const Image& front, const Image& back, const Image& left, const Image& right, const Image& bottom, const Image& top, Mipmaps mipmaps = Mipmaps::Enabled);
+		TextureCube(int width, int height, TextureFormat format, bool generateMipmaps = true);
+		TextureCube(int width, int height, bool generateMipmaps = true);
+		TextureCube(const Image2D& front, const Image2D& back, const Image2D& left, const Image2D& right, const Image2D& bottom, const Image2D& top,
+			TextureFormat format, bool generateMipmaps = true);
+		TextureCube(const Image2D& front, const Image2D& back, const Image2D& left, const Image2D& right, const Image2D& bottom, const Image2D& top,
+			bool generateMipmaps = true);
 
 	private:
-		void SetImages(const Image& front, const Image& back, const Image& left, const Image& right, const Image& bottom, const Image& top) const;
+		void SetImages(const Image2D& front, const Image2D& back, const Image2D& left, const Image2D& right, const Image2D& bottom, const Image2D& top) const;
 
 	};
 

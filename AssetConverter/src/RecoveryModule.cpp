@@ -1,6 +1,6 @@
 #include "RecoveryModule.h"
 #include "argparse.h"
-#include "filesystem.h"
+#include "AssetsLib/filesystem.h"
 #include "Converters/Texture2DConverter.h"
 
 namespace Bolt::Assets

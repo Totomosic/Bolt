@@ -121,13 +121,13 @@ namespace Bolt
 
 	const Texture2D* Framebuffer::CreateColorBuffer(ColorBuffer buffer)
 	{
-		TextureCreateOptions createOptions = { WrapMode::Repeat, MagFilter::Linear, MinFilter::Linear, Mipmaps::Disabled };
+		Image2D::Options createOptions = { PixelWrap::Repeat, PixelFilter::Linear, PixelFilter::Linear, false };
 		return CreateColorBuffer(AssetHandle<Texture2D>(BLT_NEW Texture2D(Width(), Height(), createOptions), true), buffer);
 	}
 
 	const Texture2D* Framebuffer::CreateDepthBuffer()
 	{
-		TextureCreateOptions createOptions = { WrapMode::Repeat, MagFilter::Linear, MinFilter::Linear, Mipmaps::Disabled };
+		Image2D::Options createOptions = { PixelWrap::Repeat, PixelFilter::Linear, PixelFilter::Linear, false };
 		return CreateDepthBuffer(AssetHandle<Texture2D>(BLT_NEW Texture2D(Width(), Height(), createOptions), true));
 	}
 
@@ -259,9 +259,9 @@ namespace Bolt
 		Bind();
 		texture->Bind();
 		GL_CALL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, texture->Width(), texture->Height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr));
-		texture->SetMagFilter(MagFilter::Linear);
-		texture->SetMinFilter(MinFilter::Linear);
-		texture->SetWrapMode(WrapMode::ClampToEdge);
+		texture->SetMagFilter(PixelFilter::Linear);
+		texture->SetMinFilter(PixelFilter::Linear);
+		texture->SetWrapMode(PixelWrap::Clamp);
 		GL_CALL(glFramebufferTexture2D(GL_FRAMEBUFFER, (GLenum)buffer, GL_TEXTURE_2D, texture->Id(), 0));
 		GL_CALL(glDrawBuffer((GLenum)buffer));
 	}
@@ -273,9 +273,9 @@ namespace Bolt
 		Bind();
 		texture->Bind();
 		GL_CALL(glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, texture->Width(), texture->Height(), 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr));
-		texture->SetMagFilter(MagFilter::Nearest);
-		texture->SetMinFilter(MinFilter::Nearest);
-		texture->SetWrapMode(WrapMode::ClampToEdge);
+		texture->SetMagFilter(PixelFilter::Nearest);
+		texture->SetMinFilter(PixelFilter::Nearest);
+		texture->SetWrapMode(PixelWrap::Clamp);
 		GL_CALL(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, texture->Id(), 0));
 	}
 
