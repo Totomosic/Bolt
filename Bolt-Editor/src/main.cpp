@@ -19,7 +19,7 @@ namespace Bolt
 			EntityFactory factory = layer.GetFactory();
 			factory.Rectangle(50, 50, Color::Red, { { 300, 300, 0 } });
 
-			m_SceneTexture = new RenderTexture2D(GetWindow().Width(), GetWindow().Height());
+			m_SceneTexture = new RenderTexture2D(GetWindow().Width(), GetWindow().Height(), TextureComponent::Color);
 			layer.GetRenderer().SetRenderTarget(m_SceneTexture);
 		}
 
@@ -39,7 +39,7 @@ namespace Bolt
 				bool opt_fullscreen = fullScreenPersistant;
 				static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 				// We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
-		// because it would be confusing to have two docking targets within each others.
+				// because it would be confusing to have two docking targets within each others.
 				ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
 				if (opt_fullscreen)
 				{

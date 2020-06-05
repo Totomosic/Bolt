@@ -38,6 +38,4 @@ namespace Bolt
 
 	};
 
-	Image LoadTexture(const FilePath& file, bool flipVertically = true, bool flipHorizontally = false);
-
 }
