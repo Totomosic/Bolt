@@ -36,3 +36,4 @@ Makefile
 !vendor/bin/
 *.xcodeproj/
 *.xcworkspace/
+imgui.ini
