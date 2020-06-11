@@ -3,49 +3,10 @@
 namespace Bolt::Assets
 {
 
-	struct Texture2DHeader
-	{
-	public:
-		int Width;
-		int Height;
-		PixelFormat Format;
-		Image2D::Options Parameters;
-
-	public:
-		void Serialize(void* data)
-		{
-			int* ptr = (int*)data;
-			*ptr = Width;
-			++ptr;
-			*ptr = Height;
-			++ptr;
-			memcpy(ptr, &Format, sizeof(Format));
-			uint8_t* bytePtr = (uint8_t*)ptr;
-			bytePtr += sizeof(Format);
-			SerializeOptions(Parameters, bytePtr);
-		}
-
-		static size_t GetSize() { return sizeof(int) + sizeof(int) + sizeof(PixelFormat) + GetOptionsSize(); }
-		static Texture2DHeader Deserialize(const void* data)
-		{
-			Texture2DHeader header;
-			const int* ptr = (const int*)data;
-			header.Width = *ptr;
-			++ptr;
-			header.Height = *ptr;
-			++ptr;
-			memcpy(&header.Format, ptr, sizeof(header.Format));
-			const uint8_t* bytePtr = (const uint8_t*)ptr;
-			bytePtr += sizeof(header.Format);
-			header.Parameters = DeserializeOptions(bytePtr);
-			return header;
-		}
-	};
-
 	ByteStream Texture2DEngine::CreateBoltFormat(const std::string& assetName, const Image2D& texture)
 	{
 		AssetHeader assetHeader = CreateAssetHeader(assetName);
-		Texture2DHeader header;
+		Image2DHeader header;
 		header.Width = texture.Width;
 		header.Height = texture.Height;
 		header.Format = texture.Format;
@@ -80,8 +41,8 @@ namespace Bolt::Assets
 			BLT_CORE_ERROR("Invalid Data Format: Length of data is less than size of header");
 			return {};
 		}
-		size_t s = Texture2DHeader::GetSize();
-		Texture2DHeader textureHeader = Texture2DHeader::Deserialize(ptr + assetHeaderLength);
+		size_t s = Image2DHeader::GetSize();
+		Image2DHeader textureHeader = Image2DHeader::Deserialize(ptr + assetHeaderLength);
 		int nComponents = GetComponentCount(textureHeader.Format);
 		size_t dataLength = (size_t)textureHeader.Width * (size_t)textureHeader.Height * (size_t)nComponents;
 		if (length < assetHeaderLength + header.MetadataLength + dataLength)
@@ -110,8 +71,8 @@ namespace Bolt::Assets
 		memset(header.Name, 0, sizeof(header.Name));
 		memcpy(header.Name, assetName.data(), nameLength);
 		header.Name[nameLength] = '\0';
-		header.Type = AssetType::Texture2D;
-		header.MetadataLength = Texture2DHeader::GetSize();
+		header.Type = AssetType::Image2D;
+		header.MetadataLength = Image2DHeader::GetSize();
 		return header;
 	}
 

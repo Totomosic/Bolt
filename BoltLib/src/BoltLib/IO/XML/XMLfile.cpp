@@ -1,5 +1,3 @@
-#include "bltpch.h"
-
 #include "XMLfile.h"
 
 namespace Bolt

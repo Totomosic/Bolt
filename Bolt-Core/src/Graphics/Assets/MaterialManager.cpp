@@ -25,11 +25,11 @@ namespace Bolt
 	{
 		std::unique_ptr<Material> material = m_DefaultGraph.GetMaterial();
 		material->GetLinkContext().Link("Color", baseColor);
-		material->SetIsTransparent(baseColor.a < 0.99f);
+		material->SetIsTransparent(baseColor.a < 0.99999f);
 		return material;
 	}
 
-	std::unique_ptr<Material> MaterialManager::Texture(AssetHandle<Texture2D> texture) const
+	std::unique_ptr<Material> MaterialManager::Texture(const AssetHandle<Texture2D>& texture) const
 	{
 		std::unique_ptr<Material> material = m_TextureGraph.GetMaterial();
 		material->GetLinkContext().Link("Texture", std::move(texture));

@@ -2,7 +2,7 @@
 #include "LuaBoltMethods.h"
 
 #include "Core/Time/Time.h"
-#include "Core/Utils/Filesystem/Filesystem.h"
+#include "BoltLib/IO/Filesystem.h"
 
 namespace Bolt
 {

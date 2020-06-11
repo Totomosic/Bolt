@@ -1,6 +1,6 @@
 #pragma once
 #include "../Texture2D.h"
-#include "Core/Utils/Filesystem/Filesystem.h"
+#include "BoltLib/IO/Filesystem.h"
 #include "BoltLib/Math/Maths.h"
 
 namespace Bolt

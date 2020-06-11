@@ -30,7 +30,7 @@ namespace Bolt
 		MaterialManager(AssetManager* manager);
 
 		std::unique_ptr<Material> Default(const Color& baseColor = Color::White) const;
-		std::unique_ptr<Material> Texture(AssetHandle<Texture2D> texture) const;
+		std::unique_ptr<Material> Texture(const AssetHandle<Texture2D>& texture) const;
 		std::unique_ptr<Material> Font(const AssetHandle<Bolt::Font>& font, const Color& baseColor = Color::White) const;
 		std::unique_ptr<DefaultLightingMaterial> DefaultLighting(const Color& color = Color::White) const;
 		std::unique_ptr<TextureLightingMaterial> TextureLighting(const AssetHandle<Texture2D>& texture) const;

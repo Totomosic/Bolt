@@ -1,5 +1,3 @@
-#include "bltpch.h"
-
 #include "XMLNodePath.h"
 #include "XMLnode.h"
 

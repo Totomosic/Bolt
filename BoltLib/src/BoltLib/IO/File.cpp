@@ -1,5 +1,3 @@
-#include "bltpch.h"
-
 #include "File.h"
 #include "Filesystem.h"
 
@@ -68,10 +66,10 @@ namespace Bolt
 	void File::ReadText(std::string* outString, size_t size) const
 	{
 		uint32_t realSize = std::min(size, GetSize());
-		char* buffer = BLT_NEW char[realSize];
+		char* buffer = new char[realSize];
 		Read(buffer, size);
 		*outString = std::string(buffer, realSize);
-		BLT_DELETE_ARR buffer;
+		delete[] buffer;
 	}
 
 	std::string File::ReadText(size_t size) const

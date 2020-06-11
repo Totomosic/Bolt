@@ -103,6 +103,45 @@ namespace Bolt
 namespace Bolt::Assets
 {
 
+	struct BLT_API Image2DHeader
+	{
+	public:
+		int Width;
+		int Height;
+		PixelFormat Format;
+		Image2D::Options Parameters;
+
+	public:
+		void Serialize(void* data)
+		{
+			int* ptr = (int*)data;
+			*ptr = Width;
+			++ptr;
+			*ptr = Height;
+			++ptr;
+			memcpy(ptr, &Format, sizeof(Format));
+			uint8_t* bytePtr = (uint8_t*)ptr;
+			bytePtr += sizeof(Format);
+			SerializeOptions(Parameters, bytePtr);
+		}
+
+		static size_t GetSize() { return sizeof(int) + sizeof(int) + sizeof(PixelFormat) + GetOptionsSize(); }
+		static Image2DHeader Deserialize(const void* data)
+		{
+			Image2DHeader header;
+			const int* ptr = (const int*)data;
+			header.Width = *ptr;
+			++ptr;
+			header.Height = *ptr;
+			++ptr;
+			memcpy(&header.Format, ptr, sizeof(header.Format));
+			const uint8_t* bytePtr = (const uint8_t*)ptr;
+			bytePtr += sizeof(header.Format);
+			header.Parameters = DeserializeOptions(bytePtr);
+			return header;
+		}
+	};
+
 	class BLT_API Texture2DEngine
 	{
 	public:

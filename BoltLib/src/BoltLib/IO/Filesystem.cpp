@@ -1,5 +1,3 @@
-#include "bltpch.h"
-
 #include "Filesystem.h"
 #ifdef BLT_PLATFORM_WINDOWS
 #include <filesystem>

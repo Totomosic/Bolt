@@ -52,15 +52,11 @@ namespace Bolt
 
 	ResourceId AssetManager::LoadAsset(const FilePath& assetFile)
 	{
-		File f = Filesystem::Open(assetFile, OpenMode::Read);
-		size_t size = f.GetSize();
-		char* buffer = new char[size];
-		f.Read(buffer, size);
-		Assets::AssetHeader header = Assets::AssetHeader::Deserialize((const void*)buffer);
-		switch (header.Type)
+		Assets::AssetReader reader(assetFile);
+		switch (reader.GetType())
 		{
-		case Assets::AssetType::Texture2D:
-			return LoadTexture2DAsset((const void*)buffer, size);
+		case Assets::AssetType::Image2D:
+			return LoadImage2D(reader);
 		default:
 			break;
 		}
@@ -105,9 +101,9 @@ namespace Bolt
 		return id;
 	}
 
-	ResourceId AssetManager::LoadTexture2DAsset(const void* data, size_t length)
+	ResourceId AssetManager::LoadImage2D(const Assets::AssetReader& reader)
 	{
-		Assets::Asset<Image2D> texture = Assets::Texture2DEngine::ReadBoltFormat(data, length);
+		Assets::Asset<Image2D> texture = reader.ReadAsImage2D();
 		ResourceId id = FindNextId();
 		m_Assets[id] = std::make_unique<Texture2D>(texture.Data);
 		return id;

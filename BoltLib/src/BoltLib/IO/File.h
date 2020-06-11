@@ -1,6 +1,7 @@
 #pragma once
-#include "bltpch.h"
-#include "Filepath.h"
+#include "BoltDefines.h"
+#include "FilePath.h"
+#include <fstream>
 
 namespace Bolt
 {

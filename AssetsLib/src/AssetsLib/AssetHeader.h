@@ -9,7 +9,7 @@ namespace Bolt::Assets
 	BLT_API enum class AssetType : uint8_t
 	{
 		Unknown,
-		Texture2D,
+		Image2D,
 		Model,
 		AnimatedModel,
 		Shader

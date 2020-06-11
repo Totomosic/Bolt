@@ -1,5 +1,6 @@
 #pragma once
-#include "Core/Utils/Filesystem/Filepath.h"
+#include "BoltLib/IO/Filepath.h"
+#include "AssetsLib/AssetReader.h"
 #include "Resource.h"
 #include "AssetHandle.h"
 #include "MaterialManager.h"
@@ -61,7 +62,7 @@ namespace Bolt
 	private:
 		ResourceId FindNextId() const;
 
-		ResourceId LoadTexture2DAsset(const void* data, size_t length);
+		ResourceId LoadImage2D(const Assets::AssetReader& reader);
 
 	};
 
