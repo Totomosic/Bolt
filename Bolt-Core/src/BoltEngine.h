@@ -31,6 +31,7 @@
 #include "Engine/Renderer/2D/Renderer2D.h"
 
 #include "Engine/Scene/EntityManager.h"
+#include "Engine/Scene/ScopedEntity.h"
 
 #include "Engine/Scene/Systems/UI/Shapes/UIRectangle.h"
 #include "Engine/Scene/Systems/UI/UIText.h"

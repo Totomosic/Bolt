@@ -13,30 +13,30 @@ namespace Bolt
 		T y;
 
 	public:
-		Vector2(T x, T y)	
+		constexpr Vector2(T x, T y)	
 			: x(x), y(y)	
 		{	
 				
 		}	
 				
-		Vector2(T value) : Vector2(value, value)	
+		constexpr Vector2(T value) : Vector2(value, value)
 		{	
 				
 		}	
 				
-		Vector2() : Vector2((T)0)	
+		constexpr Vector2() : Vector2((T)0)
 		{	
 				
 		}	
 
 		template<typename Other, typename OtherBase>
-		Vector2(const Vector2<Other, OtherBase>& other) : Vector2((T)other.x, (T)other.y)
+		constexpr Vector2(const Vector2<Other, OtherBase>& other) : Vector2((T)other.x, (T)other.y)
 		{
 
 		}
 
 		template<typename Other, typename OtherBase>
-		Vector2<T, Base>& operator=(const Vector2<Other, OtherBase>& other)
+		constexpr Vector2<T, Base>& operator=(const Vector2<Other, OtherBase>& other)
 		{
 			x = (T)other.x;
 			y = (T)other.y;

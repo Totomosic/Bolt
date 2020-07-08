@@ -40,13 +40,16 @@ namespace Bolt
 		default:
 			BLT_ASSERT(false, "Invalid shader stage");
 		}
+		// Convert this node into a list of nodes that need building
 		std::vector<NodeInfo> nodeList = FlattenNode(masterNode);
 		for (const NodeInfo& node : nodeList)
 		{
+			// Test if the node has already been built... as part of another node maybe?
 			if (!IsAlreadyBuilt(node.NodePtr, m_CurrentProgram->Type()))
 			{
 				ShaderProgram* oldCurrentProgram = m_CurrentProgram;
 				bool wasCompatible = true;
+				// Test if the node can be built in the current shader program
 				if (!IsShaderCompatible(masterNode.GetCompatibility(), node.NodePtr->GetCompatibility()))
 				{
 					BLT_ASSERT(m_CurrentProgram->Type() == ShaderStage::Fragment, "Cannot be done, Incompatible node");
@@ -63,6 +66,7 @@ namespace Bolt
 				}
 				BuiltMaterialNode& builtNode = CreateNewBuiltNode(node.NodePtr, oldCurrentProgram->Type(), BuiltMaterialNode(node.NodePtr->GetOutputCount()));
 				node.NodePtr->Build(builtNode, inputs, GetContext(), *this);
+				// If it couldn't be built in the current shader then we need to transfer its output using varying pass variables
 				if (!wasCompatible)
 				{
 					VertexShader& vertex = GetBuilder().Factory().Vertex();

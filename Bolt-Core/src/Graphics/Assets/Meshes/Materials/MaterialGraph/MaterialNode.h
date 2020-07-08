@@ -42,6 +42,8 @@ namespace Bolt
 		const OutputPort& GetOutputPort(int index) const;
 		const NodeConnection& GetInputConnection(int index) const;
 
+		void SetCompatibility(ShaderStageCompatibility compatibility);
+
 		virtual void Build(BuiltMaterialNode& node, const LinkedInputs& inputs, const MaterialGraphContext& context, MaterialGraphBuilder& builder) const = 0;
 		virtual void ConnectDefaults(MaterialGraph& graph, const MaterialGraphContext& context) = 0;
 

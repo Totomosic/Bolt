@@ -57,7 +57,7 @@ namespace Bolt::Assets
 			return 1;
 		}
 
-		if (assetType == AssetType::Texture2D)
+		if (assetType == AssetType::Image2D)
 		{
 			std::cout << "Converting " << filename << " as texture to " << outputFile << std::endl;
 			return Texture2DConverter::FromBoltFormat(filename, outputFile, type);

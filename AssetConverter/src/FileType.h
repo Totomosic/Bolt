@@ -25,11 +25,11 @@ namespace Bolt::Assets
 		switch (type)
 		{
 		case FileType::PNG:
-			return AssetType::Texture2D;
+			return AssetType::Image2D;
 		case FileType::JPEG:
-			return AssetType::Texture2D;
+			return AssetType::Image2D;
 		case FileType::JPG:
-			return AssetType::Texture2D;
+			return AssetType::Image2D;
 		case FileType::OBJ:
 			return AssetType::Model;
 		case FileType::SHADER:

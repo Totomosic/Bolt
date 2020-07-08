@@ -36,7 +36,6 @@ namespace Bolt
 		UniformLink<std::function<Color()>>& LinkSpecularColor(const std::function<Color()>& specularRGB);
 		UniformLink<std::function<float()>>& LinkShininess(const std::function<float()>& shininess);
 		UniformLink<std::function<float()>>& LinkShineDamper(const std::function<float()>& shineDamper);
-
 	};
 
 }

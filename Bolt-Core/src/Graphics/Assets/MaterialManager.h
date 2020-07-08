@@ -5,6 +5,7 @@
 #include "Meshes/Materials/Material.h"
 #include "Textures/Fonts/Font.h"
 
+#include "Meshes/Materials/MaterialDefs/BasicMaterials.h"
 #include "Meshes/Materials/MaterialDefs/PBRMaterials.h"
 #include "Meshes/Materials/MaterialDefs/LightingMaterials.h"
 
@@ -29,8 +30,8 @@ namespace Bolt
 	public:
 		MaterialManager(AssetManager* manager);
 
-		std::unique_ptr<Material> Default(const Color& baseColor = Color::White) const;
-		std::unique_ptr<Material> Texture(const AssetHandle<Texture2D>& texture) const;
+		std::unique_ptr<BasicMaterial> Default(const Color& baseColor = Color::White) const;
+		std::unique_ptr<TextureBasicMaterial> Texture(const AssetHandle<Texture2D>& texture) const;
 		std::unique_ptr<Material> Font(const AssetHandle<Bolt::Font>& font, const Color& baseColor = Color::White) const;
 		std::unique_ptr<DefaultLightingMaterial> DefaultLighting(const Color& color = Color::White) const;
 		std::unique_ptr<TextureLightingMaterial> TextureLighting(const AssetHandle<Texture2D>& texture) const;
