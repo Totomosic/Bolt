@@ -1,6 +1,6 @@
 #pragma once
 #include "BoltDefines.h"
-#include "FilePath.h"
+#include "Filepath.h"
 #include <fstream>
 
 namespace Bolt

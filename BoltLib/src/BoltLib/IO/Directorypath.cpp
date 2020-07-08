@@ -1,6 +1,6 @@
 #include "Directorypath.h"
 #include "Filesystem.h"
-#include "FilePath.h"
+#include "Filepath.h"
 #include "BoltLib/BoltTL/string.h"
 
 namespace Bolt

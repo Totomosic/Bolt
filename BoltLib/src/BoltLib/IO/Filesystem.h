@@ -1,7 +1,7 @@
 #pragma once
-#include "DirectoryPath.h"
+#include "Directorypath.h"
 #include "File.h"
-#include "FilePath.h"
+#include "Filepath.h"
 #include "XML/XMLfile.h"
 
 namespace Bolt
