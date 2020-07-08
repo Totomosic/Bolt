@@ -1,5 +1,6 @@
 #include "bltpch.h"
 
+#include "Engine/Engine.h"
 #include "Window.h"
 #include "Engine/User/Input.h"
 #include "Engine/AppContext.h"
@@ -89,6 +90,7 @@ namespace Bolt
 			{
 				Window& window = *(Window*)glfwGetWindowUserPointer(windowHandle);
 				window.SetSize(width, height);
+				Engine::Instance().UpdateApplication();
 			});
 		glfwSetWindowCloseCallback((GLFWwindow*)GetNativeWindow(), [](GLFWwindow * windowHandle)
 			{
