@@ -1,5 +1,5 @@
 #pragma once
-#include "DirectoryPath.h"
+#include "Directorypath.h"
 
 namespace Bolt
 {
