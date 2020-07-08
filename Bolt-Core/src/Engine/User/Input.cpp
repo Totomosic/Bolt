@@ -347,7 +347,7 @@ namespace Bolt
 				{
 					float dx = std::abs(m_Mouse.X - m_MouseDownLast.MouseDownPosition.x);
 					float dy = std::abs(m_Mouse.Y - m_MouseDownLast.MouseDownPosition.y);
-					if ((dx <= 5 && dy <= 5) || (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - m_MouseDownLast.MouseDownTime).count() < CLICK_DELAY))
+					if ((dx <= 20 && dy <= 20) || (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - m_MouseDownLast.MouseDownTime).count() < CLICK_DELAY))
 					{
 						MouseClickEvent args;
 						args.Button = (MouseButton)button;

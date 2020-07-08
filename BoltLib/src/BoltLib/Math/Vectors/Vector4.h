@@ -14,65 +14,65 @@ namespace Bolt
 		T w;
 
 	public:
-		Vector4(T x, T y, T z, T w)
+		constexpr Vector4(T x, T y, T z, T w)
 			: x(x), y(y), z(z), w(w)
 		{
 
 		}
 
 		template<typename Other, typename OtherBase>
-		Vector4(const Vector3<Other, OtherBase>& xyz, T w) : Vector4(xyz.x, xyz.y, xyz.z, w)
+		constexpr Vector4(const Vector3<Other, OtherBase>& xyz, T w) : Vector4(xyz.x, xyz.y, xyz.z, w)
 		{
 
 		}
 
 		template<typename Other, typename OtherBase>
-		Vector4(const Vector3<Other, OtherBase>& xyz) : Vector4(xyz.x, xyz.y, xyz.z, (T)1)
+		constexpr Vector4(const Vector3<Other, OtherBase>& xyz) : Vector4(xyz.x, xyz.y, xyz.z, (T)1)
 		{
 
 		}
 
 		template<typename Other, typename OtherBase>
-		Vector4(const Vector2<Other, OtherBase>& xy, T z, T w) : Vector4(xy.x, xy.y, z, w)
+		constexpr Vector4(const Vector2<Other, OtherBase>& xy, T z, T w) : Vector4(xy.x, xy.y, z, w)
 		{
 
 		}
 
 		template<typename Other, typename OtherBase>
-		Vector4(const Vector2<Other, OtherBase>& xy, T z) : Vector4(xy, z, (T)1)
+		constexpr Vector4(const Vector2<Other, OtherBase>& xy, T z) : Vector4(xy, z, (T)1)
 		{
 
 		}
 
 		template<typename Other, typename OtherBase>
-		Vector4(const Vector2<Other, OtherBase>& xy) : Vector4(xy, (T)0)
+		constexpr Vector4(const Vector2<Other, OtherBase>& xy) : Vector4(xy, (T)0)
 		{
 
 		}
 
-		Vector4(T xyz, T w) : Vector4(xyz, xyz, xyz, w)
+		constexpr Vector4(T xyz, T w) : Vector4(xyz, xyz, xyz, w)
 		{
 
 		}
 
-		Vector4(T value) : Vector4(value, value)
+		constexpr Vector4(T value) : Vector4(value, value)
 		{
 
 		}
 
-		Vector4() : Vector4((T)0)
-		{
-
-		}
-
-		template<typename Other, typename OtherBase>
-		Vector4(const Vector4<Other, OtherBase>& other) : Vector4(other.x, other.y, other.z, other.w)
+		constexpr Vector4() : Vector4((T)0)
 		{
 
 		}
 
 		template<typename Other, typename OtherBase>
-		Vector4<T, Base>& operator=(const Vector4<Other, OtherBase>& other)
+		constexpr Vector4(const Vector4<Other, OtherBase>& other) : Vector4(other.x, other.y, other.z, other.w)
+		{
+
+		}
+
+		template<typename Other, typename OtherBase>
+		constexpr Vector4<T, Base>& operator=(const Vector4<Other, OtherBase>& other)
 		{
 			x = other.x;
 			y = other.y;

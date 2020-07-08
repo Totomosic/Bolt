@@ -50,6 +50,11 @@ namespace Bolt
 		return m_Inputs[index].Connection;
 	}
 
+	void MaterialNode::SetCompatibility(ShaderStageCompatibility compatibility)
+	{
+		m_Compatibility = compatibility;
+	}
+
 	void MaterialNode::Connect(int inputIndex, const NodeConnection& connection)
 	{
 		BLT_ASSERT(inputIndex >= 0 && inputIndex < GetInputCount(), "Invalid input index");

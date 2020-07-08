@@ -18,6 +18,7 @@ namespace Bolt
 		EntityManager* m_Manager;
 
 	public:
+		EntityFactory() = default;
 		EntityFactory(EntityManager& manager);
 		EntityFactory(Layer& layer);
 

@@ -565,9 +565,11 @@ namespace Bolt
 	GenericScopedEventListener<EventIdT>& GenericScopedEventListener<EventIdT>::operator=(GenericScopedEventListener<EventIdT>&& other)
 	{
 		GenericEventBus<EventIdT>* bus = m_EventBus;
+		uint32_t id = m_ListenerId;
 		m_EventBus = other.m_EventBus;
 		m_ListenerId = other.m_ListenerId;
 		other.m_EventBus = bus;
+		other.m_ListenerId = id;
 		return *this;
 	}
 

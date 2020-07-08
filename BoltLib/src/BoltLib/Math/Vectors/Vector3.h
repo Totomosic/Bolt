@@ -13,36 +13,36 @@ namespace Bolt
 		T z;
 
 	public:
-		Vector3(T x, T y, T z)
+		constexpr Vector3(T x, T y, T z)
 			: x(x), y(y), z(z)
 		{
 
 		}
 
 		template<typename Other, typename OtherBase>
-		Vector3(const Vector2<Other, OtherBase>& xy, T z) : Vector3(xy.x, xy.y, z)
+		constexpr Vector3(const Vector2<Other, OtherBase>& xy, T z) : Vector3(xy.x, xy.y, z)
 		{
 
 		}
 
 		template<typename Other, typename OtherBase>
-		Vector3(const Vector2<Other, OtherBase>& xy) : Vector3(xy.x, xy.y, (T)0)
+		constexpr Vector3(const Vector2<Other, OtherBase>& xy) : Vector3(xy.x, xy.y, (T)0)
 		{
 
 		}
 
-		Vector3(T value) : Vector3(value, value, value)
+		constexpr Vector3(T value) : Vector3(value, value, value)
 		{
 
 		}
 
-		Vector3() : Vector3((T)0)
+		constexpr Vector3() : Vector3((T)0)
 		{
 
 		}
 
 		template<typename Other, typename OtherBase>
-		Vector3(const Vector3<Other, OtherBase>& other) : Vector3(other.x, other.y, other.z)
+		constexpr Vector3(const Vector3<Other, OtherBase>& other) : Vector3(other.x, other.y, other.z)
 		{
 
 		}

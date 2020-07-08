@@ -18,6 +18,7 @@ namespace Bolt::Assets
 		}
 		Image2D texture;
 		int nComponents;
+		stbi_set_flip_vertically_on_load(true);
 		uint8_t* pixels = stbi_load(filepath.string().c_str(), &texture.Width, &texture.Height, &nComponents, 4);
 		texture.Pixels = std::shared_ptr<uint8_t>(pixels, [](uint8_t* pixels)
 			{
@@ -54,6 +55,7 @@ namespace Bolt::Assets
 		delete[] data;
 		file.close();
 
+		stbi_flip_vertically_on_write(true);
 		switch (filetype)
 		{
 		case FileType::PNG:

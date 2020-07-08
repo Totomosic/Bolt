@@ -186,6 +186,7 @@ namespace Bolt
 			TimeDelta delta = Time::Get().RenderingTimeline().DeltaTime();
 			SceneManager::Get().GetCurrentScene().Update(delta);
 		}
+		EventManager::Get().FlushAll(); // Flush #2 (likely other scene/app events)
 		BeforeRender();
 		{
 			BLT_PROFILE_SCOPE("Render()");
@@ -194,7 +195,6 @@ namespace Bolt
 		}
 		AfterRender();
 		Time::Get().Update();
-		EventManager::Get().FlushAll(); // Flush #2 (likely other scene/app events)
 		return true;
 	}
 
@@ -245,7 +245,10 @@ namespace Bolt
 				glfwMakeContextCurrent(currentContext);
 			}
 		}
-		GetWindow().SwapBuffers();
+		if (Graphics::Get().GetRenderer().GetStats().DrawCalls > 0 || m_UseImGui)
+		{
+			GetWindow().SwapBuffers();
+		}
 	}
 
 	void Application::CloseChild(int index)

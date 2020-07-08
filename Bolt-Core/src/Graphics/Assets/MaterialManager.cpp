@@ -21,18 +21,18 @@ namespace Bolt
 		CreatePBRTextureMaterial(m_PBRTextureGraph);
 	}
 
-	std::unique_ptr<Material> MaterialManager::Default(const Color& baseColor) const
+	std::unique_ptr<BasicMaterial> MaterialManager::Default(const Color& baseColor) const
 	{
-		std::unique_ptr<Material> material = m_DefaultGraph.GetMaterial();
-		material->GetLinkContext().Link("Color", baseColor);
+		std::unique_ptr<BasicMaterial> material = m_DefaultGraph.GetMaterial<BasicMaterial>();
+		material->LinkColor(baseColor);
 		material->SetIsTransparent(baseColor.a < 0.99999f);
 		return material;
 	}
 
-	std::unique_ptr<Material> MaterialManager::Texture(const AssetHandle<Texture2D>& texture) const
+	std::unique_ptr<TextureBasicMaterial> MaterialManager::Texture(const AssetHandle<Texture2D>& texture) const
 	{
-		std::unique_ptr<Material> material = m_TextureGraph.GetMaterial();
-		material->GetLinkContext().Link("Texture", std::move(texture));
+		std::unique_ptr<TextureBasicMaterial> material = m_TextureGraph.GetMaterial<TextureBasicMaterial>();
+		material->LinkTexture(texture);
 		return material;
 	}
 
@@ -47,7 +47,7 @@ namespace Bolt
 	std::unique_ptr<DefaultLightingMaterial> MaterialManager::DefaultLighting(const Color& color) const
 	{
 		std::unique_ptr<DefaultLightingMaterial> material = m_DefaultLightingGraph.GetMaterial<DefaultLightingMaterial>();
-		material->GetLinkContext().Link("Color", color);
+		material->LinkColor(color);
 		return material;
 	}
 
@@ -83,8 +83,21 @@ namespace Bolt
 	void MaterialManager::CreateTextureMaterial(BasicMaterialGraph& graph) const
 	{
 		PropertyNode& texture = graph.AddProperty("Texture", m_Manager->Textures().DefaultWhite());
+		PropertyNode& textureTransform = graph.AddProperty("TexCoordTransform", Matrix3f::Identity());
+		MultiplyNode& multiply = graph.AddNode<MultiplyNode>();
+		// Force it to be done in the vertex shader
+		//textureTransform.SetCompatibility(ShaderStageCompatibility::VertexOnly);
+		//multiply.SetCompatibility(ShaderStageCompatibility::VertexOnly);
+		Vec3Node& createVec3 = graph.AddNode<Vec3Node>();
+		createVec3.SetXY(graph.GetContext().VertexTexCoord().GetValue());
+		createVec3.SetZ(graph.AddNode(std::make_unique<ConstantFloatNode>(1.0f)).GetValue());
+		multiply.SetInputA(textureTransform.GetValue());
+		multiply.SetInputB(createVec3.GetValue());
+		SplitVec3Node& splitter = graph.AddNode<SplitVec3Node>();
+		splitter.SetInput(multiply.GetResult());
 		SampleTextureNode& sampler = graph.AddNode<SampleTextureNode>();
 		sampler.SetTexture(texture.GetValue());
+		sampler.SetTexCoord(splitter.GetXY());
 		graph.SetRGB(sampler.GetRGB());
 		graph.SetAlpha(sampler.GetA());
 		graph.Build();
