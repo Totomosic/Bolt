@@ -25,7 +25,7 @@ namespace Bolt
 		template<typename DelegateT, typename TResult = typename std::result_of<DelegateT()>::type>
 		Task<TResult> Run(DelegateT func)
 		{
-			Task<TResult> task(TaskLauncher{ m_Pool }, Bus(), std::move(func));
+			Task<TResult> task(TaskLauncher{ &m_Pool }, &Bus(), std::move(func));
 			return task;
 		}
 

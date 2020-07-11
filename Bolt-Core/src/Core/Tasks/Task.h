@@ -10,13 +10,13 @@ namespace Bolt
 	struct TaskLauncher
 	{
 	public:
-		ThreadPool& Pool;
+		ThreadPool* Pool;
 	public:
 		template<typename TFuncResult, typename TResult = TFuncResult>
 		TaskResult<TResult> LaunchAsync(std::function<TFuncResult()> func) const
 		{
 			TaskResult<TResult> result;
-			Pool.Enqueue([statePtr{ result.m_State }, func{ std::move(func) }]()
+			Pool->Enqueue([statePtr{ result.m_State }, func{ std::move(func) }]()
 			{
 				statePtr->Promise.set_value(func());
 			});
@@ -40,21 +40,24 @@ namespace Bolt
 	class BLT_API Task : public TaskBase
 	{
 	private:
-		EventBus& m_Bus;
+		EventBus* m_Bus;
 		TaskLauncher m_Launcher;
 		TaskResult<TResult> m_Result;
 
 	private:
 		template<typename DelegateT, typename TaskResultT>
-		Task(const TaskLauncher& launcher, EventBus& bus, DelegateT func, Task<TaskResultT>& taskResult);
+		Task(const TaskLauncher& launcher, EventBus* bus, DelegateT func, Task<TaskResultT>& taskResult);
 
 		template<typename DelegateT>
-		Task(const TaskLauncher& launcher, EventBus& bus, DelegateT func, Task<void>& taskResult);
+		Task(const TaskLauncher& launcher, EventBus* bus, DelegateT func, Task<void>& taskResult);
 
 	public:
+		Task();
 		template<typename DelegateT>
-		Task(const TaskLauncher& launcher, EventBus& bus, DelegateT func);
+		Task(const TaskLauncher& launcher, EventBus* bus, DelegateT func);
 
+		operator bool() const;
+		bool IsValid() const;
 		TResult Result();
 		void Wait();
 		TaskStatus WaitFor(double seconds);
@@ -73,13 +76,13 @@ namespace Bolt
 	class BLT_API Task<void> : public TaskBase
 	{
 	private:
-		EventBus& m_Bus;
+		EventBus* m_Bus;
 		TaskLauncher m_Launcher;
 		TaskResult<int> m_Result;
 
 	private:
 		template<typename DelegateT, typename TaskResultT>
-		Task(const TaskLauncher& launcher, EventBus& bus, DelegateT func, Task<TaskResultT>& taskResult)
+		Task(const TaskLauncher& launcher, EventBus* bus, DelegateT func, Task<TaskResultT>& taskResult)
 			: m_Bus(bus), m_Launcher(launcher), m_Result()
 		{
 			m_Result = m_Launcher.LaunchAsync<int>(std::function<int()>([taskResult = std::move(taskResult.m_Result), del = std::move(func)]() mutable -> int
@@ -91,7 +94,7 @@ namespace Bolt
 		}
 
 		template<typename DelegateT>
-		Task(const TaskLauncher& launcher, EventBus& bus, DelegateT func, Task<void>& taskResult)
+		Task(const TaskLauncher& launcher, EventBus* bus, DelegateT func, Task<void>& taskResult)
 			: m_Bus(bus), m_Launcher(launcher), m_Result()
 		{
 			m_Result = m_Launcher.LaunchAsync<int>(std::function<int()>([taskResult = std::move(taskResult.m_Result), del = std::move(func)]() mutable -> int
@@ -104,8 +107,14 @@ namespace Bolt
 		}
 
 	public:
+		Task()
+			: m_Bus(nullptr), m_Launcher(), m_Result()
+		{
+		
+		}
+
 		template<typename DelegateT>
-		Task(const TaskLauncher& launcher, EventBus& bus, DelegateT func)
+		Task(const TaskLauncher& launcher, EventBus* bus, DelegateT func)
 			: m_Bus(bus), m_Launcher(launcher), m_Result()
 		{
 			m_Result = m_Launcher.LaunchAsync<int>(std::function<int()>([del = std::move(func)]() mutable -> int
@@ -115,24 +124,37 @@ namespace Bolt
 			}));
 		}
 
+		operator bool() const
+		{
+			return IsValid();
+		}
+
+		bool IsValid() const
+		{
+			return m_Bus != nullptr;
+		}
+
 		void Wait()
 		{
+			BLT_ASSERT(IsValid(), "Task is not valid");
 			m_Result.Get();
 		}
 
 		template<typename DelegateT, typename TNewResult = typename std::result_of<DelegateT()>::type>
 		Task<TNewResult> ContinueWith(DelegateT func)
 		{
+			BLT_ASSERT(IsValid(), "Task is not valid");
 			return Task<TNewResult>(m_Launcher, m_Bus, std::move(func), *this);
 		}
 
 		template<typename DelegateT>
 		void ContinueWithOnMainThread(DelegateT func)
 		{
-			EventBus& bus = m_Bus;
-			ContinueWith([&bus, func{ std::move(func) }]() mutable
+			BLT_ASSERT(IsValid(), "Task is not valid");
+			EventBus* bus = m_Bus;
+			ContinueWith([bus, func{ std::move(func) }]() mutable
 			{
-				bus.Emit(TaskEventId, TaskCompleted<int>(0, [func{ std::move(func) }](int ignore) mutable
+				bus->Emit(TaskEventId, TaskCompleted<int>(0, [func{ std::move(func) }](int ignore) mutable
 				{
 					func();
 				}));
@@ -148,7 +170,7 @@ namespace Bolt
 
 	template<typename T>
 	template<typename DelegateT, typename TaskResultT>
-	Task<T>::Task(const TaskLauncher& launcher, EventBus& bus, DelegateT func, Task<TaskResultT>& taskResult)
+	Task<T>::Task(const TaskLauncher& launcher, EventBus* bus, DelegateT func, Task<TaskResultT>& taskResult)
 		: m_Bus(bus), m_Launcher(launcher), m_Result()
 	{
 		m_Result = m_Launcher.LaunchAsync<T>(std::function<T()>([taskResult = std::move(taskResult.m_Result), del = std::move(func)]() mutable-> T
@@ -160,7 +182,7 @@ namespace Bolt
 
 	template<typename T>
 	template<typename DelegateT>
-	Task<T>::Task(const TaskLauncher& launcher, EventBus& bus, DelegateT func, Task<void>& taskResult)
+	Task<T>::Task(const TaskLauncher& launcher, EventBus* bus, DelegateT func, Task<void>& taskResult)
 		: m_Bus(bus), m_Launcher(launcher), m_Result()
 	{
 		m_Result = m_Launcher.LaunchAsync<T>(std::function<T()>([taskResult = std::move(taskResult.m_Result), del = std::move(func)]() mutable-> T
@@ -172,8 +194,15 @@ namespace Bolt
 	}
 
 	template<typename T>
+	Task<T>::Task()
+		: m_Bus(nullptr), m_Launcher(), m_Result()
+	{
+	
+	}
+
+	template<typename T>
 	template<typename DelegateT>
-	Task<T>::Task(const TaskLauncher& launcher, EventBus& bus, DelegateT func)
+	Task<T>::Task(const TaskLauncher& launcher, EventBus* bus, DelegateT func)
 		: m_Bus(bus), m_Launcher(launcher), m_Result()
 	{
 		m_Result = m_Launcher.LaunchAsync<T>(std::function<T()>([del = std::move(func)]() mutable-> T
@@ -183,20 +212,35 @@ namespace Bolt
 	}
 
 	template<typename T>
+	Task<T>::operator bool() const
+	{
+		return IsValid();
+	}
+
+	template<typename T>
+	bool Task<T>::IsValid() const
+	{
+		return m_Bus != nullptr;
+	}
+
+	template<typename T>
 	T Task<T>::Result()
 	{
+		BLT_ASSERT(IsValid(), "Task is not valid");
 		return m_Result.Get();
 	}
 
 	template<typename T>
 	void Task<T>::Wait()
 	{
+		BLT_ASSERT(IsValid(), "Task is not valid");
 		m_Result.Wait();
 	}
 
 	template<typename T>
 	TaskStatus Task<T>::WaitFor(double seconds)
 	{
+		BLT_ASSERT(IsValid(), "Task is not valid");
 		std::future_status status = m_Result.WaitFor(seconds);
 		if (status == std::future_status::ready)
 		{
@@ -209,6 +253,7 @@ namespace Bolt
 	template<typename DelegateT, typename TNewResult>
 	Task<TNewResult> Task<T>::ContinueWith(DelegateT func)
 	{
+		BLT_ASSERT(IsValid(), "Task is not valid");
 		return Task<TNewResult>(m_Launcher, m_Bus, std::move(func), *this);
 	}
 
@@ -216,10 +261,11 @@ namespace Bolt
 	template<typename DelegateT>
 	void Task<T>::ContinueWithOnMainThread(DelegateT func)
 	{
-		EventBus& bus = m_Bus;
-		ContinueWith([&bus, func{ std::move(func) }](T value) mutable
+		BLT_ASSERT(IsValid(), "Task is not valid");
+		EventBus* bus = m_Bus;
+		ContinueWith([bus, func{ std::move(func) }](T value) mutable
 		{
-			bus.Emit(TaskEventId, TaskCompleted<T>(std::move(value), std::move(func)));
+			bus->Emit(TaskEventId, TaskCompleted<T>(std::move(value), std::move(func)));
 		});
 	}
 
