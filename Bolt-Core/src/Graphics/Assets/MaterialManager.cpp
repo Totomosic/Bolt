@@ -98,7 +98,11 @@ namespace Bolt
 		SampleTextureNode& sampler = graph.AddNode<SampleTextureNode>();
 		sampler.SetTexture(texture.GetValue());
 		sampler.SetTexCoord(splitter.GetXY());
-		graph.SetRGB(sampler.GetRGB());
+		ConstantVec3Node& correction = graph.AddNode(std::make_unique<ConstantVec3Node>(Vector3f(1 / 2.2f)));
+		PowerNode& gamma = graph.AddNode<PowerNode>();
+		gamma.SetInputA(sampler.GetRGB());
+		gamma.SetInputB(correction.GetValue());
+		graph.SetRGB(gamma.GetResult());
 		graph.SetAlpha(sampler.GetA());
 		graph.Build();
 	}

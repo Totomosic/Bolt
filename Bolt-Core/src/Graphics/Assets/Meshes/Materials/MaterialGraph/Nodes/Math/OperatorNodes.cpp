@@ -143,4 +143,38 @@ namespace Bolt
 		Connect(1, node.GetValue());
 	}
 
+	// POWER NODE
+
+	PowerNode::PowerNode() : MaterialNode(ShaderStageCompatibility::All, 2, 1)
+	{
+
+	}
+
+	void PowerNode::SetInputA(const NodeConnection& connection)
+	{
+		Connect(0, connection);
+	}
+
+	void PowerNode::SetInputB(const NodeConnection& connection)
+	{
+		Connect(1, connection);
+	}
+
+	NodeConnection PowerNode::GetResult() const
+	{
+		return GetConnection(0);
+	}
+
+	void PowerNode::Build(BuiltMaterialNode& node, const LinkedInputs& inputs, const MaterialGraphContext& context, MaterialGraphBuilder& builder) const
+	{
+		node.BuildOutput(0, ShaderFuncs::Pow(inputs.GetInput(0), inputs.GetInput(1)));
+	}
+
+	void PowerNode::ConnectDefaults(MaterialGraph& graph, const MaterialGraphContext& context)
+	{
+		ConstantFloatNode& node = graph.AddNode(std::make_unique<ConstantFloatNode>(1.0f));
+		Connect(0, node.GetValue());
+		Connect(1, node.GetValue());
+	}
+
 }
